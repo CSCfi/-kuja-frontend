@@ -15,6 +15,7 @@ const LinkItem = styled(NavLink)`
   color: white;
   background: #3B7A9A;
   text-transform: uppercase;
+  margin-left: 0px;
 
   a:visited {
     color: white;
@@ -27,6 +28,15 @@ const LinkItem = styled(NavLink)`
   &.active {
     color: #3B7A9A;
     background: white;
+  }
+
+  &.text-small {
+    font-size: 14px;
+    text-transform: none;
+  }
+
+  &.pull-right {
+    margin-left: auto;
   }
 `
 
@@ -42,21 +52,22 @@ const linkItems = [
   },
   {
     to: '/kirjaudu',
-    title: 'Kirjaudu sisään'
+    title: 'Kirjaudu sisään',
+    classNames: 'text-small pull-right'
   }
 ]
 
 class Navigaatio extends Component {
   renderLinks(links) {
     return (
-      links.map((link, i) => <LinkItem key={i} to={link.to} exact={link.exact}>{link.title}</LinkItem>)
+      links.map((link, i) => <LinkItem key={i} to={link.to} exact={link.exact} className={link.classNames}>{link.title}</LinkItem>)
     )
   }
 
   render() {
     const innerStyle = {
+      display: 'flex',
       margin: '0 auto',
-      padding: '10px 20px',
       width: '100%',
       maxWidth: `${this.props.maxWidth}px`
     }
