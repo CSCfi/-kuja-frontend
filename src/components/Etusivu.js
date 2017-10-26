@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 import background from '../assets/images/palikat.png'
 
@@ -35,6 +36,9 @@ class Etusivu extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Etusivu | Oiva</title>
+        </Helmet>
         <EtusivuHero>
           <Title>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</Title>
           <Description>Palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>

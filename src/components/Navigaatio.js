@@ -51,6 +51,10 @@ const linkItems = [
     title: 'Luvat'
   },
   {
+    to: '/tilastot-raportit',
+    title: 'Tilastot ja raportit'
+  },
+  {
     to: '/kirjaudu',
     title: 'Kirjaudu sisään',
     classNames: 'text-small pull-right'

@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
+
 import { fetchLuvat } from '../actions'
 
 class Luvat extends Component {
@@ -23,6 +25,9 @@ class Luvat extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Lupavaranto | Oiva</title>
+        </Helmet>
         <h4>LUVAT</h4>
         <table>
           <thead>
