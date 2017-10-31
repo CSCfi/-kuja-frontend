@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 
 import { logout } from '../actions'
 
-class SignOut extends Component {
+class Logout extends Component {
   componentDidMount() {
     this.props.logout()
   }
@@ -24,4 +24,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(SignOut)
+export default connect(null, mapDispatchToProps)(Logout)
