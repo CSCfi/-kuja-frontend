@@ -7,6 +7,5 @@ export default function(state = {}, action) {
       return _.mapKeys(action.payload, 'id')
     default:
       return state
-    
   }
 }

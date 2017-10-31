@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -40,32 +41,30 @@ const LinkItem = styled(NavLink)`
   }
 `
 
-const linkItems = [
-  {
-    to: '/',
-    title: 'Etusivu',
-    exact: true
-  },
-  {
-    to: '/luvat',
-    title: 'Luvat'
-  },
-  {
-    to: '/tilastot-raportit',
-    title: 'Tilastot ja raportit'
-  },
-  {
-    to: '/kirjaudu',
-    title: 'Kirjaudu sisään',
-    classNames: 'text-small pull-right'
-  }
-]
-
 class Navigaatio extends Component {
-  renderLinks(links) {
-    return (
-      links.map((link, i) => <LinkItem key={i} to={link.to} exact={link.exact} className={link.classNames}>{link.title}</LinkItem>)
-    )
+  renderRoleLinks() {
+    if (this.props.user) {
+      switch (this.props.user.role) {
+        case 'esittelijä': {
+          return <LinkItem to="/esittelija" className="pull-right">Esittelijän näkymä</LinkItem>
+        }
+
+        case 'kj': {
+          return <LinkItem to="/koulutuksen-jarjestaja" className="pull-right">Koulutuksen järjestäjän näkymä</LinkItem>
+        }
+
+        default: 
+          return null;
+      }
+    }
+  }
+
+  renderLoginLinks() {
+    if (!this.props.user) {
+      return <LinkItem to="/kirjaudu" className="text-small pull-right">Kirjaudu sisään</LinkItem>
+    } else {
+      return <LinkItem to="/kirjaudu-ulos" className="text-small pull-right">Kirjaudu ulos</LinkItem>
+    }
   }
 
   render() {
@@ -75,15 +74,23 @@ class Navigaatio extends Component {
       width: '100%',
       maxWidth: `${this.props.maxWidth}px`
     }
-
+    
     return (
       <NavbarWrapper>
         <div style={innerStyle}>
-          {this.renderLinks(linkItems)}
+          <LinkItem to="/" exact>Etusivu</LinkItem>
+          <LinkItem to="/luvat">Luvat</LinkItem>
+          <LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>
+          {this.renderRoleLinks()}
+          {this.renderLoginLinks()}
         </div>
       </NavbarWrapper>
     )
   }
 }
 
-export default Navigaatio
+const mapStateToProps = (state) => {
+  return { user: state.user.user }
+}
+
+export default connect(mapStateToProps, null, null, { pure: false })(Navigaatio)
