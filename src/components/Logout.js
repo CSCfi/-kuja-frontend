@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { logout } from '../actions'
+import { logoutUser } from '../actions'
 
 class Logout extends Component {
   componentDidMount() {
@@ -20,7 +20,7 @@ class Logout extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(logout())
+    logout: () => dispatch(logoutUser())
   }
 }
 

@@ -1,25 +1,13 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
 import { fetchLuvat } from '../actions'
+import LuvatList from './LuvatList'
 
 class Luvat extends Component {
   componentWillMount() {
     this.props.fetchLuvat()
-  }
-
-  renderPermits() {
-    return _.map(this.props.luvat, lupa => {
-      return (
-        <tr key={lupa.id}>
-          <th><a href={`http://localhost:8099/api/pdf/${lupa.diaarinumero}`} target="_blank">{lupa.diaarinumero}</a></th>
-          <th>{lupa.jarjestajaOid}</th>
-          <th>{lupa.meta.esittelija}</th>
-        </tr>
-      )
-    })
   }
 
   render() {
@@ -29,18 +17,7 @@ class Luvat extends Component {
           <title>Lupavaranto | Oiva</title>
         </Helmet>
         <h4>LUVAT</h4>
-        <table>
-          <thead>
-            <tr>
-              <th>Diaarinumero</th>
-              <th>Järjestäjä</th>
-              <th>Esittelijä</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderPermits()}  
-          </tbody>
-        </table>
+        <LuvatList luvat={this.props.luvat}/>
       </div>
     )
   }
