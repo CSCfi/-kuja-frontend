@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
-import { login } from '../actions'
 import LoginForm from '../components/LoginForm'
-
 
 const FakeButton = styled.div`
   border: 1px solid #CCC;
@@ -28,6 +27,9 @@ class Kirjautuminen extends Component {
   render() {
     return (
       <div>
+        <Helmet>
+          <title>Kirjaudu sisään | Oiva</title>
+        </Helmet>
         <h1>Kirjautuminen</h1>
         <FakeButton>
           <Link to="/cas-auth">CAS-Kirjautuminen</Link>
@@ -42,10 +44,4 @@ const mapStateToProps = (state) => {
   return { user: state.user.user }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    login: (user) => dispatch(login(user))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Kirjautuminen)
+export default connect(mapStateToProps)(Kirjautuminen)

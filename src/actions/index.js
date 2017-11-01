@@ -3,8 +3,6 @@ import { API_BASE_URL } from '../helpers/Constants'
 export const FETCH_LUVAT = 'fetch_luvat'
 export const LOGIN_USER = 'login_user'
 export const LOGOUT_USER = 'logout_user'
-export const TOGGLE_LOGIN = 'toggle_login'
-export const ROLE_LOGIN = 'role_login'
 
 export function fetchLuvat() {
   const request = fetch(`${API_BASE_URL}/luvat`)
@@ -16,20 +14,7 @@ export function fetchLuvat() {
   }
 }
 
-export function login() {
-  const user = {
-    role: 'esittelijä',
-    firstName: 'Essi',
-    lastName: 'Esittelijä'
-  }
-
-  return {
-    type: LOGIN_USER,
-    payload: user
-  }
-}
-
-export function logout() {
+export function logoutUser() {
   return {
     type: LOGOUT_USER,
     payload: null
@@ -41,8 +26,4 @@ export function loginUser(values) {
     type: LOGIN_USER,
     payload: values
   }
-}
-
-export function toggleLogin() {
-  return { type: TOGGLE_LOGIN, payload: {} }
 }
