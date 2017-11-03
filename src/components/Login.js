@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import LoginForm from '../components/LoginForm'
+import LoginForm from 'components/LoginForm'
 
 const FakeButton = styled.div`
   border: 1px solid #CCC;

@@ -1,13 +1,8 @@
-import { 
-  LOGIN_USER,
-  LOGOUT_USER
- } from '../actions'
+import { LOGIN_USER, LOGOUT_USER } from 'actions/LoginActions'
 
 export default function(state = { user: null }, action) {
   switch (action.type) {
     case LOGIN_USER: {
-      console.log('LoginReducer', action)
-
       const user = {
         role: null,
         firstName: null,

@@ -1,24 +1,11 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import Moment from 'react-moment'
 
-import { API_BASE_URL } from '../helpers/Constants'
+import Lupa from 'components/Lupa'
 
 class LuvatList extends Component {
   renderPermits() {
-    return _.map(this.props.luvat, lupa => {
-      return (
-        <tr key={lupa.id}>
-          <th><a href={`${API_BASE_URL}/pdf/${lupa.diaarinumero}`} target="_blank">{lupa.diaarinumero}</a></th>
-          <th>{lupa.jarjestajaYtunnus}</th>
-          <th>todo</th>
-          <th>todo</th>
-          <th><Moment format="DD.MM.YYYY">{lupa.alkupvm}</Moment> - </th>
-          <th><Moment format="DD.MM.YYYY">{lupa.paatospvm}</Moment></th>
-          <th>{lupa.meta.esittelija}</th>
-        </tr>
-      )
-    })
+    return _.map(this.props.luvat, lupa => <Lupa lupa={lupa} key={lupa.id} />)
   }
 
   render() {

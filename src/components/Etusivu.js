@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import background from '../assets/images/palikat.png'
+import background from 'assets/images/palikat.png'
 
 const EtusivuHero = styled.div`
   background-image: url(${background});

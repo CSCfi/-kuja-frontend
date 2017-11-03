@@ -4,10 +4,10 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import styled, { injectGlobal } from 'styled-components'
 
-import store from './helpers/Store'
-import Navigaatio from './components/Navigaatio'
-import Routes from './components/Routes'
-import { APP_WIDTH } from './helpers/Constants'
+import store from 'helpers/Store'
+import Navigaatio from 'components/Navigaatio'
+import Routes from 'components/Routes'
+import { APP_WIDTH } from 'helpers/Constants'
 
 // Globaalit tyylit
 injectGlobal`

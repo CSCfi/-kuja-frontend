@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
-import { loginUser } from '../actions'
+import { loginUser } from 'actions/LoginActions'
 
 const LoginForm = (props) => {
   const { handleSubmit, pristine, submitting } = props

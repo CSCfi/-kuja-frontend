@@ -2,12 +2,12 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import styled from 'styled-components'
 
-import Luvat from './Luvat'
-import Etusivu from './Etusivu'
-import TilastotJaRaportit from './TilastotJaRaportit'
-import Kirjautuminen from './Login'
-import Logout from './Logout'
-import { LOGIN_REDIRECT_URL, APP_WIDTH } from '../helpers/Constants'
+import Luvat from 'components/Luvat'
+import Etusivu from 'components/Etusivu'
+import TilastotJaRaportit from 'components/TilastotJaRaportit'
+import Kirjautuminen from 'components/Login'
+import Logout from 'components/Logout'
+import { LOGIN_REDIRECT_URL, APP_WIDTH } from 'helpers/Constants'
 
 const RoutesWrapper = styled.div`
   width: 100%;
