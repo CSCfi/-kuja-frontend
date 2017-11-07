@@ -1,15 +1,59 @@
-import { LOGIN_USER, LOGOUT_USER } from 'actions/LoginActions'
+import { 
+  DUMMY_LOGIN_USER, 
+  DUMMY_LOGOUT_USER, 
+  LOGIN_GET_ROLES_START,
+  LOGIN_GET_ROLES_SUCCESS,
+  LOGIN_GET_ROLES_FAILURE
+} from 'actions/LoginActions'
 
-export default function(state = { user: null }, action) {
+const initialState = {
+  user: null,
+  isFetching: false,
+  fetched: false,
+  hasErrored: false
+}
+
+export default function(state = initialState, action) {
   switch (action.type) {
-    case LOGIN_USER: {
+    case LOGIN_GET_ROLES_START: {
+      console.log('LoginReducer', action.type)
+      return {
+        ...state,
+        isFetching: true,
+        fetched: false,
+        hasErrored: false
+      }
+    }
+
+    case LOGIN_GET_ROLES_SUCCESS: {
+      console.log('LoginReducer', action.type)
+      return {
+        ...state,
+        user: action.payload,
+        isFetching: false,
+        fetched: true,
+        hasErrored: false
+      }
+    }
+
+    case LOGIN_GET_ROLES_FAILURE: {
+      console.log('LoginReducer', action.type)
+      return {
+        ...state,
+        isFetching: false,
+        fetched: false,
+        hasErrored: true
+      }
+    }
+
+    case DUMMY_LOGIN_USER: {
       const user = {
         role: null,
         firstName: null,
         lastName: null
       }
 
-      if (action.payload.role) {
+      if (action.payload && action.payload.role) {
         switch (action.payload.role) {
           case 'esittelijä': {
             user.role = action.payload.role
@@ -32,7 +76,7 @@ export default function(state = { user: null }, action) {
       return { user }
     }
 
-    case LOGOUT_USER:
+    case DUMMY_LOGOUT_USER:
       return { user: null }
 
     default:

@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { logoutUser } from 'actions/LoginActions'
+import { dummyLogoutUser } from 'actions/LoginActions'
 
 class Logout extends Component {
   componentDidMount() {
-    this.props.logout()
+    this.props.dummyLogout()
   }
 
   render() {
@@ -20,7 +20,7 @@ class Logout extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout: () => dispatch(logoutUser())
+    dummyLogout: () => dispatch(dummyLogoutUser())
   }
 }
 

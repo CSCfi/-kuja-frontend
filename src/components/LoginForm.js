@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 
-import { loginUser } from 'actions/LoginActions'
+import { dummyLoginUser } from 'actions/LoginActions'
 
 const LoginForm = (props) => {
   const { handleSubmit, pristine, submitting } = props
@@ -24,7 +24,7 @@ const LoginForm = (props) => {
 }
 
 const onSubmit = (values, dispatch) => {
-  dispatch(loginUser(values));
+  dispatch(dummyLoginUser(values));
 }
 
 

@@ -7,7 +7,8 @@ import Etusivu from 'components/Etusivu'
 import TilastotJaRaportit from 'components/TilastotJaRaportit'
 import Kirjautuminen from 'components/Login'
 import Logout from 'components/Logout'
-import { LOGIN_REDIRECT_URL, APP_WIDTH } from 'helpers/Constants'
+import CasReady from 'components/CasReady'
+import { CAS_LOGIN_REDIRECT_URL, APP_WIDTH } from 'helpers/Constants'
 
 const RoutesWrapper = styled.div`
   width: 100%;
@@ -25,7 +26,8 @@ const Routes = () => {
       <Route path="/tilastot-raportit" component={TilastotJaRaportit} />
       <Route path="/kirjaudu" component={Kirjautuminen} />
       <Route path="/kirjaudu-ulos" component={Logout} />
-      <Route path="/cas-auth" render={() => { window.location = LOGIN_REDIRECT_URL }} />
+      <Route path="/cas-auth" component={() => window.location = CAS_LOGIN_REDIRECT_URL} />
+      <Route path="/cas-ready" component={CasReady} />
     </RoutesWrapper>
   )
 }
