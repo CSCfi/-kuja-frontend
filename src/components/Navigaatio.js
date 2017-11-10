@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
+import _ from 'lodash'
+
+import { ROLE_ESITTELIJA } from 'helpers/Constants'
 
 const NavbarWrapper = styled.div`
   display: flex;
@@ -43,7 +46,11 @@ const LinkItem = styled(NavLink)`
 
 class Navigaatio extends Component {
   renderRoleLinks() {
-    if (this.props.user) {
+    if (this.props.user && this.props.user.roles) {
+      const { roles } = this.props.user
+      if (_.indexOf(roles, ROLE_ESITTELIJA) > -1) {
+        return <LinkItem to="/esittelija" className="pull-right">Esittelijän näkymä</LinkItem>
+      }
       switch (this.props.user.role) {
         case 'esittelijä': {
           return <LinkItem to="/esittelija" className="pull-right">Esittelijän näkymä</LinkItem>

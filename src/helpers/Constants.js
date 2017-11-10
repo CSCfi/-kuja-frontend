@@ -1,5 +1,16 @@
-export const API_BASE_URL = 'https://localhost/api'
-export const HTTP_HOST_BASE_URL = 'https://localhost'
-export const CAS_LOGIN_REDIRECT_URL = `${API_BASE_URL}/auth/login?redirect=${HTTP_HOST_BASE_URL}/cas-ready`
-export const CAS_LOGIN_READY = `${HTTP_HOST_BASE_URL}/cas-ready`
+// NETWORKING
+const HOST_BASE_URL = window.location.origin
+export const API_BASE_URL = `${HOST_BASE_URL}/api`
+export const CAS_LOGIN_REDIRECT_URL = `${API_BASE_URL}/auth/login?redirect=${HOST_BASE_URL}/cas-ready`
+export const CAS_LOGIN_READY = `${HOST_BASE_URL}/cas-ready`
+export const CAS_BASE_URL = 'https://testi.virkailija.opintopolku.fi'
+export const CAS_LOGOUT_URL = `${CAS_BASE_URL}/cas/logout?service=${HOST_BASE_URL}`
+
+// STYLING ETC
 export const APP_WIDTH = 1280
+
+// USERS & ROLES
+export const ROLE_APPLICATION = 'APP_KOUTE'
+export const ROLE_YLLAPITAJA = 'APP_KOUTE_YLLAPITAJA'
+export const ROLE_ESITTELIJA = 'APP_KOUTE_ESITTELIJA'
+export const ROLE_KAYTTAJA = 'APP_KOUTE_KAYTTAJA'

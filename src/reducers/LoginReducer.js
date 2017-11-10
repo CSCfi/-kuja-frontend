@@ -3,7 +3,8 @@ import {
   DUMMY_LOGOUT_USER, 
   LOGIN_GET_ROLES_START,
   LOGIN_GET_ROLES_SUCCESS,
-  LOGIN_GET_ROLES_FAILURE
+  LOGIN_GET_ROLES_FAILURE,
+  LOGOUT_USER_START
 } from 'actions/LoginActions'
 
 const initialState = {
@@ -26,7 +27,6 @@ export default function(state = initialState, action) {
     }
 
     case LOGIN_GET_ROLES_SUCCESS: {
-      console.log('LoginReducer', action.type)
       return {
         ...state,
         user: action.payload,
@@ -37,12 +37,18 @@ export default function(state = initialState, action) {
     }
 
     case LOGIN_GET_ROLES_FAILURE: {
-      console.log('LoginReducer', action.type)
       return {
         ...state,
         isFetching: false,
         fetched: false,
         hasErrored: true
+      }
+    }
+
+    case LOGOUT_USER_START: {
+      return {
+        ...state,
+        user: null
       }
     }
 

@@ -14,7 +14,10 @@ export function fetchLuvat() {
 
     request
       .then((response) => response.json())
-      .then((data) => dispatch({ type: FETCH_LUVAT_SUCCESS, payload: data }))
+      .then((data) => {
+        console.log('lupa actioon', data)
+        dispatch({ type: FETCH_LUVAT_SUCCESS, payload: data })
+      })
       .catch((err) => dispatch({ type: FETCH_LUVAT_FAILURE, payload: err }))
   }
 }
