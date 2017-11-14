@@ -4,10 +4,10 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import styled, { injectGlobal } from 'styled-components'
 
-import store from 'helpers/Store'
-import Navigaatio from 'components/Navigaatio'
-import Routes from 'components/Routes'
-import { APP_WIDTH } from 'helpers/Constants'
+import store from 'store'
+import Header from 'modules/Header/components/Header'
+import Routes from 'routes/Routes'
+import { APP_WIDTH } from 'modules/constants'
 
 // Globaalit tyylit
 injectGlobal`
@@ -19,6 +19,10 @@ injectGlobal`
 // Applikaation tason tyylit
 const RootDiv = styled.div`
   font-family: Roboto, Helvetica, Arial, sans-serif;
+
+  h1 {
+    
+  }
   
   thead {
     th {
@@ -35,7 +39,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <RootDiv>
-        <Navigaatio maxWidth={`${APP_WIDTH}`}/>
+        <Header maxWidth={`${APP_WIDTH}`}/>
         <Routes />
       </RootDiv>
     </BrowserRouter>

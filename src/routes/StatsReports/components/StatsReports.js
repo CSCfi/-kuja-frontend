@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 
-class TilastotJaRaportit extends Component {
+class StatsReports extends Component {
   render() {
     return (
       <div>
@@ -14,4 +14,4 @@ class TilastotJaRaportit extends Component {
   }
 }
 
-export default TilastotJaRaportit
+export default StatsReports

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { getRoles } from 'actions/LoginActions'
+import { getRoles } from 'routes/Login/modules/user'
 
-class CasReady extends Component {
+class CasAuthenticated extends Component {
   componentWillMount() {    
     this.props.getRoles()
   }
@@ -23,4 +23,4 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(CasReady)
+export default connect(null, mapDispatchToProps)(CasAuthenticated)

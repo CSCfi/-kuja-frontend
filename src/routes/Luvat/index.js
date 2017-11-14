@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Helmet } from 'react-helmet'
 
-import { fetchLuvat } from 'actions/LupaActions'
-import LuvatList from 'components/LuvatList'
+
+import { fetchLuvat } from 'routes/Luvat/modules/luvat'
+import LuvatList from 'routes/Luvat/components/LuvatList'
 
 class Luvat extends Component {
   componentWillMount() {

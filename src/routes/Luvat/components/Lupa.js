@@ -1,7 +1,7 @@
 import React from 'react'
 import Moment from 'react-moment'
 
-import { API_BASE_URL } from 'helpers/Constants'
+import { API_BASE_URL } from 'modules/constants'
 
 const Lupa = (props) => {
   const { lupa } = props

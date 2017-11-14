@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
-import LuvatReducer from 'reducers/LupaReducer'
-import LoginReducer from 'reducers/LoginReducer'
+import luvatReducer from 'routes/Luvat/modules/luvat'
+import userReducer from 'routes/Login/modules/user'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
-  luvat: LuvatReducer,
-  user: LoginReducer,
+  luvat: luvatReducer,
+  user: userReducer,
   form: reduxFormReducer
 })
 

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { logoutUser } from 'actions/LoginActions'
-import { CAS_LOGOUT_URL } from 'helpers/Constants'
+import { logoutUser } from 'routes/Login/modules/user'
+import { CAS_LOGOUT_URL } from 'modules/constants'
 
 class Logout extends Component {
   componentDidMount() {

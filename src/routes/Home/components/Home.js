@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import background from 'assets/images/palikat.png'
-
-const EtusivuHero = styled.div`
-  background-image: url(${background});
-  height: 400px;
-`
+import background from '../assets/palikat.png'
+import Hero from './Hero'
+import LinkBox from './LinkBox'
 
 const Title = styled.h1`
   color: #555;
@@ -24,31 +20,21 @@ const Description = styled.p`
   position: relative;
 `
 
-const LupaLink = styled.div`
-  margin: 50px 0 0 20px;
-  background-color: #3B7A9A;
-  color: white;
-  display: inline-block;
-  padding: 20px 40px;
-`
-
-class Etusivu extends Component {
+class Home extends Component {
   render() {
     return (
       <div>
         <Helmet>
           <title>Etusivu | Oiva</title>
         </Helmet>
-        <EtusivuHero>
+        <Hero background={background} height="400px">
           <Title>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</Title>
           <Description>Palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>
-          <Link to="/luvat">
-            <LupaLink>Siirry lupiin</LupaLink>
-          </Link>
-        </EtusivuHero>
+          <LinkBox text="Siirry lupiin" to="/luvat" />
+        </Hero>
       </div>
     )
   }
 }
 
-export default Etusivu
+export default Home

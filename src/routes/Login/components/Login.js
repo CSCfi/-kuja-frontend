@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import LoginForm from 'components/LoginForm'
+import LoginForm from 'routes/Login/components/LoginForm'
 
 const FakeButton = styled.div`
   border: 1px solid #CCC;
@@ -23,7 +22,7 @@ const FakeButton = styled.div`
   }
 `
 
-class Kirjautuminen extends Component {
+class Login extends Component {
   render() {
     return (
       <div>
@@ -40,8 +39,4 @@ class Kirjautuminen extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { user: state.user.user }
-}
-
-export default connect(mapStateToProps)(Kirjautuminen)
+export default Login

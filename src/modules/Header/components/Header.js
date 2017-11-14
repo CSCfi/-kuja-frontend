@@ -1,50 +1,11 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
 import _ from 'lodash'
 
-import { ROLE_ESITTELIJA } from 'helpers/Constants'
+import NavbarWrapper from 'modules/Header/components/NavbarWrapper'
+import LinkItem from 'modules/Header/components/LinkItem'
+import { ROLE_ESITTELIJA } from 'modules/constants'
 
-const NavbarWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  background: #3B7A9A;
-  color: white;
-`
-const LinkItem = styled(NavLink)`
-  padding: 10px 20px;
-  text-decoration: none;
-  color: white;
-  background: #3B7A9A;
-  text-transform: uppercase;
-  margin-left: 0px;
-
-  a:visited {
-    color: white;
-  }
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  &.active {
-    color: #3B7A9A;
-    background: white;
-  }
-
-  &.text-small {
-    font-size: 14px;
-    text-transform: none;
-  }
-
-  &.pull-right {
-    margin-left: auto;
-  }
-`
-
-class Navigaatio extends Component {
+class Header extends Component {
   renderRoleLinks() {
     if (this.props.user && this.props.user.roles) {
       const { roles } = this.props.user
@@ -96,8 +57,4 @@ class Navigaatio extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return { user: state.user.user }
-}
-
-export default connect(mapStateToProps, null, null, { pure: false })(Navigaatio)
+export default Header
