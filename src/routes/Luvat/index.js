@@ -1,45 +1,10 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Helmet } from 'react-helmet'
+import LuvatContainer from 'routes/Luvat/containers/LuvatContainer'
 
-
-import { fetchLuvat } from 'routes/Luvat/modules/luvat'
-import LuvatList from 'routes/Luvat/components/LuvatList'
-
-class Luvat extends Component {
-  componentWillMount() {
-    this.props.fetchLuvat()
+const routes = [
+  {
+    path: '/luvat',
+    component: LuvatContainer
   }
+]
 
-  render() {
-    if (this.props.luvat.fetched) {
-      return (
-        <div>
-          <Helmet>
-            <title>Lupavaranto | Oiva</title>
-          </Helmet>
-          <h4>LUVAT</h4>  
-          <LuvatList luvat={this.props.luvat.luvat}/>
-        </div>
-      )
-    } else if (this.props.isFetching) {
-        return <div>Ladataan...</div>
-    } else if (this.props.hasErrored) {
-      return <div>Lupia ladattaessa tapahtui virhe</div>
-    } else {
-      return null
-    }
-  }
-}
-
-const mapStateToProps = (state) => {
-  return { luvat: state.luvat }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchLuvat: () => dispatch(fetchLuvat())
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Luvat)
+export default routes

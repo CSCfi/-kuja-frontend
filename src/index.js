@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom'
 import styled, { injectGlobal } from 'styled-components'
 
 import store from 'store'
-import Header from 'modules/Header/components/Header'
-import Routes from 'routes/Routes'
+import Header from 'modules/Header/containers/HeaderContainer'
+import Routes from 'routes'
 import { APP_WIDTH } from 'modules/constants'
 
 // Globaalit tyylit

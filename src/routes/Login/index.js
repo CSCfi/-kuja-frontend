@@ -1,3 +1,10 @@
 import LoginContainer from 'routes/Login/containers/LoginContainer'
 
-export default LoginContainer
+const routes = [
+  {
+    path: '/kirjaudu',
+    component: LoginContainer
+  }
+]
+
+export default routes
