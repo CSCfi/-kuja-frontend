@@ -1,11 +1,11 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 
-import Lupa from 'routes/Luvat/components/Lupa'
+import LupaItem from 'routes/Luvat/components/LupaItem'
 
 class LuvatList extends Component {
   renderPermits() {
-    return _.map(this.props.luvat, lupa => <Lupa lupa={lupa} key={lupa.id} />)
+    return _.map(this.props.luvat, lupa => <LupaItem lupa={lupa} key={lupa.id} />)
   }
 
   render() {
