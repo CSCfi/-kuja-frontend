@@ -21,6 +21,7 @@ class LuvatList extends Component {
               <th>Koulutustehtävän voimassaolo</th>
               <th>Päätös</th>
               <th>Esittelijä</th>
+              <th>Avaa lupa</th>
             </tr>
           </thead>
           <tbody>
