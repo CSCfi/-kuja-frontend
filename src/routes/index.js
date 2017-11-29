@@ -12,15 +12,15 @@ import Home from 'routes/Home'
 import Luvat from 'routes/Luvat'
 import Login from 'routes/Login'
 import Logout from 'routes/Logout'
+import Lupa from 'routes/Luvat/Lupa'
 
 const appRoutes = _.union(
   Home,
   Luvat,
   Login,
-  Logout
+  Logout,
+  Lupa
 )
-
-console.log(appRoutes)
 
 const RoutesWrapper = styled.div`
   width: 100%;

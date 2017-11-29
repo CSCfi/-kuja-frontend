@@ -1,7 +1,9 @@
 import React from 'react'
 import Moment from 'react-moment'
+import { Link } from 'react-router-dom'
 
 import { API_BASE_URL } from 'modules/constants'
+import { LUVAT_BASE } from 'modules/routeConstants'
 
 const Lupa = (props) => {
   const { lupa } = props
@@ -15,6 +17,7 @@ const Lupa = (props) => {
       <th><Moment format="DD.MM.YYYY">{lupa.alkupvm}</Moment> - </th>
       <th><Moment format="DD.MM.YYYY">{lupa.paatospvm}</Moment></th>
       <th>{lupa.meta.esittelija}</th>
+      <th><Link to={`${LUVAT_BASE}/${lupa.id}`}>avaa</Link></th>
     </tr>
   )
 } 

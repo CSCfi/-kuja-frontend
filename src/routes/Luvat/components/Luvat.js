@@ -5,7 +5,6 @@ import LuvatList from 'routes/Luvat/components/LuvatList'
 
 class Luvat extends Component {
   componentWillMount() {
-    console.log(this.props)
     this.props.fetchLuvat()
   }
 
