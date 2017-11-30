@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 
 import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
 
-
 const HeaderTitle = styled.div`
-  font-family: ${FONT_STACK.GENERAL};
+  font-family: ${FONT_STACK.GOTHAM_NARROW};
   font-size: 20px;
   color: white;
   padding: 14px 20px;
@@ -68,9 +66,9 @@ class Header extends Component {
         </HeaderBar>
         <HeaderBar>
           <HeaderBarInner>
-            <LinkItem to="/" exact fontFamily={FONT_STACK.NAVIGATION}>Etusivu</LinkItem>
-            <LinkItem to="/luvat">Luvat</LinkItem>
-            <LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>
+            <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
+            <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
+            {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/}
             {this.renderRoleLinks()}
           </HeaderBarInner>
         </HeaderBar>

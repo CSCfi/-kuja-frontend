@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 
-import LupaItem from 'routes/Luvat/components/LupaItem'
+import LupaItem from 'routes/Jarjestajat/components/LupaItem'
 
 class LuvatList extends Component {
   renderPermits() {

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
-import { fetchLuvat } from 'routes/Luvat/modules/luvat'
-import Luvat from '../components/Luvat'
+import { fetchLuvat } from 'routes/Jarjestajat/modules/luvat'
+import Jarjestajat from '../components/Jarjestajat'
 
 const mapStateToProps = (state) => {
   return { luvat: state.luvat }
@@ -13,4 +13,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Luvat)
+export default connect(mapStateToProps, mapDispatchToProps)(Jarjestajat)

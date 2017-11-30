@@ -10,7 +10,7 @@ const LinkItem = styled(NavLink)`
   text-transform: uppercase;
   margin-left: 0px;
   font-size: 18px;
-  font-family: ${FONT_STACK.NAVIGATION};
+  font-family: ${FONT_STACK.OPEN_SANS_REGULAR};
   line-height: 18px;
 
   a:visited {

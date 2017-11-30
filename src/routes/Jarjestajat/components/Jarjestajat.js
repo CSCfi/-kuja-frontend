@@ -1,21 +1,27 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 
-import LuvatList from 'routes/Luvat/components/LuvatList'
+import LuvatList from 'routes/Jarjestajat/components/LuvatList'
+import { P } from 'modules/styles'
 
-class Luvat extends Component {
+class Jarjestajat extends Component {
   componentWillMount() {
     this.props.fetchLuvat()
   }
 
   render() {
     if (this.props.luvat.fetched) {
+      console.log(this.props.luvat.luvat)
       return (
         <div>
           <Helmet>
             <title>Lupavaranto | Oiva</title>
           </Helmet>
-          <h4>LUVAT</h4>  
+          <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
+          <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
+          <h1>Koulutuksen järjestäjät</h1>
+          <P>Voimassa olevat koulutuksen järjestämisluvat ({Object.keys(this.props.luvat.luvat).length} kpl)</P>
           <LuvatList luvat={this.props.luvat.luvat}/>
         </div>
       )
@@ -29,4 +35,4 @@ class Luvat extends Component {
   }
 }
 
-export default Luvat
+export default Jarjestajat
