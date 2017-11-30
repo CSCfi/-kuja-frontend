@@ -17,7 +17,8 @@ import 'static/fonts/GothamNarrow-Light.otf'
 export const COLORS = {
   OIVA_GREEN: '#5A8A70',
   DARK_GRAY: '#525252',
-  BLACK: '#000000'
+  BLACK: '#000000',
+  WHITE: '#FFFFFF'
 }
 
 export const FONT_STACK = {
@@ -57,6 +58,7 @@ injectGlobal`
   
   a {
     color: ${COLORS.OIVA_GREEN};
+    text-decoration: none;
   }
 `
 
@@ -69,7 +71,6 @@ export const AppContainer = styled.div`
 `
 
 export const P = styled.p`
-  font-family: ${FONT_STACK.OPEN_SANS_REGULAR};
   font-weight: 100;
   font-size: 16px;
   line-height: 22px;

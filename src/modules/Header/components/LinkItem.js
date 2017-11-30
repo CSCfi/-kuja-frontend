@@ -18,11 +18,12 @@ const LinkItem = styled(NavLink)`
   }
 
   &:hover {
-    text-decoration: underline;
+    background-color: ${COLORS.WHITE};
+    color: ${COLORS.BLACK};
   }
 
   &.active {
-    color: ${COLORS.DARK_GRAY};
+    color: ${COLORS.BLACK};
     background: white;
   }
 
