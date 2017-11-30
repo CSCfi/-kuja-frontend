@@ -1,16 +1,15 @@
 import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-import { COLORS, FONT_STACK } from 'modules/styles'
+import { COLORS } from 'modules/styles'
 
-const LinkItem = styled(NavLink)`
+const HeaderLink = styled(Link)`
   padding: 15px 20px;
   text-decoration: none;
   color: white;
-  text-transform: uppercase;
+  text-transform: ;
   margin-left: 0px;
   font-size: 18px;
-  font-family: ${FONT_STACK.NAVIGATION};
   line-height: 18px;
 
   a:visited {
@@ -30,14 +29,6 @@ const LinkItem = styled(NavLink)`
     font-size: 14px;
     text-transform: none;
   }
-
-  &.pull-right {
-    margin-left: auto;
-  }
-  
-  &.has-separator {
-  border-right: 1px solid rgba(255, 255, 255, 0.25);
-  }
 `
 
-export default LinkItem
+export default HeaderLink

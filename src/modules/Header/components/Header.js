@@ -1,9 +1,36 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
-import NavbarWrapper from 'modules/Header/components/NavbarWrapper'
+import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA } from 'modules/constants'
+import { COLORS, FONT_STACK } from 'modules/styles'
+
+
+const HeaderTitle = styled.div`
+  font-family: ${FONT_STACK.GENERAL};
+  font-size: 20px;
+  color: white;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: white;
+  margin-left: 0px;
+  line-height: 20px;
+`
+
+const HeaderLinks = styled.div`
+  display: flex;
+`
+
+const HeaderBarInner = styled.div`
+  display: flex;
+  justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
+  margin: 0 auto;
+  width: 100%;
+  max-width: ${props => props.maxWidth ? props.maxWidth : '1280px'};
+`
 
 class Header extends Component {
   renderRoleLinks() {
@@ -27,32 +54,27 @@ class Header extends Component {
     }
   }
 
-  renderLoginLinks() {
-    if (!this.props.user) {
-      return <LinkItem to="/kirjaudu" className="text-small pull-right">Kirjaudu sisään</LinkItem>
-    } else {
-      return <LinkItem to="/kirjaudu-ulos" className="text-small pull-right">Kirjaudu ulos</LinkItem>
-    }
-  }
-
   render() {
-    const innerStyle = {
-      display: 'flex',
-      margin: '0 auto',
-      width: '100%',
-      maxWidth: `${this.props.maxWidth}px`
-    }
-    
     return (
-      <NavbarWrapper>
-        <div style={innerStyle}>
-          <LinkItem to="/" exact>Etusivu</LinkItem>
-          <LinkItem to="/luvat">Luvat</LinkItem>
-          <LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>
-          {this.renderRoleLinks()}
-          {this.renderLoginLinks()}
-        </div>
-      </NavbarWrapper>
+      <div>
+        <HeaderBar bgColor={COLORS.OIVA_GREEN}>
+          <HeaderBarInner maxWidth="1280px" justifyContent="space-between">
+            <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja sääntelypalvelu</HeaderTitle>
+            <HeaderLinks>
+              <LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>
+              <LinkItem to="/kirjaudu" className="text-small">Kirjaudu sisään</LinkItem>
+            </HeaderLinks>
+          </HeaderBarInner>
+        </HeaderBar>
+        <HeaderBar>
+          <HeaderBarInner>
+            <LinkItem to="/" exact fontFamily={FONT_STACK.NAVIGATION}>Etusivu</LinkItem>
+            <LinkItem to="/luvat">Luvat</LinkItem>
+            <LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>
+            {this.renderRoleLinks()}
+          </HeaderBarInner>
+        </HeaderBar>
+      </div>
     )
   }
 }
