@@ -6,9 +6,6 @@ export const CAS_LOGIN_READY = `${HOST_BASE_URL}/cas-ready`
 export const CAS_BASE_URL = 'https://testi.virkailija.opintopolku.fi'
 export const CAS_LOGOUT_URL = `${CAS_BASE_URL}/cas/logout?service=${HOST_BASE_URL}`
 
-// STYLING ETC
-export const APP_WIDTH = 1280
-
 // USERS & ROLES
 export const ROLE_APPLICATION = 'APP_KOUTE'
 export const ROLE_YLLAPITAJA = 'APP_KOUTE_YLLAPITAJA'

@@ -1,24 +1,29 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
+import { COLORS, FONT_STACK } from 'modules/styles'
+
 const LinkItem = styled(NavLink)`
-  padding: 10px 20px;
+  padding: 15px 20px;
   text-decoration: none;
   color: white;
-  background: #3B7A9A;
   text-transform: uppercase;
   margin-left: 0px;
+  font-size: 18px;
+  font-family: ${FONT_STACK.OPEN_SANS_REGULAR};
+  line-height: 18px;
 
   a:visited {
     color: white;
   }
 
   &:hover {
-    text-decoration: underline;
+    background-color: ${COLORS.WHITE};
+    color: ${COLORS.BLACK};
   }
 
   &.active {
-    color: #3B7A9A;
+    color: ${COLORS.BLACK};
     background: white;
   }
 
@@ -29,6 +34,10 @@ const LinkItem = styled(NavLink)`
 
   &.pull-right {
     margin-left: auto;
+  }
+  
+  &.has-separator {
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
   }
 `
 

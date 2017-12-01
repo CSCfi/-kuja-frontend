@@ -1,6 +1,6 @@
-import _ from 'lodash'
 import React from 'react'
 
+import { parseLocalizedField } from "../../../../modules/helpers"
 import { KOHTEET, KOODISTOT } from '../modules/constants'
 
 const rootStyles = {
@@ -126,14 +126,6 @@ const Section = (props) => {
       </div>
     )
   }
-}
-
-const parseLocalizedField = (obj, locale, key, localeKey) => {
-  if (!obj || !locale || !key || !localeKey) { return null }
-
-  return _.find(obj, (o) => {
-    if (o[localeKey] === locale) { return o[key] }
-  })[key]
 }
 
 export default Section

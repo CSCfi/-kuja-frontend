@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 
-import background from '../assets/palikat.png'
+
 import Hero from './Hero'
 import LinkBox from './LinkBox'
+import { BackgroundImage } from 'modules/styles'
 
 const Title = styled.h1`
   color: #555;
@@ -25,12 +26,13 @@ class Home extends Component {
     return (
       <div>
         <Helmet>
-          <title>Etusivu | Oiva</title>
+          <title>Oiva | Etusivu</title>
         </Helmet>
-        <Hero background={background} height="400px">
+        <BackgroundImage />
+        <Hero  height="400px">
           <Title>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</Title>
           <Description>Palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>
-          <LinkBox text="Siirry lupiin" to="/luvat" />
+          <LinkBox text="Siirry lupiin" to="/jarjestajat" />
         </Hero>
       </div>
     )

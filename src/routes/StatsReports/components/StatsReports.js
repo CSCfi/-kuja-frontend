@@ -6,7 +6,7 @@ class StatsReports extends Component {
     return (
       <div>
         <Helmet>
-          <title>Tilastot ja raportit | Oiva</title>
+          <title>Oiva | Tilastot ja raportit</title>
         </Helmet>
         <p>Tilastot ja raportit</p>
       </div>
