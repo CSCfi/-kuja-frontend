@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 
-import background from '../assets/palikat.png'
+import background from 'static/images/palikat.png'
 import Hero from './Hero'
 import LinkBox from './LinkBox'
 

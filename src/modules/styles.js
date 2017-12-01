@@ -25,7 +25,7 @@ export const FONT_STACK = {
   GOTHAM_NARROW: `"Gotham Narrow", Helvetica, Arial, sans-serif`,
   OPEN_SANS_REGULAR: `"Open Sans", Helvetica, Arial, sans-serif`,
   OPEN_SANS_SEMIBOLD: `"Open Sans", Helvetica, Arial, sans-serif`,
-  PT_SANS_NARROW:`"PT Sans Narrow", "Times New Roman", sans-serif`
+  PT_SANS_NARROW: `"PT Sans Narrow", "Times New Roman", sans-serif`
 }
 
 export const APP_WIDTH = 1030
@@ -35,16 +35,34 @@ injectGlobal`
   body {
     margin: 0;
     font-family: ${FONT_STACK.GOTHAM_NARROW};
-  }  
+  }
+  
+  table {
+    //padding: 12px 24px;
+    border: 1px solid #D5D5D5;
+  }
+  
+  thead {
+    color: ${COLORS.WHITE};
+    background: ${COLORS.OIVA_GREEN};
+  }
   
   thead {
     th {
-      font-weight: bold;
+    }
+  }
+  
+  tbody {
+    tr {
+      &:nth-child(even) {
+        background: #F9F9F9;
+      }
     }
   }
 
   th {
     font-weight: normal;
+    padding: 6px 18px;
   }
   
   h1 {
@@ -75,3 +93,7 @@ export const P = styled.p`
   font-size: 16px;
   line-height: 22px;
 `
+
+
+
+

@@ -13,7 +13,7 @@ export function fetchLuvat() {
   return (dispatch) => {
     dispatch({ type: FETCH_LUVAT_START })
 
-    const request = fetch(`${API_BASE_URL}/luvat`)
+    const request = fetch(`${API_BASE_URL}/luvat/jarjestajilla`)
 
     request
       .then((response) => response.json())

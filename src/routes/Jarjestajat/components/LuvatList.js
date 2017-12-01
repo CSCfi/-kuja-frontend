@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 
 import LupaItem from 'routes/Jarjestajat/components/LupaItem'
+import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
 
 class LuvatList extends Component {
   renderPermits() {
@@ -10,25 +11,19 @@ class LuvatList extends Component {
 
   render() {
     return (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Diaarinumero</th>
-              <th>Järjestäjä</th>
-              <th>Maakunta</th>
-              <th>Asia</th>
-              <th>Koulutustehtävän voimassaolo</th>
-              <th>Päätös</th>
-              <th>Esittelijä</th>
-              <th>Avaa lupa</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderPermits()}  
-          </tbody>
-        </table>
-      </div>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Diaarinumero</Th>
+            <Th flex="3">Järjestäjä</Th>
+            <Th>Maakunta</Th>
+            <Th>Voimassa oleva lupa</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {this.renderPermits()}
+        </Tbody>
+      </Table>
     )
   }
 }
