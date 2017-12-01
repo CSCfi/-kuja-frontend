@@ -8,6 +8,8 @@
 
 import styled, { injectGlobal } from 'styled-components'
 
+import background from 'static/images/palikat.png'
+
 import 'static/fonts/OpenSans-Regular.ttf'
 import 'static/fonts/OpenSans-SemiBold.ttf'
 import 'static/fonts/GothamNarrow-Book.otf'
@@ -18,14 +20,15 @@ export const COLORS = {
   OIVA_GREEN: '#5A8A70',
   DARK_GRAY: '#525252',
   BLACK: '#000000',
-  WHITE: '#FFFFFF'
+  WHITE: '#FFFFFF',
+  LIGHT_GRAY: '#D8D8D8'
 }
 
 export const FONT_STACK = {
   GOTHAM_NARROW: `"Gotham Narrow", Helvetica, Arial, sans-serif`,
   OPEN_SANS_REGULAR: `"Open Sans", Helvetica, Arial, sans-serif`,
   OPEN_SANS_SEMIBOLD: `"Open Sans", Helvetica, Arial, sans-serif`,
-  PT_SANS_NARROW: `"PT Sans Narrow", "Times New Roman", sans-serif`
+  PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`
 }
 
 export const APP_WIDTH = 1030
@@ -94,6 +97,17 @@ export const P = styled.p`
   line-height: 22px;
 `
 
+export const BackgroundImage = styled.div`
+  height: 800px;
+  width: 100vw;
+  background: url(${background});
+  background-size: cover;
+  position: absolute;
+  top: -450px;
+  right: 0;
+  opacity: 0.3;
+  z-index: -1;
+`
 
 
 

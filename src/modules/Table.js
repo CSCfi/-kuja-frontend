@@ -13,6 +13,27 @@ export const Thead = styled.div`
   flex-direction: column;
   color: ${COLORS.WHITE};
   background: ${COLORS.OIVA_GREEN};
+  
+  div {
+    font-size: 13px;
+    position: relative;
+    
+    &:after {
+      content: '';
+      width: 1px;
+      height: 22px;
+      background-color: rgba(255, 255, 255, 1);
+      position: absolute;
+      right: 0;
+      top: 7px;
+    }
+    
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+  }
 `
 
 export const Tbody = styled.div`

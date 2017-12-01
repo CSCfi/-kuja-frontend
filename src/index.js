@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, NavLink } from 'react-router-dom'
 import { BreadcrumbsProvider, Breadcrumbs } from 'react-breadcrumbs-dynamic'
 
+import 'modules/polyfills'
 import store from 'store'
 import Header from 'modules/Header/containers/HeaderContainer'
 import Routes from 'routes'

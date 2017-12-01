@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
+import { COLORS} from "../../../modules/styles"
+
 const LinkBoxStyle = styled.div`
   margin: 50px 0 0 20px;
-  background-color: #3B7A9A;
-  color: white;
+  background-color: ${COLORS.LIGHT_GRAY};
+  color: ${COLORS.BLACK};
   display: inline-block;
   padding: 20px 40px;
+  text-transform: uppercase;
+  font-weight: bold;
 `
 
 const LinkBox = ({ to, text }) => {

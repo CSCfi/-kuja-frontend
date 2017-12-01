@@ -1,24 +1,10 @@
 import React, { Component } from 'react'
 import { Helmet } from 'react-helmet'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
-import styled from 'styled-components'
 
 import LuvatList from 'routes/Jarjestajat/components/LuvatList'
 import { P } from 'modules/styles'
-
-import background from 'static/images/palikat.png'
-
-const BackgroundImage = styled.div`
-  height: 800px;
-  width: 100vw;
-  background: url(${background});
-  background-size: cover;
-  position: absolute;
-  top: -450px;
-  right: 0;
-  opacity: 0.3;
-  z-index: -1;
-`
+import { BackgroundImage } from 'modules/styles'
 
 class Jarjestajat extends Component {
   componentWillMount() {
@@ -30,7 +16,7 @@ class Jarjestajat extends Component {
       return (
         <div>
           <Helmet>
-            <title>Lupavaranto | Oiva</title>
+            <title>Oiva | Koulutuksen järjestäjät</title>
           </Helmet>
           <BackgroundImage />
           <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>

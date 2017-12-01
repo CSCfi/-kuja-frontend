@@ -5,8 +5,6 @@ import { Route } from 'react-router-dom'
 import RequireCasAuth from 'routes/Login/components/RequireCasAuth'
 import CasAuthenticated from 'routes/Login/containers/CasAuthenticated'
 
-import { APP_WIDTH } from 'modules/constants'
-
 import Home from 'routes/Home'
 import Jarjestajat from 'routes/Jarjestajat'
 import Login from 'routes/Login'

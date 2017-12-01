@@ -28,7 +28,7 @@ class Login extends Component {
     return (
       <div>
         <Helmet>
-          <title>Kirjaudu sisään | Oiva</title>
+          <title>Oiva | Kirjaudu sisään</title>
         </Helmet>
         <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
         <BreadcrumbsItem to='/kirjaudu'>Kirjaudu sisään</BreadcrumbsItem>
