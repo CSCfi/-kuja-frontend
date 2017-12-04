@@ -6,7 +6,11 @@ import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
 
 class LuvatList extends Component {
   renderPermits() {
-    return _.map(this.props.luvat, lupa => <LupaItem lupa={lupa} key={lupa.id} />)
+    const sorted = _.sortBy(this.props.luvat, (lupa) => {
+      return lupa.jarjestaja.nimi.fi || lupa.jarjestaja.nimi.sv
+    })
+
+    return _.map(sorted, lupa => <LupaItem lupa={lupa} key={lupa.id} />)
   }
 
   render() {
