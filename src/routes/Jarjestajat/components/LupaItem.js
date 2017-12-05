@@ -15,7 +15,8 @@ const Lupa = (props) => {
   return (
     <Tr>
       <Th>{lupa.diaarinumero}</Th>
-      <Th flex="3"><Link to={slugify(jarjestaja)}>{jarjestaja}</Link></Th>
+      {/*<Th flex="3"><Link to={slugify(jarjestaja)}>{jarjestaja}</Link></Th>*/}
+      <Th flex="3">{jarjestaja}</Th>
       <Th>{maakunta}</Th>
       <Th alignItems="center">
         <img src={pdf} alt="pdf" title="pdf"/>
