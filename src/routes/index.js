@@ -14,8 +14,8 @@ import Lupa from 'routes/Jarjestajat/Lupa'
 const appRoutes = _.union(
   Home,
   Jarjestajat,
-  Login,
-  Logout,
+  // Login, disabloitu toistaiseksi
+  // Logout, disabloitu toistaiseksi
   Lupa
 )
 
@@ -23,8 +23,8 @@ const Routes = () => {
   return (
     <div>
       {appRoutes.map((route, i) => (<Route key={i} {...route} />))}
-      <Route path="/cas-auth" component={RequireCasAuth} />
-      <Route path="/cas-ready" component={CasAuthenticated} />
+      {/*<Route path="/cas-auth" component={RequireCasAuth} />*/}
+      {/*<Route path="/cas-ready" component={CasAuthenticated} />*/}
     </div>
   )
 }

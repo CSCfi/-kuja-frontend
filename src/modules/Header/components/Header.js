@@ -58,10 +58,11 @@ class Header extends Component {
         <HeaderBar bgColor={COLORS.OIVA_GREEN}>
           <HeaderBarInner maxWidth="1280px" justifyContent="space-between">
             <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja sääntelypalvelu</HeaderTitle>
-            <HeaderLinks>
-              <LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>
-              <LinkItem to="/kirjaudu" className="text-small">Kirjaudu sisään</LinkItem>
-            </HeaderLinks>
+            {/* Disabloidaan headerin linkit toistaiseksi */}
+            {/*<HeaderLinks>*/}
+              {/*<LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>*/}
+              {/*<LinkItem to="/kirjaudu" className="text-small">Kirjaudu sisään</LinkItem>*/}
+            {/*</HeaderLinks>*/}
           </HeaderBarInner>
         </HeaderBar>
         <HeaderBar>
@@ -69,7 +70,7 @@ class Header extends Component {
             <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
             <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
             {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/}
-            {this.renderRoleLinks()}
+            {/*{this.renderRoleLinks()}*/}
           </HeaderBarInner>
         </HeaderBar>
       </div>
