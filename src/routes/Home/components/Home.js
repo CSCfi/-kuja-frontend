@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet'
 
 import Hero from './Hero'
 import LinkBox from './LinkBox'
+import InfoBox from './InfoBox'
 import { BackgroundImage } from 'modules/styles'
 
 const Title = styled.h1`
@@ -29,11 +30,20 @@ class Home extends Component {
           <title>Oiva | Etusivu</title>
         </Helmet>
         <BackgroundImage />
-        <Hero  height="400px">
-          <Title>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</Title>
+        <Hero  height="300px">
+          <Title>Oiva - Opetushallinnon ohjaus- ja sääntelypalvelu</Title>
           <Description>Palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>
           <LinkBox text="Siirry lupiin" to="/jarjestajat" />
         </Hero>
+        <InfoBox maxWidth="600px">
+          <h3>PALVELUN KUVAUS</h3>
+          <p>
+            Opetushallinnon ohjaus- ja säätelypalvelu on opetus- ja kulttuuriministeriön kehittämä ja ylläpitämä palvelu
+            ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen. Palvelu tulee sisältämään hakemus-
+            ja päätöspalveluiden lisäksi hakemisen ja päätöksenteon tueksi erilaisia tilastoja ja raportteja.
+          </p>
+          <p>Palvelu otetaan käyttöön vaiheittain ja se palvelee ensivaiheessa ammatillisen peruskoulutuksen lupapalveluna.</p>
+        </InfoBox>
       </div>
     )
   }
