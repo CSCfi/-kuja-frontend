@@ -13,6 +13,7 @@ const LinkBoxStyle = styled.div`
   padding: 20px 40px;
   text-transform: uppercase;
   font-weight: bold;
+  letter-spacing: 0.05em;
 `
 
 const LinkBox = ({ to, text }) => {
