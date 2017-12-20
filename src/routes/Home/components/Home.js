@@ -22,6 +22,10 @@ const Description = styled.p`
   position: relative;
 `
 
+const InfoTitle = styled.h3`
+  margin-top: 10px;
+`
+
 class Home extends Component {
   render() {
     return (
@@ -32,17 +36,17 @@ class Home extends Component {
         <BackgroundImage />
         <Hero  height="300px">
           <Title>Oiva - Opetushallinnon ohjaus- ja sääntelypalvelu</Title>
-          <Description>Palvelu ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>
+          <Description>Palvelu ammatillisen koulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen</Description>
           <LinkBox text="Siirry lupiin" to="/jarjestajat" />
         </Hero>
         <InfoBox maxWidth="600px">
-          <h3>PALVELUN KUVAUS</h3>
+          <InfoTitle >PALVELUN KUVAUS</InfoTitle>
           <p>
             Opetushallinnon ohjaus- ja säätelypalvelu on opetus- ja kulttuuriministeriön kehittämä ja ylläpitämä palvelu
-            ammatillisen peruskoulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen. Palvelu tulee sisältämään hakemus-
+            ammatillisen koulutuksen järjestämislupien ja koulutustehtävien muutosten hakemiseen. Palvelu tulee sisältämään hakemus-
             ja päätöspalveluiden lisäksi hakemisen ja päätöksenteon tueksi erilaisia tilastoja ja raportteja.
           </p>
-          <p>Palvelu otetaan käyttöön vaiheittain ja se palvelee ensivaiheessa ammatillisen peruskoulutuksen lupapalveluna.</p>
+          <p>Palvelu otetaan käyttöön vaiheittain ja se palvelee ensivaiheessa ammatillisen koulutuksen lupapalveluna.</p>
         </InfoBox>
       </div>
     )
