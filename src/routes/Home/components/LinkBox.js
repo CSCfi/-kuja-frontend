@@ -7,12 +7,13 @@ import { COLORS} from "../../../modules/styles"
 
 const LinkBoxStyle = styled.div`
   margin: 50px 0 0 20px;
-  background-color: ${COLORS.LIGHT_GRAY};
-  color: ${COLORS.BLACK};
+  background-color: ${COLORS.OIVA_GREEN};
+  color: ${COLORS.WHITE};
   display: inline-block;
   padding: 20px 40px;
   text-transform: uppercase;
   font-weight: bold;
+  letter-spacing: 0.05em;
 `
 
 const LinkBox = ({ to, text }) => {
