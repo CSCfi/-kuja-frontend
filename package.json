@@ -12,6 +12,7 @@
     "react-breadcrumbs-dynamic": "^1.0.10",
     "react-dom": "^16.0.0",
     "react-helmet": "^5.2.0",
+    "react-media": "^1.6.1",
     "react-moment": "^0.6.5",
     "react-redux": "^5.0.6",
     "react-router-dom": "4.2.2",

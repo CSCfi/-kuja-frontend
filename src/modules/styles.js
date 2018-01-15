@@ -34,12 +34,11 @@ export const FONT_STACK = {
 export const APP_WIDTH = 1030
 
 // Media query breakpointit
-
-
 export const MEDIA_QUERIES = {
-  MOBILE: 'only screen and (min-width: 360px)',
-  TABLET: 'only screen and (min-width: 768px)',
-  DESKTOP_NORMAL: 'only screen and (min-width: 1024px)',
+  MOBILE: 'only screen and (min-width: 360px) and (max-width: 767px)',
+  TABLET: 'only screen and (min-width: 768px) and (max-width: 1023px)',
+  TABLET_MIN: 'only screen and (min-width: 768px)',
+  DESKTOP_NORMAL: 'only screen and (min-width: 1024px) and (max-width: 1279px)',
   DESKTOP_LARGE: 'only screen and (min-width: 1280px)'
 }
 
@@ -51,7 +50,6 @@ injectGlobal`
   }
   
   table {
-    //padding: 12px 24px;
     border: 1px solid #D5D5D5;
   }
   
@@ -90,6 +88,12 @@ injectGlobal`
   a {
     color: ${COLORS.OIVA_GREEN};
     text-decoration: none;
+  }
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    h1 {
+      font-size: 26px;
+    }
   }
 `
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 
-
 import Hero from './Hero'
 import LinkBox from './LinkBox'
 import InfoBox from './InfoBox'
