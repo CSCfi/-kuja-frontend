@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { BREAKPOINTS } from "../../../modules/styles"
+import { MEDIA_QUERIES } from "../../../modules/styles"
 
 const Hero = styled.div`
   background-image: url(${props => props.background});
@@ -10,7 +10,7 @@ const Hero = styled.div`
     display: inline-block;
   } 
   
-  @media ${BREAKPOINTS.MOBILE} {
+  @media ${MEDIA_QUERIES.MOBILE} {
     height: auto;
   }
 `

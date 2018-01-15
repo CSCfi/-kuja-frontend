@@ -34,7 +34,9 @@ export const FONT_STACK = {
 export const APP_WIDTH = 1030
 
 // Media query breakpointit
-export const BREAKPOINTS = {
+
+
+export const MEDIA_QUERIES = {
   MOBILE: 'only screen and (min-width: 360px)',
   TABLET: 'only screen and (min-width: 768px)',
   DESKTOP_NORMAL: 'only screen and (min-width: 1024px)',
@@ -98,7 +100,7 @@ export const AppContainer = styled.div`
   padding: 15px;
   box-sizing: border-box;
   
-  @media ${BREAKPOINTS.MOBILE} {
+  @media ${MEDIA_QUERIES.MOBILE} {
   margin: 0 auto;
   }
 `

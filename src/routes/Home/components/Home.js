@@ -6,7 +6,7 @@ import { Helmet } from 'react-helmet'
 import Hero from './Hero'
 import LinkBox from './LinkBox'
 import InfoBox from './InfoBox'
-import { BackgroundImage, BREAKPOINTS } from 'modules/styles'
+import { BackgroundImage, MEDIA_QUERIES } from 'modules/styles'
 
 const Title = styled.h1`
   color: #555;
@@ -14,7 +14,7 @@ const Title = styled.h1`
   position: relative;
   top: 20px;
   
-  @media ${BREAKPOINTS.MOBILE} {
+  @media ${MEDIA_QUERIES.MOBILE} {
     margin: 15px;
     top: 0;
   }
@@ -26,7 +26,7 @@ const Description = styled.p`
   margin: 50px 0 0 20px;
   position: relative;
   
-  @media ${BREAKPOINTS.MOBILE} {
+  @media ${MEDIA_QUERIES.MOBILE} {
     margin: 15px;
   }
 `
