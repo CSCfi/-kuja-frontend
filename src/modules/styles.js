@@ -33,6 +33,14 @@ export const FONT_STACK = {
 
 export const APP_WIDTH = 1030
 
+// Media query breakpointit
+export const BREAKPOINTS = {
+  MOBILE: 'only screen and (min-width: 360px)',
+  TABLET: 'only screen and (min-width: 768px)',
+  DESKTOP_NORMAL: 'only screen and (min-width: 1024px)',
+  DESKTOP_LARGE: 'only screen and (min-width: 1280px)'
+}
+
 // Globaalit tyylit
 injectGlobal`
   body {
@@ -89,6 +97,10 @@ export const AppContainer = styled.div`
   margin: 45px auto;
   padding: 15px;
   box-sizing: border-box;
+  
+  @media ${BREAKPOINTS.MOBILE} {
+  margin: 0 auto;
+  }
 `
 
 export const P = styled.p`

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { COLORS} from "../../../modules/styles"
+import { COLORS, BREAKPOINTS } from "../../../modules/styles"
 
 const LinkBoxStyle = styled.div`
   margin: 50px 0 0 20px;
@@ -14,6 +14,10 @@ const LinkBoxStyle = styled.div`
   text-transform: uppercase;
   font-weight: bold;
   letter-spacing: 0.05em;
+  
+  @media ${BREAKPOINTS.MOBILE} {
+    margin: 15px;
+  }
 `
 
 const LinkBox = ({ to, text }) => {

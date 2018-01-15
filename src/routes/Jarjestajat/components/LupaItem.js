@@ -31,7 +31,6 @@ const Lupa = (props) => {
 
   const lupaException = LUPA_LISAKOULUTTAJAT[lupa.jarjestajaYtunnus]
   if (lupaException) {
-    console.log(lupaException);
     pdfLink = (
       <Th alignItems="center">
         <img src={pdf} alt="pdf" title="pdf"/>

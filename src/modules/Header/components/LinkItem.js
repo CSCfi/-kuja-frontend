@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
-import { COLORS, FONT_STACK } from 'modules/styles'
+import { COLORS, FONT_STACK, BREAKPOINTS } from 'modules/styles'
 
 const LinkItem = styled(NavLink)`
   padding: 15px 20px;
@@ -38,6 +38,10 @@ const LinkItem = styled(NavLink)`
   
   &.has-separator {
   border-right: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  
+  @media ${BREAKPOINTS.MOBILE} {
+    font-size: 16px;
   }
 `
 
