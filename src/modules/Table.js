@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { COLORS } from "./styles"
+import { COLORS, MEDIA_QUERIES } from "./styles"
 
 export const Table = styled.div`
   display: flex;
@@ -33,6 +33,11 @@ export const Thead = styled.div`
         display: none;
       }
     }
+    
+    @media ${MEDIA_QUERIES.MOBILE} {
+      font-size: 16px;
+      padding: 10px;
+    }
   }
 `
 
@@ -49,6 +54,12 @@ export const Tr = styled.div`
   &:nth-child(even) {
     background: #F9F9F9;
   }
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 0;
+  }
 `
 
 export const Th = styled.div`
@@ -59,5 +70,27 @@ export const Th = styled.div`
   
   img {
     margin-right: 5px;
+  }
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    &.lupa-diaarinumero {
+      padding-bottom: 4px;
+    }
+    
+    &.lupa-jarjestaja {
+      font-size: 18px;
+      padding-bottom: 2px;
+    }
+    
+    &.lupa-maakunta {
+      padding-top: 2px;
+    }
+    
+    &.lupa-pdf {
+    padding-top: 4px;
+      a {
+        font-size: 17px;
+      }
+    }
   }
 `

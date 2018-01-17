@@ -7,7 +7,7 @@ const HeaderLink = styled(Link)`
   padding: 15px 20px;
   text-decoration: none;
   color: white;
-  text-transform: ;
+  text-transform: none;
   margin-left: 0px;
   font-size: 18px;
   line-height: 18px;

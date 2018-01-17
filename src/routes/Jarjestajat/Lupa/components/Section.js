@@ -110,9 +110,8 @@ const Section = (props) => {
                   break;
                 }
               }
-            } else {
-              console.log('määräyksellä ei löytynyt kohdetta tai koodia', maarays)
             }
+
             return null
           })}
         </div>
