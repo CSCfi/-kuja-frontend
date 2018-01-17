@@ -21,7 +21,8 @@ export const COLORS = {
   DARK_GRAY: '#525252',
   BLACK: '#000000',
   WHITE: '#FFFFFF',
-  LIGHT_GRAY: '#D8D8D8'
+  LIGHT_GRAY: '#D8D8D8',
+  BORDER_GRAY: '#DFDFDF'
 }
 
 export const FONT_STACK = {
@@ -126,6 +127,3 @@ export const BackgroundImage = styled.div`
   opacity: 0.3;
   z-index: -1;
 `
-
-
-
