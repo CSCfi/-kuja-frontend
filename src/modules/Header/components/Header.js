@@ -57,7 +57,7 @@ class Header extends Component {
       <div>
         <HeaderBar bgColor={COLORS.OIVA_GREEN}>
           <HeaderBarInner maxWidth="1280px" justifyContent="space-between">
-            <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja sääntelypalvelu</HeaderTitle>
+            <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
             {/* Disabloidaan headerin linkit toistaiseksi */}
             {/*<HeaderLinks>*/}
               {/*<LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>*/}

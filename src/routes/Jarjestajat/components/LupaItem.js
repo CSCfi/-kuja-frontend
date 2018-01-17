@@ -1,10 +1,9 @@
-import _ from 'lodash'
 import React from 'react'
 import Moment from 'react-moment'
 
 import { parseLocalizedField, slugify } from "../../../modules/helpers"
 import { API_BASE_URL, HOST_BASE_URL } from 'modules/constants'
-import { LUPA_EXCEPTIONS, LUPA_LISAKOULUTTAJAT } from "../modules/constants"
+import { LUPA_LISAKOULUTTAJAT } from "../modules/constants"
 import { Th, Tr } from "../../../modules/Table"
 import pdf from 'static/images/icon-pdf-small.png'
 
@@ -14,7 +13,7 @@ const Lupa = (props) => {
   const jarjestaja = lupa.jarjestaja.nimi.fi || lupa.jarjestaja.nimi.sv || ''
 
   let pdfLink = (
-    <Th alignItems="center">
+    <Th alignItems="center" className="lupa-pdf">
       <img src={pdf} alt="pdf" title="pdf"/>
       <a href={`${API_BASE_URL}/pdf/${lupa.diaarinumero}`} target="_blank">
         <Moment format="DD.MM.YYYY">{lupa.alkupvm}</Moment>
@@ -23,17 +22,10 @@ const Lupa = (props) => {
   )
 
   // Luvan poikkeuskäsittely erikoisluville (17kpl)
-  _.find(LUPA_EXCEPTIONS, (exception) => {
-    if (exception === lupa.jarjestajaYtunnus) {
-      pdfLink = <Th alignItems="center"></Th>
-    }
-  })
-
   const lupaException = LUPA_LISAKOULUTTAJAT[lupa.jarjestajaYtunnus]
   if (lupaException) {
-    console.log(lupaException);
     pdfLink = (
-      <Th alignItems="center">
+      <Th alignItems="center" className="lupa-pdf">
         <img src={pdf} alt="pdf" title="pdf"/>
         <a href={`${API_BASE_URL}/pebble/resources/liitteet/lisakoulutusluvat/${lupaException.pdflink}`} target="_blank">
           <Moment format="DD.MM.YYYY">{lupaException.pvm}</Moment>
@@ -44,10 +36,10 @@ const Lupa = (props) => {
 
   return (
     <Tr>
-      <Th>{lupaException === undefined ? lupa.diaarinumero : lupaException.diaarinumero}</Th>
+      <Th className="lupa-diaarinumero">{lupaException === undefined ? lupa.diaarinumero : lupaException.diaarinumero}</Th>
       {/*<Th flex="3"><Link to={slugify(jarjestaja)}>{jarjestaja}</Link></Th>*/}
-      <Th flex="3">{jarjestaja}</Th>
-      <Th>{maakunta}</Th>
+      <Th flex="3" className="lupa-jarjestaja">{jarjestaja}</Th>
+      <Th className="lupa-maakunta">{maakunta}</Th>
       {pdfLink}
     </Tr>
   )
