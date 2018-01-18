@@ -48,10 +48,15 @@ const LupaTextWrapper = styled.div`
 `
 
 const CurrentLupa = (props) => {
-  const { diaarinumero, jarjestaja, infotext, voimassaolo } = props
+  const { diaarinumero, jarjestaja, infotext, voimassaolo, lupaExceptionUrl } = props
+  let url = `${API_BASE_URL}/pdf/${diaarinumero}`
+
+  if (lupaExceptionUrl) {
+    url = lupaExceptionUrl
+  }
 
   return (
-    <a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank">
+    <a href={url} target="_blank">
       <OuterWrapper>
         <CurrentLupaWrapper>
             <img src={pdf} alt="Voimassa oleva lupa PDF-tiedostona"/>

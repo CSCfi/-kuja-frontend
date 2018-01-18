@@ -8,6 +8,8 @@ import CurrentLupa from './CurrentLupa'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
 import Section from './Section'
 import { LUPA_SECTIONS } from '../modules/constants'
+import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
+import { LUPA_EXCEPTION_PATH } from "../../../../modules/constants"
 import { COLORS } from "../../../../modules/styles"
 
 const JarjestajaWrapper = styled.div`
@@ -55,6 +57,7 @@ class Jarjestaja extends Component {
         const { diaarinumero, alkupvm, jarjestajaOid } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
         const name = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
+        const lupaException = LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus]
 
         return (
           <JarjestajaWrapper>
@@ -76,6 +79,7 @@ class Jarjestaja extends Component {
               jarjestaja={name}
               infotext="Ammatillisten tutkintojen ja koulutuksen järjestämislupa"
               voimassaolo={alkupvm}
+              lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
             />
 
             <LargeParagraph>Päättyneet luvat</LargeParagraph>

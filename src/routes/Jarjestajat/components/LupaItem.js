@@ -3,7 +3,7 @@ import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 
 import { parseLocalizedField, slugify } from "../../../modules/helpers"
-import { API_BASE_URL, HOST_BASE_URL } from 'modules/constants'
+import { API_BASE_URL, LUPA_EXCEPTION_PATH } from "../../../modules/constants"
 import { LUPA_LISAKOULUTTAJAT } from "../modules/constants"
 import { Th, Tr } from "../../../modules/Table"
 import pdf from 'static/images/icon-pdf-small.png'
@@ -28,7 +28,7 @@ const Lupa = (props) => {
     pdfLink = (
       <Th alignItems="center" className="lupa-pdf">
         <img src={pdf} alt="pdf" title="pdf"/>
-        <a href={`${API_BASE_URL}/pebble/resources/liitteet/lisakoulutusluvat/${lupaException.pdflink}`} target="_blank">
+        <a href={`${LUPA_EXCEPTION_PATH}${lupaException.pdflink}`} target="_blank">
           <Moment format="DD.MM.YYYY">{lupaException.pvm}</Moment>
         </a>
       </Th>
