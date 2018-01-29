@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { fetchLupa } from '../modules/lupa'
-import Lupa from '../components/Lupa'
+import Jarjestaja from '../components/Jarjestaja'
 
 
 const mapStateToProps = (state) => {
@@ -14,4 +14,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Lupa)
+export default connect(mapStateToProps, mapDispatchToProps)(Jarjestaja)

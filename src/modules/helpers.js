@@ -29,3 +29,11 @@ export const slugify = (str) => {
 
   return str;
 }
+
+export const parsePostalCode = (str) => {
+  if (str) {
+    return str.slice(-5);
+  } else {
+    return ''
+  }
+}
