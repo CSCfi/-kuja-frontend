@@ -10,26 +10,30 @@ import pdf from 'static/images/icon-pdf-small.png'
 
 const Lupa = (props) => {
   const { lupa } = props
+  const { diaarinumero, jarjestajaYtunnus, alkupvm} = lupa
   const maakunta = parseLocalizedField(lupa.jarjestaja.maakuntaKoodi.metadata)
-  const jarjestaja = lupa.jarjestaja.nimi.fi || lupa.jarjestaja.nimi.sv || ''
+  const jarjestajaNimi = lupa.jarjestaja.nimi.fi || lupa.jarjestaja.nimi.sv || ''
 
   let pdfLink = (
     <Th alignItems="center" className="lupa-pdf">
       <img src={pdf} alt="pdf" title="pdf"/>
-      <a href={`${API_BASE_URL}/pdf/${lupa.diaarinumero}`} target="_blank">
-        <Moment format="DD.MM.YYYY">{lupa.alkupvm}</Moment>
+      <a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank">
+        <Moment format="DD.MM.YYYY">{alkupvm}</Moment>
       </a>
     </Th>
   )
 
   // Luvan poikkeuskäsittely erikoisluville (17kpl)
-  const lupaException = LUPA_LISAKOULUTTAJAT[lupa.jarjestajaYtunnus]
+  const lupaException = LUPA_LISAKOULUTTAJAT[jarjestajaYtunnus]
+
   if (lupaException) {
+    const { pdflink, pvm} = lupaException
+
     pdfLink = (
       <Th alignItems="center" className="lupa-pdf">
         <img src={pdf} alt="pdf" title="pdf"/>
-        <a href={`${LUPA_EXCEPTION_PATH}${lupaException.pdflink}`} target="_blank">
-          <Moment format="DD.MM.YYYY">{lupaException.pvm}</Moment>
+        <a href={`${LUPA_EXCEPTION_PATH}${pdflink}`} target="_blank">
+          <Moment format="DD.MM.YYYY">{pvm}</Moment>
         </a>
       </Th>
     )
@@ -37,8 +41,8 @@ const Lupa = (props) => {
 
   return (
     <Tr>
-      <Th className="lupa-diaarinumero">{lupaException === undefined ? lupa.diaarinumero : lupaException.diaarinumero}</Th>
-      <Th flex="3" className="lupa-jarjestaja"><Link lupaid={lupa.id} to={{pathname: "/jarjestajat/" + lupa.id, lupaId: lupa.id}}>{jarjestaja}</Link></Th>
+      <Th className="lupa-diaarinumero">{lupaException === undefined ? diaarinumero : lupaException.diaarinumero}</Th>
+      <Th flex="3" className="lupa-jarjestaja"><Link ytunnus={jarjestajaYtunnus} to={{pathname: "/jarjestajat/" + jarjestajaYtunnus, ytunnus: jarjestajaYtunnus}}>{jarjestajaNimi}</Link></Th>
       <Th className="lupa-maakunta">{maakunta}</Th>
       {pdfLink}
     </Tr>
