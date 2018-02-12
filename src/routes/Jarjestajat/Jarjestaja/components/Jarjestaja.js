@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 
+import ProfileMenu from './ProfileMenu'
 import LupaHistoryContainer from '../containers/LupaHistoryContainer'
 import CurrentLupa from './CurrentLupa'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
@@ -50,6 +51,22 @@ class Jarjestaja extends Component {
   render() {
     const { match, lupa } = this.props
 
+    // Alanavigaation tabivalikon routet
+    const tabNavRoutes = [
+      {
+        path: `${match.url}/omat-tiedot`,
+        text: 'Omat tiedot'
+      },
+      {
+        path: `${match.url}/jarjestamislupa`,
+        text: 'Järjestämislupa'
+      },
+      {
+        path: `${match.url}/hakemukset-paatokset`,
+        text: 'Hakemukset ja päätökset'
+      }
+    ]
+
     if (match.params) {
       if (lupa.fetched) {
         const lupadata = this.props.lupa.lupa
@@ -73,6 +90,8 @@ class Jarjestaja extends Component {
             <JarjestajaBasicInfo jarjestaja={jarjestaja} />
 
             <Separator />
+
+            <ProfileMenu routes={tabNavRoutes} />
 
             <LupaInfoWrapper>
               <h2>Koulutuksen järjestämisluvat</h2>
