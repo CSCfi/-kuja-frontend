@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 
-import LupaItem from 'routes/Jarjestajat/components/LupaItem'
+import LupaItem from './LupaItem'
 import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
 import { MEDIA_QUERIES } from "../../../modules/styles"
 

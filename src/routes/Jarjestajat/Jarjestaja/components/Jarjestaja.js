@@ -43,8 +43,8 @@ const LupaInfoWrapper = styled.div`
 
 class Jarjestaja extends Component {
   componentWillMount() {
-    const { id } = this.props.match.params
-    this.props.fetchLupa(id, '?with=all')
+    const { ytunnus } = this.props.match.params
+    this.props.fetchLupa(ytunnus, '?with=all')
   }
 
   render() {
@@ -54,10 +54,15 @@ class Jarjestaja extends Component {
       if (lupa.fetched) {
         const lupadata = this.props.lupa.lupa
         const { jarjestaja } = this.props.lupa.lupa
-        const { diaarinumero, alkupvm, jarjestajaOid } = lupadata
+        const { diaarinumero, jarjestajaOid } = lupadata
+        let { alkupvm } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
         const name = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
         const lupaException = LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus]
+
+        if (lupaException) {
+          alkupvm = lupaException.pvm
+        }
 
         return (
           <JarjestajaWrapper>
@@ -77,7 +82,6 @@ class Jarjestaja extends Component {
             <CurrentLupa
               diaarinumero={diaarinumero}
               jarjestaja={name}
-              infotext="Ammatillisten tutkintojen ja koulutuksen järjestämislupa"
               voimassaolo={alkupvm}
               lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
             />

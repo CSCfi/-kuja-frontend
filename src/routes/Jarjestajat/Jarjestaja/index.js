@@ -2,7 +2,7 @@ import JarjestajaContainer from 'routes/Jarjestajat/Jarjestaja/containers/Jarjes
 
 const routes = [
   {
-    path: '/jarjestajat/:id',
+    path: '/jarjestajat/:ytunnus',
     component: JarjestajaContainer
   }
 ]
