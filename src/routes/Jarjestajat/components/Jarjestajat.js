@@ -22,8 +22,8 @@ class Jarjestajat extends Component {
           <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
           <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
           <h1>Koulutuksen järjestäjät</h1>
-          <P>Voimassa olevat koulutuksen järjestämisluvat ({Object.keys(this.props.luvat.luvat).length} kpl)</P>
-          <LuvatList luvat={this.props.luvat.luvat}/>
+          <P>Voimassa olevat koulutuksen järjestämisluvat ({Object.keys(this.props.luvat.data).length} kpl)</P>
+          <LuvatList luvat={this.props.luvat.data}/>
         </div>
       )
     } else if (this.props.isFetching) {

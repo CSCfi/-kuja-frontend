@@ -69,8 +69,8 @@ class Jarjestaja extends Component {
 
     if (match.params) {
       if (lupa.fetched) {
-        const lupadata = this.props.lupa.lupa
-        const { jarjestaja } = this.props.lupa.lupa
+        const lupadata = this.props.lupa.data
+        const { jarjestaja } = this.props.lupa.data
         const { diaarinumero, jarjestajaOid } = lupadata
         let { alkupvm } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
@@ -110,7 +110,7 @@ class Jarjestaja extends Component {
             <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
 
 
-            {/* Luvan tiedot, piilotettu toistaiseksi*/}
+             {/*Luvan tiedot, piilotettu toistaiseksi*/}
             {/*<h4>Lupa id: {match.params.id}</h4>*/}
 
             {/*{Object.keys(LUPA_SECTIONS).map((key, i) =>*/}
@@ -136,7 +136,7 @@ class Jarjestaja extends Component {
   }
 
   parseMaaraykset(kohdeId) {
-    const { maaraykset } = this.props.lupa.lupa
+    const { maaraykset } = this.props.lupa.data
 
     if (!maaraykset) {
       return null
