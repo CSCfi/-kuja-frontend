@@ -20,6 +20,12 @@ const MenuItem = styled(NavLink)`
   border-right: 1px solid ${COLORS.BORDER_GRAY};
   position: relative;
   
+  &.active {
+    background-color: ${COLORS.WHITE};
+    color: ${COLORS.BLACK};
+    border-left: 1px solid transparent;
+  }
+  
   &:hover {
     background-color: ${COLORS.WHITE};
     color: ${COLORS.BLACK};
@@ -27,7 +33,7 @@ const MenuItem = styled(NavLink)`
   }
   
   &:first-child {
-    &:hover {
+    &:hover, &.active {
       border-left: 1px solid ${COLORS.DARK_GRAY};
     }
   }
@@ -41,10 +47,9 @@ const ProfileMenu = (props) => {
 
   const { routes } = props
 
-
   return (
     <MenuBar>
-      {_.map(routes, (item) => <MenuItem to={item.path}>{item.text}</MenuItem>)}
+      {_.map(routes, (item) => <MenuItem to={item.path} exact={item.exact}>{item.text}</MenuItem>)}
     </MenuBar>
   )
 }
