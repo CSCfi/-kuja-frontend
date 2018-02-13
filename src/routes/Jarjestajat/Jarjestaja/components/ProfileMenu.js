@@ -49,7 +49,7 @@ const ProfileMenu = (props) => {
 
   return (
     <MenuBar>
-      {_.map(routes, (item) => <MenuItem to={item.path} exact={item.exact}>{item.text}</MenuItem>)}
+      {_.map(routes, (item, i) => <MenuItem key={i} to={item.path} exact={item.exact}>{item.text}</MenuItem>)}
     </MenuBar>
   )
 }
