@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import LupaHistoryContainer from '../containers/LupaHistoryContainer'
 import CurrentLupa from './CurrentLupa'
 
-import { COLORS } from "../../../../modules/styles"
+import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/styles"
 import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
 
 const LargeParagraph = styled.p`
@@ -15,7 +15,7 @@ const LargeParagraph = styled.p`
 `
 
 const LupaInfoWrapper = styled.div`
-  margin: 44px 0 20px;
+  margin: 0 0 20px 0;
   
   h2 {
     font-weight: bold;
@@ -35,23 +35,26 @@ const JulkisetTiedot = (props) => {
   }
 
   return (
-    <div>
-      <LupaInfoWrapper>
-        <h2>Koulutuksen järjestämisluvat</h2>
-        <LargeParagraph>Voimassa oleva lupa</LargeParagraph>
-      </LupaInfoWrapper>
+    <InnerContentContainer>
+      <InnerContentWrapper>
+        <LupaInfoWrapper>
+          <h2>Koulutuksen järjestämisluvat</h2>
+          <LargeParagraph>Voimassa oleva lupa</LargeParagraph>
+        </LupaInfoWrapper>
 
-      <CurrentLupa
-        diaarinumero={diaarinumero}
-        jarjestaja={jarjestajaNimi}
-        voimassaolo={alkupvm}
-        lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
-      />
+        <CurrentLupa
+          diaarinumero={diaarinumero}
+          jarjestaja={jarjestajaNimi}
+          voimassaolo={alkupvm}
+          lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
+        />
 
-      <LargeParagraph>Päättyneet luvat</LargeParagraph>
+        <LargeParagraph>Päättyneet luvat</LargeParagraph>
 
-      <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
-    </div>
+        <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
+      </InnerContentWrapper>
+
+    </InnerContentContainer>
   )
 }
 

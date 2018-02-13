@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet'
 import Hero from './Hero'
 import LinkBox from './LinkBox'
 import InfoBox from './InfoBox'
-import { BackgroundImage, MEDIA_QUERIES } from 'modules/styles'
+import { BackgroundImage, MEDIA_QUERIES, ContentContainer } from 'modules/styles'
 
 const Title = styled.h1`
   color: #555;
@@ -37,7 +37,7 @@ const InfoTitle = styled.h3`
 class Home extends Component {
   render() {
     return (
-      <div>
+      <ContentContainer>
         <Helmet>
           <title>Oiva | Etusivu</title>
         </Helmet>
@@ -56,7 +56,7 @@ class Home extends Component {
           </p>
           <p>Palvelu otetaan käyttöön vaiheittain ja se palvelee ensivaiheessa ammatillisen koulutuksen lupapalveluna.</p>
         </InfoBox>
-      </div>
+      </ContentContainer>
     )
   }
 }

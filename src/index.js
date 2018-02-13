@@ -8,7 +8,7 @@ import 'modules/polyfills'
 import store from 'store'
 import Header from 'modules/Header/containers/HeaderContainer'
 import Routes from 'routes'
-import { AppContainer, COLORS, APP_WIDTH } from 'modules/styles'
+import { AppContainer, BreadcrumbsContainer, COLORS, APP_WIDTH } from 'modules/styles'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -17,16 +17,18 @@ ReactDOM.render(
         <div>
           <Header maxWidth={`${APP_WIDTH}`}/>
           <AppContainer>
-            <Breadcrumbs
-              separator={<b> / </b>}
-              item={NavLink}
-              finalItem={'b'}
-              finalProps={{
-                style: {
-                  color: COLORS.BLACK
-                }
-              }}
-            />
+            <BreadcrumbsContainer>
+              <Breadcrumbs
+                separator={<b> / </b>}
+                item={NavLink}
+                finalItem={'b'}
+                finalProps={{
+                  style: {
+                    color: COLORS.BLACK
+                  }
+                }}
+              />
+            </BreadcrumbsContainer>
             <Routes />
           </AppContainer>
         </div>

@@ -10,7 +10,7 @@ import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 
-import { COLORS } from "../../../../modules/styles"
+import { COLORS, ContentContainer, FullWidthWrapper } from "../../../../modules/styles"
 
 const JarjestajaWrapper = styled.div`
   margin: 20px 0 40px;
@@ -79,7 +79,10 @@ class Jarjestaja extends Component {
         const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
 
         return (
-          <JarjestajaWrapper>
+          <div>
+
+
+          <ContentContainer>
             <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
             <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
             <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
@@ -90,12 +93,21 @@ class Jarjestaja extends Component {
 
             <ProfileMenu routes={tabNavRoutes} />
 
-            <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-            <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
-            <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
-            <Route path={`${match.url}/hakemukset-ja-paatokset`} render={() => <div>hakemukset ja paatokset</div>} />
 
-          </JarjestajaWrapper>
+
+          </ContentContainer>
+
+
+            <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
+              <ContentContainer padding={'40px 15px'} margin={'28px auto'}>
+                <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
+                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
+                <Route path={`${match.url}/hakemukset-ja-paatokset`} render={() => <div>hakemukset ja paatokset</div>} />
+              </ContentContainer>
+
+            </FullWidthWrapper>
+          </div>
         )
       } else if (lupa.isFetching) {
         return <h2>Ladataan...</h2>
