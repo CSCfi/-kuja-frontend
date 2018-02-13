@@ -10,7 +10,8 @@ import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 
-import { COLORS, ContentContainer, FullWidthWrapper } from "../../../../modules/styles"
+import { COLORS } from "../../../../modules/styles"
+import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
 
 const JarjestajaWrapper = styled.div`
   margin: 20px 0 40px;

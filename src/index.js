@@ -8,7 +8,8 @@ import 'modules/polyfills'
 import store from 'store'
 import Header from 'modules/Header/containers/HeaderContainer'
 import Routes from 'routes'
-import { AppContainer, BreadcrumbsContainer, COLORS, APP_WIDTH } from 'modules/styles'
+import { COLORS, APP_WIDTH } from './modules/styles'
+import { AppContainer, BreadcrumbsContainer } from './modules/elements'
 
 ReactDOM.render(
   <Provider store={store}>

@@ -5,7 +5,8 @@ import { Helmet } from 'react-helmet'
 import Hero from './Hero'
 import LinkBox from './LinkBox'
 import InfoBox from './InfoBox'
-import { BackgroundImage, MEDIA_QUERIES, ContentContainer } from 'modules/styles'
+import { BackgroundImage, MEDIA_QUERIES } from 'modules/styles'
+import { ContentContainer } from '../../../modules/elements'
 
 const Title = styled.h1`
   color: #555;

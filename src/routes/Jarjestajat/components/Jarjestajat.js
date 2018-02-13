@@ -3,7 +3,8 @@ import { Helmet } from 'react-helmet'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 
 import LuvatList from 'routes/Jarjestajat/components/LuvatList'
-import { ContentContainer, P, BackgroundImage} from "../../../modules/styles"
+import { P, BackgroundImage} from "../../../modules/styles"
+import { ContentContainer } from '../../../modules/elements'
 
 class Jarjestajat extends Component {
   componentWillMount() {

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import LupaHistoryContainer from '../containers/LupaHistoryContainer'
 import CurrentLupa from './CurrentLupa'
 
-import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/styles"
+import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/elements"
 import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
 
 const LargeParagraph = styled.p`
