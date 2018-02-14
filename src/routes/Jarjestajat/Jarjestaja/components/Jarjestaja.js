@@ -81,26 +81,19 @@ class Jarjestaja extends Component {
 
         return (
           <div>
+            <ContentContainer>
+              <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
+              <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
+              <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
 
+              <JarjestajaBasicInfo jarjestaja={jarjestaja} />
 
-          <ContentContainer>
-            <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
-            <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
-            <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
+              <Separator />
 
-            <JarjestajaBasicInfo jarjestaja={jarjestaja} />
-
-            <Separator />
-
-            <ProfileMenu routes={tabNavRoutes} />
-
-
-
-          </ContentContainer>
-
-
+              <ProfileMenu routes={tabNavRoutes} />
+            </ContentContainer>
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
-              <ContentContainer padding={'40px 15px'} margin={'28px auto'}>
+              <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
                 <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />

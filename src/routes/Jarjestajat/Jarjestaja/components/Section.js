@@ -1,122 +1,173 @@
+import _ from 'lodash'
 import React from 'react'
+import styled from 'styled-components'
 
 import { parseLocalizedField } from "../../../../modules/helpers"
 import { KOHTEET, KOODISTOT } from '../modules/constants'
+import { COLORS } from "../../../../modules/styles"
 
-const rootStyles = {
-  spanStyle: {
-    fontSize: '14px',
-    fontWeight: 100,
-    marginLeft: '16px'
+const SectionWrapper = styled.div`
+  margin-left: 30px;
+  position: relative;
+  border-bottom: 1px solid ${COLORS.BORDER_GRAY};
+  padding: 0 0 26px;
+  
+  &:last-child {
+    border-bottom: none;
   }
-}
+`
+
+const Span = styled.span`
+  font-size: 20px;
+  position: absolute;
+  left: -30px;
+`
+
+const H3 = styled.h3`
+  text-transform: uppercase;
+  font-size: 20px;
+`
+
+const Capitalized = styled.span`
+  text-transform: capitalize;
+`
 
 const Section = (props) => {
   const { heading, target, maaraykset } = props
 
   if (maaraykset) {
-    return (
-      <div>
-        <h3>{`${target}. ${heading}`}<span style={rootStyles.spanStyle}>{`(~${maaraykset.length} määräystä)`}</span></h3>
-        <div>
-          {maaraykset.map((maarays, i) => {
-            if (maarays.koodi && maarays.kohde) {
-              const { koodi } = maarays
-              const { metadata } = koodi
-              const kohdeId = maarays.kohde.id
+    let alat = {}
 
-              switch (kohdeId) {
-                // 1. Tutkinnot ja koulutukset → sisältää koulutusalat, osaamisala-rajoitukset, tutkinnot sekä mahdollisia muita määräyksiä
-                case KOHTEET.TUTKINNOT: {
-                  if (koodi && metadata && maarays.koodisto === KOODISTOT.KOULUTUS) {
-                    const { koodiArvo } = maarays.koodi
-                    const tutkinto = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+    // kohdeid = 1: Erikoiskäsittely tutkinnoille ja koulutuksille
+    if (Number(target) === KOHTEET.TUTKINNOT) {
+      // Parsitaan aloittain
+      _.forEach(maaraykset, (maarays) => {
+        // Määritetään muuttujat
+        const { koodi, ylaKoodit } = maarays
+        const { koodiArvo, metadata } = koodi
+        const tutkintoNimi = parseLocalizedField(metadata)
 
-                    return (
-                      <div key={i}>
-                        <span>{koodiArvo} {tutkinto}</span>
-                      </div>
-                    )
+        // Määritetään määräyksissä olevat alat yläkoodeista
+        _.forEach(ylaKoodit, (ylaKoodi) => {
+          if (ylaKoodi.koodisto.koodistoUri === "isced2011koulutusalataso1") {
+            const ylaKoodiKoodiArvo = ylaKoodi.koodiArvo
+            const ylaKoodiMetadata = ylaKoodi.metadata
+            const ylaKoodiKoulutusalaNimi = parseLocalizedField(ylaKoodiMetadata)
+
+            // Tarkastetaan onko alat-objektissa jo koulutusalaa
+            const ala = alat[ylaKoodiKoodiArvo]
+
+            if (ala === undefined) {
+              // Alaa ei ole alat-objektissa, lisätään se
+              const tutkintoObj = {koodi: koodiArvo, nimi: tutkintoNimi}
+              alat[ylaKoodiKoodiArvo] = { nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [tutkintoObj]}
+            } else {
+              // Ala oli jo alat-objektissa, lisätään tutkinto alan tutkintoihin
+              ala.tutkinnot.push({ koodi: koodiArvo, nimi: tutkintoNimi })
+            }
+          }
+        })
+      })
+
+      // Palautetaan JSX
+      return (
+        <SectionWrapper>
+          <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
+          <div>
+            {_.map(alat, (ala) => {
+              return <div>{ala.koodi} {ala.nimi}</div>
+            })}
+          </div>
+        </SectionWrapper>
+      )
+    } else {
+      return (
+        <SectionWrapper>
+          <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
+          <div>
+            {maaraykset.map((maarays, i) => {
+              if (maarays.koodi && maarays.kohde) {
+                const { koodi } = maarays
+                const { metadata } = koodi
+                const kohdeId = maarays.kohde.id
+
+                switch (kohdeId) {
+                  // kohdeid = 2: Opetuskieli → oppilaitoksen opetuskieli tai tutkintokohtainen vieraskieli. Kieli tallentuu määräykseen koodina, joka puretaan opintopolun koodiston avulla
+                  case KOHTEET.KIELI: {
+                    if (koodi && metadata) {
+                      const kieli = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+
+                      return (
+                        <div key={i}>
+                          <Capitalized>{kieli}</Capitalized>
+                        </div>
+                      )
+                    }
+
+                    break;
                   }
 
-                  break;
-                }
+                  // kohdeid = 3: Toimialue → kunnat, maakunnat tai valtakunta-taso, joissa koulutuksen järjestäjällä on koulutuslupa
+                  case KOHTEET.TOIMIALUE: {
+                    if (koodi && metadata) {
+                      const kunta = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
 
-                // 2. Opetuskieli → oppilaitoksen opetuskieli tai tutkintokohtainen vieraskieli. Kieli tallentuu määräykseen koodina, joka puretaan opintopolun koodiston avulla
-                case KOHTEET.KIELI: {
-                  if (koodi && metadata) {
-                    const kieli = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+                      return (
+                        <div key={i}>
+                          <Capitalized>{kunta}</Capitalized>
+                        </div>
+                      )
+                    }
 
-                    return (
-                      <div key={i}>
-                        <span>{kieli}</span>
-                      </div>
-                    )
+                    break;
                   }
 
-                  break;
-                }
+                  // kohdeid = 4: Opiskelijavuodet → lukumäärä, joka kertoo luvan opiskelijavuosien lukumäärän. Voidaan asettaa minimi velvoitteena ja maksimi rajoitteena.
+                  case KOHTEET.OPISKELIJAVUODET: {
+                    if (koodi && metadata) {
+                      const tyyppi = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+                      const { arvo } = maarays
 
-                // 3. Toimialue → kunnat, maakunnat tai valtakunta-taso, joissa koulutuksen järjestäjällä on koulutuslupa
-                case KOHTEET.TOIMIALUE: {
-                  if (koodi && metadata) {
-                    const kunta = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+                      return (
+                        <div key={i}>
+                          <span>{tyyppi} {arvo}</span>
+                        </div>
+                      )
+                    }
 
-                    return (
-                      <div key={i}>
-                        <span>{kunta}</span>
-                      </div>
-                    )
+                    break;
                   }
 
-                  break;
-                }
+                  // kohdeid = 5: Muut määräykset→ ns. kaatoluokka kaikille muille määräyksille, jotka eivät sovi neljään ensimmäiseen kohteeseen.
+                  case KOHTEET.MUUT: {
+                    if (koodi && metadata) {
 
-                // 4. Opiskelijavuodet → lukumäärä, joka kertoo luvan opiskelijavuosien lukumäärän. Voidaan asettaa minimi velvoitteena ja maksimi rajoitteena.
-                case KOHTEET.OPISKELIJAVUODET: {
-                  if (koodi && metadata) {
-                    const tyyppi = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-                    const { arvo } = maarays
+                      const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+                      const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli')
 
-                    return (
-                      <div key={i}>
-                        <span>{tyyppi} {arvo}</span>
-                      </div>
-                    )
+                      return (
+                        <div key={i}>
+                          <span><b>{type}</b></span><br/>
+                          <span>{desc}</span>
+                        </div>
+                      )
+                    }
+
+                    break;
                   }
 
-                  break;
-                }
-
-                // 5. Muut määräykset→ ns. kaatoluokka kaikille muille määräyksille, jotka eivät sovi neljään ensimmäiseen kohteeseen.
-                case KOHTEET.MUUT: {
-                  if (koodi && metadata) {
-
-                    const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-                    const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli')
-
-                    return (
-                      <div key={i}>
-                        <span><b>{type}</b></span><br/>
-                        <span>{desc}</span>
-                      </div>
-                    )
+                  default: {
+                    break;
                   }
-
-                  break;
-                }
-
-                default: {
-                  break;
                 }
               }
-            }
 
-            return null
-          })}
-        </div>
-      </div>
-    )
+              return null
+            })}
+          </div>
+        </SectionWrapper>
+      )
+    }
   } else {
     return (
       <div>
