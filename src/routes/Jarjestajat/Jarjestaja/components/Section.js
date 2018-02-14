@@ -2,6 +2,8 @@ import _ from 'lodash'
 import React from 'react'
 import styled from 'styled-components'
 
+import Koulutusala from './Koulutusala'
+
 import { parseLocalizedField } from "../../../../modules/helpers"
 import { KOHTEET, KOODISTOT } from '../modules/constants'
 import { COLORS } from "../../../../modules/styles"
@@ -76,8 +78,8 @@ const Section = (props) => {
         <SectionWrapper>
           <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
           <div>
-            {_.map(alat, (ala) => {
-              return <div>{ala.koodi} {ala.nimi}</div>
+            {_.map(alat, (ala, i) => {
+              return <Koulutusala key={i} {...ala} />
             })}
           </div>
         </SectionWrapper>
