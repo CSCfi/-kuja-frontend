@@ -23,7 +23,8 @@ export const COLORS = {
   WHITE: '#FFFFFF',
   LIGHT_GRAY: '#D8D8D8',
   BORDER_GRAY: '#DFDFDF',
-  BG_GRAY: '#F5F5F5'
+  BG_GRAY: '#F5F5F5',
+  BG_DARKER_GRAY: '#e6e6e6'
 }
 
 export const FONT_STACK = {
