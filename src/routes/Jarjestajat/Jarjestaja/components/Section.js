@@ -60,7 +60,7 @@ const Section = (props) => {
             if (ala === undefined) {
               // Alaa ei ole alat-objektissa, lisätään se
               const tutkintoObj = {koodi: koodiArvo, nimi: tutkintoNimi}
-              alat[ylaKoodiKoodiArvo] = { nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [tutkintoObj]}
+              alat[ylaKoodiKoodiArvo] = { koodi: ylaKoodiKoodiArvo, nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [tutkintoObj]}
             } else {
               // Ala oli jo alat-objektissa, lisätään tutkinto alan tutkintoihin
               ala.tutkinnot.push({ koodi: koodiArvo, nimi: tutkintoNimi })
@@ -68,6 +68,8 @@ const Section = (props) => {
           }
         })
       })
+
+      alat = _.sortBy(alat, ala => { return ala.koodi })
 
       // Palautetaan JSX
       return (
