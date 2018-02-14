@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import arrow from 'static/images/koulutusala-arrow.svg'
@@ -34,23 +34,39 @@ const TutkintoList = styled.div`
   padding:  5px 20px 10px;
 `
 
-const Koulutusala = (props) => {
-  const { koodi, nimi, tutkinnot } = props
+class Koulutusala extends Component {
+  constructor() {
+    super()
+    this.state = {
+      isHidden: true
+    }
+  }
 
-  return (
-    <Wrapper>
-      <Heading>
-        <Arrow src={arrow} alt="Koulutusala"/>
-        <Span>{koodi}</Span>
-        <Span>{nimi}</Span>
-        <Span>{`( ${tutkinnot.length} kpl )`}</Span>
-      </Heading>
-      <TutkintoList>
-        {tutkinnot.map((tutkinto, i) => <Tutkinto {...tutkinto} />)}
-      </TutkintoList>
+  toggleTutkintoList() {
+    this.setState({
+      isHidden: !this.state.isHidden
+    })
+  }
 
-    </Wrapper>
-  )
+  render() {
+    const { koodi, nimi, tutkinnot } = this.props
+    return (
+      <Wrapper>
+        <Heading onClick={this.toggleTutkintoList.bind(this)}>
+          <Arrow src={arrow} alt="Koulutusala"/>
+          <Span>{koodi}</Span>
+          <Span>{nimi}</Span>
+          <Span>{`( ${tutkinnot.length} kpl )`}</Span>
+        </Heading>
+        {!this.state.isHidden &&
+          <TutkintoList>
+            {tutkinnot.map((tutkinto, i) => <Tutkinto {...tutkinto} key={i} />)}
+          </TutkintoList>
+        }
+
+      </Wrapper>
+    )
+  }
 }
 
 export default Koulutusala
