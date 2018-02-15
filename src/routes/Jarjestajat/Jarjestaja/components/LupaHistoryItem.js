@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MEDIA_QUERIES } from "../../../../modules/styles"
+import Moment from 'react-moment'
 
+import { MEDIA_QUERIES } from "../../../../modules/styles"
 import { API_BASE_URL } from "../../../../modules/constants"
 
 import pdf from 'static/images/icon-pdf-small.png'
@@ -26,7 +27,7 @@ const TextPartial = styled.span`
 `
 
 const LupaHistoryItem = (props) => {
-  const { filename, diaarinumero, voimassaolo, paatospvm } = props.lupaHistoria
+  const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria
 
   return (
     <a href={`${API_BASE_URL}/pebble/resources/liitteet/lupahistoria/${filename}`} target="_blank">
@@ -34,8 +35,17 @@ const LupaHistoryItem = (props) => {
         <img src={pdf} alt="Päättynyt lupa"/>
         <LupaText>
           <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
-          <TextPartial>Paatos tehty: {paatospvm}</TextPartial>
-          {voimassaolo ? `Voimassa: ${voimassaolo}` : ''}
+          <TextPartial>
+            Paatos tehty:&nbsp;
+            <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+          </TextPartial>
+          <TextPartial>
+            Voimassa:&nbsp;
+            <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
+            &nbsp;-&nbsp;
+            <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+          </TextPartial>
+
         </LupaText>
       </LupaHistoryItemWrapper>
     </a>

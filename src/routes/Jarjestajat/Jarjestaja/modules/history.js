@@ -10,7 +10,7 @@ export function fetchLupaHistory(oid) {
   return (dispatch) => {
     dispatch({ type: FETCH_HISTORY_START })
 
-    const request = fetch(`${API_BASE_URL}/luvat/historia?oid=${oid}`)
+    const request = fetch(`${API_BASE_URL}/luvat/historia/${oid}`)
 
     request
       .then((response) => response.json())
