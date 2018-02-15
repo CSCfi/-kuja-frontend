@@ -44,7 +44,7 @@ const ACTION_HANDLERS = {
       isFetching: false, 
       fetched: true, 
       hasErrored: false, 
-      luvat: _.mapKeys(action.payload, 'id') 
+      data: _.mapKeys(action.payload, 'id')
     } 
   },
   [FETCH_LUVAT_FAILURE] : (state, action) => {
@@ -62,7 +62,7 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  luvat: {}
+  data: {}
 }
 
 export default function luvatReducer(state = initialState, action) {

@@ -22,7 +22,9 @@ export const COLORS = {
   BLACK: '#000000',
   WHITE: '#FFFFFF',
   LIGHT_GRAY: '#D8D8D8',
-  BORDER_GRAY: '#DFDFDF'
+  BORDER_GRAY: '#DFDFDF',
+  BG_GRAY: '#F5F5F5',
+  BG_DARKER_GRAY: '#e6e6e6'
 }
 
 export const FONT_STACK = {
@@ -95,18 +97,6 @@ injectGlobal`
     h1 {
       font-size: 26px;
     }
-  }
-`
-
-export const AppContainer = styled.div`
-  width: 100%;
-  max-width: ${APP_WIDTH}px;
-  margin: 45px auto;
-  padding: 15px;
-  box-sizing: border-box;
-  
-  @media ${MEDIA_QUERIES.MOBILE} {
-  margin: 0 auto;
   }
 `
 

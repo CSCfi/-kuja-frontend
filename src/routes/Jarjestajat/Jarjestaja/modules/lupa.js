@@ -41,7 +41,7 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      lupa: action.payload
+      data: action.payload
     }
   },
   [FETCH_LUPA_FAILURE] : (state, action) => {
@@ -59,7 +59,7 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  lupa: {}
+  data: {}
 }
 
 export default function lupaReducer(state = initialState, action) {

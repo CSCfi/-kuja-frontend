@@ -2,16 +2,16 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import { Route } from 'react-router-dom'
 
-import ProfileMenu from './ProfileMenu'
-import LupaHistoryContainer from '../containers/LupaHistoryContainer'
-import CurrentLupa from './CurrentLupa'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
-import Section from './Section'
-import { LUPA_SECTIONS } from '../modules/constants'
-import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
-import { LUPA_EXCEPTION_PATH } from "../../../../modules/constants"
+import ProfileMenu from './ProfileMenu'
+import JulkisetTiedot from './JulkisetTiedot'
+import OmatTiedot from './OmatTiedot'
+import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
+
 import { COLORS } from "../../../../modules/styles"
+import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
 
 const JarjestajaWrapper = styled.div`
   margin: 20px 0 40px;
@@ -54,6 +54,11 @@ class Jarjestaja extends Component {
     // Alanavigaation tabivalikon routet
     const tabNavRoutes = [
       {
+        path: `${match.url}`,
+        exact: true,
+        text: 'Julkiset tiedot'
+      },
+      {
         path: `${match.url}/omat-tiedot`,
         text: 'Omat tiedot'
       },
@@ -62,66 +67,41 @@ class Jarjestaja extends Component {
         text: 'Järjestämislupa'
       },
       {
-        path: `${match.url}/hakemukset-paatokset`,
+        path: `${match.url}/hakemukset-ja-paatokset`,
         text: 'Hakemukset ja päätökset'
       }
     ]
 
     if (match.params) {
       if (lupa.fetched) {
-        const lupadata = this.props.lupa.lupa
-        const { jarjestaja } = this.props.lupa.lupa
-        const { diaarinumero, jarjestajaOid } = lupadata
-        let { alkupvm } = lupadata
+        const lupadata = this.props.lupa.data
+        const { jarjestaja } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
-        const name = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
-        const lupaException = LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus]
-
-        if (lupaException) {
-          alkupvm = lupaException.pvm
-        }
+        const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
 
         return (
-          <JarjestajaWrapper>
-            <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
-            <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
-            <BreadcrumbsItem to={breadcrumb}>{name}</BreadcrumbsItem>
+          <div>
+            <ContentContainer>
+              <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
+              <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
+              <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
 
-            <JarjestajaBasicInfo jarjestaja={jarjestaja} />
+              <JarjestajaBasicInfo jarjestaja={jarjestaja} />
 
-            <Separator />
+              <Separator />
 
-            <ProfileMenu routes={tabNavRoutes} />
+              <ProfileMenu routes={tabNavRoutes} />
+            </ContentContainer>
+            <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
+              <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
+                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
+                <Route path={`${match.url}/hakemukset-ja-paatokset`} render={() => <div>hakemukset ja paatokset</div>} />
+              </ContentContainer>
 
-            <LupaInfoWrapper>
-              <h2>Koulutuksen järjestämisluvat</h2>
-              <LargeParagraph>Voimassa oleva lupa</LargeParagraph>
-            </LupaInfoWrapper>
-
-            <CurrentLupa
-              diaarinumero={diaarinumero}
-              jarjestaja={name}
-              voimassaolo={alkupvm}
-              lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
-            />
-
-            <LargeParagraph>Päättyneet luvat</LargeParagraph>
-
-            <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
-
-
-            {/* Luvan tiedot, piilotettu toistaiseksi*/}
-            {/*<h4>Lupa id: {match.params.id}</h4>*/}
-
-            {/*{Object.keys(LUPA_SECTIONS).map((key, i) =>*/}
-              {/*<Section*/}
-                {/*key={i}*/}
-                {/*heading={LUPA_SECTIONS[key].heading}*/}
-                {/*target={key}*/}
-                {/*maaraykset={this.parseMaaraykset(parseInt(key, 10))}*/}
-              {/*/>*/}
-            {/*)}*/}
-          </JarjestajaWrapper>
+            </FullWidthWrapper>
+          </div>
         )
       } else if (lupa.isFetching) {
         return <h2>Ladataan...</h2>
@@ -133,18 +113,6 @@ class Jarjestaja extends Component {
     } else {
       return <h2>Ladataan...</h2>
     }
-  }
-
-  parseMaaraykset(kohdeId) {
-    const { maaraykset } = this.props.lupa.lupa
-
-    if (!maaraykset) {
-      return null
-    }
-
-    return _.filter(maaraykset, (maarays) => {
-      return maarays.kohde.id === kohdeId
-    })
   }
 }
 
