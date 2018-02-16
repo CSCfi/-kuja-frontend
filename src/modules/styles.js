@@ -29,6 +29,7 @@ export const COLORS = {
 
 export const FONT_STACK = {
   GOTHAM_NARROW: `"Gotham Narrow", Helvetica, Arial, sans-serif`,
+  GOTHAM_NARROW_BOLD: `"Gotham Narrow Bold", Helvetica, Arial, sans-serif`,
   OPEN_SANS_REGULAR: `"Open Sans", Helvetica, Arial, sans-serif`,
   OPEN_SANS_SEMIBOLD: `"Open Sans", Helvetica, Arial, sans-serif`,
   PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`
@@ -82,6 +83,10 @@ injectGlobal`
   h1 {
     font-family: ${FONT_STACK.PT_SANS_NARROW};
     font-size: 40px;
+  }
+  
+  h4 {
+    margin: 18px 0 10px;
   }
   
   p {

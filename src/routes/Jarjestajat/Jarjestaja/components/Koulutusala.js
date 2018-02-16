@@ -24,6 +24,7 @@ const Heading = styled.div`
 
 const Arrow = styled.img`
   margin-right: 20px;
+  ${props => props.rotated ? `transform: rotate(90deg);` : null}
 `
 
 const Span = styled.span`
@@ -53,7 +54,7 @@ class Koulutusala extends Component {
     return (
       <Wrapper>
         <Heading onClick={this.toggleTutkintoList.bind(this)}>
-          <Arrow src={arrow} alt="Koulutusala"/>
+          <Arrow src={arrow} alt="Koulutusala" rotated={!this.state.isHidden} />
           <Span>{koodi}</Span>
           <Span>{nimi}</Span>
           <Span>{`( ${tutkinnot.length} kpl )`}</Span>

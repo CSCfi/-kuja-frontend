@@ -5,11 +5,17 @@
 import _ from 'lodash'
 
 export const parseLocalizedField = (obj, locale = 'FI', key = 'nimi', localeKey = 'kieli') => {
-  if (!obj || !locale || !key || !localeKey) { return null }
-
-  return _.find(obj, (o) => {
+  const targetObj = _.find(obj, (o) => {
     if (o[localeKey] === locale) { return o[key] }
-  })[key]
+  })
+
+  if (targetObj) {
+    return _.find(obj, (o) => {
+      if (o[localeKey] === locale) { return o[key] }
+    })[key]
+  } else {
+    return undefined
+  }
 }
 
 export const slugify = (str) => {

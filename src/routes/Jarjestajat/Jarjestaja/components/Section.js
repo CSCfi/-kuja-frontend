@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import Koulutusala from './Koulutusala'
 
 import { parseLocalizedField } from "../../../../modules/helpers"
-import { KOHTEET, KOODISTOT } from '../modules/constants'
-import { COLORS } from "../../../../modules/styles"
+import { KOHTEET, KOODISTOT, LUPA_TEKSTIT } from '../modules/constants'
+import { COLORS, FONT_STACK } from "../../../../modules/styles"
 
 const SectionWrapper = styled.div`
   margin-left: 30px;
@@ -32,6 +32,11 @@ const H3 = styled.h3`
 
 const Capitalized = styled.span`
   text-transform: capitalize;
+  margin-left: 30px;
+`
+
+const Bold = styled.span`
+  font-family: ${FONT_STACK.GOTHAM_NARROW_BOLD};
 `
 
 const Section = (props) => {
@@ -61,8 +66,7 @@ const Section = (props) => {
 
             if (ala === undefined) {
               // Alaa ei ole alat-objektissa, lisätään se
-              const tutkintoObj = {koodi: koodiArvo, nimi: tutkintoNimi}
-              alat[ylaKoodiKoodiArvo] = { koodi: ylaKoodiKoodiArvo, nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [tutkintoObj]}
+              alat[ylaKoodiKoodiArvo] = { koodi: ylaKoodiKoodiArvo, nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [{koodi: koodiArvo, nimi: tutkintoNimi}]}
             } else {
               // Ala oli jo alat-objektissa, lisätään tutkinto alan tutkintoihin
               ala.tutkinnot.push({ koodi: koodiArvo, nimi: tutkintoNimi })
@@ -84,6 +88,50 @@ const Section = (props) => {
           </div>
         </SectionWrapper>
       )
+
+      // kohdeid = 2: Opetuskieli
+    } else if (Number(target) === KOHTEET.KIELI) {
+
+      return (
+        <SectionWrapper>
+          <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
+          <p>{LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI}</p>
+          {_.map(maaraykset, (maarays, i) => {
+            const { koodi } = maarays
+            const { metadata } = koodi
+            if (koodi && metadata) {
+              const kieli = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+
+              return (
+                <div key={i}>
+                  <Capitalized>{kieli}</Capitalized>
+                </div>
+              )
+            }
+          })}
+        </SectionWrapper>
+      )
+      // kohdeid = 3: Toiminta-alueet
+    } else if (Number(target) === KOHTEET.TOIMIALUE) {
+      return (
+        <SectionWrapper>
+          <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
+          <p>{LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MONIKKO.FI}</p>
+          {_.map(maaraykset, (maarays, i) => {
+            const { koodi } = maarays
+            const { metadata } = koodi
+            if (koodi && metadata) {
+              const kunta = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+
+              return (
+                <div key={i}>
+                  <Capitalized>{kunta}</Capitalized>
+                </div>
+              )
+            }
+          })}
+        </SectionWrapper>
+      )
     } else {
       return (
         <SectionWrapper>
@@ -96,36 +144,6 @@ const Section = (props) => {
                 const kohdeId = maarays.kohde.id
 
                 switch (kohdeId) {
-                  // kohdeid = 2: Opetuskieli → oppilaitoksen opetuskieli tai tutkintokohtainen vieraskieli. Kieli tallentuu määräykseen koodina, joka puretaan opintopolun koodiston avulla
-                  case KOHTEET.KIELI: {
-                    if (koodi && metadata) {
-                      const kieli = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-
-                      return (
-                        <div key={i}>
-                          <Capitalized>{kieli}</Capitalized>
-                        </div>
-                      )
-                    }
-
-                    break;
-                  }
-
-                  // kohdeid = 3: Toimialue → kunnat, maakunnat tai valtakunta-taso, joissa koulutuksen järjestäjällä on koulutuslupa
-                  case KOHTEET.TOIMIALUE: {
-                    if (koodi && metadata) {
-                      const kunta = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-
-                      return (
-                        <div key={i}>
-                          <Capitalized>{kunta}</Capitalized>
-                        </div>
-                      )
-                    }
-
-                    break;
-                  }
-
                   // kohdeid = 4: Opiskelijavuodet → lukumäärä, joka kertoo luvan opiskelijavuosien lukumäärän. Voidaan asettaa minimi velvoitteena ja maksimi rajoitteena.
                   case KOHTEET.OPISKELIJAVUODET: {
                     if (koodi && metadata) {
@@ -134,7 +152,7 @@ const Section = (props) => {
 
                       return (
                         <div key={i}>
-                          <span>{tyyppi} {arvo}</span>
+                          <span>{tyyppi}: {arvo}</span>
                         </div>
                       )
                     }
@@ -151,8 +169,8 @@ const Section = (props) => {
 
                       return (
                         <div key={i}>
-                          <span><b>{type}</b></span><br/>
-                          <span>{desc}</span>
+                          <h4><Bold>{type}</Bold></h4>
+                          {desc ? <p>{desc}</p> : <p>Ei kuvausta saatavilla</p>}
                         </div>
                       )
                     }
