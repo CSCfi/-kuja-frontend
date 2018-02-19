@@ -13,7 +13,7 @@ const Koodi = styled.span`
 `
 
 const Nimi = styled.span`
-  flex: 5;
+  flex: 6;
 `
 
 const Tutkinto = (props) => {

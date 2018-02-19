@@ -14,7 +14,7 @@ import pdfIcon from 'static/images/icon-pdf-small.png'
 
 const TopSectionWrapper = styled.div`
   margin: -30px -28px;
-  padding: 10px 28px 10px;
+  padding: 15px 60px 30px;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `
 
