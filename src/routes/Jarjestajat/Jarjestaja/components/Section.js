@@ -7,6 +7,7 @@ import Koulutusala from './Koulutusala'
 import { parseLocalizedField } from "../../../../modules/helpers"
 import { KOHTEET, KOODISTOT, LUPA_TEKSTIT } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
+import Tutkinto from "./Tutkinto"
 
 const SectionWrapper = styled.div`
   margin-left: 30px;
@@ -43,7 +44,9 @@ const Section = (props) => {
   const { heading, target, maaraykset } = props
 
   if (maaraykset) {
-    let alat = {}
+    let tutkinnot = []
+    let hasValma = undefined
+    let hasTelma = undefined
 
     // kohdeid = 1: Erikoiskäsittely tutkinnoille ja koulutuksille
     if (Number(target) === KOHTEET.TUTKINNOT) {
@@ -54,37 +57,47 @@ const Section = (props) => {
         const { koodiArvo, metadata } = koodi
         const tutkintoNimi = parseLocalizedField(metadata)
 
+        if (koodiArvo == 999901) {
+          hasValma = { koodi: koodiArvo, nimi: tutkintoNimi }
+          return
+        }
+
+        if (koodiArvo == 999903) {
+          hasTelma = { koodi: koodiArvo, nimi: tutkintoNimi }
+          return
+        }
+
+        let tutkinto = {}
+
         // Määritetään määräyksissä olevat alat yläkoodeista
         _.forEach(ylaKoodit, (ylaKoodi) => {
+          const ylaKoodiKoodiArvo = ylaKoodi.koodiArvo
+          const ylaKoodiMetadata = ylaKoodi.metadata
+          const ylakoodiMetadataArvo = parseLocalizedField(ylaKoodiMetadata)
+
           if (ylaKoodi.koodisto.koodistoUri === "isced2011koulutusalataso1") {
-            const ylaKoodiKoodiArvo = ylaKoodi.koodiArvo
-            const ylaKoodiMetadata = ylaKoodi.metadata
-            const ylaKoodiKoulutusalaNimi = parseLocalizedField(ylaKoodiMetadata)
-
-            // Tarkastetaan onko alat-objektissa jo koulutusalaa
-            const ala = alat[ylaKoodiKoodiArvo]
-
-            if (ala === undefined) {
-              // Alaa ei ole alat-objektissa, lisätään se
-              alat[ylaKoodiKoodiArvo] = { koodi: ylaKoodiKoodiArvo, nimi: ylaKoodiKoulutusalaNimi, tutkinnot: [{koodi: koodiArvo, nimi: tutkintoNimi}]}
-            } else {
-              // Ala oli jo alat-objektissa, lisätään tutkinto alan tutkintoihin
-              ala.tutkinnot.push({ koodi: koodiArvo, nimi: tutkintoNimi })
-            }
+            tutkinto.koodi = koodiArvo
+            tutkinto.nimi = tutkintoNimi
+            tutkinto.alakoodi = ylaKoodiKoodiArvo
+            tutkinto.alanimi = ylakoodiMetadataArvo
+          } else if (ylaKoodi.koodisto.koodistoUri === "koulutustyyppi") {
+            tutkinto.koulutustyyppikoodi = ylaKoodiKoodiArvo
+            tutkinto.koulutustyyppi = ylakoodiMetadataArvo
           }
         })
+        tutkinnot.push(tutkinto)
       })
 
-      alat = _.sortBy(alat, ala => { return ala.koodi })
+      let alat = sortTutkinnot(tutkinnot);
 
       // Palautetaan JSX
       return (
         <SectionWrapper>
           <Span>{`${target}.`}</Span><H3>{`${heading}`}</H3>
           <div>
-            {_.map(alat, (ala, i) => {
-              return <Koulutusala key={i} {...ala} />
-            })}
+            {_.map(alat, (ala, i) => { return <Koulutusala key={i} {...ala} /> })}
+            {hasValma ? <Tutkinto {...hasValma} /> : null}
+            {hasTelma ? <Tutkinto {...hasTelma} /> : null}
           </div>
         </SectionWrapper>
       )
@@ -198,6 +211,56 @@ const Section = (props) => {
       </div>
     )
   }
+}
+
+const sortTutkinnot = (tutkintoArray) => {
+  let obj = {}
+
+  _.map(tutkintoArray, (tutkinto, i) => {
+    const {
+      alakoodi,
+      alanimi,
+      koodi,
+      nimi,
+      koulutustyyppi,
+      koulutustyyppikoodi
+    } = tutkinto
+    const ala = obj[alakoodi]
+    let koulutusalaObj = {}
+    const tutkintoObj = { koodi, nimi }
+
+    if (ala === undefined) {
+      // Alaa ei ole alat-objektissa
+      // Tehdään koulutusala-objekti ja lisätään se juuritason objektiin
+      koulutusalaObj[koulutustyyppikoodi] = { koodi: koulutustyyppikoodi, nimi: koulutustyyppi, tutkinnot: [tutkintoObj] }
+      obj[alakoodi] = { koodi: alakoodi, nimi: alanimi, koulutusalat: koulutusalaObj }
+    } else {
+      // Ala oli jo alat-objektissa
+      // Tarkastetaan onko alalla koulutusalaa
+      let koulAlaObj = ala.koulutusalat[koulutustyyppikoodi]
+
+      if (koulAlaObj === undefined) {
+        // koulutusalaa ei ollut koulutusaloissa, luodaan se
+        ala.koulutusalat[koulutustyyppikoodi] = { koodi: koulutustyyppikoodi, nimi: koulutustyyppi, tutkinnot: [tutkintoObj] }
+      } else {
+        // koulutusala löytyi koulutusaloista, lisätään tutkinto koulutusalan tutkintoihib
+        koulAlaObj.tutkinnot.push(tutkintoObj)
+      }
+    }
+  })
+
+  // Poistetaan mahdolliset tyhjät objektit
+  obj = _.pickBy(obj, (ala) => { return ala.koodi !== undefined })
+
+  // Järjestetään objektit numerojärjestykseen
+  obj = _.sortBy(obj, (ala) => {
+    _.forEach(ala.koulutusalat, (koulutusala) => {
+      koulutusala.tutkinnot = _.sortBy(koulutusala.tutkinnot, (tutkinto) => { return tutkinto.koodi })
+    })
+    return ala.koodi
+  })
+
+  return obj
 }
 
 export default Section

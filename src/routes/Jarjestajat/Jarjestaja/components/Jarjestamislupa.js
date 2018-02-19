@@ -37,7 +37,7 @@ class Jarjestamislupa extends Component {
   render() {
     const { diaarinumero, alkupvm, paatospvm, meta } = this.props.lupa.data
     const { esittelija } = meta
-    
+
     return (
       <InnerContentContainer>
         <InnerContentWrapper>
