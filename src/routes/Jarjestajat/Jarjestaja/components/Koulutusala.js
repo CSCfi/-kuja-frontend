@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
@@ -24,15 +25,34 @@ const Heading = styled.div`
 
 const Arrow = styled.img`
   margin-right: 20px;
+  ${props => props.rotated ? `transform: rotate(90deg);` : null}
 `
 
 const Span = styled.span`
   margin-right: 15px;
 `
 
-const TutkintoList = styled.div`
+const KoulutusalaList = styled.div`
   padding:  5px 20px 10px;
 `
+
+const SubAlaWrapper = styled.div`
+  margin: 5px 0 20px;
+  font-size: 15px;
+  font-weight: bold;
+`
+
+const SubAla = (props) => {
+  const { nimi, tutkinnot } = props
+  return (
+    <SubAlaWrapper>
+      <div>{nimi}</div>
+      {_.map(tutkinnot, (tutkinto, i) => {
+        return <Tutkinto {...tutkinto} key={i} />
+      })}
+    </SubAlaWrapper>
+  )
+}
 
 class Koulutusala extends Component {
   constructor() {
@@ -48,20 +68,31 @@ class Koulutusala extends Component {
     })
   }
 
+  getTutkintoCount(koulutusalat) {
+    let count = 0
+
+    _.forEach(koulutusalat, (ala) => {
+      count += ala.tutkinnot.length
+    })
+
+    return count
+  }
+
   render() {
-    const { koodi, nimi, tutkinnot } = this.props
+    const { koodi, nimi, koulutusalat } = this.props
+
     return (
       <Wrapper>
         <Heading onClick={this.toggleTutkintoList.bind(this)}>
-          <Arrow src={arrow} alt="Koulutusala"/>
+          <Arrow src={arrow} alt="Koulutusala" rotated={!this.state.isHidden} />
           <Span>{koodi}</Span>
           <Span>{nimi}</Span>
-          <Span>{`( ${tutkinnot.length} kpl )`}</Span>
+          <Span>{`( ${this.getTutkintoCount(koulutusalat)} kpl )`}</Span>
         </Heading>
         {!this.state.isHidden &&
-          <TutkintoList>
-            {tutkinnot.map((tutkinto, i) => <Tutkinto {...tutkinto} key={i} />)}
-          </TutkintoList>
+          <KoulutusalaList>
+            {_.map(koulutusalat, (ala, i) => <SubAla {...ala} key={i}/> )}
+          </KoulutusalaList>
         }
 
       </Wrapper>
