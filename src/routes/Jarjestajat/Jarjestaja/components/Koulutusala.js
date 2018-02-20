@@ -43,7 +43,6 @@ const SubAlaWrapper = styled.div`
 `
 
 const SubAla = (props) => {
-  console.log(props)
   const { nimi, tutkinnot } = props
   return (
     <SubAlaWrapper>
@@ -82,7 +81,6 @@ class Koulutusala extends Component {
   render() {
     const { koodi, nimi, koulutusalat } = this.props
 
-    // console.log(this.props)
     return (
       <Wrapper>
         <Heading onClick={this.toggleTutkintoList.bind(this)}>
@@ -93,12 +91,7 @@ class Koulutusala extends Component {
         </Heading>
         {!this.state.isHidden &&
           <KoulutusalaList>
-            {_.map(koulutusalat, (ala, i) => {
-              return (
-                <SubAla {...ala} key={i}/>
-                // <Tutkinto {...ala} key={i} />
-              )
-            })}
+            {_.map(koulutusalat, (ala, i) => <SubAla {...ala} key={i}/> )}
           </KoulutusalaList>
         }
 

@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import Moment from 'react-moment'
 
@@ -16,6 +17,7 @@ const TopSectionWrapper = styled.div`
   margin: -30px -28px;
   padding: 15px 60px 30px;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
+  position: relative;
 `
 
 const LupaDetailsWrapper = styled.div`
@@ -47,6 +49,7 @@ class Jarjestamislupa extends Component {
             <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/api/pdf/${diaarinumero}`}><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="MM.DD.YYYY">{paatospvm}</Moment></a></Row>
             <Row>Voimassaolo:&nbsp;<Moment format="MM.DD.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
             <Row>Esittelijä:&nbsp;{esittelija ? esittelija :  '-'}</Row>
+            {/*<NavLink to={`${match.url}/hae-muutosta`}/>*/}
           </TopSectionWrapper>
 
           <LupaDetailsWrapper>

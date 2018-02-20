@@ -13,16 +13,6 @@ import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
 
-const JarjestajaWrapper = styled.div`
-  margin: 20px 0 40px;
-`
-
-const LargeParagraph = styled.p`
-  font-size: 20px;
-  line-height: 24px;
-  margin: 0;
-`
-
 const Separator = styled.div`
   &:after {
     display: block;
@@ -31,14 +21,6 @@ const Separator = styled.div`
     height: 1px;
     background-color: ${COLORS.BORDER_GRAY};
     margin: 30px 0;
-  }
-`
-
-const LupaInfoWrapper = styled.div`
-  margin: 44px 0 20px;
-  
-  h2 {
-    font-weight: bold;
   }
 `
 
