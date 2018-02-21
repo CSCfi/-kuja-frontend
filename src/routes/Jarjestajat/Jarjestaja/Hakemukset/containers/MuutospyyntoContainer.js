@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import Hakemus from '../components/Hakemus'
+import MuutosPyynto from '../components/Muutospyynto'
 
 
 const mapStateToProps = (state) => {
   return { lupa: state.lupa }
 }
 
-export default connect(mapStateToProps)(Hakemus)
+export default connect(mapStateToProps)(MuutosPyynto)

@@ -1,33 +1,33 @@
 import { API_BASE_URL } from "../../../../../modules/constants"
 
 // Constants
-export const FETCH_HAKEMUKSET_START = 'FETCH_HAKEMUKSET_START'
-export const FETCH_HAKEMUKSET_SUCCESS = 'FETCH_HAKEMUKSET_SUCCESS'
-export const FETCH_HAKEMUKSET_FAILURE = 'FETCH_HAKEMUKSET_FAILURE'
+export const FETCH_MUUTOSPYYNNOT_START = 'FETCH_MUUTOSPYYNNOT_START'
+export const FETCH_MUUTOSPYYNNOT_SUCCESS = 'FETCH_MUUTOSPYYNNOT_SUCCESS'
+export const FETCH_MUUTOSPYYNNOT_FAILURE = 'FETCH_MUUTOSPYYNNOT_FAILURE'
 
 // Actions
-export function fetchHakemukset(ytunnus, query) {
+export function fetchMuutospyynnot(ytunnus, query) {
   return (dispatch) => {
-    dispatch({ type: FETCH_HAKEMUKSET_START })
+    dispatch({ type: FETCH_MUUTOSPYYNNOT_START })
 
     const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`)
 
     request
       .then((response) => response.json())
       .then((data) => {
-        dispatch({ type: FETCH_HAKEMUKSET_SUCCESS, payload: data })
+        dispatch({ type: FETCH_MUUTOSPYYNNOT_SUCCESS, payload: data })
       })
-      .catch((err) => dispatch({ type: FETCH_HAKEMUKSET_FAILURE, payload: err }))
+      .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNNOT_FAILURE, payload: err }))
   }
 }
 
 export const actions = {
-  fetchHakemukset
+  fetchMuutospyynnot
 }
 
 // Action handlers
 const ACTION_HANDLERS = {
-  [FETCH_HAKEMUKSET_START]    : (state, action) => {
+  [FETCH_MUUTOSPYYNNOT_START]    : (state, action) => {
     return {
       ...state,
       isFetching: true,
@@ -35,7 +35,7 @@ const ACTION_HANDLERS = {
       hasErrored: false
     }
   },
-  [FETCH_HAKEMUKSET_SUCCESS]  : (state, action) => {
+  [FETCH_MUUTOSPYYNNOT_SUCCESS]  : (state, action) => {
     return {
       ...state,
       isFetching: false,
@@ -44,7 +44,7 @@ const ACTION_HANDLERS = {
       data: action.payload
     }
   },
-  [FETCH_HAKEMUKSET_FAILURE]  : (state, action) => {
+  [FETCH_MUUTOSPYYNNOT_FAILURE]  : (state, action) => {
     return {
       ...state,
       isFetching: false,
@@ -62,7 +62,7 @@ const initialState = {
   data: {}
 }
 
-export default function hakemuksetReducer(state = initialState, action) {
+export default function muutospyynnotReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state

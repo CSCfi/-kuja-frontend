@@ -1,5 +1,5 @@
 import HakemuksetJaPaatoksetContainer from './containers/HakemuksetJaPaatokset'
-import Hakemus from './components/Hakemus'
+import Hakemus from './components/Muutospyynto'
 
 const routes = [
   {

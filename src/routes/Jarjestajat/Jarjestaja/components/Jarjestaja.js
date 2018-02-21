@@ -12,7 +12,7 @@ import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
-import HakemusContainer from "../Hakemukset/containers/HakemusContainer"
+import MuutospyyntoContainer from "../Hakemukset/containers/MuutospyyntoContainer"
 
 const Separator = styled.div`
   &:after {
@@ -82,7 +82,7 @@ class Jarjestaja extends Component {
                 <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
                 {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
                 <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
-                <Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={HakemusContainer}/>
+                <Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={MuutospyyntoContainer}/>
               </ContentContainer>
             </FullWidthWrapper>
           </div>

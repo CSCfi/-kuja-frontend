@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Hakemus extends Component {
+class Muutospyynto extends Component {
   constructor() {
     super()
     this.state = {
@@ -32,4 +32,4 @@ class Hakemus extends Component {
   }
 }
 
-export default Hakemus
+export default Muutospyynto

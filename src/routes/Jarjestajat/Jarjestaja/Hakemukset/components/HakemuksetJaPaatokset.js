@@ -6,11 +6,11 @@ import MuutospyyntoList from './MuutospyyntoList'
 class HakemuksetJaPaatokset extends Component {
   componentWillMount() {
     const { ytunnus } = this.props.match.params
-    this.props.fetchHakemukset(ytunnus)
+    this.props.fetchMuutospyynnot(ytunnus)
   }
 
   render() {
-    const { isFetching, fetched, hasErrored, data } = this.props.hakemukset
+    const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
 
     if (fetched) {
       return (

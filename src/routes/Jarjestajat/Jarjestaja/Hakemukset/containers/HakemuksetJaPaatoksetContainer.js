@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
 
 import HakemuksetJaPaatokset from '../components/HakemuksetJaPaatokset'
-import { fetchHakemukset } from "../modules/hakemukset"
+import { fetchMuutospyynnot } from "../modules/muutospyynnot"
 
 const mapStateToProps = (state) => {
-  return { hakemukset: state.hakemukset }
+  return { muutospyynnot: state.muutospyynnot }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchHakemukset: (ytunnus, query) => dispatch(fetchHakemukset(ytunnus, query))
+    fetchMuutospyynnot: (ytunnus, query) => dispatch(fetchMuutospyynnot(ytunnus, query))
   }
 }
 
