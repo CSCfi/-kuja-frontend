@@ -2,7 +2,7 @@ import React from 'react'
 import Moment from 'react-moment'
 import { Link } from 'react-router-dom'
 
-import { parseLocalizedField, slugify } from "../../../modules/helpers"
+import { parseLocalizedField } from "../../../modules/helpers"
 import { API_BASE_URL, LUPA_EXCEPTION_PATH } from "../../../modules/constants"
 import { LUPA_LISAKOULUTTAJAT } from "../modules/constants"
 import { Th, Tr } from "../../../modules/Table"

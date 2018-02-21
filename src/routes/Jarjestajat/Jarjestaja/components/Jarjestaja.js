@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
@@ -12,6 +11,8 @@ import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
+import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
+import HakemusContainer from "../Hakemukset/containers/HakemusContainer"
 
 const Separator = styled.div`
   &:after {
@@ -79,9 +80,10 @@ class Jarjestaja extends Component {
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
                 <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
-                <Route path={`${match.url}/hakemukset-ja-paatokset`} render={() => <div>hakemukset ja paatokset</div>} />
+                {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
+                <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
+                <Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={HakemusContainer}/>
               </ContentContainer>
-
             </FullWidthWrapper>
           </div>
         )

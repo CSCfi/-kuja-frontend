@@ -18,9 +18,9 @@ const HeaderTitle = styled.div`
   line-height: 20px;
 `
 
-const HeaderLinks = styled.div`
-  display: flex;
-`
+// const HeaderLinks = styled.div`
+//   display: flex;
+// `
 
 const HeaderBarInner = styled.div`
   display: flex;

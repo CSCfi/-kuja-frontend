@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { COLORS, MEDIA_QUERIES } from 'modules/styles'
+import { MEDIA_QUERIES } from 'modules/styles'
 
 const InfoBox = styled.div`
   margin: 20px;
