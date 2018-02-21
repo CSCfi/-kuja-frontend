@@ -4,7 +4,10 @@ import HakemuksetJaPaatokset from '../components/HakemuksetJaPaatokset'
 import { fetchMuutospyynnot } from "../modules/muutospyynnot"
 
 const mapStateToProps = (state) => {
-  return { muutospyynnot: state.muutospyynnot }
+  return {
+    muutospyynnot: state.muutospyynnot,
+    lupa: state.lupa
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

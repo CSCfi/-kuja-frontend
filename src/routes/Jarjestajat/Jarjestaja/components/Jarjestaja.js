@@ -8,11 +8,11 @@ import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
+import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
+import MuutospyyntoContainer from "../Hakemukset/containers/MuutospyyntoContainer"
 
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
-import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
-import MuutospyyntoContainer from "../Hakemukset/containers/MuutospyyntoContainer"
 
 const Separator = styled.div`
   &:after {

@@ -1,9 +1,37 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 import MuutospyyntoList from './MuutospyyntoList'
 
+import { COLORS } from "../../../../../modules/styles"
+import { slugify } from "../../../../../modules/helpers"
+
+const Wrapper = styled.div`
+  position: relative;
+`
+
+const UusiMuutospyynto = styled(Link)`
+  position: absolute;
+  right: 0;
+  top: 10px;
+  padding: 6px 12px;
+  color: ${COLORS.OIVA_GREEN};
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 class HakemuksetJaPaatokset extends Component {
+  getMuutospyyntoUrl() {
+    const {  match } = this.props
+    const { diaarinumero } = this.props.lupa.data
+
+    return `${match.url}/${slugify(diaarinumero)}`
+  }
+
   componentWillMount() {
     const { ytunnus } = this.props.match.params
     this.props.fetchMuutospyynnot(ytunnus)
@@ -14,10 +42,11 @@ class HakemuksetJaPaatokset extends Component {
 
     if (fetched) {
       return (
-        <div>
+        <Wrapper>
           <h2>Avoimet hakemukset</h2>
+          <UusiMuutospyynto to={this.getMuutospyyntoUrl()}>Luo uusi</UusiMuutospyynto>
           <MuutospyyntoList muutospyynnot={data} />
-        </div>
+        </Wrapper>
       )
     } else if (isFetching) {
       return (
