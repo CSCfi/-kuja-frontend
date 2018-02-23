@@ -1,4 +1,5 @@
 import { API_BASE_URL } from 'modules/constants'
+import { parseLupa } from "./lupaParser"
 
 // Constants
 export const FETCH_LUPA_START = 'FETCH_LUPA_START'
@@ -41,7 +42,8 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: action.payload,
+      kohteet: parseLupa(action.payload)
     }
   },
   [FETCH_LUPA_FAILURE] : (state, action) => {
@@ -59,7 +61,8 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  data: {}
+  data: {},
+  kohteet: {}
 }
 
 export default function lupaReducer(state = initialState, action) {

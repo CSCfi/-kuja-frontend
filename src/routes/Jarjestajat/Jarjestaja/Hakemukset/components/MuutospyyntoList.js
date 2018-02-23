@@ -38,6 +38,7 @@ class MuutospyynnotList extends Component {
                 <Th flex="3">Järjestäjä</Th>
                 <Th>Hakupvm</Th>
                 <Th>Tila</Th>
+                <Th>Toiminnot</Th>
               </Tr>
               </Thead>
               <Tbody>
