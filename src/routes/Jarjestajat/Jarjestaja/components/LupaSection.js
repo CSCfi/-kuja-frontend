@@ -57,7 +57,7 @@ const MuutMaaraykset = styled.div`
 
 class LupaSection extends Component {
   render() {
-    const { kohde, diaarinumero } = this.props
+    const { kohde, diaarinumero, ytunnus } = this.props
 
     if (kohde) {
       const { kohdeid, heading } = kohde
@@ -67,13 +67,15 @@ class LupaSection extends Component {
 
         // Kohde 1: Tutkinnot
         case KOHTEET.TUTKINNOT: {
+          console.log(this.props)
           const { maaraykset, muutMaaraykset } = kohde
+          const muutosUrl = `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset/${slugify(diaarinumero)}`
 
           return (
             <SectionWrapper>
               <Span>{`${kohdeid}.`}</Span>
               <H3>{heading}</H3>
-              <MuutosLink to={`/jarjestajat/${this.props.ytunnus}/hakemukset-ja-paatokset/${slugify(diaarinumero)}`} diaarinumero={diaarinumero}>Hae muutosta</MuutosLink>
+              <MuutosLink to={muutosUrl} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
               <div>
                 <Tutkinnot>
                   {_.map(maaraykset, (ala, i) => <Koulutusala key={i} {...ala} />)}

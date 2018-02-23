@@ -36,7 +36,7 @@ const Row = styled.div`
 
 class Jarjestamislupa extends Component {
   render() {
-    const { diaarinumero, alkupvm, paatospvm, meta } = this.props.lupa.data
+    const { diaarinumero, alkupvm, paatospvm, meta, jarjestajaYtunnus } = this.props.lupa.data
     const { kohteet } = this.props.lupa
     const { esittelija } = meta
 
@@ -52,7 +52,7 @@ class Jarjestamislupa extends Component {
           </TopSectionWrapper>
 
           <LupaDetailsWrapper>
-            {Object.keys(LUPA_SECTIONS).map((k, i) => <LupaSection kohde={kohteet[k]} diaarinumero={diaarinumero} key={i} />)}
+            {Object.keys(LUPA_SECTIONS).map((k, i) => <LupaSection kohde={kohteet[k]} diaarinumero={diaarinumero} ytunnus={jarjestajaYtunnus} key={i} />)}
           </LupaDetailsWrapper>
 
         </InnerContentWrapper>
