@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 
 const TutkintoWrapper = styled.div`
@@ -28,19 +28,50 @@ const Rajoite = (props) => {
   )
 }
 
-const Tutkinto = (props) => {
-  const { koodi, nimi, rajoitteet } = props
+class Tutkinto extends Component {
+  // constructor(props) {
+  //   super(props)
+  //   // this.handleOnChange = this.handleOnChange.bind(this)
+  // }
 
-  return (
-    <div>
-      <TutkintoWrapper>
-        <Koodi>{koodi}</Koodi>
-        <Nimi>{nimi}</Nimi>
-      </TutkintoWrapper>
-      {rajoitteet ? _.map(rajoitteet, (rajoite, i) => <Rajoite {...rajoite} key={i}/>) : null}
-    </div>
+  render() {
+    const { koodi, nimi, rajoitteet, renderCheckbox } = this.props
 
-  )
+
+    return (
+      <div>
+        <TutkintoWrapper>
+          {renderCheckbox
+            ? <input type="checkbox" ref="tutkintoInput" defaultValue="off" onChange={this.handleInputOnChange.bind(this)} />
+            : null
+          }
+          <Koodi>{koodi}</Koodi>
+          <Nimi>{nimi}</Nimi>
+        </TutkintoWrapper>
+        {rajoitteet ? _.map(rajoitteet, (rajoite, i) => <Rajoite {...rajoite} key={i}/>) : null}
+      </div>
+    )
+  }
+
+  getInputValue() {
+    console.log(this.refs.tutkintoInput.checked)
+    return this.refs.tutkintoInput.checked
+  }
+
+  handleInputOnChange() {
+    const { koodi, nimi, maaraysId } = this.props
+    console.log('Poistetaan tutkinto: ' + koodi + ' ' + nimi + '. maaraysid: ' + maaraysId)
+    console.log(this.props)
+    const val = this.getInputValue()
+
+    if (val === true) {
+      this.props.removeTutkinto({ koodi, nimi, maaraysId })
+    } else {
+      this.props.undoRemoveTutkinto({ koodi, nimi, maaraysId })
+    }
+
+  }
+
 }
 
 export default Tutkinto

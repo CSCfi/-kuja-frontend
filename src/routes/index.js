@@ -9,14 +9,16 @@ import Home from 'routes/Home'
 import Jarjestajat from 'routes/Jarjestajat'
 // import Login from 'routes/Login'
 // import Logout from 'routes/Logout'
-import Jarjestaja from 'routes/Jarjestajat/Jarjestaja'
+import Jarjestaja from '../routes/Jarjestajat/Jarjestaja'
+// import JarjestajaMuutospyynto from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto'
 
 const appRoutes = _.union(
   Home,
-  Jarjestajat,
   // Login, disabloitu toistaiseksi
   // Logout, disabloitu toistaiseksi
-  Jarjestaja
+  Jarjestaja,
+  Jarjestajat,
+  // JarjestajaMuutospyynto
 )
 
 const Routes = () => {

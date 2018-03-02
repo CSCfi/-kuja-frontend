@@ -218,10 +218,13 @@ function getMaaraysArvoArray(maaraykset) {
 
   _.forEach(maaraykset, (maarays) => {
     const { koodi } = maarays
-    const { metadata } = koodi
 
-    if (koodi && metadata) {
-      arr.push(parseLocalizedField(metadata))
+    if (koodi) {
+      const { metadata } = koodi
+
+      if (metadata) {
+        arr.push(parseLocalizedField(metadata))
+      }
     }
   })
 

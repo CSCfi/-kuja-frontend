@@ -52,7 +52,15 @@ class Jarjestamislupa extends Component {
           </TopSectionWrapper>
 
           <LupaDetailsWrapper>
-            {Object.keys(LUPA_SECTIONS).map((k, i) => <LupaSection kohde={kohteet[k]} diaarinumero={diaarinumero} ytunnus={jarjestajaYtunnus} key={i} />)}
+            {Object.keys(LUPA_SECTIONS).map((k, i) =>
+              <LupaSection
+                renderMuutosLink={true}
+                kohde={kohteet[k]}
+                diaarinumero={diaarinumero}
+                ytunnus={jarjestajaYtunnus}
+                key={i}
+              />
+            )}
           </LupaDetailsWrapper>
 
         </InnerContentWrapper>

@@ -4,11 +4,12 @@ import styled from 'styled-components'
 import { withRouter, Link } from 'react-router-dom'
 
 import Koulutusala from './Koulutusala'
+import MuuMaarays from './MuuMaarays'
 
 import { slugify } from "../../../../modules/helpers"
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
-import MuuMaarays from './MuuMaarays'
+
 
 const SectionWrapper = styled.div`
   margin-left: 30px;
@@ -56,8 +57,13 @@ const MuutMaaraykset = styled.div`
 `
 
 class LupaSection extends Component {
+
+
+
   render() {
-    const { kohde, diaarinumero, ytunnus } = this.props
+    const { kohde, diaarinumero, ytunnus, renderMuutosLink } = this.props
+
+    // const { isRemoving } = this.state
 
     if (kohde) {
       const { kohdeid, heading } = kohde
@@ -67,7 +73,6 @@ class LupaSection extends Component {
 
         // Kohde 1: Tutkinnot
         case KOHTEET.TUTKINNOT: {
-          console.log(this.props)
           const { maaraykset, muutMaaraykset } = kohde
           const muutosUrl = `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset/${slugify(diaarinumero)}`
 
@@ -75,7 +80,10 @@ class LupaSection extends Component {
             <SectionWrapper>
               <Span>{`${kohdeid}.`}</Span>
               <H3>{heading}</H3>
-              <MuutosLink to={muutosUrl} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
+              {renderMuutosLink
+                ? <MuutosLink to={muutosUrl} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
+                : null
+              }
               <div>
                 <Tutkinnot>
                   {_.map(maaraykset, (ala, i) => <Koulutusala key={i} {...ala} />)}

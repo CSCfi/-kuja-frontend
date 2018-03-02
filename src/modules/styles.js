@@ -18,6 +18,7 @@ import 'static/fonts/GothamNarrow-Light.otf'
 // Colors
 export const COLORS = {
   OIVA_GREEN: '#5A8A70',
+  OIVA_RED: '#cc3300',
   DARK_GRAY: '#525252',
   BLACK: '#000000',
   WHITE: '#FFFFFF',
@@ -32,7 +33,8 @@ export const FONT_STACK = {
   GOTHAM_NARROW_BOLD: `"Gotham Narrow Bold", Helvetica, Arial, sans-serif`,
   OPEN_SANS_REGULAR: `"Open Sans", Helvetica, Arial, sans-serif`,
   OPEN_SANS_SEMIBOLD: `"Open Sans", Helvetica, Arial, sans-serif`,
-  PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`
+  PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`,
+  SOURCE_SANS: `"Source Sans", "Open Sans", Helvetica, Arial, sans-serif`
 }
 
 export const APP_WIDTH = 1030
