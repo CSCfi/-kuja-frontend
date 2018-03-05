@@ -1,6 +1,7 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import validate from '../modules/validateWizard'
+import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 
 const paatoskierrokset = [{ id: 19, nimi: '1.1.2018 voimaan tulevat päätökset' }]
 
@@ -24,14 +25,14 @@ const MuutospyyntoWizardPaatoskierros = props => {
     <div>
       <h3>Valitse päätöskierros</h3>
       <form onSubmit={handleSubmit}>
-        <div>
+        <SelectWrapper>
           <label>Päätöskierros</label>
           <Field name="paatoskierros" component={renderPaatoskierrosSelect} />
-        </div>
+        </SelectWrapper>
         <div>
-          <button type="submit" disabled={pristine || error} className="next">
-            Next
-          </button>
+          <WizButton type="submit" disabled={pristine || error} className="next">
+            Seuraava
+          </WizButton>
         </div>
       </form>
     </div>

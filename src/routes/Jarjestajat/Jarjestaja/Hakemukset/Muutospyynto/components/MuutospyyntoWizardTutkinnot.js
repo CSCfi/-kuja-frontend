@@ -6,12 +6,12 @@ import styled from 'styled-components'
 
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
-import { Button } from '../../../../../../modules/Button'
+import { WizButton } from "./MuutospyyntoWizard"
 
 const Kohde = styled.div`
   margin-left: 30px;
   position: relative;
-  border-bottom: 1px solid ${COLORS.BORDER_GRAY};
+  //border-bottom: 1px solid ${COLORS.BORDER_GRAY};
   padding: 0 0 26px;
   
   &:last-child {
@@ -34,6 +34,11 @@ const ControlsWrapper = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+`
+
+const BottomWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `
 
 class MuutospyyntoWizardTutkinnot extends Component {
@@ -69,7 +74,20 @@ class MuutospyyntoWizardTutkinnot extends Component {
             poistettavatValue={poistettavatValue}
             component={this.renderTutkinnot}
           />
-          <Button type="submit"></Button>
+          <BottomWrapper>
+              {isRemoving
+                ?
+                <div>
+                  <WizButton disabled={poistettavatValue === undefined || poistettavatValue.length === 0} bgColor={COLORS.OIVA_GREEN}>Poista valitut</WizButton>
+                  <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Peruuta</WizButton>
+                </div>
+                :
+                <div>
+                  <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</WizButton>
+                </div>
+              }
+              <WizButton type="submit" disabled={poistettavatValue === undefined || poistettavatValue.length === 0}>Seuraava</WizButton>
+          </BottomWrapper>
         </form>
       </div>
     )
@@ -88,12 +106,12 @@ class MuutospyyntoWizardTutkinnot extends Component {
         {isRemoving
           ?
             <ControlsWrapper>
-              <Button disabled={poistettavatValue === undefined || poistettavatValue.length === 0} bgColor={COLORS.OIVA_GREEN}>Poista valitut</Button>
-              <Button bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Peruuta</Button>
+              <WizButton disabled={poistettavatValue === undefined || poistettavatValue.length === 0} bgColor={COLORS.OIVA_GREEN}>Poista valitut</WizButton>
+              <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Peruuta</WizButton>
             </ControlsWrapper>
           :
           <ControlsWrapper>
-            <Button bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</Button>
+            <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</WizButton>
           </ControlsWrapper>
         }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
+import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
@@ -37,25 +38,24 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 
 
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue } = props
-
+  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, error } = props
 
   return (
     <div>
       <h3>Valitse muutospyynnön perustelut</h3>
       <form onSubmit={handleSubmit}>
+        <SelectWrapper>
+          <div>
+            <label>Muutosperustelu</label>
+            <Field
+              name="muutosperustelu"
+              muutosperustelut={muutosperustelut}
+              component={renderPerusteluSelect}
+            />
+          </div>
 
-        <div>
-          <label>Muutosperustelu</label>
-          <Field
-            name="muutosperustelu"
-            muutosperustelut={muutosperustelut}
-            component={renderPerusteluSelect}
-          />
-        </div>
-
-        {muutosperusteluValue === '01'
-          ?
+          {muutosperusteluValue === '01'
+            ?
             <div>
               <Field
                 name="muuperustelu"
@@ -64,16 +64,17 @@ let MuutospyyntoWizardPerustelut = props => {
                 component={renderField}
               />
             </div>
-          : null
-        }
+            : null
+          }
+        </SelectWrapper>
 
         <div>
-          <button type="button" className="previous" onClick={previousPage}>
-            Previous
-          </button>
-          <button type="submit" className="next">
-            Next
-          </button>
+          <WizButton type="button" onClick={previousPage}>
+            Edellinen
+          </WizButton>
+          <WizButton type="submit" disabled={muutosperusteluValue === undefined || error}>
+            Seuraava
+          </WizButton>
         </div>
       </form>
     </div>
