@@ -1,6 +1,13 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import { LUPA_VOIMASSAOLO_20181231_ASTI } from "../modules/constants"
+import { LUPA_VOIMASSAOLO_20180731_ASTI } from "../modules/constants"
+import { LUPA_VOIMASSAOLO_20180801_LUKIEN } from "../modules/constants"
+import { LUPA_VOIMASSAOLO_20190101_LUKIEN } from "../modules/constants"
+
+
+
 
 const TutkintoWrapper = styled.div`
   margin: 6px 0 6px 30px;
@@ -15,6 +22,10 @@ const Koodi = styled.span`
 
 const Nimi = styled.span`
   flex: 6;
+`
+
+const Pvm = styled.span`
+  flex: 2;
 `
 
 const RajoiteStyle = styled.div`
@@ -47,6 +58,7 @@ class Tutkinto extends Component {
           }
           <Koodi>{koodi}</Koodi>
           <Nimi>{nimi}</Nimi>
+          <Pvm>{ this.checkDateString(koodi) }</Pvm>
         </TutkintoWrapper>
         {rajoitteet ? _.map(rajoitteet, (rajoite, i) => <Rajoite {...rajoite} key={i}/>) : null}
       </div>
@@ -69,6 +81,23 @@ class Tutkinto extends Component {
     } else {
       this.props.undoRemoveTutkinto({ koodi, nimi, maaraysId })
     }
+
+  }
+
+  checkDateString(koodi) {
+
+    if(_.includes(LUPA_VOIMASSAOLO_20181231_ASTI, koodi)) {
+      return "31.12.2018 asti";
+    }
+      if(_.includes(LUPA_VOIMASSAOLO_20180731_ASTI, koodi)) {
+          return "31.07.2018 asti";
+      }
+      if(_.includes(LUPA_VOIMASSAOLO_20180801_LUKIEN, koodi)) {
+          return "01.08.2018 lukien";
+      }
+      if(_.includes(LUPA_VOIMASSAOLO_20190101_LUKIEN, koodi)) {
+          return "01.01.2019 lukien";
+      }
 
   }
 

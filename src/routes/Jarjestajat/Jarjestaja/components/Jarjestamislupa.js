@@ -50,7 +50,6 @@ class Jarjestamislupa extends Component {
             <Row>Voimassaolo:&nbsp;<Moment format="MM.DD.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
             <Row>Esittelijä:&nbsp;{esittelija ? esittelija :  '-'}</Row>
           </TopSectionWrapper>
-
           <LupaDetailsWrapper>
             {Object.keys(LUPA_SECTIONS).map((k, i) =>
               <LupaSection

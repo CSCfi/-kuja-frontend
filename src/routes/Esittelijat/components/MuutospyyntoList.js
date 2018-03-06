@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import Media from 'react-media'
 
 import MuutospyyntoItem from './MuutospyyntoItem'
-import { Table, Thead, Tbody, Th, Tr } from "../../../../../modules/Table"
-import { MEDIA_QUERIES } from "../../../../../modules/styles"
+import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
+import { MEDIA_QUERIES } from "../../../modules/styles"
 
 class MuutospyynnotList extends Component {
   renderMuutospyynnot() {
@@ -14,7 +14,7 @@ class MuutospyynnotList extends Component {
 
   render() {
     const { muutospyynnot } = this.props
-
+    console.log("asdsa!dasdasdas")
     if (muutospyynnot && muutospyynnot.length > 0) {
       return (
         <div>
@@ -34,10 +34,11 @@ class MuutospyynnotList extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Th>Muokkauspvm</Th>
-                <Th>Tila</Th>
+                <Th>Koulutuksen järjestäjä</Th>
+                <Th>Saapunut</Th>
                 <Th>Päätöskierros</Th>
-                <Th>Perustelu</Th>
+                <Th>Maakunta</Th>
+                <Th>Tila</Th>
               </Tr>
               </Thead>
               <Tbody>

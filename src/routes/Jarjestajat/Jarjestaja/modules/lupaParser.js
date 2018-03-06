@@ -96,20 +96,12 @@ const parseSectionData = (heading, target, maaraykset) => {
 
         case KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: {
           const { koodiarvo } = maarays
+
+          const ammatillinenNimi = parseLocalizedField(maarays.koodi.metadata, 'FI', 'nimi', 'kieli')
+
           muutMaaraykset.push({
             selite: TUTKINTO_TEKSTIT.ammatilliseentehtavaanvalmistavakoulutus.selite,
-            nimi: TUTKINTO_TEKSTIT.ammatilliseentehtavaanvalmistavakoulutus[koodiarvo].FI,
-            indeksi: muutMaaraykset.length + 1,
-            maaraysId: id
-          })
-          break
-        }
-
-        case KOODISTOT.TEHTAVAAN_VALMISTAVA_KOULUTUS: {
-          const { koodiarvo } = maarays
-          muutMaaraykset.push({
-            selite: TUTKINTO_TEKSTIT.tehtavaanvalmistavakoulutus.selite,
-            nimi: TUTKINTO_TEKSTIT.tehtavaanvalmistavakoulutus[koodiarvo].FI,
+            nimi: ammatillinenNimi,
             indeksi: muutMaaraykset.length + 1,
             maaraysId: id
           })
@@ -118,9 +110,12 @@ const parseSectionData = (heading, target, maaraykset) => {
 
         case KOODISTOT.KULJETTAJAKOULUTUS: {
           const { koodiarvo } = maarays
+
+          const kuljettajaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
+
           muutMaaraykset.push({
-            selite: TUTKINTO_TEKSTIT.kuljettajakoulutus.selite,
-            nimi: TUTKINTO_TEKSTIT.kuljettajakoulutus[koodiarvo].FI,
+            selite: kuljettajaSelite,
+            nimi: "",
             indeksi: muutMaaraykset.length + 1,
             maaraysId: id
           })
@@ -128,10 +123,13 @@ const parseSectionData = (heading, target, maaraykset) => {
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
-          const { koodiarvo } = maarays
+
+          const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
+          // TODO localizations
+
           muutMaaraykset.push({
-            selite: TUTKINTO_TEKSTIT.oivatyovoimakoulutus.selite,
-            nimi: TUTKINTO_TEKSTIT.oivatyovoimakoulutus[koodiarvo].FI,
+            selite: tyovoimaSelite,
+            nimi: "",
             indeksi: muutMaaraykset.length + 1,
             maaraysId: id
           })

@@ -9,6 +9,7 @@ import MuuMaarays from './MuuMaarays'
 import { slugify } from "../../../../modules/helpers"
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
+import { TUTKINTO_TEKSTIT } from "../modules/constants"
 
 
 const SectionWrapper = styled.div`
@@ -20,6 +21,17 @@ const SectionWrapper = styled.div`
   &:last-child {
     border-bottom: none;
   }
+`
+
+const Otsikko = styled.div`
+  font-size: 16px;
+`
+
+const Kohde1 = styled.span`
+  font-size: 20px;
+  position: absolute;
+  left: -30px;
+  margin-top:19px;
 `
 
 const Span = styled.span`
@@ -46,6 +58,12 @@ const Capitalized = styled.p`
 
 const Bold = styled.span`
   font-family: ${FONT_STACK.GOTHAM_NARROW_BOLD};
+`
+
+const Tietoa = styled.div`
+  font-size: 14px;
+  margin-bottom: 30px;
+  margin-left:20px;
 `
 
 const Tutkinnot = styled.div`
@@ -78,7 +96,10 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span>
+
+              <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
+
+              <Kohde1>{`${kohdeid}.`}</Kohde1>
               <H3>{heading}</H3>
               {renderMuutosLink
                 ? <MuutosLink to={muutosUrl} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
@@ -88,6 +109,9 @@ class LupaSection extends Component {
                 <Tutkinnot>
                   {_.map(maaraykset, (ala, i) => <Koulutusala key={i} {...ala} />)}
                 </Tutkinnot>
+                <Tietoa>
+                    {TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}
+                </Tietoa>
                 <MuutMaaraykset>
                   {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
                 </MuutMaaraykset>

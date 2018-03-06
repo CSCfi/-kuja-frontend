@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 import { getRoles } from 'routes/Login/modules/user'
 
 class CasAuthenticated extends Component {
@@ -9,7 +8,7 @@ class CasAuthenticated extends Component {
   }
 
   render() {
-    return (
+      return (
       <div>
         {this.props.user.hasErrored ? <p>Autentikoinnissa tapahtui virhe</p> : <p>CAS-autentikointi valmis</p>}
       </div>
