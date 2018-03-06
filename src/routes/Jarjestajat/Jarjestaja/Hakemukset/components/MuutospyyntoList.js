@@ -9,7 +9,7 @@ import { MEDIA_QUERIES } from "../../../../../modules/styles"
 class MuutospyynnotList extends Component {
   renderMuutospyynnot() {
     const sorted = _.sortBy(this.props.muutospyynnot, (muutospyynto) => { return muutospyynto.hakupvm })
-    return _.map(sorted, muutospyynto => <MuutospyyntoItem muutospyynto={muutospyynto} key={muutospyynto.diaarinumero} />)
+    return _.map(sorted, muutospyynto => <MuutospyyntoItem muutospyynto={muutospyynto} key={muutospyynto.id} />)
   }
 
   render() {
@@ -34,7 +34,6 @@ class MuutospyynnotList extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Th>Diaarinumero</Th>
                 <Th>Muokkauspvm</Th>
                 <Th>Tila</Th>
                 <Th>Päätöskierros</Th>
