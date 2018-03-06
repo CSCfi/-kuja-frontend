@@ -17,7 +17,7 @@ export function fetchMuutosperustelut() {
       .then(data => {
         dispatch({ type: FETCH_MUUTOSPERUSTELUT_SUCCESS, payload: data })
       })
-      .catch(err => dispatch({ type:FETCH_MUUTOSPERUSTELUT_FAILURE, payload: err }))
+      .catch(err => dispatch({ type: FETCH_MUUTOSPERUSTELUT_FAILURE, payload: err }))
   }
 }
 

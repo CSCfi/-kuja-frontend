@@ -7,6 +7,8 @@ import muutospyynnotReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/mo
 import muutospyyntoReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutospyynto'
 // import muutoksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/modules/muutokset'
 import muutosperustelutReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutosperustelut'
+import koulutusalatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusalat'
+import koulutuksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutukset'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
   muutospyynto: muutospyyntoReducer,
   // muutokset: muutoksetReducer,
   muutosperustelut: muutosperustelutReducer,
+  koulutusalat: koulutusalatReducer,
+  koulutukset: koulutuksetReducer,
   form: reduxFormReducer
 })
 

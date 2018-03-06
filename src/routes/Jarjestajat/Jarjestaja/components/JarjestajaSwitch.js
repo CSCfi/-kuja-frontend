@@ -6,15 +6,12 @@ import MuutospyyntoContainer from '../Hakemukset/Muutospyynto/containers/Muutosp
 import JarjestajaContainer from '../containers/JarjestajaContainer'
 
 const JarjestajaSwitch = () => {
-  console.log('JarjestajaSwitch')
   return (
     <Switch>
       <Route exact path="/jarjestajat/:ytunnus/hakemukset-ja-paatokset/uusi" render={() =>{
-        console.log('wizardia')
         return <MuutospyyntoWizardContainer />
       } } />
       <Route path="/jarjestajat/:ytunnus/hakemukset-ja-paatokset/:diaarinumero" render={() =>{
-        console.log('muutospyyntoä')
         return <MuutospyyntoContainer />
       } } />
       <Route path="/jarjestajat/:ytunnus" component={JarjestajaContainer} />

@@ -128,6 +128,8 @@ class MuutospyyntoWizard extends Component {
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
                     lupa={lupa}
+                    fetchKoulutusalat={this.props.fetchKoulutusalat}
+                    fetchKoulutukset={this.props.fetchKoulutukset}
                   />
                 )}
                 {page === 4 && (

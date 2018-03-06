@@ -4,7 +4,7 @@ import { reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat } = props
+  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat } = props
   return (
     <div>
       <h2>Yhteenveto</h2>
@@ -17,6 +17,16 @@ let MuutospyyntoWizardYhteenveto = props => {
       <div>
         <h3>Päätöskierros</h3>
         <div>{paatoskierros}</div>
+      </div>
+
+      <div>
+        <h3>Lisättävät tutkinnot</h3>
+        <div>
+          {lisattavat
+            ? lisattavat.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+            : 'Ei lisättäviä tutkintoja'
+          }
+        </div>
       </div>
 
       <div>
@@ -45,11 +55,13 @@ MuutospyyntoWizardYhteenveto = connect(state => {
   const muutosperustelu = selector(state, 'muutosperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
   const poistettavat = selector(state, 'poistettavat')
+  const lisattavat = selector(state, 'lisattavat')
 
   return {
     muutosperustelu,
     paatoskierros,
-    poistettavat
+    poistettavat,
+    lisattavat
   }
 })(MuutospyyntoWizardYhteenveto)
 

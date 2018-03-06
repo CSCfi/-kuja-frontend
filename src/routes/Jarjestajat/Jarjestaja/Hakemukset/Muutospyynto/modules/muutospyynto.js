@@ -27,8 +27,6 @@ export function fetchMuutospyynto(ytunnus, query) {
 }
 
 export function createMuutospyynto(muutospyynto) {
-  console.log('createMuutospyynto in reducer')
-  console.log(muutospyynto)
   alert(JSON.stringify(muutospyynto))
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })

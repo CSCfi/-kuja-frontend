@@ -44,7 +44,6 @@ class Muutospyynto extends Component {
   }
   componentWillMount() {
     const { muutospyynnot } = this.props
-    console.log(this.props.match)
 
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
@@ -62,7 +61,6 @@ class Muutospyynto extends Component {
   }
 
   handleOkClick() {
-    console.log(this.props)
     this.props.createMuutospyynto(this.getMuutospyyntoBody())
   }
 
