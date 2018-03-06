@@ -27,11 +27,17 @@ const Otsikko = styled.div`
   font-size: 16px;
 `
 
-const Span = styled.span`
+const Kohde1 = styled.span`
   font-size: 20px;
   position: absolute;
   left: -30px;
   margin-top:19px;
+`
+
+const Span = styled.span`
+  font-size: 20px;
+  position: absolute;
+  left: -30px;
 `
 
 const H3 = styled.h3`
@@ -93,7 +99,7 @@ class LupaSection extends Component {
 
               <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
 
-              <Span>{`${kohdeid}.`}</Span>
+              <Kohde1>{`${kohdeid}.`}</Kohde1>
               <H3>{heading}</H3>
               {renderMuutosLink
                 ? <MuutosLink to={muutosUrl} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
