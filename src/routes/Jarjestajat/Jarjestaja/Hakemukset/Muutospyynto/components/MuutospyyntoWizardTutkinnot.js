@@ -49,9 +49,6 @@ const BottomWrapper = styled.div`
   justify-content: flex-end;
 `
 
-//
-// Tutkintojen lisäämisen tyylikomponentit
-//
 const AddWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -60,12 +57,22 @@ const AddWrapper = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 3;
+  overflow: hidden;
+`
+
+const ScrollWrapper = styled.div`
+  overflow: auto;
+  max-height: 100%;
 `
 
 const AddContent = styled.div`
   position: relative;
-  margin: 30px;
+  padding: 30px;
   background-color: ${COLORS.WHITE};
+`
+const Row = styled.div`
+  margin-bottom: 30px;
+  margin-left: ${props => props.marginLeft ? props.marginLeft : 0};
 `
 
 class MuutospyyntoWizardTutkinnot extends Component {
@@ -132,43 +139,47 @@ class MuutospyyntoWizardTutkinnot extends Component {
     return (
       <div>
         <form onSubmit={handleSubmit}>
-          <FieldArray
-            name="poistettavat"
-            kohde={kohteet[1]}
-            isRemoving={isRemoving}
-            poistettavatValue={poistettavatValue}
-            component={this.renderRemoveTutkinnot}
-          />
-
-          {isAdding
-            ?
+          <Row>
             <FieldArray
-              name="lisattavat"
-              data={data}
-              isAdding={isAdding}
-              lisattavatValue={lisattavatValue}
-              component={this.renderAddKoulutuksia}
+              name="poistettavat"
+              kohde={kohteet[1]}
+              isRemoving={isRemoving}
+              poistettavatValue={poistettavatValue}
+              component={this.renderRemoveTutkinnot}
             />
-            : null
-          }
+
+            {isAdding
+              ?
+              <FieldArray
+                name="lisattavat"
+                data={data}
+                isAdding={isAdding}
+                lisattavatValue={lisattavatValue}
+                component={this.renderAddKoulutuksia}
+              />
+              : null
+            }
+          </Row>
+
+          <Row marginLeft="30px">
+            <h3>Lisätyt tutkinnot</h3>
+            {lisattavatValue
+              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+              : 'Ei lisättäviä tutkintoja'
+            }
+          </Row>
+
+          <Row marginLeft="30px">
+            <h3>Poistettavat tutkinnot</h3>
+            <div>
+              {poistettavatValue
+                ? poistettavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+                : 'Ei poistettavia tutkintoja'
+              }
+            </div>
+          </Row>
 
           <BottomWrapper>
-              {/*{isRemoving*/}
-                {/*?*/}
-                  {/*<div>*/}
-                    {/*<WizButton disabled={poistettavatValue === undefined || poistettavatValue.length === 0} bgColor={COLORS.OIVA_GREEN}>Poista valitut</WizButton>*/}
-                    {/*<WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Peruuta</WizButton>*/}
-                  {/*</div>*/}
-                {/*:*/}
-                  {/*<div>*/}
-                    {/*<WizButton onClick={this.toggleIsAdding}>*/}
-                      {/*Lisää tutkintoja*/}
-                    {/*</WizButton>*/}
-                    {/*<WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>*/}
-                      {/*Poista tutkintoja*/}
-                    {/*</WizButton>*/}
-                  {/*</div>*/}
-              {/*}*/}
               <WizButton type="submit" disabled={isDisabled || isRemoving}>Seuraava</WizButton>
           </BottomWrapper>
         </form>
@@ -220,8 +231,8 @@ class MuutospyyntoWizardTutkinnot extends Component {
               nimi={nimi}
               koulutusalat={koulutusalat}
               fields={fields}
-              isRemoving={isRemoving}
-              poistettavatValue={poistettavatValue}
+              isEditing={isRemoving}
+              editValues={poistettavatValue}
             />
           )
         })}
@@ -235,56 +246,142 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
     return (
       <AddWrapper>
+        <ScrollWrapper>
+
+
         <ContentContainer>
           <AddContent>
-            <WizButton disabled={lisattavatValue === undefined || lisattavatValue.length === 0} onClick={this.toggleIsAdding}>Lisää valitut</WizButton>
-            <WizButton
-              bgColor={COLORS.OIVA_RED}
-              onClick={(e) => {
-                e.preventDefault()
-                fields.removeAll()
-                this.toggleIsAdding()
-              }}
-            >
-              Peruuta
-            </WizButton>
+            <Row>
+              <h2>Lisää koulutuksia</h2>
+            </Row>
+            <Row>
+              <WizButton disabled={lisattavatValue === undefined || lisattavatValue.length === 0} onClick={this.toggleIsAdding}>Lisää valitut</WizButton>
+              <WizButton
+                bgColor={COLORS.OIVA_RED}
+                onClick={(e) => {
+                  e.preventDefault()
+                  fields.removeAll()
+                  this.toggleIsAdding()
+                }}
+              >
+                Peruuta
+              </WizButton>
+            </Row>
 
-            <div>
-              {_.map(data, koulutusala => {
-                const { koodiarvo, metadata, koulutukset } = koulutusala
-                const nimi = parseLocalizedField(metadata)
-                return (
-                  <div key={koodiarvo}>
-                    <div>{koodiarvo}&nbsp;{nimi}</div>
-                    {_.map(koulutukset, (koulutus, indeksi) => {
-                      const { koodiarvo, nimi } = koulutus
-                      return (
-                        <div key={indeksi}>
-                          <input type="checkbox" onChange={(event) => {
-                            const { checked } = event.target
-                            if (checked) {
-                              fields.push(koodiarvo)
-                            } else {
-                              let i = undefined
-                              _.forEach(lisattavatValue, (value, idx) => {
-                                if (value === koodiarvo) {
-                                  i = idx
-                                }
-                              })
-                              fields.remove(i)
-                            }
-                          }}/>
-                          {koodiarvo}&nbsp;{nimi}
-                        </div>
-                      )
-                    })}
-                  </div>
+
+            {_.map(data, (koulutusala, i) => {
+              const { koodiarvo, metadata, koulutukset } = koulutusala
+              const nimi = parseLocalizedField(metadata)
+              return (
+                  <LisaaKoulutusAlaList
+                    key={i}
+                    koodiarvo={koodiarvo}
+                    nimi={nimi}
+                    koulutukset={koulutukset}
+                    editValues={lisattavatValue}
+                    fields={fields}
+                  />
                 )
-              })}
-            </div>
+            })}
+
+
+            {/*<div>*/}
+              {/*{_.map(data, koulutusala => {*/}
+                {/*const { koodiarvo, metadata, koulutukset } = koulutusala*/}
+                {/*const nimi = parseLocalizedField(metadata)*/}
+                {/*return (*/}
+                  {/*<div key={koodiarvo}>*/}
+                    {/*<div>{koodiarvo}&nbsp;{nimi}</div>*/}
+                    {/*{_.map(koulutukset, (koulutus, indeksi) => {*/}
+                      {/*const { koodiarvo, nimi } = koulutus*/}
+                      {/*return (*/}
+                        {/*<div key={indeksi}>*/}
+                          {/*<input type="checkbox" onChange={(event) => {*/}
+                            {/*const { checked } = event.target*/}
+                            {/*if (checked) {*/}
+                              {/*fields.push(koodiarvo)*/}
+                            {/*} else {*/}
+                              {/*let i = undefined*/}
+                              {/*_.forEach(lisattavatValue, (value, idx) => {*/}
+                                {/*if (value === koodiarvo) {*/}
+                                  {/*i = idx*/}
+                                {/*}*/}
+                              {/*})*/}
+                              {/*fields.remove(i)*/}
+                            {/*}*/}
+                          {/*}}/>*/}
+                          {/*{koodiarvo}&nbsp;{nimi}*/}
+                        {/*</div>*/}
+                      {/*)*/}
+                    {/*})}*/}
+                  {/*</div>*/}
+                {/*)*/}
+              {/*})}*/}
+            {/*</div>*/}
           </AddContent>
         </ContentContainer>
+        </ScrollWrapper>
       </AddWrapper>
+    )
+  }
+}
+
+class LisaaKoulutusAlaList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isHidden: true
+    }
+  }
+
+  toggleTutkintoList() {
+    this.setState({
+      isHidden: !this.state.isHidden
+    })
+  }
+
+  render() {
+    const { koodiarvo, nimi, koulutukset } = this.props
+    const { editValues } = this.props
+    let { fields } = this.props
+
+    return (
+      <Wrapper>
+        <Heading onClick={this.toggleTutkintoList.bind(this)}>
+          <Arrow src={arrow} alt="Koulutusala" rotated={!this.state.isHidden} />
+          <Span>{koodiarvo}</Span>
+          <Span>{nimi}</Span>
+          <Span>{`( ${koulutukset.length} kpl )`}</Span>
+        </Heading>
+        {!this.state.isHidden &&
+        <KoulutusalaListWrapper>
+          {_.map(koulutukset, (koulutus, i) => {
+            const { koodiarvo, nimi } = koulutus
+            return (
+              <TutkintoWrapper key={i}>
+                <input type="checkbox" onChange={(event) => {
+                  const { checked } = event.target
+                  if (checked) {
+                    fields.push(koodiarvo)
+                  } else {
+                    let i = undefined
+                    _.forEach(editValues, (value, idx) => {
+                      if (value === koodiarvo) {
+                        i = idx
+                      }
+                    })
+                    fields.remove(i)
+                  }
+                }}/>
+                <Koodi>{koodiarvo}</Koodi>
+                <Nimi>{nimi}</Nimi>
+                {/*{koodiarvo}&nbsp;{nimi}*/}
+              </TutkintoWrapper>
+            )
+          } )}
+        </KoulutusalaListWrapper>
+        }
+      </Wrapper>
     )
   }
 }
@@ -314,9 +411,7 @@ class KoulutusAlaList extends Component {
   }
 
   render() {
-    const { koodi, nimi, koulutusalat, isRemoving, fields, poistettavatValue } = this.props
-
-    console.log(this.props)
+    const { koodi, nimi, koulutusalat, isEditing, fields, editValues } = this.props
 
     return (
       <Wrapper>
@@ -328,7 +423,7 @@ class KoulutusAlaList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
-          {_.map(koulutusalat, (ala, i) => <KoulutuksetList isRemoving={isRemoving} fields={fields} poistettavatValue={poistettavatValue} {...ala} key={i} /> )}
+          {_.map(koulutusalat, (ala, i) => <KoulutuksetList isEditing={isEditing} fields={fields} editValues={editValues} {...ala} key={i} /> )}
         </KoulutusalaListWrapper>
         }
       </Wrapper>
@@ -336,10 +431,8 @@ class KoulutusAlaList extends Component {
   }
 }
 
-
-
 const KoulutuksetList = (props) => {
-  const { tutkinnot, nimi, koodi, isRemoving, poistettavatValue } = props
+  const { tutkinnot, nimi, koodi, isEditing, editValues } = props
   let { fields } = props
 
   return (
@@ -348,7 +441,7 @@ const KoulutuksetList = (props) => {
       {tutkinnot.map(({ koodi, nimi, maaraysId }) => {
         return (
           <TutkintoWrapper key={koodi}>
-            {isRemoving
+            {isEditing
               ?
               <input type="checkbox" onChange={(event) => {
                 const { checked } = event.target
@@ -356,7 +449,7 @@ const KoulutuksetList = (props) => {
                   fields.push(maaraysId)
                 } else {
                   let i = undefined
-                  _.forEach(poistettavatValue, (value, idx) => {
+                  _.forEach(editValues, (value, idx) => {
                     if (value === maaraysId) {
                       i = idx
                     }
