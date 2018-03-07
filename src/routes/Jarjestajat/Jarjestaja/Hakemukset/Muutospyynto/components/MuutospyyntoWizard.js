@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import MuutospyyntoWizardPaatoskierros from './MuutospyyntoWizardPaatoskierros'
@@ -72,6 +72,8 @@ class MuutospyyntoWizard extends Component {
     super(props)
     this.nextPage = this.nextPage.bind(this)
     this.previousPage = this.previousPage.bind(this)
+    this.onCancel = this.onCancel.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
     this.state = {
       page: 1
     }
@@ -89,6 +91,19 @@ class MuutospyyntoWizard extends Component {
 
   previousPage() {
     this.setState({ page: this.state.page - 1 })
+  }
+
+  onCancel(event) {
+    if (event) {
+      event.preventDefault()
+    }
+    const url = `/jarjestajat/${this.props.match.params.ytunnus}`
+    this.props.history.push(url)
+  }
+
+  onSubmit(data) {
+    this.props.createMuutospyynto(data)
+    this.onCancel() // TODO: tehdään onDone-funktio
   }
 
   render() {
@@ -113,6 +128,7 @@ class MuutospyyntoWizard extends Component {
                 {page === 1 && (
                   <MuutospyyntoWizardPaatoskierros
                     onSubmit={this.nextPage}
+                    onCancel={this.onCancel}
                     lupa={lupa}
                   />
                 )}
@@ -120,6 +136,7 @@ class MuutospyyntoWizard extends Component {
                   <MuutospyyntoWizardPerustelut
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
+                    onCancel={this.onCancel}
                     muutosperustelut={this.props.muutosperustelut.data}
                   />
                 )}
@@ -127,6 +144,7 @@ class MuutospyyntoWizard extends Component {
                   <MuutospyyntoWizardTutkinnot
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
+                    onCancel={this.onCancel}
                     lupa={lupa}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
                     fetchKoulutukset={this.props.fetchKoulutukset}
@@ -135,7 +153,8 @@ class MuutospyyntoWizard extends Component {
                 {page === 4 && (
                   <MuutospyyntoWizardYhteenveto
                     previousPage={this.previousPage}
-                    onSubmit={createMuutospyynto}
+                    onCancel={this.onCancel}
+                    onSubmit={this.onSubmit}
                   />
                 )}
               </WizardContent>
