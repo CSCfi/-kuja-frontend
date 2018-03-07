@@ -4,12 +4,18 @@ import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import styled from 'styled-components'
 
+import arrow from 'static/images/koulutusala-arrow.svg'
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
 import { WizButton } from "./MuutospyyntoWizard"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
+import { Wrapper, Heading, Arrow, Span, KoulutusalaListWrapper, KoulutusTyyppiWrapper } from "./MuutospyyntoWizardComponents"
+import { TutkintoWrapper, Koodi, Nimi } from "./MuutospyyntoWizardComponents"
 
+//
+// Yleiset tyylikomponentit
+//
 const Kohde = styled.div`
   margin-left: 30px;
   position: relative;
@@ -43,6 +49,9 @@ const BottomWrapper = styled.div`
   justify-content: flex-end;
 `
 
+//
+// Tutkintojen lisäämisen tyylikomponentit
+//
 const AddWrapper = styled.div`
   position: fixed;
   top: 0;
@@ -203,49 +212,19 @@ class MuutospyyntoWizardTutkinnot extends Component {
           </ControlsWrapper>
         }
 
-        <div>
-          {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
-            return (
-              <div key={koodi}>
-                <div>{koodi} {nimi}</div>
-                <div>
-                  {_.map(koulutusalat, ({ koodi, nimi, tutkinnot }) => {
-                    return (
-                      <div key={koodi}>
-                        {nimi}
-                        {tutkinnot.map(({ koodi, nimi, maaraysId }) => {
-                          return (
-                            <div key={koodi}>
-                              {isRemoving
-                                ?
-                                  <input type="checkbox" onChange={(event) => {
-                                    const { checked } = event.target
-                                    if (checked) {
-                                      fields.push(maaraysId)
-                                    } else {
-                                      let i = undefined
-                                      _.forEach(poistettavatValue, (value, idx) => {
-                                        if (value === maaraysId) {
-                                          i = idx
-                                        }
-                                      })
-                                      fields.remove(i)
-                                    }
-                                  }}/>
-                                : null
-                              }
-                              <label>{koodi}&nbsp;{nimi}</label>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
+          return (
+            <KoulutusAlaList
+              key={koodi}
+              koodi={koodi}
+              nimi={nimi}
+              koulutusalat={koulutusalat}
+              fields={fields}
+              isRemoving={isRemoving}
+              poistettavatValue={poistettavatValue}
+            />
+          )
+        })}
       </Kohde>
     )
   }
@@ -308,6 +287,92 @@ class MuutospyyntoWizardTutkinnot extends Component {
       </AddWrapper>
     )
   }
+}
+
+class KoulutusAlaList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isHidden: true
+    }
+  }
+
+  toggleTutkintoList() {
+    this.setState({
+      isHidden: !this.state.isHidden
+    })
+  }
+
+  getTutkintoCount(koulutusalat) {
+    let count = 0
+
+    _.forEach(koulutusalat, (ala) => {
+      count += ala.tutkinnot.length
+    })
+
+    return count
+  }
+
+  render() {
+    const { koodi, nimi, koulutusalat, isRemoving, fields, poistettavatValue } = this.props
+
+    console.log(this.props)
+
+    return (
+      <Wrapper>
+        <Heading onClick={this.toggleTutkintoList.bind(this)}>
+          <Arrow src={arrow} alt="Koulutusala" rotated={!this.state.isHidden} />
+          <Span>{koodi}</Span>
+          <Span>{nimi}</Span>
+          <Span>{`( ${this.getTutkintoCount(koulutusalat)} kpl )`}</Span>
+        </Heading>
+        {!this.state.isHidden &&
+        <KoulutusalaListWrapper>
+          {_.map(koulutusalat, (ala, i) => <KoulutuksetList isRemoving={isRemoving} fields={fields} poistettavatValue={poistettavatValue} {...ala} key={i} /> )}
+        </KoulutusalaListWrapper>
+        }
+      </Wrapper>
+    )
+  }
+}
+
+
+
+const KoulutuksetList = (props) => {
+  const { tutkinnot, nimi, koodi, isRemoving, poistettavatValue } = props
+  let { fields } = props
+
+  return (
+    <KoulutusTyyppiWrapper key={koodi}>
+      {nimi}
+      {tutkinnot.map(({ koodi, nimi, maaraysId }) => {
+        return (
+          <TutkintoWrapper key={koodi}>
+            {isRemoving
+              ?
+              <input type="checkbox" onChange={(event) => {
+                const { checked } = event.target
+                if (checked) {
+                  fields.push(maaraysId)
+                } else {
+                  let i = undefined
+                  _.forEach(poistettavatValue, (value, idx) => {
+                    if (value === maaraysId) {
+                      i = idx
+                    }
+                  })
+                  fields.remove(i)
+                }
+              }}/>
+              : null
+            }
+            <Koodi>{koodi}</Koodi>
+            <Nimi>{nimi}</Nimi>
+          </TutkintoWrapper>
+        )
+      })}
+    </KoulutusTyyppiWrapper>
+  )
 }
 
 const selector = formValueSelector('uusi-hakemus')
