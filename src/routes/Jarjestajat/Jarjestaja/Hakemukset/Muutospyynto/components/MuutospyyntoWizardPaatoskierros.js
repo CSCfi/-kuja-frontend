@@ -2,6 +2,7 @@ import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
+import { COLORS } from "../../../../../../modules/styles"
 
 const paatoskierrokset = [{ id: 19, nimi: '1.1.2018 voimaan tulevat päätökset' }]
 
@@ -20,7 +21,7 @@ const renderPaatoskierrosSelect = ({ input, meta: { touched, error } }) => (
 )
 
 const MuutospyyntoWizardPaatoskierros = props => {
-  const { handleSubmit, pristine, error } = props
+  const { handleSubmit, pristine, error, onCancel } = props
   return (
     <div>
       <h3>Valitse päätöskierros</h3>
@@ -33,6 +34,7 @@ const MuutospyyntoWizardPaatoskierros = props => {
           <WizButton type="submit" disabled={pristine || error} className="next">
             Seuraava
           </WizButton>
+          <WizButton bgColor={COLORS.OIVA_RED} onClick={() => onCancel()}>Peruuta</WizButton>
         </div>
       </form>
     </div>

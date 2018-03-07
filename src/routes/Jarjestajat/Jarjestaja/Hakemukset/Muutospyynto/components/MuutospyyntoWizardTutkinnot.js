@@ -82,7 +82,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { handleSubmit, lupa, poistettavatValue, lisattavatValue } = this.props
+    const { handleSubmit, lupa, poistettavatValue, lisattavatValue, onCancel, previousPage } = this.props
     const { isRemoving, isAdding } = this.state
     const { kohteet } = lupa
     const data = this.props.koulutukset.treedata
@@ -140,7 +140,11 @@ class MuutospyyntoWizardTutkinnot extends Component {
           </Row>
 
           <BottomWrapper>
-              <WizButton type="submit" disabled={isDisabled || isRemoving}>Seuraava</WizButton>
+            <WizButton type="button" onClick={previousPage}>
+              Edellinen
+            </WizButton>
+            <WizButton type="submit" disabled={isDisabled || isRemoving}>Seuraava</WizButton>
+            <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
           </BottomWrapper>
         </form>
       </div>
