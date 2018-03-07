@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.17.0",
     "core-js": "^2.5.1",
+    "dateformat": "^3.0.3",
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
     "prop-types": "^15.6.0",

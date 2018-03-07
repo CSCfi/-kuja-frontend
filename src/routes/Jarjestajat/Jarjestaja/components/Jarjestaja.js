@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
@@ -9,6 +8,9 @@ import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
+import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
+// import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
+// import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
@@ -51,6 +53,10 @@ class Jarjestaja extends Component {
       {
         path: `${match.url}/hakemukset-ja-paatokset`,
         text: 'Hakemukset ja päätökset'
+      },
+      {
+        path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+        text: 'Wizard'
       }
     ]
 
@@ -74,14 +80,17 @@ class Jarjestaja extends Component {
 
               <ProfileMenu routes={tabNavRoutes} />
             </ContentContainer>
+
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
-                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer />} />
-                <Route path={`${match.url}/hakemukset-ja-paatokset`} render={() => <div>hakemukset ja paatokset</div>} />
+                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer /> } />
+                {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
+                <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
+                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={MuutospyyntoContainer}/>*/}
+                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/uusi`} exact render={() => <MuutospyyntoWizard onSubmit={alert}/>} />*/}
               </ContentContainer>
-
             </FullWidthWrapper>
           </div>
         )

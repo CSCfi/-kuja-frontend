@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import arrow from 'static/images/koulutusala-arrow.svg'
 import { COLORS } from "../../../../modules/styles"
-import Tutkinto from "./Tutkinto"
+import TutkintoContainer from '../containers/TutkintoContainer'
 
 const Wrapper = styled.div`
   margin: 4px 0;
@@ -43,12 +43,12 @@ const SubAlaWrapper = styled.div`
 `
 
 const SubAla = (props) => {
-  const { nimi, tutkinnot } = props
+  const { nimi, tutkinnot, renderCheckbox } = props
   return (
     <SubAlaWrapper>
       <div>{nimi}</div>
       {_.map(tutkinnot, (tutkinto, i) => {
-        return <Tutkinto {...tutkinto} key={i} />
+        return <TutkintoContainer {...tutkinto} key={i} renderCheckbox={renderCheckbox} />
       })}
     </SubAlaWrapper>
   )
@@ -79,7 +79,7 @@ class Koulutusala extends Component {
   }
 
   render() {
-    const { koodi, nimi, koulutusalat } = this.props
+    const { koodi, nimi, koulutusalat, renderCheckbox } = this.props
 
     return (
       <Wrapper>
@@ -91,10 +91,9 @@ class Koulutusala extends Component {
         </Heading>
         {!this.state.isHidden &&
           <KoulutusalaList>
-            {_.map(koulutusalat, (ala, i) => <SubAla {...ala} key={i}/> )}
+            {_.map(koulutusalat, (ala, i) => <SubAla {...ala} key={i} renderCheckbox={renderCheckbox} /> )}
           </KoulutusalaList>
         }
-
       </Wrapper>
     )
   }

@@ -1,10 +1,9 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import Moment from 'react-moment'
 
-import Section from './Section'
+import LupaSection from './LupaSection'
 
 import { LUPA_SECTIONS } from "../modules/constants"
 import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/elements"
@@ -37,7 +36,8 @@ const Row = styled.div`
 
 class Jarjestamislupa extends Component {
   render() {
-    const { diaarinumero, alkupvm, paatospvm, meta } = this.props.lupa.data
+    const { diaarinumero, alkupvm, paatospvm, meta, jarjestajaYtunnus } = this.props.lupa.data
+    const { kohteet } = this.props.lupa
     const { esittelija } = meta
 
     return (
@@ -46,19 +46,18 @@ class Jarjestamislupa extends Component {
           <TopSectionWrapper>
             <h2>Järjestämislupa</h2>
             <Row>Diaarinumero:&nbsp;{diaarinumero}</Row>
-            <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/api/pdf/${diaarinumero}`}><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="MM.DD.YYYY">{paatospvm}</Moment></a></Row>
+            <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank"><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="MM.DD.YYYY">{paatospvm}</Moment></a></Row>
             <Row>Voimassaolo:&nbsp;<Moment format="MM.DD.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
             <Row>Esittelijä:&nbsp;{esittelija ? esittelija :  '-'}</Row>
-            {/*<NavLink to={`${match.url}/hae-muutosta`}/>*/}
           </TopSectionWrapper>
-
           <LupaDetailsWrapper>
-            {Object.keys(LUPA_SECTIONS).map((key, i) =>
-              <Section
+            {Object.keys(LUPA_SECTIONS).map((k, i) =>
+              <LupaSection
+                renderMuutosLink={true}
+                kohde={kohteet[k]}
+                diaarinumero={diaarinumero}
+                ytunnus={jarjestajaYtunnus}
                 key={i}
-                heading={LUPA_SECTIONS[key].heading}
-                target={key}
-                maaraykset={this.parseMaaraykset(parseInt(key, 10))}
               />
             )}
           </LupaDetailsWrapper>
