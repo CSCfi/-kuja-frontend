@@ -53,3 +53,61 @@ export const Koodi = styled.span`
 export const Nimi = styled.span`
   flex: 6;
 `
+
+export const Kohdenumero = styled.span`
+  font-size: 20px;
+  position: absolute;
+  left: -30px;
+`
+
+export const Otsikko = styled.h3`
+  text-transform: uppercase;
+  font-size: 20px;
+`
+
+export const ControlsWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+`
+
+export const BottomWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`
+
+export const AddWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  overflow: hidden;
+`
+
+export const ScrollWrapper = styled.div`
+  overflow: auto;
+  max-height: 100%;
+`
+
+export const AddContent = styled.div`
+  position: relative;
+  padding: 30px;
+  background-color: ${COLORS.WHITE};
+`
+export const Row = styled.div`
+  margin-bottom: 30px;
+  margin-left: ${props => props.marginLeft ? props.marginLeft : 0};
+`
+
+export const Kohde = styled.div`
+  margin-left: 30px;
+  position: relative;
+  padding: 0 0 26px;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`

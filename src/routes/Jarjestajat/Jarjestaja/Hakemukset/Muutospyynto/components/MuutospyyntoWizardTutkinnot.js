@@ -10,70 +10,30 @@ import { COLORS } from "../../../../../../modules/styles"
 import { WizButton } from "./MuutospyyntoWizard"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import { Wrapper, Heading, Arrow, Span, KoulutusalaListWrapper, KoulutusTyyppiWrapper } from "./MuutospyyntoWizardComponents"
-import { TutkintoWrapper, Koodi, Nimi } from "./MuutospyyntoWizardComponents"
+import {
+  Wrapper,
+  Heading,
+  Arrow,
+  Span,
+  KoulutusalaListWrapper,
+  KoulutusTyyppiWrapper,
+  TutkintoWrapper,
+  Koodi,
+  Nimi,
+  Kohdenumero,
+  Otsikko,
+  ControlsWrapper,
+  BottomWrapper,
+  AddWrapper,
+  ScrollWrapper,
+  AddContent,
+  Row,
+  Kohde
+} from './MuutospyyntoWizardComponents'
 
-//
-// Yleiset tyylikomponentit
-//
-const Kohde = styled.div`
-  margin-left: 30px;
-  position: relative;
-  //border-bottom: 1px solid ${COLORS.BORDER_GRAY};
-  padding: 0 0 26px;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-`
 
-const Kohdenumero = styled.span`
-  font-size: 20px;
-  position: absolute;
-  left: -30px;
-`
 
-const Otsikko = styled.h3`
-  text-transform: uppercase;
-  font-size: 20px;
-`
 
-const ControlsWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`
-
-const BottomWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-
-const AddWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 3;
-  overflow: hidden;
-`
-
-const ScrollWrapper = styled.div`
-  overflow: auto;
-  max-height: 100%;
-`
-
-const AddContent = styled.div`
-  position: relative;
-  padding: 30px;
-  background-color: ${COLORS.WHITE};
-`
-const Row = styled.div`
-  margin-bottom: 30px;
-  margin-left: ${props => props.marginLeft ? props.marginLeft : 0};
-`
 
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
@@ -163,7 +123,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
           <Row marginLeft="30px">
             <h3>Lisätyt tutkinnot</h3>
-            {lisattavatValue
+            {lisattavatValue && lisattavatValue.length > 0
               ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
               : 'Ei lisättäviä tutkintoja'
             }
@@ -172,7 +132,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <Row marginLeft="30px">
             <h3>Poistettavat tutkinnot</h3>
             <div>
-              {poistettavatValue
+              {poistettavatValue && poistettavatValue.length > 0
                 ? poistettavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
                 : 'Ei poistettavia tutkintoja'
               }
@@ -193,50 +153,78 @@ class MuutospyyntoWizardTutkinnot extends Component {
     const { kohdeid, heading, maaraykset, muutMaaraykset } = kohde
 
     return (
-      <Kohde>
-        <Kohdenumero>{kohdeid}.</Kohdenumero>
-        <Otsikko>{heading}</Otsikko>
-
+      <div>
         {isRemoving
           ?
-            <ControlsWrapper>
-              <WizButton
-                disabled={poistettavatValue === undefined || poistettavatValue.length === 0}
-                bgColor={COLORS.OIVA_GREEN}
-                onClick={this.toggleIsRemoving}
-              >
-                Poista valitut
-              </WizButton>
-              <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => {
-                e.preventDefault()
-                fields.removeAll()
-                this.toggleIsRemoving()
-              }}
-              >
-                Peruuta
-              </WizButton>
-            </ControlsWrapper>
-          :
-          <ControlsWrapper>
-            <WizButton onClick={this.toggleIsAdding}>Lisää tutkintoja</WizButton>
-            <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</WizButton>
-          </ControlsWrapper>
-        }
+            <AddWrapper>
+              <ScrollWrapper>
+                <ContentContainer>
+                  <AddContent>
+                    <Row>
+                      <h2>Poista tutkintoja</h2>
+                    </Row>
 
-        {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
-          return (
-            <KoulutusAlaList
-              key={koodi}
-              koodi={koodi}
-              nimi={nimi}
-              koulutusalat={koulutusalat}
-              fields={fields}
-              isEditing={isRemoving}
-              editValues={poistettavatValue}
-            />
-          )
-        })}
-      </Kohde>
+                    <Row>
+                      <WizButton
+                        disabled={poistettavatValue === undefined || poistettavatValue.length === 0}
+                        bgColor={COLORS.OIVA_GREEN}
+                        onClick={this.toggleIsRemoving}
+                      >
+                        Poista valitut
+                      </WizButton>
+                      <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => {
+                        e.preventDefault()
+                        fields.removeAll()
+                        this.toggleIsRemoving()
+                      }}
+                      >
+                        Peruuta
+                      </WizButton>
+                    </Row>
+
+                    <Row>
+                      {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
+                        return (
+                          <KoulutusAlaList
+                            key={koodi}
+                            koodi={koodi}
+                            nimi={nimi}
+                            koulutusalat={koulutusalat}
+                            fields={fields}
+                            isEditing={isRemoving}
+                            editValues={poistettavatValue}
+                          />
+                        )
+                      })}
+                    </Row>
+                  </AddContent>
+                </ContentContainer>
+              </ScrollWrapper>
+            </AddWrapper>
+          :
+            <Kohde>
+              <Kohdenumero>{kohdeid}.</Kohdenumero>
+              <Otsikko>{heading}</Otsikko>
+              <ControlsWrapper>
+                <WizButton onClick={this.toggleIsAdding}>Lisää tutkintoja</WizButton>
+                <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</WizButton>
+              </ControlsWrapper>
+              {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
+                return (
+                  <KoulutusAlaList
+                    key={koodi}
+                    koodi={koodi}
+                    nimi={nimi}
+                    koulutusalat={koulutusalat}
+                    fields={fields}
+                    isEditing={isRemoving}
+                    editValues={poistettavatValue}
+                  />
+                )
+              })}
+            </Kohde>
+        }
+      </div>
     )
   }
 
@@ -283,41 +271,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
                   />
                 )
             })}
-
-
-            {/*<div>*/}
-              {/*{_.map(data, koulutusala => {*/}
-                {/*const { koodiarvo, metadata, koulutukset } = koulutusala*/}
-                {/*const nimi = parseLocalizedField(metadata)*/}
-                {/*return (*/}
-                  {/*<div key={koodiarvo}>*/}
-                    {/*<div>{koodiarvo}&nbsp;{nimi}</div>*/}
-                    {/*{_.map(koulutukset, (koulutus, indeksi) => {*/}
-                      {/*const { koodiarvo, nimi } = koulutus*/}
-                      {/*return (*/}
-                        {/*<div key={indeksi}>*/}
-                          {/*<input type="checkbox" onChange={(event) => {*/}
-                            {/*const { checked } = event.target*/}
-                            {/*if (checked) {*/}
-                              {/*fields.push(koodiarvo)*/}
-                            {/*} else {*/}
-                              {/*let i = undefined*/}
-                              {/*_.forEach(lisattavatValue, (value, idx) => {*/}
-                                {/*if (value === koodiarvo) {*/}
-                                  {/*i = idx*/}
-                                {/*}*/}
-                              {/*})*/}
-                              {/*fields.remove(i)*/}
-                            {/*}*/}
-                          {/*}}/>*/}
-                          {/*{koodiarvo}&nbsp;{nimi}*/}
-                        {/*</div>*/}
-                      {/*)*/}
-                    {/*})}*/}
-                  {/*</div>*/}
-                {/*)*/}
-              {/*})}*/}
-            {/*</div>*/}
           </AddContent>
         </ContentContainer>
         </ScrollWrapper>
@@ -375,7 +328,6 @@ class LisaaKoulutusAlaList extends Component {
                 }}/>
                 <Koodi>{koodiarvo}</Koodi>
                 <Nimi>{nimi}</Nimi>
-                {/*{koodiarvo}&nbsp;{nimi}*/}
               </TutkintoWrapper>
             )
           } )}
