@@ -18,7 +18,7 @@ class Esittelijat extends Component {
   componentWillMount() {
     // const { esittelijaNimi } = ? // TODO
 
-      this.props.fetchMuutospyynnotForEsittelija("oiva")
+      this.props.fetchMuutospyynnotForEsittelija("oiva-sanni")
   }
 
   render() {

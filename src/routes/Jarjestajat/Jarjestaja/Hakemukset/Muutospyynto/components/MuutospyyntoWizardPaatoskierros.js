@@ -3,7 +3,8 @@ import { Field, reduxForm } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 
-const paatoskierrokset = [{ id: 19, nimi: '1.1.2018 voimaan tulevat päätökset' }]
+const paatoskierrokset = [{ id: 19, nimi: '1.1.2018 voimaan tulevat päätökset' },
+    { id: 20, nimi: 'Avoin hakukierros 2018' }]
 
 const renderPaatoskierrosSelect = ({ input, meta: { touched, error } }) => (
   <div>
