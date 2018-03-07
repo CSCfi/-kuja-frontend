@@ -12,7 +12,7 @@ const MuutospyyntoItem = (props) => {
       <Th className="lupa-maakunta">{jarjestaja.nimi.fi}</Th>
       <Th className="lupa-jarjestaja"><Moment format="DD.MM.YYYY">{hakupvm}</Moment></Th>
       <Th className="lupa-maakunta">{paatoskierros.meta.fi}</Th>
-      <Th className="lupa-maakunta">{jarjestaja.maakuntaKoodi.metadata[0].nimi}</Th>
+      <Th className="lupa-maakunta">{jarjestaja.maakuntaKoodi.metadata[2].nimi}</Th>
       <Th className="lupa-maakunta">{tila}</Th>
     </Tr>
   )

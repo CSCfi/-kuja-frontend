@@ -11,7 +11,9 @@ class CasAuthenticated extends Component {
       return (
       <div>
         {this.props.user.hasErrored ? <p>Autentikoinnissa tapahtui virhe</p> : <p>CAS-autentikointi valmis</p>}
-      </div>
+
+          {JSON.stringify(this.props.user)}
+        </div>
     )
   }
 }
