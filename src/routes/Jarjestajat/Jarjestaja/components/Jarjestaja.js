@@ -56,7 +56,7 @@ class Jarjestaja extends Component {
       },
       {
         path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-        text: 'Wizard'
+        text: 'Uusi hakemus'
       }
     ]
 

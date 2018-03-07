@@ -5,6 +5,7 @@ import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { COLORS } from "../../../../../../modules/styles"
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
@@ -38,7 +39,7 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 
 
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, error } = props
+  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, error, onCancel } = props
 
   return (
     <div>
@@ -75,6 +76,7 @@ let MuutospyyntoWizardPerustelut = props => {
           <WizButton type="submit" disabled={muutosperusteluValue === undefined || error}>
             Seuraava
           </WizButton>
+          <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
         </div>
       </form>
     </div>

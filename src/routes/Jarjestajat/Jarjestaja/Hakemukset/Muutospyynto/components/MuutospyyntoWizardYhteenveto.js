@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
+
 import validate from '../modules/validateWizard'
+import { Row } from "./MuutospyyntoWizardComponents"
+import { WizButton } from "./MuutospyyntoWizard"
+import { COLORS } from "../../../../../../modules/styles"
 
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat } = props
+  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat, onCancel } = props
   return (
     <div>
       <h2>Yhteenveto</h2>
@@ -40,10 +44,10 @@ let MuutospyyntoWizardYhteenveto = props => {
       </div>
 
       <form onSubmit={handleSubmit}>
-
-        <button type="submit" className="next">
+        <WizButton type="submit" className="next">
           Tallenna
-        </button>
+        </WizButton>
+        <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
       </form>
     </div>
   )
