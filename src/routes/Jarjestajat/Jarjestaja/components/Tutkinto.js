@@ -66,14 +66,11 @@ class Tutkinto extends Component {
   }
 
   getInputValue() {
-    console.log(this.refs.tutkintoInput.checked)
     return this.refs.tutkintoInput.checked
   }
 
   handleInputOnChange() {
     const { koodi, nimi, maaraysId } = this.props
-    console.log('Poistetaan tutkinto: ' + koodi + ' ' + nimi + '. maaraysid: ' + maaraysId)
-    console.log(this.props)
     const val = this.getInputValue()
 
     if (val === true) {
