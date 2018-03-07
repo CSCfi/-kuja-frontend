@@ -18,18 +18,23 @@ import 'static/fonts/GothamNarrow-Light.otf'
 // Colors
 export const COLORS = {
   OIVA_GREEN: '#5A8A70',
+  OIVA_RED: '#cc3300',
   DARK_GRAY: '#525252',
   BLACK: '#000000',
   WHITE: '#FFFFFF',
   LIGHT_GRAY: '#D8D8D8',
-  BORDER_GRAY: '#DFDFDF'
+  BORDER_GRAY: '#DFDFDF',
+  BG_GRAY: '#F5F5F5',
+  BG_DARKER_GRAY: '#e6e6e6'
 }
 
 export const FONT_STACK = {
   GOTHAM_NARROW: `"Gotham Narrow", Helvetica, Arial, sans-serif`,
+  GOTHAM_NARROW_BOLD: `"Gotham Narrow Bold", Helvetica, Arial, sans-serif`,
   OPEN_SANS_REGULAR: `"Open Sans", Helvetica, Arial, sans-serif`,
   OPEN_SANS_SEMIBOLD: `"Open Sans", Helvetica, Arial, sans-serif`,
-  PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`
+  PT_SANS_NARROW: `"PT Sans Narrow", "Open Sans", Helvetica, Arial, sans-serif`,
+  SOURCE_SANS: `"Source Sans", "Open Sans", Helvetica, Arial, sans-serif`
 }
 
 export const APP_WIDTH = 1030
@@ -82,6 +87,10 @@ injectGlobal`
     font-size: 40px;
   }
   
+  h4 {
+    margin: 18px 0 10px;
+  }
+  
   p {
     margin: 11px 0;
   }
@@ -95,18 +104,6 @@ injectGlobal`
     h1 {
       font-size: 26px;
     }
-  }
-`
-
-export const AppContainer = styled.div`
-  width: 100%;
-  max-width: ${APP_WIDTH}px;
-  margin: 45px auto;
-  padding: 15px;
-  box-sizing: border-box;
-  
-  @media ${MEDIA_QUERIES.MOBILE} {
-  margin: 0 auto;
   }
 `
 

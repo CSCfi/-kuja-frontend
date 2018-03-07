@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Moment from 'react-moment'
 
-import { COLORS } from "../../../../modules/styles"
+import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
 import { API_BASE_URL } from "../../../../modules/constants"
 import pdf from 'static/images/icon-pdf-large.png'
 
@@ -27,6 +27,10 @@ const CurrentLupaWrapper = styled.div`
   img {
     height: 68px;
   }
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    padding: 14px;
+  }
 `
 
 const OuterWrapper = styled.div`
@@ -48,7 +52,7 @@ const LupaTextWrapper = styled.div`
 `
 
 const CurrentLupa = (props) => {
-  const { diaarinumero, jarjestaja, infotext, voimassaolo, lupaExceptionUrl } = props
+  const { diaarinumero, jarjestaja, voimassaolo, lupaExceptionUrl } = props
   let url = `${API_BASE_URL}/pdf/${diaarinumero}`
 
   if (lupaExceptionUrl) {
@@ -61,8 +65,8 @@ const CurrentLupa = (props) => {
         <CurrentLupaWrapper>
             <img src={pdf} alt="Voimassa oleva lupa PDF-tiedostona"/>
             <LupaTextWrapper>
+              <p>{diaarinumero}</p>
               <p>{jarjestaja}</p>
-              <p>{infotext}</p>
               <p>Voimassaolo: <Moment format="D.M.YYYY">{voimassaolo}</Moment> alkaen</p>
             </LupaTextWrapper>
         </CurrentLupaWrapper>

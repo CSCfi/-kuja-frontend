@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchLupa: (id, query) => dispatch(fetchLupa(id, query))
+    fetchLupa: (ytunnus, query) => dispatch(fetchLupa(ytunnus, query))
   }
 }
 

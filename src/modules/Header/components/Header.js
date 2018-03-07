@@ -18,9 +18,9 @@ const HeaderTitle = styled.div`
   line-height: 20px;
 `
 
-const HeaderLinks = styled.div`
-  display: flex;
-`
+// const HeaderLinks = styled.div`
+//   display: flex;
+// `
 
 const HeaderBarInner = styled.div`
   display: flex;
@@ -61,7 +61,7 @@ class Header extends Component {
             {/* Disabloidaan headerin linkit toistaiseksi */}
             {/*<HeaderLinks>*/}
               {/*<LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>*/}
-              {/*<LinkItem to="/kirjaudu" className="text-small">Kirjaudu sisään</LinkItem>*/}
+              {<LinkItem to="/cas-auth" className="text-small">Kirjaudu sisään</LinkItem>}
             {/*</HeaderLinks>*/}
           </HeaderBarInner>
         </HeaderBar>
@@ -69,6 +69,7 @@ class Header extends Component {
           <HeaderBarInner>
             <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
             <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
+            <LinkItem to="/esittelijat">Käsittely</LinkItem>
             {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/}
             {/*{this.renderRoleLinks()}*/}
           </HeaderBarInner>

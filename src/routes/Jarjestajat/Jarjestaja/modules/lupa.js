@@ -1,4 +1,5 @@
 import { API_BASE_URL } from 'modules/constants'
+import { parseLupa } from "./lupaParser"
 
 // Constants
 export const FETCH_LUPA_START = 'FETCH_LUPA_START'
@@ -6,11 +7,11 @@ export const FETCH_LUPA_SUCCESS = 'FETCH_LUPA_SUCCESS'
 export const FETCH_LUPA_FAILURE = 'FETCH_LUPA_FAILURE'
 
 // Actions
-export function fetchLupa(id, query) {
+export function fetchLupa(ytunnus, query) {
   return (dispatch) => {
     dispatch({ type: FETCH_LUPA_START })
 
-    const request = fetch(`${API_BASE_URL}/luvat/${id}${query = query ? query : ''}`)
+    const request = fetch(`${API_BASE_URL}/luvat/jarjestaja/${ytunnus}${query = query ? query : ''}`)
 
     request
       .then((response) => response.json())
@@ -41,7 +42,8 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      lupa: action.payload
+      data: action.payload,
+      kohteet: parseLupa(action.payload)
     }
   },
   [FETCH_LUPA_FAILURE] : (state, action) => {
@@ -59,7 +61,8 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  lupa: {}
+  data: {},
+  kohteet: {}
 }
 
 export default function lupaReducer(state = initialState, action) {
