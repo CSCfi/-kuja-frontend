@@ -85,6 +85,7 @@ class MuutospyyntoWizard extends Component {
     this.props.fetchMuutosperustelut()
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
+    this.props.fetchPaatoskierrokset()
   }
 
   nextPage() {
@@ -109,10 +110,10 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, lupa, createMuutospyynto } = this.props
+    const { muutosperustelut, lupa, paatoskierrokset, createMuutospyynto } = this.props
     const { page } = this.state
 
-    if (muutosperustelut.fetched && lupa.fetched) {
+    if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
       return (
         <div>
           <WizardBackground />
@@ -131,6 +132,7 @@ class MuutospyyntoWizard extends Component {
                   <MuutospyyntoWizardPaatoskierros
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
+                    paatoskierrokset={paatoskierrokset.data}
                     lupa={lupa}
                   />
                 )}
@@ -164,10 +166,12 @@ class MuutospyyntoWizard extends Component {
           </WizardWrapper>
         </div>
       )
-    } else if (muutosperustelut.isFetching || lupa.isFetching) {
+    } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
       return <Loading />
     } else if (muutosperustelut.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</div>
+    } else if (paatoskierrokset.hasErrored) {
+      return <div>Muutospyyntöä ei voida tehdä. Päätoskierroksia ladattaessa tapahtui virhe.</div>
     } else if (lupa.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Lupaa haettaessa tapahtui virhe.</div>
     } else {

@@ -1,26 +1,48 @@
+import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
+import Moment from 'react-moment'
 
 import validate from '../modules/validateWizard'
 import { Row } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
 
+const Paatoskierros = ({ paatoskierros }) => (
+  <div>
+    {paatoskierros.meta.fi}&nbsp;
+    (
+      <Moment format="DD.MM.YYYY">{paatoskierros.alkupvm}</Moment>
+      &nbsp;-&nbsp;
+      <Moment format="DD.MM.YYYY">{paatoskierros.loppupvm}</Moment>
+    )
+  </div>
+)
+
+
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat, onCancel } = props
+  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat, onCancel, paatoskierrokset } = props
+
+  const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
+    return String(pkierros.id) === String(paatoskierros)
+  })
+
   return (
     <div>
       <h2>Yhteenveto</h2>
 
       <div>
-        <h3>Muutoksen perustelu</h3>
-        <div>{muutosperustelu}</div>
+        <h3>Päätöskierros</h3>
+        {paatoskierrosObj
+          ? <Paatoskierros paatoskierros={paatoskierrosObj} />
+          : <div>Paatoskierroksen tietoja ei voitu ladata.</div>
+        }
       </div>
 
       <div>
-        <h3>Päätöskierros</h3>
-        <div>{paatoskierros}</div>
+        <h3>Muutoksen perustelu</h3>
+        <div>{muutosperustelu}</div>
       </div>
 
       <div>
@@ -65,7 +87,9 @@ MuutospyyntoWizardYhteenveto = connect(state => {
     muutosperustelu,
     paatoskierros,
     poistettavat,
-    lisattavat
+    lisattavat,
+    muutosperustelut: state.muutosperustelut,
+    paatoskierrokset: state.paatoskierrokset
   }
 })(MuutospyyntoWizardYhteenveto)
 

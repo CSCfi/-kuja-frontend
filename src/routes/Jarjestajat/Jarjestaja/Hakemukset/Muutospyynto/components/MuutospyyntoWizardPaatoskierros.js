@@ -4,16 +4,13 @@ import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
 
-const paatoskierrokset = [{ id: 19, nimi: '1.1.2018 voimaan tulevat päätökset' },
-    { id: 20, nimi: 'Avoin hakukierros 2018' }]
-
-const renderPaatoskierrosSelect = ({ input, meta: { touched, error } }) => (
+const renderPaatoskierrosSelect = ({ input, paatoskierrokset, meta: { touched, error } }) => (
   <div>
     <select {...input}>
       <option value="">Valitse päätöskierros</option>
       {paatoskierrokset.map(paatoskierros => (
         <option value={paatoskierros.id} key={paatoskierros.id}>
-          {paatoskierros.nimi}
+          {paatoskierros.meta.fi}
         </option>
       ))}
     </select>
@@ -22,14 +19,15 @@ const renderPaatoskierrosSelect = ({ input, meta: { touched, error } }) => (
 )
 
 const MuutospyyntoWizardPaatoskierros = props => {
-  const { handleSubmit, pristine, error, onCancel } = props
+  const { handleSubmit, pristine, error, onCancel, paatoskierrokset } = props
+  console.log(paatoskierrokset)
   return (
     <div>
       <h3>Valitse päätöskierros</h3>
       <form onSubmit={handleSubmit}>
         <SelectWrapper>
           <label>Päätöskierros</label>
-          <Field name="paatoskierros" component={renderPaatoskierrosSelect} />
+          <Field name="paatoskierros" paatoskierrokset={paatoskierrokset} component={renderPaatoskierrosSelect} />
         </SelectWrapper>
         <div>
           <WizButton type="submit" disabled={pristine || error} className="next">
