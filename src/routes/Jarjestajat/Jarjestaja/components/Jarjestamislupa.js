@@ -52,7 +52,7 @@ class Jarjestamislupa extends Component {
             <h2>Järjestämislupa</h2>
             <Row>Diaarinumero:&nbsp;{diaarinumero}</Row>
             <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank"><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="MM.DD.YYYY">{paatospvm}</Moment></a></Row>
-            <Row>Voimassaolo:&nbsp;<Moment format="MM.DD.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
+            <Row>Voimassaolo:&nbsp;<Moment format="DD.MM.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
             <Row>Esittelijä:&nbsp;{esittelija ? esittelija :  '-'}</Row>
           </TopSectionWrapper>
           <LupaDetailsWrapper>
