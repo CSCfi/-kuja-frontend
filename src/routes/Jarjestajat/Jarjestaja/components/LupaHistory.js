@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import LupaHistoryItem from './LupaHistoryItem'
+import Loading from '../../../../modules/Loading'
 
 const LupaHistoryWrapper = styled.div`
   margin: 20px 0;
@@ -18,13 +19,13 @@ class LupaHistory extends Component {
   }
 
   render() {
-    const { lupaHistory } = this.props
+    const { fetched, isFetching, hasErrored, data } = this.props.lupaHistory
 
-    if (lupaHistory.fetched) {
-      return <LupaHistoryWrapper>{this.renderLupaHistoryList(lupaHistory.data)}</LupaHistoryWrapper>
-    } else if (lupaHistory.isFetching) {
-      return <h2>Ladataan...</h2>
-    } else if (lupaHistory.hasErrored) {
+    if (fetched) {
+      return <LupaHistoryWrapper>{this.renderLupaHistoryList(data)}</LupaHistoryWrapper>
+    } else if (isFetching) {
+      return <Loading />
+    } else if (hasErrored) {
       return <h2>Lupahistoriaa ladattaessa tapahtui virhe</h2>
     } else {
       return null

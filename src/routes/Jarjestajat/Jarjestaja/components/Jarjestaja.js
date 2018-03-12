@@ -9,6 +9,7 @@ import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
+import Loading from '../../../../modules/Loading'
 // import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
 // import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
@@ -86,23 +87,20 @@ class Jarjestaja extends Component {
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
                 <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
-                {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
                 <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
-                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={MuutospyyntoContainer}/>*/}
-                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/uusi`} exact render={() => <MuutospyyntoWizard onSubmit={alert}/>} />*/}
               </ContentContainer>
             </FullWidthWrapper>
           </div>
         )
       } else if (lupa.isFetching || muutospyynnot.isFetching) {
-        return <h2>Ladataan...</h2>
+        return <Loading />
       } else if (lupa.hasErrored) {
         return <h2>Luvan lataamisessa tapahtui virhe</h2>
       } else {
         return null
       }
     } else {
-      return <h2>Ladataan...</h2>
+      return null
     }
   }
 }

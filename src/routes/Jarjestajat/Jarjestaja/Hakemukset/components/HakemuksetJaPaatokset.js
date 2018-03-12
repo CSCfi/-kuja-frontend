@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import MuutospyyntoList from './MuutospyyntoList'
+import Loading from '../../../../../modules/Loading'
 
 import { COLORS } from "../../../../../modules/styles"
 import { slugify } from "../../../../../modules/helpers"
@@ -53,7 +54,7 @@ class HakemuksetJaPaatokset extends Component {
       )
     } else if (isFetching) {
       return (
-        <h2>Ladataan...</h2>
+        <Loading />
       )
     } else if (hasErrored) {
       return (

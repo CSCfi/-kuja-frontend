@@ -5,6 +5,7 @@ import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 import LuvatList from 'routes/Jarjestajat/components/LuvatList'
 import { P, BackgroundImage} from "../../../modules/styles"
 import { ContentContainer } from '../../../modules/elements'
+import Loading from '../../../modules/Loading'
 
 class Jarjestajat extends Component {
   componentWillMount() {
@@ -12,7 +13,8 @@ class Jarjestajat extends Component {
   }
 
   render() {
-    if (this.props.luvat.fetched) {
+    const { fetched, isFetching, hasErrored, data } = this.props.luvat
+    if (fetched) {
       return (
         <ContentContainer>
           <Helmet>
@@ -23,13 +25,13 @@ class Jarjestajat extends Component {
           <BreadcrumbsItem to='/jarjestajat'>Koulutuksen järjestäjät</BreadcrumbsItem>
 
           <h1>Koulutuksen järjestäjät</h1>
-          <P>Voimassa olevat koulutuksen järjestämisluvat ({Object.keys(this.props.luvat.data).length} kpl)</P>
-          <LuvatList luvat={this.props.luvat.data}/>
+          <P>Voimassa olevat koulutuksen järjestämisluvat ({Object.keys(data).length} kpl)</P>
+          <LuvatList luvat={data}/>
         </ContentContainer>
       )
-    } else if (this.props.isFetching) {
-        return <div>Ladataan...</div>
-    } else if (this.props.hasErrored) {
+    } else if (isFetching) {
+        return <Loading />
+    } else if (hasErrored) {
       return <div>Lupia ladattaessa tapahtui virhe</div>
     } else {
       return null
