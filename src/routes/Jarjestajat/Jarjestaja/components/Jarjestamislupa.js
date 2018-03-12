@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Moment from 'react-moment'
+import { withRouter } from 'react-router-dom'
 
 import LupaSection from './LupaSection'
 
@@ -38,7 +39,10 @@ class Jarjestamislupa extends Component {
   render() {
     const { diaarinumero, alkupvm, paatospvm, meta, jarjestajaYtunnus } = this.props.lupa.data
     const { kohteet } = this.props.lupa
+    const { muutospyynnot } = this.props
+    const { ytunnus } = this.props
     const { esittelija } = meta
+    const url = muutospyynnot.data.length > 0 ? `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset` : `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset/uusi`
 
     return (
       <InnerContentContainer>
@@ -57,11 +61,11 @@ class Jarjestamislupa extends Component {
                 kohde={kohteet[k]}
                 diaarinumero={diaarinumero}
                 ytunnus={jarjestajaYtunnus}
+                url={url}
                 key={i}
               />
             )}
           </LupaDetailsWrapper>
-
         </InnerContentWrapper>
       </InnerContentContainer>
     )
@@ -80,4 +84,4 @@ class Jarjestamislupa extends Component {
   }
 }
 
-export default Jarjestamislupa
+export default withRouter(Jarjestamislupa)

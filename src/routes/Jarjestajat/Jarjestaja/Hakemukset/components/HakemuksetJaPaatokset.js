@@ -27,14 +27,17 @@ const UusiMuutospyynto = styled(Link)`
 class HakemuksetJaPaatokset extends Component {
   getMuutospyyntoUrl() {
     const {  match } = this.props
-    const { diaarinumero } = this.props.lupa.data
+    // const { diaarinumero } = this.props.lupa.data
 
-    return `${match.url}/${slugify(diaarinumero)}`
+    return `${match.url}/uusi`
   }
 
   componentWillMount() {
-    const { ytunnus } = this.props.match.params
-    this.props.fetchMuutospyynnot(ytunnus)
+    const { fetched, isFetching, hasErrored } = this.props.muutospyynnot
+    if (!fetched && !isFetching && ! hasErrored) {
+      const { ytunnus } = this.props.match.params
+      this.props.fetchMuutospyynnot(ytunnus)
+    }
   }
 
   render() {

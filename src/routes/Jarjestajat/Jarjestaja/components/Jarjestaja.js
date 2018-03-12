@@ -30,11 +30,11 @@ class Jarjestaja extends Component {
   componentWillMount() {
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
+    this.props.fetchMuutospyynnot(ytunnus)
   }
 
   render() {
-    const { match, lupa } = this.props
-
+    const { match, lupa, muutospyynnot } = this.props
     // Alanavigaation tabivalikon routet
     const tabNavRoutes = [
       {
@@ -61,7 +61,7 @@ class Jarjestaja extends Component {
     ]
 
     if (match.params) {
-      if (lupa.fetched) {
+      if (lupa.fetched && muutospyynnot.fetched) {
         const lupadata = this.props.lupa.data
         const { jarjestaja } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
@@ -85,7 +85,7 @@ class Jarjestaja extends Component {
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
-                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer /> } />
+                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
                 {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
                 <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
                 {/*<Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={MuutospyyntoContainer}/>*/}
@@ -94,7 +94,7 @@ class Jarjestaja extends Component {
             </FullWidthWrapper>
           </div>
         )
-      } else if (lupa.isFetching) {
+      } else if (lupa.isFetching || muutospyynnot.isFetching) {
         return <h2>Ladataan...</h2>
       } else if (lupa.hasErrored) {
         return <h2>Luvan lataamisessa tapahtui virhe</h2>
