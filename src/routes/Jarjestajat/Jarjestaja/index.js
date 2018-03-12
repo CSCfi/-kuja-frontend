@@ -1,4 +1,3 @@
-// import JarjestajaContainer from 'routes/Jarjestajat/Jarjestaja/containers/JarjestajaContainer'
 import JarjestajaSwitch from './components/JarjestajaSwitch'
 
 const routes = [
