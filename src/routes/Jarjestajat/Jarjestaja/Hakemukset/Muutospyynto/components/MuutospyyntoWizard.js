@@ -7,6 +7,8 @@ import MuutospyyntoWizardPerustelut from './MuutospyyntoWizardPerustelut'
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
 import MuutospyyntoWizardYhteenveto from './MuutospyyntoWizardYhteenveto'
 
+import Loading from '../../../../../../modules/Loading'
+
 import { ContentContainer } from "../../../../../../modules/elements"
 import { COLORS } from "../../../../../../modules/styles"
 
@@ -163,7 +165,7 @@ class MuutospyyntoWizard extends Component {
         </div>
       )
     } else if (muutosperustelut.isFetching || lupa.isFetching) {
-      return <div>Ladataan...</div>
+      return <Loading />
     } else if (muutosperustelut.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</div>
     } else if (lupa.hasErrored) {
