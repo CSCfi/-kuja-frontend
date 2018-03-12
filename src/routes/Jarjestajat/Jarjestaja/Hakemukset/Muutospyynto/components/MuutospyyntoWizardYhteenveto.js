@@ -8,6 +8,7 @@ import validate from '../modules/validateWizard'
 import { Row } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
+import { parseLocalizedField } from "../../../../../../modules/helpers"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -20,12 +21,29 @@ const Paatoskierros = ({ paatoskierros }) => (
   </div>
 )
 
+const Muutosperustelu = ({ muutosperustelu, muuperustelu }) => {
+  const nimi = parseLocalizedField(muutosperustelu.metadata)
+
+  return (
+    <div>
+      {nimi}
+      {muuperustelu
+        ? <span>:&nbsp;{muuperustelu}</span>
+        : null
+      }
+    </div>
+  )
+}
 
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, paatoskierros, poistettavat, lisattavat, onCancel, paatoskierrokset } = props
+  const { handleSubmit, muutosperustelu, muuperustelu, paatoskierros, poistettavat, lisattavat, onCancel, paatoskierrokset, muutosperustelut } = props
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
     return String(pkierros.id) === String(paatoskierros)
+  })
+
+  const muutosperusteluObj = _.find(muutosperustelut.data, mperustelu => {
+    return String(mperustelu.koodiArvo) === String(muutosperustelu)
   })
 
   return (
@@ -36,13 +54,16 @@ let MuutospyyntoWizardYhteenveto = props => {
         <h3>Päätöskierros</h3>
         {paatoskierrosObj
           ? <Paatoskierros paatoskierros={paatoskierrosObj} />
-          : <div>Paatoskierroksen tietoja ei voitu ladata.</div>
+          : <div>Paatoskierroksen tietoja ei voitu ladata</div>
         }
       </div>
 
       <div>
         <h3>Muutoksen perustelu</h3>
-        <div>{muutosperustelu}</div>
+        {muutosperusteluObj
+          ? <Muutosperustelu muutosperustelu={muutosperusteluObj} muuperustelu={muuperustelu} />
+          : <div>Muutosperustelun tietoja ei voitu ladata</div>
+        }
       </div>
 
       <div>
@@ -79,12 +100,14 @@ const selector = formValueSelector('uusi-hakemus')
 
 MuutospyyntoWizardYhteenveto = connect(state => {
   const muutosperustelu = selector(state, 'muutosperustelu')
+  const muuperustelu = selector(state, 'muuperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
   const poistettavat = selector(state, 'poistettavat')
   const lisattavat = selector(state, 'lisattavat')
 
   return {
     muutosperustelu,
+    muuperustelu,
     paatoskierros,
     poistettavat,
     lisattavat,
