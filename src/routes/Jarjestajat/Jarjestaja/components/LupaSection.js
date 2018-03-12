@@ -79,7 +79,7 @@ class LupaSection extends Component {
 
 
   render() {
-    const { kohde, diaarinumero, ytunnus, renderMuutosLink, url } = this.props
+    const { kohde, diaarinumero, ytunnus, renderMuutosLink, url, linkText } = this.props
 
     // const { isRemoving } = this.state
 
@@ -101,7 +101,7 @@ class LupaSection extends Component {
               <Kohde1>{`${kohdeid}.`}</Kohde1>
               <H3>{heading}</H3>
               {url
-                ? <MuutosLink to={url} diaarinumero={diaarinumero} kohdeid={kohdeid}>Hae muutosta</MuutosLink>
+                ? <MuutosLink to={url} diaarinumero={diaarinumero} kohdeid={kohdeid}>{linkText}</MuutosLink>
                 : null
               }
               <div>

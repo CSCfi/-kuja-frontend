@@ -43,6 +43,7 @@ class Jarjestamislupa extends Component {
     const { ytunnus } = this.props
     const { esittelija } = meta
     const url = muutospyynnot.data.length > 0 ? `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset` : `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset/uusi`
+    const linkText = muutospyynnot.data.length > 0 ? 'Katso muutosta' : 'Hae muutosta'
 
     return (
       <InnerContentContainer>
@@ -62,6 +63,7 @@ class Jarjestamislupa extends Component {
                 diaarinumero={diaarinumero}
                 ytunnus={jarjestajaYtunnus}
                 url={url}
+                linkText={linkText}
                 key={i}
               />
             )}
