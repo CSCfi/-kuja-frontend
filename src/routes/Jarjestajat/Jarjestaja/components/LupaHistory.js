@@ -33,7 +33,9 @@ class LupaHistory extends Component {
   }
 
   renderLupaHistoryList(data) {
+    data = _.orderBy(data, ['paatospvm'], ['desc']);
     return _.map(data, historyData => <LupaHistoryItem lupaHistoria={historyData} key={historyData.diaarinumero} />)
+
   }
 }
 
