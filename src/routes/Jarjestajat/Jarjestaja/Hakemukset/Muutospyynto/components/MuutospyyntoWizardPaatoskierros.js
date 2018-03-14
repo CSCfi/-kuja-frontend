@@ -20,7 +20,7 @@ const renderPaatoskierrosSelect = ({ input, paatoskierrokset, meta: { touched, e
 
 const MuutospyyntoWizardPaatoskierros = props => {
   const { handleSubmit, pristine, error, onCancel, paatoskierrokset } = props
-  console.log(paatoskierrokset)
+
   return (
     <div>
       <h3>Valitse päätöskierros</h3>

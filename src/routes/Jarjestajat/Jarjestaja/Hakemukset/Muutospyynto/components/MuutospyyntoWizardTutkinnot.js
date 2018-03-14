@@ -10,6 +10,7 @@ import { COLORS } from "../../../../../../modules/styles"
 import { WizButton } from "./MuutospyyntoWizard"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
+import { getTutkintoNimi } from "../modules/koulutusUtil"
 import {
   Wrapper,
   Heading,
@@ -31,23 +32,20 @@ import {
   Kohde
 } from './MuutospyyntoWizardComponents'
 
-
-
-
-
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       isRemoving: false,
-      isAdding: false
+      isAdding: true
     }
 
     this.renderRemoveTutkinnot = this.renderRemoveTutkinnot.bind(this)
     this.toggleIsRemoving = this.toggleIsRemoving.bind(this)
     this.toggleIsAdding = this.toggleIsAdding.bind(this)
     this.renderAddKoulutuksia = this.renderAddKoulutuksia.bind(this)
+    // this.getTutkintoNimi = this.getTutkintoNimi.bind(this)
   }
 
   componentWillMount() {
@@ -56,9 +54,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
         .then(() => {
           if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
             this.props.koulutusalat.data.forEach(ala => {
-              if (ala.koodiArvo !== '00') {
-                this.props.fetchKoulutukset(ala.koodiArvo, ala.metadata)
-              } else if (ala.koodiArvo !== '99') {
+              if (ala.koodiArvo !== '00' && ala.koodiArvo !== '99') {
                 this.props.fetchKoulutukset(ala.koodiArvo, ala.metadata)
               }
             })
@@ -124,7 +120,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <Row marginLeft="30px">
             <h3>Lisätyt tutkinnot</h3>
             {lisattavatValue && lisattavatValue.length > 0
-              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimi(tutkinto)}</div>)
               : 'Ei lisättäviä tutkintoja'
             }
           </Row>
@@ -260,7 +256,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
               </WizButton>
             </Row>
 
-
             {_.map(data, (koulutusala, i) => {
               const { koodiarvo, metadata, koulutukset } = koulutusala
               const nimi = parseLocalizedField(metadata)
@@ -301,6 +296,19 @@ class LisaaKoulutusAlaList extends Component {
     const { koodiarvo, nimi, koulutukset } = this.props
     const { editValues } = this.props
     let { fields } = this.props
+    let addedCount = 0
+
+    if (editValues) {
+      _.forEach(editValues, koodi => {
+        const isInEditValues = _.find(koulutukset, koulutus => {
+          return koulutus.koodiarvo === koodi
+        })
+
+        if (isInEditValues) {
+          addedCount++
+        }
+      })
+    }
 
     return (
       <Wrapper>
@@ -309,14 +317,32 @@ class LisaaKoulutusAlaList extends Component {
           <Span>{koodiarvo}</Span>
           <Span>{nimi}</Span>
           <Span>{`( ${koulutukset.length} kpl )`}</Span>
+          {addedCount > 0
+            ? <Span color={COLORS.OIVA_GREEN}>+{addedCount}</Span>
+            : null
+          }
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
           {_.map(koulutukset, (koulutus, i) => {
             const { koodiarvo, nimi } = koulutus
+
+            let isAdded = false
+
+            if (editValues) {
+              editValues.forEach(val => {
+                if (val === koodiarvo) {
+                  isAdded = true
+                }
+              })
+            }
+
             return (
               <TutkintoWrapper key={i}>
-                <input type="checkbox" onChange={(event) => {
+                <input
+                  type="checkbox"
+                  checked={isAdded}
+                  onChange={(event) => {
                   const { checked } = event.target
                   if (checked) {
                     fields.push(koodiarvo)

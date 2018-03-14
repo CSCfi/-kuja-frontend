@@ -27,11 +27,18 @@ export const parseKoulutukset = (koulutusdata, koodiarvo, metadata) => {
     kouluksetObj.nimi = name
 
     _.forEach(koulutusdata, (data) => {
-      const { koodiArvo, metadata } = data
-      koulutusArray.push({
-        koodiarvo: koodiArvo,
-        nimi: parseLocalizedField(metadata)
-      })
+      const { koodiArvo, metadata, versio } = data
+      // TODO: selvitetään mikä on oikea versiokäytäntö
+      // if (versio !== 8 && versio !== 9) {
+      //   console.log(`koulutusalan koodiarvolla: ${koodiarvo} löytyi koulutus: ${koodiArvo} ${parseLocalizedField(metadata)} versiolla: ${versio}`)
+      // }
+      // toistaiseksi käytetään vain koulutuksia versiolla 8
+      if (versio && versio === 8) {
+        koulutusArray.push({
+          koodiarvo: koodiArvo,
+          nimi: parseLocalizedField(metadata)
+        })
+      }
     })
 
     kouluksetObj.koulutukset = koulutusArray

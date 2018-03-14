@@ -9,6 +9,7 @@ import { Row } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { getTutkintoNimi } from "../modules/koulutusUtil"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -70,7 +71,7 @@ let MuutospyyntoWizardYhteenveto = props => {
         <h3>Lisättävät tutkinnot</h3>
         <div>
           {lisattavat
-            ? lisattavat.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+            ? lisattavat.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimi(tutkinto)}</div>)
             : 'Ei lisättäviä tutkintoja'
           }
         </div>

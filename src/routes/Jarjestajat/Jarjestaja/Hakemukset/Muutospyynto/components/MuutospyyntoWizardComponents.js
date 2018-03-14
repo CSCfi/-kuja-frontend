@@ -27,6 +27,7 @@ export const Arrow = styled.img`
 
 export const Span = styled.span`
   margin-right: 15px;
+  color: ${props => props.color ? props.color : COLORS.BLACK}
 `
 
 export const KoulutusalaListWrapper = styled.div`
