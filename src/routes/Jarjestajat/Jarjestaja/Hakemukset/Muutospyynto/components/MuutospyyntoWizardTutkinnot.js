@@ -10,7 +10,10 @@ import { COLORS } from "../../../../../../modules/styles"
 import { WizButton } from "./MuutospyyntoWizard"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import { getTutkintoNimi } from "../modules/koulutusUtil"
+import {
+  getTutkintoKoodiByMaaraysId, getTutkintoNimiByKoodiarvo,
+  getTutkintoNimiByMaaraysId
+} from "../modules/koulutusUtil"
 import {
   Wrapper,
   Heading,
@@ -45,7 +48,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
     this.toggleIsRemoving = this.toggleIsRemoving.bind(this)
     this.toggleIsAdding = this.toggleIsAdding.bind(this)
     this.renderAddKoulutuksia = this.renderAddKoulutuksia.bind(this)
-    // this.getTutkintoNimi = this.getTutkintoNimi.bind(this)
   }
 
   componentWillMount() {
@@ -120,7 +122,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <Row marginLeft="30px">
             <h3>Lisätyt tutkinnot</h3>
             {lisattavatValue && lisattavatValue.length > 0
-              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimi(tutkinto)}</div>)
+              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimiByKoodiarvo(tutkinto)}</div>)
               : 'Ei lisättäviä tutkintoja'
             }
           </Row>
@@ -129,7 +131,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
             <h3>Poistettavat tutkinnot</h3>
             <div>
               {poistettavatValue && poistettavatValue.length > 0
-                ? poistettavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+                ? poistettavatValue.map(maaraysId => <div key={maaraysId}>{getTutkintoKoodiByMaaraysId(maaraysId)} {getTutkintoNimiByMaaraysId(maaraysId)}</div>)
                 : 'Ei poistettavia tutkintoja'
               }
             </div>
