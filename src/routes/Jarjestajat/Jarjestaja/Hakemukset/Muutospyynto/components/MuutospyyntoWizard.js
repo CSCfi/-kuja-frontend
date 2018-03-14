@@ -128,7 +128,7 @@ class MuutospyyntoWizard extends Component {
             <ContentContainer>
 
               <WizardContent>
-                {page === 3 && (
+                {page === 1 && (
                   <MuutospyyntoWizardPaatoskierros
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
@@ -136,7 +136,7 @@ class MuutospyyntoWizard extends Component {
                     lupa={lupa}
                   />
                 )}
-                {page === 4 && (
+                {page === 2 && (
                   <MuutospyyntoWizardPerustelut
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
@@ -144,7 +144,7 @@ class MuutospyyntoWizard extends Component {
                     muutosperustelut={this.props.muutosperustelut.data}
                   />
                 )}
-                {page === 1 && (
+                {page === 3 && (
                   <MuutospyyntoWizardTutkinnot
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
@@ -154,7 +154,7 @@ class MuutospyyntoWizard extends Component {
                     fetchKoulutukset={this.props.fetchKoulutukset}
                   />
                 )}
-                {page === 2 && (
+                {page === 4 && (
                   <MuutospyyntoWizardYhteenveto
                     previousPage={this.previousPage}
                     onCancel={this.onCancel}

@@ -38,7 +38,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
     this.state = {
       isRemoving: false,
-      isAdding: true
+      isAdding: false
     }
 
     this.renderRemoveTutkinnot = this.renderRemoveTutkinnot.bind(this)
