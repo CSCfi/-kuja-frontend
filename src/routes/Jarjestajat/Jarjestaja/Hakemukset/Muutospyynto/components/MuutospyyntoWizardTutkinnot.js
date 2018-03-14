@@ -103,6 +103,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
               kohde={kohteet[1]}
               isRemoving={isRemoving}
               poistettavatValue={poistettavatValue}
+              lupa={lupa}
               component={this.renderRemoveTutkinnot}
             />
 
@@ -151,7 +152,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
   renderRemoveTutkinnot(props) {
     let { fields } = props
-    const { isRemoving, poistettavatValue, kohde } = props
+    const { isRemoving, poistettavatValue, kohde, lupa } = props
     const { kohdeid, heading, maaraykset, muutMaaraykset } = kohde
 
     return (
@@ -195,6 +196,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                             fields={fields}
                             isEditing={isRemoving}
                             editValues={poistettavatValue}
+                            lupa={lupa}
                           />
                         )
                       })}
@@ -221,6 +223,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                     fields={fields}
                     isEditing={isRemoving}
                     editValues={poistettavatValue}
+                    lupa={lupa}
                   />
                 )
               })}
@@ -340,7 +343,7 @@ class LisaaKoulutusAlaList extends Component {
             }
 
             return (
-              <TutkintoWrapper key={i}>
+              <TutkintoWrapper key={i} className={isAdded ? "is-added" : null}>
                 <input
                   type="checkbox"
                   checked={isAdded}
@@ -396,6 +399,21 @@ class KoulutusAlaList extends Component {
 
   render() {
     const { koodi, nimi, koulutusalat, isEditing, fields, editValues } = this.props
+    let removedCount = 0
+
+    if (editValues && koulutusalat) {
+      _.forEach(editValues, mId => {
+        _.forEach(koulutusalat, ala => {
+          const isInEditValues = _.find(ala.tutkinnot, tutkinto => {
+            return tutkinto.maaraysId === mId
+          })
+
+          if (isInEditValues) {
+            removedCount++
+          }
+        })
+      })
+    }
 
     return (
       <Wrapper>
@@ -404,6 +422,10 @@ class KoulutusAlaList extends Component {
           <Span>{koodi}</Span>
           <Span>{nimi}</Span>
           <Span>{`( ${this.getTutkintoCount(koulutusalat)} kpl )`}</Span>
+          {removedCount > 0
+            ? <Span color={COLORS.OIVA_RED}>-{removedCount}</Span>
+            : null
+          }
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
@@ -423,11 +445,25 @@ const KoulutuksetList = (props) => {
     <KoulutusTyyppiWrapper key={koodi}>
       {nimi}
       {tutkinnot.map(({ koodi, nimi, maaraysId }) => {
+
+        let isAdded = false
+
+        if (editValues) {
+          editValues.forEach(val => {
+            if (val === maaraysId) {
+              isAdded = true
+            }
+          })
+        }
+
         return (
-          <TutkintoWrapper key={koodi}>
+          <TutkintoWrapper key={koodi} className={isAdded ? "is-removed" : null}>
             {isEditing
               ?
-              <input type="checkbox" onChange={(event) => {
+              <input
+                type="checkbox"
+                checked={isAdded}
+                onChange={(event) => {
                 const { checked } = event.target
                 if (checked) {
                   fields.push(maaraysId)
