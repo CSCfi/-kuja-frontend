@@ -39,7 +39,7 @@ const LupaHistoryItem = (props) => {
             Paatos tehty:&nbsp;
             <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
           </TextPartial>
-          { voimassaoloalkupvm === "2018-01-01"
+          { voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
               ? <TextPartial>Kumottu: 12.12.2017</TextPartial>
               : (
                 <TextPartial>Voimassa:&nbsp;
