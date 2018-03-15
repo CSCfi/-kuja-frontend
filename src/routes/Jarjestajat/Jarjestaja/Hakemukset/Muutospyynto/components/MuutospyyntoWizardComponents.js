@@ -27,6 +27,7 @@ export const Arrow = styled.img`
 
 export const Span = styled.span`
   margin-right: 15px;
+  color: ${props => props.color ? props.color : COLORS.BLACK}
 `
 
 export const KoulutusalaListWrapper = styled.div`
@@ -44,6 +45,14 @@ export const TutkintoWrapper = styled.div`
   font-size: 15px;
   display: flex;
   position: relative;
+  
+  &.is-removed {
+    color: ${COLORS.OIVA_RED}
+  }
+  
+  &.is-added {
+    color: ${COLORS.OIVA_GREEN}
+  }
 `
 
 export const Koodi = styled.span`

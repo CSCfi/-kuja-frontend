@@ -11,6 +11,10 @@ import { WizButton } from "./MuutospyyntoWizard"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
 import {
+  getTutkintoKoodiByMaaraysId, getTutkintoNimiByKoodiarvo,
+  getTutkintoNimiByMaaraysId
+} from "../modules/koulutusUtil"
+import {
   Wrapper,
   Heading,
   Arrow,
@@ -30,10 +34,6 @@ import {
   Row,
   Kohde
 } from './MuutospyyntoWizardComponents'
-
-
-
-
 
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
@@ -56,9 +56,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
         .then(() => {
           if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
             this.props.koulutusalat.data.forEach(ala => {
-              if (ala.koodiArvo !== '00') {
-                this.props.fetchKoulutukset(ala.koodiArvo, ala.metadata)
-              } else if (ala.koodiArvo !== '99') {
+              if (ala.koodiArvo !== '00' && ala.koodiArvo !== '99') {
                 this.props.fetchKoulutukset(ala.koodiArvo, ala.metadata)
               }
             })
@@ -105,6 +103,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
               kohde={kohteet[1]}
               isRemoving={isRemoving}
               poistettavatValue={poistettavatValue}
+              lupa={lupa}
               component={this.renderRemoveTutkinnot}
             />
 
@@ -124,7 +123,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <Row marginLeft="30px">
             <h3>Lisätyt tutkinnot</h3>
             {lisattavatValue && lisattavatValue.length > 0
-              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimiByKoodiarvo(tutkinto)}</div>)
               : 'Ei lisättäviä tutkintoja'
             }
           </Row>
@@ -133,7 +132,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
             <h3>Poistettavat tutkinnot</h3>
             <div>
               {poistettavatValue && poistettavatValue.length > 0
-                ? poistettavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto}</div>)
+                ? poistettavatValue.map(maaraysId => <div key={maaraysId}>{getTutkintoKoodiByMaaraysId(maaraysId)} {getTutkintoNimiByMaaraysId(maaraysId)}</div>)
                 : 'Ei poistettavia tutkintoja'
               }
             </div>
@@ -153,7 +152,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
   renderRemoveTutkinnot(props) {
     let { fields } = props
-    const { isRemoving, poistettavatValue, kohde } = props
+    const { isRemoving, poistettavatValue, kohde, lupa } = props
     const { kohdeid, heading, maaraykset, muutMaaraykset } = kohde
 
     return (
@@ -197,6 +196,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                             fields={fields}
                             isEditing={isRemoving}
                             editValues={poistettavatValue}
+                            lupa={lupa}
                           />
                         )
                       })}
@@ -223,6 +223,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                     fields={fields}
                     isEditing={isRemoving}
                     editValues={poistettavatValue}
+                    lupa={lupa}
                   />
                 )
               })}
@@ -259,7 +260,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
                 Peruuta
               </WizButton>
             </Row>
-
 
             {_.map(data, (koulutusala, i) => {
               const { koodiarvo, metadata, koulutukset } = koulutusala
@@ -301,6 +301,19 @@ class LisaaKoulutusAlaList extends Component {
     const { koodiarvo, nimi, koulutukset } = this.props
     const { editValues } = this.props
     let { fields } = this.props
+    let addedCount = 0
+
+    if (editValues) {
+      _.forEach(editValues, koodi => {
+        const isInEditValues = _.find(koulutukset, koulutus => {
+          return koulutus.koodiarvo === koodi
+        })
+
+        if (isInEditValues) {
+          addedCount++
+        }
+      })
+    }
 
     return (
       <Wrapper>
@@ -309,14 +322,32 @@ class LisaaKoulutusAlaList extends Component {
           <Span>{koodiarvo}</Span>
           <Span>{nimi}</Span>
           <Span>{`( ${koulutukset.length} kpl )`}</Span>
+          {addedCount > 0
+            ? <Span color={COLORS.OIVA_GREEN}>+{addedCount}</Span>
+            : null
+          }
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
           {_.map(koulutukset, (koulutus, i) => {
             const { koodiarvo, nimi } = koulutus
+
+            let isAdded = false
+
+            if (editValues) {
+              editValues.forEach(val => {
+                if (val === koodiarvo) {
+                  isAdded = true
+                }
+              })
+            }
+
             return (
-              <TutkintoWrapper key={i}>
-                <input type="checkbox" onChange={(event) => {
+              <TutkintoWrapper key={i} className={isAdded ? "is-added" : null}>
+                <input
+                  type="checkbox"
+                  checked={isAdded}
+                  onChange={(event) => {
                   const { checked } = event.target
                   if (checked) {
                     fields.push(koodiarvo)
@@ -368,6 +399,21 @@ class KoulutusAlaList extends Component {
 
   render() {
     const { koodi, nimi, koulutusalat, isEditing, fields, editValues } = this.props
+    let removedCount = 0
+
+    if (editValues && koulutusalat) {
+      _.forEach(editValues, mId => {
+        _.forEach(koulutusalat, ala => {
+          const isInEditValues = _.find(ala.tutkinnot, tutkinto => {
+            return tutkinto.maaraysId === mId
+          })
+
+          if (isInEditValues) {
+            removedCount++
+          }
+        })
+      })
+    }
 
     return (
       <Wrapper>
@@ -376,6 +422,10 @@ class KoulutusAlaList extends Component {
           <Span>{koodi}</Span>
           <Span>{nimi}</Span>
           <Span>{`( ${this.getTutkintoCount(koulutusalat)} kpl )`}</Span>
+          {removedCount > 0
+            ? <Span color={COLORS.OIVA_RED}>-{removedCount}</Span>
+            : null
+          }
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
@@ -395,11 +445,25 @@ const KoulutuksetList = (props) => {
     <KoulutusTyyppiWrapper key={koodi}>
       {nimi}
       {tutkinnot.map(({ koodi, nimi, maaraysId }) => {
+
+        let isAdded = false
+
+        if (editValues) {
+          editValues.forEach(val => {
+            if (val === maaraysId) {
+              isAdded = true
+            }
+          })
+        }
+
         return (
-          <TutkintoWrapper key={koodi}>
+          <TutkintoWrapper key={koodi} className={isAdded ? "is-removed" : null}>
             {isEditing
               ?
-              <input type="checkbox" onChange={(event) => {
+              <input
+                type="checkbox"
+                checked={isAdded}
+                onChange={(event) => {
                 const { checked } = event.target
                 if (checked) {
                   fields.push(maaraysId)
