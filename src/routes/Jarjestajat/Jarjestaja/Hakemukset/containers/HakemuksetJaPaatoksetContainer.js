@@ -6,7 +6,8 @@ import { fetchMuutospyynnot } from "../modules/muutospyynnot"
 const mapStateToProps = (state) => {
   return {
     muutospyynnot: state.muutospyynnot,
-    lupa: state.lupa
+    lupa: state.lupa,
+    user: state.user.user
   }
 }
 

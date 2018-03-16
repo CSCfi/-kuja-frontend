@@ -14,6 +14,7 @@ import { COLORS } from "../../../../../../modules/styles"
 
 import pdfIcon from 'static/images/icon-pdf-small.png'
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import {ROLE_KAYTTAJA} from "../../../../../../modules/constants";
 
 const TopSectionWrapper = styled.div`
   margin: -30px -28px;
@@ -85,6 +86,13 @@ class Muutospyynto extends Component {
     // TODO: Tehdään stateen luvan sijasta muutospyynto, johon haetaan luvan tiedot getByDiaarinumero
     // Diaarimumero match:sta
     const { lupa } = this.props
+    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
+    if(_.indexOf(roles, ROLE_KAYTTAJA) === -1) {
+        return (
+            <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+        )
+    }
+
     if (lupa.hasErrored) {
       return (
         <div>Error</div>

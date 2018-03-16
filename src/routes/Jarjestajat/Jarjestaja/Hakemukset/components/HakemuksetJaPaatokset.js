@@ -7,6 +7,8 @@ import Loading from '../../../../../modules/Loading'
 
 import { COLORS } from "../../../../../modules/styles"
 import { slugify } from "../../../../../modules/helpers"
+import {ROLE_KAYTTAJA} from "../../../../../modules/constants";
+import _ from 'lodash'
 
 const Wrapper = styled.div`
   position: relative;
@@ -44,26 +46,32 @@ class HakemuksetJaPaatokset extends Component {
   render() {
     const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
 
-    if (fetched) {
-      return (
-        <Wrapper>
-          <h2>Avoimet hakemukset</h2>
-          <UusiMuutospyynto to={this.getMuutospyyntoUrl()}>Luo uusi</UusiMuutospyynto>
-          <MuutospyyntoList muutospyynnot={data} />
-        </Wrapper>
-      )
-    } else if (isFetching) {
-      return (
-        <Loading />
-      )
-    } else if (hasErrored) {
-      return (
-        <h2>Muutoshakemuksia ladattessa tapahtui virhe</h2>
-      )
-    } else {
-      return null
+    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
+    if(_.indexOf(roles, ROLE_KAYTTAJA) === -1) {
+        return (
+            <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+        )
     }
 
+    if (fetched) {
+        return (
+            <Wrapper>
+              <h2>Avoimet hakemukset</h2>
+              <UusiMuutospyynto to={this.getMuutospyyntoUrl()}>Luo uusi</UusiMuutospyynto>
+              <MuutospyyntoList muutospyynnot={data}/>
+            </Wrapper>
+        )
+    } else if (isFetching) {
+        return (
+            <Loading/>
+        )
+    } else if (hasErrored) {
+        return (
+            <h2>Muutoshakemuksia ladattessa tapahtui virhe</h2>
+        )
+    } else {
+        return null
+    }
   }
 }
 
