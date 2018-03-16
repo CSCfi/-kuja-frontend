@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
@@ -7,6 +8,7 @@ import MuutospyyntoList from './MuutospyyntoList'
 import { InnerContentContainer, InnerContentWrapper  } from "../../../modules/elements"
 import { COLORS } from "../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../modules/elements'
+import { ROLE_ESITTELIJA, ESITTELIJA } from '../../../modules/constants'
 
 
 const Wrapper = styled.div`
@@ -16,15 +18,20 @@ const Wrapper = styled.div`
 class Esittelijat extends Component {
 
   componentWillMount() {
-    // const { esittelijaNimi } = ? // TODO
-
       this.props.fetchMuutospyynnotForEsittelija("oiva-sanni")
   }
 
   render() {
 
-      //console.log("asldjaskldkalsdjklasd")
       const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
+      const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
+
+      // Sallittu vain esittelijöille
+      if(_.indexOf(roles, ROLE_ESITTELIJA) === -1) {
+          return (
+              <h2>Käsittely vaatii kirjautumisen.</h2>
+          )
+      }
 
       if (fetched) {
           return (
@@ -38,7 +45,7 @@ class Esittelijat extends Component {
                           <InnerContentWrapper>
                               <Wrapper>
                                   <h2>Hakemukset</h2>
-                                  <MuutospyyntoList muutospyynnot={data} />
+                                  <MuutospyyntoList muutospyynnot={data}/>
                               </Wrapper>
                           </InnerContentWrapper>
                       </InnerContentContainer>
@@ -52,12 +59,14 @@ class Esittelijat extends Component {
           )
       } else if (hasErrored) {
           return (
-              <h2>Muutoshakemuksia ladattessa tapahtui virhe</h2>
+              <h2>Käsittelytietoja ladattessa tapahtui virhe</h2>
           )
       } else {
-          <h2>Muutoshakemuksia ladattessa tapahtui virhe nullia</h2>
-          return null
+          return (
+              <h2>Käsittelytietoja ladattessa ei saatu tietoja</h2>
+          )
       }
+
 
   }
 }

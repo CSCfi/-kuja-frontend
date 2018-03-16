@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 
 import { COLORS } from "../../../../modules/styles"
+import {ROLE_KAYTTAJA} from "../../../../modules/constants";
 
 
 const MenuBar = styled.div`
@@ -49,7 +50,7 @@ const ProfileMenu = (props) => {
 
   return (
     <MenuBar>
-      {_.map(routes, (item, i) => <MenuItem key={i} to={item.path} exact={item.exact}>{item.text}</MenuItem>)}
+      {_.map(routes, (item, i) => (item.authenticated) ? <MenuItem key={i} to={item.path} exact={item.exact}>{item.text}</MenuItem> : null)}
     </MenuBar>
   )
 }

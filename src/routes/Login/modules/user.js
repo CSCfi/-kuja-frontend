@@ -90,13 +90,35 @@ const ACTION_HANDLERS = {
   }
 }
 
+
 // Reducer
 const initialState = {
-  user: null,
+  user: {},
   isFetching: false,
   fetched: false,
   hasErrored: false
 }
+
+
+/*
+// TEST Reducer for ESITTELIJA - uncomment when developing
+const initialState = {
+    user: {"roles":["APP_KOUTE","APP_KOUTE_ESITTELIJA","APP_KOUTE_ESITTELIJA_1.2.246.562.10.78946234170"],"username":"oiva-essi"},
+    isFetching: false,
+    fetched: false,
+    hasErrored: false
+}
+*/
+
+/*
+// TEST Reducer for KAYTTAJA - uncomment when developing
+const initialState = {
+    user: {"roles":["APP_KOUTE","APP_KOUTE_KAYTTAJA","APP_KOUTE_KAYTTAJA_1.2.246.562.10.48442622063"],"username":"oiva-sanni"},
+    isFetching: false,
+    fetched: false,
+    hasErrored: false
+}
+*/
 
 export default function userReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

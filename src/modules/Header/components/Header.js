@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItem from 'modules/Header/components/LinkItem'
-import { ROLE_ESITTELIJA } from 'modules/constants'
+import { ROLE_ESITTELIJA, ESITTELIJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
 
 const HeaderTitle = styled.div`
@@ -31,28 +31,15 @@ const HeaderBarInner = styled.div`
 `
 
 class Header extends Component {
-  renderRoleLinks() {
-    if (this.props.user && this.props.user.roles) {
-      const { roles } = this.props.user
-      if (_.indexOf(roles, ROLE_ESITTELIJA) > -1) {
-        return <LinkItem to="/esittelija" className="pull-right">Esittelijän näkymä</LinkItem>
-      }
-      switch (this.props.user.role) {
-        case 'esittelijä': {
-          return <LinkItem to="/esittelija" className="pull-right">Esittelijän näkymä</LinkItem>
-        }
-
-        case 'kj': {
-          return <LinkItem to="/koulutuksen-jarjestaja" className="pull-right">Koulutuksen järjestäjän näkymä</LinkItem>
-        }
-
-        default: 
-          return null;
-      }
-    }
-  }
 
   render() {
+
+    // for testing
+    //const { roles } = ESITTELIJA.user
+
+    // for real
+    const { roles } = (this.props.user && this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
+
     return (
       <div>
         <HeaderBar bgColor={COLORS.OIVA_GREEN}>
@@ -69,9 +56,8 @@ class Header extends Component {
           <HeaderBarInner>
             <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
             <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
-            <LinkItem to="/esittelijat">Käsittely</LinkItem>
-            {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/}
-            {/*{this.renderRoleLinks()}*/}
+            { (_.indexOf(roles, ROLE_ESITTELIJA) > -1) ? (<LinkItem to="/esittelijat">Käsittely</LinkItem>) : null}
+            {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/ }
           </HeaderBarInner>
         </HeaderBar>
       </div>

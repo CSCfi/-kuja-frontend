@@ -12,6 +12,8 @@ import Loading from '../../../../../../modules/Loading'
 import { ContentContainer } from "../../../../../../modules/elements"
 import { COLORS, MEDIA_QUERIES } from "../../../../../../modules/styles"
 import close from 'static/images/close-x.svg'
+import {ROLE_KAYTTAJA} from "../../../../../../modules/constants";
+import _ from 'lodash'
 
 const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
@@ -194,6 +196,12 @@ class MuutospyyntoWizard extends Component {
     const { muutosperustelut, lupa, paatoskierrokset, createMuutospyynto } = this.props
     const { page, visitedPages } = this.state
 
+    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
+    if(_.indexOf(roles, ROLE_KAYTTAJA) === -1) {
+        return (
+            <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+        )
+    }
 
     if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
       return (

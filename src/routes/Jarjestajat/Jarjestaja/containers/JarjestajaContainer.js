@@ -8,7 +8,8 @@ import Jarjestaja from '../components/Jarjestaja'
 const mapStateToProps = (state) => {
   return {
     lupa: state.lupa,
-    muutospyynnot: state.muutospyynnot
+    muutospyynnot: state.muutospyynnot,
+      user: state.user.user
   }
 }
 
