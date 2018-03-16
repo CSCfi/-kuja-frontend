@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector } from 'redux-form'
 import Moment from 'react-moment'
+import styled from 'styled-components'
 
 import validate from '../modules/validateWizard'
 import { Row } from "./MuutospyyntoWizardComponents"
@@ -10,9 +11,11 @@ import { WizButton } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import {
+  getJarjestajaData,
   getTutkintoKoodiByMaaraysId, getTutkintoNimiByKoodiarvo,
   getTutkintoNimiByMaaraysId
 } from "../modules/koulutusUtil"
+import { createMuutospyynto } from "../modules/muutospyynto"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -100,9 +103,16 @@ let MuutospyyntoWizardYhteenveto = props => {
   )
 }
 
-const selector = formValueSelector('uusi-hakemus')
+const selector = formValueSelector('uusiHakemus')
 
-MuutospyyntoWizardYhteenveto = connect(state => {
+MuutospyyntoWizardYhteenveto = reduxForm({
+  form: 'uusiHakemus',
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true,
+  validate
+})(MuutospyyntoWizardYhteenveto)
+
+export default connect(state => {
   const muutosperustelu = selector(state, 'muutosperustelu')
   const muuperustelu = selector(state, 'muuperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
@@ -110,6 +120,7 @@ MuutospyyntoWizardYhteenveto = connect(state => {
   const lisattavat = selector(state, 'lisattavat')
 
   return {
+    formValues: state.form.uusiHakemus.values,
     muutosperustelu,
     muuperustelu,
     paatoskierros,
@@ -120,9 +131,4 @@ MuutospyyntoWizardYhteenveto = connect(state => {
   }
 })(MuutospyyntoWizardYhteenveto)
 
-export default reduxForm({
-  form: 'uusi-hakemus',
-  destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true,
-  validate
-})(MuutospyyntoWizardYhteenveto)
+

@@ -105,6 +105,7 @@ export const AddContent = styled.div`
   position: relative;
   padding: 30px;
   background-color: ${COLORS.WHITE};
+  margin-top: 150px;
 `
 export const Row = styled.div`
   margin-bottom: 30px;

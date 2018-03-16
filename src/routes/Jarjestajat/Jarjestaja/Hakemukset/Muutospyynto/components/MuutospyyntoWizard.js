@@ -19,27 +19,29 @@ const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   top: 0;
   left: 0;
 `
 
 const WizardTop = styled.div`
   background-color: ${COLORS.DARK_GRAY};
-  position: relative;
+  position: fixed;
   left: 0;
+  top: 0;
   height: 50px;
-  width: 100vw;
+  width: 100%;
   z-index: 2;
   display: flex;
 `
 
 const WizardHeader = styled.div`
   background-color: ${COLORS.BG_GRAY};
-  position: relative;
+  position: fixed;
   left: 0;
+  top: 50px;
   height: 50px;
-  width: 100vw;
+  width: 100%;
   z-index: 2;
   display: flex;
   font-size: 14px;
@@ -185,7 +187,7 @@ class MuutospyyntoWizard extends Component {
 
   onSubmit(data) {
     this.props.createMuutospyynto(data)
-    this.onCancel() // TODO: tehdään onDone-funktio
+    // this.onCancel() // TODO: tehdään onDone-funktio
   }
 
   changePhase(number) {
@@ -225,7 +227,7 @@ class MuutospyyntoWizard extends Component {
               </Container>
             </WizardHeader>
 
-            <ContentContainer maxWidth="1085px">
+            <ContentContainer maxWidth="1085px" margin="50px auto">
               <WizardContent>
                 {page === 1 && (
                   <MuutospyyntoWizardPaatoskierros

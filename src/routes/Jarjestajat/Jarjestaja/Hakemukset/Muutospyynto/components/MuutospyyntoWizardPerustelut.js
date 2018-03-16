@@ -83,7 +83,7 @@ let MuutospyyntoWizardPerustelut = props => {
   )
 }
 
-const selector = formValueSelector('uusi-hakemus')
+const selector = formValueSelector('uusiHakemus')
 
 MuutospyyntoWizardPerustelut = connect(state => {
   const muutosperusteluValue = selector(state, 'muutosperustelu')
@@ -94,7 +94,7 @@ MuutospyyntoWizardPerustelut = connect(state => {
 })(MuutospyyntoWizardPerustelut)
 
 export default reduxForm({
-  form: 'uusi-hakemus',
+  form: 'uusiHakemus',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   validate
