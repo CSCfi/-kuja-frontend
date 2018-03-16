@@ -274,7 +274,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 }
 
-const selector = formValueSelector('uusi-hakemus')
+const selector = formValueSelector('uusiHakemus')
 
 MuutospyyntoWizardTutkinnot = connect(state => {
   const poistettavatValue = selector(state, 'poistettavat')
@@ -289,7 +289,7 @@ MuutospyyntoWizardTutkinnot = connect(state => {
 })(MuutospyyntoWizardTutkinnot)
 
 export default reduxForm({
-  form: 'uusi-hakemus',
+  form: 'uusiHakemus',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   validate

@@ -185,7 +185,7 @@ class MuutospyyntoWizard extends Component {
 
   onSubmit(data) {
     this.props.createMuutospyynto(data)
-    this.onCancel() // TODO: tehdään onDone-funktio
+    // this.onCancel() // TODO: tehdään onDone-funktio
   }
 
   changePhase(number) {

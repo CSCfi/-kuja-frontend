@@ -10,7 +10,7 @@ export function fetchPaatoskierrokset() {
   return (dispatch) => {
     dispatch({ type: FETCH_PAATOSKIERROKSET_START })
 
-    const request = fetch(`${API_BASE_URL}/paatoskierrokset`)
+    const request = fetch(`${API_BASE_URL}/paatoskierrokset/open`)
 
     request
       .then(response => response.json())
