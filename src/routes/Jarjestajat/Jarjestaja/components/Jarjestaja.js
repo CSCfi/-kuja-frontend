@@ -39,37 +39,6 @@ class Jarjestaja extends Component {
 
   render() {
     const { match, lupa, muutospyynnot } = this.props
-    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
-
-      // Alanavigaation tabivalikon routet
-    const tabNavRoutes = [
-      {
-        path: `${match.url}`,
-        exact: true,
-        text: 'Julkiset tiedot',
-        authenticated: true
-      },
-      {
-        path: `${match.url}/omat-tiedot`,
-        text: 'Omat tiedot',
-        authenticated: (_.indexOf(roles, ROLE_KAYTTAJA) > -1) ? true : false
-      },
-      {
-        path: `${match.url}/jarjestamislupa`,
-        text: 'Järjestämislupa',
-        authenticated: true
-      },
-      {
-        path: `${match.url}/hakemukset-ja-paatokset`,
-        text: 'Hakemukset ja päätökset',
-        authenticated: (_.indexOf(roles, ROLE_KAYTTAJA) > -1) ? true : false
-      },
-      {
-        path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-        text: 'Uusi hakemus',
-        authenticated: (_.indexOf(roles, ROLE_KAYTTAJA) > -1) ? true : false
-      }
-    ]
 
     if (match.params) {
 
@@ -79,8 +48,45 @@ class Jarjestaja extends Component {
         const breadcrumb = `/jarjestajat/${match.params.id}`
         const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
 
+        // check the rights
+        // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_KAYTTAJA && sessionStorage.getItem('oid')===jarjestaja.oid) {
+            authenticated = true;
+        }
 
-          return (
+        // Alanavigaation tabivalikon routet
+        const tabNavRoutes = [
+            {
+                path: `${match.url}`,
+                exact: true,
+                text: 'Julkiset tiedot',
+                authenticated: true
+            },
+            {
+                path: `${match.url}/omat-tiedot`,
+                text: 'Omat tiedot',
+                authenticated: authenticated
+            },
+            {
+                path: `${match.url}/jarjestamislupa`,
+                text: 'Järjestämislupa',
+                authenticated: true
+            },
+            {
+                path: `${match.url}/hakemukset-ja-paatokset`,
+                text: 'Hakemukset ja päätökset',
+                authenticated: authenticated
+            },
+            {
+                path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+                text: 'Uusi hakemus',
+                authenticated: authenticated
+            }
+        ]
+
+
+        return (
           <div>
             <ContentContainer>
               <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
@@ -97,9 +103,9 @@ class Jarjestaja extends Component {
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-                {(_.indexOf(roles, ROLE_KAYTTAJA) > -1) ? (<Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />) : null }
+                {(authenticated) ? (<Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />) : null }
                 <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
-                {(_.indexOf(roles, ROLE_KAYTTAJA) > -1) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
+                {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
               </ContentContainer>
             </FullWidthWrapper>
           </div>

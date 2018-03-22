@@ -1,23 +1,31 @@
 import React, { Component } from 'react'
-
-import { Redirect } from 'react-router-dom'
-
-
-import { CAS_LOGOUT_URL } from 'modules/constants'
+import { connect } from 'react-redux'
+import { logoutUser } from 'routes/Login/modules/user'
 
 class Logout extends Component {
-  componentDidMount() {
-    this.props.logoutUser()
-    window.location = CAS_LOGOUT_URL
-  }
+    componentWillMount() {
+        this.props.logoutUser()
+    }
 
-  render() {
-    return (
-      <div>
-        <Redirect to="/" />
-      </div>
-    )
-  }
+    render() {
+        return (
+            <div>
+              <p>Olet kirjautunut ulos.</p>
+
+                {sessionStorage.getItem('username')}
+            </div>
+        )
+    }
 }
 
-export default Logout
+function mapStateToProps(state) {
+    return { user: state.user }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        logoutUser: () => dispatch(logoutUser())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Logout)

@@ -24,10 +24,9 @@ class Esittelijat extends Component {
   render() {
 
       const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
-      const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
 
       // Sallittu vain esittelijöille
-      if(_.indexOf(roles, ROLE_ESITTELIJA) === -1) {
+      if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
           return (
               <h2>Käsittely vaatii kirjautumisen.</h2>
           )

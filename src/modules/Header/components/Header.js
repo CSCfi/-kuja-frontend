@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import styled from 'styled-components'
 
 import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItem from 'modules/Header/components/LinkItem'
-import { ROLE_ESITTELIJA, ESITTELIJA } from 'modules/constants'
+import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
 
 const HeaderTitle = styled.div`
@@ -34,21 +33,22 @@ class Header extends Component {
 
   render() {
 
-    // for testing
-    //const { roles } = ESITTELIJA.user
-
-    // for real
-    const { roles } = (this.props.user && this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
-
     return (
       <div>
         <HeaderBar bgColor={COLORS.OIVA_GREEN}>
           <HeaderBarInner maxWidth="1280px" justifyContent="space-between">
             <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
-            {/* Disabloidaan headerin linkit toistaiseksi */}
             {/*<HeaderLinks>*/}
+
               {/*<LinkItem to="/sv" className="text-small has-separator">På svenska</LinkItem>*/}
-              {<LinkItem to="/cas-auth" className="text-small">Kirjaudu sisään</LinkItem>}
+
+              {(sessionStorage.getItem('role')!==ROLE_ESITTELIJA && sessionStorage.getItem('role')!==ROLE_KAYTTAJA)
+              ? (<LinkItem to="/cas-auth" className="text-small">Kirjaudu sisään</LinkItem>) : null}
+
+              {/* TODO: proper logout */}
+              {(sessionStorage.getItem('role')===ROLE_ESITTELIJA || sessionStorage.getItem('role')===ROLE_KAYTTAJA)
+              ? (<LinkItem to="/cas-logout" className="text-small">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItem>) : null}
+
             {/*</HeaderLinks>*/}
           </HeaderBarInner>
         </HeaderBar>
@@ -56,13 +56,12 @@ class Header extends Component {
           <HeaderBarInner>
             <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
             <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
-            { (_.indexOf(roles, ROLE_ESITTELIJA) > -1) ? (<LinkItem to="/esittelijat">Käsittely</LinkItem>) : null}
-            {/*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem>*/ }
+            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/esittelijat" >Käsittely</LinkItem>) : null}
+            { /*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem> */}
           </HeaderBarInner>
         </HeaderBar>
       </div>
     )
   }
 }
-
 export default Header

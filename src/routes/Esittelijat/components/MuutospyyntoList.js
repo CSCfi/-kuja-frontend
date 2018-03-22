@@ -14,7 +14,7 @@ class MuutospyynnotList extends Component {
 
   render() {
     const { muutospyynnot } = this.props
-    console.log("asdsa!dasdasdas")
+
     if (muutospyynnot && muutospyynnot.length > 0) {
       return (
         <div>
