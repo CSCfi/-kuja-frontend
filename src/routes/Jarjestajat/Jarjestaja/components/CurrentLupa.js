@@ -6,8 +6,6 @@ import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
 import { API_BASE_URL } from "../../../../modules/constants"
 import pdf from 'static/images/icon-pdf-large.png'
 
-
-
 const CurrentLupaWrapper = styled.div`
   border-top: 1px solid ${COLORS.BORDER_GRAY};
   border-right: 1px solid ${COLORS.BORDER_GRAY};

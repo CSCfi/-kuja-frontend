@@ -14,8 +14,7 @@ const mapStateToProps = (state) => {
     muutosperustelut: state.muutosperustelut,
     lupa: state.lupa,
     koulutukset: state.koulutukset,
-    paatoskierrokset: state.paatoskierrokset,
-    user: state.user.user
+    paatoskierrokset: state.paatoskierrokset
   }
 }
 

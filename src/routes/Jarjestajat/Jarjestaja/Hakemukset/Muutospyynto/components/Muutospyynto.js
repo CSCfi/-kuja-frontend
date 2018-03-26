@@ -86,8 +86,8 @@ class Muutospyynto extends Component {
     // TODO: Tehdään stateen luvan sijasta muutospyynto, johon haetaan luvan tiedot getByDiaarinumero
     // Diaarimumero match:sta
     const { lupa } = this.props
-    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
-    if(_.indexOf(roles, ROLE_KAYTTAJA) === -1) {
+
+    if(sessionStorage.getItem('role')!==ROLE_KAYTTAJA) {
         return (
             <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
         )

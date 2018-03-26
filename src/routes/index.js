@@ -11,6 +11,7 @@ import Esittelijat from 'routes/Esittelijat'
 import Login from 'routes/Login'
 import Logout from 'routes/Logout'
 import Jarjestaja from '../routes/Jarjestajat/Jarjestaja'
+import DestroyCasAuth from "./Logout/components/DestroyCasAuth";
 
 // import JarjestajaMuutospyynto from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto'
 
@@ -30,6 +31,8 @@ const Routes = () => {
       {appRoutes.map((route, i) => <Route key={i} {...route} />)}
       {<Route path="/cas-auth" component={RequireCasAuth} />}
       {<Route path="/cas-ready" component={CasAuthenticated} />}
+      {<Route path="/cas-logout" component={DestroyCasAuth} />}
+
     </div>
   )
 }

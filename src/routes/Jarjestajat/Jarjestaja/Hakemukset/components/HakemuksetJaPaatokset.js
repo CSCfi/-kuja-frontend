@@ -30,8 +30,6 @@ const UusiMuutospyynto = styled(Link)`
 class HakemuksetJaPaatokset extends Component {
   getMuutospyyntoUrl() {
     const {  match } = this.props
-    // const { diaarinumero } = this.props.lupa.data
-
     return `${match.url}/uusi`
   }
 
@@ -46,12 +44,21 @@ class HakemuksetJaPaatokset extends Component {
   render() {
     const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
 
-    const { roles } = (this.props.user.roles) ? this.props.user : {"roles":["no auth"]}
-    if(_.indexOf(roles, ROLE_KAYTTAJA) === -1) {
+
+    if(sessionStorage.getItem('role')!==ROLE_KAYTTAJA) {
         return (
             <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
         )
     }
+
+    // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
+    const { jarjestajaOid } = this.props.lupa.data
+    if(sessionStorage.getItem('oid')!==jarjestajaOid) {
+        return (
+            <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
+        )
+    }
+
 
     if (fetched) {
         return (

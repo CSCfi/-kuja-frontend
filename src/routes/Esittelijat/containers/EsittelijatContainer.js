@@ -6,8 +6,7 @@ import Esittelijat from '../components/Esittelijat'
 const mapStateToProps = (state) => {
     return {
         muutospyynnot: state.muutospyynnot,
-        lupa: state.lupa,
-        user: state.user.user
+        lupa: state.lupa
     }
 }
 

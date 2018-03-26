@@ -1,6 +1,8 @@
 import axios from 'axios'
+import _ from 'lodash'
 
 import { API_BASE_URL } from 'modules/constants'
+import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
 
 // Constants
 export const DUMMY_LOGIN_USER = 'DUMMY_LOGIN_USER'
@@ -21,7 +23,24 @@ export function getRoles() {
     
     axios.get(`${API_BASE_URL}/auth/me`, { withCredentials: true })
       .then((response) => {
-        dispatch({ type: LOGIN_GET_ROLES_SUCCESS, payload: response.data })
+
+          var userObj = JSON.parse(JSON.stringify(response.data))
+          sessionStorage.setItem('role', '')
+          sessionStorage.setItem('username', userObj.username)
+
+          var roleArr = _.split(userObj.roles, ',')
+          if(_.indexOf(userObj.roles, ROLE_ESITTELIJA) > -1) {
+              sessionStorage.setItem('role', ROLE_ESITTELIJA)
+              sessionStorage.setItem('oid', _.replace(roleArr[2],ROLE_ESITTELIJA+'_',''))
+          }
+          if(_.indexOf(userObj.roles, ROLE_KAYTTAJA) > -1) {
+              sessionStorage.setItem('role', ROLE_KAYTTAJA)
+              sessionStorage.setItem('oid', _.replace(roleArr[2],ROLE_KAYTTAJA+'_',''))
+          }
+
+          // TODO: error logging?
+
+          dispatch({ type: LOGIN_GET_ROLES_SUCCESS, payload: response.data })
       })
       .catch((err) => dispatch({ type: LOGIN_GET_ROLES_FAILURE, payload: err }))
       
@@ -30,7 +49,11 @@ export function getRoles() {
 
 export function logoutUser() {
   return (dispatch) => {
-    dispatch({ type: LOGOUT_USER_START })
+      sessionStorage.removeItem('username')
+      sessionStorage.removeItem('oid')
+      sessionStorage.removeItem('role')
+      dispatch({ type: LOGOUT_USER_START })
+
   }
 }
 
@@ -90,7 +113,6 @@ const ACTION_HANDLERS = {
   }
 }
 
-
 // Reducer
 const initialState = {
   user: {},
@@ -98,27 +120,6 @@ const initialState = {
   fetched: false,
   hasErrored: false
 }
-
-
-/*
-// TEST Reducer for ESITTELIJA - uncomment when developing
-const initialState = {
-    user: {"roles":["APP_KOUTE","APP_KOUTE_ESITTELIJA","APP_KOUTE_ESITTELIJA_1.2.246.562.10.78946234170"],"username":"oiva-essi"},
-    isFetching: false,
-    fetched: false,
-    hasErrored: false
-}
-*/
-
-/*
-// TEST Reducer for KAYTTAJA - uncomment when developing
-const initialState = {
-    user: {"roles":["APP_KOUTE","APP_KOUTE_KAYTTAJA","APP_KOUTE_KAYTTAJA_1.2.246.562.10.48442622063"],"username":"oiva-sanni"},
-    isFetching: false,
-    fetched: false,
-    hasErrored: false
-}
-*/
 
 export default function userReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]

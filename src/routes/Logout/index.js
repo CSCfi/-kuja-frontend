@@ -2,7 +2,7 @@ import LogoutContainer from 'routes/Logout/containers/LogoutContainer'
 
 const routes = [
   {
-    path: '/kirjaudu-ulos',
+    path: '/logout',
     component: LogoutContainer
   }
 ]
