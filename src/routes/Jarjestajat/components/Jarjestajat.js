@@ -14,6 +14,7 @@ class Jarjestajat extends Component {
 
   render() {
     const { fetched, isFetching, hasErrored, data } = this.props.luvat
+
     if (fetched) {
       return (
         <ContentContainer>

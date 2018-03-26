@@ -1,27 +1,37 @@
 export const LUPA_SECTIONS = {
   1: {
-    heading: "Tutkinnot ja koulutukset"
+    heading: "Tutkinnot ja koulutukset",
+    tunniste: 'tutkinnotjakoulutukset',
+    headingNumber: 1
   },
   2: {
-    heading: "Opetus- ja tutkintokielet"
+    heading: "Opetus- ja tutkintokielet",
+    tunniste: 'opetusjatutkintokieli',
+    headingNumber: 2
   },
   3: {
-    heading: "Toiminta-alueet"
+    heading: "Toiminta-alueet",
+    tunniste: 'toimintaalue',
+    headingNumber: 3
   },
   4: {
-    heading: "Opiskelijavuodet"
+    heading: "Opiskelijavuodet",
+    tunniste: 'opiskelijavuodet',
+    headingNumber: 4
   },
   5: {
-    heading: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
+    heading: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät",
+    tunniste: 'muut',
+    headingNumber: 5
   }
 }
 
 export const KOHTEET = {
-  TUTKINNOT: 1,
-  KIELI: 2,
-  TOIMIALUE: 3,
-  OPISKELIJAVUODET: 4,
-  MUUT: 5
+  TUTKINNOT: 'tutkinnotjakoulutukset',
+  KIELI: 'opetusjatutkintokieli',
+  TOIMIALUE: 'toimintaalue',
+  OPISKELIJAVUODET: 'opiskelijavuodet',
+  MUUT: 'muut'
 }
 
 export const KOODISTOT = {

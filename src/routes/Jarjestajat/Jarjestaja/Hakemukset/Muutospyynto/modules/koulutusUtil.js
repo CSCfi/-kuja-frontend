@@ -59,12 +59,12 @@ export function getMuutosperusteluObjectById(muutosperusteluId) {
   }
 }
 
-export function getPaatoskierrosById(paatoskierrosId) {
+export function getPaatoskierrosByUuid(paatoskierrosUuid) {
   const state = store.getState()
 
   if (state.paatoskierrokset && state.paatoskierrokset.data) {
     return _.find(state.paatoskierrokset.data, paatoskierros => {
-      return Number(paatoskierros.id) === Number(paatoskierrosId)
+      return paatoskierros.uuid === paatoskierrosUuid
     })
   }
 }
@@ -110,6 +110,7 @@ export function getJarjestajaData(state) {
 }
 
 export function formatMuutospyynto(muutospyynto) {
+
   const {
     diaarinumero,
     jarjestajaOid,
@@ -132,7 +133,7 @@ export function formatMuutospyynto(muutospyynto) {
     luoja,
     luontipvm,
     lupaId,
-    paatoskierrosId: paatoskierros,
+    paatoskierrosUuid: paatoskierros,
     tila,
     paivittaja: "string",
     paivityspvm: null,

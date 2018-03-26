@@ -72,18 +72,6 @@ class Jarjestamislupa extends Component {
       </InnerContentContainer>
     )
   }
-
-  parseMaaraykset(kohdeId) {
-    const { maaraykset } = this.props.lupa.data
-
-    if (!maaraykset) {
-      return null
-    }
-
-    return _.filter(maaraykset, (maarays) => {
-      return maarays.kohde.id === kohdeId
-    })
-  }
 }
 
 export default withRouter(Jarjestamislupa)

@@ -4,7 +4,7 @@ import { Field, formValueSelector, reduxForm } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
-import { getJarjestajaData, getPaatoskierrosById } from "../modules/koulutusUtil"
+import { getJarjestajaData, getPaatoskierrosByUuid } from "../modules/koulutusUtil"
 
 class MuutospyyntoWizardPaatoskierros extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class MuutospyyntoWizardPaatoskierros extends Component {
           <option value="">Valitse päätöskierros</option>
           {paatoskierrokset.map(paatoskierros => {
             return (
-              <option value={paatoskierros.id} key={paatoskierros.id}>
+              <option value={paatoskierros.uuid} key={paatoskierros.uuid}>
                 {paatoskierros.meta.fi || paatoskierros.meta.nimi.fi}
               </option>
             )
@@ -33,7 +33,7 @@ class MuutospyyntoWizardPaatoskierros extends Component {
   }
 
   getKuvaus(paatoskierros) {
-    const obj = getPaatoskierrosById(paatoskierros)
+    const obj = getPaatoskierrosByUuid(paatoskierros)
 
     if (obj.meta && obj.meta.kuvaus) {
       return obj.meta.kuvaus.fi

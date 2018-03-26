@@ -8,10 +8,10 @@ export const parseLupa = (lupa) => {
 
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
-        const { heading } = LUPA_SECTIONS[key]
-        const currentMaaraykset = parseMaaraykset(lupa.maaraykset, Number(key))
+        const { heading, tunniste, headingNumber } = LUPA_SECTIONS[key]
+        const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste)
 
-        lupaObj[key] = parseSectionData(heading, Number(key), currentMaaraykset)
+        lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber)
       }
     }
 
@@ -19,16 +19,16 @@ export const parseLupa = (lupa) => {
   }
 }
 
-const parseSectionData = (heading, target, maaraykset) => {
+const parseSectionData = (heading, target, maaraykset, headingNumber) => {
   let returnobj = {}
   let tutkinnot = []
   let muutMaaraykset = []
 
   // kohde 1: Erikoiskäsittely tutkinnoille ja koulutuksille
-  if (Number(target) === KOHTEET.TUTKINNOT) {
+  if (target === KOHTEET.TUTKINNOT) {
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodisto, id } = maarays
+      const { koodisto, uuid } = maarays
 
       switch (koodisto) {
         case KOODISTOT.KOULUTUS: {
@@ -44,7 +44,7 @@ const parseSectionData = (heading, target, maaraykset) => {
               nimi: tutkintoNimi,
               selite: TUTKINTO_TEKSTIT.valma.selite,
               indeksi: muutMaaraykset.length + 1,
-              maaraysId: id
+              maaraysId: uuid
             })
             return
           }
@@ -55,7 +55,7 @@ const parseSectionData = (heading, target, maaraykset) => {
               nimi: tutkintoNimi,
               selite: TUTKINTO_TEKSTIT.telma.selite,
               indeksi: muutMaaraykset.length + 1,
-              maaraysId: id
+              maaraysId: uuid
             })
             return
           }
@@ -67,7 +67,7 @@ const parseSectionData = (heading, target, maaraykset) => {
               const { koodi } = alimaarays
               const { koodiArvo, metadata } = koodi
               const nimi = parseLocalizedField(metadata)
-              tutkinto.rajoitteet.push({ koodi: koodiArvo, nimi, maaraysId: id })
+              tutkinto.rajoitteet.push({ koodi: koodiArvo, nimi, maaraysId: uuid })
             })
           }
 
@@ -88,7 +88,7 @@ const parseSectionData = (heading, target, maaraykset) => {
             }
           })
 
-          tutkinto.maaraysId = id
+          tutkinto.maaraysId = uuid
 
           tutkinnot.push(tutkinto)
           break
@@ -103,7 +103,7 @@ const parseSectionData = (heading, target, maaraykset) => {
             selite: TUTKINTO_TEKSTIT.ammatilliseentehtavaanvalmistavakoulutus.selite,
             nimi: ammatillinenNimi,
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: id
+            maaraysId: uuid
           })
           break
         }
@@ -117,7 +117,7 @@ const parseSectionData = (heading, target, maaraykset) => {
             selite: kuljettajaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: id
+            maaraysId: uuid
           })
           break
         }
@@ -131,7 +131,7 @@ const parseSectionData = (heading, target, maaraykset) => {
             selite: tyovoimaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: id
+            maaraysId: uuid
           })
           break
         }
@@ -154,13 +154,13 @@ const parseSectionData = (heading, target, maaraykset) => {
     returnobj.muutMaaraykset = muutMaaraykset
 
     // kohde 2: Opetuskieli
-  } else if (Number(target) === KOHTEET.KIELI) {
+  } else if (target === KOHTEET.KIELI) {
 
     returnobj.kohdeKuvaus = LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
     returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
 
     // kohde 3: Toiminta-alueet
-  } else if (Number(target) === KOHTEET.TOIMIALUE) {
+  } else if (target === KOHTEET.TOIMIALUE) {
 
     returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
     if (returnobj.kohdeArvot.length > 1) {
@@ -170,7 +170,7 @@ const parseSectionData = (heading, target, maaraykset) => {
     }
 
     // kohde 4: opiskelijavuodet
-  } else if (Number(target) === KOHTEET.OPISKELIJAVUODET) {
+  } else if (target === KOHTEET.OPISKELIJAVUODET) {
 
     let opiskelijavuodet = []
 
@@ -185,7 +185,7 @@ const parseSectionData = (heading, target, maaraykset) => {
     returnobj.opiskelijavuodet = opiskelijavuodet
 
     // kohde 5: Muut
-  } else if (Number(target) === KOHTEET.MUUT) {
+  } else if (target === KOHTEET.MUUT) {
 
     let muut = []
 
@@ -206,7 +206,8 @@ const parseSectionData = (heading, target, maaraykset) => {
   }
 
   returnobj.heading = heading
-  returnobj.kohdeid = target
+  returnobj.tunniste = target
+  returnobj.headingNumber = headingNumber
 
   return returnobj
 }
@@ -293,13 +294,13 @@ function sortTutkinnot(tutkintoArray) {
   return obj
 }
 
-function parseMaaraykset(maaraykset, kohdeId) {
+function parseMaaraykset(maaraykset, kohdeTunniste) {
 
   if (!maaraykset) {
     return null
   }
 
   return _.filter(maaraykset, (maarays) => {
-    return maarays.kohde.id === kohdeId
+    return maarays.kohde.tunniste === kohdeTunniste
   })
 }

@@ -46,7 +46,7 @@ let MuutospyyntoWizardYhteenveto = props => {
   const { handleSubmit, muutosperustelu, muuperustelu, paatoskierros, poistettavat, lisattavat, onCancel, paatoskierrokset, muutosperustelut } = props
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
-    return String(pkierros.id) === String(paatoskierros)
+    return String(pkierros.uuid) === String(paatoskierros)
   })
 
   const muutosperusteluObj = _.find(muutosperustelut.data, mperustelu => {
