@@ -12,7 +12,7 @@ class LuvatList extends Component {
       return lupa.jarjestaja.nimi.fi || lupa.jarjestaja.nimi.sv
     })
 
-    return _.map(sorted, lupa => <LupaItem lupa={lupa} key={lupa.id} />)
+    return _.map(sorted, lupa => <LupaItem lupa={lupa} key={lupa.uuid} />)
   }
 
   render() {

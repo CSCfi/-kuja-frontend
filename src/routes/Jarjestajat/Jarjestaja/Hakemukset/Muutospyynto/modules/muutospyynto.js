@@ -30,7 +30,6 @@ export function fetchMuutospyynto(ytunnus, query) {
 export function createMuutospyynto(muutospyynto) {
   const formatted = formatMuutospyynto(muutospyynto)
 
-
   let obj = {}
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })

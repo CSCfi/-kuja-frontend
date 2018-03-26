@@ -6,7 +6,6 @@ import { withRouter, Link } from 'react-router-dom'
 import Koulutusala from './Koulutusala'
 import MuuMaarays from './MuuMaarays'
 
-import { slugify } from "../../../../modules/helpers"
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
 import { TUTKINTO_TEKSTIT } from "../modules/constants"
@@ -84,24 +83,25 @@ class LupaSection extends Component {
     // const { isRemoving } = this.state
 
     if (kohde) {
-      const { kohdeid, heading } = kohde
+      const { tunniste, heading, headingNumber } = kohde
 
       // Logiikka eri kohteille
-      switch (kohdeid) {
+      switch (tunniste) {
 
         // Kohde 1: Tutkinnot
         case KOHTEET.TUTKINNOT: {
           const { maaraykset, muutMaaraykset } = kohde
+
 
           return (
             <SectionWrapper>
 
               <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
 
-              <Kohde1>{`${kohdeid}.`}</Kohde1>
+              <Kohde1>{`${headingNumber}.`}</Kohde1>
               <H3>{heading}</H3>
               {url
-                ? <MuutosLink to={url} diaarinumero={diaarinumero} kohdeid={kohdeid}>{linkText}</MuutosLink>
+                ? <MuutosLink to={url} diaarinumero={diaarinumero} kohdeid={headingNumber}>{linkText}</MuutosLink>
                 : null
               }
               <div>
@@ -125,7 +125,7 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span><H3>{heading}</H3>
+              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
               {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
             </SectionWrapper>
@@ -138,7 +138,7 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span><H3>{heading}</H3>
+              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
               {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
             </SectionWrapper>
@@ -151,7 +151,7 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span><H3>{heading}</H3>
+              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               {_.map(opiskelijavuodet, (obj, i) => {
                 const { tyyppi, arvo } = obj
                 return <span key={i}>{tyyppi}:&nbsp;{arvo}</span>
@@ -166,7 +166,7 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span><H3>{heading}</H3>
+              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               {_.map(muut, (muu, i) => {
                 const { tyyppi, kuvaus } = muu
                 return (
@@ -183,7 +183,7 @@ class LupaSection extends Component {
         default: {
           return (
             <SectionWrapper>
-              <Span>{`${kohdeid}.`}</Span><H3>{heading}</H3>
+              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
             </SectionWrapper>
           )
         }
