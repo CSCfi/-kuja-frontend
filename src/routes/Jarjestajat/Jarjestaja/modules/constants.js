@@ -40,7 +40,8 @@ export const KOODISTOT = {
   TEHTAVAAN_VALMISTAVA_KOULUTUS: 'tehtavaanvalmistavakoulutus',
   AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: 'ammatilliseentehtavaanvalmistavakoulutus',
   KULJETTAJAKOULUTUS: 'kuljettajakoulutus',
-  OSAAMISALA: 'osaamisala'
+  OSAAMISALA: 'osaamisala',
+  OPPILAITOKSENOPETUSKIELI : 'oppilaitoksenopetuskieli'
 }
 
 export const LUPA_TEKSTIT = {
@@ -58,10 +59,40 @@ export const LUPA_TEKSTIT = {
       SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
     },
     VELVOLLISUUS_MONIKKO: {
-      FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavialla opetuskielillä'
+      FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavilla opetuskielillä',
+      SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
     },
-    LISA_RUOTSI: {
-      FI: 'Tutkintokieli on em. opetuskielen lisäksi ruotsi seuraavissa tutkinnoissa'
+    LISA_RUOTSI_YKSIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielen lisäksi ruotsi seuraavassa tutkinnossa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
+    },
+    LISA_RUOTSI_MONIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavissa tutkinnoissa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
+    },
+    LISA_ENGLANTI_YKSIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
+    },
+    LISA_ENGLANTI_MONIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielten lisäksi englanti seuraavissa tutkinnoissa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
+    },
+    LISA_SUOMI_YKSIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielen lisäksi suomi seuraavassa tutkinnossa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
+    },
+    LISA_SUOMI_MONIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielten lisäksi suomi seuraavissa tutkinnoissa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
+    },
+    LISA_VENAJA_YKSIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielen lisäksi venäjä seuraavassa tutkinnossa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
+    },
+    LISA_VENAJA_MONIKKO: {
+      FI: 'Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavissa tutkinnoissa',
+      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
     }
   }
 }

@@ -12,6 +12,7 @@ export const parseLupa = (lupa) => {
         const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste)
 
         lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber)
+
       }
     }
 
@@ -23,6 +24,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
   let returnobj = {}
   let tutkinnot = []
   let muutMaaraykset = []
+
 
   // kohde 1: Erikoiskäsittely tutkinnoille ja koulutuksille
   if (target === KOHTEET.TUTKINNOT) {
@@ -156,10 +158,55 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
     // kohde 2: Opetuskieli
   } else if (target === KOHTEET.KIELI) {
 
-    returnobj.kohdeKuvaus = LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
-    returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
+      let opetuskielet = []
+      let tutkintokieletEn = []
+      let tutkintokieletSv = []
+      let tutkintokieletFi = []
+      let tutkintokieletRu = []
 
-    // kohde 3: Toiminta-alueet
+      _.forEach(maaraykset, (maarays) => {
+          const {koodisto, uuid} = maarays
+          const {koodi, aliMaaraykset} = maarays
+
+          // Alimääräykset
+          if (aliMaaraykset) {
+              _.forEach(aliMaaraykset, (alimaarays) => {
+                  const {koodi} = alimaarays
+                  const {koodiArvo, metadata} = koodi
+                  const nimi  = parseLocalizedField(maarays.koodi.metadata)
+                  const tutkintokoodi = maarays.koodiarvo
+                  switch (koodiArvo) {
+                      case "EN":
+                          tutkintokieletEn.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "SV":
+                          tutkintokieletSv.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "RU":
+                          tutkintokieletRu.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "FI":
+                          tutkintokieletFi.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                  }
+
+              })
+          }
+
+          if(koodisto === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+              opetuskielet.push(maarays)
+          }
+
+      })
+
+      returnobj.kohdeKuvaus = (opetuskielet.length > 1) ? LUPA_TEKSTIT.KIELI.VELVOLLISUUS_MONIKKO.FI : LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
+      returnobj.kohdeArvot = getMaaraysArvoArray(opetuskielet)
+      returnobj.tutkinnotjakieletEn = tutkintokieletEn
+      returnobj.tutkinnotjakieletSv = tutkintokieletSv
+      returnobj.tutkinnotjakieletRu = tutkintokieletRu
+      returnobj.tutkinnotjakieletFi = tutkintokieletFi
+
+      // kohde 3: Toiminta-alueet
   } else if (target === KOHTEET.TOIMIALUE) {
 
     returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
@@ -296,11 +343,27 @@ function sortTutkinnot(tutkintoArray) {
 
 function parseMaaraykset(maaraykset, kohdeTunniste) {
 
-  if (!maaraykset) {
-    return null
-  }
+    if (!maaraykset) {
+        return null
+    }
 
-  return _.filter(maaraykset, (maarays) => {
-    return maarays.kohde.tunniste === kohdeTunniste
-  })
+    if (kohdeTunniste != KOHTEET.KIELI) {
+        return _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === kohdeTunniste
+        })
+    }
+    else {
+
+        // oppilaitoksen opetuskieli
+        let opetuskielet = _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === KOHTEET.KIELI
+        })
+
+        // tutkintokielet
+        let tutkintokielet = _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === KOHTEET.TUTKINNOT
+        })
+
+        return _.concat(opetuskielet, tutkintokielet)
+    }
 }

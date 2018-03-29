@@ -8,7 +8,8 @@ import MuuMaarays from './MuuMaarays'
 
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
-import { TUTKINTO_TEKSTIT } from "../modules/constants"
+import { TUTKINTO_TEKSTIT, LUPA_TEKSTIT } from "../modules/constants"
+import Tutkintokieli from "./Tutkintokieli";
 
 
 const SectionWrapper = styled.div`
@@ -121,13 +122,33 @@ class LupaSection extends Component {
 
         // Kohde 2: Opetuskieli
         case KOHTEET.KIELI: {
-          const { kohdeKuvaus, kohdeArvot } = kohde
+          const { kohdeKuvaus, kohdeArvot, tutkinnotjakieletEn, tutkinnotjakieletSv, tutkinnotjakieletFi, tutkinnotjakieletRu } = kohde
 
-          return (
+            return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
               {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
+              <div>
+                <Tutkinnot>
+                    {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletEn.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletEn, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletSv.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletSv.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletSv, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletFi.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletFi.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletFi, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletRu.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_MONIKKO.FI : null }
+                    {(tutkinnotjakieletRu.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletRu, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+                </Tutkinnot>
+              </div>
+
             </SectionWrapper>
           )
         }
