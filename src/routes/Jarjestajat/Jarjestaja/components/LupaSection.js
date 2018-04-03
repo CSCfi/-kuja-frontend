@@ -155,13 +155,14 @@ class LupaSection extends Component {
 
         // Kohde 3: Toiminta-alueet
         case KOHTEET.TOIMIALUE: {
-          const { kohdeKuvaus, kohdeArvot } = kohde
+          const { kohdeKuvaus, maakunnat, kunnat } = kohde
 
           return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
-              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
+              {_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}
+              {_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}
             </SectionWrapper>
           )
         }

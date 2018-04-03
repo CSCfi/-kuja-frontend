@@ -209,12 +209,35 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
       // kohde 3: Toiminta-alueet
   } else if (target === KOHTEET.TOIMIALUE) {
 
-    returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
-    if (returnobj.kohdeArvot.length > 1) {
-      returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MONIKKO.FI
-    } else {
-      returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_YKSIKKO.FI
-    }
+    let toimintaalueet = getToimintaalueArvoArray(maaraykset)
+
+    let maakunnat = _.filter(toimintaalueet, alue => {
+      return alue.koodisto === 'maakunta'
+    })
+
+    let kunnat = _.filter(toimintaalueet, alue => {
+      return alue.koodisto === 'kunta'
+    })
+
+    returnobj.maakunnat = maakunnat
+    returnobj.kunnat = kunnat
+
+    if(maakunnat.length > 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_MONIKKO.FI}
+    if(maakunnat.length === 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_MONIKKO.FI}
+    if(maakunnat.length < 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_EIMAAKUNTA_KUNTA_MONIKKO.FI}
+
+    if(maakunnat.length > 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_YKSIKKO.FI}
+    if(maakunnat.length === 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_YKSIKKO.FI}
+    if(maakunnat.length < 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_EIMAAKUNTA_KUNTA_YKSIKKO.FI}
+
+    if(maakunnat.length > 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_EIKUNTA.FI}
+    if(maakunnat.length === 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA.FI}
+    if(maakunnat.length < 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.EI_VELVOLLISUUTTA.FI}
+
+    _.filter(toimintaalueet, alue => {
+        (alue.koodisto === 'nuts1') ? returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI : null
+    })
+
 
     // kohde 4: opiskelijavuodet
   } else if (target === KOHTEET.OPISKELIJAVUODET) {
@@ -275,6 +298,24 @@ function getMaaraysArvoArray(maaraykset) {
   })
 
   return arr
+}
+
+function getToimintaalueArvoArray(maaraykset) {
+    let arr = []
+
+    _.forEach(maaraykset, (maarays) => {
+        const { koodi, koodisto } = maarays
+
+        if (koodi) {
+            const { metadata } = koodi
+
+            if (metadata) {
+                arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto })
+            }
+        }
+    })
+
+    return arr
 }
 
 function sortTutkinnot(tutkintoArray) {

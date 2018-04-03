@@ -44,14 +44,55 @@ export const KOODISTOT = {
   OPPILAITOKSENOPETUSKIELI : 'oppilaitoksenopetuskieli'
 }
 
+
 export const LUPA_TEKSTIT = {
+
   TOIMINTA_ALUE : {
-    VELVOLLISUUS_YKSIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen'
+    EI_VELVOLLISUUTTA: {
+        FI: 'Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta.',
+        SV: 'Utbildningsanordnaren har ingen regional skyldighet att ordna examina och utbildning. Utbildningsanordnaren får ordna examina och utbildning i hela Finland med undantag för landskapet Åland.'
     },
-    VELVOLLISUUS_MONIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeisiin'
+    VELVOLLISUUS_EIMAAKUNTA_KUNTA_YKSIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan kunnan osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommun:'
+    },
+    VELVOLLISUUS_EIMAAKUNTA_KUNTA_MONIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien kuntien osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommuner:'
+    },
+    VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
+    },
+    VELVOLLISUUS_MAAKUNTA_MONIKKO_EIKUNTA: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
+    },
+    VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_YKSIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja kunnan osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
+    },
+    VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_MONIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja kuntien alueen osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
+    },
+    VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_MONIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja seuraavien kuntien osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
+    },
+    VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_YKSIKKO: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja seuraavan kunnan osaamis- ja koulutustarpeeseen:',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
+    },
+    VELVOLLISUUS_KOKO_SUOMI: {
+      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen.',
+      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning för kompetens- och utbildningsbehovet i hela landet med undantag för landskapet Åland.'
+    },
+    VALTAKUNNALLINEN: {
+      FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+      SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
     }
+
   },
   KIELI: {
     VELVOLLISUUS_YKSIKKO: {
