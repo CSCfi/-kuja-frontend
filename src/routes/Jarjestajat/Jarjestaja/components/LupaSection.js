@@ -180,7 +180,6 @@ class LupaSection extends Component {
         // Kohde 4: Opiskelijavuodet
         case KOHTEET.OPISKELIJAVUODET: {
           const { opiskelijavuodet, rajoitukset, kohdeKuvaus, eiMaaraysta } = kohde
-
           return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
@@ -188,7 +187,7 @@ class LupaSection extends Component {
                 const { arvo } = obj
                 return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}</span>
               })}
-              <KohdeKuvaus>{kohdeKuvaus}</KohdeKuvaus>
+              <KohdeKuvaus>{(ytunnus === '0244767-4') ? LUPA_TEKSTIT.OPISKELIJAVUODET.VALTIO.FI : kohdeKuvaus}</KohdeKuvaus>
               {_.map(rajoitukset, (obj, i) => {
                 const { tyyppi, arvo } = obj
                 return <OpiskelijavuosiRajoitukset key={i}>{tyyppi}&nbsp;{LUPA_TEKSTIT.OPISKELIJAVUODET.ENINTAAN.FI} {arvo} {LUPA_TEKSTIT.OPISKELIJAVUODET.OPISKELIJAVUOTTA.FI}</OpiskelijavuosiRajoitukset>

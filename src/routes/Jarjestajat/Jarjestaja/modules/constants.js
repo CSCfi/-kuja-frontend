@@ -169,6 +169,10 @@ export const LUPA_TEKSTIT = {
       EI_VAHIMMAISMAARAA: {
           FI:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.',
           SV:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.'
+      },
+      VALTIO: {
+          FI:'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.',
+          SV:'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.'
       }
 
 
