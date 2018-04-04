@@ -48,135 +48,140 @@ export const KOODISTOT = {
 
 export const LUPA_TEKSTIT = {
 
-  TOIMINTA_ALUE : {
-    EI_VELVOLLISUUTTA: {
-        FI: 'Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta.',
-        SV: 'Utbildningsanordnaren har ingen regional skyldighet att ordna examina och utbildning. Utbildningsanordnaren får ordna examina och utbildning i hela Finland med undantag för landskapet Åland.'
+    TOIMINTA_ALUE: {
+        EI_VELVOLLISUUTTA: {
+            FI: 'Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta.',
+            SV: 'Utbildningsanordnaren har ingen regional skyldighet att ordna examina och utbildning. Utbildningsanordnaren får ordna examina och utbildning i hela Finland med undantag för landskapet Åland.'
+        },
+        VELVOLLISUUS_EIMAAKUNTA_KUNTA_YKSIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan kunnan osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommun:'
+        },
+        VELVOLLISUUS_EIMAAKUNTA_KUNTA_MONIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien kuntien osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommuner:'
+        },
+        VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
+        },
+        VELVOLLISUUS_MAAKUNTA_MONIKKO_EIKUNTA: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
+        },
+        VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_YKSIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja kunnan osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
+        },
+        VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_MONIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja kuntien alueen osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
+        },
+        VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_MONIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja seuraavien kuntien osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
+        },
+        VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_YKSIKKO: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja seuraavan kunnan osaamis- ja koulutustarpeeseen:',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
+        },
+        VELVOLLISUUS_KOKO_SUOMI: {
+            FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen.',
+            SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning för kompetens- och utbildningsbehovet i hela landet med undantag för landskapet Åland.'
+        },
+        VALTAKUNNALLINEN: {
+            FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+            SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+        }
+
     },
-    VELVOLLISUUS_EIMAAKUNTA_KUNTA_YKSIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan kunnan osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommun:'
+    KIELI: {
+        VELVOLLISUUS_YKSIKKO: {
+            FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavalla opetuskielellä',
+            SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
+        },
+        VELVOLLISUUS_MONIKKO: {
+            FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavilla opetuskielillä',
+            SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
+        },
+        LISA_RUOTSI_YKSIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielen lisäksi ruotsi seuraavassa tutkinnossa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
+        },
+        LISA_RUOTSI_MONIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavissa tutkinnoissa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
+        },
+        LISA_ENGLANTI_YKSIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
+        },
+        LISA_ENGLANTI_MONIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielten lisäksi englanti seuraavissa tutkinnoissa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
+        },
+        LISA_SUOMI_YKSIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielen lisäksi suomi seuraavassa tutkinnossa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
+        },
+        LISA_SUOMI_MONIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielten lisäksi suomi seuraavissa tutkinnoissa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
+        },
+        LISA_VENAJA_YKSIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielen lisäksi venäjä seuraavassa tutkinnossa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
+        },
+        LISA_VENAJA_MONIKKO: {
+            FI: 'Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavissa tutkinnoissa',
+            SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
+        }
     },
-    VELVOLLISUUS_EIMAAKUNTA_KUNTA_MONIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien kuntien osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande kommuner:'
+    OPISKELIJAVUODET: {
+        VAHIMMAISMAARA: {
+            FI: 'Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on',
+            SV: 'Utbildningsanordnarens minimiantal studerandeår är'
+        },
+        ENINTAAN: {
+            FI: 'enintään',
+            SV: 'högst'
+        },
+        OPISKELIJAVUOTTA: {
+            FI: 'opiskelijavuotta',
+            SV: 'studerandeår'
+        },
+        RAJOITUS_TEKSTI_YKSIKKO: {
+            FI: 'Opiskelijavuosien vähimmäismäärää koskee seuraava rajoitus:',
+            SV: 'Följande begränsning gäller för studerandeåren'
+        },
+        RAJOITUS_TEKSTI_MONIKKO: {
+            FI: 'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
+            SV: 'Följande begränsningar gäller för studerandeåren'
+        },
+        VELVOLLISUUS_TEKSTI_YKSIKKO: {
+            FI: 'Opiskelijavuosien vähimmäismäärää koskee seuraava velvollisuus:',
+            SV: 'Följande skyldighet gäller för studerandeåren'
+        },
+        VELVOLLISUUS_TEKSTI_MONIKKO: {
+            FI: 'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
+            SV: 'Följande skyldigheter gäller för studerandeåren'
+        },
+        EI_VAHIMMAISMAARAA: {
+            FI: 'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.',
+            SV: 'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.'
+        },
+        VALTIO: {
+            FI: 'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.',
+            SV: 'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.'
+        }
     },
-    VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
-    },
-    VELVOLLISUUS_MAAKUNTA_MONIKKO_EIKUNTA: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap:'
-    },
-    VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_YKSIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja kunnan osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
-    },
-    VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_MONIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja kuntien alueen osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
-    },
-    VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_MONIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja seuraavien kuntien osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommuner:'
-    },
-    VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_YKSIKKO: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja seuraavan kunnan osaamis- ja koulutustarpeeseen:',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning i första hand för kompetens- och utbildningsbehovet i följande landskap och kommun:'
-    },
-    VELVOLLISUUS_KOKO_SUOMI: {
-      FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen.',
-      SV: 'Utbildningsanordnaren är skyldig att ordna examina och utbildning för kompetens- och utbildningsbehovet i hela landet med undantag för landskapet Åland.'
-    },
-    VALTAKUNNALLINEN: {
-      FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
-      SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+    MUUT: {
+        EI_MAARAYKSIA: {
+            FI: 'Koulutuksen järjestäjälle ei tässä järjestämisluvassa määrätä muita oikeuksia, velvollisuuksia, ehtoja tai tehtäviä.',
+            SV: 'I detta anordnartillstånd anges inga andra rättigheter, skyldigheter, villkor eller uppgifter för utbildningsanordnaren.'
+        }
+
     }
-
-  },
-  KIELI: {
-    VELVOLLISUUS_YKSIKKO: {
-      FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavalla opetuskielellä',
-      SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
-    },
-    VELVOLLISUUS_MONIKKO: {
-      FI: 'Koulutuksen järjestäjän on annettava opetusta seuraavilla opetuskielillä',
-      SV: 'Utbildningsanordnaren ska meddela undervisningen på följande språk'
-    },
-    LISA_RUOTSI_YKSIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielen lisäksi ruotsi seuraavassa tutkinnossa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
-    },
-    LISA_RUOTSI_MONIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavissa tutkinnoissa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill svenska i följande examina'
-    },
-    LISA_ENGLANTI_YKSIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
-    },
-    LISA_ENGLANTI_MONIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielten lisäksi englanti seuraavissa tutkinnoissa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill engelska i följande examina'
-    },
-    LISA_SUOMI_YKSIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielen lisäksi suomi seuraavassa tutkinnossa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
-    },
-    LISA_SUOMI_MONIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielten lisäksi suomi seuraavissa tutkinnoissa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill finska i följande examina'
-    },
-    LISA_VENAJA_YKSIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielen lisäksi venäjä seuraavassa tutkinnossa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
-    },
-    LISA_VENAJA_MONIKKO: {
-      FI: 'Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavissa tutkinnoissa',
-      SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
-    }
-  },
-  OPISKELIJAVUODET: {
-      VAHIMMAISMAARA: {
-          FI:'Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on',
-          SV:'Utbildningsanordnarens minimiantal studerandeår är'
-      },
-      ENINTAAN: {
-          FI:'enintään',
-          SV:'högst'
-      },
-      OPISKELIJAVUOTTA: {
-          FI:'opiskelijavuotta',
-          SV:'studerandeår'
-      },
-      RAJOITUS_TEKSTI_YKSIKKO: {
-          FI:'Opiskelijavuosien vähimmäismäärää koskee seuraava rajoitus:',
-          SV:'Följande begränsning gäller för studerandeåren'
-      },
-      RAJOITUS_TEKSTI_MONIKKO: {
-          FI:'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
-          SV:'Följande begränsningar gäller för studerandeåren'
-      },
-      VELVOLLISUUS_TEKSTI_YKSIKKO: {
-          FI:'Opiskelijavuosien vähimmäismäärää koskee seuraava velvollisuus:',
-          SV:'Följande skyldighet gäller för studerandeåren'
-      },
-      VELVOLLISUUS_TEKSTI_MONIKKO: {
-          FI:'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
-          SV:'Följande skyldigheter gäller för studerandeåren'
-      },
-      EI_VAHIMMAISMAARAA: {
-          FI:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.',
-          SV:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.'
-      },
-      VALTIO: {
-          FI:'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.',
-          SV:'Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää.'
-      }
-
-
-  }
 }
 
 export const TUTKINTO_TEKSTIT = {

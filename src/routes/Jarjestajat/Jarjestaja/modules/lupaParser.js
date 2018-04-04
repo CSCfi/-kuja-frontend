@@ -246,7 +246,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
 
     _.forEach(maaraykset, (maarays) => {
       const { koodi, arvo, koodisto } = maarays
-        console.log('koodisto: ' + koodisto)
       const { metadata } = koodi
       const tyyppi = parseLocalizedField(metadata)
 
@@ -270,21 +269,90 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
   } else if (target === KOHTEET.MUUT) {
 
     let muut = []
+    let vaativat = []
+    let vankilat = []
+    let kokeilut = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi } = maarays
+      const { koodi, meta, koodiarvo } = maarays
       const { metadata } = koodi
 
-      if (koodi && metadata) {
+        if (koodi && metadata) {
 
-        const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-        const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli') || 'Ei kuvausta saatavilla'
+            const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+            const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli') || 'Ei kuvausta saatavilla'
 
-        muut.push({ tyyppi: type, kuvaus: desc })
+            switch (koodiarvo){
+
+                case "1": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "4": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "6": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+
+                case "7": {
+                    // TODO localization
+                    const { kokeilu } = meta
+                    const { fi } = kokeilu
+                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    break
+                }
+                case "8": {
+                    // TODO localization
+                    const { yhteistyösopimus } = meta
+                    const { fi } = yhteistyösopimus
+                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    break
+                }
+                case "9": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "10": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "11": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "2": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "3": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "12": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+
+                case "5": {
+                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "13": {
+                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+            }
       }
+
     })
 
     returnobj.muut = muut
+    returnobj.vaativat = vaativat
+    returnobj.vankilat = vankilat
+    returnobj.kokeilut = kokeilut
   }
 
   returnobj.heading = heading

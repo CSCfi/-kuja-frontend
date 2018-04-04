@@ -198,7 +198,7 @@ class LupaSection extends Component {
 
         // Kohde 5: Muut määräykset
         case KOHTEET.MUUT: {
-          const { muut } = kohde
+          const { muut, vaativat, vankilat, kokeilut } = kohde
 
           return (
             <SectionWrapper>
@@ -212,6 +212,38 @@ class LupaSection extends Component {
                   </div>
                 )
               })}
+
+              {(vaativat.length > 0) ? <h4><Bold>{vaativat[0].tyyppi}</Bold></h4> : null}
+              {_.map(vaativat, (vaativa, i) => {
+                    const { kuvaus } = vaativa
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+              })}
+              {(kokeilut.length > 0) ? <h4><Bold>{kokeilut[0].tyyppi}</Bold></h4> : null}
+                {_.map(kokeilut, (kokeilu, i) => {
+                    const { kuvaus } = kokeilu
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+                })}
+              {(vankilat.length > 0) ? <h4><Bold>{vankilat[0].tyyppi}</Bold></h4> : null}
+                {_.map(vankilat, (vankila, i) => {
+                    const { kuvaus } = vankila
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+                })}
+
+                {(kokeilut.length === 0 && vankilat.length === 0 && vaativat.length === 0 && muut.length === 0)
+                    ? <p>{LUPA_TEKSTIT.MUUT.EI_MAARAYKSIA.FI}</p> : null}
+
             </SectionWrapper>
           )
         }
