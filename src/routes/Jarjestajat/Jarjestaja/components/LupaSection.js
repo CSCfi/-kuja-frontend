@@ -74,6 +74,16 @@ const MuutMaaraykset = styled.div`
   margin-bottom: 30px;
 `
 
+const OpiskelijavuosiRajoitukset = styled.div`
+  margin-left: 30px;
+  margin-top: 20px;
+`
+
+const KohdeKuvaus = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`
+
 class LupaSection extends Component {
 
 
@@ -169,14 +179,19 @@ class LupaSection extends Component {
 
         // Kohde 4: Opiskelijavuodet
         case KOHTEET.OPISKELIJAVUODET: {
-          const { opiskelijavuodet } = kohde
+          const { opiskelijavuodet, rajoitukset, kohdeKuvaus, eiMaaraysta } = kohde
 
           return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               {_.map(opiskelijavuodet, (obj, i) => {
+                const { arvo } = obj
+                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}</span>
+              })}
+              <KohdeKuvaus>{kohdeKuvaus}</KohdeKuvaus>
+              {_.map(rajoitukset, (obj, i) => {
                 const { tyyppi, arvo } = obj
-                return <span key={i}>{tyyppi}:&nbsp;{arvo}</span>
+                return <OpiskelijavuosiRajoitukset key={i}>{tyyppi}&nbsp;{LUPA_TEKSTIT.OPISKELIJAVUODET.ENINTAAN.FI} {arvo} {LUPA_TEKSTIT.OPISKELIJAVUODET.OPISKELIJAVUOTTA.FI}</OpiskelijavuosiRajoitukset>
               })}
             </SectionWrapper>
           )

@@ -41,7 +41,8 @@ export const KOODISTOT = {
   AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: 'ammatilliseentehtavaanvalmistavakoulutus',
   KULJETTAJAKOULUTUS: 'kuljettajakoulutus',
   OSAAMISALA: 'osaamisala',
-  OPPILAITOKSENOPETUSKIELI : 'oppilaitoksenopetuskieli'
+  OPPILAITOKSENOPETUSKIELI : 'oppilaitoksenopetuskieli',
+  OIVA_MUUT : 'oivamuutoikeudetvelvollisuudetehdotjatehtavat'
 }
 
 
@@ -135,6 +136,42 @@ export const LUPA_TEKSTIT = {
       FI: 'Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavissa tutkinnoissa',
       SV: 'Utöver ovannämnda undervisningsspråk är examensspråket därtill ryska i följande examina'
     }
+  },
+  OPISKELIJAVUODET: {
+      VAHIMMAISMAARA: {
+          FI:'Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on',
+          SV:'Utbildningsanordnarens minimiantal studerandeår är'
+      },
+      ENINTAAN: {
+          FI:'enintään',
+          SV:'högst'
+      },
+      OPISKELIJAVUOTTA: {
+          FI:'opiskelijavuotta',
+          SV:'studerandeår'
+      },
+      RAJOITUS_TEKSTI_YKSIKKO: {
+          FI:'Opiskelijavuosien vähimmäismäärää koskee seuraava rajoitus:',
+          SV:'Följande begränsning gäller för studerandeåren'
+      },
+      RAJOITUS_TEKSTI_MONIKKO: {
+          FI:'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
+          SV:'Följande begränsningar gäller för studerandeåren'
+      },
+      VELVOLLISUUS_TEKSTI_YKSIKKO: {
+          FI:'Opiskelijavuosien vähimmäismäärää koskee seuraava velvollisuus:',
+          SV:'Följande skyldighet gäller för studerandeåren'
+      },
+      VELVOLLISUUS_TEKSTI_MONIKKO: {
+          FI:'Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:',
+          SV:'Följande skyldigheter gäller för studerandeåren'
+      },
+      EI_VAHIMMAISMAARAA: {
+          FI:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.',
+          SV:'Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää.'
+      }
+
+
   }
 }
 

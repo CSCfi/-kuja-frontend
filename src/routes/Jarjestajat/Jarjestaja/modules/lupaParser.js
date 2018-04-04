@@ -5,13 +5,14 @@ import { parseLocalizedField } from "../../../../modules/helpers"
 export const parseLupa = (lupa) => {
   if (lupa) {
     let lupaObj = {}
+    let tyovoimaMaarays = checkTyovoima(lupa.maaraykset)
 
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
         const { heading, tunniste, headingNumber } = LUPA_SECTIONS[key]
         const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste)
 
-        lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber)
+        lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber, tyovoimaMaarays)
 
       }
     }
@@ -20,11 +21,10 @@ export const parseLupa = (lupa) => {
   }
 }
 
-const parseSectionData = (heading, target, maaraykset, headingNumber) => {
+const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMaarays) => {
   let returnobj = {}
   let tutkinnot = []
   let muutMaaraykset = []
-
 
   // kohde 1: Erikoiskäsittely tutkinnoille ja koulutuksille
   if (target === KOHTEET.TUTKINNOT) {
@@ -125,7 +125,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
-
           const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
           // TODO localizations
 
@@ -243,16 +242,29 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
   } else if (target === KOHTEET.OPISKELIJAVUODET) {
 
     let opiskelijavuodet = []
+    let rajoitukset = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, arvo } = maarays
+      const { koodi, arvo, koodisto } = maarays
+        console.log('koodisto: ' + koodisto)
       const { metadata } = koodi
       const tyyppi = parseLocalizedField(metadata)
 
-      opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi })
+      if(koodisto === KOODISTOT.OIVA_MUUT) {
+          rajoitukset.push({ arvo: arvo, tyyppi: tyyppi })
+      }
+      else {
+          opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi })
+      }
+
     })
 
+    if(rajoitukset.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.RAJOITUS_TEKSTI_YKSIKKO.FI}
+    if(rajoitukset.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.RAJOITUS_TEKSTI_MONIKKO.FI}
+    if(tyovoimaMaarays.length > 0) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.EI_VAHIMMAISMAARAA.FI }
+
     returnobj.opiskelijavuodet = opiskelijavuodet
+    returnobj.rajoitukset = rajoitukset
 
     // kohde 5: Muut
   } else if (target === KOHTEET.MUUT) {
@@ -407,4 +419,19 @@ function parseMaaraykset(maaraykset, kohdeTunniste) {
 
         return _.concat(opetuskielet, tutkintokielet)
     }
+}
+
+function checkTyovoima(maaraykset) {
+
+    if (!maaraykset) {
+        return null
+    }
+
+    // mikäli järjestäjällä on vain työvoimakoulutusta, palautetaan määräys opiskelijavuositekstiä varten
+    return _.filter(maaraykset, (maarays) => {
+        if(maarays.koodisto === KOODISTOT.OIVA_TYOVOIMAKOULUTUS)
+            return maarays.koodiarvo === "3"
+
+    })
+
 }
