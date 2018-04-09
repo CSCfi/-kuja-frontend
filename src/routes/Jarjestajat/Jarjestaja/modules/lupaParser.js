@@ -5,13 +5,15 @@ import { parseLocalizedField } from "../../../../modules/helpers"
 export const parseLupa = (lupa) => {
   if (lupa) {
     let lupaObj = {}
+    let tyovoimaMaarays = checkTyovoima(lupa.maaraykset)
 
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
         const { heading, tunniste, headingNumber } = LUPA_SECTIONS[key]
         const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste)
 
-        lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber)
+        lupaObj[key] = parseSectionData(heading, tunniste, currentMaaraykset, headingNumber, tyovoimaMaarays)
+
       }
     }
 
@@ -19,7 +21,7 @@ export const parseLupa = (lupa) => {
   }
 }
 
-const parseSectionData = (heading, target, maaraykset, headingNumber) => {
+const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMaarays) => {
   let returnobj = {}
   let tutkinnot = []
   let muutMaaraykset = []
@@ -123,7 +125,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
-
           const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
           // TODO localizations
 
@@ -156,53 +157,202 @@ const parseSectionData = (heading, target, maaraykset, headingNumber) => {
     // kohde 2: Opetuskieli
   } else if (target === KOHTEET.KIELI) {
 
-    returnobj.kohdeKuvaus = LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
-    returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
+      let opetuskielet = []
+      let tutkintokieletEn = []
+      let tutkintokieletSv = []
+      let tutkintokieletFi = []
+      let tutkintokieletRu = []
 
-    // kohde 3: Toiminta-alueet
+      _.forEach(maaraykset, (maarays) => {
+          const {koodisto, uuid} = maarays
+          const {koodi, aliMaaraykset} = maarays
+
+          // Alimääräykset
+          if (aliMaaraykset) {
+              _.forEach(aliMaaraykset, (alimaarays) => {
+                  const {koodi} = alimaarays
+                  const {koodiArvo, metadata} = koodi
+                  const nimi  = parseLocalizedField(maarays.koodi.metadata)
+                  const tutkintokoodi = maarays.koodiarvo
+                  switch (koodiArvo) {
+                      case "EN":
+                          tutkintokieletEn.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "SV":
+                          tutkintokieletSv.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "RU":
+                          tutkintokieletRu.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                      case "FI":
+                          tutkintokieletFi.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          break
+                  }
+
+              })
+          }
+
+          if(koodisto === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+              opetuskielet.push(maarays)
+          }
+
+      })
+
+      returnobj.kohdeKuvaus = (opetuskielet.length > 1) ? LUPA_TEKSTIT.KIELI.VELVOLLISUUS_MONIKKO.FI : LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
+      returnobj.kohdeArvot = getMaaraysArvoArray(opetuskielet)
+      returnobj.tutkinnotjakieletEn = tutkintokieletEn
+      returnobj.tutkinnotjakieletSv = tutkintokieletSv
+      returnobj.tutkinnotjakieletRu = tutkintokieletRu
+      returnobj.tutkinnotjakieletFi = tutkintokieletFi
+
+      // kohde 3: Toiminta-alueet
   } else if (target === KOHTEET.TOIMIALUE) {
 
-    returnobj.kohdeArvot = getMaaraysArvoArray(maaraykset)
-    if (returnobj.kohdeArvot.length > 1) {
-      returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MONIKKO.FI
-    } else {
-      returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_YKSIKKO.FI
-    }
+    let toimintaalueet = getToimintaalueArvoArray(maaraykset)
+
+    let maakunnat = _.filter(toimintaalueet, alue => {
+      return alue.koodisto === 'maakunta'
+    })
+
+    let kunnat = _.filter(toimintaalueet, alue => {
+      return alue.koodisto === 'kunta'
+    })
+
+    returnobj.maakunnat = maakunnat
+    returnobj.kunnat = kunnat
+
+    if(maakunnat.length > 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_MONIKKO.FI}
+    if(maakunnat.length === 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_MONIKKO.FI}
+    if(maakunnat.length < 1 && kunnat.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_EIMAAKUNTA_KUNTA_MONIKKO.FI}
+
+    if(maakunnat.length > 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_KUNTA_YKSIKKO.FI}
+    if(maakunnat.length === 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_KUNTA_YKSIKKO.FI}
+    if(maakunnat.length < 1 && kunnat.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_EIMAAKUNTA_KUNTA_YKSIKKO.FI}
+
+    if(maakunnat.length > 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_MONIKKO_EIKUNTA.FI}
+    if(maakunnat.length === 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA.FI}
+    if(maakunnat.length < 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.EI_VELVOLLISUUTTA.FI}
+
+    _.filter(toimintaalueet, alue => {
+        (alue.koodisto === 'nuts1') ? returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI : null
+    })
+
 
     // kohde 4: opiskelijavuodet
   } else if (target === KOHTEET.OPISKELIJAVUODET) {
 
     let opiskelijavuodet = []
+    let rajoitukset = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, arvo } = maarays
+      const { koodi, arvo, koodisto } = maarays
       const { metadata } = koodi
       const tyyppi = parseLocalizedField(metadata)
 
-      opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi })
+      if(koodisto === KOODISTOT.OIVA_MUUT) {
+          rajoitukset.push({ arvo: arvo, tyyppi: tyyppi })
+      }
+      else {
+          opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi })
+      }
+
     })
 
+    if(rajoitukset.length === 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.RAJOITUS_TEKSTI_YKSIKKO.FI}
+    if(rajoitukset.length > 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.RAJOITUS_TEKSTI_MONIKKO.FI}
+    if(tyovoimaMaarays.length > 0) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.OPISKELIJAVUODET.EI_VAHIMMAISMAARAA.FI }
+
     returnobj.opiskelijavuodet = opiskelijavuodet
+    returnobj.rajoitukset = rajoitukset
 
     // kohde 5: Muut
   } else if (target === KOHTEET.MUUT) {
 
     let muut = []
+    let vaativat = []
+    let vankilat = []
+    let kokeilut = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi } = maarays
+      const { koodi, meta, koodiarvo } = maarays
       const { metadata } = koodi
 
-      if (koodi && metadata) {
+        if (koodi && metadata) {
 
-        const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
-        const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli') || 'Ei kuvausta saatavilla'
+            const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
+            const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli') || 'Ei kuvausta saatavilla'
 
-        muut.push({ tyyppi: type, kuvaus: desc })
+            switch (koodiarvo){
+
+                case "1": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "4": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "6": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+
+                case "7": {
+                    // TODO localization
+                    const { kokeilu } = meta
+                    const { fi } = kokeilu
+                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    break
+                }
+                case "8": {
+                    // TODO localization
+                    const { yhteistyösopimus } = meta
+                    const { fi } = yhteistyösopimus
+                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    break
+                }
+                case "9": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "10": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "11": {
+                    muut.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "2": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "3": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "12": {
+                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+
+                case "5": {
+                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+                case "13": {
+                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    break
+                }
+            }
       }
+
     })
 
     returnobj.muut = muut
+    returnobj.vaativat = vaativat
+    returnobj.vankilat = vankilat
+    returnobj.kokeilut = kokeilut
   }
 
   returnobj.heading = heading
@@ -228,6 +378,24 @@ function getMaaraysArvoArray(maaraykset) {
   })
 
   return arr
+}
+
+function getToimintaalueArvoArray(maaraykset) {
+    let arr = []
+
+    _.forEach(maaraykset, (maarays) => {
+        const { koodi, koodisto } = maarays
+
+        if (koodi) {
+            const { metadata } = koodi
+
+            if (metadata) {
+                arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto })
+            }
+        }
+    })
+
+    return arr
 }
 
 function sortTutkinnot(tutkintoArray) {
@@ -296,11 +464,42 @@ function sortTutkinnot(tutkintoArray) {
 
 function parseMaaraykset(maaraykset, kohdeTunniste) {
 
-  if (!maaraykset) {
-    return null
-  }
+    if (!maaraykset) {
+        return null
+    }
 
-  return _.filter(maaraykset, (maarays) => {
-    return maarays.kohde.tunniste === kohdeTunniste
-  })
+    if (kohdeTunniste != KOHTEET.KIELI) {
+        return _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === kohdeTunniste
+        })
+    }
+    else {
+
+        // oppilaitoksen opetuskieli
+        let opetuskielet = _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === KOHTEET.KIELI
+        })
+
+        // tutkintokielet
+        let tutkintokielet = _.filter(maaraykset, (maarays) => {
+            return maarays.kohde.tunniste === KOHTEET.TUTKINNOT
+        })
+
+        return _.concat(opetuskielet, tutkintokielet)
+    }
+}
+
+function checkTyovoima(maaraykset) {
+
+    if (!maaraykset) {
+        return null
+    }
+
+    // mikäli järjestäjällä on vain työvoimakoulutusta, palautetaan määräys opiskelijavuositekstiä varten
+    return _.filter(maaraykset, (maarays) => {
+        if(maarays.koodisto === KOODISTOT.OIVA_TYOVOIMAKOULUTUS)
+            return maarays.koodiarvo === "3"
+
+    })
+
 }

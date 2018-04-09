@@ -8,7 +8,8 @@ import MuuMaarays from './MuuMaarays'
 
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
-import { TUTKINTO_TEKSTIT } from "../modules/constants"
+import { TUTKINTO_TEKSTIT, LUPA_TEKSTIT } from "../modules/constants"
+import Tutkintokieli from "./Tutkintokieli";
 
 
 const SectionWrapper = styled.div`
@@ -73,6 +74,16 @@ const MuutMaaraykset = styled.div`
   margin-bottom: 30px;
 `
 
+const OpiskelijavuosiRajoitukset = styled.div`
+  margin-left: 30px;
+  margin-top: 20px;
+`
+
+const KohdeKuvaus = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`
+
 class LupaSection extends Component {
 
 
@@ -121,40 +132,65 @@ class LupaSection extends Component {
 
         // Kohde 2: Opetuskieli
         case KOHTEET.KIELI: {
-          const { kohdeKuvaus, kohdeArvot } = kohde
+          const { kohdeKuvaus, kohdeArvot, tutkinnotjakieletEn, tutkinnotjakieletSv, tutkinnotjakieletFi, tutkinnotjakieletRu } = kohde
 
-          return (
+            return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
               {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
+              <div>
+                <Tutkinnot>
+                    {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletEn.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletEn, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletSv.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletSv.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletSv, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletFi.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_MONIKKO.FI : null }
+                    {(tutkinnotjakieletFi.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletFi, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+
+                    {(tutkinnotjakieletRu.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_MONIKKO.FI : null }
+                    {(tutkinnotjakieletRu.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_YKSIKKO.FI : null }
+                    {_.map(tutkinnotjakieletRu, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+                </Tutkinnot>
+              </div>
+
             </SectionWrapper>
           )
         }
 
         // Kohde 3: Toiminta-alueet
         case KOHTEET.TOIMIALUE: {
-          const { kohdeKuvaus, kohdeArvot } = kohde
+          const { kohdeKuvaus, maakunnat, kunnat } = kohde
 
           return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
-              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
+              {_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}
+              {_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}
             </SectionWrapper>
           )
         }
 
         // Kohde 4: Opiskelijavuodet
         case KOHTEET.OPISKELIJAVUODET: {
-          const { opiskelijavuodet } = kohde
-
+          const { opiskelijavuodet, rajoitukset, kohdeKuvaus, eiMaaraysta } = kohde
           return (
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               {_.map(opiskelijavuodet, (obj, i) => {
+                const { arvo } = obj
+                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}</span>
+              })}
+              <KohdeKuvaus>{(ytunnus === '0244767-4') ? LUPA_TEKSTIT.OPISKELIJAVUODET.VALTIO.FI : kohdeKuvaus}</KohdeKuvaus>
+              {_.map(rajoitukset, (obj, i) => {
                 const { tyyppi, arvo } = obj
-                return <span key={i}>{tyyppi}:&nbsp;{arvo}</span>
+                return <OpiskelijavuosiRajoitukset key={i}>{tyyppi}&nbsp;{LUPA_TEKSTIT.OPISKELIJAVUODET.ENINTAAN.FI} {arvo} {LUPA_TEKSTIT.OPISKELIJAVUODET.OPISKELIJAVUOTTA.FI}</OpiskelijavuosiRajoitukset>
               })}
             </SectionWrapper>
           )
@@ -162,7 +198,7 @@ class LupaSection extends Component {
 
         // Kohde 5: Muut määräykset
         case KOHTEET.MUUT: {
-          const { muut } = kohde
+          const { muut, vaativat, vankilat, kokeilut } = kohde
 
           return (
             <SectionWrapper>
@@ -176,6 +212,38 @@ class LupaSection extends Component {
                   </div>
                 )
               })}
+
+              {(vaativat.length > 0) ? <h4><Bold>{vaativat[0].tyyppi}</Bold></h4> : null}
+              {_.map(vaativat, (vaativa, i) => {
+                    const { kuvaus } = vaativa
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+              })}
+              {(kokeilut.length > 0) ? <h4><Bold>{kokeilut[0].tyyppi}</Bold></h4> : null}
+                {_.map(kokeilut, (kokeilu, i) => {
+                    const { kuvaus } = kokeilu
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+                })}
+              {(vankilat.length > 0) ? <h4><Bold>{vankilat[0].tyyppi}</Bold></h4> : null}
+                {_.map(vankilat, (vankila, i) => {
+                    const { kuvaus } = vankila
+                    return (
+                        <div key={i}>
+                          <p>{kuvaus}</p>
+                        </div>
+                    )
+                })}
+
+                {(kokeilut.length === 0 && vankilat.length === 0 && vaativat.length === 0 && muut.length === 0)
+                    ? <p>{LUPA_TEKSTIT.MUUT.EI_MAARAYKSIA.FI}</p> : null}
+
             </SectionWrapper>
           )
         }
