@@ -259,7 +259,7 @@ class MuutospyyntoWizard extends Component {
                     onCancel={this.onCancel}
                     lupa={lupa}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
-                    fetchKoulutukset={this.props.fetchKoulutukset}
+                    fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
                   />
                 )}
                 {page === 4 && (
