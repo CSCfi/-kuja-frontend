@@ -7,7 +7,7 @@ import CasAuthenticated from 'routes/Login/containers/CasAuthenticated'
 
 import Home from 'routes/Home'
 import Jarjestajat from 'routes/Jarjestajat'
-import Esittelijat from 'routes/Esittelijat'
+import Asiat from 'routes/Asiat'
 import Login from 'routes/Login'
 import Logout from 'routes/Logout'
 import Jarjestaja from '../routes/Jarjestajat/Jarjestaja'
@@ -21,7 +21,7 @@ const appRoutes = _.union(
   Logout,
   Jarjestaja,
   Jarjestajat,
-  Esittelijat
+  Asiat
     // JarjestajaMuutospyynto
 )
 

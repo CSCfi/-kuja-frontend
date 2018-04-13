@@ -9,7 +9,7 @@ import { MEDIA_QUERIES } from "../../../modules/styles"
 class MuutospyynnotList extends Component {
   renderMuutospyynnot() {
     const sorted = _.sortBy(this.props.muutospyynnot, (muutospyynto) => { return muutospyynto.hakupvm })
-    return _.map(sorted, muutospyynto => <MuutospyyntoItem muutospyynto={muutospyynto} key={muutospyynto.id} />)
+    return _.map(sorted, muutospyynto => <MuutospyyntoItem muutospyynto={muutospyynto} key={muutospyynto.uuid} />)
   }
 
   render() {

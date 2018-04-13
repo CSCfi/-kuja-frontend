@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
-import { fetchMuutospyynnotForEsittelija } from "routes/Esittelijat/modules/muutospyynnot"
-import Esittelijat from '../components/Esittelijat'
+import { fetchMuutospyynnotForEsittelija } from "routes/Asiat/modules/muutospyynnot"
+import AvoimetAsiat from '../components/AvoimetAsiat'
 
 const mapStateToProps = (state) => {
     return {
@@ -16,4 +16,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Esittelijat)
+export default connect(mapStateToProps, mapDispatchToProps)(AvoimetAsiat)
