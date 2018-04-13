@@ -88,7 +88,6 @@ class TutkintoList extends Component {
           <Arrow src={arrow} alt="Koulutusala" rotated={!this.state.isHidden} />
           <Span>{alaKoodiArvo}</Span>
           <Span>{nimi}</Span>
-          <Span>{`( ${koulutukset.length} kpl )`}</Span>
           {muutokset.length > 0
             ? <SpanMuutos>Muutokset:&nbsp;<Span color={COLORS.OIVA_PURPLE}>{muutokset.length}</Span><Span onClick={event => {event.stopPropagation();this.removeChanges(muutokset, editValues, fields, alaKoodiArvo);}}>Poista muutokset</Span></SpanMuutos>
             : null
