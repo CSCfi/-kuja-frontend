@@ -50,7 +50,7 @@ const WizardHeader = styled.div`
 const WizardContent = styled.div`
   background-color: ${COLORS.WHITE};
   padding: 30px;
-  border: 1px solid ${COLORS.BORDER_GRAY};
+  //border: 1px solid ${COLORS.BORDER_GRAY};
   position: relative;
   z-index: 1;
 `
@@ -227,21 +227,22 @@ class MuutospyyntoWizard extends Component {
 
             <WizardHeader>
               <Container maxWidth="1085px" color={COLORS.BLACK}>
-                <Phase number="1" text="Valitse päätöskierros" activePage={page} handleClick={(number) => this.changePhase(number)} />
+                <Phase number="1" text="Muutokset" activePage={page} handleClick={(number) => this.changePhase(number)} />
                 <Phase number="2" text="Perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
-                <Phase number="3" text="Muutokset" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
-                <Phase number="4" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(4) === -1} handleClick={(number) => this.changePhase(number)} />
+                <Phase number="3" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
               </Container>
             </WizardHeader>
 
             <ContentContainer maxWidth="1085px" margin="50px auto">
               <WizardContent>
                 {page === 1 && (
-                  <MuutospyyntoWizardPaatoskierros
+                  <MuutospyyntoWizardTutkinnot
+                    previousPage={this.previousPage}
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
-                    paatoskierrokset={paatoskierrokset.data}
                     lupa={lupa}
+                    fetchKoulutusalat={this.props.fetchKoulutusalat}
+                    fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
                   />
                 )}
                 {page === 2 && (
@@ -253,16 +254,6 @@ class MuutospyyntoWizard extends Component {
                   />
                 )}
                 {page === 3 && (
-                  <MuutospyyntoWizardTutkinnot
-                    previousPage={this.previousPage}
-                    onSubmit={this.nextPage}
-                    onCancel={this.onCancel}
-                    lupa={lupa}
-                    fetchKoulutusalat={this.props.fetchKoulutusalat}
-                    fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
-                  />
-                )}
-                {page === 4 && (
                   <MuutospyyntoWizardYhteenveto
                     previousPage={this.previousPage}
                     onCancel={this.onCancel}
