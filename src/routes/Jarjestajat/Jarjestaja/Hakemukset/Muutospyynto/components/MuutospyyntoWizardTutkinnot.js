@@ -5,8 +5,7 @@ import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
 import { WizButton } from "./MuutospyyntoWizard"
-import KoulutusAlaList from './KoulutusAlaList'
-import LisaaKoulutusAlaList from './LisaaKoulutusAlaList'
+import TutkintoList from './TutkintoList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
 import {
@@ -17,11 +16,7 @@ import {
 import {
   Kohdenumero,
   Otsikko,
-  ControlsWrapper,
   BottomWrapper,
-  AddWrapper,
-  ScrollWrapper,
-  AddContent,
   Row,
   Kohde
 } from './MuutospyyntoWizardComponents'
@@ -29,16 +24,6 @@ import {
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      isRemoving: false,
-      isAdding: false
-    }
-
-    this.renderRemoveTutkinnot = this.renderRemoveTutkinnot.bind(this)
-    this.toggleIsRemoving = this.toggleIsRemoving.bind(this)
-    this.toggleIsAdding = this.toggleIsAdding.bind(this)
-    this.renderAddKoulutuksia = this.renderAddKoulutuksia.bind(this)
   }
 
   componentWillMount() {
@@ -46,43 +31,32 @@ class MuutospyyntoWizardTutkinnot extends Component {
       this.props.fetchKoulutusalat()
         .then(() => {
           if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
-            this.props.koulutusalat.data.forEach(ala => {
-              if (ala.koodiArvo !== '00' && ala.koodiArvo !== '99') {
-                this.props.fetchKoulutukset(ala.koodiArvo, ala.metadata)
-              }
-            })
+            this.props.fetchKoulutuksetAll()
           }
         })
     }
   }
 
-  toggleIsRemoving(event) {
-    if (event) {
-      event.preventDefault()
-    }
-    this.setState({ isRemoving: !this.state.isRemoving })
-  }
-
-  toggleIsAdding(event) {
-    if (event) {
-      event.preventDefault()
-    }
-    this.setState({ isAdding: !this.state.isAdding })
-  }
-
   render() {
-    const { handleSubmit, lupa, poistettavatValue, lisattavatValue, onCancel, previousPage } = this.props
-    const { isRemoving, isAdding } = this.state
+    const { handleSubmit, lupa, tutkintomuutoksetValue, onCancel, previousPage } = this.props
     const { kohteet } = lupa
-    const data = this.props.koulutukset.treedata
-
-    const removeBool = poistettavatValue === undefined || poistettavatValue.length === 0
-    const addBool = lisattavatValue === undefined || lisattavatValue.length === 0
+    const koulutusdata = this.props.koulutukset.koulutusdata
+    const tutkintomuutoksetBool = tutkintomuutoksetValue === undefined || tutkintomuutoksetValue.length === 0
 
     let isDisabled = true
+    let hasAdditions = false
+    let hasRemovals = false
 
-    if ((removeBool === false) ||(addBool === false)) {
+    if (!tutkintomuutoksetBool) {
       isDisabled = false
+
+      tutkintomuutoksetValue.forEach(muutos => {
+        if (muutos.type === "addition") {
+          hasAdditions = true
+        } else if (muutos.type === "removal") {
+          hasRemovals = true
+        }
+      })
     }
 
     return (
@@ -90,31 +64,25 @@ class MuutospyyntoWizardTutkinnot extends Component {
         <form onSubmit={handleSubmit}>
           <Row>
             <FieldArray
-              name="poistettavat"
+              name="tutkintomuutokset"
               kohde={kohteet[1]}
-              isRemoving={isRemoving}
-              poistettavatValue={poistettavatValue}
               lupa={lupa}
-              component={this.renderRemoveTutkinnot}
+              data={koulutusdata}
+              editValue={tutkintomuutoksetValue}
+              component={this.renderTutkinnot}
             />
-
-            {isAdding
-              ?
-              <FieldArray
-                name="lisattavat"
-                data={data}
-                isAdding={isAdding}
-                lisattavatValue={lisattavatValue}
-                component={this.renderAddKoulutuksia}
-              />
-              : null
-            }
           </Row>
 
           <Row marginLeft="30px">
             <h3>Lisätyt tutkinnot</h3>
-            {lisattavatValue && lisattavatValue.length > 0
-              ? lisattavatValue.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimiByKoodiarvo(tutkinto)}</div>)
+            {hasAdditions
+              ? tutkintomuutoksetValue.map(muutos => {
+                if (muutos.type === "addition") {
+                  return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+                } else {
+                  return null
+                }
+              })
               : 'Ei lisättäviä tutkintoja'
             }
           </Row>
@@ -122,8 +90,14 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <Row marginLeft="30px">
             <h3>Poistettavat tutkinnot</h3>
             <div>
-              {poistettavatValue && poistettavatValue.length > 0
-                ? poistettavatValue.map(maaraysId => <div key={maaraysId}>{getTutkintoKoodiByMaaraysId(maaraysId)} {getTutkintoNimiByMaaraysId(maaraysId)}</div>)
+              {hasRemovals
+                ? tutkintomuutoksetValue.map(muutos => {
+                  if (muutos.type === "removal") {
+                    return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+                  } else {
+                    return null
+                  }
+                })
                 : 'Ei poistettavia tutkintoja'
               }
             </div>
@@ -133,7 +107,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
             <WizButton type="button" onClick={previousPage}>
               Edellinen
             </WizButton>
-            <WizButton type="submit" disabled={isDisabled || isRemoving}>Seuraava</WizButton>
+            <WizButton type="submit" disabled={isDisabled}>Seuraava</WizButton>
             <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
           </BottomWrapper>
         </form>
@@ -141,135 +115,41 @@ class MuutospyyntoWizardTutkinnot extends Component {
     )
   }
 
-  renderRemoveTutkinnot(props) {
-    let { fields } = props
-    const { isRemoving, poistettavatValue, kohde, lupa } = props
-    const { kohdeid, heading, maaraykset, muutMaaraykset } = kohde
+  renderTutkinnot(props) {
+
+    let { fields, data } = props
+    const { kohde, lupa, editValue } = props
+    const { headingNumber, heading, maaraykset, muutMaaraykset } = kohde
+
+    data = _.sortBy(data, d => {
+      return d.koodiArvo
+    })
 
     return (
-      <div>
-        {isRemoving
-          ?
-            <AddWrapper>
-              <ScrollWrapper>
-                <ContentContainer>
-                  <AddContent>
-                    <Row>
-                      <h2>Poista tutkintoja</h2>
-                    </Row>
-
-                    <Row>
-                      <WizButton
-                        disabled={poistettavatValue === undefined || poistettavatValue.length === 0}
-                        bgColor={COLORS.OIVA_GREEN}
-                        onClick={this.toggleIsRemoving}
-                      >
-                        Poista valitut
-                      </WizButton>
-                      <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => {
-                        e.preventDefault()
-                        fields.removeAll()
-                        this.toggleIsRemoving()
-                      }}
-                      >
-                        Peruuta
-                      </WizButton>
-                    </Row>
-
-                    <Row>
-                      {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
-                        return (
-                          <KoulutusAlaList
-                            key={koodi}
-                            koodi={koodi}
-                            nimi={nimi}
-                            koulutusalat={koulutusalat}
-                            fields={fields}
-                            isEditing={isRemoving}
-                            editValues={poistettavatValue}
-                            lupa={lupa}
-                          />
-                        )
-                      })}
-                    </Row>
-                  </AddContent>
-                </ContentContainer>
-              </ScrollWrapper>
-            </AddWrapper>
-          :
-            <Kohde>
-              <Kohdenumero>{kohdeid}.</Kohdenumero>
-              <Otsikko>{heading}</Otsikko>
-              <ControlsWrapper>
-                <WizButton onClick={this.toggleIsAdding}>Lisää tutkintoja</WizButton>
-                <WizButton bgColor={COLORS.OIVA_RED} onClick={this.toggleIsRemoving}>Poista tutkintoja</WizButton>
-              </ControlsWrapper>
-              {maaraykset.map(({ koodi, nimi, koulutusalat }) => {
-                return (
-                  <KoulutusAlaList
-                    key={koodi}
-                    koodi={koodi}
-                    nimi={nimi}
-                    koulutusalat={koulutusalat}
-                    fields={fields}
-                    isEditing={isRemoving}
-                    editValues={poistettavatValue}
-                    lupa={lupa}
-                  />
-                )
-              })}
-            </Kohde>
-        }
-      </div>
-    )
-  }
-
-  renderAddKoulutuksia(props) {
-    const { data, lisattavatValue } = props
-    let { fields } = props
-
-    return (
-      <AddWrapper>
-        <ScrollWrapper>
-
-
+      <Kohde>
         <ContentContainer>
-          <AddContent>
-            <Row>
-              <h2>Lisää koulutuksia</h2>
-            </Row>
-            <Row>
-              <WizButton disabled={lisattavatValue === undefined || lisattavatValue.length === 0} onClick={this.toggleIsAdding}>Lisää valitut</WizButton>
-              <WizButton
-                bgColor={COLORS.OIVA_RED}
-                onClick={(e) => {
-                  e.preventDefault()
-                  fields.removeAll()
-                  this.toggleIsAdding()
-                }}
-              >
-                Peruuta
-              </WizButton>
-            </Row>
-
+          <Kohdenumero>{headingNumber}.</Kohdenumero>
+          <Otsikko>{heading}</Otsikko>
+          <Row>
             {_.map(data, (koulutusala, i) => {
-              const { koodiarvo, metadata, koulutukset } = koulutusala
+              const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo
+              const { metadata, koulutukset } = koulutusala
               const nimi = parseLocalizedField(metadata)
               return (
-                  <LisaaKoulutusAlaList
-                    key={i}
-                    koodiarvo={koodiarvo}
-                    nimi={nimi}
-                    koulutukset={koulutukset}
-                    editValues={lisattavatValue}
-                    fields={fields}
-                  />
-                )
+                <TutkintoList
+                  key={i}
+                  koodiarvo={koodiarvo}
+                  nimi={nimi}
+                  koulutukset={koulutukset}
+                  maaraykset={maaraykset}
+                  editValues={editValue}
+                  fields={fields}
+                />
+              )
             })}
-          </AddContent>
+          </Row>
         </ContentContainer>
-        </ScrollWrapper>
-      </AddWrapper>
+      </Kohde>
     )
   }
 }
@@ -277,12 +157,10 @@ class MuutospyyntoWizardTutkinnot extends Component {
 const selector = formValueSelector('uusiHakemus')
 
 MuutospyyntoWizardTutkinnot = connect(state => {
-  const poistettavatValue = selector(state, 'poistettavat')
-  const lisattavatValue = selector(state, 'lisattavat')
+  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
 
   return {
-    poistettavatValue,
-    lisattavatValue,
+    tutkintomuutoksetValue,
     koulutusalat: state.koulutusalat,
     koulutukset: state.koulutukset
   }

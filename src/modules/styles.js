@@ -19,6 +19,7 @@ import 'static/fonts/GothamNarrow-Light.otf'
 export const COLORS = {
   OIVA_GREEN: '#5A8A70',
   OIVA_RED: '#cc3300',
+  OIVA_PURPLE: '#9B26B6',
   DARK_GRAY: '#525252',
   BLACK: '#000000',
   WHITE: '#FFFFFF',

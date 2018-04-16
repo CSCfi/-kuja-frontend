@@ -43,7 +43,7 @@ const Muutosperustelu = ({ muutosperustelu, muuperustelu }) => {
 }
 
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, muuperustelu, paatoskierros, poistettavat, lisattavat, onCancel, paatoskierrokset, muutosperustelut } = props
+  const { handleSubmit, muutosperustelu, muuperustelu, paatoskierros, tutkintomuutokset, onCancel, paatoskierrokset, muutosperustelut } = props
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
     return String(pkierros.uuid) === String(paatoskierros)
@@ -52,6 +52,19 @@ let MuutospyyntoWizardYhteenveto = props => {
   const muutosperusteluObj = _.find(muutosperustelut.data, mperustelu => {
     return String(mperustelu.koodiArvo) === String(muutosperustelu)
   })
+
+  let hasAdditions = false
+  let hasRemovals = false
+
+  if (tutkintomuutokset) {
+    tutkintomuutokset.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasAdditions = true
+      } else if (muutos.type === "removal") {
+        hasRemovals = true
+      }
+    })
+  }
 
   return (
     <div>
@@ -76,8 +89,14 @@ let MuutospyyntoWizardYhteenveto = props => {
       <div>
         <h3>Lisättävät tutkinnot</h3>
         <div>
-          {lisattavat
-            ? lisattavat.map(tutkinto => <div key={tutkinto}>{tutkinto} {getTutkintoNimiByKoodiarvo(tutkinto)}</div>)
+          {hasAdditions
+            ? tutkintomuutokset.map(muutos => {
+              if (muutos.type === "addition") {
+                return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+              } else {
+                return null
+              }
+            })
             : 'Ei lisättäviä tutkintoja'
           }
         </div>
@@ -86,8 +105,14 @@ let MuutospyyntoWizardYhteenveto = props => {
       <div>
         <h3>Poistettavat tutkinnot</h3>
         <div>
-          {poistettavat
-            ? poistettavat.map(maaraysId => <div key={maaraysId}>{getTutkintoKoodiByMaaraysId(maaraysId)} {getTutkintoNimiByMaaraysId(maaraysId)}</div>)
+          {hasRemovals
+            ? tutkintomuutokset.map(muutos => {
+              if (muutos.type === "removal") {
+                return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+              } else {
+                return null
+              }
+            })
             : 'Ei poistettavia tutkintoja'
           }
         </div>
@@ -116,16 +141,14 @@ export default connect(state => {
   const muutosperustelu = selector(state, 'muutosperustelu')
   const muuperustelu = selector(state, 'muuperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
-  const poistettavat = selector(state, 'poistettavat')
-  const lisattavat = selector(state, 'lisattavat')
+  const tutkintomuutokset = selector(state, 'tutkintomuutokset')
 
   return {
     formValues: state.form.uusiHakemus.values,
     muutosperustelu,
     muuperustelu,
     paatoskierros,
-    poistettavat,
-    lisattavat,
+    tutkintomuutokset,
     muutosperustelut: state.muutosperustelut,
     paatoskierrokset: state.paatoskierrokset
   }

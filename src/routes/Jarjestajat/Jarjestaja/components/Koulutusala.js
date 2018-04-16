@@ -43,11 +43,11 @@ const SubAlaWrapper = styled.div`
 `
 
 const SubAla = (props) => {
-  const { nimi, tutkinnot, renderCheckbox } = props
+  const { nimi, koulutukset, renderCheckbox } = props
   return (
     <SubAlaWrapper>
       <div>{nimi}</div>
-      {_.map(tutkinnot, (tutkinto, i) => {
+      {_.map(koulutukset, (tutkinto, i) => {
         return <TutkintoContainer {...tutkinto} key={i} renderCheckbox={renderCheckbox} />
       })}
     </SubAlaWrapper>
@@ -72,7 +72,7 @@ class Koulutusala extends Component {
     let count = 0
 
     _.forEach(koulutusalat, (ala) => {
-      count += ala.tutkinnot.length
+      count += ala.koulutukset.length
     })
 
     return count

@@ -3,6 +3,14 @@ import dateformat from 'dateformat'
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
+export function getKoulutusAlat() {
+  const state = store.getState()
+
+  if (state.koulutusalat && state.koulutusalat.fetched) {
+    return state.koulutusalat.data
+  }
+}
+
 export function getTutkintoNimiByKoodiarvo(koodi) {
   const state = store.getState()
 

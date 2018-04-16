@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import { parseKoulutusalat } from "./koulutusParser"
 
 // Constants
 export const FETCH_KOULUTUSALAT_START = 'FETCH_KOULUTUSALAT_START'
@@ -41,7 +42,7 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: parseKoulutusalat(action.payload)
     }
   },
   [FETCH_KOULUTUSALAT_FAILURE] : (state, action) => {

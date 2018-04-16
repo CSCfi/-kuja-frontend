@@ -422,7 +422,7 @@ function sortTutkinnot(tutkintoArray) {
       koulutusalaObj[koulutustyyppikoodi] = {
         koodi: koulutustyyppikoodi,
         nimi: koulutustyyppi,
-        tutkinnot: [tutkintoObj]
+        koulutukset: [tutkintoObj]
       }
       obj[alakoodi] = {koodi: alakoodi, nimi: alanimi, koulutusalat: koulutusalaObj}
     } else {
@@ -435,11 +435,11 @@ function sortTutkinnot(tutkintoArray) {
         ala.koulutusalat[koulutustyyppikoodi] = {
           koodi: koulutustyyppikoodi,
           nimi: koulutustyyppi,
-          tutkinnot: [tutkintoObj]
+          koulutukset: [tutkintoObj]
         }
       } else {
-        // koulutusala löytyi koulutusaloista, lisätään tutkinto koulutusalan tutkintoihib
-        koulAlaObj.tutkinnot.push(tutkintoObj)
+        // koulutusala löytyi koulutusaloista, lisätään tutkinto koulutusalan tutkintoihin
+        koulAlaObj.koulutukset.push(tutkintoObj)
       }
     }
   })
@@ -452,7 +452,7 @@ function sortTutkinnot(tutkintoArray) {
   // Järjestetään objektit numerojärjestykseen
   obj = _.sortBy(obj, (ala) => {
     _.forEach(ala.koulutusalat, (koulutusala) => {
-      koulutusala.tutkinnot = _.sortBy(koulutusala.tutkinnot, (tutkinto) => {
+      koulutusala.koulutukset = _.sortBy(koulutusala.koulutukset, (tutkinto) => {
         return tutkinto.koodi
       })
     })
