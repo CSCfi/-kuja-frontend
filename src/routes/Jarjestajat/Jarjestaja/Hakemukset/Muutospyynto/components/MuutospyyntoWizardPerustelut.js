@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Field, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
+import { Separator, H3, SelectStyle, Input } from './MuutospyyntoWizardComponents'
 
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { COLORS } from "../../../../../../modules/styles"
@@ -11,7 +12,7 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
     <label>{label}</label>
     <div>
-      <input {...input} placeholder={label} type={type} />
+      <Input {...input} placeholder={label} type={type} />
       {touched && error && <span>{error}</span>}
     </div>
   </div>
@@ -20,34 +21,40 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error } }) => {
   return (
     <div>
-      <select {...input}>
-        <option value="">Valitse </option>
-        {muutosperustelut.map(perustelu => {
-          const { koodiArvo, metadata } = perustelu
-          const nimi = parseLocalizedField(metadata)
-          return (
-            <option value={koodiArvo} key={koodiArvo}>
-              {nimi}
-            </option>
-          )
-        })}
-      </select>
+      <SelectStyle>
+        <select {...input}>
+          <option value="">Valitse </option>
+          {muutosperustelut.map(perustelu => {
+            const { koodiArvo, metadata } = perustelu
+            const nimi = parseLocalizedField(metadata)
+            return (
+              <option value={koodiArvo} key={koodiArvo}>
+                {nimi}
+              </option>
+            )
+          })}
+        </select>
+      </SelectStyle>
       {touched && error && <span>{error}</span>}
     </div>
   )
 }
 
-
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, error, onCancel } = props
+  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, error, onCancel } = props
 
   return (
     <div>
-      <h3>Valitse muutospyynnön perustelut</h3>
+      <h2>Perustele muutosehdotukset</h2>
+      <p>&lt;Tähän tulee lyhyt perusteluohje eli suuntaviivat sille mitä pitää tehdä.&gt;</p>
+
+      <Separator/>
+
+      <H3>Muutospyynnön taustalla olevat syyt</H3>
       <form onSubmit={handleSubmit}>
         <SelectWrapper>
           <div>
-            <label>Muutosperustelu</label>
+            <label>Mikä on aiheuttanut muutostarpeen?</label>
             <Field
               name="muutosperustelu"
               muutosperustelut={muutosperustelut}
@@ -69,11 +76,13 @@ let MuutospyyntoWizardPerustelut = props => {
           }
         </SelectWrapper>
 
+        <Separator/>
+
         <div>
           <WizButton type="button" onClick={previousPage}>
             Edellinen
           </WizButton>
-          <WizButton type="submit" disabled={muutosperusteluValue === undefined || error}>
+          <WizButton type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined) || error}>
             Seuraava
           </WizButton>
           <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
@@ -87,9 +96,13 @@ const selector = formValueSelector('uusiHakemus')
 
 MuutospyyntoWizardPerustelut = connect(state => {
   const muutosperusteluValue = selector(state, 'muutosperustelu')
+  const muuperusteluValue = selector(state, 'muuperustelu')
+  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
 
   return {
-    muutosperusteluValue
+    muutosperusteluValue,
+    muuperusteluValue,
+    tutkintomuutoksetValue
   }
 })(MuutospyyntoWizardPerustelut)
 
