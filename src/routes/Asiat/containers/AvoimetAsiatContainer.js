@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { fetchMuutospyynnotForEsittelija } from "routes/Asiat/modules/muutospyynnot"
+import { fetchAvoimetAsiat } from "routes/Asiat/modules/muutospyynnot"
 import AvoimetAsiat from '../components/AvoimetAsiat'
 
 const mapStateToProps = (state) => {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchMuutospyynnotForEsittelija: (esittelija, query) => dispatch(fetchMuutospyynnotForEsittelija(esittelija, query))
+        fetchAvoimetAsiat: () => dispatch(fetchAvoimetAsiat())
     }
 }
 

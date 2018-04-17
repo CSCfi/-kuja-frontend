@@ -6,11 +6,11 @@ export const FETCH_MUUTOSPYYNNOT_SUCCESS = 'FETCH_MUUTOSPYYNNOT_SUCCESS'
 export const FETCH_MUUTOSPYYNNOT_FAILURE = 'FETCH_MUUTOSPYYNNOT_FAILURE'
 
 // Actions
-export function fetchMuutospyynnotForEsittelija(esittelija, query) {
+export function fetchAvoimetAsiat() {
   return (dispatch) => {
     dispatch({ type: FETCH_MUUTOSPYYNNOT_START })
 
-    const request = fetch(`${API_BASE_URL}/muutospyynnot/esittelija/${esittelija}${query ? query : ''}`)
+    const request = fetch(`${API_BASE_URL}/muutospyynnot/avoimet/`)
 
     request
       .then((response) => response.json())
@@ -21,8 +21,40 @@ export function fetchMuutospyynnotForEsittelija(esittelija, query) {
   }
 }
 
+export function fetchValmistelussaAsiat() {
+    return (dispatch) => {
+        dispatch({ type: FETCH_MUUTOSPYYNNOT_START })
+
+        const request = fetch(`${API_BASE_URL}/muutospyynnot/valmistelussa/`)
+
+        request
+            .then((response) => response.json())
+            .then((data) => {
+                dispatch({ type: FETCH_MUUTOSPYYNNOT_SUCCESS, payload: data })
+            })
+            .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNNOT_FAILURE, payload: err }))
+    }
+}
+
+export function fetchPaatetytAsiat() {
+    return (dispatch) => {
+        dispatch({ type: FETCH_MUUTOSPYYNNOT_START })
+
+        const request = fetch(`${API_BASE_URL}/muutospyynnot/paatetyt/`)
+
+        request
+            .then((response) => response.json())
+            .then((data) => {
+                dispatch({ type: FETCH_MUUTOSPYYNNOT_SUCCESS, payload: data })
+            })
+            .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNNOT_FAILURE, payload: err }))
+    }
+}
+
 export const actions = {
-  fetchMuutospyynnotForEsittelija
+    fetchAvoimetAsiat,
+    fetchValmistelussaAsiat,
+    fetchPaatetytAsiat
 }
 
 // Action handlers

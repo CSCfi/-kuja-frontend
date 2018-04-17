@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 class PaatetytAsiat extends Component {
 
     componentWillMount() {
-        this.props.fetchMuutospyynnotForEsittelija("oiva-sanni")
+        this.props.fetchPaatetytAsiat()
     }
 
     render() {

@@ -15,12 +15,9 @@ import {ROLE_ESITTELIJA} from "../../../modules/constants";
 
 
 class Asiat extends Component {
-    componentWillMount() {
-        this.props.fetchMuutospyynnotForEsittelija("oiva-sanni")
-    }
 
     render() {
-        const { match, muutospyynnot } = this.props
+        const { match } = this.props
 
 
         if (match.params) {
