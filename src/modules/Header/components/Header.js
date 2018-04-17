@@ -56,7 +56,7 @@ class Header extends Component {
           <HeaderBarInner>
             <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
             <LinkItem to="/jarjestajat">Koulutuksen järjestäjät</LinkItem>
-            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/esittelijat" >Käsittely</LinkItem>) : null}
+            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/asiat" >Asiat</LinkItem>) : null}
             { /*<LinkItem to="/tilastot-raportit">Tilastot ja raportit</LinkItem> */}
           </HeaderBarInner>
         </HeaderBar>
