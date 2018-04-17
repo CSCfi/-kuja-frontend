@@ -128,6 +128,16 @@ class TutkintoList extends Component {
                   }
                 })
               })
+            } else {
+              // Tarkastetaan myös tilanne, jossa koulutusalalla ei ollut yhtään tutkintoa luvassa, mutta alalle on lisätty tutkintoja
+              if (editValues) {
+                editValues.forEach(val => {
+                  if (val.koodiarvo === koodiarvo) {
+                    val.type === "addition" ? isAdded = true : null
+                    val.type === "removal" ? isRemoved = true : null
+                  }
+                })
+              }
             }
 
             let customClassName = ""
@@ -180,7 +190,7 @@ class TutkintoList extends Component {
                 <Nimi>{nimiText}</Nimi>
               </TutkintoWrapper>
             )
-          } )}
+          })}
         </KoulutusalaListWrapper>
         }
       </Wrapper>

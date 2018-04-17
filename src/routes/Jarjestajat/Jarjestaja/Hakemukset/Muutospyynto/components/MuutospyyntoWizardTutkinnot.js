@@ -117,7 +117,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   renderTutkinnot(props) {
-
     let { fields, data } = props
     const { kohde, lupa, editValue } = props
     const { headingNumber, heading, maaraykset, muutMaaraykset } = kohde
