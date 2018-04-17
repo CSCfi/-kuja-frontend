@@ -75,16 +75,11 @@ const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta: { touched, err
     return null
   }
 
-  console.log(fields)
-  console.log(tyyppi)
-
   return (
     fields.map((mutos, index) => {
       let muutos = fields.get(index)
-      console.log(muutos)
       const { koodiarvo, nimi, type, perustelu } = muutos
       const helpText = type === "addition" ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISAYS_OHJE.FI : MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTO_OHJE.FI
-      console.log(perustelu)
       if (type === tyyppi) {
         return (
           <MuutosWrapper key={koodiarvo}>
@@ -101,7 +96,7 @@ const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta: { touched, err
                   let obj = fields.get(i)
                   obj.perustelu = e.target.value
                   fields.remove(i)
-                  fields.push(obj)
+                  fields.insert(i, obj)
                 }}
               >{perustelu !== null ? perustelu : null}</textarea>
               {touched && error && <span>{error}</span>}
@@ -148,9 +143,6 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 let MuutospyyntoWizardPerustelut = props => {
   const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, error, onCancel } = props
 
-  console.log('tutkintomuutokset')
-  console.log(tutkintomuutoksetValue)
-
   return (
     <div>
       <h2>{MUUTOS_WIZARD_TEKSTIT.PERUSTELUT_PAAOTSIKKO.FI}</h2>
@@ -195,8 +187,6 @@ let MuutospyyntoWizardPerustelut = props => {
             component={renderMuutoksetByType}
           />
 
-
-
         </TutkintoMuutoksetWrapper>
 
         <Separator/>
@@ -232,8 +222,7 @@ const selector = formValueSelector('uusiHakemus')
 MuutospyyntoWizardPerustelut = connect(state => {
   const muutosperusteluValue = selector(state, 'muutosperustelu')
   const muuperusteluValue = selector(state, 'muuperustelu')
-  const tutkintomuutoksetValue = _.sortBy(selector(state, 'tutkintomuutokset'), muutos => { return muutos.koodiarvo })
-  // const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
+  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
 
   return {
     muutosperusteluValue,
