@@ -1,9 +1,7 @@
 const validate = values => {
   const errors = {}
 
-  if (!values.paatoskierros) {
-    errors.paatoskierros = 'Päätöskierros täytyy valita'
-  }
+  console.log(values)
 
   if (!values.muutosperustelu) {
     errors.muutosperustelu = 'Muutospyynnölle täytyy valita perustelu'

@@ -159,12 +159,12 @@ class TutkintoList extends Component {
                           }
                         } else {
                           // Tutkinto ei ollut luvassa --> lisätään se formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "addition", isInLupa: isInLupa })
+                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "addition", isInLupa: isInLupa, perustelu: null })
                         }
                       } else {
                         if (isInLupa) {
                           // Tutkinto oli luvassa --> lisätään muutos formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "removal", isInLupa: isInLupa })
+                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "removal", isInLupa: isInLupa, perustelu: null })
                         } else {
                           // Tutkinto ei ollut luvassa --> poistetaan muutos formista
                           const i = this.getIndex(editValues, koodiarvo)
