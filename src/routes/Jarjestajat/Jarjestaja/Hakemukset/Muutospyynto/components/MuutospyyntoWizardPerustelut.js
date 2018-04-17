@@ -70,10 +70,7 @@ const getIndex = (values, koodiarvo) => {
   return i
 }
 
-const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta: { touched, error } }) => {
-  if (!muutokset || !tyyppi) {
-    return null
-  }
+const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta }) => {
 
   return (
     fields.map((mutos, index) => {
@@ -99,7 +96,6 @@ const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta: { touched, err
                   fields.insert(i, obj)
                 }}
               >{perustelu !== null ? perustelu : null}</textarea>
-              {touched && error && <span>{error}</span>}
             </MuutosBody>
           </MuutosWrapper>
         )
@@ -141,7 +137,7 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 }
 
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, error, onCancel } = props
+  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, formSyncErrors, onCancel } = props
 
   return (
     <div>
@@ -201,13 +197,11 @@ let MuutospyyntoWizardPerustelut = props => {
           />
         </TutkintoMuutoksetWrapper>
 
-        {JSON.stringify(tutkintomuutoksetValue)}
-
         <div>
           <WizButton type="button" onClick={previousPage}>
             Edellinen
           </WizButton>
-          <WizButton type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined) || error}>
+          <WizButton type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined)}>
             Seuraava
           </WizButton>
           <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>

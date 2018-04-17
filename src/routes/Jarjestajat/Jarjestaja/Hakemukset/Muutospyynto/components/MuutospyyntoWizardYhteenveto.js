@@ -16,6 +16,7 @@ import {
   getTutkintoNimiByMaaraysId
 } from "../modules/koulutusUtil"
 import { createMuutospyynto } from "../modules/muutospyynto"
+import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -68,52 +69,52 @@ let MuutospyyntoWizardYhteenveto = props => {
 
   return (
     <div>
-      <h2>Yhteenveto</h2>
+      <h2>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
 
       <div>
-        <h3>Päätöskierros</h3>
+        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.HEADING.FI}</h3>
         {paatoskierrosObj
           ? <Paatoskierros paatoskierros={paatoskierrosObj} />
-          : <div>Paatoskierroksen tietoja ei voitu ladata</div>
+          : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.TIETOJEN_LATAUS_VIRHE.FI}</div>
         }
       </div>
 
       <div>
-        <h3>Muutoksen perustelu</h3>
+        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.MUUTOSPERUSTELU.HEADING.FI}</h3>
         {muutosperusteluObj
           ? <Muutosperustelu muutosperustelu={muutosperusteluObj} muuperustelu={muuperustelu} />
-          : <div>Muutosperustelun tietoja ei voitu ladata</div>
+          : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.MUUTOSPERUSTELU.TIETOJEN_LATAUS_VIRHE.FI}</div>
         }
       </div>
 
       <div>
-        <h3>Lisättävät tutkinnot</h3>
+        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.LISATTAVAT.HEADING.FI}</h3>
         <div>
           {hasAdditions
             ? tutkintomuutokset.map(muutos => {
-              if (muutos.type === "addition") {
-                return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
-              } else {
-                return null
-              }
-            })
-            : 'Ei lisättäviä tutkintoja'
+                if (muutos.type === "addition") {
+                  return <div key={muutos.koodiarvo}>{`${muutos.koodiarvo} ${muutos.nimi} ${MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.PERUSTELU.FI} ${muutos.perustelu}`}</div>
+                } else {
+                  return null
+                }
+              })
+            : MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.LISATTAVAT.EI_TUTKINTOJA.FI
           }
         </div>
       </div>
 
       <div>
-        <h3>Poistettavat tutkinnot</h3>
+        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.POISTETTAVAT.HEADING.FI}</h3>
         <div>
           {hasRemovals
             ? tutkintomuutokset.map(muutos => {
-              if (muutos.type === "removal") {
-                return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
-              } else {
-                return null
-              }
-            })
-            : 'Ei poistettavia tutkintoja'
+                if (muutos.type === "removal") {
+                  return <div key={muutos.koodiarvo}>{`${muutos.koodiarvo} ${muutos.nimi} ${MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.PERUSTELU.FI} ${muutos.perustelu}`}</div>
+                } else {
+                  return null
+                }
+              })
+            : MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.POISTETTAVAT.EI_TUTKINTOJA.FI
           }
         </div>
       </div>
