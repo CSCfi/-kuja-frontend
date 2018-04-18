@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import TutkinnotMuutos from '../components/TutkinnotMuutos'
+import TutkinnotValmistelu from '../components/TutkinnotValmistelu'
 import { clearToBeRemoved, toggleLupaSectionIsRemoving } from '../../../Jarjestajat/Jarjestaja/Hakemukset/modules/muutokset'
 
 const mapStateToProps = (state) => {
@@ -14,4 +14,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TutkinnotMuutos)
+export default connect(mapStateToProps, mapDispatchToProps)(TutkinnotValmistelu)

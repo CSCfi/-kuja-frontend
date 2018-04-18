@@ -70,7 +70,7 @@ const Button = styled.div`
   }
 `
 
-class TutkinnotMuutos extends Component {
+class TutkinnotValmistelu extends Component {
 
     getIsRemoving() {
         return this.props.muutokset.isRemoving
@@ -144,4 +144,4 @@ class TutkinnotMuutos extends Component {
     }
 }
 
-export default withRouter(TutkinnotMuutos)
+export default withRouter(TutkinnotValmistelu)

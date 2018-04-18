@@ -5,7 +5,7 @@ import Moment from 'react-moment'
 import { withRouter } from 'react-router-dom'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
 
-import TutkinnotMuutosContainer from '../containers/TutkinnotMuutosContainer'
+import TutkinnotMuutosContainer from '../containers/TutkinnotValmisteluContainer'
 
 import { InnerContentContainer, InnerContentWrapper, ContentContainer, FullWidthWrapper } from "../../../../modules/elements"
 import { COLORS } from "../../../../modules/styles"
@@ -43,20 +43,19 @@ class Valmistelu extends Component {
     componentWillMount() {
         const { muutospyynnot } = this.props
 
-        const { ytunnus } = this.props.match.params
-        this.props.fetchLupa(ytunnus, '?with=all')
+
+        this.props.fetchLupa('0208201-1', '?with=all')
 
         if (muutospyynnot && muutospyynnot.fetched === false) {
-            const { jarjestajaYtunnus } = this.props.lupa.data
-            this.props.fetchMuutospyynnot(jarjestajaYtunnus)
+            this.props.fetchMuutospyynto('ff277108-2e65-11e8-87f0-02420a141704')
         }
     }
 
-    checkByDiaarinumero(diaarinumero) {
-        return _.find(this.props.muutospyynnot.data, muutospyynto => {
-            return muutospyynto.diaarinumero === diaarinumero
-        })
-    }
+    //checkByDiaarinumero(diaarinumero) {
+      //  return _.find(this.props.muutospyynnot.data, muutospyynto => {
+        //    return muutospyynto.diaarinumero === diaarinumero
+        //})
+   // }
 
     getMuutospyyntoBody() {
         // const now = dateFormat(new Date(), "yyyy-mm-dd")
@@ -100,9 +99,9 @@ class Valmistelu extends Component {
             // const jarjestajaBreadcrumb = `/jarjestajat/${this.props.match.params.ytunnus}`
             // const muutoksetBreadcrumb = `/jarjestajat/${this.props.match.params.ytunnus}/hakemukset-ja-paatokset`
 
-            if (this.checkByDiaarinumero(diaarinumero) !== undefined) {
-
-            }
+           // if (this.checkByDiaarinumero(diaarinumero) !== undefined) {
+//
+  //          }
 
             return (
                 <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>

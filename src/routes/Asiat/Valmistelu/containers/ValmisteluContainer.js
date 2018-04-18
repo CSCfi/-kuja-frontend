@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import Valmistelu from '../components/Valmistelu'
 
-import { fetchMuutospyynto} from "../modules/muutospyynto"
+import { fetchMuutospyynto} from "../modules/valmistelu"
 //import { updateMuutospyynto } from "../modules/muutospyynto"
-import { fetchLupa } from "../../../Jarjestajat/Jarjestaja/modules/lupa"
+import { fetchLupa } from "../modules/voimassaolevaLupa"
 
 const mapStateToProps = (state) => {
     return {
