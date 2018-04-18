@@ -128,6 +128,16 @@ class TutkintoList extends Component {
                   }
                 })
               })
+            } else {
+              // Tarkastetaan myös tilanne, jossa koulutusalalla ei ollut yhtään tutkintoa luvassa, mutta alalle on lisätty tutkintoja
+              if (editValues) {
+                editValues.forEach(val => {
+                  if (val.koodiarvo === koodiarvo) {
+                    val.type === "addition" ? isAdded = true : null
+                    val.type === "removal" ? isRemoved = true : null
+                  }
+                })
+              }
             }
 
             let customClassName = ""
@@ -159,12 +169,12 @@ class TutkintoList extends Component {
                           }
                         } else {
                           // Tutkinto ei ollut luvassa --> lisätään se formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "addition", isInLupa: isInLupa })
+                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "addition", isInLupa: isInLupa, perustelu: null })
                         }
                       } else {
                         if (isInLupa) {
                           // Tutkinto oli luvassa --> lisätään muutos formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "removal", isInLupa: isInLupa })
+                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "removal", isInLupa: isInLupa, perustelu: null })
                         } else {
                           // Tutkinto ei ollut luvassa --> poistetaan muutos formista
                           const i = this.getIndex(editValues, koodiarvo)
@@ -180,7 +190,7 @@ class TutkintoList extends Component {
                 <Nimi>{nimiText}</Nimi>
               </TutkintoWrapper>
             )
-          } )}
+          })}
         </KoulutusalaListWrapper>
         }
       </Wrapper>

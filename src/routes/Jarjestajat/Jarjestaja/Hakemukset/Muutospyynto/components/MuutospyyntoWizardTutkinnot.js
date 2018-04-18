@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
+import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { WizButton } from "./MuutospyyntoWizard"
 import TutkintoList from './TutkintoList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
@@ -74,31 +75,31 @@ class MuutospyyntoWizardTutkinnot extends Component {
           </Row>
 
           <Row marginLeft="30px">
-            <h3>Lisätyt tutkinnot</h3>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISATYT_TUTKINNOT.FI}</h3>
             {hasAdditions
               ? tutkintomuutoksetValue.map(muutos => {
                 if (muutos.type === "addition") {
-                  return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+                  return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
                 } else {
                   return null
                 }
               })
-              : 'Ei lisättäviä tutkintoja'
+              : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_LISATTYJA.FI
             }
           </Row>
 
           <Row marginLeft="30px">
-            <h3>Poistettavat tutkinnot</h3>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTETUT_TUTKINNOT.FI}</h3>
             <div>
               {hasRemovals
                 ? tutkintomuutoksetValue.map(muutos => {
                   if (muutos.type === "removal") {
-                    return <div key={muutos.koodiarvo}>{JSON.stringify(muutos)} {getTutkintoNimiByKoodiarvo(muutos.koodiarvo)}</div>
+                    return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
                   } else {
                     return null
                   }
                 })
-                : 'Ei poistettavia tutkintoja'
+                : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_POISTETTUJA.FI
               }
             </div>
           </Row>
@@ -116,7 +117,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   renderTutkinnot(props) {
-
     let { fields, data } = props
     const { kohde, lupa, editValue } = props
     const { headingNumber, heading, maaraykset, muutMaaraykset } = kohde
