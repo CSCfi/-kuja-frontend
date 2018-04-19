@@ -10,9 +10,10 @@ class CasAuthenticated extends Component {
   render() {
       return (
       <div>
-        {this.props.user.hasErrored ? <p>Autentikoinnissa tapahtui virhe</p> : <p>CAS-autentikointi valmis</p>}
+        {this.props.user.hasErrored ? <p>Kirjautumisessa tapahtui virhe</p> : <p>Kirjautuminen onnistui! Tervetuloa Oiva-palveluun {sessionStorage.getItem('username')}</p>}
 
-          {JSON.stringify(this.props.user)}
+
+
         </div>
     )
   }

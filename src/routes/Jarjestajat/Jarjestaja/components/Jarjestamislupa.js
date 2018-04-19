@@ -2,6 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Moment from 'react-moment'
+import { withRouter } from 'react-router-dom'
 
 import LupaSection from './LupaSection'
 
@@ -38,7 +39,11 @@ class Jarjestamislupa extends Component {
   render() {
     const { diaarinumero, alkupvm, paatospvm, meta, jarjestajaYtunnus } = this.props.lupa.data
     const { kohteet } = this.props.lupa
+    const { muutospyynnot } = this.props
+    const { ytunnus } = this.props
     const { esittelija } = meta
+    const url = muutospyynnot.data.length > 0 ? `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset` : `/jarjestajat/${ytunnus}/hakemukset-ja-paatokset/uusi`
+    const linkText = muutospyynnot.data.length > 0 ? 'Katso muutosta' : 'Hae muutosta'
 
     return (
       <InnerContentContainer>
@@ -46,8 +51,8 @@ class Jarjestamislupa extends Component {
           <TopSectionWrapper>
             <h2>Järjestämislupa</h2>
             <Row>Diaarinumero:&nbsp;{diaarinumero}</Row>
-            <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank"><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="MM.DD.YYYY">{paatospvm}</Moment></a></Row>
-            <Row>Voimassaolo:&nbsp;<Moment format="MM.DD.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
+            <Row>Päätös:&nbsp;<a href={`${API_BASE_URL}/pdf/${diaarinumero}`} target="_blank"><img src={pdfIcon} alt="Järjestämislupa PDF-muodossa"/><Moment format="DD.MM.YYYY">{paatospvm}</Moment></a></Row>
+            <Row>Voimassaolo:&nbsp;<Moment format="DD.MM.YYYY">{alkupvm}</Moment>&nbsp;alkaen</Row>
             <Row>Esittelijä:&nbsp;{esittelija ? esittelija :  '-'}</Row>
           </TopSectionWrapper>
           <LupaDetailsWrapper>
@@ -57,27 +62,16 @@ class Jarjestamislupa extends Component {
                 kohde={kohteet[k]}
                 diaarinumero={diaarinumero}
                 ytunnus={jarjestajaYtunnus}
+                url={url}
+                linkText={linkText}
                 key={i}
               />
             )}
           </LupaDetailsWrapper>
-
         </InnerContentWrapper>
       </InnerContentContainer>
     )
   }
-
-  parseMaaraykset(kohdeId) {
-    const { maaraykset } = this.props.lupa.data
-
-    if (!maaraykset) {
-      return null
-    }
-
-    return _.filter(maaraykset, (maarays) => {
-      return maarays.kohde.id === kohdeId
-    })
-  }
 }
 
-export default Jarjestamislupa
+export default withRouter(Jarjestamislupa)

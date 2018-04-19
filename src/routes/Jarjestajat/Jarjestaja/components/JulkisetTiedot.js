@@ -49,7 +49,7 @@ const JulkisetTiedot = (props) => {
           lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
         />
 
-        <LargeParagraph>Päättyneet luvat</LargeParagraph>
+        <LargeParagraph>Historiatiedot</LargeParagraph>
 
         <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
       </InnerContentWrapper>

@@ -7,12 +7,13 @@ import CasAuthenticated from 'routes/Login/containers/CasAuthenticated'
 
 import Home from 'routes/Home'
 import Jarjestajat from 'routes/Jarjestajat'
-import Esittelijat from 'routes/Esittelijat'
+import Asiat from 'routes/Asiat'
 import Login from 'routes/Login'
 import Logout from 'routes/Logout'
 import Jarjestaja from '../routes/Jarjestajat/Jarjestaja'
+import Valmistelu from '../routes/Asiat/Valmistelu'
+import DestroyCasAuth from "./Logout/components/DestroyCasAuth";
 
-// import JarjestajaMuutospyynto from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto'
 
 const appRoutes = _.union(
   Home,
@@ -20,8 +21,8 @@ const appRoutes = _.union(
   Logout,
   Jarjestaja,
   Jarjestajat,
-  Esittelijat
-    // JarjestajaMuutospyynto
+  Asiat,
+  Valmistelu
 )
 
 const Routes = () => {
@@ -30,6 +31,8 @@ const Routes = () => {
       {appRoutes.map((route, i) => <Route key={i} {...route} />)}
       {<Route path="/cas-auth" component={RequireCasAuth} />}
       {<Route path="/cas-ready" component={CasAuthenticated} />}
+      {<Route path="/cas-logout" component={DestroyCasAuth} />}
+
     </div>
   )
 }

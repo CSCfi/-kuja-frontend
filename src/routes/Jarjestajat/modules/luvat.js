@@ -44,7 +44,7 @@ const ACTION_HANDLERS = {
       isFetching: false, 
       fetched: true, 
       hasErrored: false, 
-      data: _.mapKeys(action.payload, 'id')
+      data: _.mapKeys(action.payload, 'uuid')
     } 
   },
   [FETCH_LUVAT_FAILURE] : (state, action) => {

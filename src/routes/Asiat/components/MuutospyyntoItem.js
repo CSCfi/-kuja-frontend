@@ -22,7 +22,6 @@ const MuutospyyntoItem = (props) => {
 
 
 function checkTila(tila) {
-    console.log("tila: " + tila);
     if(tila=="VIETY KASITELTAVAKSI") {
         return "OTA KASITTELYYN"
     }

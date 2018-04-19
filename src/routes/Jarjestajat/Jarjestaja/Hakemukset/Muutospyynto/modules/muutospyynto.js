@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
 import axios from "axios/index"
+import { formatMuutospyynto } from "./koulutusUtil"
 
 // Constants
 export const FETCH_MUUTOSPYYNTO_START = 'FETCH_MUUTOSPYYNTO_START'
@@ -27,18 +28,19 @@ export function fetchMuutospyynto(ytunnus, query) {
 }
 
 export function createMuutospyynto(muutospyynto) {
-  alert(JSON.stringify(muutospyynto))
+  const formatted = formatMuutospyynto(muutospyynto)
+
+  let obj = {}
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })
 
-    // axios.put(`${API_BASE_URL}/muutospyynnot/create`, muutospyynto)
-    //   .then(response => {
-    //     dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
-    //   })
-    //   .catch(err => {
-    //     dispatch({ type: CREATE_MUUTOSPYYNTO_FAILURE, payload: err })
-    //   })
-
+    axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
+      .then(response => {
+        dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
+      })
+      .catch(err => {
+        dispatch({ type: CREATE_MUUTOSPYYNTO_FAILURE, payload: err })
+      })
   }
 }
 

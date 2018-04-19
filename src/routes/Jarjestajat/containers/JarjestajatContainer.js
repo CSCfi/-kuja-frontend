@@ -4,7 +4,8 @@ import { fetchLuvat } from 'routes/Jarjestajat/modules/luvat'
 import Jarjestajat from '../components/Jarjestajat'
 
 const mapStateToProps = (state) => {
-  return { luvat: state.luvat }
+  return { luvat: state.luvat
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {

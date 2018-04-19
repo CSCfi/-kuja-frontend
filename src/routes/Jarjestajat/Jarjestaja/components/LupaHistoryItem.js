@@ -39,17 +39,21 @@ const LupaHistoryItem = (props) => {
             Paatos tehty:&nbsp;
             <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
           </TextPartial>
-          <TextPartial>
-            Voimassa:&nbsp;
-            <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-            &nbsp;-&nbsp;
-            <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-          </TextPartial>
-
+          { voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
+              ? <TextPartial>Kumottu: 12.12.2017</TextPartial>
+              : (
+                <TextPartial>Voimassa:&nbsp;
+                  <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
+                  &nbsp;-&nbsp;
+                  <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+                </TextPartial>)
+          }
         </LupaText>
       </LupaHistoryItemWrapper>
     </a>
   )
 }
+
+
 
 export default LupaHistoryItem

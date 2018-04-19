@@ -9,11 +9,15 @@ import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
+import Loading from '../../../../modules/Loading'
 // import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
 // import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
 import { COLORS } from "../../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
+import {ROLE_KAYTTAJA} from "../../../../modules/constants";
+import _ from 'lodash'
+
 
 const Separator = styled.div`
   &:after {
@@ -30,42 +34,57 @@ class Jarjestaja extends Component {
   componentWillMount() {
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
+    this.props.fetchMuutospyynnot(ytunnus)
   }
 
   render() {
-    const { match, lupa } = this.props
-
-    // Alanavigaation tabivalikon routet
-    const tabNavRoutes = [
-      {
-        path: `${match.url}`,
-        exact: true,
-        text: 'Julkiset tiedot'
-      },
-      {
-        path: `${match.url}/omat-tiedot`,
-        text: 'Omat tiedot'
-      },
-      {
-        path: `${match.url}/jarjestamislupa`,
-        text: 'Järjestämislupa'
-      },
-      {
-        path: `${match.url}/hakemukset-ja-paatokset`,
-        text: 'Hakemukset ja päätökset'
-      },
-      {
-        path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-        text: 'Uusi hakemus'
-      }
-    ]
+    const { match, lupa, muutospyynnot } = this.props
 
     if (match.params) {
-      if (lupa.fetched) {
+
+      if (lupa.fetched && muutospyynnot.fetched) {
         const lupadata = this.props.lupa.data
         const { jarjestaja } = lupadata
         const breadcrumb = `/jarjestajat/${match.params.id}`
         const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || ''
+
+        // check the rights
+        // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_KAYTTAJA && sessionStorage.getItem('oid')===jarjestaja.oid) {
+            authenticated = true;
+        }
+
+        // Alanavigaation tabivalikon routet
+        const tabNavRoutes = [
+            {
+                path: `${match.url}`,
+                exact: true,
+                text: 'Julkiset tiedot',
+                authenticated: true
+            },
+            {
+                path: `${match.url}/omat-tiedot`,
+                text: 'Omat tiedot',
+                authenticated: authenticated
+            },
+            {
+                path: `${match.url}/jarjestamislupa`,
+                text: 'Järjestämislupa',
+                authenticated: true
+            },
+            {
+                path: `${match.url}/hakemukset-ja-paatokset`,
+                text: 'Hakemukset ja päätökset',
+                authenticated: authenticated
+            },
+            {
+                path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+                text: 'Uusi hakemus',
+                authenticated: authenticated
+            }
+        ]
+
 
         return (
           <div>
@@ -84,25 +103,22 @@ class Jarjestaja extends Component {
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-                <Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />
-                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer /> } />
-                {/*Hakemusroutes: tee routtaus niinku juuressa -> käydään läpi toisessa filussa ja importataan*/}
-                <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
-                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/:diaarinumero`} component={MuutospyyntoContainer}/>*/}
-                {/*<Route path={`${match.url}/hakemukset-ja-paatokset/uusi`} exact render={() => <MuutospyyntoWizard onSubmit={alert}/>} />*/}
+                {(authenticated) ? (<Route path={`${match.url}/omat-tiedot`} render={() => <OmatTiedot />} />) : null }
+                <Route path={`${match.url}/jarjestamislupa`} render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
+                {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
               </ContentContainer>
             </FullWidthWrapper>
           </div>
         )
-      } else if (lupa.isFetching) {
-        return <h2>Ladataan...</h2>
+      } else if (lupa.isFetching || muutospyynnot.isFetching) {
+        return <Loading />
       } else if (lupa.hasErrored) {
         return <h2>Luvan lataamisessa tapahtui virhe</h2>
       } else {
         return null
       }
     } else {
-      return <h2>Ladataan...</h2>
+      return null
     }
   }
 }
