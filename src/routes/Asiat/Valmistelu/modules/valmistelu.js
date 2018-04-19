@@ -12,11 +12,11 @@ export const CREATE_MUUTOSPYYNTO_SUCCESS = 'CREATE_MUUTOSPYYNTO_SUCCESS'
 export const CREATE_MUUTOSPYYNTO_FAILURE = 'CREATE_MUUTOSPYYNTO_FAILURE'
 
 // Actions
-export function fetchMuutospyynto(ytunnus, query) {
+export function fetchMuutospyynto(uuid) {
     return (dispatch) => {
         dispatch({ type: FETCH_MUUTOSPYYNTO_START })
 
-        const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`)
+        const request = fetch(`${API_BASE_URL}/muutospyynnot/id/${uuid}`)
 
         request
             .then((response) => response.json())

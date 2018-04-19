@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { fetchPaatetytAsiat } from "routes/Asiat/modules/muutospyynnot"
+import { fetchPaatetytAsiat } from "routes/Asiat/modules/asiat"
 import PaatetytAsiat from "../components/PaatetytAsiat";
 
 const mapStateToProps = (state) => {
