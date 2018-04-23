@@ -71,10 +71,7 @@ const getIndex = (values, koodiarvo) => {
 }
 
 const renderTutkintoMuutoksetByType = (props) => {
-
-  console.log(props)
   const { muutokset, tyyppi, kategoria, fields, meta } = props
-  console.log(kategoria)
 
   return (
     fields.map((mutos, index) => {

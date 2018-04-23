@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Redirect, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
-import MuutospyyntoWizardPaatoskierros from './MuutospyyntoWizardPaatoskierros'
+import MuutospyyntoWizardMuutokset from './MuutospyyntoWizardMuutokset'
 import MuutospyyntoWizardPerustelut from './MuutospyyntoWizardPerustelut'
-import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
 import MuutospyyntoWizardYhteenveto from './MuutospyyntoWizardYhteenveto'
 
 import Loading from '../../../../../../modules/Loading'
@@ -13,7 +12,6 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { COLORS, MEDIA_QUERIES } from "../../../../../../modules/styles"
 import close from 'static/images/close-x.svg'
 import {ROLE_KAYTTAJA} from "../../../../../../modules/constants";
-import _ from 'lodash'
 
 const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
@@ -236,7 +234,7 @@ class MuutospyyntoWizard extends Component {
             <ContentContainer maxWidth="1085px" margin="50px auto">
               <WizardContent>
                 {page === 1 && (
-                  <MuutospyyntoWizardTutkinnot
+                  <MuutospyyntoWizardMuutokset
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}

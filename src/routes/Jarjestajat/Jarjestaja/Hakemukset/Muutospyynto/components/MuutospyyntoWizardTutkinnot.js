@@ -10,7 +10,7 @@ import { WizButton } from "./MuutospyyntoWizard"
 import TutkintoList from './TutkintoList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import { getEditIndex, handleCheckboxChange } from "../modules/koulutusUtil"
+import { handleCheckboxChange } from "../modules/koulutusUtil"
 import Loading from '../../../../../../modules/Loading'
 import {
   Kohdenumero,
@@ -45,8 +45,9 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { handleSubmit, lupa, tutkintomuutoksetValue, koulutusmuutoksetValue, onCancel, previousPage } = this.props
+    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue } = this.props
     const { kohteet } = lupa
+    const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
     const hasTutkintoMuutoksia = tutkintomuutoksetValue !== undefined && tutkintomuutoksetValue.length !== 0
     const hasKoulutusMuutoksia = koulutusmuutoksetValue !== undefined && koulutusmuutoksetValue.length !== 0
@@ -105,8 +106,10 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
     if (koulutuksetFetched && muutFetched && muuData !== undefined && poikkeusData !== undefined) {
       return (
-        <div>
-          <form onSubmit={handleSubmit}>
+        <Kohde>
+          <ContentContainer>
+            <Kohdenumero>{headingNumber}.</Kohdenumero>
+            <Otsikko>{heading}</Otsikko>
             <Row>
               <FieldArray
                 name="tutkintomuutokset"
@@ -160,16 +163,8 @@ class MuutospyyntoWizardTutkinnot extends Component {
                 }
               </div>
             </Row>
-
-            <BottomWrapper>
-              <WizButton type="button" onClick={previousPage}>
-                Edellinen
-              </WizButton>
-              <WizButton type="submit" disabled={isDisabled}>Seuraava</WizButton>
-              <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
-            </BottomWrapper>
-          </form>
-        </div>
+          </ContentContainer>
+        </Kohde>
       )
     } else if (koulutuksetIsFetching || muutIsFetching) {
       return <Loading/>
@@ -190,30 +185,24 @@ class MuutospyyntoWizardTutkinnot extends Component {
     })
 
     return (
-      <Kohde>
-        <ContentContainer>
-          <Kohdenumero>{headingNumber}.</Kohdenumero>
-          <Otsikko>{heading}</Otsikko>
-          <Row>
-            {_.map(data, (koulutusala, i) => {
-              const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo
-              const { metadata, koulutukset } = koulutusala
-              const nimi = parseLocalizedField(metadata)
-              return (
-                <TutkintoList
-                  key={i}
-                  koodiarvo={koodiarvo}
-                  nimi={nimi}
-                  koulutukset={koulutukset}
-                  maaraykset={maaraykset}
-                  editValues={editValue}
-                  fields={fields}
-                />
-              )
-            })}
-          </Row>
-        </ContentContainer>
-      </Kohde>
+      <Row>
+        {_.map(data, (koulutusala, i) => {
+          const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo
+          const { metadata, koulutukset } = koulutusala
+          const nimi = parseLocalizedField(metadata)
+          return (
+            <TutkintoList
+              key={i}
+              koodiarvo={koodiarvo}
+              nimi={nimi}
+              koulutukset={koulutukset}
+              maaraykset={maaraykset}
+              editValues={editValue}
+              fields={fields}
+            />
+          )
+        })}
+      </Row>
     )
   }
 
@@ -222,127 +211,124 @@ class MuutospyyntoWizardTutkinnot extends Component {
     const { muutMaaraykset } = kohde
 
     return (
-      <ContentContainer>
-        <Row>
-          <Info>{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</Info>
+      <Row>
+        <Info>{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</Info>
 
-          {_.map(muut, (muu, koodisto) => {
-            return (
-              <div key={koodisto}>
-                <h3>Otsikko</h3>
+        {_.map(muut, (muu, koodisto) => {
+          return (
+            <div key={koodisto}>
+              <h3>Otsikko</h3>
 
-                {muu.map(m => {
-                  const { koodiArvo, metadata } = m
-                  const { koodistoUri } = m.koodisto
-                  const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
-                  const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
-                  const identifier = `input-${koodistoUri}-${koodiArvo}`
+              {muu.map(m => {
+                const { koodiArvo, metadata } = m
+                const { koodistoUri } = m.koodisto
+                const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
+                const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
+                const identifier = `input-${koodistoUri}-${koodiArvo}`
 
-                  let isInLupa = false
-                  let isAdded = false
-                  let isRemoved = false
-                  let isChecked = false
-                  let customClassName = ""
+                let isInLupa = false
+                let isAdded = false
+                let isRemoved = false
+                let isChecked = false
+                let customClassName = ""
 
-                  muutMaaraykset.forEach(muuMaarays => {
-                    if (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo) {
-                      isInLupa = true
+                muutMaaraykset.forEach(muuMaarays => {
+                  if (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo) {
+                    isInLupa = true
+                  }
+                })
+
+                if (editValue) {
+                  editValue.forEach(val => {
+                    if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
+                      val.type === "addition" ? isAdded = true : null
+                      val.type === "removal" ? isRemoved = true : null
                     }
                   })
+                }
 
-                  if (editValue) {
-                    editValue.forEach(val => {
-                      if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                        val.type === "addition" ? isAdded = true : null
-                        val.type === "removal" ? isRemoved = true : null
-                      }
-                    })
-                  }
+                isInLupa ? customClassName = "is-in-lupa" : null
+                isAdded ? customClassName = "is-added" : null
+                isRemoved ? customClassName = "is-removed" : null
 
-                  isInLupa ? customClassName = "is-in-lupa" : null
-                  isAdded ? customClassName = "is-added" : null
-                  isRemoved ? customClassName = "is-removed" : null
+                if ((isInLupa && !isRemoved) || isAdded) {
+                  isChecked = true
+                }
 
-                  if ((isInLupa && !isRemoved) || isAdded) {
-                    isChecked = true
-                  }
+                return (
+                  <TutkintoMuuWrapper key={identifier} className={customClassName}>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={isChecked}
+                        onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, m) }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </Checkbox>
+                    <div>
+                      <div>{nimi}</div>
+                      <div>{kuvaus}</div>
+                    </div>
+                  </TutkintoMuuWrapper>
+                )
+              })}
+            </div>
+          )
+        })}
 
-                  return (
-                    <TutkintoMuuWrapper key={identifier} className={customClassName}>
-                      <Checkbox>
-                        <input
-                          type="checkbox"
-                          id={identifier}
-                          checked={isChecked}
-                          onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, m) }}
-                        />
-                        <label htmlFor={identifier}></label>
-                      </Checkbox>
-                      <div>
-                        <div>{nimi}</div>
-                        <div>{kuvaus}</div>
-                        <div>{JSON.stringify(m)}</div>
-                      </div>
-                    </TutkintoMuuWrapper>
-                  )
-                })}
-              </div>
-            )
-          })}
+        {poikkeukset.map((poikkeus, i) => {
+          const { koodiArvo, metadata, koodisto } = poikkeus
+          const { koodistoUri } = koodisto
+          const nimi = parseLocalizedField(metadata)
+          const identifier = `input-${koodiArvo}-${i}`
 
-          {poikkeukset.map((poikkeus, i) => {
-            const { koodiArvo, metadata, koodisto } = poikkeus
-            const { koodistoUri } = koodisto
-            const nimi = parseLocalizedField(metadata)
-            const identifier = `input-${koodiArvo}-${i}`
+          let isInLupa = false
+          let isAdded = false
+          let isRemoved = false
+          let isChecked = false
+          let customClassName = ""
 
-            let isInLupa = false
-            let isAdded = false
-            let isRemoved = false
-            let isChecked = false
-            let customClassName = ""
+          muutMaaraykset.forEach(muuMaarays => {
+            if (muuMaarays.koodi && muuMaarays.koodi === koodiArvo) {
+              isInLupa = true
+            }
+          })
 
-            muutMaaraykset.forEach(muuMaarays => {
-              if (muuMaarays.koodi && muuMaarays.koodi === koodiArvo) {
-                isInLupa = true
+          if (editValue) {
+            editValue.forEach(val => {
+              if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
+                val.type === "addition" ? isAdded = true : null
+                val.type === "removal" ? isRemoved = true : null
               }
             })
+          }
 
-            if (editValue) {
-              editValue.forEach(val => {
-                if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                  val.type === "addition" ? isAdded = true : null
-                  val.type === "removal" ? isRemoved = true : null
-                }
-              })
-            }
+          isInLupa ? customClassName = "is-in-lupa" : null
+          isAdded ? customClassName = "is-added" : null
+          isRemoved ? customClassName = "is-removed" : null
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
+          if ((isInLupa && !isRemoved) || isAdded) {
+            isChecked = true
+          }
 
-            if ((isInLupa && !isRemoved) || isAdded) {
-              isChecked = true
-            }
-
-            return (
-              <TutkintoMuuWrapper key={identifier} className={customClassName}>
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    id={identifier}
-                    checked={isChecked}
-                    onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, poikkeus) }}
-                  />
-                  <label htmlFor={identifier}></label>
-                </Checkbox>
-                <div>{koodiArvo}</div>
-                <div>{nimi}</div>
-              </TutkintoMuuWrapper>
-            )
-          })}
-        </Row>
-      </ContentContainer>
+          return (
+            <TutkintoMuuWrapper key={identifier} className={customClassName}>
+              <Checkbox>
+                <input
+                  type="checkbox"
+                  id={identifier}
+                  checked={isChecked}
+                  onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, poikkeus) }}
+                />
+                <label htmlFor={identifier}></label>
+              </Checkbox>
+              <div>{koodiArvo}</div>
+              <div>{nimi}</div>
+            </TutkintoMuuWrapper>
+          )
+        })}
+      </Row>
     )
   }
 }
