@@ -243,6 +243,8 @@ class MuutospyyntoWizard extends Component {
                     lupa={lupa}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
                     fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
+                    fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
+                    fetchKoulutus={this.props.fetchKoulutus}
                   />
                 )}
                 {page === 2 && (

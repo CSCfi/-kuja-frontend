@@ -4,7 +4,7 @@ import { fetchMuutosperustelut } from "../modules/muutosperustelut"
 import { fetchLupa } from "../../../modules/lupa"
 import { createMuutospyynto } from "../modules/muutospyynto"
 import { fetchKoulutusalat } from "../modules/koulutusalat"
-import { fetchKoulutuksetAll } from "../modules/koulutukset"
+import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../modules/koulutukset"
 import { fetchPaatoskierrokset } from "../modules/paatoskierrokset"
 
 import MuutospyyntoWizard from '../components/MuutospyyntoWizard'
@@ -25,6 +25,8 @@ const mapDispatchToProps = (dispatch, props) => {
     createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
     fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
     fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
+    fetchKoulutuksetMuut: (koodisto) => dispatch(fetchKoulutuksetMuut(koodisto)),
+    fetchKoulutus: (koodi) => dispatch(fetchKoulutus(koodi)),
     fetchPaatoskierrokset: () => dispatch(fetchPaatoskierrokset())
   }
 }
