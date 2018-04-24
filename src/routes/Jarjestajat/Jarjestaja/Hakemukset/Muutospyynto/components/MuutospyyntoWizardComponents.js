@@ -149,6 +149,10 @@ export const Info = styled.div`
   margin-left:20px;
 `
 
+export const Div = styled.div`
+  margin: ${props => props.margin ? props.margin : 'auto'};
+`
+
 export const Separator = styled.div`
   &:after {
     display: block;

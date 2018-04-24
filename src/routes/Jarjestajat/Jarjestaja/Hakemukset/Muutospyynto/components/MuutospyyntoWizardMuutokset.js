@@ -23,9 +23,6 @@ class MuutospyyntoWizardMuutokset extends Component {
       <div>
         <form onSubmit={onSubmit}>
           <MuutospyyntoWizardTutkinnot
-            previousPage={previousPage}
-            onSubmit={onSubmit}
-            onCancel={onCancel}
             lupa={lupa}
             fetchKoulutusalat={fetchKoulutusalat}
             fetchKoulutuksetAll={fetchKoulutuksetAll}
@@ -38,9 +35,6 @@ class MuutospyyntoWizardMuutokset extends Component {
           />
 
           <BottomWrapper>
-            <WizButton type="button" onClick={previousPage}>
-              Edellinen
-            </WizButton>
             <WizButton type="submit">Seuraava</WizButton>
             <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
           </BottomWrapper>
