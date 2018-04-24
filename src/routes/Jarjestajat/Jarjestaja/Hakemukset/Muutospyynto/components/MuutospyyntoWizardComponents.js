@@ -202,9 +202,10 @@ export const SelectStyle = styled.div`
   }
 `
 
-export const TutkintoMuuWrapper = styled.div`
+export const CheckboxRowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: baseline;
   margin-bottom: 20px;
   
   &.is-removed {

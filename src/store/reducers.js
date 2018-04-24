@@ -10,6 +10,7 @@ import muutosperustelutReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset
 import koulutusalatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusalat'
 import koulutuksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutukset'
 import paatoskierroksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/paatoskierrokset'
+import oppilaitoksenopetuskieletReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/oppilaitoksenopetuskielet'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   koulutusalat: koulutusalatReducer,
   koulutukset: koulutuksetReducer,
   paatoskierrokset: paatoskierroksetReducer,
+  oppilaitoksenopetuskielet: oppilaitoksenopetuskieletReducer,
   form: reduxFormReducer
 })
 

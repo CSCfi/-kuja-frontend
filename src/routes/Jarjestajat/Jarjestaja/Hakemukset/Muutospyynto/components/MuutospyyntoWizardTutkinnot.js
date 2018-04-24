@@ -20,7 +20,7 @@ import {
   Kohde,
   Info,
   Checkbox,
-  TutkintoMuuWrapper
+  CheckboxRowContainer
 } from './MuutospyyntoWizardComponents'
 
 class MuutospyyntoWizardTutkinnot extends Component {
@@ -256,7 +256,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                 }
 
                 return (
-                  <TutkintoMuuWrapper key={identifier} className={customClassName}>
+                  <CheckboxRowContainer key={identifier} className={customClassName}>
                     <Checkbox>
                       <input
                         type="checkbox"
@@ -270,7 +270,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                       <div>{nimi}</div>
                       <div>{kuvaus}</div>
                     </div>
-                  </TutkintoMuuWrapper>
+                  </CheckboxRowContainer>
                 )
               })}
             </div>
@@ -313,7 +313,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           }
 
           return (
-            <TutkintoMuuWrapper key={identifier} className={customClassName}>
+            <CheckboxRowContainer key={identifier} className={customClassName}>
               <Checkbox>
                 <input
                   type="checkbox"
@@ -325,7 +325,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
               </Checkbox>
               <div>{koodiArvo}</div>
               <div>{nimi}</div>
-            </TutkintoMuuWrapper>
+            </CheckboxRowContainer>
           )
         })}
       </Row>

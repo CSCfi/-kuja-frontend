@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
-import MuutospyyntoWizardKielet from './MuutospyyntoWizardKielet'
+import MuutospyyntoWizardKieletContainer from '../containers/MuutospyyntoWizardKieletContainer'
 import { COLORS } from "../../../../../../modules/styles"
 import { BottomWrapper } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
@@ -30,7 +30,7 @@ class MuutospyyntoWizardMuutokset extends Component {
             fetchKoulutus={fetchKoulutus}
           />
 
-          <MuutospyyntoWizardKielet
+          <MuutospyyntoWizardKieletContainer
             lupa={lupa}
           />
 
