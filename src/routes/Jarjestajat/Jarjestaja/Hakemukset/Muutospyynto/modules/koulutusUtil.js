@@ -152,6 +152,51 @@ export function formatMuutospyynto(muutospyynto) {
   }
 }
 
+export function getEditIndex(values, koodiarvo, koodisto) {
+  let i = undefined
+
+  _.forEach(values, (value, idx) => {
+    if (value.koodiarvo === koodiarvo && value.koodisto === koodisto) {
+      i = idx
+    }
+  })
+
+  return i
+}
+
+export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
+  const { koodiArvo, metadata, koodisto } = currentObj
+  const { koodistoUri } = koodisto
+  const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
+  const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
+
+  const { checked } = event.target
+
+  if (checked) {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> poistetaan se formista
+      const i = getEditIndex(editValue, koodiArvo)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Tutkinto ei ollut luvassa --> lisätään se formiin
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null })
+    }
+  } else {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> lisätään muutos formiin
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null })
+    } else {
+      // Tutkinto ei ollut luvassa --> poistetaan muutos formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
 function formatMuutosperustelu(muutosperusteluId, muuperustelu) {
   const perustelu = getMuutosperusteluObjectById(muutosperusteluId)
   const { koodiArvo, koodisto, metadata } = perustelu

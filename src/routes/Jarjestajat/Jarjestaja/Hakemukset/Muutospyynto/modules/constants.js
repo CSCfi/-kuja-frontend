@@ -44,7 +44,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
     SV: "På svenska"
   },
   MUUTOS_POISTO_OHJE: {
-    FI: "Perustele miksi tämä tutkinto tulisi poistaa järjestämisluvasta",
+    FI: "Perustele miksi tämä tutkinto tai koulutus tulisi poistaa järjestämisluvasta",
     SV: "På svenska"
   },
   YHTEENVETO: {
@@ -97,4 +97,10 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       }
     }
   }
+}
+
+export const MUUT_KEYS = {
+  AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: "ammatilliseentehtavaanvalmistavakoulutus",
+  KULJETTAJAKOULUTUS: "kuljettajakoulutus",
+  OIVA_TYOVOIMAKOULUTUS: "oivatyovoimakoulutus"
 }

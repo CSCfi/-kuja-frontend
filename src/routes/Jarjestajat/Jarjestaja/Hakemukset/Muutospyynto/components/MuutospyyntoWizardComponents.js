@@ -74,10 +74,6 @@ export const TutkintoWrapper = styled.div`
   &.is-in-lupa {
     font-weight: bold;
   }
-  
-  &.is-removed {
-    
-  }
 `
 
 export const Koodi = styled.span`
@@ -147,6 +143,12 @@ export const Kohde = styled.div`
   }
 `
 
+export const Info = styled.div`
+  font-size: 14px;
+  margin-bottom: 30px;
+  margin-left:20px;
+`
+
 export const Separator = styled.div`
   &:after {
     display: block;
@@ -193,6 +195,25 @@ export const SelectStyle = styled.div`
     &:focus {
       outline: none;
     }
+  }
+`
+
+export const TutkintoMuuWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  
+  &.is-removed {
+    text-decoration: line-through;
+    color: ${COLORS.OIVA_PURPLE};
+  }
+  
+  &.is-added {
+    color: ${COLORS.OIVA_PURPLE};
+  }
+  
+  &.is-in-lupa {
+    font-weight: bold;
   }
 `
 

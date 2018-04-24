@@ -70,12 +70,13 @@ const getIndex = (values, koodiarvo) => {
   return i
 }
 
-const renderMuutoksetByType = ({ muutokset, tyyppi, fields, meta }) => {
+const renderTutkintoMuutoksetByType = (props) => {
+  const { muutokset, tyyppi, kategoria, fields, meta } = props
 
   return (
     fields.map((mutos, index) => {
       let muutos = fields.get(index)
-      const { koodiarvo, nimi, type, perustelu } = muutos
+      const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus } = muutos
       const helpText = type === "addition" ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISAYS_OHJE.FI : MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTO_OHJE.FI
       if (type === tyyppi) {
         return (
@@ -137,7 +138,32 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 }
 
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, formSyncErrors, onCancel } = props
+  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, koulutusmuutoksetValue, onCancel } = props
+
+  let hasTutkintoAdditions = false
+  let hasTutkintoRemovals = false
+  let hasKoulutusAdditions = false
+  let hasKoulutusRemovals = false
+
+  if (tutkintomuutoksetValue && tutkintomuutoksetValue.length !== 0) {
+    tutkintomuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasTutkintoAdditions = true
+      } else if (muutos.type === "removal") {
+        hasTutkintoRemovals = true
+      }
+    })
+  }
+
+  if (koulutusmuutoksetValue && koulutusmuutoksetValue.length !== 0) {
+    koulutusmuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasKoulutusAdditions = true
+      } else if (muutos.type === "removal") {
+        hasKoulutusRemovals = true
+      }
+    })
+  }
 
   return (
     <div>
@@ -174,28 +200,70 @@ let MuutospyyntoWizardPerustelut = props => {
 
         <Separator/>
 
-        <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_LISAYKSET.FI}</h3>
-        <TutkintoMuutoksetWrapper>
-          <FieldArray
-            name="tutkintomuutokset"
-            muutokset={tutkintomuutoksetValue}
-            tyyppi="addition"
-            component={renderMuutoksetByType}
-          />
+        {hasTutkintoAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_LISAYKSET.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="tutkintomuutokset"
+                muutokset={tutkintomuutoksetValue}
+                tyyppi="addition"
+                component={renderTutkintoMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
 
-        </TutkintoMuutoksetWrapper>
+        {hasTutkintoAdditions && hasTutkintoRemovals &&
+          <Separator/>
+        }
 
-        <Separator/>
+        {hasTutkintoRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_POISTOT.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="tutkintomuutokset"
+                muutokset={tutkintomuutoksetValue}
+                tyyppi="removal"
+                component={renderTutkintoMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
 
-        <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_POISTOT.FI}</h3>
-        <TutkintoMuutoksetWrapper>
-          <FieldArray
-            name="tutkintomuutokset"
-            muutokset={tutkintomuutoksetValue}
-            tyyppi="removal"
-            component={renderMuutoksetByType}
-          />
-        </TutkintoMuutoksetWrapper>
+        {hasKoulutusAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_LISAYKSET.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="koulutusmuutokset"
+                muutokset={koulutusmuutoksetValue}
+                tyyppi="addition"
+                kategoria="koulutus"
+                component={renderTutkintoMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasKoulutusAdditions && hasKoulutusRemovals &&
+          <Separator/>
+        }
+
+        {hasKoulutusRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_EHDOTETUT_POISTOT.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="koulutusmuutokset"
+                muutokset={koulutusmuutoksetValue}
+                tyyppi="removal"
+                component={renderTutkintoMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
 
         <div>
           <WizButton type="button" onClick={previousPage}>
@@ -217,11 +285,13 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const muutosperusteluValue = selector(state, 'muutosperustelu')
   const muuperusteluValue = selector(state, 'muuperustelu')
   const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
+  const koulutusmuutoksetValue = selector(state, 'koulutusmuutokset')
 
   return {
     muutosperusteluValue,
     muuperusteluValue,
-    tutkintomuutoksetValue
+    tutkintomuutoksetValue,
+    koulutusmuutoksetValue
   }
 })(MuutospyyntoWizardPerustelut)
 

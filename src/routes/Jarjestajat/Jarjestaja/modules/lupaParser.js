@@ -97,7 +97,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
         }
 
         case KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: {
-          const { koodiarvo } = maarays
+          const { koodiarvo, koodisto } = maarays
+          console.log('ammatilliseen tehtavaan valmistava koulutus')
+          console.log(maarays)
 
           const ammatillinenNimi = parseLocalizedField(maarays.koodi.metadata, 'FI', 'nimi', 'kieli')
 
@@ -105,13 +107,17 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: TUTKINTO_TEKSTIT.ammatilliseentehtavaanvalmistavakoulutus.selite,
             nimi: ammatillinenNimi,
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
 
         case KOODISTOT.KULJETTAJAKOULUTUS: {
-          const { koodiarvo } = maarays
+          const { koodiarvo, koodisto } = maarays
+          console.log('kuljettajakoulutus')
+          console.log(maarays)
 
           const kuljettajaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
 
@@ -119,12 +125,18 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: kuljettajaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
+          const { koodiarvo, koodisto } = maarays
+          console.log('oiva tyovoimakoulutus')
+          console.log(maarays)
+
           const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
           // TODO localizations
 
@@ -132,7 +144,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: tyovoimaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
