@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import { fetchOppilaitoksenopetuskielet } from "../modules/oppilaitoksenopetuskielet"
 
-import MuutospyyntoWizardKielet from '../components/MuutospyyntoWizardKielet'
+import MuutospyyntoWizardKielet from '../components/MuutospyyntoWizardOpetuskielet'
 
 const mapStateToProps = (state) => {
   return {

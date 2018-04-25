@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
-import MuutospyyntoWizardKieletContainer from '../containers/MuutospyyntoWizardKieletContainer'
+import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoWizardOpetuskieletContainer'
+import MuutospyyntoWizardTutkintokieletContainer from '../containers/MuutospyyntoWizardTutkintokieletContainer'
 import { COLORS } from "../../../../../../modules/styles"
-import { BottomWrapper } from "./MuutospyyntoWizardComponents"
+import { BottomWrapper, Kohde } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 
 class MuutospyyntoWizardMuutokset extends Component {
@@ -30,9 +31,15 @@ class MuutospyyntoWizardMuutokset extends Component {
             fetchKoulutus={fetchKoulutus}
           />
 
-          <MuutospyyntoWizardKieletContainer
-            lupa={lupa}
-          />
+          <Kohde>
+            <MuutospyyntoWizardOpetuskieletContainer
+              lupa={lupa}
+            />
+
+            <MuutospyyntoWizardTutkintokieletContainer
+              lupa={lupa}
+            />
+          </Kohde>
 
           <BottomWrapper>
             <WizButton type="submit">Seuraava</WizButton>

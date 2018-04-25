@@ -47,6 +47,18 @@ export const MUUTOS_WIZARD_TEKSTIT = {
     FI: "Perustele miksi tämä tutkinto tai koulutus tulisi poistaa järjestämisluvasta",
     SV: "På svenska"
   },
+  MUUTOS_OPETUSKIELET: {
+    HEADING: {
+      FI: "Valitse oppilaitoksen opetuskielet",
+      SV: "På svenska"
+    }
+  },
+  MUUTOS_TUTKINTOKIELET: {
+    HEADING: {
+      FI: "Valitse opetuskielen lisäksi erilliset tutkintokielet",
+      SV: "På svenska"
+    }
+  },
   YHTEENVETO: {
     HEADING: {
       FI: "Yhteenveto",
