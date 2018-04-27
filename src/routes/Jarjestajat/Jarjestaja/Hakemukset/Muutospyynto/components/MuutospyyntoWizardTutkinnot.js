@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
@@ -45,7 +45,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue } = this.props
+    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue, paatoskierrokset } = this.props
     const { kohteet } = lupa
     const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
@@ -343,7 +343,8 @@ MuutospyyntoWizardTutkinnot = connect(state => {
     tutkintomuutoksetValue,
     koulutusmuutoksetValue,
     koulutusalat: state.koulutusalat,
-    koulutukset: state.koulutukset
+    koulutukset: state.koulutukset,
+    paatoskierrokset: state.paatoskierrokset
   }
 })(MuutospyyntoWizardTutkinnot)
 

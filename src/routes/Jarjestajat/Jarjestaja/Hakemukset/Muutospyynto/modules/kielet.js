@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import { getKieliList } from "./koulutusUtil"
 
 // Constants
 export const FETCH_KIELET_START = 'FETCH_KIELET_START'
@@ -39,7 +40,8 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: action.payload,
+      kieliList: getKieliList(action.payload, 'FI')
     }
   },
   [FETCH_KIELET_FAILURE] : (state, action) => {

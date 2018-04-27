@@ -36,7 +36,7 @@ class MuutospyyntoWizardKielet extends Component {
             <Otsikko>{heading}</Otsikko>
             <Row>
               <FieldArray
-                name="opetusjatutkintokielimuutokset"
+                name="opetuskielimuutokset"
                 kohde={kohde}
                 opetuskielet={oppilaitoksenopetuskielet.data}
                 editValues={opetusjatutkintokielimuutoksetValue}
@@ -122,7 +122,7 @@ class MuutospyyntoWizardKielet extends Component {
 const selector = formValueSelector('uusiHakemus')
 
 MuutospyyntoWizardKielet = connect(state => {
-  const opetusjatutkintokielimuutoksetValue = selector(state, 'opetusjatutkintokielimuutokset')
+  const opetusjatutkintokielimuutoksetValue = selector(state, 'opetuskielimuutokset')
 
   return {
     opetusjatutkintokielimuutoksetValue

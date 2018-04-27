@@ -193,7 +193,7 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, lupa, paatoskierrokset, createMuutospyynto } = this.props
+    const { muutosperustelut, lupa, paatoskierrokset } = this.props
     const { page, visitedPages } = this.state
 
     if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
