@@ -77,13 +77,35 @@ export function getPaatoskierrosByUuid(paatoskierrosUuid) {
   }
 }
 
+function getDefaultPaatoskierrosUuid() {
+  const state = store.getState()
+
+  const { paatoskierrokset } = state
+
+  if (paatoskierrokset && paatoskierrokset.data) {
+    const pkierrosObj = _.find(paatoskierrokset.data, pkierros => {
+      if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
+        if (pkierros.meta.nimi.fi === "Avoin hakukierros 2018") {
+          return pkierros
+        }
+      }
+    })
+
+    if (pkierrosObj) {
+      return pkierrosObj.uuid
+    }
+  }
+
+  return undefined
+}
+
 export function getJarjestajaData(state) {
   const fakeUser = "oiva-web" // TODO: oikea käyttäjä statesta
 
   if (state.lupa && state.lupa.data) {
     const { data } = state.lupa
     const {
-      id,
+      id: uuid,
       diaarinumero,
       jarjestajaYtunnus,
       jarjestajaOid
@@ -97,7 +119,7 @@ export function getJarjestajaData(state) {
       jarjestajaYtunnus,
       luoja: fakeUser,
       luontipvm: now,
-      lupaId: id,
+      lupaId: uuid,
       paatoskierrosId: null,
       paivityspvm: now,
       tila: "LUONNOS",
@@ -131,8 +153,13 @@ export function formatMuutospyynto(muutospyynto) {
     poistettavat,
     paatoskierros,
     muutosperustelu,
-    muuperustelu
+    muuperustelu,
+    tutkintomuutokset,
+    opetuskielimuutokset,
+    tutkintokielimuutokset
   } = muutospyynto
+
+  let muutokset = formatMuutokset(lisattavat, poistettavat)
 
   return {
     diaarinumero,
@@ -141,15 +168,185 @@ export function formatMuutospyynto(muutospyynto) {
     luoja,
     luontipvm,
     lupaId,
-    paatoskierrosUuid: paatoskierros,
+    paatoskierrosId: getDefaultPaatoskierrosUuid(),
     tila,
     paivittaja: "string",
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
     muutosperustelu: formatMuutosperustelu(muutosperustelu, muuperustelu),
-    muutokset: formatMuutokset(lisattavat, poistettavat)
+    muutokset: muutokset
   }
+}
+
+export function getEditIndex(values, koodiarvo, koodisto) {
+  let i = undefined
+
+  _.forEach(values, (value, idx) => {
+    if (value.koodiarvo === koodiarvo && value.koodisto === koodisto) {
+      i = idx
+    }
+  })
+
+  return i
+}
+
+export function getChangeIndices(values, koodiarvo) {
+  let indices = []
+
+  _.forEach(values, (value, i) => {
+    if (value.type === "change" && value.koodiarvo === koodiarvo) {
+      indices.push(i)
+    }
+  })
+
+  return indices
+}
+
+export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
+  const { koodiArvo, metadata, koodisto } = currentObj
+  const { koodistoUri } = koodisto
+  const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
+  const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
+
+  const { checked } = event.target
+
+  if (checked) {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> poistetaan se formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Tutkinto ei ollut luvassa --> lisätään se formiin
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null })
+    }
+  } else {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> lisätään muutos formiin
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null })
+    } else {
+      // Tutkinto ei ollut luvassa --> poistetaan muutos formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
+export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isInLupa, value, currentObj) {
+  const { koodi, nimi, maaraysId } = currentObj
+  const koodistoUri = "kieli"
+
+  const { checked } = event.target
+
+  if (checked) {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> poistetaan se formista
+      const i = getEditIndex(editValue, koodi, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Tutkinto ei ollut luvassa --> lisätään se formiin
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null })
+    }
+  } else {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> lisätään muutos formiin
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null })
+    } else {
+      // Tutkinto ei ollut luvassa --> poistetaan muutos formista
+      const i = getEditIndex(editValue, koodi, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+    // Tarkastetaan, että editvaluesiin ei jää muutos-tyyppisiä arvoja
+    if (editValue) {
+      const indices = getChangeIndices(editValue, koodi)
+      if (indices.length > 0) {
+        indices.forEach(i => {
+          fields.remove(i)
+        })
+      }
+    }
+  }
+}
+
+export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tutkinto, selectedValue) {
+
+  if (selectedValue === null) {
+    return
+  }
+
+  const { koodi, maaraysId, nimi } = tutkinto
+  const { value, koodisto, label } = selectedValue
+  const { koodistoUri } = koodisto
+
+  if (isInLupa) {
+    // Tarkastetaan löytyykö muutosta editValuesista
+    if (editValues) {
+      const i = getEditIndex(editValues, koodi, koodistoUri)
+      if (i !== undefined) {
+        let obj = fields.get(i)
+        fields.remove(i)
+        obj.value = selectedValue.value
+        fields.insert(i, obj)
+      } else {
+        fields.push({
+          koodiarvo: koodi,
+          koodisto: koodistoUri,
+          nimi,
+          maaraysId,
+          value,
+          label,
+          kuvaus: null,
+          isInLupa,
+          type: "change",
+          perustelu: null
+        })
+      }
+    } else {
+      fields.push({
+        koodiarvo: koodi,
+        koodisto: koodistoUri,
+        nimi,
+        maaraysId,
+        value,
+        label,
+        kuvaus: null,
+        isInLupa,
+        type: "change",
+        perustelu: null
+      })
+    }
+  } else {
+    if (editValues) {
+      const i = getEditIndex(editValues, koodi, koodistoUri)
+      if (i !== undefined) {
+        let obj = fields.get(i)
+        fields.remove(i)
+        obj.value = value
+        obj.label = label
+        obj.isAdded = true
+        fields.insert(i, obj)
+      }
+    }
+  }
+}
+
+export function getKieliList(kielet, locale) {
+  let kieletExtended = []
+
+  kielet.forEach(kieli => {
+    const { koodiArvo, koodisto, metadata } = kieli
+    kieletExtended.push({ koodiArvo, koodisto, metadata, label: parseLocalizedField(metadata, locale), value: koodiArvo })
+  })
+
+  return kieletExtended
 }
 
 function formatMuutosperustelu(muutosperusteluId, muuperustelu) {

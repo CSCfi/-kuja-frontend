@@ -106,6 +106,25 @@ injectGlobal`
       font-size: 26px;
     }
   }
+  
+  div, p, span {
+    &.is-removed {
+      text-decoration: line-through;
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-added {
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-changed {
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-in-lupa {
+      font-weight: bold;
+    }
+  }
 `
 
 export const P = styled.p`

@@ -75,6 +75,38 @@ const ACTION_HANDLERS = {
       fetched: false,
       hasErrored: true
     }
+  },
+  [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
+    return {
+      ...state,
+      create: {
+        isSubmitting: true,
+        isCreated: false,
+        hasErrored: false,
+      }
+    }
+  },
+  [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+    return {
+      ...state,
+      create: {
+        isSubmitting: false,
+        isCreated: true,
+        hasErrored: false,
+        response: action.payload
+      }
+    }
+  },
+  [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+    return {
+      ...state,
+      create: {
+        isSubmitting: false,
+        hasCreated: false,
+        hasErrored: true,
+        response: action.payload
+      }
+    }
   }
 }
 
@@ -83,7 +115,8 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  data: {}
+  data: {},
+  create: undefined
 }
 
 export default function muutospyyntoReducer(state = initialState, action) {

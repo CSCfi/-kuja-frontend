@@ -129,6 +129,14 @@ export const parseKoulutuksetAll = (koulutusdata) => {
   return koulutukset
 }
 
+export function parseMuut(muu) {
+  if (!muu) {
+    return null
+  }
+
+  return _.sortBy(muu, ['koodiArvo'])
+}
+
 export function parseKoulutusalat(koulutusalat) {
   if (!koulutusalat) {
     return null

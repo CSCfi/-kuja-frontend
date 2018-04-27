@@ -97,7 +97,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
         }
 
         case KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: {
-          const { koodiarvo } = maarays
+          const { koodiarvo, koodisto } = maarays
 
           const ammatillinenNimi = parseLocalizedField(maarays.koodi.metadata, 'FI', 'nimi', 'kieli')
 
@@ -105,13 +105,15 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: TUTKINTO_TEKSTIT.ammatilliseentehtavaanvalmistavakoulutus.selite,
             nimi: ammatillinenNimi,
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
 
         case KOODISTOT.KULJETTAJAKOULUTUS: {
-          const { koodiarvo } = maarays
+          const { koodiarvo, koodisto } = maarays
 
           const kuljettajaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
 
@@ -119,12 +121,16 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: kuljettajaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
+          const { koodiarvo, koodisto } = maarays
+
           const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
           // TODO localizations
 
@@ -132,7 +138,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             selite: tyovoimaSelite,
             nimi: "",
             indeksi: muutMaaraykset.length + 1,
-            maaraysId: uuid
+            maaraysId: uuid,
+            koodiarvo,
+            koodisto
           })
           break
         }
@@ -158,6 +166,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
   } else if (target === KOHTEET.KIELI) {
 
       let opetuskielet = []
+      let tutkintokielet = []
       let tutkintokieletEn = []
       let tutkintokieletSv = []
       let tutkintokieletFi = []
@@ -169,11 +178,15 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
 
           // Alimääräykset
           if (aliMaaraykset) {
+            console.log(aliMaaraykset)
               _.forEach(aliMaaraykset, (alimaarays) => {
                   const {koodi} = alimaarays
                   const {koodiArvo, metadata} = koodi
                   const nimi  = parseLocalizedField(maarays.koodi.metadata)
                   const tutkintokoodi = maarays.koodiarvo
+
+                  tutkintokielet.push({ koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi })
+
                   switch (koodiArvo) {
                       case "EN":
                           tutkintokieletEn.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
@@ -200,6 +213,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
 
       returnobj.kohdeKuvaus = (opetuskielet.length > 1) ? LUPA_TEKSTIT.KIELI.VELVOLLISUUS_MONIKKO.FI : LUPA_TEKSTIT.KIELI.VELVOLLISUUS_YKSIKKO.FI
       returnobj.kohdeArvot = getMaaraysArvoArray(opetuskielet)
+      returnobj.tutkinnotjakielet = tutkintokielet
       returnobj.tutkinnotjakieletEn = tutkintokieletEn
       returnobj.tutkinnotjakieletSv = tutkintokieletSv
       returnobj.tutkinnotjakieletRu = tutkintokieletRu
