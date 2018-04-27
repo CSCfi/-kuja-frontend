@@ -193,10 +193,10 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, lupa, paatoskierrokset, createMuutospyynto } = this.props
+    const { muutosperustelut, lupa, paatoskierrokset } = this.props
     const { page, visitedPages } = this.state
 
-    if(sessionStorage.getItem('role')!==ROLE_KAYTTAJA) {
+    if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
         return (
             <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
         )
@@ -204,7 +204,7 @@ class MuutospyyntoWizard extends Component {
 
     // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
     const { jarjestajaOid } = this.props.lupa.data
-    if(sessionStorage.getItem('oid')!==jarjestajaOid) {
+    if (sessionStorage.getItem('oid') !== jarjestajaOid) {
         return (
             <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
         )

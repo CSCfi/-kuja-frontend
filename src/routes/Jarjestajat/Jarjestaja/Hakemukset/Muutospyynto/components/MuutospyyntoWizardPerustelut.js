@@ -77,11 +77,72 @@ const renderTutkintoMuutoksetByType = (props) => {
     fields.map((mutos, index) => {
       let muutos = fields.get(index)
       const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus } = muutos
-      const helpText = type === "addition" ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISAYS_OHJE.FI : MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTO_OHJE.FI
+      const helpText = type === "addition"
+        ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISAYS_OHJE.FI
+        : type === "removal"
+          ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTO_OHJE.FI
+          : type === "change"
+            ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELU_YLEINEN.FI
+            : null
+
       if (type === tyyppi) {
         return (
           <MuutosWrapper key={koodiarvo}>
             <MuutosHeader>{koodiarvo}&nbsp;{nimi}</MuutosHeader>
+            <MuutosBody>
+              <BodyTopArea>
+                <span>{helpText}</span>
+                <span>Katso esimerkkiperustelu</span>
+              </BodyTopArea>
+              <textarea
+                rows="5"
+                onBlur={(e) => {
+                  const i = getIndex(muutokset, koodiarvo)
+                  let obj = fields.get(i)
+                  obj.perustelu = e.target.value
+                  fields.remove(i)
+                  fields.insert(i, obj)
+                }}
+              >{perustelu !== null ? perustelu : null}</textarea>
+            </MuutosBody>
+          </MuutosWrapper>
+        )
+      }
+    })
+  )
+}
+
+const renderKieliMuutoksetByType = (props) => {
+  const { muutokset, tyyppi, kategoria, fields, meta } = props
+
+  return (
+    fields.map((mutos, index) => {
+      let muutos = fields.get(index)
+      const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus, value, label } = muutos
+      const helpText = type === "addition"
+        ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_KIELET_OHJE.LISAYS.FI
+        : type === "removal"
+          ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_KIELET_OHJE.POISTO.FI
+          : type === "change"
+            ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_KIELET_OHJE.MUUTOS.FI
+            : null
+
+      let kieli = undefined
+
+      if (value && value !== "") {
+        kieli = _.find()
+      }
+
+      let heading = `${koodiarvo} ${nimi}`
+
+      if (kategoria === "tutkintokielimuutos") {
+        heading = `${koodiarvo} ${nimi} - ${_.capitalize(label)}`
+      }
+
+      if (type === tyyppi) {
+        return (
+          <MuutosWrapper key={koodiarvo}>
+            <MuutosHeader>{heading}</MuutosHeader>
             <MuutosBody>
               <BodyTopArea>
                 <span>{helpText}</span>
@@ -138,14 +199,30 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
 }
 
 let MuutospyyntoWizardPerustelut = props => {
-  const { handleSubmit, previousPage, muutosperustelut, muutosperusteluValue, muuperusteluValue, tutkintomuutoksetValue, koulutusmuutoksetValue, onCancel } = props
+  const {
+    handleSubmit,
+    previousPage,
+    muutosperustelut,
+    muutosperusteluValue,
+    muuperusteluValue,
+    tutkintomuutoksetValue,
+    koulutusmuutoksetValue,
+    opetuskielimuutoksetValue,
+    tutkintokielimuutoksetValue,
+    onCancel
+  } = props
 
   let hasTutkintoAdditions = false
   let hasTutkintoRemovals = false
   let hasKoulutusAdditions = false
   let hasKoulutusRemovals = false
+  let hasOpetuskieliAdditions = false
+  let hasOpetuskieliRemovals = false
+  let hasTutkintokieliAdditions = false
+  let hasTutkintokieliRemovals = false
+  let hasTutkintokieliChanges = false
 
-  if (tutkintomuutoksetValue && tutkintomuutoksetValue.length !== 0) {
+  if (tutkintomuutoksetValue && tutkintomuutoksetValue.length > 0) {
     tutkintomuutoksetValue.forEach(muutos => {
       if (muutos.type === "addition") {
         hasTutkintoAdditions = true
@@ -155,12 +232,34 @@ let MuutospyyntoWizardPerustelut = props => {
     })
   }
 
-  if (koulutusmuutoksetValue && koulutusmuutoksetValue.length !== 0) {
+  if (koulutusmuutoksetValue && koulutusmuutoksetValue.length > 0) {
     koulutusmuutoksetValue.forEach(muutos => {
       if (muutos.type === "addition") {
         hasKoulutusAdditions = true
       } else if (muutos.type === "removal") {
         hasKoulutusRemovals = true
+      }
+    })
+  }
+
+  if (opetuskielimuutoksetValue && opetuskielimuutoksetValue.length > 0) {
+    opetuskielimuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasOpetuskieliAdditions = true
+      } else if (muutos.type === "removal") {
+        hasOpetuskieliRemovals = true
+      }
+    })
+  }
+
+  if (tutkintokielimuutoksetValue && tutkintokielimuutoksetValue.length > 0) {
+    tutkintokielimuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasTutkintokieliAdditions = true
+      } else if (muutos.type === "removal") {
+        hasTutkintokieliRemovals = true
+      } else if (muutos.type === "change") {
+        hasTutkintokieliChanges = true
       }
     })
   }
@@ -265,6 +364,83 @@ let MuutospyyntoWizardPerustelut = props => {
           </div>
         }
 
+        {hasOpetuskieliAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPETUSKIELET.PERUSTELU.HEADING_LISAYS.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="opetuskielimuutokset"
+                muutokset={opetuskielimuutoksetValue}
+                tyyppi="addition"
+                component={renderKieliMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasOpetuskieliAdditions && hasOpetuskieliRemovals &&
+          <Separator/>
+        }
+
+        {hasOpetuskieliRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPETUSKIELET.PERUSTELU.HEADING_POISTO.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="opetuskielimuutokset"
+                muutokset={opetuskielimuutoksetValue}
+                tyyppi="removal"
+                component={renderKieliMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasTutkintokieliAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.PERUSTELU.HEADING_LISAYS.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="tutkintokielimuutokset"
+                muutokset={tutkintokielimuutoksetValue}
+                tyyppi="addition"
+                kategoria="tutkintokielimuutos"
+                component={renderKieliMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasTutkintokieliRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.PERUSTELU.HEADING_POISTO.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="tutkintokielimuutokset"
+                muutokset={tutkintokielimuutoksetValue}
+                tyyppi="removal"
+                kategoria="tutkintokielimuutos"
+                component={renderKieliMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasTutkintokieliChanges &&
+        <div>
+          <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.PERUSTELU.HEADING_MUUTOS.FI}</h3>
+          <TutkintoMuutoksetWrapper>
+            <FieldArray
+              name="tutkintokielimuutokset"
+              muutokset={tutkintokielimuutoksetValue}
+              tyyppi="change"
+              kategoria="tutkintokielimuutos"
+              component={renderKieliMuutoksetByType}
+            />
+          </TutkintoMuutoksetWrapper>
+        </div>
+        }
+
         <div>
           <WizButton type="button" onClick={previousPage}>
             Edellinen
@@ -286,12 +462,16 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const muuperusteluValue = selector(state, 'muuperustelu')
   const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
   const koulutusmuutoksetValue = selector(state, 'koulutusmuutokset')
+  const opetuskielimuutoksetValue = selector(state, 'opetuskielimuutokset')
+  const tutkintokielimuutoksetValue = selector(state, 'tutkintokielimuutokset')
 
   return {
     muutosperusteluValue,
     muuperusteluValue,
     tutkintomuutoksetValue,
-    koulutusmuutoksetValue
+    koulutusmuutoksetValue,
+    opetuskielimuutoksetValue,
+    tutkintokielimuutoksetValue
   }
 })(MuutospyyntoWizardPerustelut)
 

@@ -47,6 +47,74 @@ export const MUUTOS_WIZARD_TEKSTIT = {
     FI: "Perustele miksi tämä tutkinto tai koulutus tulisi poistaa järjestämisluvasta",
     SV: "På svenska"
   },
+  MUUTOS_OPETUSKIELET: {
+    HEADING: {
+      FI: "Valitse oppilaitoksen opetuskielet",
+      SV: "På svenska"
+    },
+    PERUSTELU: {
+      HEADING_LISAYS: {
+        FI: "Opetuskielet: ehdotetut lisäykset",
+        SV: "På svenska"
+      },
+      HEADING_POISTO: {
+        FI: "Opetuskielet: ehdotetut poistot",
+        SV: "På svenska"
+      },
+      FI: "Perustele lyhyesti miksi tälle muutokselle olisi tarvetta",
+      SV: "På svenska"
+    }
+  },
+  MUUTOS_PERUSTELU_YLEINEN: {
+    FI: "Perustele lyhyesti miksi tälle muutokselle olisi tarvetta",
+    SV: "På svenska"
+  },
+  MUUTOS_KIELET_OHJE: {
+    LISAYS: {
+      FI: "Perustele lyhyesti miksi tälle kielelle olisi tarvetta",
+      SV: "På svenska"
+    },
+    POISTO: {
+      FI: "Perustele lyhyesti miksi tämä kieli tulisi poistaa",
+      SV: "På svenska"
+    },
+    MUUTOS: {
+      FI: "Perustele lyhyesti miksi tälle kielimuutokselle olisi tarvetta",
+      SV: "På svenska"
+    }
+  },
+  MUUTOS_TUTKINTOKIELET: {
+    HEADING: {
+      FI: "Valitse opetuskielen lisäksi erilliset tutkintokielet",
+      SV: "På svenska"
+    },
+    PERUSTELU: {
+      HEADING_LISAYS: {
+        FI: "Tutkintokielet: ehdotetut lisäykset",
+        SV: "På svenska"
+      },
+      HEADING_POISTO: {
+        FI: "Tutkintokielet: ehdotetut poistot",
+        SV: "På svenska"
+      },
+      HEADING_MUUTOS: {
+        FI: "Tutkintokielet: ehdotetut muutokset",
+        SV: "På svenska"
+      },
+      LISAYS: {
+        FI: "Perustele lyhyesti miksi tälle kielelle olisi tarvetta",
+        SV: "På svenska"
+      },
+      POISTO: {
+        FI: "Perustele lyhyesti miksi tämä kieli tulisi poistaa",
+        SV: "På svenska"
+      },
+      MUUTOS: {
+        FI: "Perustele lyhyesti miksi tälle kielimuutokselle olisi tarvetta",
+        SV: "På svenska"
+      }
+    }
+  },
   YHTEENVETO: {
     HEADING: {
       FI: "Yhteenveto",

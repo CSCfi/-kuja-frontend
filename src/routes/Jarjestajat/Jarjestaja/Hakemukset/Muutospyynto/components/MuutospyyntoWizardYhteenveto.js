@@ -1,26 +1,18 @@
 import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { reduxForm, formValueSelector } from 'redux-form'
+import { reduxForm, formValueSelector, Field } from 'redux-form'
 import Moment from 'react-moment'
-import styled from 'styled-components'
 
 import validate from '../modules/validateWizard'
-import { Row } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 import { COLORS } from "../../../../../../modules/styles"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import {
-  getJarjestajaData,
-  getTutkintoKoodiByMaaraysId, getTutkintoNimiByKoodiarvo,
-  getTutkintoNimiByMaaraysId
-} from "../modules/koulutusUtil"
-import { createMuutospyynto } from "../modules/muutospyynto"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
-    {paatoskierros.meta.fi}&nbsp;
+    {paatoskierros.meta.nimi.fi}&nbsp;
     (
       <Moment format="DD.MM.YYYY">{paatoskierros.alkupvm}</Moment>
       &nbsp;-&nbsp;
@@ -44,10 +36,24 @@ const Muutosperustelu = ({ muutosperustelu, muuperustelu }) => {
 }
 
 let MuutospyyntoWizardYhteenveto = props => {
-  const { handleSubmit, muutosperustelu, muuperustelu, paatoskierros, tutkintomuutokset, onCancel, paatoskierrokset, muutosperustelut } = props
+  const {
+    handleSubmit,
+    muutosperustelu,
+    muuperustelu,
+    tutkintomuutokset,
+    onCancel,
+    paatoskierrokset,
+    muutosperustelut,
+    opetuskielimuutokset,
+    tutkinetokielimuutokset
+  } = props
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
-    return String(pkierros.uuid) === String(paatoskierros)
+    if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
+      if (pkierros.meta.nimi.fi === "Avoin päätöskierros 2018") {
+        return pkierros
+      }
+    }
   })
 
   const muutosperusteluObj = _.find(muutosperustelut.data, mperustelu => {
@@ -119,6 +125,22 @@ let MuutospyyntoWizardYhteenveto = props => {
         </div>
       </div>
 
+      {opetuskielimuutokset && opetuskielimuutokset.length > 0 &&
+        <div>
+          <h3>Opetuskielimuutokset</h3>
+          <div>
+            {opetuskielimuutokset.map(muutos => {
+              const { nimi, koodiarvo, koodisto, type, perustelu } = muutos
+              const identifier = `${koodiarvo}-${nimi}-${type}`
+              const tyyppi = type === "addition" ? "lisäys" : type === "removal" ? "poisto" : null
+              return (
+                <div key={identifier}>{`${koodiarvo} ${nimi} ${tyyppi} ${perustelu}`}</div>
+              )
+            })}
+          </div>
+        </div>
+      }
+
       <form onSubmit={handleSubmit}>
         <WizButton type="submit" className="next">
           Tallenna
@@ -143,6 +165,8 @@ export default connect(state => {
   const muuperustelu = selector(state, 'muuperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
   const tutkintomuutokset = selector(state, 'tutkintomuutokset')
+  const opetuskielimuutokset = selector(state, 'opetuskielimuutokset')
+  const tutkintokielimuutokset = selector(state, 'tutkintokielimuutokset')
 
   return {
     formValues: state.form.uusiHakemus.values,
@@ -150,9 +174,9 @@ export default connect(state => {
     muuperustelu,
     paatoskierros,
     tutkintomuutokset,
+    opetuskielimuutokset,
+    tutkintokielimuutokset,
     muutosperustelut: state.muutosperustelut,
     paatoskierrokset: state.paatoskierrokset
   }
 })(MuutospyyntoWizardYhteenveto)
-
-

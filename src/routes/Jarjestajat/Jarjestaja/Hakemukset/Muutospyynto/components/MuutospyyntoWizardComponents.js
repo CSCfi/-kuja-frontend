@@ -149,6 +149,10 @@ export const Info = styled.div`
   margin-left:20px;
 `
 
+export const Div = styled.div`
+  margin: ${props => props.margin ? props.margin : 'auto'};
+`
+
 export const Separator = styled.div`
   &:after {
     display: block;
@@ -198,9 +202,10 @@ export const SelectStyle = styled.div`
   }
 `
 
-export const TutkintoMuuWrapper = styled.div`
+export const CheckboxRowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: baseline;
   margin-bottom: 20px;
   
   &.is-removed {
@@ -215,6 +220,19 @@ export const TutkintoMuuWrapper = styled.div`
   &.is-in-lupa {
     font-weight: bold;
   }
+`
+
+export const CheckboxRowContainerSmall = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin: 2px 0;
+  font-size: 14px;
+  
+`
+
+export const TableDiv = styled.div`
+  flex: ${props => props.flex ? props.flex : 1};
 `
 
 export const Checkbox = styled.div`
@@ -247,6 +265,82 @@ export const Checkbox = styled.div`
       position: absolute;
       top: 4px;
       left: 4px;
+      border: 3px solid #fcfff4;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+   
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+    
+    &:checked + label {
+      background: ${COLORS.OIVA_GREEN};
+      
+      &:hover {
+        &:after {
+          background: rgba(90, 138, 112, 0.0);
+        }
+      }
+    }
+    
+    &:hover {
+      background: rgba(90, 138, 112, 0.5);
+    }
+    
+    &:checked + label:after {
+      opacity: 1;
+      background: ${COLORS.OIVA_GREEN};
+      
+      &:hover {
+        background: rgba(90, 138, 112, 0.5);
+      }
+    }
+    
+    &:checked + label:hover {
+      background: rgba(90, 138, 112, 0.5);
+      
+      &:after {
+        border-color: white;
+        opacity: 1;
+      }
+    }
+  }
+`
+
+export const CheckboxSmall = styled.div`
+  width: 14px;
+  position: relative;
+  margin: 6px 10px;
+  
+  label {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background: white;
+    border-radius: 0;
+    border: 1px solid ${COLORS.OIVA_GREEN};
+    
+    &:hover {
+      &:after {
+        border-color: ${COLORS.OIVA_GREEN};
+        opacity: 0.5;
+      }
+    }
+    
+    &:after {
+      content: '';
+      width: 6px;
+      height: 3px;
+      position: absolute;
+      top: 3px;
+      left: 3px;
       border: 3px solid #fcfff4;
       border-top: none;
       border-right: none;

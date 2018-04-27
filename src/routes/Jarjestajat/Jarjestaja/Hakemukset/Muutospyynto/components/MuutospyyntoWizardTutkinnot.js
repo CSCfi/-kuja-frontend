@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
@@ -20,7 +20,7 @@ import {
   Kohde,
   Info,
   Checkbox,
-  TutkintoMuuWrapper
+  CheckboxRowContainer
 } from './MuutospyyntoWizardComponents'
 
 class MuutospyyntoWizardTutkinnot extends Component {
@@ -45,7 +45,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue } = this.props
+    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue, paatoskierrokset } = this.props
     const { kohteet } = lupa
     const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
@@ -256,7 +256,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                 }
 
                 return (
-                  <TutkintoMuuWrapper key={identifier} className={customClassName}>
+                  <CheckboxRowContainer key={identifier} className={customClassName}>
                     <Checkbox>
                       <input
                         type="checkbox"
@@ -270,7 +270,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
                       <div>{nimi}</div>
                       <div>{kuvaus}</div>
                     </div>
-                  </TutkintoMuuWrapper>
+                  </CheckboxRowContainer>
                 )
               })}
             </div>
@@ -313,7 +313,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           }
 
           return (
-            <TutkintoMuuWrapper key={identifier} className={customClassName}>
+            <CheckboxRowContainer key={identifier} className={customClassName}>
               <Checkbox>
                 <input
                   type="checkbox"
@@ -325,7 +325,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
               </Checkbox>
               <div>{koodiArvo}</div>
               <div>{nimi}</div>
-            </TutkintoMuuWrapper>
+            </CheckboxRowContainer>
           )
         })}
       </Row>
@@ -343,7 +343,8 @@ MuutospyyntoWizardTutkinnot = connect(state => {
     tutkintomuutoksetValue,
     koulutusmuutoksetValue,
     koulutusalat: state.koulutusalat,
-    koulutukset: state.koulutukset
+    koulutukset: state.koulutukset,
+    paatoskierrokset: state.paatoskierrokset
   }
 })(MuutospyyntoWizardTutkinnot)
 

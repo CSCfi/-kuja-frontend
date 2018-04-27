@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
-import MuutospyyntoWizardKielet from './MuutospyyntoWizardKielet'
+import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoWizardOpetuskieletContainer'
+import MuutospyyntoWizardTutkintokieletContainer from '../containers/MuutospyyntoWizardTutkintokieletContainer'
 import { COLORS } from "../../../../../../modules/styles"
-import { BottomWrapper } from "./MuutospyyntoWizardComponents"
+import { BottomWrapper, Kohde } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
 
 class MuutospyyntoWizardMuutokset extends Component {
@@ -23,9 +24,6 @@ class MuutospyyntoWizardMuutokset extends Component {
       <div>
         <form onSubmit={onSubmit}>
           <MuutospyyntoWizardTutkinnot
-            previousPage={previousPage}
-            onSubmit={onSubmit}
-            onCancel={onCancel}
             lupa={lupa}
             fetchKoulutusalat={fetchKoulutusalat}
             fetchKoulutuksetAll={fetchKoulutuksetAll}
@@ -33,14 +31,17 @@ class MuutospyyntoWizardMuutokset extends Component {
             fetchKoulutus={fetchKoulutus}
           />
 
-          <MuutospyyntoWizardKielet
-            lupa={lupa}
-          />
+          <Kohde>
+            <MuutospyyntoWizardOpetuskieletContainer
+              lupa={lupa}
+            />
+
+            <MuutospyyntoWizardTutkintokieletContainer
+              lupa={lupa}
+            />
+          </Kohde>
 
           <BottomWrapper>
-            <WizButton type="button" onClick={previousPage}>
-              Edellinen
-            </WizButton>
             <WizButton type="submit">Seuraava</WizButton>
             <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
           </BottomWrapper>
