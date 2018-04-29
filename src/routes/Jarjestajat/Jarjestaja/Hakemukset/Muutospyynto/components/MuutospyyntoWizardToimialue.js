@@ -62,10 +62,6 @@ class MuutospyyntoWizardToimialue extends Component {
     const options = _.concat(maakuntaList, kuntaList)
     let initialValue = []
 
-    console.log('renderToimialueMuutokset')
-    console.log(editValues)
-    console.log(fields)
-
     maakunnat.forEach(maakunta => { initialValue.push(maakunta.koodiarvo) })
     kunnat.forEach(kunta => { initialValue.push(kunta.koodiarvo) })
 
