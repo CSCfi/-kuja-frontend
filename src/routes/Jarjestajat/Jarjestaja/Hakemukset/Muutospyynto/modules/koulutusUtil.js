@@ -277,7 +277,6 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
 }
 
 export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tutkinto, selectedValue) {
-
   if (selectedValue === null) {
     return
   }

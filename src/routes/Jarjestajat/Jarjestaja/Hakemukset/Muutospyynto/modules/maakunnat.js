@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import { getToimialueList } from "./toimialueUtil"
 
 // Constants
 export const FETCH_MAAKUNNAT_START = 'FETCH_MAAKUNNAT_START'
@@ -39,7 +40,8 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: action.payload,
+      maakuntaList: getToimialueList(action.payload, 'FI')
     }
   },
   [FETCH_MAAKUNNAT_FAILURE] : (state, action) => {

@@ -32,15 +32,15 @@ class MuutospyyntoWizardMuutokset extends Component {
             fetchKoulutus={fetchKoulutus}
           />
 
-          <Kohde>
-            <MuutospyyntoWizardOpetuskieletContainer
-              lupa={lupa}
-            />
+          {/*<Kohde>*/}
+            {/*<MuutospyyntoWizardOpetuskieletContainer*/}
+              {/*lupa={lupa}*/}
+            {/*/>*/}
 
-            <MuutospyyntoWizardTutkintokieletContainer
-              lupa={lupa}
-            />
-          </Kohde>
+            {/*<MuutospyyntoWizardTutkintokieletContainer*/}
+              {/*lupa={lupa}*/}
+            {/*/>*/}
+          {/*</Kohde>*/}
 
           <Kohde>
             <MuutospyyntoWizardToimialueContainer

@@ -398,13 +398,13 @@ function getToimintaalueArvoArray(maaraykset) {
     let arr = []
 
     _.forEach(maaraykset, (maarays) => {
-        const { koodi, koodisto } = maarays
+        const { koodi, koodisto, koodiarvo } = maarays
 
         if (koodi) {
             const { metadata } = koodi
 
             if (metadata) {
-                arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto })
+                arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto, koodiarvo: koodiarvo})
             }
         }
     })
