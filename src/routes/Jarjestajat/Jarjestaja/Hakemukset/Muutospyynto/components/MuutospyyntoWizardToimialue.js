@@ -99,7 +99,7 @@ class ToimialueSelect extends Component {
 
     return (
       <Select
-        name="asdasda"
+        name="toimialue"
         multi
         options={options}
         value={value}

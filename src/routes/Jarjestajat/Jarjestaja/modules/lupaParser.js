@@ -178,7 +178,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
 
           // Alimääräykset
           if (aliMaaraykset) {
-            console.log(aliMaaraykset)
               _.forEach(aliMaaraykset, (alimaarays) => {
                   const {koodi} = alimaarays
                   const {koodiArvo, metadata} = koodi
