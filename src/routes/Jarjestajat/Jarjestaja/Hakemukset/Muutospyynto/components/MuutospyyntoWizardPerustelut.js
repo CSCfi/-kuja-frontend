@@ -166,6 +166,54 @@ const renderKieliMuutoksetByType = (props) => {
   )
 }
 
+const renderToimialueMuutokset = (props) => {
+  const { muutokset, tyyppi, fields, meta } = props
+
+  return (
+    fields.map((mutos, index) => {
+      let muutos = fields.get(index)
+      const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus, value, label } = muutos
+      const helpText = type === "addition"
+        ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUE_OHJE.LISAYS.FI
+        : type === "removal"
+          ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUE_OHJE.POISTO.FI
+          : null
+
+      let kieli = undefined
+
+      if (value && value !== "") {
+        kieli = _.find()
+      }
+
+      let heading = `${koodiarvo} ${nimi}`
+
+      if (type === tyyppi) {
+        return (
+          <MuutosWrapper key={koodiarvo}>
+            <MuutosHeader>{label}</MuutosHeader>
+            <MuutosBody>
+              <BodyTopArea>
+                <span>{helpText}</span>
+                <span>Katso esimerkkiperustelu</span>
+              </BodyTopArea>
+              <textarea
+                rows="5"
+                onBlur={(e) => {
+                  const i = getIndex(muutokset, koodiarvo)
+                  let obj = fields.get(i)
+                  obj.perustelu = e.target.value
+                  fields.remove(i)
+                  fields.insert(i, obj)
+                }}
+              >{perustelu !== null ? perustelu : null}</textarea>
+            </MuutosBody>
+          </MuutosWrapper>
+        )
+      }
+    })
+  )
+}
+
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div>
     <label>{label}</label>
@@ -198,6 +246,50 @@ const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error
   )
 }
 
+const renderOpiskelijavuosiMuutokset = (props) => {
+  const { muutokset, fields } = props
+
+  return (
+    fields.map((mutos, index) => {
+      let muutos = fields.get(index)
+      const { koodiarvo, nimi, type, perustelu, koodisto, kategoria, arvo } = muutos
+      const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+
+      const heading = koodiarvo === "3"
+        ? "Vähimmäisopiskelijavuosimäärä: " + arvo
+        : koodiarvo === "2"
+          ? "Vaativa koulutus: " + arvo
+          : koodiarvo === "4"
+            ? "Sisäoppilaitosmuotoinen opetus: " + arvo
+            : null
+
+
+
+      return (
+        <MuutosWrapper key={koodiarvo}>
+          <MuutosHeader>{heading}</MuutosHeader>
+          <MuutosBody>
+            <BodyTopArea>
+              <span>{helpText}</span>
+              <span>Katso esimerkkiperustelu</span>
+            </BodyTopArea>
+            <textarea
+              rows="5"
+              onBlur={(e) => {
+                const i = getIndex(muutokset, koodiarvo)
+                let obj = fields.get(i)
+                obj.perustelu = e.target.value
+                fields.remove(i)
+                fields.insert(i, obj)
+              }}
+            >{perustelu !== null ? perustelu : null}</textarea>
+          </MuutosBody>
+        </MuutosWrapper>
+      )
+    })
+  )
+}
+
 let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
@@ -209,6 +301,8 @@ let MuutospyyntoWizardPerustelut = props => {
     koulutusmuutoksetValue,
     opetuskielimuutoksetValue,
     tutkintokielimuutoksetValue,
+    toimialuemuutoksetValue,
+    opiskelijavuosimuutoksetValue,
     onCancel
   } = props
 
@@ -221,6 +315,9 @@ let MuutospyyntoWizardPerustelut = props => {
   let hasTutkintokieliAdditions = false
   let hasTutkintokieliRemovals = false
   let hasTutkintokieliChanges = false
+  let hasToimialueAdditions = false
+  let hasToimialueRemovals = false
+  let hasOpiskelijavuosiChanges = false
 
   if (tutkintomuutoksetValue && tutkintomuutoksetValue.length > 0) {
     tutkintomuutoksetValue.forEach(muutos => {
@@ -262,6 +359,20 @@ let MuutospyyntoWizardPerustelut = props => {
         hasTutkintokieliChanges = true
       }
     })
+  }
+
+  if (toimialuemuutoksetValue && toimialuemuutoksetValue.length > 0) {
+    toimialuemuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasToimialueAdditions = true
+      } else if (muutos.type === "removal") {
+        hasToimialueRemovals = true
+      }
+    })
+  }
+
+  if (opiskelijavuosimuutoksetValue && opiskelijavuosimuutoksetValue.length > 0) {
+    hasOpiskelijavuosiChanges = true
   }
 
   return (
@@ -427,18 +538,60 @@ let MuutospyyntoWizardPerustelut = props => {
         }
 
         {hasTutkintokieliChanges &&
-        <div>
-          <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.PERUSTELU.HEADING_MUUTOS.FI}</h3>
-          <TutkintoMuutoksetWrapper>
-            <FieldArray
-              name="tutkintokielimuutokset"
-              muutokset={tutkintokielimuutoksetValue}
-              tyyppi="change"
-              kategoria="tutkintokielimuutos"
-              component={renderKieliMuutoksetByType}
-            />
-          </TutkintoMuutoksetWrapper>
-        </div>
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.PERUSTELU.HEADING_MUUTOS.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="tutkintokielimuutokset"
+                muutokset={tutkintokielimuutoksetValue}
+                tyyppi="change"
+                kategoria="tutkintokielimuutos"
+                component={renderKieliMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasToimialueAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUEET.PERUSTELU.HEADING_LISAYS.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="toimialuemuutokset"
+                muutokset={toimialuemuutoksetValue}
+                tyyppi="addition"
+                component={renderToimialueMuutokset}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasToimialueRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUEET.PERUSTELU.HEADING_POISTO.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="toimialuemuutokset"
+                muutokset={toimialuemuutoksetValue}
+                tyyppi="removal"
+                component={renderToimialueMuutokset}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasOpiskelijavuosiChanges &&
+          <div>
+            <h3>Muutokset opiskelijavuosiin</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="opiskelijavuosimuutokset"
+                muutokset={opiskelijavuosimuutoksetValue}
+                component={renderOpiskelijavuosiMuutokset}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+
         }
 
         <div>
@@ -464,6 +617,8 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const koulutusmuutoksetValue = selector(state, 'koulutusmuutokset')
   const opetuskielimuutoksetValue = selector(state, 'opetuskielimuutokset')
   const tutkintokielimuutoksetValue = selector(state, 'tutkintokielimuutokset')
+  const toimialuemuutoksetValue = selector(state, 'toimialuemuutokset')
+  const opiskelijavuosimuutoksetValue = selector(state, 'opiskelijavuosimuutokset')
 
   return {
     muutosperusteluValue,
@@ -471,7 +626,9 @@ MuutospyyntoWizardPerustelut = connect(state => {
     tutkintomuutoksetValue,
     koulutusmuutoksetValue,
     opetuskielimuutoksetValue,
-    tutkintokielimuutoksetValue
+    tutkintokielimuutoksetValue,
+    toimialuemuutoksetValue,
+    opiskelijavuosimuutoksetValue
   }
 })(MuutospyyntoWizardPerustelut)
 

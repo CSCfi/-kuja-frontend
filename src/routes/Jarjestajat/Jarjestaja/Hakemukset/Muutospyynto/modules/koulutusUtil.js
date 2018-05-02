@@ -203,6 +203,22 @@ export function getChangeIndices(values, koodiarvo) {
   return indices
 }
 
+export function getOpiskelijavuosiIndex(values, koodiarvo) {
+  let i = undefined
+
+  _.forEach(values, (value, idx) => {
+    if (value.koodiarvo === koodiarvo) {
+      i = idx
+    }
+  })
+
+  return i
+}
+
+export function handleOpiskelijavuosiInputChange(editValue, fields, value) {
+  console.log('handleOpiskelijavuosiInputChange')
+}
+
 export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto
@@ -277,7 +293,6 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
 }
 
 export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tutkinto, selectedValue) {
-
   if (selectedValue === null) {
     return
   }

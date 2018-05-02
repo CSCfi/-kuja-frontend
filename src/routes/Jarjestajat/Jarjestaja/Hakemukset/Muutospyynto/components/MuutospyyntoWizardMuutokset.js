@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
 import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoWizardOpetuskieletContainer'
 import MuutospyyntoWizardTutkintokieletContainer from '../containers/MuutospyyntoWizardTutkintokieletContainer'
+import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWizardToimialueContainer'
+import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
 import { COLORS } from "../../../../../../modules/styles"
 import { BottomWrapper, Kohde } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
@@ -37,6 +39,18 @@ class MuutospyyntoWizardMuutokset extends Component {
             />
 
             <MuutospyyntoWizardTutkintokieletContainer
+              lupa={lupa}
+            />
+          </Kohde>
+
+          <Kohde>
+            <MuutospyyntoWizardToimialueContainer
+              lupa={lupa}
+            />
+          </Kohde>
+
+          <Kohde>
+            <MuutospyyntoWizardOpiskelijavuodet
               lupa={lupa}
             />
           </Kohde>
