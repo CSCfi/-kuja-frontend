@@ -566,9 +566,9 @@ let MuutospyyntoWizardPerustelut = props => {
           </div>
         }
 
-        {hasToimialueAdditions &&
+        {hasToimialueRemovals &&
           <div>
-            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUEET.PERUSTELU.HEADING_LISAYS.FI}</h3>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUEET.PERUSTELU.HEADING_POISTO.FI}</h3>
             <TutkintoMuutoksetWrapper>
               <FieldArray
                 name="toimialuemuutokset"
