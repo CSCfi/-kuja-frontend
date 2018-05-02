@@ -83,6 +83,16 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       SV: "På svenska"
     }
   },
+  MUUTOS_TOIMIALUE_OHJE: {
+    LISAYS: {
+      FI: "Perustele lyhyesti miksi tälle toimialueelle olisi tarvetta",
+      SV: "På svenska"
+    },
+    POISTO: {
+      FI: "Perustele lyhyesti miksi tämä toimialue tulisi poistaa",
+      SV: "På svenska"
+    }
+  },
   MUUTOS_TUTKINTOKIELET: {
     HEADING: {
       FI: "Valitse opetuskielen lisäksi erilliset tutkintokielet",
@@ -111,6 +121,30 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       },
       MUUTOS: {
         FI: "Perustele lyhyesti miksi tälle kielimuutokselle olisi tarvetta",
+        SV: "På svenska"
+      }
+    }
+  },
+  MUUTOS_TOIMIALUEET: {
+    HEADING: {
+      FI: "PLACEHOLDER",
+      SV: "På svenska"
+    },
+    PERUSTELU: {
+      HEADING_LISAYS: {
+        FI: "Toimialueet: ehdotetut lisäykset",
+        SV: "På svenska"
+      },
+      HEADING_POISTO: {
+        FI: "Toimialueet: ehdotetut poistot",
+        SV: "På svenska"
+      },
+      LISAYS: {
+        FI: "Perustele lyhyesti miksi tälle toimialueelle olisi tarvetta",
+        SV: "På svenska"
+      },
+      POISTO: {
+        FI: "Perustele lyhyesti miksi tämä toimialue tulisi poistaa",
         SV: "På svenska"
       }
     }
