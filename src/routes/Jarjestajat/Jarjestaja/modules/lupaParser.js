@@ -287,7 +287,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     let kokeilut = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, meta, koodiarvo } = maarays
+      const { koodi, meta, koodiarvo, koodisto } = maarays
       const { metadata } = koodi
 
         if (koodi && metadata) {
@@ -295,66 +295,74 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             const type = parseLocalizedField(metadata, 'FI', 'nimi', 'kieli')
             const desc = parseLocalizedField(metadata, 'FI', 'kuvaus', 'kieli') || 'Ei kuvausta saatavilla'
 
+            let obj = {
+              tyyppi: type,
+              kuvaus: desc,
+              koodiarvo: koodiarvo,
+              koodisto: koodisto
+            }
+
             switch (koodiarvo){
 
                 case "1": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
                 case "4": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
                 case "6": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
-
                 case "7": {
                     // TODO localization
                     const { kokeilu } = meta
                     const { fi } = kokeilu
-                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    obj.kuvaus = fi
+                    kokeilut.push(obj)
                     break
                 }
                 case "8": {
                     // TODO localization
                     const { yhteistyösopimus } = meta
                     const { fi } = yhteistyösopimus
-                    kokeilut.push({ tyyppi: type, kuvaus: fi })
+                    obj.kuvaus = fi
+                    kokeilut.push(obj)
                     break
                 }
                 case "9": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
                 case "10": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
                 case "11": {
-                    muut.push({ tyyppi: type, kuvaus: desc })
+                    muut.push(obj)
                     break
                 }
                 case "2": {
-                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    vaativat.push(obj)
                     break
                 }
                 case "3": {
-                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    vaativat.push(obj)
                     break
                 }
                 case "12": {
-                    vaativat.push({ tyyppi: type, kuvaus: desc })
+                    vaativat.push(obj)
                     break
                 }
 
                 case "5": {
-                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    vankilat.push(obj)
                     break
                 }
                 case "13": {
-                    vankilat.push({ tyyppi: type, kuvaus: desc })
+                    vankilat.push(obj)
                     break
                 }
             }
