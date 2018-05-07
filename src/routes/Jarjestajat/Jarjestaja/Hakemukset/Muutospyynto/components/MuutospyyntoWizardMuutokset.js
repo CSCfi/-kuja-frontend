@@ -5,6 +5,7 @@ import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoW
 import MuutospyyntoWizardTutkintokieletContainer from '../containers/MuutospyyntoWizardTutkintokieletContainer'
 import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWizardToimialueContainer'
 import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
+import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
 import { COLORS } from "../../../../../../modules/styles"
 import { BottomWrapper, Kohde } from "./MuutospyyntoWizardComponents"
 import { WizButton } from "./MuutospyyntoWizard"
@@ -51,6 +52,12 @@ class MuutospyyntoWizardMuutokset extends Component {
 
           <Kohde>
             <MuutospyyntoWizardOpiskelijavuodet
+              lupa={lupa}
+            />
+          </Kohde>
+
+          <Kohde>
+            <MuutospyyntoWizardMuutContainer
               lupa={lupa}
             />
           </Kohde>
