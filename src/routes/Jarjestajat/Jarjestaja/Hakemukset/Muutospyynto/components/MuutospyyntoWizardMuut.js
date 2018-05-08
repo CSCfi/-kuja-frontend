@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 
 import { ContentContainer } from "../../../../../../modules/elements"
-import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer } from "./MuutospyyntoWizardComponents"
+import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, Div } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
@@ -107,8 +107,8 @@ class MuutospyyntoWizardMuut extends Component {
                   />
                   <label htmlFor={identifier}></label>
                 </Checkbox>
-                <div>{nimi}</div>
-                <div>{kuvaus}</div>
+                <Div margin="0 10px" flex="2">{nimi}</Div>
+                <Div margin="0 10px" flex="5">{kuvaus}</Div>
               </CheckboxRowContainer>
             )
           })}

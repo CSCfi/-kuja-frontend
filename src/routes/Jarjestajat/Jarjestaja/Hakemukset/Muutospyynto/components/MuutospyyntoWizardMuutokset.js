@@ -26,35 +26,35 @@ class MuutospyyntoWizardMuutokset extends Component {
     return (
       <div>
         <form onSubmit={onSubmit}>
-          {/*<MuutospyyntoWizardTutkinnot*/}
-            {/*lupa={lupa}*/}
-            {/*fetchKoulutusalat={fetchKoulutusalat}*/}
-            {/*fetchKoulutuksetAll={fetchKoulutuksetAll}*/}
-            {/*fetchKoulutuksetMuut={fetchKoulutuksetMuut}*/}
-            {/*fetchKoulutus={fetchKoulutus}*/}
-          {/*/>*/}
+          <MuutospyyntoWizardTutkinnot
+            lupa={lupa}
+            fetchKoulutusalat={fetchKoulutusalat}
+            fetchKoulutuksetAll={fetchKoulutuksetAll}
+            fetchKoulutuksetMuut={fetchKoulutuksetMuut}
+            fetchKoulutus={fetchKoulutus}
+          />
 
-          {/*<Kohde>*/}
-            {/*<MuutospyyntoWizardOpetuskieletContainer*/}
-              {/*lupa={lupa}*/}
-            {/*/>*/}
+          <Kohde>
+            <MuutospyyntoWizardOpetuskieletContainer
+              lupa={lupa}
+            />
 
-            {/*<MuutospyyntoWizardTutkintokieletContainer*/}
-              {/*lupa={lupa}*/}
-            {/*/>*/}
-          {/*</Kohde>*/}
+            <MuutospyyntoWizardTutkintokieletContainer
+              lupa={lupa}
+            />
+          </Kohde>
 
-          {/*<Kohde>*/}
-            {/*<MuutospyyntoWizardToimialueContainer*/}
-              {/*lupa={lupa}*/}
-            {/*/>*/}
-          {/*</Kohde>*/}
+          <Kohde>
+            <MuutospyyntoWizardToimialueContainer
+              lupa={lupa}
+            />
+          </Kohde>
 
-          {/*<Kohde>*/}
-            {/*<MuutospyyntoWizardOpiskelijavuodet*/}
-              {/*lupa={lupa}*/}
-            {/*/>*/}
-          {/*</Kohde>*/}
+          <Kohde>
+            <MuutospyyntoWizardOpiskelijavuodet
+              lupa={lupa}
+            />
+          </Kohde>
 
           <Kohde>
             <MuutospyyntoWizardMuutContainer
