@@ -285,9 +285,10 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     let vaativat = []
     let vankilat = []
     let kokeilut = []
+    let muutCombined = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, meta, koodiarvo, koodisto } = maarays
+      const { koodi, meta, koodiarvo, koodisto, uuid } = maarays
       const { metadata } = koodi
 
         if (koodi && metadata) {
@@ -299,7 +300,8 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
               tyyppi: type,
               kuvaus: desc,
               koodiarvo: koodiarvo,
-              koodisto: koodisto
+              koodisto: koodisto,
+              maaraysId: uuid
             }
 
             switch (koodiarvo){
@@ -356,7 +358,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                     vaativat.push(obj)
                     break
                 }
-
                 case "5": {
                     vankilat.push(obj)
                     break
@@ -366,6 +367,8 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                     break
                 }
             }
+
+            muutCombined.push(obj)
       }
 
     })
@@ -374,6 +377,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     returnobj.vaativat = vaativat
     returnobj.vankilat = vankilat
     returnobj.kokeilut = kokeilut
+    returnobj.muutCombined = muutCombined
   }
 
   returnobj.heading = heading

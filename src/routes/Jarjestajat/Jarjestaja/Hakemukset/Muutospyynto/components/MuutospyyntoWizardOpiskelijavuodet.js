@@ -5,7 +5,7 @@ import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 
 import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
-import { getOpiskelijavuosiIndex, handleOpiskelijavuosiInputChange } from "../modules/koulutusUtil"
+import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil"
 import { handleToimialueSelectChange } from "../modules/toimialueUtil"
 
 class MuutospyyntoWizardOpiskelijavuodet extends Component {
