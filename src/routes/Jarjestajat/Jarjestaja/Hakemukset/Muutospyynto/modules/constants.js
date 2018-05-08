@@ -149,6 +149,24 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       }
     }
   },
+  MUUTOS_MUUT: {
+    HEADING: {
+      FI: "Valitse muut oikeudet, velvollisuudet, ehdot ja tehtävät",
+      SV: "På svenska"
+    },
+    PERUSTELU: {
+      HEADING_LISAYS: {
+        FI: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät: ehdotetut lisäykset",
+        SV: "På svenska"
+      },
+      HEADING_POISTO: {
+        FI: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät: ehdotetut poistot",
+        SV: "På svenska"
+      },
+      FI: "Perustele lyhyesti miksi tälle muutokselle olisi tarvetta",
+      SV: "På svenska"
+    }
+  },
   YHTEENVETO: {
     HEADING: {
       FI: "Yhteenveto",

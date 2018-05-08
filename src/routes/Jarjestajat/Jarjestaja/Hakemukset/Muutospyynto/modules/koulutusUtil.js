@@ -215,10 +215,6 @@ export function getOpiskelijavuosiIndex(values, koodiarvo) {
   return i
 }
 
-export function handleOpiskelijavuosiInputChange(editValue, fields, value) {
-  console.log('handleOpiskelijavuosiInputChange')
-}
-
 export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto

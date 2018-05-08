@@ -151,6 +151,7 @@ export const Info = styled.div`
 
 export const Div = styled.div`
   margin: ${props => props.margin ? props.margin : 'auto'};
+  ${props => props.flex ? 'flex:' + props.flex : null}
 `
 
 export const Separator = styled.div`
