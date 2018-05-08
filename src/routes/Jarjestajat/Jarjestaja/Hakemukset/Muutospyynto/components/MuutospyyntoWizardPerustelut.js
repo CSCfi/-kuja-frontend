@@ -290,6 +290,46 @@ const renderOpiskelijavuosiMuutokset = (props) => {
   )
 }
 
+const renderMuutMuutoksetByType = (props) => {
+  const { muutokset, tyyppi, fields, meta } = props
+
+  return (
+    fields.map((mutos, index) => {
+      let muutos = fields.get(index)
+      const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus, value, label } = muutos
+      const helpText = MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.PERUSTELU.FI
+
+      let heading = `${koodiarvo} ${nimi}`
+
+
+
+      if (type === tyyppi) {
+        return (
+          <MuutosWrapper key={koodiarvo}>
+            <MuutosHeader>{heading}</MuutosHeader>
+            <MuutosBody>
+              <BodyTopArea>
+                <span>{helpText}</span>
+                <span>Katso esimerkkiperustelu</span>
+              </BodyTopArea>
+              <textarea
+                rows="5"
+                onBlur={(e) => {
+                  const i = getIndex(muutokset, koodiarvo)
+                  let obj = fields.get(i)
+                  obj.perustelu = e.target.value
+                  fields.remove(i)
+                  fields.insert(i, obj)
+                }}
+              >{perustelu !== null ? perustelu : null}</textarea>
+            </MuutosBody>
+          </MuutosWrapper>
+        )
+      }
+    })
+  )
+}
+
 let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
@@ -303,6 +343,7 @@ let MuutospyyntoWizardPerustelut = props => {
     tutkintokielimuutoksetValue,
     toimialuemuutoksetValue,
     opiskelijavuosimuutoksetValue,
+    muutmuutoksetValue,
     onCancel
   } = props
 
@@ -318,6 +359,8 @@ let MuutospyyntoWizardPerustelut = props => {
   let hasToimialueAdditions = false
   let hasToimialueRemovals = false
   let hasOpiskelijavuosiChanges = false
+  let hasMuutMuutoksetAdditions = false
+  let hasMuutMuutoksetRemovals = false
 
   if (tutkintomuutoksetValue && tutkintomuutoksetValue.length > 0) {
     tutkintomuutoksetValue.forEach(muutos => {
@@ -373,6 +416,16 @@ let MuutospyyntoWizardPerustelut = props => {
 
   if (opiskelijavuosimuutoksetValue && opiskelijavuosimuutoksetValue.length > 0) {
     hasOpiskelijavuosiChanges = true
+  }
+
+  if (muutmuutoksetValue && muutmuutoksetValue.length > 0) {
+    muutmuutoksetValue.forEach(muutos => {
+      if (muutos.type === "addition") {
+        hasMuutMuutoksetAdditions = true
+      } else if (muutos.type === "removal") {
+        hasMuutMuutoksetRemovals = true
+      }
+    })
   }
 
   return (
@@ -591,7 +644,38 @@ let MuutospyyntoWizardPerustelut = props => {
               />
             </TutkintoMuutoksetWrapper>
           </div>
+        }
 
+        {hasMuutMuutoksetAdditions &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.PERUSTELU.HEADING_LISAYS.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="muutmuutokset"
+                muutokset={muutmuutoksetValue}
+                tyyppi="addition"
+                component={renderMuutMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
+        }
+
+        {hasMuutMuutoksetAdditions && hasMuutMuutoksetRemovals &&
+          <Separator/>
+        }
+
+        {hasMuutMuutoksetRemovals &&
+          <div>
+            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.PERUSTELU.HEADING_POISTO.FI}</h3>
+            <TutkintoMuutoksetWrapper>
+              <FieldArray
+                name="muutmuutokset"
+                muutokset={muutmuutoksetValue}
+                tyyppi="removal"
+                component={renderMuutMuutoksetByType}
+              />
+            </TutkintoMuutoksetWrapper>
+          </div>
         }
 
         <div>
@@ -619,6 +703,7 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const tutkintokielimuutoksetValue = selector(state, 'tutkintokielimuutokset')
   const toimialuemuutoksetValue = selector(state, 'toimialuemuutokset')
   const opiskelijavuosimuutoksetValue = selector(state, 'opiskelijavuosimuutokset')
+  const muutmuutoksetValue = selector(state, 'muutmuutokset')
 
   return {
     muutosperusteluValue,
@@ -628,7 +713,8 @@ MuutospyyntoWizardPerustelut = connect(state => {
     opetuskielimuutoksetValue,
     tutkintokielimuutoksetValue,
     toimialuemuutoksetValue,
-    opiskelijavuosimuutoksetValue
+    opiskelijavuosimuutoksetValue,
+    muutmuutoksetValue
   }
 })(MuutospyyntoWizardPerustelut)
 
