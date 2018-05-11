@@ -8,7 +8,7 @@ import Loading from '../../../../../../modules/Loading'
 
 import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
-import { handleToimialueSelectChange } from "../modules/toimialueUtil"
+import { getToimialueByKoodiArvo, handleToimialueSelectChange } from "../modules/toimialueUtil"
 
 class MuutospyyntoWizardToimialue extends Component {
   componentWillMount() {
@@ -65,6 +65,35 @@ class MuutospyyntoWizardToimialue extends Component {
     maakunnat.forEach(maakunta => { initialValue.push(maakunta.koodiarvo) })
     kunnat.forEach(kunta => { initialValue.push(kunta.koodiarvo) })
 
+    if (editValues) {
+      editValues.forEach(value => {
+        if (value.type === "addition") {
+          initialValue.push(value.value)
+        } else if (value.type === "removal") {
+          if (_.includes(initialValue, value.value)) {
+            console.log('value ' + value.value + ' is in editvalues --> removing')
+            _.pull(initialValue, value.value)
+          }
+        }
+      })
+    }
+
+    let valitutMaakunnat = []
+    let valitutKunnat = []
+
+    if (initialValue) {
+      initialValue.forEach(value => {
+        const alue = getToimialueByKoodiArvo(value)
+        if (alue) {
+          if (alue.tyyppi === "maakunta") {
+            valitutMaakunnat.push(alue)
+          } else if (alue.tyyppi === "kunta") {
+            valitutKunnat.push(alue)
+          }
+        }
+      })
+    }
+
     return (
       <div>
         <ToimialueSelect
@@ -74,6 +103,30 @@ class MuutospyyntoWizardToimialue extends Component {
           editValues={editValues}
           fields={fields}
         />
+
+        {valitutMaakunnat.length > 0 &&
+          <div>
+            <h4>Valitut maakunnat</h4>
+            {valitutMaakunnat.map(alue => {
+              const { label } = alue
+              return (
+                <div key={label}>{label}</div>
+              )
+            })}
+          </div>
+        }
+
+        {valitutKunnat.length > 0 &&
+          <div>
+            <h4>Valitut kunnat</h4>
+            {valitutKunnat.map(alue => {
+              const { label } = alue
+              return (
+                <div key={label}>{label}</div>
+              )
+            })}
+          </div>
+        }
       </div>
     )
   }

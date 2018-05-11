@@ -41,7 +41,7 @@ const ACTION_HANDLERS = {
       fetched: true,
       hasErrored: false,
       data: action.payload,
-      kuntaList: getToimialueList(action.payload, 'FI')
+      kuntaList: getToimialueList(action.payload, 'FI', 'kunta')
     }
   },
   [FETCH_KUNNAT_FAILURE] : (state, action) => {

@@ -31,12 +31,12 @@ export function getToimialueByKoodiArvo(koodiarvo) {
   }
 }
 
-export function getToimialueList(toimialueet, locale) {
+export function getToimialueList(toimialueet, locale, tyyppi) {
   let array = []
 
   toimialueet.forEach(toimialue => {
     const { koodiArvo, metadata } = toimialue
-    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo })
+    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi })
   })
 
   return array

@@ -174,6 +174,7 @@ const renderToimialueMuutokset = (props) => {
     fields.map((mutos, index) => {
       let muutos = fields.get(index)
       const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus, value, label } = muutos
+      const identifier = `${koodisto}-${koodiarvo}-${nimi}-${index}`
       const helpText = type === "addition"
         ? MUUTOS_WIZARD_TEKSTIT.MUUTOS_TOIMIALUE_OHJE.LISAYS.FI
         : type === "removal"
@@ -190,7 +191,7 @@ const renderToimialueMuutokset = (props) => {
 
       if (type === tyyppi) {
         return (
-          <MuutosWrapper key={koodiarvo}>
+          <MuutosWrapper key={identifier}>
             <MuutosHeader>{label}</MuutosHeader>
             <MuutosBody>
               <BodyTopArea>
