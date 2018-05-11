@@ -2,11 +2,29 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import styled from 'styled-components'
 
 import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
 import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+
+const Opiskelijavuosi = styled.div`
+  display: flex;
+`
+const Voimassaoleva = styled.div`
+  flex: 1;
+  margin-right:10px;
+`
+const HaettuMuutos = styled.div`
+  flex: 1;
+  margin-right:10px;
+`
+const Yhteensa = styled.div`
+  flex: 1;
+  margin-right:10px;
+`
+
 
 
 class MuutospyyntoWizardOpiskelijavuodet extends Component {
@@ -16,7 +34,6 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     const { headingNumber, heading, opiskelijavuodet } = kohteet[4]
     const { muutCombined } = kohteet[5]
 
-
       // Vahimmaisopiskelijavuosimäärä
     const obj = _.find(opiskelijavuodet, obj => { return obj.tyyppi === "Ammatillinen koulutus" })
     let vahimmaisArvoInitial = 0
@@ -25,15 +42,66 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     }
 
     // Vaativa erityisopetus (2)
-    // tarkistetaan onko kohteessa 5 tälle määräystä:
-    const vaativaTukiObj = _.find(muutCombined, obj => { return obj.koodiarvo === "2" })
-    let vaativaArvoInitial = undefined
 
+    // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
+    const vaativaTukiVoimassa = _.find(muutCombined, obj => { return obj.koodiarvo === "2" })
+    // tarkitetaan onko käyttäjä valinnut lisättäväksi lupaan kohdassa 5
+    const vaativaTukiLisattava = _.find(muutmuutoksetValue, obj => { return obj.koodiarvo === "2" })
+    // oletusarvo
+    let vaativaArvoInitial = undefined
+    let showVaativa = false
+
+    if(vaativaTukiVoimassa) {
+        showVaativa = true
+    }
+
+    if(vaativaTukiLisattava) {
+        (vaativaTukiLisattava.type === "addition") ? showVaativa = true : showVaativa = false
+    }
 
     // Sisäoppilaitos (4)
-      // tarkistetaan onko kohteessa 5 tälle määräystä:
-    const sisaoppilaitosObj = _.find(muutCombined, obj => { return obj.koodiarvo === "4" })
+
+    // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
+    const sisaoppilaitosVoimassa = _.find(muutCombined, obj => { return obj.koodiarvo === "4" })
+
+    // tarkistetaan käyttäjä valinnut lisättäväksi lupaan kohdassa 5:
+    const sisaoppilaitosLisattava = _.find(muutmuutoksetValue, obj => { return obj.koodiarvo === "4" })
+
+    // oletusarvo
     let sisaoppilaitosArvoInitial = undefined
+    let showSisaoppilaitos = false;
+
+    if(sisaoppilaitosVoimassa) {
+        showSisaoppilaitos = true;
+    }
+
+    if(sisaoppilaitosLisattava) {
+      (sisaoppilaitosLisattava.type === "addition") ? showSisaoppilaitos = true : showSisaoppilaitos = false
+    }
+
+    let haettuVahimmaismaaraObj = _.find(opiskelijavuosimuutoksetValue, value => { return value.kategoria === "vahimmaisopiskelijavuodet"})
+    let muutos = 0
+
+    if(haettuVahimmaismaaraObj) {
+       muutos = (haettuVahimmaismaaraObj.arvo - vahimmaisArvoInitial)
+       if(muutos > 0) muutos = "+"+muutos
+    }
+
+    let haettuVaativaObj = _.find(opiskelijavuosimuutoksetValue, value => { return value.kategoria === "vaativa"})
+    let muutosVaativa = 0
+
+    if(haettuVaativaObj) {
+        muutosVaativa = (Number.parseInt(haettuVaativaObj.arvo) - ((vaativaArvoInitial) ? vaativaArvoInitial : 0))
+        if(muutosVaativa > 0) muutosVaativa = "+"+muutosVaativa
+    }
+
+    let haettuSisaoppilaitosObj = _.find(opiskelijavuosimuutoksetValue, value => { return value.kategoria === "sisaoppilaitos"})
+    let muutosSisaoppilaitos = 0
+
+    if(haettuSisaoppilaitosObj) {
+        muutosSisaoppilaitos = (Number.parseInt(haettuSisaoppilaitosObj.arvo) - ((sisaoppilaitosArvoInitial) ? sisaoppilaitosArvoInitial : 0))
+        if(muutosSisaoppilaitos > 0) muutosSisaoppilaitos = "+"+muutosSisaoppilaitos
+    }
 
     return (
       <ContentContainer>
@@ -41,48 +109,86 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
         <Otsikko>{heading}</Otsikko>
         <Row>
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAHIMMAISMAARA.FI}</h4>
-          <div>{vahimmaisArvoInitial}</div>
-          <FieldArray
-            name="opiskelijavuosimuutokset"
-            initialValue={vahimmaisArvoInitial}
-            editValues={opiskelijavuosimuutoksetValue}
-            kategoria="vahimmaisopiskelijavuodet"
-            koodisto="koulutussektori"
-            koodiarvo="3"
-            tyyppi="change"
-            component={this.renderOpiskelijavuodet}
-          />
+          <Opiskelijavuosi>
+            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
+            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
+            <Yhteensa>Muutos yhteensä</Yhteensa>
+          </Opiskelijavuosi>
+          <Opiskelijavuosi>
+            <Voimassaoleva>{vahimmaisArvoInitial}</Voimassaoleva>
+            <HaettuMuutos>
+              <FieldArray
+                name="opiskelijavuosimuutokset"
+                initialValue={''}
+                editValues={opiskelijavuosimuutoksetValue}
+                kategoria="vahimmaisopiskelijavuodet"
+                koodisto="koulutussektori"
+                koodiarvo="3"
+                tyyppi="change"
+                component={this.renderOpiskelijavuodet}
+              />
+            </HaettuMuutos>
+            <Yhteensa>{muutos}</Yhteensa>
+          </Opiskelijavuosi>
         </Row>
 
-        {vaativaTukiObj ?
+          { (showVaativa || showSisaoppilaitos) ?
+              <Row>
+                <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.RAJOITUKSET.FI}</h4>
+              </Row>
+              : null }
+
+        {showVaativa ?
         <Row>
-          <h4>Vaativa erityisopetus</h4>
-          <FieldArray
-            name="opiskelijavuosimuutokset"
-            initialValue={vaativaArvoInitial}
-            editValues={opiskelijavuosimuutoksetValue}
-            kategoria="vaativa"
-            koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
-            koodiarvo="2"
-            tyyppi={vaativaArvoInitial !== undefined ? 'change' : 'addition'}
-            component={this.renderOpiskelijavuodet}
-          />
+          <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAATIVA_TUKI.FI}</h4>
+          <Opiskelijavuosi>
+            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
+            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
+            <Yhteensa>Muutos yhteensä</Yhteensa>
+          </Opiskelijavuosi>
+          <Opiskelijavuosi>
+            <Voimassaoleva>{vaativaArvoInitial}</Voimassaoleva>
+            <HaettuMuutos>
+              <FieldArray
+                name="opiskelijavuosimuutokset"
+                initialValue={''}
+                editValues={opiskelijavuosimuutoksetValue}
+                kategoria="vaativa"
+                koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
+                koodiarvo="2"
+                tyyppi={vaativaArvoInitial !== undefined ? 'change' : 'addition'}
+                component={this.renderOpiskelijavuodet}
+              />
+            </HaettuMuutos>
+            <Yhteensa>{muutosVaativa}</Yhteensa>
+          </Opiskelijavuosi>
         </Row>
         : null }
 
-        {sisaoppilaitosObj ?
+        {showSisaoppilaitos ?
         <Row>
-          <h4>Sisoppilaitosmuotoinen opetus</h4>
-          <FieldArray
-            name="opiskelijavuosimuutokset"
-            initialValue={sisaoppilaitosArvoInitial}
-            editValues={opiskelijavuosimuutoksetValue}
-            kategoria="sisaoppilaitos"
-            koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
-            koodiarvo="4"
-            tyyppi={sisaoppilaitosArvoInitial !== undefined ? 'change' : 'addition'}
-            component={this.renderOpiskelijavuodet}
-          />
+          <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.SISAOPPILAITOS.FI}</h4>
+          <Opiskelijavuosi>
+            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
+            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
+            <Yhteensa>Muutos yhteensä</Yhteensa>
+          </Opiskelijavuosi>
+          <Opiskelijavuosi>
+            <Voimassaoleva>{sisaoppilaitosArvoInitial}</Voimassaoleva>
+            <HaettuMuutos>
+              <FieldArray
+                name="opiskelijavuosimuutokset"
+                initialValue={''}
+                editValues={opiskelijavuosimuutoksetValue}
+                kategoria="sisaoppilaitos"
+                koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
+                koodiarvo="4"
+                tyyppi={sisaoppilaitosArvoInitial !== undefined ? 'change' : 'addition'}
+                component={this.renderOpiskelijavuodet}
+              />
+            </HaettuMuutos>
+            <Yhteensa>{muutosSisaoppilaitos}</Yhteensa>
+          </Opiskelijavuosi>
         </Row>
         : null }
 
@@ -105,7 +211,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
 
     return (
       <input
-        type="text"
+        type="number"
         value={arvo}
         onChange={(e) => {
           const { value } = e.target
@@ -168,5 +274,5 @@ export default reduxForm({
   form: 'uusiHakemus',
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
-  // validate,
+  //validate
 })(MuutospyyntoWizardOpiskelijavuodet)
