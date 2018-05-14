@@ -3,6 +3,18 @@ import dateformat from 'dateformat'
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
+export function getKieliByKoodi(koodi) {
+  const state = store.getState()
+
+  const { kielet } = state
+
+  if (kielet && kielet.data) {
+    return _.find(kielet.data, (kieli) => { return kieli.koodiArvo === koodi })
+  } else {
+    return undefined
+  }
+}
+
 export function getKoulutusAlat() {
   const state = store.getState()
 
@@ -347,6 +359,52 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
       }
     }
   }
+}
+
+export function getSelectedTutkintoKielet(tutkinnotjakielet, editValues) {
+  console.log('getSelectedTutkintoKielet')
+  console.log(tutkinnotjakielet)
+  console.log(editValues)
+
+  let kielet = []
+
+  if (tutkinnotjakielet) {
+    tutkinnotjakielet.forEach(tutkintokieli => {
+      const { tutkintokoodi, nimi, koodi, maaraysId } = tutkintokieli
+
+      const kieli = getKieliByKoodi(koodi)
+      let label = "Ei saatavilla"
+
+      if (kieli) {
+        label = parseLocalizedField(kieli.metadata)
+      }
+
+      let obj = {}
+      obj.maaraysId = maaraysId
+      obj.koodiarvo = tutkintokoodi
+      obj.nimi = nimi
+      obj.koodisto = "kieli"
+      obj.value = koodi
+      obj.label = label
+      obj.isInLupa = true
+
+      kielet.push(obj)
+    })
+  }
+
+  if (editValues) {
+    editValues.forEach(value => {
+      let obj = value
+
+      if (obj.type === "addition") {
+        // Lisäykset
+      } else if (obj.type === "removal") {
+        // poistot
+      }
+    })
+  }
+
+  return kielet
 }
 
 export function getKieliList(kielet, locale) {

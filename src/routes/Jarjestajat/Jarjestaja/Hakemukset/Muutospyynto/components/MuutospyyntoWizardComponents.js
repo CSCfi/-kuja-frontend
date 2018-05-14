@@ -7,12 +7,10 @@ import arrowDown from 'static/images/arrow-down.svg'
 export const Wrapper = styled.div`
   margin: 4px 0;
   background-color: ${COLORS.BG_GRAY};
-  max-width: 725px;
 `
 
 export const Heading = styled.div`
   position: relative;
-  z-index: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
