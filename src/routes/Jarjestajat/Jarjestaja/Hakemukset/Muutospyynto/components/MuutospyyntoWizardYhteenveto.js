@@ -45,6 +45,7 @@ let MuutospyyntoWizardYhteenveto = props => {
     paatoskierrokset,
     muutosperustelut,
     opetuskielimuutokset,
+    preview,
     tutkinetokielimuutokset
   } = props
 
@@ -146,6 +147,7 @@ let MuutospyyntoWizardYhteenveto = props => {
           Tallenna
         </WizButton>
         <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
+        <WizButton bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e)}>Esikatsele</WizButton>
       </form>
     </div>
   )
