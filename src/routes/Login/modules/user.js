@@ -69,10 +69,19 @@ export function getOrganisation(oid) {
 
 export function logoutUser() {
   return (dispatch) => {
+
+      dispatch({ type: LOGOUT_USER_START })
+
+      axios.get(`${API_BASE_URL}/auth/logout`, { withCredentials: true })
+          .then((response) => response.json())
+          .then((data) => {
+              dispatch({ type: LOGOUT_USER_SUCCESS, payload: data })
+          })
+          .catch((err) => dispatch({ type: LOGOUT_USER_FAILURE, payload: err }))
+
       sessionStorage.removeItem('username')
       sessionStorage.removeItem('oid')
       sessionStorage.removeItem('role')
-      dispatch({ type: LOGOUT_USER_START })
 
   }
 }
