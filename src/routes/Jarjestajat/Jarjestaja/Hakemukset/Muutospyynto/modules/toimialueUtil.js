@@ -42,6 +42,55 @@ export function getToimialueList(toimialueet, locale, tyyppi) {
   return array
 }
 
+export function getMaakuntakunnatList(toimialueet, locale) {
+  const now = new Date()
+  let list = _.forEach(toimialueet, toimialue => {
+    const { koodiArvo, metadata, kunta, tila, voimassaLoppuPvm } = toimialue
+
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "99") {
+      if (!voimassaLoppuPvm) {
+        _.extend(toimialue, { label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta" })
+      } else {
+        if (now < Date.parse(voimassaLoppuPvm)) {
+          _.extend(toimialue, { label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta" })
+        }
+      }
+    }
+
+    _.forEach(kunta, k => {
+      const { koodiArvo, metadata, tila, voimassaLoppuPvm } = k
+
+      if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
+        if (!voimassaLoppuPvm) {
+          _.extend(k, { label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta" })
+        } else {
+          if (now < Date.parse(voimassaLoppuPvm)) {
+            _.extend(k, { label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta" })
+          }
+        }
+      }
+    })
+
+    toimialue.options = kunta
+  })
+
+  // list = _.remove(list, maakunta => {
+  //   if (maakunta.voimassaLoppuPvm) {
+  //     console.log(maakunta)
+  //   }
+  // })
+
+  list = _.sortBy(list, maakunta => {
+    maakunta.kunta = _.sortBy(maakunta.kunta, kunta => {
+      return kunta.label
+    })
+
+    return maakunta.label
+  })
+
+  return list
+}
+
 export function handleToimialueSelectChange(editValues, fields, initialValues, values) {
   if (!hasToimialueChanged(initialValues, values)) {
     return
