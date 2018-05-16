@@ -49,7 +49,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_OPETUSKIELET: {
     HEADING: {
-      FI: "Valitse oppilaitoksen opetuskielet",
+      FI: "Valitse opetuskielet",
       SV: "På svenska"
     },
     PERUSTELU: {
@@ -95,7 +95,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_TUTKINTOKIELET: {
     HEADING: {
-      FI: "Valitse opetuskielen lisäksi erilliset tutkintokielet",
+      FI: "Valitse opetuskielen lisäksi tutkintokielet",
       SV: "På svenska"
     },
     PERUSTELU: {
