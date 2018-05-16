@@ -73,6 +73,14 @@ export function logoutUser() {
       sessionStorage.removeItem('oid')
       sessionStorage.removeItem('role')
       dispatch({ type: LOGOUT_USER_START })
+      const request = fetch(`${API_BASE_URL}/auth/logout`)
+
+      request
+          .then((response) => response.json())
+          .then((data) => {
+              dispatch({ type: LOGOUT_USER_SUCCESS, payload: data })
+          })
+          .catch((err) => dispatch({ type: LOGOUT_USER_FAILURE, payload: err }))
 
   }
 }
