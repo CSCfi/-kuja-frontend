@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
-import { getMaakuntakunnatList, getToimialueList } from "./toimialueUtil"
+import { getMaakuntakunnatList,  getToimialueList } from "./toimialueUtil"
 
 // Constants
 export const FETCH_MAAKUNTAKUNNAT_START = 'FETCH_MAAKUNTAKUNNAT_START'
