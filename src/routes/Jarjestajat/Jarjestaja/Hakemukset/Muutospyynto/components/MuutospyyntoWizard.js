@@ -146,6 +146,7 @@ class MuutospyyntoWizard extends Component {
     this.onCancel = this.onCancel.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.changePhase = this.changePhase.bind(this)
+    this.preview = this.preview.bind(this)
     this.state = {
       page: 1,
       visitedPages: [1]
@@ -186,6 +187,28 @@ class MuutospyyntoWizard extends Component {
   onSubmit(data) {
     this.props.createMuutospyynto(data)
     // this.onCancel() // TODO: tehdään onDone-funktio
+  }
+
+  preview(event, data) {
+      event.preventDefault()
+      this.props.previewMuutospyynto(data).then(() => {
+
+          //console.log("response: " + JSON.stringify(this.props.muutospyynto.pdf))
+
+          var binaryData = [];
+          binaryData.push(this.props.muutospyynto.pdf.data);
+          const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
+          //const data =  window.URL.createObjectURL(response.data)
+          var link = document.createElement('a');
+          link.href = data;
+          link.download="file.pdf";
+          link.click();
+          setTimeout(function(){
+          // For Firefox it is necessary to delay revoking the ObjectURL
+          window.URL.revokeObjectURL(data)
+              , 100})
+
+      })
   }
 
   changePhase(number) {
@@ -258,6 +281,7 @@ class MuutospyyntoWizard extends Component {
                     previousPage={this.previousPage}
                     onCancel={this.onCancel}
                     onSubmit={this.onSubmit}
+                    preview={this.preview}
                   />
                 )}
               </WizardContent>

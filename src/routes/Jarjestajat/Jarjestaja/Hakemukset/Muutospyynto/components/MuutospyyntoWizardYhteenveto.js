@@ -45,9 +45,9 @@ let MuutospyyntoWizardYhteenveto = props => {
     paatoskierrokset,
     muutosperustelut,
     opetuskielimuutokset,
-    preview,
-    tutkinetokielimuutokset
+    preview
   } = props
+
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
     if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
@@ -147,7 +147,7 @@ let MuutospyyntoWizardYhteenveto = props => {
           Tallenna
         </WizButton>
         <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
-        <WizButton bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e)}>Esikatsele</WizButton>
+        <WizButton bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e, "<h2>laksdja</h2>")}>Esikatsele</WizButton>
       </form>
     </div>
   )

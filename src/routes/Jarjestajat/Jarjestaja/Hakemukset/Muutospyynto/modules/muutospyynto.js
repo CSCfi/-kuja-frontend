@@ -11,6 +11,10 @@ export const CREATE_MUUTOSPYYNTO_START = 'CREATE_MUUTOSPYYNTO_START'
 export const CREATE_MUUTOSPYYNTO_SUCCESS = 'CREATE_MUUTOSPYYNTO_SUCCESS'
 export const CREATE_MUUTOSPYYNTO_FAILURE = 'CREATE_MUUTOSPYYNTO_FAILURE'
 
+export const PREVIEW_MUUTOSPYYNTO_START = 'PREVIEW_MUUTOSPYYNTO_START'
+export const PREVIEW_MUUTOSPYYNTO_SUCCESS = 'PREVIEW_MUUTOSPYYNTO_SUCCESS'
+export const PREVIEW_MUUTOSPYYNTO_FAILURE = 'PREVIEW_MUUTOSPYYNTO_FAILURE'
+
 // Actions
 export function fetchMuutospyynto(ytunnus, query) {
   return (dispatch) => {
@@ -44,9 +48,33 @@ export function createMuutospyynto(muutospyynto) {
   }
 }
 
+export function previewMuutospyynto(muutospyynto) {
+  console.log("PDFksi: " + JSON.stringify(muutospyynto))
+    return (dispatch) => {
+        dispatch({ type: PREVIEW_MUUTOSPYYNTO_START })
+
+        return axios.put(`${API_BASE_URL}/pdf/muutospyyntoToPdf`,
+            muutospyynto,
+            {
+                responseType: 'arraybuffer',
+                headers: {
+                    'Content-Type': 'text/plain',
+                    'Accept': 'application/pdf'
+                }
+            })
+            .then(response => {
+                dispatch({ type: PREVIEW_MUUTOSPYYNTO_SUCCESS, payload: response })
+            })
+            .catch(err => {
+                dispatch({ type: PREVIEW_MUUTOSPYYNTO_FAILURE, payload: err })
+            })
+    }
+}
+
 export const actions = {
   fetchMuutospyynto,
-  createMuutospyynto
+  createMuutospyynto,
+  previewMuutospyynto
 }
 
 // Action handlers
@@ -76,38 +104,63 @@ const ACTION_HANDLERS = {
       hasErrored: true
     }
   },
-  [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
-    return {
-      ...state,
-      create: {
-        isSubmitting: true,
-        isCreated: false,
+    [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
+        return {
+            ...state,
+            create: {
+                isSubmitting: true,
+                isCreated: false,
+                hasErrored: false,
+            }
+        }
+    },
+    [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+        return {
+            ...state,
+            create: {
+                isSubmitting: false,
+                isCreated: true,
+                hasErrored: false,
+                response: action.payload
+            }
+        }
+    },
+    [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+        return {
+            ...state,
+            create: {
+                isSubmitting: false,
+                hasCreated: false,
+                hasErrored: true,
+                response: action.payload
+            }
+        }
+    },
+    [PREVIEW_MUUTOSPYYNTO_START]   : (state, action) => {
+      return {
+        ...state,
+        isFetching: true,
+        fetched: false,
+        hasErrored: false
+      }
+    },
+    [PREVIEW_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+      return {
+        ...state,
+        isFetching: false,
+        fetched: true,
         hasErrored: false,
+        pdf: action.payload
+      }
+    },
+    [PREVIEW_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+      return {
+        ...state,
+        isFetching: false,
+        fetched: false,
+        hasErrored: true
       }
     }
-  },
-  [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
-    return {
-      ...state,
-      create: {
-        isSubmitting: false,
-        isCreated: true,
-        hasErrored: false,
-        response: action.payload
-      }
-    }
-  },
-  [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
-    return {
-      ...state,
-      create: {
-        isSubmitting: false,
-        hasCreated: false,
-        hasErrored: true,
-        response: action.payload
-      }
-    }
-  }
 }
 
 // Reducer
