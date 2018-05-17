@@ -62,8 +62,7 @@ class MuutospyyntoWizardMuutokset extends Component {
           </Kohde>
 
           <PageControlsWrapper>
-            <Button onClick={previousPage}>&lt; Edellinen</Button>
-            <Button type="submit">Seuraava &gt;</Button>
+            <Button type="submit" className="button-right">Seuraava &gt;</Button>
           </PageControlsWrapper>
         </form>
       </div>

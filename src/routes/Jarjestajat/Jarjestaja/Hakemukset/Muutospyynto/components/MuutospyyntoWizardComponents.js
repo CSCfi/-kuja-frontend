@@ -413,7 +413,7 @@ export const Button = styled.button`
   }
   
   &.button-right {
-  margin-left: auto;
+    margin-left: auto;
   }
   
   &:hover {
