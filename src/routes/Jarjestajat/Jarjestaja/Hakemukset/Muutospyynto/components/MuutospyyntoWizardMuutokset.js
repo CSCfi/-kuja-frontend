@@ -7,8 +7,7 @@ import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWiza
 import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
 import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
 import { COLORS } from "../../../../../../modules/styles"
-import { BottomWrapper, Kohde } from "./MuutospyyntoWizardComponents"
-import { WizButton } from "./MuutospyyntoWizard"
+import { PageControlsWrapper, Button, Kohde } from "./MuutospyyntoWizardComponents"
 
 class MuutospyyntoWizardMuutokset extends Component {
   render() {
@@ -62,10 +61,10 @@ class MuutospyyntoWizardMuutokset extends Component {
             />
           </Kohde>
 
-          <BottomWrapper>
-            <WizButton type="submit">Seuraava</WizButton>
-            <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
-          </BottomWrapper>
+          <PageControlsWrapper>
+            <Button onClick={previousPage}>&lt; Edellinen</Button>
+            <Button type="submit">Seuraava &gt;</Button>
+          </PageControlsWrapper>
         </form>
       </div>
     )

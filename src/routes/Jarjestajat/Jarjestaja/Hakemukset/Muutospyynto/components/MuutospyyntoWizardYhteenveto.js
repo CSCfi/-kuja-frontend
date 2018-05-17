@@ -5,7 +5,7 @@ import { reduxForm, formValueSelector, Field } from 'redux-form'
 import Moment from 'react-moment'
 
 import validate from '../modules/validateWizard'
-import { WizButton } from "./MuutospyyntoWizard"
+import { PageControlsWrapper, Button } from "./MuutospyyntoWizardComponents"
 import { COLORS } from "../../../../../../modules/styles"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
@@ -42,6 +42,7 @@ let MuutospyyntoWizardYhteenveto = props => {
     muuperustelu,
     tutkintomuutokset,
     onCancel,
+    previousPage,
     paatoskierrokset,
     muutosperustelut,
     opetuskielimuutokset,
@@ -142,10 +143,9 @@ let MuutospyyntoWizardYhteenveto = props => {
       }
 
       <form onSubmit={handleSubmit}>
-        <WizButton type="submit" className="next">
-          Tallenna
-        </WizButton>
-        <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
+        <PageControlsWrapper>
+          <Button onClick={previousPage}>&lt; Edellinen</Button>
+        </PageControlsWrapper>
       </form>
     </div>
   )
