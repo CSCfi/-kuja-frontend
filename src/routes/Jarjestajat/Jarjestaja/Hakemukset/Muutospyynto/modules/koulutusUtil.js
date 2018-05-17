@@ -227,6 +227,59 @@ export function getOpiskelijavuosiIndex(values, koodiarvo) {
   return i
 }
 
+export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, obj) {
+  const { checked } = event.target
+  const { koodiarvo, koodisto } = obj
+
+  if (checked) {
+    if (isInLupa) {
+      // Valtakunnallinen luvassa --> poistetaan se formista
+      const i = getEditIndex(editValues, koodiarvo, koodisto)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Valtakunnallinen ei luvassa --> lisätään muutos formiin
+      fields.push({
+        type: 'addition',
+        perustelu: null,
+        isValtakunnallinen: true,
+        koodiarvo: 'FI1',
+        koodisto: 'nuts1',
+        metadata: {
+          kuvaus: {
+            FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+            SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+          }
+        }
+      })
+    }
+  } else {
+    if (isInLupa) {
+      // Valtakunnallinen luvassa --> lisätään muutos formiin
+      fields.push({
+        type: 'addition',
+        perustelu: null,
+        isValtakunnallinen: false,
+        koodiarvo: 'FI1',
+        koodisto: 'nuts1',
+        metadata: {
+          kuvaus: {
+            FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+            SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+          }
+        }
+      })
+    } else {
+      // Valtakunnallinen ei luvassa --> poistetaan se formista
+      const i = getEditIndex(editValues, koodiarvo, koodisto)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
 export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto

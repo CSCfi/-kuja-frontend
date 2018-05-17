@@ -41,7 +41,7 @@ const ACTION_HANDLERS = {
       fetched: true,
       hasErrored: false,
       data: action.payload,
-      maakuntaList: getToimialueList(action.payload, 'FI')
+      maakuntaList: getToimialueList(action.payload, 'FI', 'maakunta')
     }
   },
   [FETCH_MAAKUNNAT_FAILURE] : (state, action) => {
