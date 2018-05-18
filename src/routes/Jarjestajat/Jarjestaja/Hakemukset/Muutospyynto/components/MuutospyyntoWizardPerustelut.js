@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
-import { Separator, H3, SelectStyle, Input } from './MuutospyyntoWizardComponents'
+import { SelectWrapper } from "./MuutospyyntoWizard"
+import { Separator, H3, SelectStyle, Input, PageControlsWrapper, Button } from './MuutospyyntoWizardComponents'
 
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { COLORS } from "../../../../../../modules/styles"
@@ -680,15 +680,10 @@ let MuutospyyntoWizardPerustelut = props => {
           </div>
         }
 
-        <div>
-          <WizButton type="button" onClick={previousPage}>
-            Edellinen
-          </WizButton>
-          <WizButton type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined)}>
-            Seuraava
-          </WizButton>
-          <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
-        </div>
+        <PageControlsWrapper>
+          <Button onClick={previousPage}>&lt; Edellinen</Button>
+          <Button type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined)}>Seuraava &gt;</Button>
+        </PageControlsWrapper>
       </form>
     </div>
   )

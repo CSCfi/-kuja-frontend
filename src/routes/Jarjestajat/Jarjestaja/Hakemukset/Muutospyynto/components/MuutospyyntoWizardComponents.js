@@ -93,12 +93,6 @@ export const Otsikko = styled.h3`
   font-size: 20px;
 `
 
-export const ControlsWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-`
-
 export const BottomWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -383,5 +377,48 @@ export const CheckboxSmall = styled.div`
         opacity: 1;
       }
     }
+  }
+`
+
+export const PageControlsWrapper = styled.div`
+ display: flex;
+ justify-content: space-between;
+ margin: 20px 0;
+`
+
+export const Button = styled.button`
+  color: ${props => props.disabled ? COLORS.WHITE : props.color ? props.textColor : COLORS.OIVA_GREEN};
+  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.WHITE};
+  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  width: 140px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 1px;
+  font-size: 14px;
+  transition: all 0.1s ease-in-out;
+  margin: 0 10px;
+  
+  &.button-danger {
+    color: ${COLORS.WHITE};
+    background-color: ${COLORS.OIVA_RED};
+    border: 1px solid ${COLORS.OIVA_RED};
+  }
+  
+  &.button-left {
+    margin-right: auto;
+  }
+  
+  &.button-right {
+    margin-left: auto;
+  }
+  
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
   }
 `
