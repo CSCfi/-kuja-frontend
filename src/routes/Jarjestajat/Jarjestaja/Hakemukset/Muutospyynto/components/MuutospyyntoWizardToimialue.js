@@ -10,6 +10,7 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row, CheckboxRowContainer, Checkbox, Nimi } from "./MuutospyyntoWizardComponents"
 import { getToimialueByKoodiArvo, handleToimialueSelectChange } from "../modules/toimialueUtil"
 import { handleSimpleCheckboxChange } from "../modules/koulutusUtil"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardToimialue extends Component {
   componentWillMount() {
@@ -46,7 +47,7 @@ class MuutospyyntoWizardToimialue extends Component {
           </Row>
           <Row>
             <FieldArray
-              name="toimialuemuutokset"
+              name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
               maakunnat={maakuntaMaaraykset}
               kunnat={kuntaMaaraykset}
               editValues={toimialuemuutoksetValue}
@@ -244,10 +245,10 @@ class ToimialueSelect extends Component {
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardToimialue = connect(state => {
-  const toimialuemuutoksetValue = selector(state, 'toimialuemuutokset')
+  const toimialuemuutoksetValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
   const valtakunnallinenmuutoksetValue = selector(state, 'valtakunnallinen')
 
   return {
@@ -257,7 +258,7 @@ MuutospyyntoWizardToimialue = connect(state => {
 })(MuutospyyntoWizardToimialue)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   // validate,

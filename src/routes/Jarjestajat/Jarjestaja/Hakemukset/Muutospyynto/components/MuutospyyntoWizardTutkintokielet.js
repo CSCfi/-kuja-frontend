@@ -10,6 +10,7 @@ import { Row } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkintokielet extends Component {
   componentWillMount() {
@@ -32,7 +33,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.HEADING.FI}</h4>
           <Row>
             <FieldArray
-              name="tutkintokielimuutokset"
+              name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
               kohde={kohde}
               kielet={kielet.data}
               kieliList={kielet.kieliList}
@@ -90,29 +91,15 @@ class MuutospyyntoWizardTutkintokielet extends Component {
             )
           })}
         </Row>
-
-        {/* TODO: Tarvitaanko erillistä listausta tässä? */}
-        {/*{valitutKielet && valitutKielet.length > 0 &&*/}
-          {/*<Row>*/}
-            {/*<h4>Seuraavissa tutkinoissa on erikseen tutkintokieli</h4>*/}
-            {/*{valitutKielet.map((kieli, i) => {*/}
-              {/*const { koodiarvo, nimi, label } = kieli*/}
-              {/*const identifier = koodiarvo*/}
-              {/*return (*/}
-                {/*<div key={identifier}>{`${koodiarvo} ${nimi} ${_.capitalize(label)}`}</div>*/}
-              {/*)*/}
-            {/*})}*/}
-          {/*</Row>*/}
-        {/*}*/}
       </div>
     )
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkintokielet = connect(state => {
-  const tutkintokielimuutoksetValue = selector(state, 'tutkintokielimuutokset')
+  const tutkintokielimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
 
   return {
     tutkintokielimuutoksetValue
@@ -120,7 +107,7 @@ MuutospyyntoWizardTutkintokielet = connect(state => {
 })(MuutospyyntoWizardTutkintokielet)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   // validate,
