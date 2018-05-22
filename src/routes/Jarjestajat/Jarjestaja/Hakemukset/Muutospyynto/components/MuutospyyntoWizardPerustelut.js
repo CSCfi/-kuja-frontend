@@ -97,6 +97,8 @@ let MuutospyyntoWizardPerustelut = props => {
           name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
           muutokset={tutkinnotjakoulutuksetValue}
           kategoria="tutkinto"
+          headingNumber="1"
+          heading="Tutkinnot ja koulutukset"
           component={MuutosList}
         />
 
@@ -104,6 +106,8 @@ let MuutospyyntoWizardPerustelut = props => {
           name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
           muutokset={opetusjatutkintokieletValue}
           kategoria="opetuskieli"
+          headingNumber="2"
+          heading="Opetus- ja tutkintokielet"
           component={MuutosList}
         />
 
@@ -111,6 +115,8 @@ let MuutospyyntoWizardPerustelut = props => {
           name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
           muutokset={toimialueValue}
           kategoria="toimialue"
+          headingNumber="3"
+          heading="Toiminta-alueet"
           component={MuutosList}
         />
 
@@ -118,6 +124,8 @@ let MuutospyyntoWizardPerustelut = props => {
           name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
           muutokset={opiskelijavuosiValue}
           kategoria="opiskelijavuosi"
+          headingNumber="4"
+          heading="Opiskelijavuodet"
           component={MuutosList}
         />
 
@@ -125,6 +133,8 @@ let MuutospyyntoWizardPerustelut = props => {
           name={FIELD_ARRAY_NAMES.MUUT}
           muutokset={muutmuutoksetValue}
           kategoria="muumuutos"
+          headingNumber="5"
+          heading="Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
           component={MuutosList}
         />
 

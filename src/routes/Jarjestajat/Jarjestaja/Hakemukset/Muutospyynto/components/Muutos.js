@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+
 import Perustelu from './Perustelu'
+import Indikaattori from './Indikaattori'
+import arrow from 'static/images/arrow-down.svg'
+
 import { COLORS } from "../../../../../../modules/styles"
 import { getIndex } from "../modules/muutosUtil"
-import arrow from 'static/images/arrow-down.svg'
 import { MUUTOS_TYPES, MUUTOS_TYPE_TEXTS } from "../modules/uusiHakemusFormConstants"
 
 const MuutosWrapper = styled.div`
@@ -12,8 +15,13 @@ const MuutosWrapper = styled.div`
   flex-direction: column;
 `
 
-const MuutosHeader = styled.div`
+const MuutosTop = styled.div`
   width: 100%;
+  display: flex;
+`
+
+const MuutosHeader = styled.div`
+  width: 85%;
   background-color: ${props => props.isActive ? COLORS.ACTIVE_BLUE : COLORS.BG_GRAY};
   padding: 10px 20px;
   border-bottom: 1px solid ${props => props.isActive ? COLORS.OIVA_GREEN : COLORS.BORDER_GRAY };
@@ -91,11 +99,16 @@ class Muutos extends Component {
 
     return (
       <MuutosWrapper>
-        <MuutosHeader isActive={!isHidden}  onClick={this.toggleMuutos}>
-          <MuutosTyyppi>{tyyppi}</MuutosTyyppi>
-          <Div>{name}</Div>
-          <Arrow src={arrow} rotated={!isHidden} />
-        </MuutosHeader>
+        <MuutosTop>
+          <MuutosHeader isActive={!isHidden}  onClick={this.toggleMuutos}>
+            <MuutosTyyppi>{tyyppi}</MuutosTyyppi>
+            <Div>{name}</Div>
+            <Arrow src={arrow} rotated={!isHidden} />
+          </MuutosHeader>
+          {perustelu !== null &&
+            <Indikaattori status="ok" text="Perusteltu" />
+          }
+        </MuutosTop>
         {!isHidden &&
           <Perustelu
             helpText={helpText}

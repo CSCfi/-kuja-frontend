@@ -7,7 +7,7 @@ const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-left: 3px solid ${COLORS.BORDER_GRAY};
-  padding: 20px 20px 30px 60px;
+  padding: 20px 110px 30px 60px;
   margin: 10px 40px 20px 40px;
   
   textarea {
