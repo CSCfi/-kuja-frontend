@@ -243,6 +243,7 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       fields.push({
         type: 'addition',
         perustelu: null,
+        muutosperustelu: null,
         isValtakunnallinen: true,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
@@ -260,6 +261,7 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       fields.push({
         type: 'addition',
         perustelu: null,
+        muutosperustelu: null,
         isValtakunnallinen: false,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
@@ -297,12 +299,12 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null })
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null })
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodiArvo, koodistoUri)
@@ -328,12 +330,12 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null })
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null })
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodi, koodistoUri)
@@ -382,7 +384,8 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
           kuvaus: null,
           isInLupa,
           type: "change",
-          perustelu: null
+          perustelu: null,
+          muutosperustelu: null
         })
       }
     } else {
@@ -396,7 +399,8 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
         kuvaus: null,
         isInLupa,
         type: "change",
-        perustelu: null
+        perustelu: null,
+        muutosperustelu: null
       })
     }
   } else {

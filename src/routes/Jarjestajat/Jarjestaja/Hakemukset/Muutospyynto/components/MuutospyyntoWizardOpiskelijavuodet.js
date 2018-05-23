@@ -228,7 +228,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                   koodiarvo,
                   koodisto,
                   arvo: value,
-                  perustelu: null
+                  perustelu: null,
+                  muutosperustelu: null
                 }
                 fields.remove(i)
                 fields.insert(i, obj)
@@ -240,7 +241,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 koodiarvo,
                 koodisto,
                 arvo: value,
-                perustelu: null
+                perustelu: null,
+                muutosperustelu: null
               })
             }
           } else {
@@ -250,7 +252,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
               koodiarvo,
               koodisto,
               arvo: value,
-              perustelu: null
+              perustelu: null,
+              muutosperustelu: null
             })
           }
         }}

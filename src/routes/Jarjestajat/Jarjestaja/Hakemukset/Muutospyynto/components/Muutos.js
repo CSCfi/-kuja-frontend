@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import Perustelu from './Perustelu'
+import PerusteluContainer from '../containers/PerusteluContainer'
 import Indikaattori from './Indikaattori'
 import arrow from 'static/images/arrow-down.svg'
 
@@ -70,7 +70,7 @@ class Muutos extends Component {
   render() {
     const { isHidden } = this.state
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, nimi, type, perustelu, koodisto, kuvaus, label, arvo } = muutos
+    const { koodiarvo, nimi, type, perustelu, muutosperustelu, koodisto, kuvaus, label, arvo } = muutos
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
     const tyyppi =
       type === MUUTOS_TYPES.ADDITION ? MUUTOS_TYPE_TEXTS.ADDITION.FI :
@@ -105,16 +105,18 @@ class Muutos extends Component {
             <Div>{name}</Div>
             <Arrow src={arrow} rotated={!isHidden} />
           </MuutosHeader>
-          {perustelu !== null &&
+          {perustelu !== null && muutosperustelu !== null &&
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
         {!isHidden &&
-          <Perustelu
+          <PerusteluContainer
             helpText={helpText}
             koodiarvo={koodiarvo}
             perustelu={perustelu}
+            muutosperustelu={muutosperustelu}
             muutokset={muutokset}
+            muutos={muutos}
             fields={fields}
           />
         }

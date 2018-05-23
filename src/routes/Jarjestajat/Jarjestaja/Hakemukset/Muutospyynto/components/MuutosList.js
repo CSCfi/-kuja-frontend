@@ -17,16 +17,21 @@ const Heading = styled.h4`
 
 class MuutosList extends Component {
   render() {
-    const { muutokset, kategoria, kohde, fields, headingNumber, heading } = this.props
+    const { muutokset, kategoria, fields, headingNumber, heading } = this.props
+    const { length } = fields
 
     return (
       <MuutosListWrapper>
-        <Heading>{`${headingNumber}. ${heading}`}</Heading>
+        {length > 0 &&
+          <Heading>{`${headingNumber}. ${heading}`}</Heading>
+        }
         {fields.map((field, index) => {
           const muutos = fields.get(index)
+          const { koodiarvo, koodisto } = muutos
+          const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
 
           return (
-            <MuutosWrapper>
+            <MuutosWrapper key={identifier}>
               <Muutos
                 key={index}
                 muutos={muutos}

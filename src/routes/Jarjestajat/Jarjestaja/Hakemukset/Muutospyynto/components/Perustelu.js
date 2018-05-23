@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import { getIndex } from "../modules/muutosUtil"
 import { COLORS } from "../../../../../../modules/styles"
 
+import PerusteluSelect from './PerusteluSelect'
+
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-left: 3px solid ${COLORS.BORDER_GRAY};
-  padding: 20px 110px 30px 60px;
+  padding: 0 110px 30px 60px;
   margin: 10px 40px 20px 40px;
   
   textarea {
@@ -30,17 +32,33 @@ const PerusteluTopArea = styled.div`
 `
 
 class Perustelu extends Component {
+  componentWillMount() {
+    const { muutosperustelut } = this.props
+
+    if (muutosperustelut && !muutosperustelut.fetched) {
+      this.props.fetchMuutosperustelut()
+    }
+  }
+
   render() {
-    const { helpText, muutokset, koodiarvo, fields, perustelu } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, fields, perustelu, muutosperustelu, muutosperustelut } = this.props
 
     return (
       <PerusteluWrapper>
+        <PerusteluSelect
+          muutosperustelu={muutosperustelu}
+          muutosperustelut={muutosperustelut.muutosperusteluList}
+          muutos={muutos}
+          muutokset={muutokset}
+          fields={fields}
+        />
         <PerusteluTopArea>
           <span>{helpText}</span>
-          <span>Katso esimerkkiperustelu</span>
+          <span>Ohje</span>
         </PerusteluTopArea>
         <textarea
           rows="5"
+          defaultValue={perustelu !== null ? perustelu : undefined}
           onBlur={(e) => {
             const i = getIndex(muutokset, koodiarvo)
             let obj = fields.get(i)
@@ -48,7 +66,7 @@ class Perustelu extends Component {
             fields.remove(i)
             fields.insert(i, obj)
           }}
-        >{perustelu !== null ? perustelu : null}</textarea>
+        />
       </PerusteluWrapper>
     )
   }

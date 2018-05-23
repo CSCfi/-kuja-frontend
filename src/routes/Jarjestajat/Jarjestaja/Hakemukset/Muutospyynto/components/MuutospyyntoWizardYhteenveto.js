@@ -75,7 +75,8 @@ let MuutospyyntoWizardYhteenveto = props => {
     })
   }
 
-  console.log('yhteenveto ', formValues)
+  setTimeout(() => console.log('yhteenveto ', formValues), 400)
+
 
   return (
     <div>

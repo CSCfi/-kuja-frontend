@@ -1,63 +1,23 @@
-import _ from 'lodash'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { SelectWrapper } from "./MuutospyyntoWizard"
-import { Separator, H3, SelectStyle, Input, PageControlsWrapper, Button } from './MuutospyyntoWizardComponents'
+import { Separator, PageControlsWrapper, Button } from './MuutospyyntoWizardComponents'
 import MuutosList from './MuutosList'
 
-import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
-
-
-
-const renderField = ({ input, label, type, meta: { touched, error } }) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <Input {...input} placeholder={label} type={type} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-)
-
-const renderPerusteluSelect = ({ input, muutosperustelut, meta: { touched, error } }) => {
-  return (
-    <div>
-      <SelectStyle>
-        <select {...input}>
-          <option value="">Valitse </option>
-          {muutosperustelut.map(perustelu => {
-            const { koodiArvo, metadata } = perustelu
-            const nimi = parseLocalizedField(metadata)
-            return (
-              <option value={koodiArvo} key={koodiArvo}>
-                {nimi}
-              </option>
-            )
-          })}
-        </select>
-      </SelectStyle>
-      {touched && error && <span>{error}</span>}
-    </div>
-  )
-}
 
 let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
     previousPage,
     muutosperustelut,
-    muutosperusteluValue,
-    muuperusteluValue,
     tutkinnotjakoulutuksetValue,
     opetusjatutkintokieletValue,
     toimialueValue,
     opiskelijavuosiValue,
-    muutmuutoksetValue,
-    onCancel
+    muutmuutoksetValue
   } = props
 
   return (
@@ -66,36 +26,11 @@ let MuutospyyntoWizardPerustelut = props => {
       <p>{MUUTOS_WIZARD_TEKSTIT.PERUSTELUT_OHJE.FI}</p>
 
       <Separator/>
-
-      <H3>{MUUTOS_WIZARD_TEKSTIT.TAUSTA_SYYT_OTSIKKO.FI}</H3>
       <form onSubmit={handleSubmit}>
-        <SelectWrapper>
-          <div>
-            <label>{MUUTOS_WIZARD_TEKSTIT.TAUSTA_SYYT_TARKENNE.FI}</label>
-            <Field
-              name="muutosperustelu"
-              muutosperustelut={muutosperustelut}
-              component={renderPerusteluSelect}
-            />
-          </div>
-
-          {muutosperusteluValue === '01'
-            ?
-            <div>
-              <Field
-                name="muuperustelu"
-                type="text"
-                label="Kirjoita perustelu"
-                component={renderField}
-              />
-            </div>
-            : null
-          }
-        </SelectWrapper>
-
         <FieldArray
           name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
           muutokset={tutkinnotjakoulutuksetValue}
+          muutosperustelut={muutosperustelut}
           kategoria="tutkinto"
           headingNumber="1"
           heading="Tutkinnot ja koulutukset"
@@ -140,7 +75,7 @@ let MuutospyyntoWizardPerustelut = props => {
 
         <PageControlsWrapper>
           <Button onClick={previousPage}>&lt; Edellinen</Button>
-          <Button type="submit" disabled={muutosperusteluValue === undefined || (muutosperusteluValue === "01" && muuperusteluValue === undefined)}>Seuraava &gt;</Button>
+          <Button type="submit">Seuraava &gt;</Button>
         </PageControlsWrapper>
       </form>
     </div>
@@ -150,8 +85,6 @@ let MuutospyyntoWizardPerustelut = props => {
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardPerustelut = connect(state => {
-  const muutosperusteluValue = selector(state, 'muutosperustelu')
-  const muuperusteluValue = selector(state, 'muuperustelu')
   const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
   const opetusjatutkintokieletValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
   const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
@@ -159,8 +92,6 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
 
   return {
-    muutosperusteluValue,
-    muuperusteluValue,
     tutkinnotjakoulutuksetValue,
     opetusjatutkintokieletValue,
     toimialueValue,
