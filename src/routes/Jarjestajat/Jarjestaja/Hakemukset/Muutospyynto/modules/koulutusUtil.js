@@ -440,6 +440,8 @@ function formatMuutosperustelu(muutosperusteluId, muuperustelu) {
 function formatMuutokset(lisattavat, poistettavat) {
   let muutokset = []
 
+  console.log("LISATTAVAT: " + JSON.stringify(lisattavat))
+
   if (lisattavat) {
     _.forEach(lisattavat, koodiarvo => {
       let obj = getBaseObject()
