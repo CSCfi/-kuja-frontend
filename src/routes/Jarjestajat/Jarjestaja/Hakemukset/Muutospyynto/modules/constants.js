@@ -256,7 +256,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         }
       },
       PERUSTELU: {
-        FI: "Perustelu",
+        FI: "PerusteluWrapper",
         SV: "På svenska"
       }
     }

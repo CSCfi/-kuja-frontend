@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import { getMuutosperusteluList } from "./muutosperusteluUtil"
 
 // Constants
 export const FETCH_MUUTOSPERUSTELUT_START = 'FETCH_MUUTOSPERUSTELUT_START'
@@ -41,7 +42,8 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: action.payload,
+      muutosperusteluList: getMuutosperusteluList(action.payload, 'FI')
     }
   },
   [FETCH_MUUTOSPERUSTELUT_FAILURE] : (state, action) => {

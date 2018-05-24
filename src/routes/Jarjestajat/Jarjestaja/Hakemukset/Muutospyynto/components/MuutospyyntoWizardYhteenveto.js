@@ -46,7 +46,8 @@ let MuutospyyntoWizardYhteenveto = props => {
     paatoskierrokset,
     muutosperustelut,
     opetuskielimuutokset,
-    tutkinetokielimuutokset
+    tutkinetokielimuutokset,
+    formValues
   } = props
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
@@ -73,6 +74,9 @@ let MuutospyyntoWizardYhteenveto = props => {
       }
     })
   }
+
+  setTimeout(() => console.log('yhteenveto ', formValues), 400)
+
 
   return (
     <div>
