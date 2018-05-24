@@ -26,7 +26,8 @@ export const COLORS = {
   LIGHT_GRAY: '#D8D8D8',
   BORDER_GRAY: '#DFDFDF',
   BG_GRAY: '#F5F5F5',
-  BG_DARKER_GRAY: '#e6e6e6'
+  BG_DARKER_GRAY: '#e6e6e6',
+  ACTIVE_BLUE: '#E9F6FA'
 }
 
 export const FONT_STACK = {

@@ -8,6 +8,7 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
 import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 const Opiskelijavuosi = styled.div`
   display: flex;
@@ -118,7 +119,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
             <Voimassaoleva>{vahimmaisArvoInitial}</Voimassaoleva>
             <HaettuMuutos>
               <FieldArray
-                name="opiskelijavuosimuutokset"
+                name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
                 kategoria="vahimmaisopiskelijavuodet"
@@ -150,7 +151,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
             <Voimassaoleva>{vaativaArvoInitial}</Voimassaoleva>
             <HaettuMuutos>
               <FieldArray
-                name="opiskelijavuosimuutokset"
+                name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
                 kategoria="vaativa"
@@ -177,7 +178,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
             <Voimassaoleva>{sisaoppilaitosArvoInitial}</Voimassaoleva>
             <HaettuMuutos>
               <FieldArray
-                name="opiskelijavuosimuutokset"
+                name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
                 kategoria="sisaoppilaitos"
@@ -227,7 +228,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                   koodiarvo,
                   koodisto,
                   arvo: value,
-                  perustelu: null
+                  perustelu: null,
+                  muutosperustelu: null
                 }
                 fields.remove(i)
                 fields.insert(i, obj)
@@ -239,7 +241,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 koodiarvo,
                 koodisto,
                 arvo: value,
-                perustelu: null
+                perustelu: null,
+                muutosperustelu: null
               })
             }
           } else {
@@ -249,7 +252,8 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
               koodiarvo,
               koodisto,
               arvo: value,
-              perustelu: null
+              perustelu: null,
+              muutosperustelu: null
             })
           }
         }}
@@ -258,10 +262,10 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardOpiskelijavuodet = connect(state => {
-  const opiskelijavuosimuutoksetValue = selector(state, 'opiskelijavuosimuutokset')
+  const opiskelijavuosimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
   const muutmuutoksetValue = selector(state, 'muutmuutokset')
 
   return {
@@ -271,7 +275,7 @@ MuutospyyntoWizardOpiskelijavuodet = connect(state => {
 })(MuutospyyntoWizardOpiskelijavuodet)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   //validate

@@ -3,27 +3,21 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { COLORS } from "../../../../../../modules/styles"
-import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
+import { MUUT_KEYS } from "../modules/constants"
 import { TUTKINTO_TEKSTIT } from "../../../modules/constants"
-import { WizButton } from "./MuutospyyntoWizard"
 import TutkintoList from './TutkintoList'
 import KoulutusList from './KoulutusList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import { handleCheckboxChange } from "../modules/koulutusUtil"
 import Loading from '../../../../../../modules/Loading'
 import {
   Kohdenumero,
   Otsikko,
-  BottomWrapper,
   Row,
   Kohde,
   Info,
-  Checkbox,
-  CheckboxRowContainer,
-  Div
 } from './MuutospyyntoWizardComponents'
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
@@ -47,42 +41,10 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue, paatoskierrokset } = this.props
+    const { lupa, tutkintomuutoksetValue } = this.props
     const { kohteet } = lupa
     const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
-    const hasTutkintoMuutoksia = tutkintomuutoksetValue !== undefined && tutkintomuutoksetValue.length !== 0
-    const hasKoulutusMuutoksia = koulutusmuutoksetValue !== undefined && koulutusmuutoksetValue.length !== 0
-
-    let isDisabled = true
-    let hasTutkintoAdditions = false
-    let hasTutkintoRemovals = false
-    let hasKoulutusAdditions = false
-    let hasKoulutusRemovals = false
-
-    if (hasTutkintoMuutoksia) {
-      isDisabled = false
-
-      tutkintomuutoksetValue.forEach(muutos => {
-        if (muutos.type === "addition") {
-          hasTutkintoAdditions = true
-        } else if (muutos.type === "removal") {
-          hasTutkintoRemovals = true
-        }
-      })
-    }
-
-    if (hasKoulutusMuutoksia) {
-      isDisabled = false
-      koulutusmuutoksetValue.forEach(muutos => {
-        if (muutos.type === "addition") {
-          hasKoulutusAdditions = true
-        } else if (muutos.type === "removal") {
-          hasKoulutusRemovals = true
-        }
-      })
-    }
-
     const koulutuksetFetched = this.props.koulutukset.fetched
     const koulutuksetIsFetching = this.props.koulutukset.isFetching
     const koulutuksetHasErrored = this.props.koulutukset.hasErrored
@@ -114,7 +76,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
             <Otsikko>{heading}</Otsikko>
             <Row>
               <FieldArray
-                name="tutkintomuutokset"
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
                 lupa={lupa}
                 data={koulutusdata}
@@ -126,12 +88,12 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
             <Row>
               <FieldArray
-                name="koulutusmuutokset"
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
                 lupa={lupa}
                 muut={muuData}
                 poikkeukset={poikkeusData}
-                editValue={koulutusmuutoksetValue}
+                editValue={tutkintomuutoksetValue}
                 component={this.renderKoulutukset}
               />
             </Row>
@@ -237,15 +199,13 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkinnot = connect(state => {
-  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
-  const koulutusmuutoksetValue = selector(state, 'koulutusmuutokset')
+  const tutkintomuutoksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
 
   return {
     tutkintomuutoksetValue,
-    koulutusmuutoksetValue,
     koulutusalat: state.koulutusalat,
     koulutukset: state.koulutukset,
     paatoskierrokset: state.paatoskierrokset
@@ -253,7 +213,7 @@ MuutospyyntoWizardTutkinnot = connect(state => {
 })(MuutospyyntoWizardTutkinnot)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   validate

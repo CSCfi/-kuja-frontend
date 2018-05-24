@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
@@ -8,6 +7,7 @@ import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, Div } from "
 import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardMuut extends Component {
   componentWillMount() {
@@ -34,7 +34,7 @@ class MuutospyyntoWizardMuut extends Component {
           <Otsikko>{heading}</Otsikko>
           <Row>
             <FieldArray
-              name="muutmuutokset"
+              name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={muut.data}
@@ -119,10 +119,10 @@ class MuutospyyntoWizardMuut extends Component {
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardMuut = connect(state => {
-  const muutmuutoksetValue = selector(state, 'muutmuutokset')
+  const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
 
   return {
     muutmuutoksetValue
@@ -130,7 +130,7 @@ MuutospyyntoWizardMuut = connect(state => {
 })(MuutospyyntoWizardMuut)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   // validate,

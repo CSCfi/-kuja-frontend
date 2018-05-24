@@ -227,6 +227,61 @@ export function getOpiskelijavuosiIndex(values, koodiarvo) {
   return i
 }
 
+export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, obj) {
+  const { checked } = event.target
+  const { koodiarvo, koodisto } = obj
+
+  if (checked) {
+    if (isInLupa) {
+      // Valtakunnallinen luvassa --> poistetaan se formista
+      const i = getEditIndex(editValues, koodiarvo, koodisto)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Valtakunnallinen ei luvassa --> lisätään muutos formiin
+      fields.push({
+        type: 'addition',
+        perustelu: null,
+        muutosperustelu: null,
+        isValtakunnallinen: true,
+        koodiarvo: 'FI1',
+        koodisto: 'nuts1',
+        metadata: {
+          kuvaus: {
+            FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+            SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+          }
+        }
+      })
+    }
+  } else {
+    if (isInLupa) {
+      // Valtakunnallinen luvassa --> lisätään muutos formiin
+      fields.push({
+        type: 'addition',
+        perustelu: null,
+        muutosperustelu: null,
+        isValtakunnallinen: false,
+        koodiarvo: 'FI1',
+        koodisto: 'nuts1',
+        metadata: {
+          kuvaus: {
+            FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
+            SV: 'Examina och utbildning får därtill ordnas även på annat håll i Finland, med undantag för landskapet Åland.'
+          }
+        }
+      })
+    } else {
+      // Valtakunnallinen ei luvassa --> poistetaan se formista
+      const i = getEditIndex(editValues, koodiarvo, koodisto)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
 export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto
@@ -244,12 +299,12 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null })
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null })
+      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodiArvo, koodistoUri)
@@ -275,12 +330,12 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null })
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null })
+      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodi, koodistoUri)
@@ -329,7 +384,8 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
           kuvaus: null,
           isInLupa,
           type: "change",
-          perustelu: null
+          perustelu: null,
+          muutosperustelu: null
         })
       }
     } else {
@@ -343,7 +399,8 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
         kuvaus: null,
         isInLupa,
         type: "change",
-        perustelu: null
+        perustelu: null,
+        muutosperustelu: null
       })
     }
   } else {

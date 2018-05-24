@@ -246,10 +246,14 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     if(maakunnat.length === 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VELVOLLISUUS_MAAKUNTA_YKSIKKO_EIKUNTA.FI}
     if(maakunnat.length < 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.EI_VELVOLLISUUTTA.FI}
 
-    _.filter(toimintaalueet, alue => {
-        (alue.koodisto === 'nuts1') ? returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI : null
+    let valtakunnalliset =_.filter(toimintaalueet, alue => {
+      return alue.koodisto === 'nuts1'
     })
 
+    if (valtakunnalliset && valtakunnalliset.length > 0) {
+      returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI
+      returnobj.valtakunnallinen = valtakunnalliset[0]
+    }
 
     // kohde 4: opiskelijavuodet
   } else if (target === KOHTEET.OPISKELIJAVUODET) {
@@ -417,6 +421,10 @@ function getToimintaalueArvoArray(maaraykset) {
             if (metadata) {
                 arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto, koodiarvo: koodiarvo})
             }
+        }
+
+        if (koodisto === 'nuts1') {
+          arr.push({ arvo: koodiarvo, koodisto, koodiarvo, maaraysId: maarays.uuid })
         }
     })
 

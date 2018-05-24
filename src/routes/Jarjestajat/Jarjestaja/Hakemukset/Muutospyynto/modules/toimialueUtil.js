@@ -31,15 +31,57 @@ export function getToimialueByKoodiArvo(koodiarvo) {
   }
 }
 
-export function getToimialueList(toimialueet, locale) {
+export function getToimialueList(toimialueet, locale, tyyppi) {
   let array = []
 
   toimialueet.forEach(toimialue => {
     const { koodiArvo, metadata } = toimialue
-    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo })
+    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi })
   })
 
   return array
+}
+
+function getKuntaList(kunnat, locale) {
+  let list = []
+
+  _.forEach(kunnat, kunta => {
+    const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta
+
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
+      list.push({ ...kunta, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta" })
+    }
+  })
+
+  return list
+}
+
+export function getMaakuntakunnatList(toimialueet, locale) {
+  const now = new Date()
+
+  let list = []
+
+  _.forEach(toimialueet, toimialue => {
+    const { koodiArvo, metadata, kunta, tila, voimassaLoppuPvm } = toimialue
+
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "99") {
+      if (!voimassaLoppuPvm || now < Date.parse(voimassaLoppuPvm)) {
+        let curMaakunta = { ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta" }
+        curMaakunta.kunta = getKuntaList(kunta, locale)
+        list.push(curMaakunta)
+      }
+    }
+  })
+
+  list = _.sortBy(list, maakunta => {
+    maakunta.kunta = _.sortBy(maakunta.kunta, kunta => {
+      return kunta.label
+    })
+
+    return maakunta.label
+  })
+
+  return list
 }
 
 export function handleToimialueSelectChange(editValues, fields, initialValues, values) {
@@ -56,7 +98,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
       fields.push({
         ...toimialue,
         type: "removal",
-        perustelu: null
+        perustelu: null,
+        muutosperustelu: null
       })
     })
   }
@@ -77,7 +120,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
           fields.push({
             ...value,
             type: "addition",
-            perustelu: null
+            perustelu: null,
+            muutosperustelu: null
           })
         }
       } else {
@@ -85,7 +129,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
         fields.push({
           ...value,
           type: "addition",
-          perustelu: null
+          perustelu: null,
+          muutosperustelu: null
         })
       }
     }
