@@ -193,8 +193,6 @@ class MuutospyyntoWizard extends Component {
       event.preventDefault()
       this.props.previewMuutospyynto(data).then(() => {
 
-          //console.log("response: " + JSON.stringify(this.props.muutospyynto.pdf))
-
           var binaryData = [];
           binaryData.push(this.props.muutospyynto.pdf.data);
           const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))

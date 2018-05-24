@@ -33,8 +33,6 @@ export function fetchMuutospyynto(ytunnus, query) {
 
 export function createMuutospyynto(muutospyynto) {
 
-    console.log("PDFksi asdasd: " + JSON.stringify(muutospyynto))
-
     const formatted = formatMuutospyynto(muutospyynto)
 
   let obj = {}
@@ -52,7 +50,6 @@ export function createMuutospyynto(muutospyynto) {
 }
 
 export function previewMuutospyynto(muutospyynto) {
-    console.log("PDFksi 1: " + JSON.stringify(muutospyynto))
 
 //    const formatted = formatMuutospyynto(muutospyynto)
 
@@ -119,6 +116,31 @@ export function previewMuutospyynto(muutospyynto) {
         "\t\t  \"tila\": \"POISTO\"\n" +
         "\t\t},\n" +
         " \t    {\n" +
+        "\t\t  \"kohdeId\": 2,\n" +
+        "\t\t  \"koodiarvo\": \"1\",\n" +
+        "\t\t  \"koodisto\": \"oppilaitoksenopetuskieli\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 3,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"opetuskielen lisäys\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 2,\n" +
+        "\t\t  \"koodiarvo\": \"1\",\n" +
+        "\t\t  \"parentId\": \"321604\",\n" +
+        "\t\t  \"koodisto\": \"kieli\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 3,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"tutkintokielen lisäys\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
         "\t\t  \"kohdeId\": 4,\n" +
         "\t\t  \"koodiarvo\": \"3\",\n" +
         "\t\t  \"koodisto\": \"koulutussektori\",\n" +
@@ -170,6 +192,150 @@ export function previewMuutospyynto(muutospyynto) {
         "\t\t  \"tila\": \"LISAYS\"\n" +
         "\t\t},\n" +
         " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"1\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4asdsadasasdas\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"2\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"3\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"4\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"5\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"6\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"7\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"kokeilu\": \"laskdjlaks lkjd lkasjdlkasjdklajskl\", \"perusteluteksti\":\"ljoojojojojojoj\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"8\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"yhteistyösopimus\": \"Yhteistyötä loremin kanssa\", \"perusteluteksti\":\"perusteluita\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"9\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"10\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"11\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
+        "\t\t  \"kohdeId\": 5,\n" +
+        "\t\t  \"koodiarvo\": \"12\",\n" +
+        "\t\t  \"koodisto\": \"oivamuutoikeudetvelvollisuudetehdotjatehtavat\",\n" +
+        "\t\t  \"luoja\": \"oiva-sanni\",\n" +
+        "   \t\t  \"luontipvm\": \"2018-03-15\",\n" +
+        "\t\t  \"maaraystyyppiId\": 1,\n" +
+        "\t\t  \"meta\": {\n" +
+        "\t\t    \"perusteluteksti\": \"Lorem ipsum 4\"\n" +
+        "\t\t  },\n" +
+        "\t\t  \"tila\": \"LISAYS\"\n" +
+        "\t\t},\n" +
+        " \t    {\n" +
         "\t\t  \"kohdeId\": 3,\n" +
         "\t\t  \"koodiarvo\": \"287\",\n" +
         "\t\t  \"koodisto\": \"kunta\",\n" +
@@ -185,8 +351,6 @@ export function previewMuutospyynto(muutospyynto) {
         "}"
 
 
-
-    console.log("PDFksi 2: " + JSON.stringify(formatted))
     return (dispatch) => {
         dispatch({ type: PREVIEW_MUUTOSPYYNTO_START })
 
