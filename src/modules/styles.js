@@ -27,7 +27,10 @@ export const COLORS = {
   BORDER_GRAY: '#DFDFDF',
   BG_GRAY: '#F5F5F5',
   BG_DARKER_GRAY: '#e6e6e6',
-  ACTIVE_BLUE: '#E9F6FA'
+  ACTIVE_BLUE: '#E9F6FA',
+  OIVA_OPAQUE_GREEN: 'rgba(90,138,112,0.4)',
+  OIVA_DARK_GREEN: '#517c64',
+  OIVA_LIGHT_GREEN: '#eef3f0'
 }
 
 export const FONT_STACK = {
@@ -48,6 +51,10 @@ export const MEDIA_QUERIES = {
   TABLET_MIN: 'only screen and (min-width: 768px)',
   DESKTOP_NORMAL: 'only screen and (min-width: 1024px) and (max-width: 1279px)',
   DESKTOP_LARGE: 'only screen and (min-width: 1280px)'
+}
+
+export const TRANSITIONS = {
+  EASE_IN_OUT_QUICK: 'all 0.05s ease-in-out'
 }
 
 // Globaalit tyylit

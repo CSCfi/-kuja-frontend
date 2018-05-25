@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Redirect, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import Modal from 'react-modal'
 
 import MuutospyyntoWizardMuutokset from './MuutospyyntoWizardMuutokset'
 import MuutospyyntoWizardPerustelut from './MuutospyyntoWizardPerustelut'
@@ -9,96 +10,17 @@ import MuutospyyntoWizardYhteenveto from './MuutospyyntoWizardYhteenveto'
 import Loading from '../../../../../../modules/Loading'
 
 import { ContentContainer } from "../../../../../../modules/elements"
-import { COLORS, MEDIA_QUERIES } from "../../../../../../modules/styles"
+import { WizardBackground, WizardTop, WizardWrapper, WizardHeader, WizardContent, Container } from "./MuutospyyntoWizardComponents"
+import { COLORS } from "../../../../../../modules/styles"
 import close from 'static/images/close-x.svg'
-import {ROLE_KAYTTAJA} from "../../../../../../modules/constants";
+import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
+import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 
-const WizardBackground = styled.div`
-  background-color: rgba(255, 255, 255, 0.7);
-  position: absolute;
-  height: 100vh;
-  width: 100%;
-  top: 0;
-  left: 0;
-`
-
-const WizardTop = styled.div`
-  background-color: ${COLORS.DARK_GRAY};
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 50px;
-  width: 100%;
-  z-index: 2;
-  display: flex;
-`
-
-const WizardHeader = styled.div`
-  background-color: ${COLORS.BG_GRAY};
-  position: fixed;
-  left: 0;
-  top: 50px;
-  height: 50px;
-  width: 100%;
-  z-index: 2;
-  display: flex;
-  font-size: 14px;
-`
-
-const WizardContent = styled.div`
-  background-color: ${COLORS.WHITE};
-  padding: 30px;
-  //border: 1px solid ${COLORS.BORDER_GRAY};
-  position: relative;
-  z-index: 1;
-`
-
-const WizardWrapper = styled.div`
-  position: relative;
-  top: -45px;
-`
-
-const Container = styled.div`
-  width: 100%;
-  max-width: ${props => props.maxWidth ? props.maxWidth : '1280px'};
-  margin: ${props => props.margin ? props.margin : 'auto'};  
-  padding: ${props => props.padding ? props.padding : '0 15px'};
-  box-sizing: border-box;
-  display: flex;
-  color: ${props => props.color ? props.color : COLORS.WHITE};
-  justify-content: space-between;
-  align-items: center;
-  
-  @media ${MEDIA_QUERIES.MOBILE} {
-    margin: 0 auto;
-  }
-`
+Modal.setAppElement('#root')
 
 const CloseButton = styled.img`
   height: 20px;
   cursor: pointer;
-`
-
-export const WizButton = styled.button`
-  color: ${props => props.textColor ? props.textColor : COLORS.WHITE};
-  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  margin-right: 15px;
-  height: 36px;
-  width: 140px;
-  line-height: 36px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius: 2px;
-  
-  &:hover {
-    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
-    ${props => props.disabled ? 'cursor: not-allowed;' : null}
-  }
 `
 
 const PhaseStyle = styled.div`
@@ -123,10 +45,6 @@ const Text = styled.div`
   color: ${props => props.active ? COLORS.BLACK : 'rgb(96, 96, 96)'};
 `
 
-export const SelectWrapper = styled.div`
-  margin-bottom: 20px;
-`
-
 const Phase = ({ number, text, activePage, disabled, handleClick }) => {
   const isActive = Number(number) === Number(activePage)
 
@@ -147,9 +65,13 @@ class MuutospyyntoWizard extends Component {
     this.onSubmit = this.onSubmit.bind(this)
     this.changePhase = this.changePhase.bind(this)
     this.preview = this.preview.bind(this)
+    this.openCancelModal = this.openCancelModal.bind(this)
+    this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this)
+    this.closeCancelModal = this.closeCancelModal.bind(this)
     this.state = {
       page: 1,
-      visitedPages: [1]
+      visitedPages: [1],
+      isCloseModalOpen: false
     }
   }
 
@@ -213,6 +135,18 @@ class MuutospyyntoWizard extends Component {
     this.setState({ page: number })
   }
 
+  openCancelModal(e) {
+    e.preventDefault()
+    this.setState({ modalIsOpen: true })
+  }
+
+  afterOpenCancelModal() {
+  }
+
+  closeCancelModal() {
+    this.setState({ modalIsOpen: false })
+  }
+
   render() {
     const { muutosperustelut, lupa, paatoskierrokset } = this.props
     const { page, visitedPages } = this.state
@@ -240,7 +174,7 @@ class MuutospyyntoWizard extends Component {
             <WizardTop>
               <Container padding="0 20px">
                 <div>Uusi muutoshakemus</div>
-                <CloseButton src={close} onClick={this.onCancel} />
+                <CloseButton src={close} onClick={this.openCancelModal} />
               </Container>
             </WizardTop>
 
@@ -285,6 +219,22 @@ class MuutospyyntoWizard extends Component {
               </WizardContent>
             </ContentContainer>
           </WizardWrapper>
+
+          <Modal
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenCancelModal}
+            onRequestClose={this.closeCancelModal}
+            contentLabel="Poistu muutoshakemuksen teosta"
+            style={modalStyles}
+          >
+            <Content>
+              <ModalText>Oletko varma, että haluat poistua muutoshakemuksen luonnista? Tekemiäsi muutoksia ei tallenneta.</ModalText>
+            </Content>
+            <div>
+              <ModalButton primary onClick={this.onCancel}>Kyllä</ModalButton>
+              <ModalButton onClick={this.closeCancelModal}>Ei</ModalButton>
+            </div>
+          </Modal>
         </div>
       )
     } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
