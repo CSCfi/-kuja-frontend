@@ -13,11 +13,6 @@ export function getMuutosperusteluList(muutosperustelut, locale) {
 }
 
 export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, selectedValue) {
-  console.log('handleMuutosperusteluSelectChange')
-  console.log(muutokset)
-  console.log(fields)
-  console.log(muutos)
-  console.log(selectedValue)
   let muutosperusteluValue = null
 
   if (selectedValue !== null) {

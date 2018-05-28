@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { Separator, PageControlsWrapper, Button } from './MuutospyyntoWizardComponents'
+import { Separator, Button, SubtleButton, Container, WizardBottom } from './MuutospyyntoWizardComponents'
 import MuutosList from './MuutosList'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
@@ -73,10 +73,15 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
-        <PageControlsWrapper>
-          <Button onClick={previousPage}>&lt; Edellinen</Button>
-          <Button type="submit">Seuraava &gt;</Button>
-        </PageControlsWrapper>
+        <WizardBottom>
+          <Container maxWidth="1085px" padding="15px">
+            <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+            <div>
+              <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+            </div>
+            <Button type="submit" className="next button-right">Seuraava</Button>
+          </Container>
+        </WizardBottom>
       </form>
     </div>
   )

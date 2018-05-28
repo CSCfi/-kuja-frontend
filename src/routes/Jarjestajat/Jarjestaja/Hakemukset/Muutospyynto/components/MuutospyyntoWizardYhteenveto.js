@@ -5,10 +5,11 @@ import { reduxForm, formValueSelector, Field } from 'redux-form'
 import Moment from 'react-moment'
 
 import validate from '../modules/validateWizard'
-import { PageControlsWrapper, Button } from "./MuutospyyntoWizardComponents"
+import { WizardBottom, Container, SubtleButton, Button } from "./MuutospyyntoWizardComponents"
 import { COLORS } from "../../../../../../modules/styles"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -38,19 +39,14 @@ const Muutosperustelu = ({ muutosperustelu, muuperustelu }) => {
 let MuutospyyntoWizardYhteenveto = props => {
   const {
     handleSubmit,
-    muutosperustelu,
-    muuperustelu,
-    tutkintomuutokset,
     onCancel,
     previousPage,
     paatoskierrokset,
-    muutosperustelut,
-    opetuskielimuutokset,
     preview,
-    tutkinetokielimuutokset,
-    formValues
+    formValues,
+    tutkinnotjakoulutuksetValue,
+    opetusjatutkintokieletValue
   } = props
-
 
   const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
     if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
@@ -59,23 +55,6 @@ let MuutospyyntoWizardYhteenveto = props => {
       }
     }
   })
-
-  const muutosperusteluObj = _.find(muutosperustelut.data, mperustelu => {
-    return String(mperustelu.koodiArvo) === String(muutosperustelu)
-  })
-
-  let hasAdditions = false
-  let hasRemovals = false
-
-  if (tutkintomuutokset) {
-    tutkintomuutokset.forEach(muutos => {
-      if (muutos.type === "addition") {
-        hasAdditions = true
-      } else if (muutos.type === "removal") {
-        hasRemovals = true
-      }
-    })
-  }
 
   setTimeout(() => console.log('yhteenveto ', formValues), 400)
 
@@ -92,100 +71,41 @@ let MuutospyyntoWizardYhteenveto = props => {
         }
       </div>
 
-      <div>
-        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.MUUTOSPERUSTELU.HEADING.FI}</h3>
-        {muutosperusteluObj
-          ? <Muutosperustelu muutosperustelu={muutosperusteluObj} muuperustelu={muuperustelu} />
-          : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.MUUTOSPERUSTELU.TIETOJEN_LATAUS_VIRHE.FI}</div>
-        }
-      </div>
-
-      <div>
-        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.LISATTAVAT.HEADING.FI}</h3>
-        <div>
-          {hasAdditions
-            ? tutkintomuutokset.map(muutos => {
-                if (muutos.type === "addition") {
-                  return <div key={muutos.koodiarvo}>{`${muutos.koodiarvo} ${muutos.nimi} ${MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.PERUSTELU.FI} ${muutos.perustelu}`}</div>
-                } else {
-                  return null
-                }
-              })
-            : MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.LISATTAVAT.EI_TUTKINTOJA.FI
-          }
-        </div>
-      </div>
-
-      <div>
-        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.POISTETTAVAT.HEADING.FI}</h3>
-        <div>
-          {hasRemovals
-            ? tutkintomuutokset.map(muutos => {
-                if (muutos.type === "removal") {
-                  return <div key={muutos.koodiarvo}>{`${muutos.koodiarvo} ${muutos.nimi} ${MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.PERUSTELU.FI} ${muutos.perustelu}`}</div>
-                } else {
-                  return null
-                }
-              })
-            : MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.TUTKINNOT.POISTETTAVAT.EI_TUTKINTOJA.FI
-          }
-        </div>
-      </div>
-
-      {opetuskielimuutokset && opetuskielimuutokset.length > 0 &&
-        <div>
-          <h3>Opetuskielimuutokset</h3>
-          <div>
-            {opetuskielimuutokset.map(muutos => {
-              const { nimi, koodiarvo, koodisto, type, perustelu } = muutos
-              const identifier = `${koodiarvo}-${nimi}-${type}`
-              const tyyppi = type === "addition" ? "lisäys" : type === "removal" ? "poisto" : null
-              return (
-                <div key={identifier}>{`${koodiarvo} ${nimi} ${tyyppi} ${perustelu}`}</div>
-              )
-            })}
-          </div>
-        </div>
-      }
-
       <form onSubmit={handleSubmit}>
-        <WizButton type="submit" className="next">Tallenna</WizButton>
-        <WizButton bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e, props.formValues)}>Esikatsele</WizButton>
-        <PageControlsWrapper>
-          <Button onClick={previousPage}>&lt; Edellinen</Button>
-        </PageControlsWrapper>
+        <WizardBottom>
+          <Container maxWidth="1085px" padding="15px">
+            <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+            <div>
+              <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+              <SubtleButton onClick={(e) => preview(e, props.formValues)}>Esikatsele</SubtleButton>
+            </div>
+            <Button type="submit" className="next button-right">Lähetä hakemus</Button>
+          </Container>
+        </WizardBottom>
       </form>
-
-
-     </div>
+    </div>
   )
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardYhteenveto = reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   validate
 })(MuutospyyntoWizardYhteenveto)
 
 export default connect(state => {
-  const muutosperustelu = selector(state, 'muutosperustelu')
-  const muuperustelu = selector(state, 'muuperustelu')
   const paatoskierros = selector(state, 'paatoskierros')
-  const tutkintomuutokset = selector(state, 'tutkintomuutokset')
-  const opetuskielimuutokset = selector(state, 'opetuskielimuutokset')
-  const tutkintokielimuutokset = selector(state, 'tutkintokielimuutokset')
+  const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
+  const opetusjatutkintokieletValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
 
   return {
     formValues: state.form.uusiHakemus.values,
-    muutosperustelu,
-    muuperustelu,
     paatoskierros,
-    tutkintomuutokset,
-    opetuskielimuutokset,
-    tutkintokielimuutokset,
+    tutkinnotjakoulutuksetValue,
+    opetusjatutkintokieletValue,
     muutosperustelut: state.muutosperustelut,
     paatoskierrokset: state.paatoskierrokset
   }
