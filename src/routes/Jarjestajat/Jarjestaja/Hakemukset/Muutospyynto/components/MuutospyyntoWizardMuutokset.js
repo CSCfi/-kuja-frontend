@@ -7,6 +7,12 @@ import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWiza
 import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
 import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
 import { Button, SubtleButton, Kohde, WizardBottom, Container } from "./MuutospyyntoWizardComponents"
+import styled from 'styled-components'
+
+const Otsikko = styled.div`
+  display: flex;
+  align-items: baseline;
+`
 
 class MuutospyyntoWizardMuutokset extends Component {
   constructor(props) {
@@ -31,6 +37,12 @@ class MuutospyyntoWizardMuutokset extends Component {
 
     return (
       <div>
+
+        <Otsikko>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen
+          mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen
+          järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen
+          lakiin (531/2017) on esitetty kohdittain.</Otsikko>
+
         <form onSubmit={onSubmit}>
           <MuutospyyntoWizardTutkinnot
             lupa={lupa}
