@@ -1,15 +1,17 @@
 import _ from 'lodash'
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { reduxForm, formValueSelector, Field } from 'redux-form'
+import { reduxForm, formValueSelector } from 'redux-form'
 import Moment from 'react-moment'
+import Modal from 'react-modal'
 
 import validate from '../modules/validateWizard'
 import { WizardBottom, Container, SubtleButton, Button } from "./MuutospyyntoWizardComponents"
-import { COLORS } from "../../../../../../modules/styles"
-import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
+
+Modal.setAppElement('#root')
 
 const Paatoskierros = ({ paatoskierros }) => (
   <div>
@@ -22,69 +24,97 @@ const Paatoskierros = ({ paatoskierros }) => (
   </div>
 )
 
-const Muutosperustelu = ({ muutosperustelu, muuperustelu }) => {
-  const nimi = parseLocalizedField(muutosperustelu.metadata)
+class MuutospyyntoWizardYhteenveto extends Component {
+  constructor(props) {
+    super(props)
 
-  return (
-    <div>
-      {nimi}
-      {muuperustelu
-        ? <span>:&nbsp;{muuperustelu}</span>
-        : null
-      }
-    </div>
-  )
-}
-
-let MuutospyyntoWizardYhteenveto = props => {
-  const {
-    handleSubmit,
-    onCancel,
-    previousPage,
-    paatoskierrokset,
-    preview,
-    formValues,
-    tutkinnotjakoulutuksetValue,
-    opetusjatutkintokieletValue
-  } = props
-
-  const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
-    if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
-      if (pkierros.meta.nimi.fi === "Avoin päätöskierros 2018") {
-        return pkierros
-      }
+    this.state = {
+      isSendModalOpen: false
     }
-  })
 
-  setTimeout(() => console.log('yhteenveto ', formValues), 400)
+    this.openSendModal = this.openSendModal.bind(this)
+    this.afterOpenSendModal = this.afterOpenSendModal.bind(this)
+    this.closeSendModal = this.closeSendModal.bind(this)
+  }
 
+  openSendModal(e) {
+    e.preventDefault()
+    this.setState({ isSendModalOpen: true })
+  }
 
-  return (
-    <div>
-      <h2>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
+  afterOpenSendModal() {
+  }
 
-      <div>
-        <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.HEADING.FI}</h3>
-        {paatoskierrosObj
-          ? <Paatoskierros paatoskierros={paatoskierrosObj} />
-          : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.TIETOJEN_LATAUS_VIRHE.FI}</div>
+  closeSendModal() {
+    this.setState({ isSendModalOpen: false })
+  }
+
+  render() {
+    const {
+      handleSubmit,
+      onCancel,
+      onSubmit,
+      previousPage,
+      paatoskierrokset,
+      preview,
+      formValues,
+      tutkinnotjakoulutuksetValue,
+      opetusjatutkintokieletValue
+    } = this.props
+
+    setTimeout(() => console.log('yhteenveto ', formValues), 400)
+
+    const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
+      if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
+        if (pkierros.meta.nimi.fi === "Avoin päätöskierros 2018") {
+          return pkierros
         }
-      </div>
+      }
+    })
 
-      <form onSubmit={handleSubmit}>
-        <WizardBottom>
-          <Container maxWidth="1085px" padding="15px">
-            <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+    return (
+      <div>
+        <h2>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
+
+        <div>
+          <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.HEADING.FI}</h3>
+          {paatoskierrosObj
+            ? <Paatoskierros paatoskierros={paatoskierrosObj} />
+            : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.TIETOJEN_LATAUS_VIRHE.FI}</div>
+          }
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <WizardBottom>
+            <Container maxWidth="1085px" padding="15px">
+              <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+              <div>
+                <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+                <SubtleButton onClick={(e) => preview(e, this.props.formValues)}>Esikatsele</SubtleButton>
+              </div>
+              <Button  onClick={this.openSendModal} type="submit" className="next button-right">Lähetä hakemus</Button>
+            </Container>
+          </WizardBottom>
+
+          <Modal
+            isOpen={this.state.isSendModalOpen}
+            onAfterOpen={this.afterOpenSendModal}
+            onRequestClose={this.closeSendModal}
+            contentLabel="Lähetä hakemus"
+            style={modalStyles}
+          >
+            <Content>
+              <ModalText>Oletko varma, että haluat lähettää hakemuksen käsiteltäväksi?</ModalText>
+            </Content>
             <div>
-              <SubtleButton disabled>Tallenna luonnos</SubtleButton>
-              <SubtleButton onClick={(e) => preview(e, props.formValues)}>Esikatsele</SubtleButton>
+              <ModalButton primary onClick={onSubmit}>Kyllä</ModalButton>
+              <ModalButton onClick={this.closeSendModal}>Ei</ModalButton>
             </div>
-            <Button type="submit" className="next button-right">Lähetä hakemus</Button>
-          </Container>
-        </WizardBottom>
-      </form>
-    </div>
-  )
+          </Modal>
+        </form>
+      </div>
+    )
+  }
 }
 
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)

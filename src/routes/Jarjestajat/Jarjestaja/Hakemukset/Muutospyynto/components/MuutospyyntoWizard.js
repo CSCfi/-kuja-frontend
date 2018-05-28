@@ -137,14 +137,14 @@ class MuutospyyntoWizard extends Component {
 
   openCancelModal(e) {
     e.preventDefault()
-    this.setState({ modalIsOpen: true })
+    this.setState({ isCloseModalOpen: true })
   }
 
   afterOpenCancelModal() {
   }
 
   closeCancelModal() {
-    this.setState({ modalIsOpen: false })
+    this.setState({ isCloseModalOpen: false })
   }
 
   render() {
@@ -221,7 +221,7 @@ class MuutospyyntoWizard extends Component {
           </WizardWrapper>
 
           <Modal
-            isOpen={this.state.modalIsOpen}
+            isOpen={this.state.isCloseModalOpen}
             onAfterOpen={this.afterOpenCancelModal}
             onRequestClose={this.closeCancelModal}
             contentLabel="Poistu muutoshakemuksen teosta"
