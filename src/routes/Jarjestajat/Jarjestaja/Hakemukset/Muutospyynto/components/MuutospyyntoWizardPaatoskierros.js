@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, formValueSelector, reduxForm } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { WizButton, SelectWrapper } from "./MuutospyyntoWizard"
+import { Button, SelectWrapper } from './MuutospyyntoWizardComponents'
 import { COLORS } from "../../../../../../modules/styles"
 import { getJarjestajaData, getPaatoskierrosByUuid } from "../modules/koulutusUtil"
 
@@ -49,16 +49,16 @@ class MuutospyyntoWizardPaatoskierros extends Component {
       <div>
         <h3>Valitse päätöskierros</h3>
         <form onSubmit={handleSubmit}>
-          <SelectWrapper>
+          <div>
             <label>Päätöskierros</label>
             <Field name="paatoskierros" paatoskierrokset={paatoskierrokset} component={this.renderPaatoskierrosSelect} />
             {paatoskierros ? <div>{this.getKuvaus(paatoskierros)}</div> : null}
-          </SelectWrapper>
+          </div>
           <div>
-            <WizButton type="submit" disabled={pristine || error} className="next">
+            <Button type="submit" disabled={pristine || error} className="next">
               Seuraava
-            </WizButton>
-            <WizButton bgColor={COLORS.OIVA_RED} onClick={() => onCancel()}>Peruuta</WizButton>
+            </Button>
+            <Button bgColor={COLORS.OIVA_RED} onClick={() => onCancel()}>Peruuta</Button>
           </div>
         </form>
       </div>

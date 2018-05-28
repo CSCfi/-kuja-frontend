@@ -6,10 +6,17 @@ import MuutospyyntoWizardTutkintokieletContainer from '../containers/Muutospyynt
 import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWizardToimialueContainer'
 import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
 import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
-import { COLORS } from "../../../../../../modules/styles"
-import { PageControlsWrapper, Button, Kohde } from "./MuutospyyntoWizardComponents"
+import { Button, SubtleButton, Kohde, WizardBottom, Container } from "./MuutospyyntoWizardComponents"
 
 class MuutospyyntoWizardMuutokset extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      modalIsOpen: false
+    }
+  }
+
   render() {
     const {
       onSubmit,
@@ -61,9 +68,15 @@ class MuutospyyntoWizardMuutokset extends Component {
             />
           </Kohde>
 
-          <PageControlsWrapper>
-            <Button type="submit" className="button-right">Seuraava &gt;</Button>
-          </PageControlsWrapper>
+          <WizardBottom>
+            <Container maxWidth="1085px" padding="15px">
+              <Button className="previous button-left button-hidden">Edellinen</Button>
+              <div>
+                <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+              </div>
+              <Button type="submit" className="next button-right">Seuraava</Button>
+            </Container>
+          </WizardBottom>
         </form>
       </div>
     )
