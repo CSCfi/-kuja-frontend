@@ -111,9 +111,9 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
         <Row>
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAHIMMAISMAARA.FI}</h4>
           <Opiskelijavuosi>
-            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
-            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
-            <Yhteensa>Muutos yhteensä</Yhteensa>
+            <Voimassaoleva>NYKYINEN</Voimassaoleva>
+            <HaettuMuutos>HAETTAVA</HaettuMuutos>
+            <Yhteensa>MUUTOS</Yhteensa>
           </Opiskelijavuosi>
           <Opiskelijavuosi>
             <Voimassaoleva>{vahimmaisArvoInitial}</Voimassaoleva>
@@ -133,19 +133,13 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
           </Opiskelijavuosi>
         </Row>
 
-          { (showVaativa || showSisaoppilaitos) ?
-              <Row>
-                <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.RAJOITUKSET.FI}</h4>
-              </Row>
-              : null }
-
         {showVaativa ?
         <Row>
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAATIVA_TUKI.FI}</h4>
           <Opiskelijavuosi>
-            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
-            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
-            <Yhteensa>Muutos yhteensä</Yhteensa>
+            <Voimassaoleva>NYKYINEN</Voimassaoleva>
+            <HaettuMuutos>HAETTAVA</HaettuMuutos>
+            <Yhteensa>MUUTOS</Yhteensa>
           </Opiskelijavuosi>
           <Opiskelijavuosi>
             <Voimassaoleva>{vaativaArvoInitial}</Voimassaoleva>
@@ -170,9 +164,9 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
         <Row>
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.SISAOPPILAITOS.FI}</h4>
           <Opiskelijavuosi>
-            <Voimassaoleva>Voimassaoleva</Voimassaoleva>
-            <HaettuMuutos>Haettu uusi lukumäärä</HaettuMuutos>
-            <Yhteensa>Muutos yhteensä</Yhteensa>
+            <Voimassaoleva>NYKYINEN</Voimassaoleva>
+            <HaettuMuutos>HAETTAVA</HaettuMuutos>
+            <Yhteensa>MUUTOS</Yhteensa>
           </Opiskelijavuosi>
           <Opiskelijavuosi>
             <Voimassaoleva>{sisaoppilaitosArvoInitial}</Voimassaoleva>
