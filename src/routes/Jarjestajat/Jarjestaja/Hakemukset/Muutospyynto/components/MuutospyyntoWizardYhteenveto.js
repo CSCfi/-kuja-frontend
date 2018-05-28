@@ -149,8 +149,8 @@ let MuutospyyntoWizardYhteenveto = props => {
       }
 
       <form onSubmit={handleSubmit}>
-        <WizButton type="submit" className="next">Tallenna</WizButton>
-        <WizButton bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e, props.formValues)}>Esikatsele</WizButton>
+        <Button type="submit" className="next">Tallenna</Button>
+        <Button bgColor={COLORS.OIVA_PURPLE} onClick={(e) => preview(e, props.formValues)}>Esikatsele</Button>
         <PageControlsWrapper>
           <Button onClick={previousPage}>&lt; Edellinen</Button>
         </PageControlsWrapper>
