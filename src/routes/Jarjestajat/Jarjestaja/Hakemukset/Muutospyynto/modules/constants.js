@@ -49,7 +49,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_OPETUSKIELET: {
     HEADING: {
-      FI: "Valitse opetuskielet",
+      FI: "OPETUSKIELI",
       SV: "På svenska"
     },
     PERUSTELU: {
@@ -95,7 +95,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_TUTKINTOKIELET: {
     HEADING: {
-      FI: "Valitse opetuskielen lisäksi tutkintokielet",
+      FI: "TUTKINTOKIELET",
       SV: "På svenska"
     },
     PERUSTELU: {
@@ -159,11 +159,11 @@ export const MUUTOS_WIZARD_TEKSTIT = {
           SV: "Utbildningsanordnarens minimiantal studerandeår"
       },
       VAATIVA_TUKI: {
-          FI: "Vaativan erityisen tuen tehtävä",
+          FI: "Vähimmäisopiskelijavuosimäärän rajoitus koskien vaativaa erityistä tukea (65 §)",
           SV: "På svenska"
       },
       SISAOPPILAITOS: {
-          FI: "Sisäoppilaitosmuotoinen koulutus",
+          FI: "Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)",
           SV: "På svenska"
       },
       ENINTAAN: {
