@@ -4,6 +4,7 @@ const routes = [
 
     {
         path: '/asiat/valmistelu/:uuid',
+        exact: true,
         component: ValmisteluContainer
     }
 ]

@@ -14,6 +14,19 @@ import close from 'static/images/close-x.svg'
 import {ROLE_ESITTELIJA, ROLE_KAYTTAJA} from "../../../../modules/constants";
 import _ from 'lodash'
 
+import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import { Route } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
+
+import AvoimetAsiatContainer from '../../containers/AvoimetAsiatContainer'
+import ValmistelussaAsiatContainer from '../../containers/ValmistelussaAsiatContainer'
+import PaatetytAsiatContainer from '../../containers/PaatetytAsiatContainer'
+import AsiatMenu from '../../components/AsiatMenu'
+import { BackgroundImage } from "../../../../modules/styles"
+import { FullWidthWrapper } from '../../../../modules/elements'
+
+
+
 const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
@@ -205,7 +218,7 @@ class Valmistelu extends Component {
     }
 
     render() {
-        const { muutosperustelut, lupa, paatoskierrokset, muutospyynto } = this.props
+        const { muutosperustelut, lupa, paatoskierrokset, muutospyynto, match } = this.props
         const { page, visitedPages } = this.state
 
         console.log('TEST: ' + JSON.stringify(muutospyynto))
@@ -213,63 +226,58 @@ class Valmistelu extends Component {
 
         if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
             return (
-                <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+                <h2>Valmistelu tekeminen vaatii kirjautumisen palveluun.</h2>
             )
         }
 
-        console.log('are we good or not?')
+        // check the rights
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_ESITTELIJA) {
+            authenticated = true;
+        }
+
+        // Alanavigaation tabivalikon routet
+        const tabNavRoutes = [
+            {
+                path: `${match.url}`,
+                exact: true,
+                text: {'fi':'Avoinna olevat asiat','sv':'Avoinna olevat asiat på svenska'},
+                authenticated: true
+            },
+            {
+                path: `${match.url}/valmistelussa-olevat-asiat`,
+                text: {'fi':'Valmistelussa olevat asiat','sv':'Valmistelussa olevat asiat på svenska'},
+                authenticated: authenticated
+            },
+            {
+                path: `${match.url}/paatetyt-asiat`,
+                text: {'fi':'Päätetyt asiat','sv':'Päätetyt asiat på svenska'},
+                authenticated: authenticated
+            }
+        ]
 
         if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
             return (
                 <div>
-                    <WizardBackground />
+                    <ContentContainer padding={'20px auto 0px auto'} margin={'38px auto 0px auto'}>
+                        <Helmet>
+                            <title>Oiva | Asiat</title>
+                        </Helmet>
+                        <BackgroundImage />
+                        <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
+                        <BreadcrumbsItem to='/asiat'>Asiat</BreadcrumbsItem>
+                        <AsiatMenu routes={tabNavRoutes} />
+                    </ContentContainer>
 
-                    <WizardWrapper>
-                        <WizardTop>
-                            <Container padding="0 20px">
-                                <div>Uusi muutoshakemus</div>
-                                <CloseButton src={close} onClick={this.onCancel} />
-                            </Container>
-                        </WizardTop>
+                    <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
+                        <ContentContainer padding={'10px 0px 40px'} margin={'0px auto 0'}>
 
-                        <WizardHeader>
-                            <Container maxWidth="1085px" color={COLORS.BLACK}>
-                                <Phase number="1" text="Muutokset" activePage={page} handleClick={(number) => this.changePhase(number)} />
-                                <Phase number="2" text="Perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
-                                <Phase number="3" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
-                            </Container>
-                        </WizardHeader>
+                            {(authenticated) ? (<Route path={`${match.url}`} render={() => <AvoimetAsiatContainer />} />) : null }
+                            {(authenticated) ? (<Route path={`${match.url}/valmistelussa-olevat-asiat`} render={() => <ValmistelussaAsiatContainer />} />) : null }
+                            {(authenticated) ? (<Route path={`${match.url}/paatetyt-asiat`} render={() => <PaatetytAsiatContainer />} />) : null }
 
-                        <ContentContainer maxWidth="1085px" margin="50px auto">
-                            <WizardContent>
-                                {page === 1 && (
-                                    <ValmisteluTutkinnot
-                                        previousPage={this.previousPage}
-                                        onSubmit={this.nextPage}
-                                        onCancel={this.onCancel}
-                                        lupa={lupa}
-                                        fetchKoulutusalat={this.props.fetchKoulutusalat}
-                                        fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
-                                    />
-                                )}
-                                {page === 2 && (
-                                    <ValmisteluPerustelut
-                                        previousPage={this.previousPage}
-                                        onSubmit={this.nextPage}
-                                        onCancel={this.onCancel}
-                                        muutosperustelut={this.props.muutosperustelut.data}
-                                    />
-                                )}
-                                {page === 3 && (
-                                    <ValmisteluYhteenveto
-                                        previousPage={this.previousPage}
-                                        onCancel={this.onCancel}
-                                        onSubmit={this.onSubmit}
-                                    />
-                                )}
-                            </WizardContent>
                         </ContentContainer>
-                    </WizardWrapper>
+                    </FullWidthWrapper>
                 </div>
             )
         } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
