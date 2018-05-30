@@ -419,10 +419,6 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
 }
 
 export function getSelectedTutkintoKielet(tutkinnotjakielet, editValues) {
-  console.log('getSelectedTutkintoKielet')
-  console.log(tutkinnotjakielet)
-  console.log(editValues)
-
   let kielet = []
 
   if (tutkinnotjakielet) {

@@ -1,7 +1,6 @@
 import _ from 'lodash'
 
 export function sortOpetuskielet(kielet) {
-  console.log(kielet)
   let array = []
 
   array.push(findKieliByKoodi(kielet, "1")) // Suomi

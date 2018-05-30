@@ -5,7 +5,8 @@ export const FIELD_ARRAY_NAMES = {
   OPETUS_JA_TUTKINTOKIELET: 'opetusjatutkintokielet',
   TOIMINTA_ALUEET: 'toimintaalueet',
   OPISKELIJAVUODET: 'opiskelijavuodet',
-  MUUT: 'muutmuutokset'
+  MUUT: 'muutmuutokset',
+  HAKIJAN_TIEDOT: 'hakijantiedot'
 }
 
 export const MUUTOS_TYPES = {
@@ -27,4 +28,9 @@ export const MUUTOS_TYPE_TEXTS = {
     FI: 'Muutos',
     SV: 'På Svenska'
   }
+}
+
+export const COMPONENT_TYPES = {
+  MUUTOS: 'muutos',
+  MUUTOS_YHTEENVETO: 'muutosYhteenveto'
 }

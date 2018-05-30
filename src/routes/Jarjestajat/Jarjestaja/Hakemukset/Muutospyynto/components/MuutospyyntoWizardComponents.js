@@ -547,3 +547,22 @@ export const SubtleButton = styled.button`
     ${props => props.disabled ? 'cursor: not-allowed;' : null}
   }
 `
+
+export const FormGroup = styled.div`
+  display: flex;
+`
+
+export const Label = styled.label`
+  flex: 1;
+  font-size: 18px;
+  align-self: center;
+`
+
+export const FormField = styled.div`
+  flex: 3;
+  
+  input[type="text"] {
+    max-width: 355px;
+    width: 100%;
+  }
+`

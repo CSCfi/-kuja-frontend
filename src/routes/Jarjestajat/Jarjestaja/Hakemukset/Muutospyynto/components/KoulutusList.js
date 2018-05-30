@@ -36,9 +36,7 @@ class KoulutusList extends Component {
     let removals = []
 
     muutokset.forEach(muutos => {
-      console.log(muutos)
       editValues.forEach((value, index) => {
-        console.log(value)
         if (muutos.koodiarvo === value.koodiarvo && koodisto === muutos.koodisto && koodisto === value.koodisto) {
           fields.remove(this.getIndex(editValues, index, koodisto))
           removals.push(editValues[index])
