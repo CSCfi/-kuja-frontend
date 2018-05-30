@@ -23,6 +23,129 @@ export const Heading = styled.div`
   }
 `
 
+export const WizardBottom = styled.div`
+  background-color: ${COLORS.BG_GRAY};
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+`
+
+export const Container = styled.div`
+  width: 100%;
+  max-width: ${props => props.maxWidth ? props.maxWidth : '1280px'};
+  margin: ${props => props.margin ? props.margin : 'auto'};  
+  padding: ${props => props.padding ? props.padding : '0 15px'};
+  box-sizing: border-box;
+  display: flex;
+  color: ${props => props.color ? props.color : COLORS.WHITE};
+  justify-content: space-between;
+  align-items: center;
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    margin: 0 auto;
+  }
+`
+
+export const Button = styled.button`
+  color: ${props => props.disabled ? COLORS.WHITE : props.color ? props.textColor : COLORS.OIVA_GREEN};
+  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.WHITE};
+  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  width: 160px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 0;
+  font-size: 14px;
+  transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
+  margin: 0 10px;
+  
+  &.previous {
+    &:before {
+      content: '<';
+      display: block;
+      position: absolute;
+      left: 12px;
+      top: 8px;
+    }
+  }
+  
+  &.next {
+    &:after {
+      content: '>';
+      display: block;
+      position: absolute;
+      right: 12px;
+      top: 8px;
+    }
+  }
+  
+  &.button-danger {
+    color: ${COLORS.WHITE};
+    background-color: ${COLORS.OIVA_RED};
+    border: 1px solid ${COLORS.OIVA_RED};
+  }
+  
+  &.button-left {
+    margin-right: auto;
+  }
+  
+  &.button-right {
+    margin-left: auto;
+  }
+  
+  &.button-hidden {
+    visibility: hidden;
+  }
+  
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
+  }
+`
+
+export const SubtleButton = styled.button`
+  color: ${props => props.disabled ? COLORS.OIVA_OPAQUE_GREEN : props.color ? props.textColor : COLORS.OIVA_GREEN};
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 0;
+  font-size: 14px;
+  transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
+  margin: 0 10px;
+  
+  &.button-danger {
+    color: ${COLORS.WHITE};
+    background-color: ${COLORS.OIVA_RED};
+    border: 1px solid ${COLORS.OIVA_RED};
+  }
+  
+  &.button-left {
+    margin-right: auto;
+  }
+  
+  &.button-right {
+    margin-left: auto;
+  }
+  
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
+  }
+`
+
 export const H3 = styled.h3`
 
 `
