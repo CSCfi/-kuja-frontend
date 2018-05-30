@@ -12,7 +12,6 @@ let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
     previousPage,
-    muutosperustelut,
     tutkinnotjakoulutuksetValue,
     opetusjatutkintokieletValue,
     toimialueValue,
@@ -30,7 +29,6 @@ let MuutospyyntoWizardPerustelut = props => {
         <FieldArray
           name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
           muutokset={tutkinnotjakoulutuksetValue}
-          muutosperustelut={muutosperustelut}
           kategoria="tutkinto"
           headingNumber="1"
           heading="Tutkinnot ja koulutukset"
