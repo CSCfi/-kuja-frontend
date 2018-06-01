@@ -30,14 +30,27 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
   if (target === KOHTEET.TUTKINNOT) {
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodisto, uuid } = maarays
+      const { koodisto, kohde, maaraystyyppi, uuid } = maarays
+
+      let kohdeUuid, maaraystyyppiUuid = undefined
+
+      // if (kohde) {
+      //   kohdeUuid = kohde.uuid
+      // }
+      //
+      // if (maaraystyyppi) {
+      //   maaraystyyppiUuid = maaraystyyppi.uuid
+      // }
 
       switch (koodisto) {
         case KOODISTOT.KOULUTUS: {
           const { koodi, ylaKoodit, aliMaaraykset } = maarays
           const { koodiArvo, metadata } = koodi
           const tutkintoNimi = parseLocalizedField(metadata)
-          let tutkinto = {}
+          let tutkinto = {
+            kohde,
+            maaraystyyppi
+          }
 
           // Käsitellään poikkeukset: valma (999901) ja telma (999903)
           if (koodiArvo === "999901") {
@@ -46,7 +59,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
               nimi: tutkintoNimi,
               selite: TUTKINTO_TEKSTIT.valma.selite,
               indeksi: muutMaaraykset.length + 1,
-              maaraysId: uuid
+              maaraysId: uuid,
+              maaraystyyppi,
+              kohde
             })
             return
           }
@@ -57,7 +72,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
               nimi: tutkintoNimi,
               selite: TUTKINTO_TEKSTIT.telma.selite,
               indeksi: muutMaaraykset.length + 1,
-              maaraysId: uuid
+              maaraysId: uuid,
+              maaraystyyppi,
+              kohde
             })
             return
           }
@@ -66,10 +83,16 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
           if (aliMaaraykset) {
             tutkinto.rajoitteet = []
             _.forEach(aliMaaraykset, (alimaarays) => {
-              const { koodi } = alimaarays
+              const { koodi, kohde, maaraystyyppi } = alimaarays
               const { koodiArvo, metadata } = koodi
               const nimi = parseLocalizedField(metadata)
-              tutkinto.rajoitteet.push({ koodi: koodiArvo, nimi, maaraysId: uuid })
+              tutkinto.rajoitteet.push({
+                koodi: koodiArvo,
+                nimi,
+                maaraysId: uuid,
+                maaraystyyppi,
+                kohde
+              })
             })
           }
 
@@ -97,7 +120,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
         }
 
         case KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: {
-          const { koodiarvo, koodisto } = maarays
+          const { koodiarvo, koodisto, kohde, maaraystyyppi } = maarays
 
           const ammatillinenNimi = parseLocalizedField(maarays.koodi.metadata, 'FI', 'nimi', 'kieli')
 
@@ -107,13 +130,15 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             indeksi: muutMaaraykset.length + 1,
             maaraysId: uuid,
             koodiarvo,
-            koodisto
+            koodisto,
+            kohde,
+            maaraystyyppi
           })
           break
         }
 
         case KOODISTOT.KULJETTAJAKOULUTUS: {
-          const { koodiarvo, koodisto } = maarays
+          const { koodiarvo, koodisto, kohde, maaraystyyppi } = maarays
 
           const kuljettajaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
 
@@ -123,13 +148,15 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             indeksi: muutMaaraykset.length + 1,
             maaraysId: uuid,
             koodiarvo,
-            koodisto
+            koodisto,
+            kohde,
+            maaraystyyppi
           })
           break
         }
 
         case KOODISTOT.OIVA_TYOVOIMAKOULUTUS: {
-          const { koodiarvo, koodisto } = maarays
+          const { koodiarvo, koodisto, kohde, maaraystyyppi } = maarays
 
           const tyovoimaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
           // TODO localizations
@@ -140,7 +167,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             indeksi: muutMaaraykset.length + 1,
             maaraysId: uuid,
             koodiarvo,
-            koodisto
+            koodisto,
+            kohde,
+            maaraystyyppi
           })
           break
         }
@@ -173,31 +202,41 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
       let tutkintokieletRu = []
 
       _.forEach(maaraykset, (maarays) => {
-          const {koodisto, uuid} = maarays
-          const {koodi, aliMaaraykset} = maarays
+          const { koodisto, uuid } = maarays
+          const { koodi, aliMaaraykset } = maarays
+
+
 
           // Alimääräykset
           if (aliMaaraykset) {
               _.forEach(aliMaaraykset, (alimaarays) => {
-                  const {koodi} = alimaarays
-                  const {koodiArvo, metadata} = koodi
+                  const { koodi, kohde, maaraystyyppi } = alimaarays
+                  const { koodiArvo, metadata } = koodi
                   const nimi  = parseLocalizedField(maarays.koodi.metadata)
                   const tutkintokoodi = maarays.koodiarvo
+                  const obj = {
+                    koodi: koodiArvo,
+                    maaraysId: uuid,
+                    nimi,
+                    tutkintokoodi,
+                    kohde,
+                    maaraystyyppi
+                  }
 
-                  tutkintokielet.push({ koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi })
+                  tutkintokielet.push(obj)
 
                   switch (koodiArvo) {
                       case "EN":
-                          tutkintokieletEn.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          tutkintokieletEn.push(obj)
                           break
                       case "SV":
-                          tutkintokieletSv.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          tutkintokieletSv.push(obj)
                           break
                       case "RU":
-                          tutkintokieletRu.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          tutkintokieletRu.push(obj)
                           break
                       case "FI":
-                          tutkintokieletFi.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                          tutkintokieletFi.push(obj)
                           break
                   }
 
@@ -262,15 +301,16 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     let rajoitukset = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, arvo, koodisto } = maarays
+      const { koodi, arvo, koodisto, kohde, maaraystyyppi } = maarays
       const { metadata } = koodi
       const tyyppi = parseLocalizedField(metadata)
 
-      if(koodisto === KOODISTOT.OIVA_MUUT) {
-          rajoitukset.push({ arvo: arvo, tyyppi: tyyppi })
-      }
-      else {
-          opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi })
+
+
+      if (koodisto === KOODISTOT.OIVA_MUUT) {
+          rajoitukset.push({ arvo: arvo, tyyppi: tyyppi, kohde, maaraystyyppi, koodisto })
+      } else {
+          opiskelijavuodet.push({ arvo: arvo, tyyppi: tyyppi, kohde, maaraystyyppi, koodisto })
       }
 
     })
@@ -292,7 +332,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
     let muutCombined = []
 
     _.forEach(maaraykset, (maarays) => {
-      const { koodi, meta, koodiarvo, koodisto, uuid } = maarays
+      const { koodi, meta, koodiarvo, koodisto, uuid, kohde, maaraystyyppi } = maarays
       const { metadata } = koodi
 
         if (koodi && metadata) {
@@ -305,7 +345,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
               kuvaus: desc,
               koodiarvo: koodiarvo,
               koodisto: koodisto,
-              maaraysId: uuid
+              maaraysId: uuid,
+              kohde,
+              maaraystyyppi
             }
 
             switch (koodiarvo){
@@ -413,18 +455,31 @@ function getToimintaalueArvoArray(maaraykset) {
     let arr = []
 
     _.forEach(maaraykset, (maarays) => {
-        const { koodi, koodisto, koodiarvo } = maarays
+        const { koodi, koodisto, koodiarvo, kohde, maaraystyyppi } = maarays
 
         if (koodi) {
             const { metadata } = koodi
 
             if (metadata) {
-                arr.push({arvo: parseLocalizedField(metadata), koodisto: koodisto, koodiarvo: koodiarvo})
+                arr.push({
+                  arvo: parseLocalizedField(metadata),
+                  koodisto: koodisto,
+                  koodiarvo: koodiarvo,
+                  kohde,
+                  maaraystyyppi
+                })
             }
         }
 
         if (koodisto === 'nuts1') {
-          arr.push({ arvo: koodiarvo, koodisto, koodiarvo, maaraysId: maarays.uuid })
+          arr.push({
+            arvo: koodiarvo,
+            koodisto,
+            koodiarvo,
+            maaraysId: maarays.uuid,
+            kohde,
+            maaraystyyppi
+          })
         }
     })
 
@@ -443,11 +498,13 @@ function sortTutkinnot(tutkintoArray) {
       rajoitteet,
       koulutustyyppi,
       koulutustyyppikoodi,
+      maaraystyyppi,
+      kohde,
       maaraysId
     } = tutkinto
     const ala = obj[alakoodi]
     let koulutusalaObj = {}
-    const tutkintoObj = { koodi, nimi, maaraysId, rajoitteet }
+    const tutkintoObj = { koodi, nimi, maaraysId, rajoitteet, maaraystyyppi, kohde }
 
     if (ala === undefined) {
       // Alaa ei ole alat-objektissa

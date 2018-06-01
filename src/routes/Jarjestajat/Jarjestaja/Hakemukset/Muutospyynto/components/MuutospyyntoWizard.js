@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import Modal from 'react-modal'
@@ -15,6 +17,8 @@ import { COLORS } from "../../../../../../modules/styles"
 import close from 'static/images/close-x.svg'
 import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
+import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { getJarjestajaData } from "../modules/muutospyyntoUtil"
 
 Modal.setAppElement('#root')
 
@@ -65,6 +69,7 @@ class MuutospyyntoWizard extends Component {
     this.onSubmit = this.onSubmit.bind(this)
     this.changePhase = this.changePhase.bind(this)
     this.preview = this.preview.bind(this)
+    this.save = this.save.bind(this)
     this.openCancelModal = this.openCancelModal.bind(this)
     this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this)
     this.closeCancelModal = this.closeCancelModal.bind(this)
@@ -109,6 +114,12 @@ class MuutospyyntoWizard extends Component {
   onSubmit(data) {
     this.props.createMuutospyynto(data)
     // this.onCancel() // TODO: tehdään onDone-funktio
+  }
+
+  save(event, data) {
+    event.preventDefault()
+    console.log('save', data)
+    this.props.saveMuutospyynto(data)
   }
 
   preview(event, data) {
@@ -193,6 +204,7 @@ class MuutospyyntoWizard extends Component {
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
+                    save={this.save}
                     lupa={lupa}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
                     fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
@@ -205,6 +217,7 @@ class MuutospyyntoWizard extends Component {
                     previousPage={this.previousPage}
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
+                    save={this.save}
                     muutosperustelut={this.props.muutosperustelut.data}
                   />
                 )}
@@ -213,6 +226,7 @@ class MuutospyyntoWizard extends Component {
                     previousPage={this.previousPage}
                     onCancel={this.onCancel}
                     onSubmit={this.onSubmit}
+                    save={this.save}
                     preview={this.preview}
                   />
                 )}
@@ -250,5 +264,17 @@ class MuutospyyntoWizard extends Component {
     }
   }
 }
+
+MuutospyyntoWizard = reduxForm({
+  form: FORM_NAME_UUSI_HAKEMUS,
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true
+})(MuutospyyntoWizard)
+
+MuutospyyntoWizard = connect(state => {
+  return {
+    initialValues: getJarjestajaData(state)
+  }
+})(MuutospyyntoWizard)
 
 export default withRouter(MuutospyyntoWizard)

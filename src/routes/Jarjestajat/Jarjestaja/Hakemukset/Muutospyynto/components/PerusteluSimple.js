@@ -40,9 +40,9 @@ class PerusteluSimple extends Component {
   }
 
   render() {
-    const { helpText, muutos, muutokset, koodiarvo, fields, perustelu, muutosperustelu, muutosperustelut } = this.props
+    const { perusteluteksti, muutosperusteluId } = this.props
     let perusteluText = 'Ei saatavilla'
-    const perusteluObj = getMuutosperusteluByKoodiArvo(muutosperustelu)
+    const perusteluObj = getMuutosperusteluByKoodiArvo(muutosperusteluId)
     if (perusteluObj) {
       perusteluText = perusteluObj.label
     }
@@ -56,7 +56,7 @@ class PerusteluSimple extends Component {
           </Area>
           <Area>
             <Label>Perusteluteksti:</Label>
-            <Content>{perustelu}</Content>
+            <Content>{perusteluteksti}</Content>
           </Area>
         </PerusteluInner>
       </PerusteluWrapper>

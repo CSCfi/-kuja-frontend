@@ -98,8 +98,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
       fields.push({
         ...toimialue,
         type: "removal",
-        perustelu: null,
-        muutosperustelu: null
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
       })
     })
   }
@@ -120,8 +120,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
           fields.push({
             ...value,
             type: "addition",
-            perustelu: null,
-            muutosperustelu: null
+            meta: { perusteluteksti: null },
+            muutosperusteluId: null
           })
         }
       } else {
@@ -129,8 +129,8 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
         fields.push({
           ...value,
           type: "addition",
-          perustelu: null,
-          muutosperustelu: null
+          meta: { perusteluteksti: null },
+          muutosperusteluId: null
         })
       }
     }

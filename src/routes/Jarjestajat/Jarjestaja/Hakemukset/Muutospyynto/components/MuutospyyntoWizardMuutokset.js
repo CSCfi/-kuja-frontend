@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { reduxForm } from 'redux-form'
+import { connect } from 'react-redux'
 
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
 import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoWizardOpetuskieletContainer'
@@ -8,6 +10,7 @@ import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavu
 import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
 import { Button, SubtleButton, Kohde, WizardBottom, Container } from "./MuutospyyntoWizardComponents"
 import styled from 'styled-components'
+import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 const Otsikko = styled.div`
   display: flex;
@@ -26,14 +29,16 @@ class MuutospyyntoWizardMuutokset extends Component {
   render() {
     const {
       onSubmit,
-      previousPage,
-      onCancel,
+      save,
       lupa,
       fetchKoulutusalat,
       fetchKoulutuksetAll,
       fetchKoulutuksetMuut,
-      fetchKoulutus
+      fetchKoulutus,
+      formValues
     } = this.props
+
+    setTimeout(() => console.log('formValues', formValues), 1000)
 
     return (
       <div>
@@ -84,7 +89,7 @@ class MuutospyyntoWizardMuutokset extends Component {
             <Container maxWidth="1085px" padding="15px">
               <Button className="previous button-left button-hidden">Edellinen</Button>
               <div>
-                <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+                <SubtleButton disabled={!formValues} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
               </div>
               <Button type="submit" className="next button-right">Seuraava</Button>
             </Container>
@@ -96,4 +101,19 @@ class MuutospyyntoWizardMuutokset extends Component {
   }
 }
 
-export default MuutospyyntoWizardMuutokset
+MuutospyyntoWizardMuutokset = reduxForm({
+  form: FORM_NAME_UUSI_HAKEMUS,
+  destroyOnUnmount: false,
+  forceUnregisterOnUnmount: true
+})(MuutospyyntoWizardMuutokset)
+
+export default connect(state => {
+  let formVals = undefined
+  if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
+    formVals = state.form.uusiHakemus.values
+  }
+
+  return {
+    formValues: formVals
+  }
+})(MuutospyyntoWizardMuutokset)

@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
 import axios from "axios/index"
-import { formatMuutospyynto } from "./koulutusUtil"
+import { formatMuutospyynto } from "./muutospyyntoUtil"
 
 // Constants
 export const FETCH_MUUTOSPYYNTO_START = 'FETCH_MUUTOSPYYNTO_START'
@@ -14,6 +14,10 @@ export const CREATE_MUUTOSPYYNTO_FAILURE = 'CREATE_MUUTOSPYYNTO_FAILURE'
 export const PREVIEW_MUUTOSPYYNTO_START = 'PREVIEW_MUUTOSPYYNTO_START'
 export const PREVIEW_MUUTOSPYYNTO_SUCCESS = 'PREVIEW_MUUTOSPYYNTO_SUCCESS'
 export const PREVIEW_MUUTOSPYYNTO_FAILURE = 'PREVIEW_MUUTOSPYYNTO_FAILURE'
+
+export const SAVE_MUUTOSPYYNTO_START = 'SAVE_MUUTOSPYYNTO_START'
+export const SAVE_MUUTOSPYYNTO_SUCCESS = 'SAVE_MUUTOSPYYNTO_SUCCESS'
+export const SAVE_MUUTOSPYYNTO_FAILURE = 'SAVE_MUUTOSPYYNTO_FAILURE'
 
 // Actions
 export function fetchMuutospyynto(ytunnus, query) {
@@ -33,9 +37,8 @@ export function fetchMuutospyynto(ytunnus, query) {
 
 export function createMuutospyynto(muutospyynto) {
 
-    const formatted = formatMuutospyynto(muutospyynto)
+  const formatted = formatMuutospyynto(muutospyynto)
 
-  let obj = {}
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })
 
@@ -47,6 +50,14 @@ export function createMuutospyynto(muutospyynto) {
         dispatch({ type: CREATE_MUUTOSPYYNTO_FAILURE, payload: err })
       })
   }
+}
+
+export function saveMuutospyynto(muutospyynto) {
+  console.log('saveMuutospyynto', muutospyynto)
+
+  const formatted = formatMuutospyynto(muutospyynto)
+
+  console.log('formatted', formatted)
 }
 
 export function previewMuutospyynto(muutospyynto) {
