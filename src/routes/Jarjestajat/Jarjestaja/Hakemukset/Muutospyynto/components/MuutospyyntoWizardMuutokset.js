@@ -11,6 +11,7 @@ import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuu
 import { Button, SubtleButton, Kohde, WizardBottom, Container } from "./MuutospyyntoWizardComponents"
 import styled from 'styled-components'
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { hasFormChanges } from "../modules/muutospyyntoUtil"
 
 const Otsikko = styled.div`
   display: flex;
@@ -89,7 +90,7 @@ class MuutospyyntoWizardMuutokset extends Component {
             <Container maxWidth="1085px" padding="15px">
               <Button className="previous button-left button-hidden">Edellinen</Button>
               <div>
-                <SubtleButton disabled={!formValues} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
+                <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
               </div>
               <Button type="submit" className="next button-right">Seuraava</Button>
             </Container>

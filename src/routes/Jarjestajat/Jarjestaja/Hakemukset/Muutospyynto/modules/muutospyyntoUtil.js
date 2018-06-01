@@ -171,3 +171,23 @@ export function getJarjestajaData(state) {
     }
   }
 }
+
+export function hasFormChanges(formValues) {
+  if (formValues) {
+    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset } = formValues
+
+    if (tutkinnotjakoulutukset && tutkinnotjakoulutukset.length > 0) {
+      return true
+    } else if (opetusjatutkintokielet && opetusjatutkintokielet.length > 0) {
+      return true
+    } else if (toimintaalueet && toimintaalueet.length > 0) {
+      return true
+    } else if (opiskelijavuodet && opiskelijavuodet.length > 0) {
+      return true
+    } else if (muutmuutokset && muutmuutokset.length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
