@@ -7,6 +7,8 @@ import { previewMuutospyynto } from "../modules/muutospyynto"
 import { fetchKoulutusalat } from "../modules/koulutusalat"
 import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../modules/koulutukset"
 import { fetchPaatoskierrokset } from "../modules/paatoskierrokset"
+import { fetchMaaraystyypit } from "../modules/maaraystyyppi"
+import { fetchKohteet } from "../modules/kohde"
 
 import MuutospyyntoWizard from '../components/MuutospyyntoWizard'
 
@@ -16,7 +18,9 @@ const mapStateToProps = (state) => {
     lupa: state.lupa,
     koulutukset: state.koulutukset,
     paatoskierrokset: state.paatoskierrokset,
-    muutospyynto: state.muutospyynto
+    muutospyynto: state.muutospyynto,
+    maaraystyypit: state.maaraystyypit,
+    kohteet: state.kohteet
   }
 }
 
@@ -31,7 +35,9 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
     fetchKoulutuksetMuut: (koodisto) => dispatch(fetchKoulutuksetMuut(koodisto)),
     fetchKoulutus: (koodi) => dispatch(fetchKoulutus(koodi)),
-    fetchPaatoskierrokset: () => dispatch(fetchPaatoskierrokset())
+    fetchPaatoskierrokset: () => dispatch(fetchPaatoskierrokset()),
+    fetchMaaraystyypit: () => dispatch(fetchMaaraystyypit()),
+    fetchKohteet: () => dispatch(fetchKohteet())
   }
 }
 

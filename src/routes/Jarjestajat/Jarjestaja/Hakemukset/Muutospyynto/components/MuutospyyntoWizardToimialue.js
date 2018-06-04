@@ -10,7 +10,7 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row, CheckboxRowContainer, Checkbox, Nimi } from "./MuutospyyntoWizardComponents"
 import { getToimialueByKoodiArvo, handleToimialueSelectChange } from "../modules/toimialueUtil"
 import { handleSimpleCheckboxChange } from "../modules/koulutusUtil"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardToimialue extends Component {
   componentWillMount() {
@@ -97,9 +97,9 @@ class MuutospyyntoWizardToimialue extends Component {
 
     if (editValues) {
       editValues.forEach(value => {
-        if (value.type === "addition") {
+        if (value.type === MUUTOS_TYPES.ADDITION) {
           initialValue.push(value.value)
-        } else if (value.type === "removal") {
+        } else if (value.type === MUUTOS_TYPES.REMOVAL) {
           // Jätetään poistettu toimialue näkyville
           // if (_.includes(initialValue, value.value)) {
           //   _.pull(initialValue, value.value)
@@ -149,7 +149,7 @@ class MuutospyyntoWizardToimialue extends Component {
             <h4>Valitut maakunnat</h4>
             {valitutMaakunnat.map(alue => {
               const { label, type } = alue
-              const customClass = type === "addition" ? 'is-added' : type === "removal" ? 'is-removed' : 'is-in-lupa'
+              const customClass = type === MUUTOS_TYPES.ADDITION ? 'is-added' : type === MUUTOS_TYPES.REMOVAL ? 'is-removed' : 'is-in-lupa'
               return (
                 <div key={label} className={customClass}>{label}</div>
               )
@@ -162,7 +162,7 @@ class MuutospyyntoWizardToimialue extends Component {
             <h4>Valitut kunnat</h4>
             {valitutKunnat.map(alue => {
               const { label, type } = alue
-              const customClass = type === "addition" ? 'is-added' : type === "removal" ? 'is-removed' : 'is-in-lupa'
+              const customClass = type === MUUTOS_TYPES.ADDITION ? 'is-added' : type === MUUTOS_TYPES.REMOVAL ? 'is-removed' : 'is-in-lupa'
               return (
                 <div key={label} className={customClass}>{label}</div>
               )

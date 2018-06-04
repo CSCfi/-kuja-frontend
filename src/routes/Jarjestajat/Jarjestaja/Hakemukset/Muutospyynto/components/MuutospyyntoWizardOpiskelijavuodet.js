@@ -8,7 +8,7 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
 import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 const Opiskelijavuosi = styled.div`
   display: flex;
@@ -57,7 +57,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     }
 
     if(vaativaTukiLisattava) {
-        (vaativaTukiLisattava.type === "addition") ? showVaativa = true : showVaativa = false
+        (vaativaTukiLisattava.type === MUUTOS_TYPES.ADDITION) ? showVaativa = true : showVaativa = false
     }
 
     // Sisäoppilaitos (4)
@@ -77,7 +77,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     }
 
     if(sisaoppilaitosLisattava) {
-      (sisaoppilaitosLisattava.type === "addition") ? showSisaoppilaitos = true : showSisaoppilaitos = false
+      (sisaoppilaitosLisattava.type === MUUTOS_TYPES.ADDITION) ? showSisaoppilaitos = true : showSisaoppilaitos = false
     }
 
     let haettuVahimmaismaaraObj = _.find(opiskelijavuosimuutoksetValue, value => { return value.kategoria === "vahimmaisopiskelijavuodet"})
@@ -125,7 +125,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 kategoria="vahimmaisopiskelijavuodet"
                 koodisto="koulutussektori"
                 koodiarvo="3"
-                tyyppi="change"
+                tyyppi={MUUTOS_TYPES.CHANGE}
                 component={this.renderOpiskelijavuodet}
               />
             </HaettuMuutos>

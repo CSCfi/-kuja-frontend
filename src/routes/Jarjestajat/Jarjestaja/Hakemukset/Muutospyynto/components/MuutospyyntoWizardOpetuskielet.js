@@ -11,7 +11,7 @@ import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 
 class MuutospyyntoWizardKielet extends Component {
@@ -77,16 +77,19 @@ class MuutospyyntoWizardKielet extends Component {
             let customClassName = ""
 
             kohdeArvot.forEach(arvo => {
-              if (arvo === nimi) {
+              if (arvo.koodiarvo === koodiArvo) {
                 isInLupa = true
               }
+              // if (arvo === nimi) {
+              //   isInLupa = true
+              // }
             })
 
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  val.type === "addition" ? isAdded = true : null
-                  val.type === "removal" ? isRemoved = true : null
+                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                 }
               })
             }

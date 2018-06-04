@@ -3,6 +3,7 @@ import { getMuutosperusteluObjectById, getTutkintoKoodiByMaaraysId } from "./kou
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import dateformat from "dateformat"
 import store from "../../../../../../store"
+import { MUUTOS_TILAT, MUUTOS_TYPES } from "./uusiHakemusFormConstants"
 
 export function formatMuutospyynto(muutospyynto) {
 
@@ -14,15 +15,20 @@ export function formatMuutospyynto(muutospyynto) {
     luontipvm,
     lupaId,
     tila,
-    tutkinnotjakoulutukset,
-    opetusjatutkintokielet,
-    toimintaalueet,
-    opiskelijavuodet,
-    muutmuutokset
+    tutkinnotjakoulutukset = [],
+    opetusjatutkintokielet = [],
+    toimintaalueet = [],
+    opiskelijavuodet = [],
+    muutmuutokset = []
   } = muutospyynto
 
-  // let muutokset = formatMuutokset(lisattavat, poistettavat)
-  let muutokset = []
+  let muutokset = [
+    ...formatMuutosArray(tutkinnotjakoulutukset),
+    ...formatMuutosArray(opetusjatutkintokielet),
+    ...formatMuutosArray(toimintaalueet),
+    ...formatMuutosArray(opiskelijavuodet),
+    ...formatMuutosArray(muutmuutokset)
+  ]
 
 
   return {
@@ -38,83 +44,22 @@ export function formatMuutospyynto(muutospyynto) {
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
-    // muutosperustelu: formatMuutosperustelu(muutosperustelu, muuperustelu),
     muutokset: muutokset
   }
 }
 
-function genMuutokset(tutkinnotjakoulutukset, asd) {
-
-}
-
-function formatMuutokset(lisattavat, poistettavat) {
-  let muutokset = []
-
-  console.log("LISATTAVAT: " + JSON.stringify(lisattavat))
-
-  if (lisattavat) {
-    _.forEach(lisattavat, koodiarvo => {
-      let obj = getBaseObject()
-      obj.koodiarvo = koodiarvo
-      obj.tila = "LISAYS"
-      muutokset.push(obj)
-    })
+function formatMuutosArray(muutokset) {
+  if (!muutokset) {
+    return []
   }
 
-  if (poistettavat) {
-    _.forEach(poistettavat, maaraysId => {
-      let obj = getBaseObject()
-      obj.koodiarvo = getTutkintoKoodiByMaaraysId(maaraysId)
-      obj.maaraysId = maaraysId
-      obj.tila = "POISTO"
-      muutokset.push(obj)
-    })
-  }
-
-  return muutokset
-}
-
-export function getMuutosBaseObject() {
-
-}
-
-function getBaseObject() {
-  return {
-    kohdeId: 1, // koulutukset
-    koodisto: "koulutus",
-    luoja: "string",
-    luontipvm: 0,
-    maaraystyyppiId: 1, // oikeus
-    meta: {
-      perusteluteksti: [
-        {
-          fi: "Suomeksi"
-        },
-        {
-          sv: "På Svenska"
-        }
-      ]
-    }
-  }
-}
-
-function formatMuutosperustelu(muutosperusteluId, muuperustelu) {
-  const perustelu = getMuutosperusteluObjectById(muutosperusteluId)
-  const { koodiArvo, koodisto, metadata } = perustelu
-  const nimi = parseLocalizedField(metadata, 'FI', nimi)
-  const kuvaus = parseLocalizedField(metadata, 'FI', kuvaus)
-
-  return {
-    arvo: "",
-    koodiarvo: koodiArvo,
-    koodisto: koodisto.koodistoUri,
-    luoja: "asd",
-    luontipvm: dateformat(new Date(), "yyyy-mm-dd"),
-    meta: {
-      perusteluteksti: nimi,
-      kuvaus: kuvaus
-    }
-  }
+  return _.map(muutokset, muutos => _.assignIn({}, muutos, {
+    tila:
+      muutos.type === MUUTOS_TYPES.ADDITION ? MUUTOS_TILAT.LISAYS :
+      muutos.type === MUUTOS_TYPES.REMOVAL ? MUUTOS_TILAT.POISTO :
+      muutos.type === MUUTOS_TYPES.CHANGE ? MUUTOS_TILAT.MUUTOS :
+      null
+  }))
 }
 
 function getDefaultPaatoskierrosUuid() {
@@ -125,7 +70,7 @@ function getDefaultPaatoskierrosUuid() {
   if (paatoskierrokset && paatoskierrokset.data) {
     const pkierrosObj = _.find(paatoskierrokset.data, pkierros => {
       if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
-        if (pkierros.meta.nimi.fi === "Avoin hakukierros 2018") {
+        if (pkierros.meta.nimi.fi === "Avoin päätöskierros 2018") {
           return pkierros
         }
       }
@@ -190,4 +135,26 @@ export function hasFormChanges(formValues) {
   }
 
   return false
+}
+
+export function getMaaraystyyppiByTunniste(tunniste) {
+  const state = store.getState()
+
+  if (state.maaraystyypit && state.maaraystyypit.fetched) {
+    const maaraystyypit = state.maaraystyypit.data
+    return _.find(maaraystyypit, maaraystyyppi => {
+      return maaraystyyppi.tunniste.toLowerCase() === tunniste.toLowerCase()
+    })
+  }
+}
+
+export function getKohdeByTunniste(tunniste) {
+  const state = store.getState()
+
+  if (state.kohteet && state.kohteet.fetched) {
+    const kohteet = state.kohteet.data
+    return _.find(kohteet, kohde => {
+      return kohde.tunniste.toLowerCase() === tunniste.toLowerCase()
+    })
+  }
 }

@@ -45,6 +45,13 @@ export const KOODISTOT = {
   OIVA_MUUT : 'oivamuutoikeudetvelvollisuudetehdotjatehtavat'
 }
 
+export const MAARAYSTYYPIT = {
+  OIKEUS: 'OIKEUS',
+  RAJOITE: 'RAJOITE',
+  VELVOITE: 'VELVOITE',
+  POIKKEUS: 'POIKKEUS'
+}
+
 
 export const LUPA_TEKSTIT = {
 

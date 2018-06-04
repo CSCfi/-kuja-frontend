@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { KOODISTOT } from "../../../modules/constants"
+import { KOHTEET, KOODISTOT, MAARAYSTYYPIT } from "../../../modules/constants"
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "./muutospyyntoUtil"
+import { MUUTOS_TYPES } from "./uusiHakemusFormConstants"
 
 export function getKieliByKoodi(koodi) {
   const state = store.getState()
@@ -105,7 +107,7 @@ export function getChangeIndices(values, koodiarvo) {
   let indices = []
 
   _.forEach(values, (value, i) => {
-    if (value.type === "change" && value.koodiarvo === koodiarvo) {
+    if (value.type === MUUTOS_TYPES.CHANGE && value.koodiarvo === koodiarvo) {
       indices.push(i)
     }
   })
@@ -196,19 +198,22 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   const { checked } = event.target
 
   if (!kohde) {
+    console.log('koulutusUtil.handleCheckboxChange kohdetta ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
-      kohde = { id: 1 }
+      kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      kohde = getKohdeByTunniste(KOHTEET.KIELI)
     }
   }
 
   if (!maaraystyyppi) {
+    console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
-      maaraystyyppi = { id: 1 }
+      maaraystyyppi = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
     }
   }
-
-  console.log(koodistoUri)
-  console.log(kohde)
 
   if (checked) {
     if (isInLupa) {
@@ -227,7 +232,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         isInLupa,
         kohde,
         maaraystyyppi,
-        type: "addition",
+        type: MUUTOS_TYPES.ADDITION,
         meta: { perusteluteksti: null },
         muutosperusteluId: null
       })
@@ -243,7 +248,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         isInLupa,
         kohde,
         maaraystyyppi,
-        type: "removal",
+        type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
         muutosperusteluId: null
       })
@@ -282,7 +287,7 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         value,
         kuvaus: null,
         isInLupa,
-        type: "addition",
+        type: MUUTOS_TYPES.ADDITION,
         meta: { perusteluteksti: null },
         muutosperusteluId: null
       })
@@ -301,7 +306,7 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         maaraystyyppi,
         kuvaus: null,
         isInLupa,
-        type: "removal",
+        type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
         muutosperusteluId: null
       })
@@ -354,7 +359,7 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
           maaraystyyppi,
           kuvaus: null,
           isInLupa,
-          type: "change",
+          type: MUUTOS_TYPES.CHANGE,
           meta: { perusteluteksti: null },
           muutosperusteluId: null
         })
@@ -371,7 +376,7 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
         maaraystyyppi,
         kuvaus: null,
         isInLupa,
-        type: "change",
+        type: MUUTOS_TYPES.CHANGE,
         meta: { perusteluteksti: null },
         muutosperusteluId: null
       })

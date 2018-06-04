@@ -58,6 +58,10 @@ export function saveMuutospyynto(muutospyynto) {
   const formatted = formatMuutospyynto(muutospyynto)
 
   console.log('formatted', formatted)
+
+  return (dispatch) => {
+    dispatch({ type: SAVE_MUUTOSPYYNTO_START})
+  }
 }
 
 export function previewMuutospyynto(muutospyynto) {

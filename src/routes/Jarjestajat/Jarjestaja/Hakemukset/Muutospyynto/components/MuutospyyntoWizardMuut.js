@@ -7,7 +7,7 @@ import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, Div } from "
 import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardMuut extends Component {
   componentWillMount() {
@@ -82,8 +82,8 @@ class MuutospyyntoWizardMuut extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  val.type === "addition" ? isAdded = true : null
-                  val.type === "removal" ? isRemoved = true : null
+                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                 }
               })
             }

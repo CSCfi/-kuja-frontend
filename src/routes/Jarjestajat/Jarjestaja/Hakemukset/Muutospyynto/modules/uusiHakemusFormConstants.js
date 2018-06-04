@@ -15,6 +15,12 @@ export const MUUTOS_TYPES = {
   CHANGE: 'change'
 }
 
+export const MUUTOS_TILAT = {
+  MUUTOS: 'MUUTOS',
+  LISAYS: 'LISAYS',
+  POISTO: 'POISTO'
+}
+
 export const MUUTOS_TYPE_TEXTS = {
   ADDITION: {
     FI: 'Lisäys',

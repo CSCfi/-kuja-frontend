@@ -244,6 +244,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
           }
 
           if(koodisto === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+              setTimeout(() => console.log(maarays), 2000)
               opetuskielet.push(maarays)
           }
 
@@ -437,13 +438,19 @@ function getMaaraysArvoArray(maaraykset) {
   let arr = []
 
   _.forEach(maaraykset, (maarays) => {
+    setTimeout(() => console.log(maarays), 3000)
     const { koodi } = maarays
 
     if (koodi) {
       const { metadata } = koodi
 
       if (metadata) {
-        arr.push(parseLocalizedField(metadata))
+        // arr.push(parseLocalizedField(metadata))
+        arr.push({
+          ...maarays,
+          value: maarays.koodiarvo,
+          label: parseLocalizedField(metadata)
+        })
       }
     }
   })

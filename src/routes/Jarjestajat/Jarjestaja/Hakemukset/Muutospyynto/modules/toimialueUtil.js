@@ -2,6 +2,9 @@ import _ from 'lodash'
 
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "./muutospyyntoUtil"
+import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants"
+import { MUUTOS_TYPES } from "./uusiHakemusFormConstants"
 
 export function getToimialueByKoodiArvo(koodiarvo) {
   if (!koodiarvo) {
@@ -91,15 +94,19 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
 
   // käsitellään poistot
   const removals = getToimialueRemovals(initialValues, values)
+  const kohde = getKohdeByTunniste(KOHTEET.TOIMIALUE)
+  const maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
 
   if (removals.length > 0) {
     removals.forEach(removal => {
       const toimialue = getToimialueByKoodiArvo(removal)
       fields.push({
         ...toimialue,
-        type: "removal",
+        type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperusteluId: null,
+        kohde,
+        maaraystyyppi
       })
     })
   }
@@ -119,18 +126,22 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
           // Arvoa ei löytynyt editvaluesista --> lisatään se
           fields.push({
             ...value,
-            type: "addition",
+            type: MUUTOS_TYPES.ADDITION,
             meta: { perusteluteksti: null },
-            muutosperusteluId: null
+            muutosperusteluId: null,
+            kohde,
+            maaraystyyppi
           })
         }
       } else {
         // Ei editvaluesia --> luodaan arvo
         fields.push({
           ...value,
-          type: "addition",
+          type: MUUTOS_TYPES.ADDITION,
           meta: { perusteluteksti: null },
-          muutosperusteluId: null
+          muutosperusteluId: null,
+          kohde,
+          maaraystyyppi
         })
       }
     }

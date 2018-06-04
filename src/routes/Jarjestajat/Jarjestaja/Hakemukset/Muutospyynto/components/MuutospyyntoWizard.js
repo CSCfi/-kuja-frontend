@@ -85,6 +85,8 @@ class MuutospyyntoWizard extends Component {
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
     this.props.fetchPaatoskierrokset()
+    this.props.fetchMaaraystyypit()
+    this.props.fetchKohteet()
   }
 
   nextPage() {
@@ -117,7 +119,10 @@ class MuutospyyntoWizard extends Component {
   }
 
   save(event, data) {
-    event.preventDefault()
+    if (event) {
+      event.preventDefault()
+    }
+
     console.log('save', data)
     this.props.saveMuutospyynto(data)
   }
