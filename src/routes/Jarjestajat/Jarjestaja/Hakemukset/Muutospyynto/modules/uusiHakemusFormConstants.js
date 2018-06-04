@@ -21,6 +21,12 @@ export const MUUTOS_TILAT = {
   POISTO: 'POISTO'
 }
 
+export const OPISKELIJAVUODET_KATEGORIAT = {
+  SISAOPPILAITOS: 'sisaoppilaitos',
+  VAATIVA: 'vaativa',
+  VAHIMMAISOPISKELIJAVUODET: 'vahimmaisopiskelijavuodet'
+}
+
 export const MUUTOS_TYPE_TEXTS = {
   ADDITION: {
     FI: 'Lisäys',

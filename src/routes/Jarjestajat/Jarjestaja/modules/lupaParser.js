@@ -244,7 +244,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
           }
 
           if(koodisto === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
-              setTimeout(() => console.log(maarays), 2000)
               opetuskielet.push(maarays)
           }
 

@@ -203,6 +203,8 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       kohde = getKohdeByTunniste(KOHTEET.KIELI)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      kohde = getKohdeByTunniste(KOHTEET.MUUT)
     }
   }
 
@@ -212,6 +214,12 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       maaraystyyppi = getKohdeByTunniste(KOHTEET.TUTKINNOT)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      if (koodiArvo === "3") {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+      } else {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
+      }
     }
   }
 

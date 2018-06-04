@@ -39,8 +39,6 @@ class MuutospyyntoWizardMuutokset extends Component {
       formValues
     } = this.props
 
-    setTimeout(() => console.log('formValues', formValues), 1000)
-
     return (
       <div>
 

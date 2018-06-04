@@ -134,7 +134,7 @@ injectGlobal`
     }
   }
   
-  input[type="text"], input[type="number"] {
+  input[type="text"] {
     font-size: 15px;
     padding: 8px 16px;
     width: 320px;
@@ -148,6 +148,19 @@ injectGlobal`
     }
   }
   
+  input[type="number"] {
+    font-size: 15px;
+    padding: 8px 16px;
+    width: 140px;
+    margin: 10px 10px 10px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    &:focus {
+      outline: none;
+    }
+  }
   
   .react-datepicker-popper {
     .react-datepicker {
