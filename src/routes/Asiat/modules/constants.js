@@ -327,6 +327,12 @@ export const VALMISTELU_WIZARD_TEKSTIT = {
                 SV: "På svenska"
             }
         }
+    },
+    OTSIKOT :{
+        PAATOKSEN_VALMISTELU:{
+            FI:"Päätöksen valmistelu",
+            SV:"på svenska"
+        }
     }
 }
 
@@ -366,4 +372,9 @@ export const MUUTOS_TYPE_TEXTS = {
         FI: 'Muutos',
         SV: 'På Svenska'
     }
+}
+
+export const COMPONENT_TYPES = {
+    MUUTOS: 'muutos',
+    MUUTOS_YHTEENVETO: 'muutosYhteenveto'
 }

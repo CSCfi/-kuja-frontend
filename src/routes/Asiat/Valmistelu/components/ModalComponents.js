@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { COLORS, TRANSITIONS } from "../../../../../../modules/styles"
+import { COLORS, TRANSITIONS } from "../../../../modules/styles"
 
 export const modalStyles = {
     overlay: {

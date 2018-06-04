@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from "../../../../modules/styles"
+import { COLORS, MEDIA_QUERIES, TRANSITIONS } from "../../../../modules/styles"
 import arrowDown from 'static/images/arrow-down.svg'
 
 export const Wrapper = styled.div`
@@ -392,5 +392,69 @@ export const Checkbox = styled.div`
         opacity: 1;
       }
     }
+  }
+`
+
+export const WizardBackground = styled.div`
+  background-color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+`
+
+export const WizardTop = styled.div`
+  background-color: ${COLORS.DARK_GRAY};
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+`
+
+export const ValmisteluHeader = styled.div`
+  background-color: ${COLORS.WHITE};
+  position: fixed;
+  left: 0;
+  top: 50px;
+  height: 150px;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  font-size: 14px;
+`
+
+export const WizardContent = styled.div`
+  background-color: ${COLORS.WHITE};
+  padding: 30px;
+  //border: 1px solid ${COLORS.BORDER_GRAY};
+  position: relative;
+  z-index: 1;
+`
+
+export const WizardWrapper = styled.div`
+  position: relative;
+  top: -45px;
+`
+
+export const FormGroup = styled.div`
+  display: flex;
+`
+
+export const Label = styled.label`
+  flex: 1;
+  font-size: 18px;
+  align-self: center;
+`
+
+export const FormField = styled.div`
+  flex: 3;
+  
+  input[type="text"] {
+    max-width: 355px;
+    width: 100%;
   }
 `

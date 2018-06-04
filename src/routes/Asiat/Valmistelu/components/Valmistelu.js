@@ -4,17 +4,17 @@ import styled from 'styled-components'
 import Modal from 'react-modal'
 
 import ValmisteluWizardTiedot from './ValmisteluWizardTiedot'
-import MuutospyyntoWizardPerustelut from './MuutospyyntoWizardPerustelut'
-import MuutospyyntoWizardYhteenveto from './MuutospyyntoWizardYhteenveto'
+import ValmisteluWizardMuutokset from './ValmisteluWizardMuutokset'
 
-import Loading from '../../../../../../modules/Loading'
+import Loading from '../../../../modules/Loading'
 
-import { ContentContainer } from "../../../../../../modules/elements"
-import { WizardBackground, WizardTop, WizardWrapper, WizardHeader, WizardContent, Container } from "./MuutospyyntoWizardComponents"
-import { COLORS } from "../../../../../../modules/styles"
+import { ContentContainer } from "../../../../modules/elements"
+import { WizardBackground, WizardTop, WizardWrapper, ValmisteluHeader, WizardContent, Container } from "./ValmisteluComponents"
+import { COLORS } from "../../../../modules/styles"
 import close from 'static/images/close-x.svg'
-import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
+import { ROLE_ESITTELIJA } from "../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
+import { VALMISTELU_WIZARD_TEKSTIT } from "../../modules/constants"
 
 Modal.setAppElement('#root')
 
@@ -56,7 +56,7 @@ const Phase = ({ number, text, activePage, disabled, handleClick }) => {
     )
 }
 
-class MuutospyyntoWizard extends Component {
+class ValmisteluWizard extends Component {
     constructor(props) {
         super(props)
         this.nextPage = this.nextPage.bind(this)
@@ -77,8 +77,17 @@ class MuutospyyntoWizard extends Component {
 
     componentWillMount() {
         this.props.fetchMuutosperustelut()
-        const { ytunnus } = this.props.match.params
-        this.props.fetchLupa(ytunnus, '?with=all')
+        const { uuid } = this.props.match.params
+        console.log('UUID: ' + uuid)
+        this.props.fetchMuutospyynto(uuid).then(() => {
+            console.log('muutospyynto: ' + JSON.stringify(this.props.muutospyynto.data))
+
+            const { lupaUuid } = this.props.muutospyynto.data
+            console.log('Lupa UUID: ' + lupaUuid)
+
+            this.props.fetchLupa(lupaUuid, '?with=all')
+
+        })
         this.props.fetchPaatoskierrokset()
     }
 
@@ -102,7 +111,7 @@ class MuutospyyntoWizard extends Component {
         if (event) {
             event.preventDefault()
         }
-        const url = `/jarjestajat/${this.props.match.params.ytunnus}`
+        const url = `/asiat`
         this.props.history.push(url)
     }
 
@@ -151,21 +160,27 @@ class MuutospyyntoWizard extends Component {
         const { muutosperustelut, lupa, paatoskierrokset } = this.props
         const { page, visitedPages } = this.state
 
-        if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
-            return (
-                <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
-            )
+        // check the rights - TODO
+        /*
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_ESITTELIJA) {
+            authenticated = true;
         }
+        */
 
-        // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-        const { jarjestajaOid } = this.props.lupa.data
-        if (sessionStorage.getItem('oid') !== jarjestajaOid) {
+        // Sallittu vain esittelijöille
+        if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
             return (
-                <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
+                <h2>Käsittely vaatii kirjautumisen.</h2>
             )
         }
 
         if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
+
+            console.log('muutospyynto: ' + JSON.stringify(this.props.muutospyynto))
+
+            console.log('lupa: ' + JSON.stringify(this.props.lupa))
+
             return (
                 <div>
                     <WizardBackground />
@@ -173,23 +188,23 @@ class MuutospyyntoWizard extends Component {
                     <WizardWrapper>
                         <WizardTop>
                             <Container padding="0 20px">
-                                <div>Uusi muutoshakemus</div>
+                                <div>{VALMISTELU_WIZARD_TEKSTIT.OTSIKOT.PAATOKSEN_VALMISTELU.FI}</div>
                                 <CloseButton src={close} onClick={this.openCancelModal} />
                             </Container>
                         </WizardTop>
-
-                        <WizardHeader>
+                        <ValmisteluHeader>
+                            Koulutuksen järjestäjä
                             <Container maxWidth="1085px" color={COLORS.BLACK}>
                                 <Phase number="1" text="Muutokset" activePage={page} handleClick={(number) => this.changePhase(number)} />
                                 <Phase number="2" text="Perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
                                 <Phase number="3" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
                             </Container>
-                        </WizardHeader>
+                        </ValmisteluHeader>
 
                         <ContentContainer maxWidth="1085px" margin="50px auto">
                             <WizardContent>
                                 {page === 1 && (
-                                    <MuutospyyntoWizardMuutokset
+                                    <ValmisteluWizardTiedot
                                         previousPage={this.previousPage}
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
@@ -201,19 +216,11 @@ class MuutospyyntoWizard extends Component {
                                     />
                                 )}
                                 {page === 2 && (
-                                    <MuutospyyntoWizardPerustelut
+                                    <ValmisteluWizardMuutokset
                                         previousPage={this.previousPage}
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
                                         muutosperustelut={this.props.muutosperustelut.data}
-                                    />
-                                )}
-                                {page === 3 && (
-                                    <MuutospyyntoWizardYhteenveto
-                                        previousPage={this.previousPage}
-                                        onCancel={this.onCancel}
-                                        onSubmit={this.onSubmit}
-                                        preview={this.preview}
                                     />
                                 )}
                             </WizardContent>
@@ -251,4 +258,4 @@ class MuutospyyntoWizard extends Component {
     }
 }
 
-export default withRouter(MuutospyyntoWizard)
+export default withRouter(ValmisteluWizard)

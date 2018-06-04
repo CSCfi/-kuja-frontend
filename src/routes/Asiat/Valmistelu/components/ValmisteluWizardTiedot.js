@@ -1,14 +1,17 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { reduxForm, formValueSelector } from 'redux-form'
+import { reduxForm, formValueSelector, FieldArray, Field } from 'redux-form'
 import Moment from 'react-moment'
 import Modal from 'react-modal'
 
 import validate from '../modules/validateValmistelu'
-import { WizardBottom, Container, SubtleButton, Button } from "./ValmisteluComponents"
-import { VALMISTELU_WIZARD_TEKSTIT, FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/constants"
+import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator  } from "./ValmisteluComponents"
+import { VALMISTELU_WIZARD_TEKSTIT, FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, COMPONENT_TYPES } from "../../modules/constants"
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
+import OrganisaationTiedot from './OrganisaationTiedot'
+import DatePicker from "../../../../modules/DatePicker"
+import MuutosList from './MuutosList'
+
 
 Modal.setAppElement('#root')
 
@@ -34,6 +37,9 @@ class ValmisteluWizardTiedot extends Component {
         this.openSendModal = this.openSendModal.bind(this)
         this.afterOpenSendModal = this.afterOpenSendModal.bind(this)
         this.closeSendModal = this.closeSendModal.bind(this)
+        this.renderHakijanTiedot = this.renderHakijanTiedot.bind(this)
+        this.renderField = this.renderField.bind(this)
+        this.renderDatePicker = this.renderDatePicker.bind(this)
     }
 
     openSendModal(e) {
@@ -57,33 +63,96 @@ class ValmisteluWizardTiedot extends Component {
             paatoskierrokset,
             preview,
             formValues,
+            lupa,
             tutkinnotjakoulutuksetValue,
-            opetusjatutkintokieletValue
+            opetusjatutkintokieletValue,
+            toimialueValue,
+            opiskelijavuosiValue,
+            muutmuutoksetValue
         } = this.props
+
+        let jarjestaja = undefined
+        if (lupa && lupa.fetched) {
+            jarjestaja = lupa.data.jarjestaja
+        }
 
         setTimeout(() => console.log('yhteenveto ', formValues), 400)
 
-        const paatoskierrosObj = _.find(paatoskierrokset.data, pkierros => {
-            if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
-                if (pkierros.meta.nimi.fi === "Avoin päätöskierros 2018") {
-                    return pkierros
-                }
-            }
-        })
-
         return (
             <div>
-                <h2>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
+                <h2>{VALMISTELU_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
 
+                {jarjestaja &&
                 <div>
-                    <h3>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.HEADING.FI}</h3>
-                    {paatoskierrosObj
-                        ? <Paatoskierros paatoskierros={paatoskierrosObj} />
-                        : <div>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.PAATOSKIERROS.TIETOJEN_LATAUS_VIRHE.FI}</div>
-                    }
+                    <h3>Organisaation tiedot</h3>
+                    <OrganisaationTiedot jarjestaja={jarjestaja} />
                 </div>
+                }
+
+                <Separator />
 
                 <form onSubmit={handleSubmit}>
+                    <h3>Hakemuksen yleiset tiedot</h3>
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.HAKIJAN_TIEDOT}
+                        component={this.renderHakijanTiedot}
+                    />
+
+                    <Separator />
+
+                    <h3>Muutokset perusteluineen</h3>
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
+                        muutokset={tutkinnotjakoulutuksetValue}
+                        kategoria="tutkinto"
+                        headingNumber="1"
+                        heading="Tutkinnot ja koulutukset"
+                        component={MuutosList}
+                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
+                    />
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
+                        muutokset={opetusjatutkintokieletValue}
+                        kategoria="opetuskieli"
+                        headingNumber="2"
+                        heading="Opetus- ja tutkintokielet"
+                        component={MuutosList}
+                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
+                    />
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
+                        muutokset={toimialueValue}
+                        kategoria="toimialue"
+                        headingNumber="3"
+                        heading="Toiminta-alueet"
+                        component={MuutosList}
+                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
+                    />
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
+                        muutokset={opiskelijavuosiValue}
+                        kategoria="opiskelijavuosi"
+                        headingNumber="4"
+                        heading="Opiskelijavuodet"
+                        component={MuutosList}
+                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
+                    />
+
+                    <FieldArray
+                        name={FIELD_ARRAY_NAMES.MUUT}
+                        muutokset={muutmuutoksetValue}
+                        kategoria="muumuutos"
+                        headingNumber="5"
+                        heading="Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
+                        component={MuutosList}
+                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
+                    />
+
                     <WizardBottom>
                         <Container maxWidth="1085px" padding="15px">
                             <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
@@ -114,28 +183,103 @@ class ValmisteluWizardTiedot extends Component {
             </div>
         )
     }
+
+    renderHakijanTiedot() {
+        return (
+            <div>
+                <Field
+                    name="hakija.nimi"
+                    type="text"
+                    label="Yhteyshenkilön nimi"
+                    component={this.renderField}
+                />
+                <Field
+                    name="hakija.puhelin"
+                    type="text"
+                    label="Yhteyshenkilön puhelinnumero"
+                    component={this.renderField}
+                />
+                <Field
+                    name="hakija.email"
+                    type="text"
+                    label="Yhteyshenkilön sähköposti"
+                    component={this.renderField}
+                />
+                <Field
+                    name="hakija.hyvaksyjat"
+                    type="text"
+                    label="Hakemuksen hyväksyjät/allekirjoittajat"
+                    component={this.renderField}
+                />
+                <Field
+                    name="hakija.haettupvm"
+                    type="text"
+                    label="Muutoksien voimaantulo"
+                    component={this.renderDatePicker}
+                />
+            </div>
+        )
+    }
+
+    renderField({ input, label, type, meta: { touched, error } }) {
+        return (
+            <FormGroup>
+                <Label>{label}</Label>
+                <FormField>
+                    <input {...input} type={type} />
+                    {touched && error && <span>{error}</span>}
+                </FormField>
+            </FormGroup>
+        )
+    }
+
+    renderDatePicker(props) {
+        const { input, label, type, meta: { touched, error } } = props
+        return (
+            <FormGroup>
+                <Label>{label}</Label>
+                <FormField>
+                    <DatePicker customInput={input} handleChange={input.onChange} />
+                    {/*<input {...input} type={type} />*/}
+                    {/*{touched && error && <span>{error}</span>}*/}
+                </FormField>
+            </FormGroup>
+        )
+    }
 }
 
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
-MuutospyyntoWizardYhteenveto = reduxForm({
+ValmisteluWizardTiedot = reduxForm({
     form: FORM_NAME_UUSI_HAKEMUS,
     destroyOnUnmount: false,
     forceUnregisterOnUnmount: true,
     validate
-})(MuutospyyntoWizardYhteenveto)
+})(ValmisteluWizardTiedot)
 
 export default connect(state => {
     const paatoskierros = selector(state, 'paatoskierros')
     const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
     const opetusjatutkintokieletValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
+    const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
+    const opiskelijavuosiValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
+    const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
+
+    let formVals = undefined
+    if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
+        formVals = state.form.uusiHakemus.values
+    }
 
     return {
-        formValues: state.form.uusiHakemus.values,
+        formValues: formVals,
         paatoskierros,
         tutkinnotjakoulutuksetValue,
         opetusjatutkintokieletValue,
+        toimialueValue,
+        opiskelijavuosiValue,
+        muutmuutoksetValue,
+        lupa: state.lupa,
         muutosperustelut: state.muutosperustelut,
         paatoskierrokset: state.paatoskierrokset
     }
-})(MuutospyyntoWizardYhteenveto)
+})(ValmisteluWizardTiedot)
