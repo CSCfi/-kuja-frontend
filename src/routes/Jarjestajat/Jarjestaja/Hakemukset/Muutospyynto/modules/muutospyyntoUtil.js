@@ -85,7 +85,12 @@ function getDefaultPaatoskierrosUuid() {
 }
 
 export function getJarjestajaData(state) {
-  const fakeUser = "oiva-web" // TODO: oikea käyttäjä statesta
+  let username = "oiva-default"
+  if (state.user && state.user.fetched) {
+    username = state.user.user.username
+  } else {
+    username = sessionStorage.getItem('username')
+  }
 
   if (state.lupa && state.lupa.fetched && state.paatoskierrokset && state.paatoskierrokset.fetched) {
     const { data } = state.lupa
@@ -103,7 +108,7 @@ export function getJarjestajaData(state) {
       // hakupvm: now, // kun siirretään käsittelyyn
       jarjestajaOid,
       jarjestajaYtunnus,
-      luoja: fakeUser,
+      luoja: username,
       luontipvm: now,
       lupaId: uuid,
       paatoskierrosId: null,
