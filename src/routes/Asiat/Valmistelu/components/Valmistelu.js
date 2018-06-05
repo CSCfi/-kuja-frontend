@@ -1,105 +1,26 @@
 import React, { Component } from 'react'
-import { Redirect, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import Modal from 'react-modal'
 
-import ValmisteluPerustelut from './ValmisteluPerustelut'
-import ValmisteluTutkinnot from './ValmisteluTutkinnot'
-import ValmisteluYhteenveto from './ValmisteluYhteenveto'
+import ValmisteluWizardTiedot from './ValmisteluWizardTiedot'
+import ValmisteluWizardMuutokset from './ValmisteluWizardMuutokset'
 
 import Loading from '../../../../modules/Loading'
 
 import { ContentContainer } from "../../../../modules/elements"
-import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
+import { WizardBackground, WizardTop, WizardWrapper, ValmisteluHeader, WizardContent, Container } from "./ValmisteluComponents"
+import { COLORS } from "../../../../modules/styles"
 import close from 'static/images/close-x.svg'
-import {ROLE_ESITTELIJA, ROLE_KAYTTAJA} from "../../../../modules/constants";
-import _ from 'lodash'
+import { ROLE_ESITTELIJA } from "../../../../modules/constants";
+import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
+import { VALMISTELU_WIZARD_TEKSTIT } from "../../modules/constants"
 
-const WizardBackground = styled.div`
-  background-color: rgba(255, 255, 255, 0.7);
-  position: absolute;
-  height: 100vh;
-  width: 100%;
-  top: 0;
-  left: 0;
-`
-
-const WizardTop = styled.div`
-  background-color: ${COLORS.DARK_GRAY};
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 50px;
-  width: 100%;
-  z-index: 2;
-  display: flex;
-`
-
-const WizardHeader = styled.div`
-  background-color: ${COLORS.BG_GRAY};
-  position: fixed;
-  left: 0;
-  top: 50px;
-  height: 50px;
-  width: 100%;
-  z-index: 2;
-  display: flex;
-  font-size: 14px;
-`
-
-const WizardContent = styled.div`
-  background-color: ${COLORS.WHITE};
-  padding: 30px;
-  //border: 1px solid ${COLORS.BORDER_GRAY};
-  position: relative;
-  z-index: 1;
-`
-
-const WizardWrapper = styled.div`
-  position: relative;
-  top: -45px;
-`
-
-const Container = styled.div`
-  width: 100%;
-  max-width: ${props => props.maxWidth ? props.maxWidth : '1280px'};
-  margin: ${props => props.margin ? props.margin : 'auto'};  
-  padding: ${props => props.padding ? props.padding : '0 15px'};
-  box-sizing: border-box;
-  display: flex;
-  color: ${props => props.color ? props.color : COLORS.WHITE};
-  justify-content: space-between;
-  align-items: center;
-  
-  @media ${MEDIA_QUERIES.MOBILE} {
-    margin: 0 auto;
-  }
-`
+Modal.setAppElement('#root')
 
 const CloseButton = styled.img`
   height: 20px;
   cursor: pointer;
-`
-
-export const WizButton = styled.button`
-  color: ${props => props.textColor ? props.textColor : COLORS.WHITE};
-  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  margin-right: 15px;
-  height: 36px;
-  width: 140px;
-  line-height: 36px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius: 2px;
-  
-  &:hover {
-    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
-    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
-    ${props => props.disabled ? 'cursor: not-allowed;' : null}
-  }
 `
 
 const PhaseStyle = styled.div`
@@ -124,10 +45,6 @@ const Text = styled.div`
   color: ${props => props.active ? COLORS.BLACK : 'rgb(96, 96, 96)'};
 `
 
-export const SelectWrapper = styled.div`
-  margin-bottom: 20px;
-`
-
 const Phase = ({ number, text, activePage, disabled, handleClick }) => {
     const isActive = Number(number) === Number(activePage)
 
@@ -139,7 +56,7 @@ const Phase = ({ number, text, activePage, disabled, handleClick }) => {
     )
 }
 
-class Valmistelu extends Component {
+class ValmisteluWizard extends Component {
     constructor(props) {
         super(props)
         this.nextPage = this.nextPage.bind(this)
@@ -147,27 +64,30 @@ class Valmistelu extends Component {
         this.onCancel = this.onCancel.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
         this.changePhase = this.changePhase.bind(this)
+        this.preview = this.preview.bind(this)
+        this.openCancelModal = this.openCancelModal.bind(this)
+        this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this)
+        this.closeCancelModal = this.closeCancelModal.bind(this)
         this.state = {
             page: 1,
-            visitedPages: [1]
+            visitedPages: [1],
+            isCloseModalOpen: false
         }
     }
 
     componentWillMount() {
-        const { uuid } = this.props.match.params
-        this.props.fetchMuutospyynto(uuid)
-
-        const { muutospyynto } = this.props
-        console.log('TEST: ' + JSON.stringify(muutospyynto))
-
-
         this.props.fetchMuutosperustelut()
-        const { jarjestajaYtunnus } = muutospyynto
+        const { uuid } = this.props.match.params
+        console.log('UUID: ' + uuid)
+        this.props.fetchMuutospyynto(uuid).then(() => {
+            console.log('muutospyynto: ' + JSON.stringify(this.props.muutospyynto.data))
 
-        console.log('TEST2: ' + JSON.stringify(jarjestajaYtunnus))
+            const { lupaUuid } = this.props.muutospyynto.data
+            console.log('Lupa UUID: ' + lupaUuid)
 
-        // TODO: haettavat uuid:n perusteella heti kun backend tukee
-        this.props.fetchLupa('0208201-1', '?with=all')
+            this.props.fetchLupa(lupaUuid, '?with=all')
+
+        })
         this.props.fetchPaatoskierrokset()
     }
 
@@ -191,7 +111,7 @@ class Valmistelu extends Component {
         if (event) {
             event.preventDefault()
         }
-        const url = `/jarjestajat/${this.props.match.params.ytunnus}`
+        const url = `/asiat`
         this.props.history.push(url)
     }
 
@@ -200,26 +120,67 @@ class Valmistelu extends Component {
         // this.onCancel() // TODO: tehdään onDone-funktio
     }
 
+    preview(event, data) {
+        event.preventDefault()
+        this.props.previewMuutospyynto(data).then(() => {
+
+            var binaryData = [];
+            binaryData.push(this.props.muutospyynto.pdf.data);
+            const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
+            //const data =  window.URL.createObjectURL(response.data)
+            var link = document.createElement('a');
+            link.href = data;
+            link.download="file.pdf";
+            link.click();
+            setTimeout(function(){
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(data)
+                    , 100})
+
+        })
+    }
+
     changePhase(number) {
         this.setState({ page: number })
     }
 
+    openCancelModal(e) {
+        e.preventDefault()
+        this.setState({ isCloseModalOpen: true })
+    }
+
+    afterOpenCancelModal() {
+    }
+
+    closeCancelModal() {
+        this.setState({ isCloseModalOpen: false })
+    }
+
     render() {
-        const { muutosperustelut, lupa, paatoskierrokset, muutospyynto } = this.props
+        const { muutosperustelut, lupa, paatoskierrokset } = this.props
         const { page, visitedPages } = this.state
 
-        console.log('TEST: ' + JSON.stringify(muutospyynto))
+        // check the rights - TODO
+        /*
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_ESITTELIJA) {
+            authenticated = true;
+        }
+        */
 
-
+        // Sallittu vain esittelijöille
         if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
             return (
-                <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+                <h2>Käsittely vaatii kirjautumisen.</h2>
             )
         }
 
-        console.log('are we good or not?')
-
         if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
+
+            console.log('muutospyynto: ' + JSON.stringify(this.props.muutospyynto))
+
+            console.log('lupa: ' + JSON.stringify(this.props.lupa))
+
             return (
                 <div>
                     <WizardBackground />
@@ -227,49 +188,60 @@ class Valmistelu extends Component {
                     <WizardWrapper>
                         <WizardTop>
                             <Container padding="0 20px">
-                                <div>Uusi muutoshakemus</div>
-                                <CloseButton src={close} onClick={this.onCancel} />
+                                <div>{VALMISTELU_WIZARD_TEKSTIT.OTSIKOT.PAATOKSEN_VALMISTELU.FI}</div>
+                                <CloseButton src={close} onClick={this.openCancelModal} />
                             </Container>
                         </WizardTop>
-
-                        <WizardHeader>
+                        <ValmisteluHeader>
+                            Koulutuksen järjestäjä
                             <Container maxWidth="1085px" color={COLORS.BLACK}>
                                 <Phase number="1" text="Muutokset" activePage={page} handleClick={(number) => this.changePhase(number)} />
                                 <Phase number="2" text="Perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
                                 <Phase number="3" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
                             </Container>
-                        </WizardHeader>
+                        </ValmisteluHeader>
 
                         <ContentContainer maxWidth="1085px" margin="50px auto">
                             <WizardContent>
                                 {page === 1 && (
-                                    <ValmisteluTutkinnot
+                                    <ValmisteluWizardTiedot
                                         previousPage={this.previousPage}
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
                                         lupa={lupa}
                                         fetchKoulutusalat={this.props.fetchKoulutusalat}
                                         fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
+                                        fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
+                                        fetchKoulutus={this.props.fetchKoulutus}
                                     />
                                 )}
                                 {page === 2 && (
-                                    <ValmisteluPerustelut
+                                    <ValmisteluWizardMuutokset
                                         previousPage={this.previousPage}
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
                                         muutosperustelut={this.props.muutosperustelut.data}
                                     />
                                 )}
-                                {page === 3 && (
-                                    <ValmisteluYhteenveto
-                                        previousPage={this.previousPage}
-                                        onCancel={this.onCancel}
-                                        onSubmit={this.onSubmit}
-                                    />
-                                )}
                             </WizardContent>
                         </ContentContainer>
                     </WizardWrapper>
+
+                    <Modal
+                        isOpen={this.state.isCloseModalOpen}
+                        onAfterOpen={this.afterOpenCancelModal}
+                        onRequestClose={this.closeCancelModal}
+                        contentLabel="Poistu muutoshakemuksen teosta"
+                        style={modalStyles}
+                    >
+                        <Content>
+                            <ModalText>Oletko varma, että haluat poistua muutoshakemuksen luonnista? Tekemiäsi muutoksia ei tallenneta.</ModalText>
+                        </Content>
+                        <div>
+                            <ModalButton primary onClick={this.onCancel}>Kyllä</ModalButton>
+                            <ModalButton onClick={this.closeCancelModal}>Ei</ModalButton>
+                        </div>
+                    </Modal>
                 </div>
             )
         } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
@@ -286,4 +258,4 @@ class Valmistelu extends Component {
     }
 }
 
-export default withRouter(Valmistelu)
+export default withRouter(ValmisteluWizard)

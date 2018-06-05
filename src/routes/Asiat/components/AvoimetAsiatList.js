@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
+import { Link } from 'react-router-dom'
 
 import MuutospyyntoItem from './MuutospyyntoItem'
 import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
@@ -10,7 +11,9 @@ import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import '../../../modules/Header/react-table-overrides.css'
 import styled from 'styled-components'
-
+import { parseLocalizedField } from "../../../modules/helpers"
+import Moment from 'react-moment'
+import { ASIAT } from "../modules/constants"
 
 const TableHeader = styled.div`
     font-weight: normal;
@@ -29,6 +32,22 @@ const TableCell = styled.div`
     padding: 10px 20px;
     white-space: normal;
 `
+const TableCellLink = styled.div`
+    font-weight: normal;
+    padding: 10px 20px;
+    white-space: normal;
+    border: 2px solid ${COLORS.OIVA_GREEN};
+`
+
+const getColumnWidth = (rows, accessor, headerText) => {
+    const maxWidth = 400
+    const magicSpacing = 10
+    const cellLength = Math.max(
+        ...rows.map(row => (`${row[accessor]}` || '').length),
+        headerText.length,
+    )
+    return Math.min(maxWidth, cellLength * magicSpacing)
+}
 
 class AvoimetAsiatList extends Component {
     renderMuutospyynnot() {
@@ -40,30 +59,27 @@ class AvoimetAsiatList extends Component {
         const { muutospyynnot } = this.props
 
         const columns = [{
-            Header: props => <TableHeader>Koulutuksen järjestäjä</TableHeader>,
+            Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_KOULUTUKSEN_JARJESTAJA.FI}</TableHeader>,
             accessor: 'jarjestaja.nimi.fi',
+            width:200,
             Cell: props => <TableCell>{props.value}</TableCell>
         }, {
-            Header: props => <TableHeader>Saapunut</TableHeader>,
+            Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_SAAPUNUT.FI}</TableHeader>,
             accessor: 'hakupvm',
-            Cell: props => <TableCell>{props.value}</TableCell> // Custom cell components!
-        }, {
-            Header: props => <TableHeader>Hakukierros</TableHeader>,
-            accessor: 'paatoskierros.meta.fi' //d => d.friend.name // Custom value accessors!
-            ,
             Cell: props => <TableCell>{props.value}</TableCell>
         }, {
-            Header: props => <TableHeader>Esittelijä</TableHeader>,
-            accessor: 'luoja',
-            Cell: props => <TableCell>{props.value}</TableCell>
+            Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_HAKUKIERROS.FI}</TableHeader>,
+            accessor: 'paatoskierros.alkupvm',
+            Cell: props => <TableCell><Moment format="DD/YYYY">{props.value}</Moment></TableCell>
         }, {
-            Header: props => <TableHeader>Maakunta</TableHeader>,
-            accessor: 'jarjestaja.maakuntaKoodi.metadata[0].nimi',
-            Cell: props => <TableCell>{props.value}</TableCell>
+            Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_MAAKUNTA.FI}</TableHeader>,
+            accessor: 'jarjestaja.maakuntaKoodi.metadata',
+            Cell: props => <TableCell>{parseLocalizedField(props.value, 'FI', 'nimi')}</TableCell>
         }, {
-            Header: props => <TableHeader>Tila</TableHeader>,
-            accessor: 'tila',
-            Cell: props => <TableCell>{props.value}</TableCell>
+            Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_TILA.FI}</TableHeader>,
+            accessor: 'uuid',
+            width:190,
+            Cell: props => <TableCellLink><Link exact={true} uuid={props.value} to={{pathname: "/asiat/valmistelu/" + props.value, uuid: props.value}}>{ASIAT.LISTAT.COLUMN_OTA_VALMISTELUUN.FI} &#187;</Link></TableCellLink>
         }]
 
 
@@ -74,7 +90,7 @@ class AvoimetAsiatList extends Component {
                         <Table>
                             <Thead>
                             <Tr>
-                                <Th>Avoinna olevat asiat</Th>
+                                <Th>{ASIAT.OTSIKOT.AVOINNA_OLEVAT.FI}</Th>
                             </Tr>
                             </Thead>
                             <Tbody>
@@ -86,13 +102,21 @@ class AvoimetAsiatList extends Component {
                         <ReactTable
                             defaultPageSize={5}
                             data={muutospyynnot}
-                            columns={columns}/>
+                            columns={columns}
+                            previousText={ASIAT.SIVUTUS.EDELLINEN.FI}
+                            nextText={ASIAT.SIVUTUS.SEURAAVA.FI}
+                            loadingText={ASIAT.SIVUTUS.LADATAAN.FI}
+                            noDataText={ASIAT.SIVUTUS.EI_TIETOJA.FI}
+                            pageText={ASIAT.SIVUTUS.SIVU.FI}
+                            ofText={' / '}
+                            rowsText={ASIAT.SIVUTUS.RIVI.FI}
+                        />
                     }/>
                 </div>
             )
         } else {
             return (
-                <div>Ei muutospyyntöjä</div>
+                <div>{ASIAT.OTSIKOT.EI_MUUTOSPYYNTOJA.FI}</div>
             )
         }
     }

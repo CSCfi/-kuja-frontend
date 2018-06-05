@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { COLORS } from "../../../../modules/styles"
+import { COLORS, MEDIA_QUERIES, TRANSITIONS } from "../../../../modules/styles"
 import arrowDown from 'static/images/arrow-down.svg'
 
 export const Wrapper = styled.div`
@@ -20,6 +20,129 @@ export const Heading = styled.div`
   
   &:hover {
     background-color: ${COLORS.BG_DARKER_GRAY};
+  }
+`
+
+export const WizardBottom = styled.div`
+  background-color: ${COLORS.BG_GRAY};
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+`
+
+export const Container = styled.div`
+  width: 100%;
+  max-width: ${props => props.maxWidth ? props.maxWidth : '1280px'};
+  margin: ${props => props.margin ? props.margin : 'auto'};  
+  padding: ${props => props.padding ? props.padding : '0 15px'};
+  box-sizing: border-box;
+  display: flex;
+  color: ${props => props.color ? props.color : COLORS.WHITE};
+  justify-content: space-between;
+  align-items: center;
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    margin: 0 auto;
+  }
+`
+
+export const Button = styled.button`
+  color: ${props => props.disabled ? COLORS.WHITE : props.color ? props.textColor : COLORS.OIVA_GREEN};
+  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.WHITE};
+  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  width: 160px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 0;
+  font-size: 14px;
+  transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
+  margin: 0 10px;
+  
+  &.previous {
+    &:before {
+      content: '<';
+      display: block;
+      position: absolute;
+      left: 12px;
+      top: 8px;
+    }
+  }
+  
+  &.next {
+    &:after {
+      content: '>';
+      display: block;
+      position: absolute;
+      right: 12px;
+      top: 8px;
+    }
+  }
+  
+  &.button-danger {
+    color: ${COLORS.WHITE};
+    background-color: ${COLORS.OIVA_RED};
+    border: 1px solid ${COLORS.OIVA_RED};
+  }
+  
+  &.button-left {
+    margin-right: auto;
+  }
+  
+  &.button-right {
+    margin-left: auto;
+  }
+  
+  &.button-hidden {
+    visibility: hidden;
+  }
+  
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
+  }
+`
+
+export const SubtleButton = styled.button`
+  color: ${props => props.disabled ? COLORS.OIVA_OPAQUE_GREEN : props.color ? props.textColor : COLORS.OIVA_GREEN};
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 0;
+  font-size: 14px;
+  transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
+  margin: 0 10px;
+  
+  &.button-danger {
+    color: ${COLORS.WHITE};
+    background-color: ${COLORS.OIVA_RED};
+    border: 1px solid ${COLORS.OIVA_RED};
+  }
+  
+  &.button-left {
+    margin-right: auto;
+  }
+  
+  &.button-right {
+    margin-left: auto;
+  }
+  
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
   }
 `
 
@@ -269,5 +392,69 @@ export const Checkbox = styled.div`
         opacity: 1;
       }
     }
+  }
+`
+
+export const WizardBackground = styled.div`
+  background-color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  top: 0;
+  left: 0;
+`
+
+export const WizardTop = styled.div`
+  background-color: ${COLORS.DARK_GRAY};
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+`
+
+export const ValmisteluHeader = styled.div`
+  background-color: ${COLORS.WHITE};
+  position: fixed;
+  left: 0;
+  top: 50px;
+  height: 150px;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  font-size: 14px;
+`
+
+export const WizardContent = styled.div`
+  background-color: ${COLORS.WHITE};
+  padding: 30px;
+  //border: 1px solid ${COLORS.BORDER_GRAY};
+  position: relative;
+  z-index: 1;
+`
+
+export const WizardWrapper = styled.div`
+  position: relative;
+  top: -45px;
+`
+
+export const FormGroup = styled.div`
+  display: flex;
+`
+
+export const Label = styled.label`
+  flex: 1;
+  font-size: 18px;
+  align-self: center;
+`
+
+export const FormField = styled.div`
+  flex: 3;
+  
+  input[type="text"] {
+    max-width: 355px;
+    width: 100%;
   }
 `

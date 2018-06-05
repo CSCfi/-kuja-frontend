@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchMuutosperustelut: () => dispatch(fetchMuutosperustelut()),
-        fetchLupa: (ytunnus, query) => dispatch(fetchLupa(ytunnus, query)),
+        fetchLupa: (uuid, query) => dispatch(fetchLupa(uuid, query)),
         createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
         fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
         fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
