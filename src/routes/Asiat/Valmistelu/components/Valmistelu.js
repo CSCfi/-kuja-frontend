@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import { Link } from 'react-router-dom'
 
 import ValmisteluWizardTiedot from './ValmisteluWizardTiedot'
 import ValmisteluWizardMuutokset from './ValmisteluWizardMuutokset'
@@ -193,11 +194,11 @@ class ValmisteluWizard extends Component {
                             </Container>
                         </WizardTop>
                         <ValmisteluHeader>
-                            Koulutuksen järjestäjä
                             <Container maxWidth="1085px" color={COLORS.BLACK}>
-                                <Phase number="1" text="Muutokset" activePage={page} handleClick={(number) => this.changePhase(number)} />
-                                <Phase number="2" text="Perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
-                                <Phase number="3" text="Yhteenveto" activePage={page} disabled={visitedPages.indexOf(3) === -1} handleClick={(number) => this.changePhase(number)} />
+                                <Phase number="1" text="Päätöksen tiedot" activePage={page} handleClick={(number) => this.changePhase(number)} />
+                                <Phase number="2" text="Muutokset ja perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
+                                <Link to="/asiat/valmistelu/voimassaoleva">Voimassaoleva lupa</Link>
+                                <Link to="/asiat/valmistelu/esikatselu">Esikatselu</Link>
                             </Container>
                         </ValmisteluHeader>
 

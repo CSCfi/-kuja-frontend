@@ -278,9 +278,9 @@ export const VALMISTELU_WIZARD_TEKSTIT = {
             SV: "På svenska"
         }
     },
-    YHTEENVETO: {
+    TIEDOT: {
         HEADING: {
-            FI: "Yhteenveto",
+            FI: "Päätöksen tiedot",
             SV: "På svenska"
         },
         PAATOSKIERROS: {

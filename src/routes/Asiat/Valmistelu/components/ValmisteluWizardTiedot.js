@@ -5,7 +5,7 @@ import Moment from 'react-moment'
 import Modal from 'react-modal'
 
 import validate from '../modules/validateValmistelu'
-import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator  } from "./ValmisteluComponents"
+import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, SelectStyle, TextareaLabel  } from "./ValmisteluComponents"
 import { VALMISTELU_WIZARD_TEKSTIT, FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, COMPONENT_TYPES } from "../../modules/constants"
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import OrganisaationTiedot from './OrganisaationTiedot'
@@ -80,77 +80,13 @@ class ValmisteluWizardTiedot extends Component {
 
         return (
             <div>
-                <h2>{VALMISTELU_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
-
-                {jarjestaja &&
-                <div>
-                    <h3>Organisaation tiedot</h3>
-                    <OrganisaationTiedot jarjestaja={jarjestaja} />
-                </div>
-                }
-
-                <Separator />
+                <h2>{VALMISTELU_WIZARD_TEKSTIT.TIEDOT.HEADING.FI}</h2>
 
                 <form onSubmit={handleSubmit}>
-                    <h3>Hakemuksen yleiset tiedot</h3>
 
                     <FieldArray
                         name={FIELD_ARRAY_NAMES.HAKIJAN_TIEDOT}
                         component={this.renderHakijanTiedot}
-                    />
-
-                    <Separator />
-
-                    <h3>Muutokset perusteluineen</h3>
-
-                    <FieldArray
-                        name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
-                        muutokset={tutkinnotjakoulutuksetValue}
-                        kategoria="tutkinto"
-                        headingNumber="1"
-                        heading="Tutkinnot ja koulutukset"
-                        component={MuutosList}
-                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
-                    />
-
-                    <FieldArray
-                        name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
-                        muutokset={opetusjatutkintokieletValue}
-                        kategoria="opetuskieli"
-                        headingNumber="2"
-                        heading="Opetus- ja tutkintokielet"
-                        component={MuutosList}
-                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
-                    />
-
-                    <FieldArray
-                        name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
-                        muutokset={toimialueValue}
-                        kategoria="toimialue"
-                        headingNumber="3"
-                        heading="Toiminta-alueet"
-                        component={MuutosList}
-                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
-                    />
-
-                    <FieldArray
-                        name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
-                        muutokset={opiskelijavuosiValue}
-                        kategoria="opiskelijavuosi"
-                        headingNumber="4"
-                        heading="Opiskelijavuodet"
-                        component={MuutosList}
-                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
-                    />
-
-                    <FieldArray
-                        name={FIELD_ARRAY_NAMES.MUUT}
-                        muutokset={muutmuutoksetValue}
-                        kategoria="muumuutos"
-                        headingNumber="5"
-                        heading="Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
-                        component={MuutosList}
-                        componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
                     />
 
                     <WizardBottom>
@@ -158,9 +94,8 @@ class ValmisteluWizardTiedot extends Component {
                             <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
                             <div>
                                 <SubtleButton disabled>Tallenna luonnos</SubtleButton>
-                                <SubtleButton onClick={(e) => preview(e, this.props.formValues)}>Esikatsele</SubtleButton>
                             </div>
-                            <Button  onClick={this.openSendModal} type="submit" className="next button-right">Lähetä hakemus</Button>
+                            <Button  onClick={this.openSendModal} type="submit" className="next button-right">Lähetä allekirjoitettavaksi</Button>
                         </Container>
                     </WizardBottom>
 
@@ -168,11 +103,11 @@ class ValmisteluWizardTiedot extends Component {
                         isOpen={this.state.isSendModalOpen}
                         onAfterOpen={this.afterOpenSendModal}
                         onRequestClose={this.closeSendModal}
-                        contentLabel="Lähetä hakemus"
+                        contentLabel="Lähetä allekirjoitettavaksi"
                         style={modalStyles}
                     >
                         <Content>
-                            <ModalText>Oletko varma, että haluat lähettää hakemuksen käsiteltäväksi?</ModalText>
+                            <ModalText>Oletko varma, että haluat lähettää päätöksen allekirjoitettavaksi?</ModalText>
                         </Content>
                         <div>
                             <ModalButton primary onClick={onSubmit}>Kyllä</ModalButton>
@@ -188,34 +123,52 @@ class ValmisteluWizardTiedot extends Component {
         return (
             <div>
                 <Field
-                    name="hakija.nimi"
+                    name="paatos.diaarinumero"
                     type="text"
-                    label="Yhteyshenkilön nimi"
+                    label="Diaarinumero"
                     component={this.renderField}
                 />
                 <Field
-                    name="hakija.puhelin"
+                    name="paatos.paatospvm"
                     type="text"
-                    label="Yhteyshenkilön puhelinnumero"
-                    component={this.renderField}
-                />
-                <Field
-                    name="hakija.email"
-                    type="text"
-                    label="Yhteyshenkilön sähköposti"
-                    component={this.renderField}
-                />
-                <Field
-                    name="hakija.hyvaksyjat"
-                    type="text"
-                    label="Hakemuksen hyväksyjät/allekirjoittajat"
-                    component={this.renderField}
-                />
-                <Field
-                    name="hakija.haettupvm"
-                    type="text"
-                    label="Muutoksien voimaantulo"
+                    label="Päätöksen päivämäärä"
                     component={this.renderDatePicker}
+                />
+                <Field
+                    name="paatos.esittelija"
+                    type="text"
+                    label="Esittelijän nimi"
+                    component={this.renderField}
+                />
+                <Field
+                    name="paatos.esittelija_titteli"
+                    type="text"
+                    label="Esittelijän titteli"
+                    component={this.renderField}
+                />
+                <Field
+                    name="paatos.ministeri"
+                    type="text"
+                    label="Ministerin nimi"
+                    component={this.renderField}
+                />
+                <Field
+                    name="paatos.ministeri_titteli"
+                    type="text"
+                    label="Ministerin titteli"
+                    component={this.renderField}
+                />
+                <Field
+                    name="paatos.paatoskirje_id"
+                    type="select"
+                    label="Päätöskirjeen pohja"
+                    component={this.renderSelect}
+                />
+                <Field
+                    name="paatos.paatoskirje"
+                    type="text"
+                    label="Päätöskirjeen teksti"
+                    component={this.renderTextArea}
                 />
             </div>
         )
@@ -228,6 +181,33 @@ class ValmisteluWizardTiedot extends Component {
                 <FormField>
                     <input {...input} type={type} />
                     {touched && error && <span>{error}</span>}
+                </FormField>
+            </FormGroup>
+        )
+    }
+
+    renderSelect({ input, label, type, meta: { touched, error } }) {
+        return (
+            <FormGroup>
+                <Label>{label}</Label>
+                <FormField>
+                    <SelectStyle>
+                        <select disabled><option>valitse</option></select>
+                    </SelectStyle>
+                </FormField>
+            </FormGroup>
+        )
+    }
+
+    renderTextArea({label}){
+        return (
+            <FormGroup>
+                <TextareaLabel>{label}</TextareaLabel>
+                <FormField>
+                    <textarea
+                    rows="10"
+                    //defaultValue={paatos !== null ? perustelu : undefined}
+                    />
                 </FormField>
             </FormGroup>
         )
