@@ -450,6 +450,12 @@ export const Label = styled.label`
   align-self: center;
 `
 
+export const TextareaLabel = styled.label`
+  flex: 1;
+  font-size: 18px;
+  align-self: auto;
+`
+
 export const FormField = styled.div`
   flex: 3;
   
@@ -457,4 +463,21 @@ export const FormField = styled.div`
     max-width: 355px;
     width: 100%;
   }
+  
+  select {
+    max-width: 355px;
+    width: 100%;
+    font-size: 15px;
+    padding: 8px 16px;
+    margin: 10px 10px 10px 0;
+  }
+  
+  textarea {
+    max-width: 355px;
+    width: 100%;
+    font-size: 15px;
+    padding: 8px 16px;
+    margin: 10px 10px 10px 0;
+  }
+  
 `
