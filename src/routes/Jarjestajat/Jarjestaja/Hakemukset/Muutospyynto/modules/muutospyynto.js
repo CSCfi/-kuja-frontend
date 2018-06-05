@@ -61,6 +61,14 @@ export function saveMuutospyynto(muutospyynto) {
 
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})
+
+    axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted, { withCredentials: true })
+      .then(response => {
+        dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: response })
+      })
+      .catch(err => {
+        dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: err })
+      })
   }
 }
 

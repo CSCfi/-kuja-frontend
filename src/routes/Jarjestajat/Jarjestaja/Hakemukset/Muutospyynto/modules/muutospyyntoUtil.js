@@ -13,7 +13,7 @@ export function formatMuutospyynto(muutospyynto) {
     jarjestajaYtunnus,
     luoja,
     luontipvm,
-    lupaId,
+    lupa_uuid,
     tila,
     tutkinnotjakoulutukset = [],
     opetusjatutkintokielet = [],
@@ -37,8 +37,8 @@ export function formatMuutospyynto(muutospyynto) {
     jarjestajaYtunnus,
     luoja,
     luontipvm,
-    lupaId,
-    paatoskierrosId: getDefaultPaatoskierrosUuid(),
+    lupa_uuid,
+    paatoskierros: getDefaultPaatoskierros(),
     tila,
     paivittaja: "string",
     paivityspvm: null,
@@ -62,7 +62,7 @@ function formatMuutosArray(muutokset) {
   }))
 }
 
-function getDefaultPaatoskierrosUuid() {
+function getDefaultPaatoskierros() {
   const state = store.getState()
 
   const { paatoskierrokset } = state
@@ -77,7 +77,7 @@ function getDefaultPaatoskierrosUuid() {
     })
 
     if (pkierrosObj) {
-      return pkierrosObj.uuid
+      return { uuid: pkierrosObj.uuid }
     }
   }
 
@@ -110,7 +110,7 @@ export function getJarjestajaData(state) {
       jarjestajaYtunnus,
       luoja: username,
       luontipvm: now,
-      lupaId: uuid,
+      lupa_uuid: uuid,
       paatoskierrosId: null,
       paivityspvm: now,
       tila: "LUONNOS",

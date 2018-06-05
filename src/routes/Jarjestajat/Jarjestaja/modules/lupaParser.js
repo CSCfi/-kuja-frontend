@@ -437,7 +437,6 @@ function getMaaraysArvoArray(maaraykset) {
   let arr = []
 
   _.forEach(maaraykset, (maarays) => {
-    setTimeout(() => console.log(maarays), 3000)
     const { koodi } = maarays
 
     if (koodi) {

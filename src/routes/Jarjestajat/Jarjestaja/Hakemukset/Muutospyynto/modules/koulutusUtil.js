@@ -193,8 +193,6 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
   const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
 
-  console.log(currentObj)
-
   const { checked } = event.target
 
   if (!kohde) {
@@ -211,7 +209,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   if (!maaraystyyppi) {
     console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
-      maaraystyyppi = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
     } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
