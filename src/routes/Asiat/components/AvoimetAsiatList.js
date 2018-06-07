@@ -1,9 +1,7 @@
-import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import { Link } from 'react-router-dom'
 
-import MuutospyyntoItem from './MuutospyyntoItem'
 import { Table, Thead, Tbody, Th, Tr } from "../../../modules/Table"
 import { MEDIA_QUERIES, COLORS, FONT_STACK } from "../../../modules/styles"
 
@@ -39,21 +37,7 @@ const TableCellLink = styled.div`
     border: 2px solid ${COLORS.OIVA_GREEN};
 `
 
-const getColumnWidth = (rows, accessor, headerText) => {
-    const maxWidth = 400
-    const magicSpacing = 10
-    const cellLength = Math.max(
-        ...rows.map(row => (`${row[accessor]}` || '').length),
-        headerText.length,
-    )
-    return Math.min(maxWidth, cellLength * magicSpacing)
-}
-
 class AvoimetAsiatList extends Component {
-    renderMuutospyynnot() {
-        const sorted = _.sortBy(this.props.muutospyynnot, (muutospyynto) => { return muutospyynto.hakupvm })
-        return _.map(sorted, muutospyynto => <MuutospyyntoItem muutospyynto={muutospyynto} key={muutospyynto.uuid} />)
-    }
 
     render() {
         const { muutospyynnot } = this.props
@@ -66,11 +50,11 @@ class AvoimetAsiatList extends Component {
         }, {
             Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_SAAPUNUT.FI}</TableHeader>,
             accessor: 'hakupvm',
-            Cell: props => <TableCell>{props.value}</TableCell>
+            Cell: props => <TableCell><Moment format="d.M.YYYY">{props.value}</Moment></TableCell>
         }, {
             Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_HAKUKIERROS.FI}</TableHeader>,
             accessor: 'paatoskierros.alkupvm',
-            Cell: props => <TableCell><Moment format="DD/YYYY">{props.value}</Moment></TableCell>
+            Cell: props => <TableCell><Moment format="MM/YYYY">{props.value}</Moment></TableCell>
         }, {
             Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_MAAKUNTA.FI}</TableHeader>,
             accessor: 'jarjestaja.maakuntaKoodi.metadata',
@@ -87,16 +71,19 @@ class AvoimetAsiatList extends Component {
             return (
                 <div>
                     <Media query={MEDIA_QUERIES.MOBILE} render={() =>
-                        <Table>
-                            <Thead>
-                            <Tr>
-                                <Th>{ASIAT.OTSIKOT.AVOINNA_OLEVAT.FI}</Th>
-                            </Tr>
-                            </Thead>
-                            <Tbody>
-                            {this.renderMuutospyynnot()}
-                            </Tbody>
-                        </Table>
+                        // TODO: ReactTable mobile
+                        <ReactTable
+                            defaultPageSize={5}
+                            data={muutospyynnot}
+                            columns={columns}
+                            previousText={ASIAT.SIVUTUS.EDELLINEN.FI}
+                            nextText={ASIAT.SIVUTUS.SEURAAVA.FI}
+                            loadingText={ASIAT.SIVUTUS.LADATAAN.FI}
+                            noDataText={ASIAT.SIVUTUS.EI_TIETOJA.FI}
+                            pageText={ASIAT.SIVUTUS.SIVU.FI}
+                            ofText={' / '}
+                            rowsText={ASIAT.SIVUTUS.RIVI.FI}
+                        />
                     }/>
                     <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
                         <ReactTable
