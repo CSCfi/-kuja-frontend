@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { reduxForm, formValueSelector, FieldArray, Field } from 'redux-form'
+import { bindActionCreators } from 'redux'
+import { reduxForm, formValueSelector, FieldArray, Field, change } from 'redux-form'
 import Modal from 'react-modal'
 
 import OrganisaationTiedot from './OrganisaationTiedot'
@@ -10,7 +12,12 @@ import MuutosList from './MuutosList'
 import validate from '../modules/validateWizard'
 import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator } from "./MuutospyyntoWizardComponents"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import {
+  COMPONENT_TYPES,
+  FIELD_ARRAY_NAMES,
+  FIELDS,
+  FORM_NAME_UUSI_HAKEMUS
+} from "../modules/uusiHakemusFormConstants"
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { hasFormChanges } from "../modules/muutospyyntoUtil"
 
@@ -22,7 +29,9 @@ class MuutospyyntoWizardYhteenveto extends Component {
     super(props)
 
     this.state = {
-      isSendModalOpen: false
+      isSendModalOpen: false,
+      isSent: false,
+      hasErrored: false
     }
 
     this.openSendModal = this.openSendModal.bind(this)
@@ -31,6 +40,8 @@ class MuutospyyntoWizardYhteenveto extends Component {
     this.renderHakijanTiedot = this.renderHakijanTiedot.bind(this)
     this.renderField = this.renderField.bind(this)
     this.renderDatePicker = this.renderDatePicker.bind(this)
+    this.sendHakemus = this.sendHakemus.bind(this)
+    this.onDone = this.onDone.bind(this)
   }
 
   openSendModal(e) {
@@ -43,6 +54,37 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
   closeSendModal() {
     this.setState({ isSendModalOpen: false })
+  }
+
+  sendHakemus(event, data) {
+    if (event) {
+      event.preventDefault()
+    }
+
+    console.log('firing change')
+    data.tila = FIELDS.TILA.VALUES.AVOIN
+
+    setTimeout(() => {
+      console.log('setTimeout over')
+      this.props.createMuutospyynto(data)
+        .then(() => {
+          if (this.props.muutospyynto.create && this.props.muutospyynto.create.isCreated) {
+            console.log('is created')
+            this.setState({ isSent: true})
+          } else {
+            console.log('not created', this.props.muutospyynto.create)
+            this.setState({ hasErrored: true })
+          }
+        })
+    }, 500)
+
+  }
+
+  onDone() {
+    console.log('onDone')
+    this.closeSendModal()
+    const url = `/jarjestajat/${this.props.match.params.ytunnus}/hakemukset-ja-paatokset`
+    this.props.history.push(url)
   }
 
   render() {
@@ -58,7 +100,8 @@ class MuutospyyntoWizardYhteenveto extends Component {
       opetusjatutkintokieletValue,
       toimialueValue,
       opiskelijavuosiValue,
-      muutmuutoksetValue
+      muutmuutoksetValue,
+      tila
     } = this.props
 
     let jarjestaja = undefined
@@ -148,7 +191,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
               <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
               <div>
                 <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
-                <SubtleButton onClick={(e) => preview(e, this.props.formValues)}>Esikatsele</SubtleButton>
+                <SubtleButton onClick={(e) => preview(e, formValues)}>Esikatsele</SubtleButton>
               </div>
               <Button onClick={this.openSendModal} type="submit" className="next button-right">Lähetä hakemus</Button>
             </Container>
@@ -162,12 +205,33 @@ class MuutospyyntoWizardYhteenveto extends Component {
             style={modalStyles}
           >
             <Content>
-              <ModalText>Oletko varma, että haluat lähettää hakemuksen käsiteltäväksi?</ModalText>
+              <ModalText>
+                {
+                  !this.state.isSent && !this.state.hasErrored ?
+                    'Oletko varma, että haluat lähettää hakemuksen käsiteltäväksi?' :
+                  this.state.isSent ?
+                    'Hakemus lähetetty onnistuneesti' :
+                  this.state.hasErrored ?
+                    'Hakemuksen lähettämisessä tapahtui virhe' : null
+                }
+              </ModalText>
             </Content>
-            <div>
-              <ModalButton primary onClick={onSubmit}>Kyllä</ModalButton>
-              <ModalButton onClick={this.closeSendModal}>Ei</ModalButton>
-            </div>
+            {
+              !this.state.isSent && !this.state.hasErrored ?
+                <div>
+                  <ModalButton primary onClick={(e) => this.sendHakemus(e, formValues)}>Kyllä</ModalButton>
+                  <ModalButton onClick={this.closeSendModal}>Ei</ModalButton>
+                </div> :
+              this.state.isSent ?
+                <div>
+                  <ModalButton primary onClick={this.onDone}>Sulje</ModalButton>
+                </div> :
+              this.state.hasErrored ?
+                <div>
+                  <ModalButton primary onClick={this.onDone}>Sulje</ModalButton>
+                </div> : null
+            }
+
           </Modal>
         </form>
       </div>
@@ -238,6 +302,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({change}, dispatch);
+}
+
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardYhteenveto = reduxForm({
@@ -247,7 +315,7 @@ MuutospyyntoWizardYhteenveto = reduxForm({
   validate
 })(MuutospyyntoWizardYhteenveto)
 
-export default connect(state => {
+MuutospyyntoWizardYhteenveto = connect(state => {
   const paatoskierros = selector(state, 'paatoskierros')
   const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
   const opetusjatutkintokieletValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
@@ -270,6 +338,9 @@ export default connect(state => {
     muutmuutoksetValue,
     lupa: state.lupa,
     muutosperustelut: state.muutosperustelut,
-    paatoskierrokset: state.paatoskierrokset
+    paatoskierrokset: state.paatoskierrokset,
+    muutospyynto: state.muutospyynto
   }
-})(MuutospyyntoWizardYhteenveto)
+}, mapDispatchToProps)(MuutospyyntoWizardYhteenveto)
+
+export default withRouter(MuutospyyntoWizardYhteenveto)
