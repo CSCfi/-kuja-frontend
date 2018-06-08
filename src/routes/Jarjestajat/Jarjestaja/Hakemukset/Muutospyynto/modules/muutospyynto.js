@@ -19,19 +19,26 @@ export const SAVE_MUUTOSPYYNTO_START = 'SAVE_MUUTOSPYYNTO_START'
 export const SAVE_MUUTOSPYYNTO_SUCCESS = 'SAVE_MUUTOSPYYNTO_SUCCESS'
 export const SAVE_MUUTOSPYYNTO_FAILURE = 'SAVE_MUUTOSPYYNTO_FAILURE'
 
+export const UPDATE_MUUTOSPYYNTO_START = 'UPDATE_MUUTOSPYYNTO_START'
+export const UPDATE_MUUTOSPYYNTO_SUCCESS = 'UPDATE_MUUTOSPYYNTO_SUCCESS'
+export const UPDATE_MUUTOSPYYNTO_FAILURE = 'UPDATE_MUUTOSPYYNTO_FAILURE'
+
 // Actions
-export function fetchMuutospyynto(ytunnus, query) {
-  return (dispatch) => {
-    dispatch({ type: FETCH_MUUTOSPYYNTO_START })
+export function fetchMuutospyynto(uuid) {
+  console.log('fetchMuutospyynto ', uuid)
+  if (uuid) {
+    return (dispatch) => {
+      dispatch({ type: FETCH_MUUTOSPYYNTO_START })
 
-    const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`)
+      const request = fetch(`${API_BASE_URL}/muutospyynnot/id/${uuid}`)
 
-    request
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
-      })
-      .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
+      request
+        .then((response) => response.json())
+        .then((data) => {
+          dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
+        })
+        .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
+    }
   }
 }
 
@@ -67,7 +74,27 @@ export function saveMuutospyynto(muutospyynto) {
         dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: response })
       })
       .catch(err => {
-        dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: err })
+        dispatch({ type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err })
+      })
+  }
+}
+
+export function updateMuutospyynto(muutospyynto) {
+  console.log('updateMuutospyynto', muutospyynto)
+
+  const formatted = formatMuutospyynto(muutospyynto)
+
+  console.log('formatted', formatted)
+
+  return (dispatch) => {
+    dispatch({ type: UPDATE_MUUTOSPYYNTO_START })
+
+    axios.post(`${API_BASE_URL}/muutospyynnot/update`, formatted, { withCredentials: true })
+      .then(response => {
+        dispatch({ type: UPDATE_MUUTOSPYYNTO_SUCCESS, payload: response })
+      })
+      .catch(err => {
+        dispatch({ type: UPDATE_MUUTOSPYYNTO_FAILURE, payload: err })
       })
   }
 }
@@ -398,7 +425,9 @@ export function previewMuutospyynto(muutospyynto) {
 export const actions = {
   fetchMuutospyynto,
   createMuutospyynto,
-  previewMuutospyynto
+  previewMuutospyynto,
+  saveMuutospyynto,
+  updateMuutospyynto
 }
 
 // Action handlers
@@ -428,63 +457,123 @@ const ACTION_HANDLERS = {
       hasErrored: true
     }
   },
-    [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
-        return {
-            ...state,
-            create: {
-                isSubmitting: true,
-                isCreated: false,
-                hasErrored: false,
-            }
-        }
-    },
-    [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
-        return {
-            ...state,
-            create: {
-                isSubmitting: false,
-                isCreated: true,
-                hasErrored: false,
-                response: action.payload
-            }
-        }
-    },
-    [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
-        return {
-            ...state,
-            create: {
-                isSubmitting: false,
-                hasCreated: false,
-                hasErrored: true,
-                response: action.payload
-            }
-        }
-    },
-    [PREVIEW_MUUTOSPYYNTO_START]   : (state, action) => {
+  [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
       return {
-        ...state,
-        isFetching: true,
-        fetched: false,
+          ...state,
+          create: {
+              isSubmitting: true,
+              isCreated: false,
+              hasErrored: false,
+          }
+      }
+  },
+  [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+      return {
+          ...state,
+          create: {
+              isSubmitting: false,
+              isCreated: true,
+              hasErrored: false,
+              response: action.payload
+          }
+      }
+  },
+  [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+      return {
+          ...state,
+          create: {
+              isSubmitting: false,
+              hasCreated: false,
+              hasErrored: true,
+              response: action.payload
+          }
+      }
+  },
+  [PREVIEW_MUUTOSPYYNTO_START]   : (state, action) => {
+    return {
+      ...state,
+      isFetching: true,
+      fetched: false,
+      hasErrored: false
+    }
+  },
+  [PREVIEW_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+    return {
+      ...state,
+      isFetching: false,
+      fetched: true,
+      hasErrored: false,
+      pdf: action.payload
+    }
+  },
+  [PREVIEW_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+    return {
+      ...state,
+      isFetching: false,
+      fetched: false,
+      hasErrored: true
+    }
+  },
+  [SAVE_MUUTOSPYYNTO_START] : (state, action) => {
+    return {
+      ...state,
+      save: {
+        isSaving: true,
+        saved: false,
         hasErrored: false
       }
-    },
-    [PREVIEW_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
-      return {
-        ...state,
-        isFetching: false,
-        fetched: true,
-        hasErrored: false,
-        pdf: action.payload
+    }
+  },
+  [SAVE_MUUTOSPYYNTO_SUCCESS] : (state, action) => {
+    return {
+      ...state,
+      save: {
+        isSaving: false,
+        saved: true,
+        hasErrored: false
       }
-    },
-    [PREVIEW_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
-      return {
-        ...state,
-        isFetching: false,
-        fetched: false,
+    }
+  },
+  [SAVE_MUUTOSPYYNTO_FAILURE] : (state, action) => {
+    return {
+      ...state,
+      save: {
+        isSaving: false,
+        saved: false,
         hasErrored: true
       }
     }
+  },
+  [UPDATE_MUUTOSPYYNTO_START] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: true,
+        updated: false,
+        hasErrored: false
+      }
+    }
+  },
+  [UPDATE_MUUTOSPYYNTO_SUCCESS] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: false,
+        updated: true,
+        hasErrored: false
+      }
+    }
+  },
+  [UPDATE_MUUTOSPYYNTO_FAILURE] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: false,
+        updated: false,
+        hasErrored: true
+      }
+    }
+  }
 }
 
 // Reducer

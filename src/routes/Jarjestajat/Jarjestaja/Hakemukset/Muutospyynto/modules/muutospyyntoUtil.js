@@ -4,6 +4,7 @@ import { parseLocalizedField } from "../../../../../../modules/helpers"
 import dateformat from "dateformat"
 import store from "../../../../../../store"
 import { MUUTOS_TILAT, MUUTOS_TYPES } from "./uusiHakemusFormConstants"
+import { KOHTEET } from "../../../modules/constants"
 
 export function formatMuutospyynto(muutospyynto) {
 
@@ -120,6 +121,114 @@ export function getJarjestajaData(state) {
       meta: {}
     }
   }
+}
+
+export function getBaseJarjestajaData(state) {
+  let username = "oiva-default"
+  if (state.user && state.user.fetched) {
+    username = state.user.user.username
+  } else {
+    username = sessionStorage.getItem('username')
+  }
+
+  if (state.lupa && state.lupa.fetched && state.paatoskierrokset && state.paatoskierrokset.fetched) {
+    const { data } = state.lupa
+    const {
+      uuid,
+      diaarinumero,
+      jarjestajaYtunnus,
+      jarjestajaOid
+    } = data
+
+    const now = dateformat(new Date(), "yyyy-mm-dd")
+
+    return {
+      diaarinumero,
+      // hakupvm: now, // kun siirretään käsittelyyn
+      jarjestajaOid,
+      jarjestajaYtunnus,
+      // luoja: username,
+      // luontipvm: now,
+      // lupaUuid: uuid,
+      paatoskierrosId: null,
+      // paivityspvm: now,
+      // voimassaalkupvm: null,
+      // voimassaloppupvm: null,
+      meta: {}
+    }
+  }
+}
+
+export function loadFormData(state, muutosdata) {
+  console.log('loadFormData')
+  console.log(state)
+  console.log(muutosdata)
+
+  const {
+    voimassaalkupvm,
+    voimassaloppupvm,
+    tila,
+    luoja,
+    luontipvm,
+    lupaUuid,
+    paatoskierros,
+    muutokset
+  } = muutosdata
+
+  let initialData = getBaseJarjestajaData(state)
+  initialData = {
+    ...initialData,
+    voimassaalkupvm,
+    voimassaloppupvm,
+    tila,
+    luoja,
+    luontipvm,
+    lupaUuid,
+    paatoskierros
+  }
+
+  // formatoi muutokset
+
+
+  if (state.kohteet && state.kohteet.fetched) {
+    const kohteet = state.kohteet.data
+
+    // 1. Tutkinnot ja koulutukset
+    const tutkinnotKohde = _.find(kohteet, kohde => {
+      return kohde.tunniste === KOHTEET.TUTKINNOT
+    })
+
+    if (tutkinnotKohde) {
+      initialData[KOHTEET.TUTKINNOT] = getMuutosArray(muutokset, tutkinnotKohde.uuid)
+    }
+  }
+
+  console.log(initialData)
+
+  return initialData
+}
+
+function getMuutosArray(muutokset, kohdeUuid) {
+  if (!muutokset || !kohdeUuid) {
+    return
+  }
+
+  let results = _.filter(muutokset, muutos => {
+    if (muutos.kohde) {
+      return muutos.kohde.uuid === kohdeUuid
+    }
+  })
+
+  _.forEach(results, muutos => {
+    const tyyppi =
+      muutos.tila === MUUTOS_TILAT.LISAYS ? MUUTOS_TYPES.ADDITION :
+      muutos.tila === MUUTOS_TILAT.POISTO ? MUUTOS_TYPES.REMOVAL :
+      muutos.tila === MUUTOS_TILAT.MUUTOS ? MUUTOS_TYPES.CHANGE :
+      null
+    _.extend(muutos, { type: tyyppi })
+  })
+
+  return results
 }
 
 export function hasFormChanges(formValues) {

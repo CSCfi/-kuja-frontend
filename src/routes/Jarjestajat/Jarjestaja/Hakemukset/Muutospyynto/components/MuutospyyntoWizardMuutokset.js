@@ -31,6 +31,7 @@ class MuutospyyntoWizardMuutokset extends Component {
     const {
       onSubmit,
       save,
+      update,
       lupa,
       fetchKoulutusalat,
       fetchKoulutuksetAll,
@@ -88,6 +89,10 @@ class MuutospyyntoWizardMuutokset extends Component {
             <Container maxWidth="1085px" padding="15px">
               <Button className="previous button-left button-hidden">Edellinen</Button>
               <div>
+                {/*{update !== undefined*/}
+                  {/*? <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => update(e, formValues)}>Päivitä luonnos</SubtleButton>*/}
+                  {/*: <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>*/}
+                {/*}*/}
                 <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
               </div>
               <Button type="submit" className="next button-right">Seuraava</Button>
@@ -103,7 +108,8 @@ class MuutospyyntoWizardMuutokset extends Component {
 MuutospyyntoWizardMuutokset = reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
+  enableReinitialize : true
 })(MuutospyyntoWizardMuutokset)
 
 export default connect(state => {
