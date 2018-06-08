@@ -216,5 +216,6 @@ export default reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
+  enableReinitialize : true,
   validate
 })(MuutospyyntoWizardTutkinnot)

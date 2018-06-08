@@ -16,6 +16,7 @@ import {
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class TutkintoList extends Component {
   constructor(props) {
@@ -122,8 +123,8 @@ class TutkintoList extends Component {
                   if (editValues) {
                     editValues.forEach(val => {
                       if (val.koodiarvo === koodiarvo) {
-                        val.type === "addition" ? isAdded = true : null
-                        val.type === "removal" ? isRemoved = true : null
+                        val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                        val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                       }
                     })
                   }
@@ -134,8 +135,8 @@ class TutkintoList extends Component {
               if (editValues) {
                 editValues.forEach(val => {
                   if (val.koodiarvo === koodiarvo) {
-                    val.type === "addition" ? isAdded = true : null
-                    val.type === "removal" ? isRemoved = true : null
+                    val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                    val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                   }
                 })
               }

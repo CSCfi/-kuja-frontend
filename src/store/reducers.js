@@ -16,6 +16,8 @@ import kunnatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyy
 import maakunnatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/maakunnat'
 import maakuntakunnatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/maakuntakunnat'
 import muutReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muut'
+import maaraystyypitReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/maaraystyyppi'
+import kohdeReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/kohde'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
   maakunnat: maakunnatReducer,
   maakuntakunnat: maakuntakunnatReducer,
   muut: muutReducer,
+  maaraystyypit: maaraystyypitReducer,
+  kohteet: kohdeReducer,
   form: reduxFormReducer
 })
 

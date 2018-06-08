@@ -1,7 +1,9 @@
 import _ from 'lodash'
-import dateformat from 'dateformat'
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { KOHTEET, KOODISTOT, MAARAYSTYYPIT } from "../../../modules/constants"
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "./muutospyyntoUtil"
+import { MUUTOS_TYPES } from "./uusiHakemusFormConstants"
 
 export function getKieliByKoodi(koodi) {
   const state = store.getState()
@@ -89,108 +91,6 @@ export function getPaatoskierrosByUuid(paatoskierrosUuid) {
   }
 }
 
-function getDefaultPaatoskierrosUuid() {
-  const state = store.getState()
-
-  const { paatoskierrokset } = state
-
-  if (paatoskierrokset && paatoskierrokset.data) {
-    const pkierrosObj = _.find(paatoskierrokset.data, pkierros => {
-      if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
-        if (pkierros.meta.nimi.fi === "Avoin hakukierros 2018") {
-          return pkierros
-        }
-      }
-    })
-
-    if (pkierrosObj) {
-      return pkierrosObj.uuid
-    }
-  }
-
-  return undefined
-}
-
-export function getJarjestajaData(state) {
-  const fakeUser = "oiva-web" // TODO: oikea käyttäjä statesta
-
-  if (state.lupa && state.lupa.data) {
-    const { data } = state.lupa
-    const {
-      id: uuid,
-      diaarinumero,
-      jarjestajaYtunnus,
-      jarjestajaOid
-    } = data
-    const now = dateformat(new Date(), "yyyy-mm-dd")
-
-    return {
-      diaarinumero,
-      // hakupvm: now, // kun siirretään käsittelyyn
-      jarjestajaOid,
-      jarjestajaYtunnus,
-      luoja: fakeUser,
-      luontipvm: now,
-      lupaId: uuid,
-      paatoskierrosId: null,
-      paivityspvm: now,
-      tila: "LUONNOS",
-      voimassaalkupvm: null,
-      voimassaloppupvm: null,
-      muutosperustelu: {
-        arvo: "",
-        koodiarvo: null,
-        koodisto: "oivaperustelut",
-        luoja: fakeUser,
-        luontipvm: now,
-        meta: {
-          perusteluteksti: null
-        }
-      }
-    }
-  }
-}
-
-export function formatMuutospyynto(muutospyynto) {
-
-  const {
-    diaarinumero,
-    jarjestajaOid,
-    jarjestajaYtunnus,
-    luoja,
-    luontipvm,
-    lupaId,
-    tila,
-    lisattavat,
-    poistettavat,
-    paatoskierros,
-    muutosperustelu,
-    muuperustelu,
-    tutkintomuutokset,
-    opetuskielimuutokset,
-    tutkintokielimuutokset
-  } = muutospyynto
-
-  let muutokset = formatMuutokset(lisattavat, poistettavat)
-
-  return {
-    diaarinumero,
-    jarjestajaOid,
-    jarjestajaYtunnus,
-    luoja,
-    luontipvm,
-    lupaId,
-    paatoskierrosId: getDefaultPaatoskierrosUuid(),
-    tila,
-    paivittaja: "string",
-    paivityspvm: null,
-    voimassaalkupvm: "2018-01-01",
-    voimassaloppupvm: "2018-12-31",
-    muutosperustelu: formatMuutosperustelu(muutosperustelu, muuperustelu),
-    muutokset: muutokset
-  }
-}
-
 export function getEditIndex(values, koodiarvo, koodisto) {
   let i = undefined
 
@@ -207,7 +107,7 @@ export function getChangeIndices(values, koodiarvo) {
   let indices = []
 
   _.forEach(values, (value, i) => {
-    if (value.type === "change" && value.koodiarvo === koodiarvo) {
+    if (value.type === MUUTOS_TYPES.CHANGE && value.koodiarvo === koodiarvo) {
       indices.push(i)
     }
   })
@@ -229,7 +129,7 @@ export function getOpiskelijavuosiIndex(values, koodiarvo) {
 
 export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, obj) {
   const { checked } = event.target
-  const { koodiarvo, koodisto } = obj
+  const { koodiarvo, koodisto, kohde, maaraystyyppi } = obj
 
   if (checked) {
     if (isInLupa) {
@@ -242,11 +142,13 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       // Valtakunnallinen ei luvassa --> lisätään muutos formiin
       fields.push({
         type: 'addition',
-        perustelu: null,
-        muutosperustelu: null,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null,
         isValtakunnallinen: true,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
+        kohde,
+        maaraystyyppi,
         metadata: {
           kuvaus: {
             FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
@@ -260,11 +162,13 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       // Valtakunnallinen luvassa --> lisätään muutos formiin
       fields.push({
         type: 'addition',
-        perustelu: null,
-        muutosperustelu: null,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null,
         isValtakunnallinen: false,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
+        kohde,
+        maaraystyyppi,
         metadata: {
           kuvaus: {
             FI: 'Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa.',
@@ -284,11 +188,38 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
 
 export function handleCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
   const { koodiArvo, metadata, koodisto } = currentObj
+  let { kohde, maaraystyyppi } = currentObj
   const { koodistoUri } = koodisto
   const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
   const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
 
   const { checked } = event.target
+
+  if (!kohde) {
+    console.log('koulutusUtil.handleCheckboxChange kohdetta ei löytynyt', currentObj)
+    if (koodistoUri === KOODISTOT.KOULUTUS) {
+      kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      kohde = getKohdeByTunniste(KOHTEET.KIELI)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      kohde = getKohdeByTunniste(KOHTEET.MUUT)
+    }
+  }
+
+  if (!maaraystyyppi) {
+    console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
+    if (koodistoUri === KOODISTOT.KOULUTUS) {
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      if (koodiArvo === "3") {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+      } else {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
+      }
+    }
+  }
 
   if (checked) {
     if (isInLupa) {
@@ -299,12 +230,34 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.ADDITION,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
+      })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodiArvo, koodisto: koodistoUri, nimi, kuvaus, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.REMOVAL,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
+      })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodiArvo, koodistoUri)
@@ -316,7 +269,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
 }
 
 export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isInLupa, value, currentObj) {
-  const { koodi, nimi, maaraysId } = currentObj
+  const { koodi, nimi, maaraysId, kohde, maaraystyyppi } = currentObj
   const koodistoUri = "kieli"
 
   const { checked } = event.target
@@ -330,12 +283,39 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
       }
     } else {
       // Tutkinto ei ollut luvassa --> lisätään se formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "addition", perustelu: null, muutosperustelu: null })
+      fields.push({
+        koodiarvo: koodi,
+        koodisto: koodistoUri,
+        nimi,
+        // maaraysId,
+        kohde,
+        maaraystyyppi,
+        value,
+        kuvaus: null,
+        isInLupa,
+        type: MUUTOS_TYPES.ADDITION,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
+      })
     }
   } else {
     if (isInLupa) {
       // Tutkinto oli luvassa --> lisätään muutos formiin
-      fields.push({ koodiarvo: koodi, koodisto: koodistoUri, nimi, maaraysId, value, kuvaus: null, isInLupa, type: "removal", perustelu: null, muutosperustelu: null })
+      fields.push({
+        koodiarvo:
+        koodi,
+        koodisto: koodistoUri,
+        nimi,
+        // maaraysId,
+        value,
+        kohde,
+        maaraystyyppi,
+        kuvaus: null,
+        isInLupa,
+        type: MUUTOS_TYPES.REMOVAL,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
+      })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
       const i = getEditIndex(editValue, koodi, koodistoUri)
@@ -360,7 +340,7 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
     return
   }
 
-  const { koodi, maaraysId, nimi } = tutkinto
+  const { koodi, maaraysId, nimi, kohde, maaraystyyppi } = tutkinto
   const { value, koodisto, label } = selectedValue
   const { koodistoUri } = koodisto
 
@@ -381,11 +361,13 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
           maaraysId,
           value,
           label,
+          kohde,
+          maaraystyyppi,
           kuvaus: null,
           isInLupa,
-          type: "change",
-          perustelu: null,
-          muutosperustelu: null
+          type: MUUTOS_TYPES.CHANGE,
+          meta: { perusteluteksti: null },
+          muutosperusteluId: null
         })
       }
     } else {
@@ -396,11 +378,13 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
         maaraysId,
         value,
         label,
+        kohde,
+        maaraystyyppi,
         kuvaus: null,
         isInLupa,
-        type: "change",
-        perustelu: null,
-        muutosperustelu: null
+        type: MUUTOS_TYPES.CHANGE,
+        meta: { perusteluteksti: null },
+        muutosperusteluId: null
       })
     }
   } else {
@@ -418,121 +402,13 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
   }
 }
 
-export function getSelectedTutkintoKielet(tutkinnotjakielet, editValues) {
-  let kielet = []
-
-  if (tutkinnotjakielet) {
-    tutkinnotjakielet.forEach(tutkintokieli => {
-      const { tutkintokoodi, nimi, koodi, maaraysId } = tutkintokieli
-
-      const kieli = getKieliByKoodi(koodi)
-      let label = "Ei saatavilla"
-
-      if (kieli) {
-        label = parseLocalizedField(kieli.metadata)
-      }
-
-      let obj = {}
-      obj.maaraysId = maaraysId
-      obj.koodiarvo = tutkintokoodi
-      obj.nimi = nimi
-      obj.koodisto = "kieli"
-      obj.value = koodi
-      obj.label = label
-      obj.isInLupa = true
-
-      kielet.push(obj)
-    })
-  }
-
-  if (editValues) {
-    editValues.forEach(value => {
-      let obj = value
-
-      if (obj.type === "addition") {
-        // Lisäykset
-      } else if (obj.type === "removal") {
-        // poistot
-      }
-    })
-  }
-
-  return kielet
-}
-
 export function getKieliList(kielet, locale) {
   let kieletExtended = []
 
   kielet.forEach(kieli => {
-    const { koodiArvo, koodisto, metadata } = kieli
-    kieletExtended.push({ koodiArvo, koodisto, metadata, label: parseLocalizedField(metadata, locale), value: koodiArvo })
+    const { koodiArvo, koodisto, metadata, kohde, maaraystyyppi } = kieli
+    kieletExtended.push({ koodiArvo, koodisto, metadata, kohde, maaraystyyppi, label: parseLocalizedField(metadata, locale), value: koodiArvo })
   })
 
   return kieletExtended
-}
-
-function formatMuutosperustelu(muutosperusteluId, muuperustelu) {
-  const perustelu = getMuutosperusteluObjectById(muutosperusteluId)
-  const { koodiArvo, koodisto, metadata } = perustelu
-  const nimi = parseLocalizedField(metadata, 'FI', nimi)
-  const kuvaus = parseLocalizedField(metadata, 'FI', kuvaus)
-
-  return {
-    arvo: "",
-    koodiarvo: koodiArvo,
-    koodisto: koodisto.koodistoUri,
-    luoja: "asd",
-    luontipvm: dateformat(new Date(), "yyyy-mm-dd"),
-    meta: {
-      perusteluteksti: nimi,
-      kuvaus: kuvaus
-    }
-  }
-}
-
-function formatMuutokset(lisattavat, poistettavat) {
-  let muutokset = []
-
-  console.log("LISATTAVAT: " + JSON.stringify(lisattavat))
-
-  if (lisattavat) {
-    _.forEach(lisattavat, koodiarvo => {
-      let obj = getBaseObject()
-      obj.koodiarvo = koodiarvo
-      obj.tila = "LISAYS"
-      muutokset.push(obj)
-    })
-  }
-
-  if (poistettavat) {
-    _.forEach(poistettavat, maaraysId => {
-      let obj = getBaseObject()
-      obj.koodiarvo = getTutkintoKoodiByMaaraysId(maaraysId)
-      obj.maaraysId = maaraysId
-      obj.tila = "POISTO"
-      muutokset.push(obj)
-    })
-  }
-
-  return muutokset
-}
-
-function getBaseObject() {
-  return {
-    kohdeId: 1, // koulutukset
-    koodisto: "koulutus",
-    luoja: "string",
-    luontipvm: 0,
-    maaraystyyppiId: 1, // oikeus
-    meta: {
-      perusteluteksti: [
-        {
-          fi: "Suomeksi"
-        },
-        {
-          sv: "På Svenska"
-        }
-      ]
-    }
-  }
 }

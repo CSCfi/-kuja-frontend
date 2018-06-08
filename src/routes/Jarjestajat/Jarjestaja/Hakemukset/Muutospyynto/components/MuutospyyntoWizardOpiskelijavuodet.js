@@ -8,7 +8,14 @@ import { ContentContainer } from "../../../../../../modules/elements"
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents"
 import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import {
+  FIELD_ARRAY_NAMES,
+  FORM_NAME_UUSI_HAKEMUS,
+  MUUTOS_TYPES,
+  OPISKELIJAVUODET_KATEGORIAT
+} from "../modules/uusiHakemusFormConstants"
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "../modules/muutospyyntoUtil"
+import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants"
 
 const Opiskelijavuosi = styled.div`
   display: flex;
@@ -57,7 +64,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     }
 
     if(vaativaTukiLisattava) {
-        (vaativaTukiLisattava.type === "addition") ? showVaativa = true : showVaativa = false
+        (vaativaTukiLisattava.type === MUUTOS_TYPES.ADDITION) ? showVaativa = true : showVaativa = false
     }
 
     // Sisäoppilaitos (4)
@@ -77,7 +84,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
     }
 
     if(sisaoppilaitosLisattava) {
-      (sisaoppilaitosLisattava.type === "addition") ? showSisaoppilaitos = true : showSisaoppilaitos = false
+      (sisaoppilaitosLisattava.type === MUUTOS_TYPES.ADDITION) ? showSisaoppilaitos = true : showSisaoppilaitos = false
     }
 
     let haettuVahimmaismaaraObj = _.find(opiskelijavuosimuutoksetValue, value => { return value.kategoria === "vahimmaisopiskelijavuodet"})
@@ -122,10 +129,10 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
-                kategoria="vahimmaisopiskelijavuodet"
+                kategoria={OPISKELIJAVUODET_KATEGORIAT.VAHIMMAISOPISKELIJAVUODET}
                 koodisto="koulutussektori"
                 koodiarvo="3"
-                tyyppi="change"
+                tyyppi={MUUTOS_TYPES.CHANGE}
                 component={this.renderOpiskelijavuodet}
               />
             </HaettuMuutos>
@@ -148,10 +155,10 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
-                kategoria="vaativa"
+                kategoria={OPISKELIJAVUODET_KATEGORIAT.VAATIVA}
                 koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
                 koodiarvo="2"
-                tyyppi={vaativaArvoInitial !== undefined ? 'change' : 'addition'}
+                tyyppi={vaativaArvoInitial !== undefined ? MUUTOS_TYPES.CHANGE : MUUTOS_TYPES.ADDITION}
                 component={this.renderOpiskelijavuodet}
               />
             </HaettuMuutos>
@@ -175,10 +182,10 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 name={FIELD_ARRAY_NAMES.OPISKELIJAVUODET}
                 initialValue={''}
                 editValues={opiskelijavuosimuutoksetValue}
-                kategoria="sisaoppilaitos"
+                kategoria={OPISKELIJAVUODET_KATEGORIAT.SISAOPPILAITOS}
                 koodisto="oivamuutoikeudetvelvollisuudetehdotjatehtavat"
                 koodiarvo="4"
-                tyyppi={sisaoppilaitosArvoInitial !== undefined ? 'change' : 'addition'}
+                tyyppi={sisaoppilaitosArvoInitial !== undefined ? MUUTOS_TYPES.CHANGE : MUUTOS_TYPES.ADDITION}
                 component={this.renderOpiskelijavuodet}
               />
             </HaettuMuutos>
@@ -204,6 +211,12 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
       }
     }
 
+    const kohde = getKohdeByTunniste(KOHTEET.OPISKELIJAVUODET)
+    const tunniste =
+      kategoria === OPISKELIJAVUODET_KATEGORIAT.VAHIMMAISOPISKELIJAVUODET ? MAARAYSTYYPIT.OIKEUS :
+      kategoria === OPISKELIJAVUODET_KATEGORIAT.SISAOPPILAITOS || OPISKELIJAVUODET_KATEGORIAT.VAATIVA ? MAARAYSTYYPIT.RAJOITE : MAARAYSTYYPIT.OIKEUS
+    const maaraystyyppi = getMaaraystyyppiByTunniste(tunniste)
+
     return (
       <input
         type="number"
@@ -221,9 +234,11 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                   kategoria,
                   koodiarvo,
                   koodisto,
+                  kohde,
+                  maaraystyyppi,
                   arvo: value,
-                  perustelu: null,
-                  muutosperustelu: null
+                  meta: { perusteluteksti: null },
+                  muutosperusteluId: null
                 }
                 fields.remove(i)
                 fields.insert(i, obj)
@@ -234,9 +249,11 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 kategoria,
                 koodiarvo,
                 koodisto,
+                kohde,
+                maaraystyyppi,
                 arvo: value,
-                perustelu: null,
-                muutosperustelu: null
+                meta: { perusteluteksti: null },
+                muutosperusteluId: null
               })
             }
           } else {
@@ -245,9 +262,11 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
               kategoria,
               koodiarvo,
               koodisto,
+              kohde,
+              maaraystyyppi,
               arvo: value,
-              perustelu: null,
-              muutosperustelu: null
+              meta: { perusteluteksti: null },
+              muutosperusteluId: null
             })
           }
         }}
@@ -260,7 +279,7 @@ const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardOpiskelijavuodet = connect(state => {
   const opiskelijavuosimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
-  const muutmuutoksetValue = selector(state, 'muutmuutokset')
+  const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
 
   return {
     opiskelijavuosimuutoksetValue,

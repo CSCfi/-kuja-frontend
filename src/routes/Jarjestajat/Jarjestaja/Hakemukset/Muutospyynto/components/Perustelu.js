@@ -41,12 +41,12 @@ class Perustelu extends Component {
   }
 
   render() {
-    const { helpText, muutos, muutokset, koodiarvo, fields, perustelu, muutosperustelu, muutosperustelut } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperusteluId, muutosperustelut } = this.props
 
     return (
       <PerusteluWrapper>
         <PerusteluSelect
-          muutosperustelu={muutosperustelu}
+          muutosperusteluId={muutosperusteluId}
           muutosperustelut={muutosperustelut.muutosperusteluList}
           muutos={muutos}
           muutokset={muutokset}
@@ -58,11 +58,11 @@ class Perustelu extends Component {
         </PerusteluTopArea>
         <textarea
           rows="5"
-          defaultValue={perustelu !== null ? perustelu : undefined}
+          defaultValue={perusteluteksti !== null ? perusteluteksti : undefined}
           onBlur={(e) => {
             const i = getIndex(muutokset, koodiarvo)
             let obj = fields.get(i)
-            obj.perustelu = e.target.value
+            obj.meta.perusteluteksti = e.target.value
             fields.remove(i)
             fields.insert(i, obj)
           }}

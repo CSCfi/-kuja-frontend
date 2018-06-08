@@ -46,7 +46,8 @@ const MuutosTyyppi = styled.div`
 class MuutosYhteenveto extends Component {
   render() {
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, nimi, type, perustelu, muutosperustelu, koodisto, kuvaus, label, arvo } = muutos
+    const { koodiarvo, nimi, type, meta, muutosperusteluId, koodisto, kuvaus, label, arvo } = muutos
+    const { perusteluteksti } = meta
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
     const tyyppi =
       type === MUUTOS_TYPES.ADDITION ? MUUTOS_TYPE_TEXTS.ADDITION.FI :
@@ -80,15 +81,15 @@ class MuutosYhteenveto extends Component {
             <MuutosTyyppi>{tyyppi}</MuutosTyyppi>
             <Div>{name}</Div>
           </MuutosHeader>
-          {perustelu !== null && muutosperustelu !== null &&
+          {perusteluteksti !== null && muutosperusteluId !== null &&
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
         <PerusteluSimple
           helpText={helpText}
           koodiarvo={koodiarvo}
-          perustelu={perustelu}
-          muutosperustelu={muutosperustelu}
+          perusteluteksti={perusteluteksti}
+          muutosperusteluId={muutosperusteluId}
           muutokset={muutokset}
           muutos={muutos}
           fields={fields}

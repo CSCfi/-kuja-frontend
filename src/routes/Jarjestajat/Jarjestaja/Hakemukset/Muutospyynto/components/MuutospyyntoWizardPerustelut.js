@@ -7,16 +7,19 @@ import MuutosList from './MuutosList'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
+import { hasFormChanges } from "../modules/muutospyyntoUtil"
 
 let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
     previousPage,
+    save,
     tutkinnotjakoulutuksetValue,
     opetusjatutkintokieletValue,
     toimialueValue,
     opiskelijavuosiValue,
-    muutmuutoksetValue
+    muutmuutoksetValue,
+    formValues
   } = props
 
   return (
@@ -75,7 +78,7 @@ let MuutospyyntoWizardPerustelut = props => {
           <Container maxWidth="1085px" padding="15px">
             <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
             <div>
-              <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+              <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
             </div>
             <Button type="submit" className="next button-right">Seuraava</Button>
           </Container>
@@ -93,13 +96,18 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
   const opiskelijavuosiValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
   const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
+  let formVals = undefined
+  if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
+    formVals = state.form.uusiHakemus.values
+  }
 
   return {
     tutkinnotjakoulutuksetValue,
     opetusjatutkintokieletValue,
     toimialueValue,
     opiskelijavuosiValue,
-    muutmuutoksetValue
+    muutmuutoksetValue,
+    formValues: formVals
   }
 })(MuutospyyntoWizardPerustelut)
 

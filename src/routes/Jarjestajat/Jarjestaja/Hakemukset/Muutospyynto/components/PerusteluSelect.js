@@ -18,7 +18,7 @@ class PerusteluSelect extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedOption: props.muutosperustelu
+      selectedOption: props.muutosperusteluId
     }
   }
 

@@ -18,7 +18,7 @@ import close from 'static/images/close-x.svg'
 import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
-import { getJarjestajaData } from "../modules/muutospyyntoUtil"
+import { getJarjestajaData, loadFormData } from "../modules/muutospyyntoUtil"
 
 Modal.setAppElement('#root')
 
@@ -60,7 +60,7 @@ const Phase = ({ number, text, activePage, disabled, handleClick }) => {
   )
 }
 
-class MuutospyyntoWizard extends Component {
+class MuutospyyntoEditWizard extends Component {
   constructor(props) {
     super(props)
     this.nextPage = this.nextPage.bind(this)
@@ -70,6 +70,7 @@ class MuutospyyntoWizard extends Component {
     this.changePhase = this.changePhase.bind(this)
     this.preview = this.preview.bind(this)
     this.save = this.save.bind(this)
+    this.update = this.update.bind(this)
     this.openCancelModal = this.openCancelModal.bind(this)
     this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this)
     this.closeCancelModal = this.closeCancelModal.bind(this)
@@ -82,11 +83,13 @@ class MuutospyyntoWizard extends Component {
 
   componentWillMount() {
     this.props.fetchMuutosperustelut()
-    const { ytunnus } = this.props.match.params
+    const { ytunnus, uuid } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
     this.props.fetchPaatoskierrokset()
     this.props.fetchMaaraystyypit()
     this.props.fetchKohteet()
+    this.props.fetchMuutospyynto(uuid)
+
   }
 
   nextPage() {
@@ -127,24 +130,33 @@ class MuutospyyntoWizard extends Component {
     this.props.saveMuutospyynto(data)
   }
 
-  preview(event, data) {
+  update(event, data) {
+    if (event) {
       event.preventDefault()
-      this.props.previewMuutospyynto(data).then(() => {
+    }
 
-          var binaryData = [];
-          binaryData.push(this.props.muutospyynto.pdf.data);
-          const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
-          //const data =  window.URL.createObjectURL(response.data)
-          var link = document.createElement('a');
-          link.href = data;
-          link.download="file.pdf";
-          link.click();
-          setTimeout(function(){
-          // For Firefox it is necessary to delay revoking the ObjectURL
-          window.URL.revokeObjectURL(data)
-              , 100})
+    console.log('update', data)
+    this.props.updateMuutospyynto(data)
+  }
 
-      })
+  preview(event, data) {
+    event.preventDefault()
+    this.props.previewMuutospyynto(data).then(() => {
+
+      var binaryData = [];
+      binaryData.push(this.props.muutospyynto.pdf.data);
+      const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
+      //const data =  window.URL.createObjectURL(response.data)
+      var link = document.createElement('a');
+      link.href = data;
+      link.download="file.pdf";
+      link.click();
+      setTimeout(function(){
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(data)
+          , 100})
+
+    })
   }
 
   changePhase(number) {
@@ -164,24 +176,26 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, lupa, paatoskierrokset } = this.props
+    const { muutosperustelut, lupa, paatoskierrokset, match, muutospyynto, initialValues } = this.props
     const { page, visitedPages } = this.state
 
+    // setTimeout(() => console.log(muutospyynto), 3000)
+
     if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
-        return (
-            <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
-        )
+      return (
+        <h2>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</h2>
+      )
     }
 
     // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
     const { jarjestajaOid } = this.props.lupa.data
     if (sessionStorage.getItem('oid') !== jarjestajaOid) {
-        return (
-            <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
-        )
+      return (
+        <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
+      )
     }
 
-    if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
+    if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched && muutospyynto.fetched) {
       return (
         <div>
           <WizardBackground />
@@ -210,7 +224,9 @@ class MuutospyyntoWizard extends Component {
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
                     save={this.save}
+                    update={this.update}
                     lupa={lupa}
+                    initialValues={initialValues}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
                     fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
                     fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
@@ -256,12 +272,14 @@ class MuutospyyntoWizard extends Component {
           </Modal>
         </div>
       )
-    } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
+    } else if (muutosperustelut.isFetching || lupa.isFetching || paatoskierrokset.isFetching || muutospyynto.isFetching) {
       return <Loading />
     } else if (muutosperustelut.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</div>
     } else if (paatoskierrokset.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Päätoskierroksia ladattaessa tapahtui virhe.</div>
+    } else if (muutospyynto.hasErrored) {
+      return <div>Muutospyyntöä ei voida tehdä. Muutospyyntöä ladattaessa tapahtui virhe.</div>
     } else if (lupa.hasErrored) {
       return <div>Muutospyyntöä ei voida tehdä. Lupaa haettaessa tapahtui virhe.</div>
     } else {
@@ -270,16 +288,19 @@ class MuutospyyntoWizard extends Component {
   }
 }
 
-MuutospyyntoWizard = reduxForm({
+MuutospyyntoEditWizard = reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true
-})(MuutospyyntoWizard)
+  forceUnregisterOnUnmount: true,
+  enableReinitialize : true
+})(MuutospyyntoEditWizard)
 
-MuutospyyntoWizard = connect(state => {
+MuutospyyntoEditWizard = connect(state => {
+  const { data } = state.muutospyynto
+
   return {
-    initialValues: getJarjestajaData(state)
+    initialValues: loadFormData(state, data)
   }
-})(MuutospyyntoWizard)
+})(MuutospyyntoEditWizard)
 
-export default withRouter(MuutospyyntoWizard)
+export default withRouter(MuutospyyntoEditWizard)

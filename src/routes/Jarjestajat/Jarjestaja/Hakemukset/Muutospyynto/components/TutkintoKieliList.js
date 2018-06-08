@@ -16,6 +16,7 @@ import {
   Nimi
 } from './MuutospyyntoWizardComponents'
 import { handleTutkintoKieliCheckboxChange } from "../modules/koulutusUtil"
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class TutkintoKieliList extends Component {
   constructor(props) {
@@ -121,11 +122,11 @@ class TutkintoKieliList extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodi) {
-                  if (val.type === "addition") {
+                  if (val.type === MUUTOS_TYPES.ADDITION) {
                     valueKoodi = val.value
                   }
 
-                  val.type === "addition" ? isAdded = true : val.type === "removal" ? isRemoved = true : val.type === "change" ? isChanged = true : null
+                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : val.type === MUUTOS_TYPES.CHANGE ? isChanged = true : null
                 }
               })
             }

@@ -2,15 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { reduxForm, formValueSelector, FieldArray, Field } from 'redux-form'
 import Modal from 'react-modal'
+
 import OrganisaationTiedot from './OrganisaationTiedot'
+import DatePicker from "../../../../../../modules/DatePicker"
+import MuutosList from './MuutosList'
 
 import validate from '../modules/validateWizard'
 import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator } from "./MuutospyyntoWizardComponents"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
-import DatePicker from "../../../../../../modules/DatePicker"
-import MuutosList from './MuutosList'
+import { hasFormChanges } from "../modules/muutospyyntoUtil"
+
 
 Modal.setAppElement('#root')
 
@@ -45,11 +48,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
   render() {
     const {
       handleSubmit,
-      onCancel,
       onSubmit,
       previousPage,
-      paatoskierrokset,
       preview,
+      save,
       formValues,
       lupa,
       tutkinnotjakoulutuksetValue,
@@ -145,10 +147,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
             <Container maxWidth="1085px" padding="15px">
               <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
               <div>
-                <SubtleButton disabled>Tallenna luonnos</SubtleButton>
+                <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
                 <SubtleButton onClick={(e) => preview(e, this.props.formValues)}>Esikatsele</SubtleButton>
               </div>
-              <Button  onClick={this.openSendModal} type="submit" className="next button-right">Lähetä hakemus</Button>
+              <Button onClick={this.openSendModal} type="submit" className="next button-right">Lähetä hakemus</Button>
             </Container>
           </WizardBottom>
 

@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import { fetchMuutosperustelut } from "../modules/muutosperustelut"
 import { fetchLupa } from "../../../modules/lupa"
-import { createMuutospyynto, saveMuutospyynto } from "../modules/muutospyynto"
+import { createMuutospyynto, saveMuutospyynto, fetchMuutospyynto, updateMuutospyynto } from "../modules/muutospyynto"
 import { previewMuutospyynto } from "../modules/muutospyynto"
 import { fetchKoulutusalat } from "../modules/koulutusalat"
 import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../modules/koulutukset"
@@ -10,7 +10,7 @@ import { fetchPaatoskierrokset } from "../modules/paatoskierrokset"
 import { fetchMaaraystyypit } from "../modules/maaraystyyppi"
 import { fetchKohteet } from "../modules/kohde"
 
-import MuutospyyntoWizard from '../components/MuutospyyntoWizard'
+import MuutospyyntoEditWizard from '../components/MuutospyyntoEditWizard'
 
 const mapStateToProps = (state) => {
   return {
@@ -31,6 +31,8 @@ const mapDispatchToProps = (dispatch, props) => {
     createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
     saveMuutospyynto: (muutospyynto) => dispatch(saveMuutospyynto(muutospyynto)),
     previewMuutospyynto: (muutospyynto) => dispatch(previewMuutospyynto(muutospyynto)),
+    updateMuutospyynto: (muutospyynto) => dispatch(updateMuutospyynto(muutospyynto)),
+    fetchMuutospyynto: (uuid) => dispatch(fetchMuutospyynto(uuid)),
     fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
     fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
     fetchKoulutuksetMuut: (koodisto) => dispatch(fetchKoulutuksetMuut(koodisto)),
@@ -41,4 +43,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MuutospyyntoWizard)
+export default connect(mapStateToProps, mapDispatchToProps)(MuutospyyntoEditWizard)
