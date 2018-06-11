@@ -12,6 +12,10 @@ export const ASIAT = {
             FI: 'Hakukierros',
             SV: 'på svenska'
         },
+        COLUMN_ESITTELIJA: {
+            FI: 'Esittelijä',
+            SV: 'på svenska'
+        },
         COLUMN_MAAKUNTA: {
             FI: 'Maakunta',
             SV: 'på svenska'
@@ -24,16 +28,44 @@ export const ASIAT = {
             FI: 'Ota valmisteluun',
             SV: 'på svenska'
         },
+        COLUMN_VALMISTELUUN: {
+            FI: 'Valmistelussa',
+            SV: 'på svenska'
+        },
+        COLUMN_NAYTA_PDF: {
+            FI: 'Näytä pdf',
+            SV: 'på svenska'
+        },
     },
     OTSIKOT: {
         AVOINNA_OLEVAT: {
             FI: 'Avoinna olevat asiat',
             SV: 'på svenska'
         },
+        VALMISTELUSSA_OLEVAT: {
+            FI: 'Valmistelussa olevat asiat',
+            SV: 'på svenska'
+        },
+        PAATETYT: {
+            FI: 'Päätetyt asiat',
+            SV: 'på svenska'
+        },
         EI_MUUTOSPYYNTOJA: {
             FI: 'Ei muutospyyntöjä',
             SV: 'på svenska'
         },
+        LATAUS_VIRHE_PAATETYT:{
+            FI: 'Päätettyjä asioita ladattessa tapahtui virhe',
+            SV: 'Päätettyjä asioita ladattessa tapahtui virhe på svenska'
+        },
+        HAKU_VIRHE_PAATETYT:{
+            FI: 'Päätettyjen asioiden tietojen lataus epäonnistui',
+            SV: 'Päätettyjen asioiden tietojen lataus epäonnistui på svenska'
+        },
+        KIRJAUTUMISVIRHE: {
+            FI: 'Käsittely vaatii kirjautumisen',
+            SV: 'på svenska'
+        }
     },
     SIVUTUS: {
         EDELLINEN: {
@@ -60,6 +92,17 @@ export const ASIAT = {
             FI: 'Riviä',
             SV: 'på svenska'
         },
+    },
+    BREADCRUMBS: {
+        ETUSIVU: {
+            FI:'Etusivu',
+            SV:'Frontsida'
+        },
+        ASIAT: {
+            FI:'Asiat',
+            SV:'på svenska'
+        },
+
     }
 
 

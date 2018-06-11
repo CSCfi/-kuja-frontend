@@ -39,7 +39,7 @@ const TableCellLink = styled.div`
     text-align:center;
 `
 
-class ValmistelussaAsiatList extends Component {
+class PaatetytList extends Component {
 
     render() {
         const { muutospyynnot } = this.props
@@ -69,7 +69,7 @@ class ValmistelussaAsiatList extends Component {
             Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_TILA.FI}</TableHeader>,
             accessor: 'uuid',
             width:190,
-            Cell: props => <TableCellLink><Link exact={true} uuid={props.value} to={{pathname: "/asiat/valmistelu/" + props.value, uuid: props.value}}>{ASIAT.LISTAT.COLUMN_VALMISTELUUN.FI} &#187;</Link></TableCellLink>
+            Cell: props => <TableCellLink><Link exact={true} uuid={props.value} to={{pathname: "/asiat/valmistelu/esikatselu/" + props.value, uuid: props.value}}>{ASIAT.LISTAT.COLUMN_NAYTA_PDF.FI} &#187;</Link></TableCellLink>
         }]
 
 
@@ -77,7 +77,7 @@ class ValmistelussaAsiatList extends Component {
             return (
                 <div>
                     <Media query={MEDIA_QUERIES.MOBILE} render={() =>
-                        // TODO: mobile version
+                        // TODO: mobile version of react table
                         <ReactTable
                             defaultPageSize={5}
                             data={muutospyynnot}
@@ -113,4 +113,4 @@ class ValmistelussaAsiatList extends Component {
     }
 }
 
-export default ValmistelussaAsiatList
+export default PaatetytList

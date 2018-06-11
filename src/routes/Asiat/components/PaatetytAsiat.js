@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
-
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
-
-import MuutospyyntoList from './MuutospyyntoList'
+import PaatetytList from './PaatetytList'
 import { InnerContentContainer, InnerContentWrapper  } from "../../../modules/elements"
 import { COLORS, BackgroundImage } from "../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../modules/elements'
 import { ROLE_ESITTELIJA, ESITTELIJA } from '../../../modules/constants'
 import AsiatMenu from './AsiatMenu'
 import { Helmet } from 'react-helmet'
+import { ASIAT } from "../modules/constants"
 
 
 const Wrapper = styled.div`
@@ -34,9 +32,9 @@ class PaatetytAsiat extends Component {
         }
 
         // Sallittu vain esittelijöille
-        if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
+        if(!authenticated) {
             return (
-                <h2>Käsittely vaatii kirjautumisen.</h2>
+                <h2>{ASIAT.OTSIKOT.KIRJAUTUMISVIRHE.FI}</h2>
             )
         }
 
@@ -68,8 +66,8 @@ class PaatetytAsiat extends Component {
                             <title>Oiva | Asiat</title>
                         </Helmet>
                         <BackgroundImage />
-                        <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
-                        <BreadcrumbsItem to='/asiat'>Asiat</BreadcrumbsItem>
+                        <BreadcrumbsItem to='/'>{ASIAT.BREADCRUMBS.ETUSIVU.FI}</BreadcrumbsItem>
+                        <BreadcrumbsItem to='/asiat'>{ASIAT.BREADCRUMBS.ASIAT.FI}</BreadcrumbsItem>
                         <AsiatMenu routes={tabNavRoutes} />
                     </ContentContainer>
                     <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
@@ -77,8 +75,8 @@ class PaatetytAsiat extends Component {
                             <InnerContentContainer>
                                 <InnerContentWrapper>
                                     <Wrapper>
-                                        <h2>Päätetyt asiat</h2>
-                                        <MuutospyyntoList muutospyynnot={data}/>
+                                        <h2>{ASIAT.OTSIKOT.PAATETYT.FI}</h2>
+                                        <PaatetytList muutospyynnot={data}/>
                                     </Wrapper>
                                 </InnerContentWrapper>
                             </InnerContentContainer>
@@ -89,15 +87,15 @@ class PaatetytAsiat extends Component {
             )
         } else if (isFetching) {
             return (
-                <h2>Ladataan...</h2>
+                <h2>{ASIAT.SIVUTUS.LADATAAN.FI}</h2>
             )
         } else if (hasErrored) {
             return (
-                <h2>Käsittelytietoja ladattessa tapahtui virhe</h2>
+                <h2>{ASIAT.OTSIKOT.LATAUS_VIRHE_PAATETYT.FI}</h2>
             )
         } else {
             return (
-                <h2>Käsittelytietoja ladattessa ei saatu tietoja</h2>
+                <h2>{ASIAT.OTSIKOT.HAKU_VIRHE_PAATETYT.FI}</h2>
             )
         }
 
