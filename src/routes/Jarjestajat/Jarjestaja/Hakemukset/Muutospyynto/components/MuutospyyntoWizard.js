@@ -114,7 +114,8 @@ class MuutospyyntoWizard extends Component {
   }
 
   onSubmit(data) {
-    this.props.createMuutospyynto(data)
+
+
     // this.onCancel() // TODO: tehdään onDone-funktio
   }
 
@@ -233,6 +234,7 @@ class MuutospyyntoWizard extends Component {
                     onSubmit={this.onSubmit}
                     save={this.save}
                     preview={this.preview}
+                    createMuutospyynto={this.props.createMuutospyynto}
                   />
                 )}
               </WizardContent>

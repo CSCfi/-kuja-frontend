@@ -43,13 +43,16 @@ export function fetchMuutospyynto(uuid) {
 }
 
 export function createMuutospyynto(muutospyynto) {
+  console.log('createMuutospyynto', muutospyynto)
 
   const formatted = formatMuutospyynto(muutospyynto)
+
+  console.log('formatted', formatted)
 
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })
 
-    axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
+    return axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
       .then(response => {
         dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
       })

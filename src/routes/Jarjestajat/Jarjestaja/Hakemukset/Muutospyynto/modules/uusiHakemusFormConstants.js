@@ -9,6 +9,20 @@ export const FIELD_ARRAY_NAMES = {
   HAKIJAN_TIEDOT: 'hakijantiedot'
 }
 
+export const FIELDS = {
+  TILA: {
+    NAME: 'tila',
+    VALUES: {
+      LUONNOS: 'LUONNOS',
+      AVOIN: 'AVOIN',
+      VALMISTELUSSA: 'VALMISTELUSSA',
+      TAYDENNETTAVA: 'TAYDENNETTAVA',
+      PAATETTY: 'PAATETTY',
+      PASSIVOITU: 'PASSIVOITU'
+    }
+  }
+}
+
 export const MUUTOS_TYPES = {
   ADDITION: 'addition',
   REMOVAL: 'removal',
