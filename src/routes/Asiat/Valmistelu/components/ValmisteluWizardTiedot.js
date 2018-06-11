@@ -233,7 +233,7 @@ const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 ValmisteluWizardTiedot = reduxForm({
     form: FORM_NAME_UUSI_HAKEMUS,
     destroyOnUnmount: false,
-    forceUnregisterOnUnmount: true,
+    forceUnregisterOnUnmount: false,
     validate
 })(ValmisteluWizardTiedot)
 

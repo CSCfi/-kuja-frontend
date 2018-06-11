@@ -16,6 +16,7 @@ import close from 'static/images/close-x.svg'
 import { ROLE_ESITTELIJA } from "../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { VALMISTELU_WIZARD_TEKSTIT } from "../../modules/constants"
+import { API_BASE_URL } from "../../../../modules/constants"
 
 Modal.setAppElement('#root')
 
@@ -71,7 +72,7 @@ class ValmisteluWizard extends Component {
         this.closeCancelModal = this.closeCancelModal.bind(this)
         this.state = {
             page: 1,
-            visitedPages: [1],
+            visitedPages: [1,2],
             isCloseModalOpen: false
         }
     }
@@ -178,9 +179,8 @@ class ValmisteluWizard extends Component {
 
         if (muutosperustelut.fetched && lupa.fetched && paatoskierrokset.fetched) {
 
-            console.log('muutospyynto: ' + JSON.stringify(this.props.muutospyynto))
-
-            console.log('lupa: ' + JSON.stringify(this.props.lupa))
+            const { diaarinumero } = this.props.lupa.data
+            let url = `/api/pdf/${diaarinumero}`
 
             return (
                 <div>
@@ -197,7 +197,7 @@ class ValmisteluWizard extends Component {
                             <Container maxWidth="1085px" color={COLORS.BLACK}>
                                 <Phase number="1" text="Päätöksen tiedot" activePage={page} handleClick={(number) => this.changePhase(number)} />
                                 <Phase number="2" text="Muutokset ja perustelut" activePage={page} disabled={visitedPages.indexOf(2) === -1} handleClick={(number) => this.changePhase(number)} />
-                                <Link to="/asiat/valmistelu/voimassaoleva">Voimassaoleva lupa</Link>
+                                <a href={url}>Voimassaoleva lupa</a>
                                 <Link to="/asiat/valmistelu/esikatselu">Esikatselu</Link>
                             </Container>
                         </ValmisteluHeader>
@@ -236,7 +236,7 @@ class ValmisteluWizard extends Component {
                         style={modalStyles}
                     >
                         <Content>
-                            <ModalText>Oletko varma, että haluat poistua muutoshakemuksen luonnista? Tekemiäsi muutoksia ei tallenneta.</ModalText>
+                            <ModalText>Oletko varma, että haluat poistua asian valmistelusta? Tekemiäsi muutoksia ei tallenneta.</ModalText>
                         </Content>
                         <div>
                             <ModalButton primary onClick={this.onCancel}>Kyllä</ModalButton>

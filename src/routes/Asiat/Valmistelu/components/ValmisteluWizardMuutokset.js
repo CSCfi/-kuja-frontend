@@ -105,6 +105,6 @@ ValmisteluWizardMuutokset = connect(state => {
 export default reduxForm({
     form: FORM_NAME_UUSI_HAKEMUS,
     destroyOnUnmount: false,
-    forceUnregisterOnUnmount: true,
+    forceUnregisterOnUnmount: false,
     validate
 })(ValmisteluWizardMuutokset)
