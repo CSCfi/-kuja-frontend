@@ -41,12 +41,12 @@ class Perustelu extends Component {
   }
 
   render() {
-    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperusteluId, muutosperustelut } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
 
     return (
       <PerusteluWrapper>
         <PerusteluSelect
-          muutosperusteluId={muutosperusteluId}
+          muutosperustelukoodiarvo={muutosperustelukoodiarvo}
           muutosperustelut={muutosperustelut.muutosperusteluList}
           muutos={muutos}
           muutokset={muutokset}

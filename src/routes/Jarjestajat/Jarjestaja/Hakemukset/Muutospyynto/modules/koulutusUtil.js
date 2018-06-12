@@ -71,12 +71,12 @@ export function getTutkintoNimiByMaaraysId(maaraysId) {
   }
 }
 
-export function getMuutosperusteluObjectById(muutosperusteluId) {
+export function getMuutosperusteluObjectById(muutosperustelukoodiarvo) {
   const state = store.getState()
 
   if (state.muutosperustelut && state.muutosperustelut.data) {
     return _.find(state.muutosperustelut.data, mperustelu => {
-      return String(mperustelu.koodiArvo) === String(muutosperusteluId)
+      return String(mperustelu.koodiArvo) === String(muutosperustelukoodiarvo)
     })
   }
 }
@@ -143,7 +143,7 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       fields.push({
         type: 'addition',
         meta: { perusteluteksti: null },
-        muutosperusteluId: null,
+        muutosperustelukoodiarvo: null,
         isValtakunnallinen: true,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
@@ -163,7 +163,7 @@ export function handleSimpleCheckboxChange(event, editValues, fields, isInLupa, 
       fields.push({
         type: 'addition',
         meta: { perusteluteksti: null },
-        muutosperusteluId: null,
+        muutosperustelukoodiarvo: null,
         isValtakunnallinen: false,
         koodiarvo: 'FI1',
         koodisto: 'nuts1',
@@ -240,7 +240,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         maaraystyyppi,
         type: MUUTOS_TYPES.ADDITION,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperustelukoodiarvo: null
       })
     }
   } else {
@@ -256,7 +256,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         maaraystyyppi,
         type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperustelukoodiarvo: null
       })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
@@ -295,7 +295,7 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         isInLupa,
         type: MUUTOS_TYPES.ADDITION,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperustelukoodiarvo: null
       })
     }
   } else {
@@ -314,7 +314,7 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         isInLupa,
         type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperustelukoodiarvo: null
       })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
@@ -367,7 +367,7 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
           isInLupa,
           type: MUUTOS_TYPES.CHANGE,
           meta: { perusteluteksti: null },
-          muutosperusteluId: null
+          muutosperustelukoodiarvo: null
         })
       }
     } else {
@@ -384,7 +384,7 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
         isInLupa,
         type: MUUTOS_TYPES.CHANGE,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null
+        muutosperustelukoodiarvo: null
       })
     }
   } else {

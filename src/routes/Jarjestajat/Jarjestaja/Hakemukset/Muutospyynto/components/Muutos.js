@@ -70,7 +70,7 @@ class Muutos extends Component {
   render() {
     const { isHidden } = this.state
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, nimi, type, meta, muutosperusteluId, koodisto, kuvaus, label, arvo } = muutos
+    const { koodiarvo, nimi, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, label, arvo } = muutos
     const { perusteluteksti } = meta
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
     const tyyppi =
@@ -106,7 +106,7 @@ class Muutos extends Component {
             <Div>{name}</Div>
             <Arrow src={arrow} rotated={!isHidden} />
           </MuutosHeader>
-          {perusteluteksti !== null && muutosperusteluId !== null &&
+          {perusteluteksti !== null && muutosperustelukoodiarvo !== null &&
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
@@ -115,7 +115,7 @@ class Muutos extends Component {
             helpText={helpText}
             koodiarvo={koodiarvo}
             perusteluteksti={perusteluteksti}
-            muutosperusteluId={muutosperusteluId}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
             muutokset={muutokset}
             muutos={muutos}
             fields={fields}

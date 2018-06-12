@@ -77,7 +77,7 @@ class Muutospyynto extends Component {
       jarjestajaYtunnus,
       lupaId: id,
       paatoskierrosId: 19, // TODO: muutetaan myöhemmin
-      muutosperusteluId: 1, // TODO: muutetaan myöhemmin
+      muutosperustelukoodiarvo: 1, // TODO: muutetaan myöhemmin
       tila: "LUONNOS"
     }
   }

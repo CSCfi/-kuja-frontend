@@ -57,12 +57,12 @@ export function getTutkintoNimiByMaaraysId(maaraysId) {
     }
 }
 
-export function getMuutosperusteluObjectById(muutosperusteluId) {
+export function getMuutosperusteluObjectById(muutosperustelukoodiarvo) {
     const state = store.getState()
 
     if (state.muutosperustelut && state.muutosperustelut.data) {
         return _.find(state.muutosperustelut.data, mperustelu => {
-            return String(mperustelu.koodiArvo) === String(muutosperusteluId)
+            return String(mperustelu.koodiArvo) === String(muutosperustelukoodiarvo)
         })
     }
 }
@@ -152,8 +152,8 @@ export function formatMuutospyynto(muutospyynto) {
     }
 }
 
-function formatMuutosperustelu(muutosperusteluId, muuperustelu) {
-    const perustelu = getMuutosperusteluObjectById(muutosperusteluId)
+function formatMuutosperustelu(muutosperustelukoodiarvo, muuperustelu) {
+    const perustelu = getMuutosperusteluObjectById(muutosperustelukoodiarvo)
     const { koodiArvo, koodisto, metadata } = perustelu
     const nimi = parseLocalizedField(metadata, 'FI', nimi)
     const kuvaus = parseLocalizedField(metadata, 'FI', kuvaus)
