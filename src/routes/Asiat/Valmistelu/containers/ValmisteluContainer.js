@@ -7,7 +7,7 @@ import { fetchKoulutusalat } from "../modules/valmisteluKoulutusalat"
 import { fetchKoulutuksetAll } from "../modules/valmisteluKoulutukset"
 import { fetchPaatoskierrokset } from "../modules/valmisteluPaatoskierros"
 
-import Valmistelu from '../components/Valmistelu'
+import Valmistelu from '../components/ValmisteluWizard'
 
 const mapStateToProps = (state) => {
     return {
