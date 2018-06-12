@@ -84,7 +84,7 @@ let ValmisteluWizardMuutokset = props => {
     )
 }
 
-const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
+const selector = formValueSelector('uusiPaatos')
 
 ValmisteluWizardMuutokset = connect(state => {
     const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
@@ -103,8 +103,8 @@ ValmisteluWizardMuutokset = connect(state => {
 })(ValmisteluWizardMuutokset)
 
 export default reduxForm({
-    form: FORM_NAME_UUSI_HAKEMUS,
+    form: 'uusiPaatos',
     destroyOnUnmount: false,
-    forceUnregisterOnUnmount: false,
+    forceUnregisterOnUnmount: true,
     validate
 })(ValmisteluWizardMuutokset)

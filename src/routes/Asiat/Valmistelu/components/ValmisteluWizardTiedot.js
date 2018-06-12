@@ -82,7 +82,7 @@ class ValmisteluWizardTiedot extends Component {
             <div>
                 <h2>{VALMISTELU_WIZARD_TEKSTIT.TIEDOT.HEADING.FI}</h2>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={onSubmit}>
 
                     <FieldArray
                         name={FIELD_ARRAY_NAMES.HAKIJAN_TIEDOT}
@@ -91,7 +91,8 @@ class ValmisteluWizardTiedot extends Component {
 
                     <WizardBottom>
                         <Container maxWidth="1085px" padding="15px">
-                            <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+                            <Button type="submit" className="next button-right">Seuraava</Button>
+
                             <div>
                                 <SubtleButton disabled>Tallenna luonnos</SubtleButton>
                             </div>
@@ -228,12 +229,12 @@ class ValmisteluWizardTiedot extends Component {
     }
 }
 
-const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
+const selector = formValueSelector('uusiPaatos')
 
 ValmisteluWizardTiedot = reduxForm({
-    form: FORM_NAME_UUSI_HAKEMUS,
+    form: 'uusiPaatos',
     destroyOnUnmount: false,
-    forceUnregisterOnUnmount: false,
+    forceUnregisterOnUnmount: true,
     validate
 })(ValmisteluWizardTiedot)
 
@@ -246,8 +247,8 @@ export default connect(state => {
     const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
 
     let formVals = undefined
-    if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
-        formVals = state.form.uusiHakemus.values
+    if (state.form && state.form.uusiPaatos && state.form.uusiPaatos.values) {
+        formVals = state.form.uusiPaatos.values
     }
 
     return {

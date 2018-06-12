@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { reduxForm } from 'redux-form'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import Modal from 'react-modal'
@@ -16,7 +18,7 @@ import close from 'static/images/close-x.svg'
 import { ROLE_ESITTELIJA } from "../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { VALMISTELU_WIZARD_TEKSTIT } from "../../modules/constants"
-import { API_BASE_URL } from "../../../../modules/constants"
+import { getJarjestajaData } from "../modules/valmisteluUtils"
 
 Modal.setAppElement('#root')
 
@@ -118,8 +120,17 @@ class ValmisteluWizard extends Component {
     }
 
     onSubmit(data) {
-        this.props.createMuutospyynto(data)
+
         // this.onCancel() // TODO: tehdään onDone-funktio
+    }
+
+    save(event, data) {
+        if (event) {
+            event.preventDefault()
+        }
+
+        console.log('save', data)
+        //this.props.savePaatos(data)
     }
 
     preview(event, data) {
@@ -210,10 +221,8 @@ class ValmisteluWizard extends Component {
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
                                         lupa={lupa}
-                                        fetchKoulutusalat={this.props.fetchKoulutusalat}
-                                        fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
-                                        fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
-                                        fetchKoulutus={this.props.fetchKoulutus}
+                                        save={this.save}
+
                                     />
                                 )}
                                 {page === 2 && (
@@ -221,7 +230,14 @@ class ValmisteluWizard extends Component {
                                         previousPage={this.previousPage}
                                         onSubmit={this.nextPage}
                                         onCancel={this.onCancel}
+                                        save={this.save}
                                         muutosperustelut={this.props.muutosperustelut.data}
+                                        fetchKoulutusalat={this.props.fetchKoulutusalat}
+                                        fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
+                                        fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
+                                        fetchKoulutus={this.props.fetchKoulutus}
+                                        preview={this.preview}
+                                        createMuutospyynto={this.props.createMuutospyynto}
                                     />
                                 )}
                             </WizardContent>
@@ -232,7 +248,7 @@ class ValmisteluWizard extends Component {
                         isOpen={this.state.isCloseModalOpen}
                         onAfterOpen={this.afterOpenCancelModal}
                         onRequestClose={this.closeCancelModal}
-                        contentLabel="Poistu muutoshakemuksen teosta"
+                        contentLabel="Poistu päätöksen teosta"
                         style={modalStyles}
                     >
                         <Content>
@@ -258,5 +274,17 @@ class ValmisteluWizard extends Component {
         }
     }
 }
+
+ValmisteluWizard = reduxForm({
+    form: 'uusiPaatos',
+    destroyOnUnmount: false,
+    forceUnregisterOnUnmount: true
+})(ValmisteluWizard)
+
+ValmisteluWizard = connect(state => {
+    return {
+        initialValues: getJarjestajaData(state)
+    }
+})(ValmisteluWizard)
 
 export default withRouter(ValmisteluWizard)

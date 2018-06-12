@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateValmistelu'
-import { WizButton, SelectWrapper } from "./Valmistelu"
+import { WizButton, SelectWrapper } from "./ValmisteluWizard"
 import { Separator, H3, SelectStyle, Input } from './ValmisteluComponents'
 
 import { parseLocalizedField } from "../../../../modules/helpers"
@@ -92,7 +92,7 @@ let ValmisteluPerustelut = props => {
     )
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector('uusiPaatos')
 
 ValmisteluPerustelut = connect(state => {
     const muutosperusteluValue = selector(state, 'muutosperustelu')
@@ -107,7 +107,7 @@ ValmisteluPerustelut = connect(state => {
 })(ValmisteluPerustelut)
 
 export default reduxForm({
-    form: 'uusiHakemus',
+    form: 'uusiPaatos',
     destroyOnUnmount: false,
     forceUnregisterOnUnmount: true,
     validate
