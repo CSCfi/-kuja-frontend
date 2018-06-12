@@ -104,7 +104,7 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
         ...toimialue,
         type: MUUTOS_TYPES.REMOVAL,
         meta: { perusteluteksti: null },
-        muutosperusteluId: null,
+        muutosperustelukoodiarvo: null,
         kohde,
         maaraystyyppi
       })
@@ -128,7 +128,7 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
             ...value,
             type: MUUTOS_TYPES.ADDITION,
             meta: { perusteluteksti: null },
-            muutosperusteluId: null,
+            muutosperustelukoodiarvo: null,
             kohde,
             maaraystyyppi
           })
@@ -139,7 +139,7 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
           ...value,
           type: MUUTOS_TYPES.ADDITION,
           meta: { perusteluteksti: null },
-          muutosperusteluId: null,
+          muutosperustelukoodiarvo: null,
           kohde,
           maaraystyyppi
         })

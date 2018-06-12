@@ -238,7 +238,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                   maaraystyyppi,
                   arvo: value,
                   meta: { perusteluteksti: null },
-                  muutosperusteluId: null
+                  muutosperustelukoodiarvo: null
                 }
                 fields.remove(i)
                 fields.insert(i, obj)
@@ -253,7 +253,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
                 maaraystyyppi,
                 arvo: value,
                 meta: { perusteluteksti: null },
-                muutosperusteluId: null
+                muutosperustelukoodiarvo: null
               })
             }
           } else {
@@ -266,7 +266,7 @@ class MuutospyyntoWizardOpiskelijavuodet extends Component {
               maaraystyyppi,
               arvo: value,
               meta: { perusteluteksti: null },
-              muutosperusteluId: null
+              muutosperustelukoodiarvo: null
             })
           }
         }}

@@ -27,7 +27,7 @@ export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, sel
   if (i !== undefined) {
     let obj = fields.get(i)
     fields.remove(i)
-    obj.muutosperusteluId = muutosperusteluValue
+    obj.muutosperustelukoodiarvo = muutosperusteluValue
     fields.insert(i, obj)
   }
 }
