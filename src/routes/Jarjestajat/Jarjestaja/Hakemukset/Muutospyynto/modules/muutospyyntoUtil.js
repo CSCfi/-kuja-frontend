@@ -20,7 +20,8 @@ export function formatMuutospyynto(muutospyynto) {
     opetusjatutkintokielet = [],
     toimintaalueet = [],
     opiskelijavuodet = [],
-    muutmuutokset = []
+    muutmuutokset = [],
+    hakija = []
   } = muutospyynto
 
   let muutokset = [
@@ -45,6 +46,7 @@ export function formatMuutospyynto(muutospyynto) {
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
+    meta: hakija,
     muutokset: muutokset
   }
 }

@@ -63,7 +63,7 @@ class AvoimetAsiatList extends Component {
             Header: props => <TableHeader>{ASIAT.LISTAT.COLUMN_TILA.FI}</TableHeader>,
             accessor: 'uuid',
             width:190,
-            Cell: props => <TableCellLink><Link exact={true} uuid={props.value} to={{pathname: "/asiat/valmistelu/" + props.value, uuid: props.value}}>{ASIAT.LISTAT.COLUMN_OTA_VALMISTELUUN.FI} &#187;</Link></TableCellLink>
+            Cell: props => <TableCellLink><Link uuid={props.value} to={{pathname: "/asiat/valmistelu/" + props.value, uuid: props.value}}>{ASIAT.LISTAT.COLUMN_OTA_VALMISTELUUN.FI} &#187;</Link></TableCellLink>
         }]
 
 
