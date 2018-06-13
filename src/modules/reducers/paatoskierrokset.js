@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
+import { API_BASE_URL } from "../constants"
 
 // Constants
 export const FETCH_PAATOSKIERROKSET_START = 'FETCH_PAATOSKIERROKSET_START'

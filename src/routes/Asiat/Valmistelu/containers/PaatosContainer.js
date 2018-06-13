@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import Perustelu from '../components/Perustelu'
+import Paatos from '../components/Paatos'
 import { fetchMuutosperustelut } from "../modules/muutosperustelut"
 
 const mapStateToProps = (state) => {
@@ -15,4 +15,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Perustelu)
+export default connect(mapStateToProps, mapDispatchToProps)(Paatos)

@@ -1,14 +1,14 @@
 import { connect } from 'react-redux'
 
-import { fetchMuutosperustelut } from "../modules/muutosperustelut"
+import { fetchMuutosperustelut } from "../../../../../../modules/reducers/muutosperustelut"
 import { fetchLupa } from "../../../modules/lupa"
 import { createMuutospyynto, saveMuutospyynto } from "../modules/muutospyynto"
 import { previewMuutospyynto } from "../modules/muutospyynto"
-import { fetchKoulutusalat } from "../modules/koulutusalat"
-import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../modules/koulutukset"
-import { fetchPaatoskierrokset } from "../modules/paatoskierrokset"
-import { fetchMaaraystyypit } from "../modules/maaraystyyppi"
-import { fetchKohteet } from "../modules/kohde"
+import { fetchKoulutusalat } from "../../../../../../modules/reducers/koulutusalat"
+import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../../../../../../modules/reducers/koulutukset"
+import { fetchPaatoskierrokset } from "../../../../../../modules/reducers/paatoskierrokset"
+import { fetchMaaraystyypit } from "../../../../../../modules/reducers/maaraystyyppi"
+import { fetchKohteet } from "../../../../../../modules/reducers/kohde"
 
 import MuutospyyntoWizard from '../components/MuutospyyntoWizard'
 

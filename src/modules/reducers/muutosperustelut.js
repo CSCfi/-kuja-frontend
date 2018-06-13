@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
-import { getMuutosperusteluList } from "./muutosperusteluUtil"
+import { API_BASE_URL } from "../constants"
+import { getMuutosperusteluList } from "../../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutosperusteluUtil"
 
 // Constants
 export const FETCH_MUUTOSPERUSTELUT_START = 'FETCH_MUUTOSPERUSTELUT_START'

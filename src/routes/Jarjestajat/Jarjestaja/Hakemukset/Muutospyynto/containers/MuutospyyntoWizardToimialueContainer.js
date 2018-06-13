@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 
-import { fetchKunnat } from "../modules/kunnat"
-import { fetchMaakunnat } from "../modules/maakunnat"
-import { fetchMaakuntakunnat } from "../modules/maakuntakunnat"
+import { fetchKunnat } from "../../../../../../modules/reducers/kunnat"
+import { fetchMaakunnat } from "../../../../../../modules/reducers/maakunnat"
+import { fetchMaakuntakunnat } from "../../../../../../modules/reducers/maakuntakunnat"
 
 import MuutospyyntoWizardToimialue from '../components/MuutospyyntoWizardToimialue'
 

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import Perustelu from '../components/Perustelu'
-import { fetchMuutosperustelut } from "../modules/muutosperustelut"
+import { fetchMuutosperustelut } from "../../../../../../modules/reducers/muutosperustelut"
 
 const mapStateToProps = (state) => {
   return {
