@@ -28,15 +28,15 @@ export function getKoulutusAlat() {
 export function getTutkintoNimiByKoodiarvo(koodi) {
   const state = store.getState()
 
-  if (state.koulutukset && state.koulutukset.treedata) {
-    const { treedata } = state.koulutukset
+  if (state.koulutukset && state.koulutukset.koulutusdata) {
+    const { koulutusdata } = state.koulutukset
 
     let nimi = undefined
 
-    _.forEach(treedata, ala => {
+    _.forEach(koulutusdata, ala => {
       _.forEach(ala.koulutukset, koulutus => {
-        if (koulutus.koodiarvo === koodi) {
-          nimi = koulutus.nimi
+        if (koulutus.koodiArvo === koodi) {
+          nimi = parseLocalizedField(koulutus.metadata)
         }
       })
     })

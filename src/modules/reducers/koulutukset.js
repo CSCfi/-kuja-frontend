@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
-import { parseKoulutuksetAll, parseMuut } from "./koulutusParser"
+import { API_BASE_URL } from "../constants"
+import { parseKoulutuksetAll, parseMuut } from "../../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusParser"
 
 // Constants
 export const FETCH_KOULUTUKSET_ALL_START = 'FETCH_KOULUTUKSET_ALL_START'

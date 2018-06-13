@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { fetchMuut } from "../modules/muut"
+import { fetchMuut } from "../../../../../../modules/reducers/muut"
 
 import MuutospyyntoWizardMuut from '../components/MuutospyyntoWizardMuut'
 

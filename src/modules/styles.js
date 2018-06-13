@@ -162,6 +162,72 @@ injectGlobal`
     }
   }
   
+  .control {
+    display: flex;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    padding-top: 3px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .control input {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+  }
+  .control_indicator {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      height: 24px;
+      width: 24px;
+      background: #ffffff;
+      border: 1px solid #909090;
+  }
+  .control-radio .control_indicator {
+      border-radius: 50%;
+  }
+  
+  .control:hover input ~ .control_indicator,
+  .control input:focus ~ .control_indicator {
+      background: #ffffff;
+  }
+  
+  .control input:checked ~ .control_indicator {
+      background: #ffffff;
+  }
+  .control:hover input:not([disabled]):checked ~ .control_indicator,
+  .control input:checked:focus ~ .control_indicator {
+      background: #ffffff;
+  }
+  .control input:disabled ~ .control_indicator {
+      background: #e6e6e6;
+      opacity: 0.6;
+      pointer-events: none;
+  }
+  .control_indicator:after {
+      box-sizing: unset;
+      content: '';
+      position: absolute;
+      display: none;
+  }
+  .control input:checked ~ .control_indicator:after {
+      display: block;
+  }
+  .control-radio .control_indicator:after {
+      left: 4px;
+      top: 4px;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: #5A8A70;
+  }
+  .control-radio input:disabled ~ .control_indicator:after {
+      background: #7b7b7b;
+  }
+  
   .react-datepicker-popper {
     .react-datepicker {
       border-radius: 0;

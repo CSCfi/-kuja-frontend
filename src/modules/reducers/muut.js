@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
+import { API_BASE_URL } from "../constants"
 
 // Constants
 export const FETCH_MUUT_START = 'FETCH_MUUT_START'
