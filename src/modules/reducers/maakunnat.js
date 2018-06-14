@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
-import { getToimialueList } from "./toimialueUtil"
+import { API_BASE_URL } from "../constants"
+import { getToimialueList } from "../../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/toimialueUtil"
 
 // Constants
 export const FETCH_MAAKUNNAT_START = 'FETCH_MAAKUNNAT_START'
@@ -41,7 +41,7 @@ const ACTION_HANDLERS = {
       fetched: true,
       hasErrored: false,
       data: action.payload,
-      maakuntaList: getToimialueList(action.payload, 'FI')
+      maakuntaList: getToimialueList(action.payload, 'FI', 'maakunta')
     }
   },
   [FETCH_MAAKUNNAT_FAILURE] : (state, action) => {

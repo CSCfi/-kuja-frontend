@@ -14,16 +14,14 @@ export const CREATE_MUUTOSPYYNTO_FAILURE = 'CREATE_MUUTOSPYYNTO_FAILURE'
 // Actions
 export function fetchMuutospyynto(uuid) {
     return (dispatch) => {
-        dispatch({ type: FETCH_MUUTOSPYYNTO_START })
 
-        const request = fetch(`${API_BASE_URL}/muutospyynnot/id/${uuid}`)
+        dispatch({type: FETCH_MUUTOSPYYNTO_START})
 
-        request
-            .then((response) => response.json())
-            .then((data) => {
-                dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
+        return axios.get(`${API_BASE_URL}/muutospyynnot/id/${uuid}`)
+            .then((response) => {
+                dispatch({type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: response.data})
             })
-            .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
+            .catch((err) => dispatch({type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err}))
     }
 }
 

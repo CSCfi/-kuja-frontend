@@ -3,25 +3,21 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { COLORS } from "../../../../../../modules/styles"
-import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
+import { MUUT_KEYS } from "../modules/constants"
 import { TUTKINTO_TEKSTIT } from "../../../modules/constants"
-import { WizButton } from "./MuutospyyntoWizard"
 import TutkintoList from './TutkintoList'
+import KoulutusList from './KoulutusList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import { handleCheckboxChange } from "../modules/koulutusUtil"
 import Loading from '../../../../../../modules/Loading'
 import {
   Kohdenumero,
   Otsikko,
-  BottomWrapper,
   Row,
   Kohde,
   Info,
-  Checkbox,
-  CheckboxRowContainer
 } from './MuutospyyntoWizardComponents'
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
@@ -45,42 +41,10 @@ class MuutospyyntoWizardTutkinnot extends Component {
   }
 
   render() {
-    const { lupa, tutkintomuutoksetValue, koulutusmuutoksetValue, paatoskierrokset } = this.props
+    const { lupa, tutkintomuutoksetValue } = this.props
     const { kohteet } = lupa
     const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
-    const hasTutkintoMuutoksia = tutkintomuutoksetValue !== undefined && tutkintomuutoksetValue.length !== 0
-    const hasKoulutusMuutoksia = koulutusmuutoksetValue !== undefined && koulutusmuutoksetValue.length !== 0
-
-    let isDisabled = true
-    let hasTutkintoAdditions = false
-    let hasTutkintoRemovals = false
-    let hasKoulutusAdditions = false
-    let hasKoulutusRemovals = false
-
-    if (hasTutkintoMuutoksia) {
-      isDisabled = false
-
-      tutkintomuutoksetValue.forEach(muutos => {
-        if (muutos.type === "addition") {
-          hasTutkintoAdditions = true
-        } else if (muutos.type === "removal") {
-          hasTutkintoRemovals = true
-        }
-      })
-    }
-
-    if (hasKoulutusMuutoksia) {
-      isDisabled = false
-      koulutusmuutoksetValue.forEach(muutos => {
-        if (muutos.type === "addition") {
-          hasKoulutusAdditions = true
-        } else if (muutos.type === "removal") {
-          hasKoulutusRemovals = true
-        }
-      })
-    }
-
     const koulutuksetFetched = this.props.koulutukset.fetched
     const koulutuksetIsFetching = this.props.koulutukset.isFetching
     const koulutuksetHasErrored = this.props.koulutukset.hasErrored
@@ -112,7 +76,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
             <Otsikko>{heading}</Otsikko>
             <Row>
               <FieldArray
-                name="tutkintomuutokset"
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
                 lupa={lupa}
                 data={koulutusdata}
@@ -124,44 +88,14 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
             <Row>
               <FieldArray
-                name="koulutusmuutokset"
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
                 lupa={lupa}
                 muut={muuData}
                 poikkeukset={poikkeusData}
-                editValue={koulutusmuutoksetValue}
+                editValue={tutkintomuutoksetValue}
                 component={this.renderKoulutukset}
               />
-            </Row>
-
-            <Row marginLeft="30px">
-              <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISATYT_TUTKINNOT.FI}</h3>
-              {hasTutkintoAdditions
-                ? tutkintomuutoksetValue.map(muutos => {
-                  if (muutos.type === "addition") {
-                    return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
-                  } else {
-                    return null
-                  }
-                })
-                : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_LISATTYJA.FI
-              }
-            </Row>
-
-            <Row marginLeft="30px">
-              <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTETUT_TUTKINNOT.FI}</h3>
-              <div>
-                {hasTutkintoRemovals
-                  ? tutkintomuutoksetValue.map(muutos => {
-                    if (muutos.type === "removal") {
-                      return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
-                    } else {
-                      return null
-                    }
-                  })
-                  : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_POISTETTUJA.FI
-                }
-              </div>
             </Row>
           </ContentContainer>
         </Kohde>
@@ -214,134 +148,64 @@ class MuutospyyntoWizardTutkinnot extends Component {
       <Row>
         <Info>{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</Info>
 
-        {_.map(muut, (muu, koodisto) => {
-          return (
-            <div key={koodisto}>
-              <h3>Otsikko</h3>
+        <KoulutusList
+          key="valmentavat"
+          koodisto="koulutus"
+          nimi="Valmentavat koulutukset"
+          koulutukset={poikkeukset}
+          muutMaaraykset={muutMaaraykset}
+          editValues={editValue}
+          fields={fields}
+        />
 
-              {muu.map(m => {
-                const { koodiArvo, metadata } = m
-                const { koodistoUri } = m.koodisto
-                const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
-                const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
-                const identifier = `input-${koodistoUri}-${koodiArvo}`
+        {muut.ammatilliseentehtavaanvalmistavakoulutus &&
+          <KoulutusList
+            key="ammatilliseentehtavaanvalmistavakoulutus"
+            koodisto="ammatilliseentehtavaanvalmistavakoulutus"
+            nimi="Ammatilliseen tehtavaan valmistavat koulutukset"
+            koulutukset={muut.ammatilliseentehtavaanvalmistavakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
 
-                let isInLupa = false
-                let isAdded = false
-                let isRemoved = false
-                let isChecked = false
-                let customClassName = ""
+        {muut.oivatyovoimakoulutus &&
+          <KoulutusList
+            key="oivatyovoimakoulutus"
+            koodisto="oivatyovoimakoulutus"
+            nimi="Työvoimakoulutukset"
+            koulutukset={muut.oivatyovoimakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
 
-                muutMaaraykset.forEach(muuMaarays => {
-                  if (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo) {
-                    isInLupa = true
-                  }
-                })
+        {muut.kuljettajakoulutus &&
+          <KoulutusList
+            key="kuljettajakoulutus"
+            koodisto="kuljettajakoulutus"
+            nimi="Kuljettajakoulutukset"
+            koulutukset={muut.kuljettajakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
 
-                if (editValue) {
-                  editValue.forEach(val => {
-                    if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                      val.type === "addition" ? isAdded = true : null
-                      val.type === "removal" ? isRemoved = true : null
-                    }
-                  })
-                }
-
-                isInLupa ? customClassName = "is-in-lupa" : null
-                isAdded ? customClassName = "is-added" : null
-                isRemoved ? customClassName = "is-removed" : null
-
-                if ((isInLupa && !isRemoved) || isAdded) {
-                  isChecked = true
-                }
-
-                return (
-                  <CheckboxRowContainer key={identifier} className={customClassName}>
-                    <Checkbox>
-                      <input
-                        type="checkbox"
-                        id={identifier}
-                        checked={isChecked}
-                        onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, m) }}
-                      />
-                      <label htmlFor={identifier}></label>
-                    </Checkbox>
-                    <div>
-                      <div>{nimi}</div>
-                      <div>{kuvaus}</div>
-                    </div>
-                  </CheckboxRowContainer>
-                )
-              })}
-            </div>
-          )
-        })}
-
-        {poikkeukset.map((poikkeus, i) => {
-          const { koodiArvo, metadata, koodisto } = poikkeus
-          const { koodistoUri } = koodisto
-          const nimi = parseLocalizedField(metadata)
-          const identifier = `input-${koodiArvo}-${i}`
-
-          let isInLupa = false
-          let isAdded = false
-          let isRemoved = false
-          let isChecked = false
-          let customClassName = ""
-
-          muutMaaraykset.forEach(muuMaarays => {
-            if (muuMaarays.koodi && muuMaarays.koodi === koodiArvo) {
-              isInLupa = true
-            }
-          })
-
-          if (editValue) {
-            editValue.forEach(val => {
-              if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                val.type === "addition" ? isAdded = true : null
-                val.type === "removal" ? isRemoved = true : null
-              }
-            })
-          }
-
-          isInLupa ? customClassName = "is-in-lupa" : null
-          isAdded ? customClassName = "is-added" : null
-          isRemoved ? customClassName = "is-removed" : null
-
-          if ((isInLupa && !isRemoved) || isAdded) {
-            isChecked = true
-          }
-
-          return (
-            <CheckboxRowContainer key={identifier} className={customClassName}>
-              <Checkbox>
-                <input
-                  type="checkbox"
-                  id={identifier}
-                  checked={isChecked}
-                  onChange={(e) => { handleCheckboxChange(e, editValue, fields, isInLupa, poikkeus) }}
-                />
-                <label htmlFor={identifier}></label>
-              </Checkbox>
-              <div>{koodiArvo}</div>
-              <div>{nimi}</div>
-            </CheckboxRowContainer>
-          )
-        })}
       </Row>
     )
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkinnot = connect(state => {
-  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
-  const koulutusmuutoksetValue = selector(state, 'koulutusmuutokset')
+  const tutkintomuutoksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
 
   return {
     tutkintomuutoksetValue,
-    koulutusmuutoksetValue,
     koulutusalat: state.koulutusalat,
     koulutukset: state.koulutukset,
     paatoskierrokset: state.paatoskierrokset
@@ -349,8 +213,9 @@ MuutospyyntoWizardTutkinnot = connect(state => {
 })(MuutospyyntoWizardTutkinnot)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
+  enableReinitialize : true,
   validate
 })(MuutospyyntoWizardTutkinnot)

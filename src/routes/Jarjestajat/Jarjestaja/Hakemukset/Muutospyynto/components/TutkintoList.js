@@ -15,6 +15,8 @@ import {
   Nimi
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { handleCheckboxChange } from "../modules/koulutusUtil"
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class TutkintoList extends Component {
   constructor(props) {
@@ -121,8 +123,8 @@ class TutkintoList extends Component {
                   if (editValues) {
                     editValues.forEach(val => {
                       if (val.koodiarvo === koodiarvo) {
-                        val.type === "addition" ? isAdded = true : null
-                        val.type === "removal" ? isRemoved = true : null
+                        val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                        val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                       }
                     })
                   }
@@ -133,8 +135,8 @@ class TutkintoList extends Component {
               if (editValues) {
                 editValues.forEach(val => {
                   if (val.koodiarvo === koodiarvo) {
-                    val.type === "addition" ? isAdded = true : null
-                    val.type === "removal" ? isRemoved = true : null
+                    val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                    val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                   }
                 })
               }
@@ -157,33 +159,8 @@ class TutkintoList extends Component {
                     type="checkbox"
                     id={identifier}
                     checked={isChecked}
-                    onChange={(event) => {
-                      const { checked } = event.target
-
-                      if (checked) {
-                        if (isInLupa) {
-                          // Tutkinto oli luvassa --> poistetaan se formista
-                          const i = this.getIndex(editValues, koodiarvo)
-                          if (i !== undefined) {
-                            fields.remove(i)
-                          }
-                        } else {
-                          // Tutkinto ei ollut luvassa --> lisätään se formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "addition", isInLupa: isInLupa, perustelu: null })
-                        }
-                      } else {
-                        if (isInLupa) {
-                          // Tutkinto oli luvassa --> lisätään muutos formiin
-                          fields.push({ koodiarvo: koodiarvo, nimi: nimiText, ala: alaKoodiArvo, type: "removal", isInLupa: isInLupa, perustelu: null })
-                        } else {
-                          // Tutkinto ei ollut luvassa --> poistetaan muutos formista
-                          const i = this.getIndex(editValues, koodiarvo)
-                          if (i !== undefined) {
-                            fields.remove(i)
-                          }
-                        }
-                      }
-                    }}/>
+                    onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                  />
                   <label htmlFor={identifier}></label>
                 </Checkbox>
                 <Koodi>{koodiarvo}</Koodi>

@@ -11,6 +11,7 @@ import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 
 class MuutospyyntoWizardKielet extends Component {
@@ -36,7 +37,7 @@ class MuutospyyntoWizardKielet extends Component {
             <Otsikko>{heading}</Otsikko>
             <Row>
               <FieldArray
-                name="opetuskielimuutokset"
+                name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
                 kohde={kohde}
                 opetuskielet={oppilaitoksenopetuskielet.data}
                 editValues={opetusjatutkintokielimuutoksetValue}
@@ -76,16 +77,19 @@ class MuutospyyntoWizardKielet extends Component {
             let customClassName = ""
 
             kohdeArvot.forEach(arvo => {
-              if (arvo === nimi) {
+              if (arvo.koodiarvo === koodiArvo) {
                 isInLupa = true
               }
+              // if (arvo === nimi) {
+              //   isInLupa = true
+              // }
             })
 
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  val.type === "addition" ? isAdded = true : null
-                  val.type === "removal" ? isRemoved = true : null
+                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                 }
               })
             }
@@ -119,10 +123,10 @@ class MuutospyyntoWizardKielet extends Component {
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardKielet = connect(state => {
-  const opetusjatutkintokielimuutoksetValue = selector(state, 'opetuskielimuutokset')
+  const opetusjatutkintokielimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
 
   return {
     opetusjatutkintokielimuutoksetValue
@@ -130,7 +134,7 @@ MuutospyyntoWizardKielet = connect(state => {
 })(MuutospyyntoWizardKielet)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   // validate,

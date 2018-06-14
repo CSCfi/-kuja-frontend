@@ -7,11 +7,11 @@ export const FETCH_LUPA_SUCCESS = 'FETCH_LUPA_SUCCESS'
 export const FETCH_LUPA_FAILURE = 'FETCH_LUPA_FAILURE'
 
 // Actions
-export function fetchLupa(ytunnus, query) {
+export function fetchLupa(uuid, query) {
     return (dispatch) => {
         dispatch({ type: FETCH_LUPA_START })
 
-        const request = fetch(`${API_BASE_URL}/luvat/jarjestaja/${ytunnus}${query = query ? query : ''}`)
+        const request = fetch(`${API_BASE_URL}/luvat/lupa/${uuid}${query = query ? query : ''}`)
 
         request
             .then((response) => response.json())

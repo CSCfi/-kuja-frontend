@@ -67,7 +67,7 @@ class Asiat extends Component {
                         <ContentContainer padding={'10px 0px 40px'} margin={'0px auto 0'}>
 
                             {(authenticated) ? (<Route path={`${match.url}`} exact render={() => <AvoimetAsiatContainer />} />) : null }
-                            {(authenticated) ? (<Route path={`${match.url}/valmistelussa-olevat-asiat`}  render={() => <ValmistelussaAsiatContainer />} />) : null }
+                            {(authenticated) ? (<Route path={`${match.url}/valmistelussa-olevat-asiat`} exact render={() => <ValmistelussaAsiatContainer />} />) : null }
                             {(authenticated) ? (<Route path={`${match.url}/paatetyt-asiat`} render={() => <PaatetytAsiatContainer />} />) : null }
 
                         </ContentContainer>

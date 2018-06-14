@@ -2,19 +2,15 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
-import Select from 'react-select'
 import 'react-select/dist/react-select.css'
 
+import TutkintoKieliList from './TutkintoKieliList'
 import { ContentContainer} from "../../../../../../modules/elements"
-import { Kohde, Kohdenumero, Otsikko, Row, Div, CheckboxSmall, CheckboxRowContainerSmall, TableDiv } from "./MuutospyyntoWizardComponents"
-import { LUPA_TEKSTIT } from "../../../modules/constants"
+import { Row } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
-import { parseLocalizedField } from "../../../../../../modules/helpers"
-import {
-  handleCheckboxChange, getKieliList, handleTutkintoKieliCheckboxChange,
-  handleTutkintokieliSelectChange
-} from "../modules/koulutusUtil"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkintokielet extends Component {
   componentWillMount() {
@@ -34,15 +30,16 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     if (kielet.fetched) {
       return (
         <ContentContainer>
+          <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.HEADING.FI}</h4>
           <Row>
             <FieldArray
-              name="tutkintokielimuutokset"
+              name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
               kohde={kohde}
               kielet={kielet.data}
               kieliList={kielet.kieliList}
               tutkintomaaraykset={kohteet[1].maaraykset}
               editValues={tutkintokielimuutoksetValue}
-              component={this.renderTutkintokieliMuutokset}
+              component={this.renderTutkintokieliList}
             />
           </Row>
         </ContentContainer>
@@ -56,92 +53,41 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     }
   }
 
-  renderTutkintokieliMuutokset(props) {
+  renderTutkintokieliList(props) {
     const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset } = props
     const { kohdeArvot, tutkinnotjakielet } = kohde
 
+    // TODO: Tarvitaanko valittujen tutkintokielten listausta tässä?
+    // const valitutKielet = getSelectedTutkintoKielet(tutkinnotjakielet, editValues)
 
     return (
       <div>
         <Row>
-          <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_TUTKINTOKIELET.HEADING.FI}</h4>
-        </Row>
-        <Row>
-          {tutkintomaaraykset.map(koulutusala => {
+          {_.map(tutkintomaaraykset, (koulutusala, i) => {
+            const koodiarvo = koulutusala.koodi || koulutusala.koodiarvo || koulutusala.koodiArvo
+            const { nimi, metadata, koulutusalat } = koulutusala
+            let nimiText = nimi
+            let arrays = _.flatten(_.concat(_.map(koulutusalat, ala => { return ala.koulutukset })))
+
+            if (!nimi && metadata) {
+              nimiText = parseLocalizedField(metadata)
+            } else {
+              nimiText = nimi
+            }
+
             return (
-              _.map(koulutusala.koulutusalat, koulutustyyppi => {
-                return koulutustyyppi.koulutukset.map((tutkinto, i) => {
-                  const { koodi, nimi, maaraysId } = tutkinto
-                  const identifier = `input-tutkintokieli-${koodi}`
-
-                  let isInLupa = false
-                  let isAdded = false
-                  let isRemoved = false
-                  let isChanged = false
-                  let isChecked = false
-                  let customClassName = ""
-                  let value = ""
-                  let valueKoodi = ""
-
-                  tutkinnotjakielet.forEach(tutkintokieli => {
-                    if (tutkintokieli.tutkintokoodi === koodi) {
-                      isInLupa = true
-                      valueKoodi = tutkintokieli.koodi
-                    }
-                  })
-
-                  if (editValues) {
-                    editValues.forEach(val => {
-                      if (val.koodiarvo === koodi) {
-                        val.type === "addition" ? isAdded = true : val.type === "removal" ? isRemoved = true : val.type === "change" ? isChanged = true : null
-                      }
-                    })
-                  }
-
-                  isInLupa ? customClassName = "is-in-lupa" : null
-                  isAdded ? customClassName = "is-added" : null
-                  isRemoved ? customClassName = "is-removed" : null
-                  isChanged ? customClassName = "is-changed" : null
-
-                  if ((isInLupa && !isRemoved) || isAdded) {
-                    isChecked = true
-                    value = valueKoodi
-                  }
-
-                  if (isInLupa && isRemoved) {
-                    value = ''
-                  }
-
-                  return (
-                    <CheckboxRowContainerSmall key={identifier} className={customClassName}>
-                      <CheckboxSmall>
-                        <input
-                          type="checkbox"
-                          id={identifier}
-                          checked={isChecked}
-                          onChange={(e) => { handleTutkintoKieliCheckboxChange(e, editValues, fields, isInLupa, value, tutkinto) }}
-                        />
-                        <label htmlFor={identifier}></label>
-                      </CheckboxSmall>
-                      <TableDiv className={customClassName}>{koodi}</TableDiv>
-                      <TableDiv className={customClassName} flex="3">{nimi}</TableDiv>
-                      <TableDiv>
-                        <KieliSelect
-                          identifier={identifier}
-                          value={value}
-                          kielet={kieliList}
-                          disabled={!isChecked}
-                          editValues={editValues}
-                          fields={fields}
-                          isInLupa={isInLupa}
-                          tutkinto={tutkinto}
-                          customClass={customClassName}
-                        />
-                      </TableDiv>
-                    </CheckboxRowContainerSmall>
-                  )
-                })
-              })
+              <TutkintoKieliList
+                key={i}
+                koodiarvo={koodiarvo}
+                nimi={nimiText}
+                koulutukset={arrays}
+                maaraykset={arrays}
+                editValues={editValues}
+                fields={fields}
+                kielet={kielet}
+                kieliList={kieliList}
+                tutkinnotjakielet={tutkinnotjakielet}
+              />
             )
           })}
         </Row>
@@ -150,41 +96,10 @@ class MuutospyyntoWizardTutkintokielet extends Component {
   }
 }
 
-class KieliSelect extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedOption: props.value
-    }
-  }
-
-  handleChange(selectedOption) {
-    this.setState({ selectedOption })
-    const { editValues, fields, isInLupa, tutkinto} = this.props
-    handleTutkintokieliSelectChange(editValues, fields, isInLupa, tutkinto, selectedOption)
-  }
-
-  render() {
-    const { selectedOption } = this.state
-    const { identifier, kielet, disabled } = this.props
-
-    return (
-      <Select
-        name={`select-${identifier}`}
-        value={selectedOption}
-        onChange={this.handleChange.bind(this)}
-        options={kielet}
-        disabled={disabled}
-        placeholder="Valitse kieli..."
-      />
-    )
-  }
-}
-
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkintokielet = connect(state => {
-  const tutkintokielimuutoksetValue = selector(state, 'tutkintokielimuutokset')
+  const tutkintokielimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
 
   return {
     tutkintokielimuutoksetValue
@@ -192,7 +107,7 @@ MuutospyyntoWizardTutkintokielet = connect(state => {
 })(MuutospyyntoWizardTutkintokielet)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
   // validate,

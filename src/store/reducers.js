@@ -6,14 +6,18 @@ import historyReducer from '../routes/Jarjestajat/Jarjestaja/modules/history'
 import userReducer from '../routes/Login/modules/user'
 import muutospyynnotReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/modules/muutospyynnot'
 import muutospyyntoReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutospyynto'
-import muutosperustelutReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutosperustelut'
-import koulutusalatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusalat'
-import koulutuksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutukset'
-import paatoskierroksetReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/paatoskierrokset'
+import muutosperustelutReducer from '../modules/reducers/muutosperustelut'
+import koulutusalatReducer from '../modules/reducers/koulutusalat'
+import koulutuksetReducer from '../modules/reducers/koulutukset'
+import paatoskierroksetReducer from '../modules/reducers/paatoskierrokset'
 import oppilaitoksenopetuskieletReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/oppilaitoksenopetuskielet'
 import kieletReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/kielet'
-import kunnatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/kunnat'
-import maakunnatReducer from '../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/maakunnat'
+import kunnatReducer from '../modules/reducers/kunnat'
+import maakunnatReducer from '../modules/reducers/maakunnat'
+import maakuntakunnatReducer from '../modules/reducers/maakuntakunnat'
+import muutReducer from '../modules/reducers/muut'
+import maaraystyypitReducer from '../modules/reducers/maaraystyyppi'
+import kohdeReducer from '../modules/reducers/kohde'
 import { reducer as reduxFormReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -31,6 +35,10 @@ const rootReducer = combineReducers({
   kielet: kieletReducer,
   kunnat: kunnatReducer,
   maakunnat: maakunnatReducer,
+  maakuntakunnat: maakuntakunnatReducer,
+  muut: muutReducer,
+  maaraystyypit: maaraystyypitReducer,
+  kohteet: kohdeReducer,
   form: reduxFormReducer
 })
 

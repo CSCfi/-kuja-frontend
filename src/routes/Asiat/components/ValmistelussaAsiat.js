@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-
 import styled from 'styled-components'
 import { BreadcrumbsItem } from 'react-breadcrumbs-dynamic'
+import ValmistelussaAsiatList from "./ValmistelussaAsiatList";
 
 import { InnerContentContainer, InnerContentWrapper  } from "../../../modules/elements"
-import { COLORS } from "../../../modules/styles"
+import { COLORS, BackgroundImage } from "../../../modules/styles"
 import { ContentContainer, FullWidthWrapper } from '../../../modules/elements'
 import { ROLE_ESITTELIJA, ESITTELIJA } from '../../../modules/constants'
-import ValmistelussaAsiatList from "./ValmistelussaAsiatList";
+import AsiatMenu from './AsiatMenu'
+import { Helmet } from 'react-helmet'
+import { ASIAT } from "../modules/constants"
 
 
 const Wrapper = styled.div`
@@ -21,47 +23,80 @@ class ValmistelussaAsiat extends Component {
     }
 
     render() {
-
+        const { match } = this.props
         const { isFetching, fetched, hasErrored, data } = this.props.muutospyynnot
 
+        // check the rights
+        let authenticated = false;
+        if(sessionStorage.getItem('role')===ROLE_ESITTELIJA) {
+            authenticated = true;
+        }
+
         // Sallittu vain esittelijöille
-        if(sessionStorage.getItem('role')!==ROLE_ESITTELIJA) {
+        if(!authenticated) {
             return (
-                <h2>Käsittely vaatii kirjautumisen.</h2>
+                <h2>{ASIAT.OTSIKOT.KIRJAUTUMISVIRHE.FI}</h2>
             )
         }
 
+        // Alanavigaation tabivalikon routet
+        const tabNavRoutes = [
+            {
+                path: `/asiat`,
+                exact: true,
+                text: {'fi':'Avoinna olevat asiat','sv':'Avoinna olevat asiat på svenska'},
+                authenticated: true
+            },
+            {
+                path: `${match.url}`,
+                text: {'fi':'Valmistelussa olevat asiat','sv':'Valmistelussa olevat asiat på svenska'},
+                authenticated: authenticated
+            },
+            {
+                path: `paatetyt-asiat`,
+                text: {'fi':'Päätetyt asiat','sv':'Päätetyt asiat på svenska'},
+                authenticated: authenticated
+            }
+        ]
+
         if (fetched) {
             return (
-                <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
-                    <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
-
-                        <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
-                        <BreadcrumbsItem to='/asiat'>Asiat</BreadcrumbsItem>
-
-                        <InnerContentContainer>
-                            <InnerContentWrapper>
-                                <Wrapper>
-                                    <h2>Valmistelussa olevat asiat</h2>
-                                    <ValmistelussaAsiatList muutospyynnot={data}/>
-                                </Wrapper>
-                            </InnerContentWrapper>
-                        </InnerContentContainer>
-
+                <div>
+                    <ContentContainer padding={'20px auto 0px auto'} margin={'38px auto 0px auto'}>
+                        <Helmet>
+                            <title>Oiva | Asiat</title>
+                        </Helmet>
+                        <BackgroundImage />
+                        <BreadcrumbsItem to='/'>{ASIAT.BREADCRUMBS.ETUSIVU.FI}</BreadcrumbsItem>
+                        <BreadcrumbsItem to='/asiat'>{ASIAT.BREADCRUMBS.ASIAT.FI}</BreadcrumbsItem>
+                        <AsiatMenu routes={tabNavRoutes} />
                     </ContentContainer>
-                </FullWidthWrapper>
+
+                    <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
+                        <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                            <InnerContentContainer>
+                                <InnerContentWrapper>
+                                    <Wrapper>
+                                        <h2>{ASIAT.OTSIKOT.VALMISTELUSSA_OLEVAT.FI}</h2>
+                                        <ValmistelussaAsiatList muutospyynnot={data}/>
+                                    </Wrapper>
+                                </InnerContentWrapper>
+                            </InnerContentContainer>
+                        </ContentContainer>
+                    </FullWidthWrapper>
+                </div>
             )
         } else if (isFetching) {
             return (
-                <h2>Ladataan...</h2>
+                <h2>{ASIAT.SIVUTUS.LADATAAN.FI}</h2>
             )
         } else if (hasErrored) {
             return (
-                <h2>Käsittelytietoja ladattessa tapahtui virhe</h2>
+                <h2>{ASIAT.OTSIKOT.LATAUS_VIRHE_PAATETYT.FI}</h2>
             )
         } else {
             return (
-                <h2>Käsittelytietoja ladattessa ei saatu tietoja</h2>
+                <h2>{ASIAT.OTSIKOT.HAKU_VIRHE_PAATETYT.FI}</h2>
             )
         }
 

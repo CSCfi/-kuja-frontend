@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
+import { sortOpetuskielet } from "./kieliUtil"
 
 // Constants
 export const FETCH_OPPILAITOKSENOPETUSKIELET_START = 'FETCH_OPPILAITOKSENOPETUSKIELET_START'
@@ -39,7 +40,7 @@ const ACTION_HANDLERS = {
       isFetching: false,
       fetched: true,
       hasErrored: false,
-      data: action.payload
+      data: sortOpetuskielet(action.payload)
     }
   },
   [FETCH_OPPILAITOKSENOPETUSKIELET_FAILURE] : (state, action) => {

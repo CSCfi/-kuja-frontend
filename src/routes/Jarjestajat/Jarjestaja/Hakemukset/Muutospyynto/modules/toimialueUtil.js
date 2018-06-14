@@ -2,6 +2,9 @@ import _ from 'lodash'
 
 import store from '../../../../../../store'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "./muutospyyntoUtil"
+import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants"
+import { MUUTOS_TYPES } from "./uusiHakemusFormConstants"
 
 export function getToimialueByKoodiArvo(koodiarvo) {
   if (!koodiarvo) {
@@ -31,15 +34,57 @@ export function getToimialueByKoodiArvo(koodiarvo) {
   }
 }
 
-export function getToimialueList(toimialueet, locale) {
+export function getToimialueList(toimialueet, locale, tyyppi) {
   let array = []
 
   toimialueet.forEach(toimialue => {
     const { koodiArvo, metadata } = toimialue
-    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo })
+    array.push({ ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi })
   })
 
   return array
+}
+
+function getKuntaList(kunnat, locale) {
+  let list = []
+
+  _.forEach(kunnat, kunta => {
+    const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta
+
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
+      list.push({ ...kunta, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta" })
+    }
+  })
+
+  return list
+}
+
+export function getMaakuntakunnatList(toimialueet, locale) {
+  const now = new Date()
+
+  let list = []
+
+  _.forEach(toimialueet, toimialue => {
+    const { koodiArvo, metadata, kunta, tila, voimassaLoppuPvm } = toimialue
+
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "99") {
+      if (!voimassaLoppuPvm || now < Date.parse(voimassaLoppuPvm)) {
+        let curMaakunta = { ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta" }
+        curMaakunta.kunta = getKuntaList(kunta, locale)
+        list.push(curMaakunta)
+      }
+    }
+  })
+
+  list = _.sortBy(list, maakunta => {
+    maakunta.kunta = _.sortBy(maakunta.kunta, kunta => {
+      return kunta.label
+    })
+
+    return maakunta.label
+  })
+
+  return list
 }
 
 export function handleToimialueSelectChange(editValues, fields, initialValues, values) {
@@ -49,14 +94,19 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
 
   // käsitellään poistot
   const removals = getToimialueRemovals(initialValues, values)
+  const kohde = getKohdeByTunniste(KOHTEET.TOIMIALUE)
+  const maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
 
   if (removals.length > 0) {
     removals.forEach(removal => {
       const toimialue = getToimialueByKoodiArvo(removal)
       fields.push({
         ...toimialue,
-        type: "removal",
-        perustelu: null
+        type: MUUTOS_TYPES.REMOVAL,
+        meta: { perusteluteksti: null },
+        muutosperustelukoodiarvo: null,
+        kohde,
+        maaraystyyppi
       })
     })
   }
@@ -76,16 +126,22 @@ export function handleToimialueSelectChange(editValues, fields, initialValues, v
           // Arvoa ei löytynyt editvaluesista --> lisatään se
           fields.push({
             ...value,
-            type: "addition",
-            perustelu: null
+            type: MUUTOS_TYPES.ADDITION,
+            meta: { perusteluteksti: null },
+            muutosperustelukoodiarvo: null,
+            kohde,
+            maaraystyyppi
           })
         }
       } else {
         // Ei editvaluesia --> luodaan arvo
         fields.push({
           ...value,
-          type: "addition",
-          perustelu: null
+          type: MUUTOS_TYPES.ADDITION,
+          meta: { perusteluteksti: null },
+          muutosperustelukoodiarvo: null,
+          kohde,
+          maaraystyyppi
         })
       }
     }

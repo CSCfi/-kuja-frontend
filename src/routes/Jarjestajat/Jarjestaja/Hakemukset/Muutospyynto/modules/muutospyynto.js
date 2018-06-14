@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
 import axios from "axios/index"
-import { formatMuutospyynto } from "./koulutusUtil"
+import { formatMuutospyynto } from "./muutospyyntoUtil"
 
 // Constants
 export const FETCH_MUUTOSPYYNTO_START = 'FETCH_MUUTOSPYYNTO_START'
@@ -11,30 +11,48 @@ export const CREATE_MUUTOSPYYNTO_START = 'CREATE_MUUTOSPYYNTO_START'
 export const CREATE_MUUTOSPYYNTO_SUCCESS = 'CREATE_MUUTOSPYYNTO_SUCCESS'
 export const CREATE_MUUTOSPYYNTO_FAILURE = 'CREATE_MUUTOSPYYNTO_FAILURE'
 
+export const PREVIEW_MUUTOSPYYNTO_START = 'PREVIEW_MUUTOSPYYNTO_START'
+export const PREVIEW_MUUTOSPYYNTO_SUCCESS = 'PREVIEW_MUUTOSPYYNTO_SUCCESS'
+export const PREVIEW_MUUTOSPYYNTO_FAILURE = 'PREVIEW_MUUTOSPYYNTO_FAILURE'
+
+export const SAVE_MUUTOSPYYNTO_START = 'SAVE_MUUTOSPYYNTO_START'
+export const SAVE_MUUTOSPYYNTO_SUCCESS = 'SAVE_MUUTOSPYYNTO_SUCCESS'
+export const SAVE_MUUTOSPYYNTO_FAILURE = 'SAVE_MUUTOSPYYNTO_FAILURE'
+
+export const UPDATE_MUUTOSPYYNTO_START = 'UPDATE_MUUTOSPYYNTO_START'
+export const UPDATE_MUUTOSPYYNTO_SUCCESS = 'UPDATE_MUUTOSPYYNTO_SUCCESS'
+export const UPDATE_MUUTOSPYYNTO_FAILURE = 'UPDATE_MUUTOSPYYNTO_FAILURE'
+
 // Actions
-export function fetchMuutospyynto(ytunnus, query) {
-  return (dispatch) => {
-    dispatch({ type: FETCH_MUUTOSPYYNTO_START })
+export function fetchMuutospyynto(uuid) {
+  console.log('fetchMuutospyynto ', uuid)
+  if (uuid) {
+    return (dispatch) => {
+      dispatch({ type: FETCH_MUUTOSPYYNTO_START })
 
-    const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`)
+      const request = fetch(`${API_BASE_URL}/muutospyynnot/id/${uuid}`)
 
-    request
-      .then((response) => response.json())
-      .then((data) => {
-        dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
-      })
-      .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
+      request
+        .then((response) => response.json())
+        .then((data) => {
+          dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
+        })
+        .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
+    }
   }
 }
 
 export function createMuutospyynto(muutospyynto) {
+  console.log('createMuutospyynto', muutospyynto)
+
   const formatted = formatMuutospyynto(muutospyynto)
 
-  let obj = {}
+  console.log('formatted', formatted)
+
   return (dispatch) => {
     dispatch({ type: CREATE_MUUTOSPYYNTO_START })
 
-    axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
+    return axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
       .then(response => {
         dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
       })
@@ -44,9 +62,77 @@ export function createMuutospyynto(muutospyynto) {
   }
 }
 
+export function saveMuutospyynto(muutospyynto) {
+  console.log('saveMuutospyynto', muutospyynto)
+
+  const formatted = formatMuutospyynto(muutospyynto)
+
+  console.log('formatted', formatted)
+
+  return (dispatch) => {
+    dispatch({ type: SAVE_MUUTOSPYYNTO_START})
+
+    axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted, { withCredentials: true })
+      .then(response => {
+        dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: response })
+      })
+      .catch(err => {
+        dispatch({ type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err })
+      })
+  }
+}
+
+export function updateMuutospyynto(muutospyynto) {
+  console.log('updateMuutospyynto', muutospyynto)
+
+  const formatted = formatMuutospyynto(muutospyynto)
+
+  console.log('formatted', formatted)
+
+  return (dispatch) => {
+    dispatch({ type: UPDATE_MUUTOSPYYNTO_START })
+
+    axios.post(`${API_BASE_URL}/muutospyynnot/update`, formatted, { withCredentials: true })
+      .then(response => {
+        dispatch({ type: UPDATE_MUUTOSPYYNTO_SUCCESS, payload: response })
+      })
+      .catch(err => {
+        dispatch({ type: UPDATE_MUUTOSPYYNTO_FAILURE, payload: err })
+      })
+  }
+}
+
+export function previewMuutospyynto(muutospyynto) {
+
+    const formatted = formatMuutospyynto(muutospyynto)
+
+    return (dispatch) => {
+        dispatch({ type: PREVIEW_MUUTOSPYYNTO_START })
+
+        return axios.put(`${API_BASE_URL}/pdf/muutospyyntoObjToPdf`,
+            formatted,
+            {
+                responseType: 'arraybuffer',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/pdf'
+                }
+            })
+            .then(response => {
+                dispatch({ type: PREVIEW_MUUTOSPYYNTO_SUCCESS, payload: response })
+            })
+            .catch(err => {
+                dispatch({ type: PREVIEW_MUUTOSPYYNTO_FAILURE, payload: err })
+            })
+    }
+}
+
 export const actions = {
   fetchMuutospyynto,
-  createMuutospyynto
+  createMuutospyynto,
+  previewMuutospyynto,
+  saveMuutospyynto,
+  updateMuutospyynto
 }
 
 // Action handlers
@@ -77,34 +163,119 @@ const ACTION_HANDLERS = {
     }
   },
   [CREATE_MUUTOSPYYNTO_START]   : (state, action) => {
-    return {
-      ...state,
-      create: {
-        isSubmitting: true,
-        isCreated: false,
-        hasErrored: false,
+      return {
+          ...state,
+          create: {
+              isSubmitting: true,
+              isCreated: false,
+              hasErrored: false,
+          }
       }
-    }
   },
   [CREATE_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+      return {
+          ...state,
+          create: {
+              isSubmitting: false,
+              isCreated: true,
+              hasErrored: false,
+              response: action.payload
+          }
+      }
+  },
+  [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+      return {
+          ...state,
+          create: {
+              isSubmitting: false,
+              hasCreated: false,
+              hasErrored: true,
+              response: action.payload
+          }
+      }
+  },
+  [PREVIEW_MUUTOSPYYNTO_START]   : (state, action) => {
     return {
       ...state,
-      create: {
-        isSubmitting: false,
-        isCreated: true,
-        hasErrored: false,
-        response: action.payload
+      isFetching: true,
+      fetched: false,
+      hasErrored: false
+    }
+  },
+  [PREVIEW_MUUTOSPYYNTO_SUCCESS]   : (state, action) => {
+    return {
+      ...state,
+      isFetching: false,
+      fetched: true,
+      hasErrored: false,
+      pdf: action.payload
+    }
+  },
+  [PREVIEW_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+    return {
+      ...state,
+      isFetching: false,
+      fetched: false,
+      hasErrored: true
+    }
+  },
+  [SAVE_MUUTOSPYYNTO_START] : (state, action) => {
+    return {
+      ...state,
+      save: {
+        isSaving: true,
+        saved: false,
+        hasErrored: false
       }
     }
   },
-  [CREATE_MUUTOSPYYNTO_FAILURE]   : (state, action) => {
+  [SAVE_MUUTOSPYYNTO_SUCCESS] : (state, action) => {
     return {
       ...state,
-      create: {
-        isSubmitting: false,
-        hasCreated: false,
-        hasErrored: true,
-        response: action.payload
+      save: {
+        isSaving: false,
+        saved: true,
+        hasErrored: false
+      }
+    }
+  },
+  [SAVE_MUUTOSPYYNTO_FAILURE] : (state, action) => {
+    return {
+      ...state,
+      save: {
+        isSaving: false,
+        saved: false,
+        hasErrored: true
+      }
+    }
+  },
+  [UPDATE_MUUTOSPYYNTO_START] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: true,
+        updated: false,
+        hasErrored: false
+      }
+    }
+  },
+  [UPDATE_MUUTOSPYYNTO_SUCCESS] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: false,
+        updated: true,
+        hasErrored: false
+      }
+    }
+  },
+  [UPDATE_MUUTOSPYYNTO_FAILURE] : (state, action) => {
+    return {
+      ...state,
+      update: {
+        isUpdating: false,
+        updated: false,
+        hasErrored: true
       }
     }
   }
