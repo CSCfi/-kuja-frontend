@@ -3,32 +3,37 @@ import { connect } from 'react-redux'
 import { fetchMuutosperustelut } from "../modules/valmisteluPerustelut"
 import { createMuutospyynto, fetchMuutospyynto } from "../modules/valmistelu"
 import { fetchLupa } from "../modules/voimassaolevaLupa"
-import { fetchKoulutusalat } from "../modules/valmisteluKoulutusalat"
-import { fetchKoulutuksetAll } from "../modules/valmisteluKoulutukset"
-import { fetchPaatoskierrokset } from "../modules/valmisteluPaatoskierros"
+import { fetchKohteet } from "../../../../modules/reducers/kohde"
+import { fetchKoulutusalat } from "../../../../modules/reducers/koulutusalat"
+import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../../../../modules/reducers/koulutukset"
+import { fetchPaatoskierrokset } from "../../../../modules/reducers/paatoskierrokset"
 
-import Valmistelu from '../components/Valmistelu'
+import ValmisteluWizard from '../components/ValmisteluWizard'
 
 const mapStateToProps = (state) => {
-    return {
-        muutosperustelut: state.muutosperustelut,
-        lupa: state.lupa,
-        koulutukset: state.koulutukset,
-        paatoskierrokset: state.paatoskierrokset,
-        muutospyynto: state.muutospyynto
-    }
+  return {
+    muutosperustelut: state.muutosperustelut,
+    lupa: state.lupa,
+    koulutukset: state.koulutukset,
+    koulutusalat: state.koulutusalat,
+    paatoskierrokset: state.paatoskierrokset,
+    muutospyynto: state.muutospyynto
+  }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-    return {
-        fetchMuutosperustelut: () => dispatch(fetchMuutosperustelut()),
-        fetchLupa: (ytunnus, query) => dispatch(fetchLupa(ytunnus, query)),
-        createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
-        fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
-        fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
-        fetchPaatoskierrokset: () => dispatch(fetchPaatoskierrokset()),
-        fetchMuutospyynto: (uuid) => dispatch(fetchMuutospyynto(uuid))
-    }
+  return {
+    fetchMuutosperustelut: () => dispatch(fetchMuutosperustelut()),
+    fetchLupa: (uuid, query) => dispatch(fetchLupa(uuid, query)),
+    createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
+    fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
+    fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
+    fetchKoulutuksetMuut: (koodisto) => dispatch(fetchKoulutuksetMuut(koodisto)),
+    fetchKoulutus: (koodi) => dispatch(fetchKoulutus(koodi)),
+    fetchPaatoskierrokset: () => dispatch(fetchPaatoskierrokset()),
+    fetchMuutospyynto: (uuid) => dispatch(fetchMuutospyynto(uuid)),
+    fetchKohteet: () => dispatch(fetchKohteet())
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Valmistelu)
+export default connect(mapStateToProps, mapDispatchToProps)(ValmisteluWizard)

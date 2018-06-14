@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "../../../../../../modules/constants"
-import { parseKoulutusalat } from "./koulutusParser"
+import { API_BASE_URL } from "../constants"
+import { parseKoulutusalat } from "../../routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusParser"
 
 // Constants
 export const FETCH_KOULUTUSALAT_START = 'FETCH_KOULUTUSALAT_START'

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateValmistelu'
 import { COLORS } from "../../../../modules/styles"
-import { WizButton } from "./Valmistelu"
+import { WizButton } from "./ValmisteluWizard"
 import TutkintoList from './ValmisteluTutkinnotList'
 import { parseLocalizedField } from "../../../../modules/helpers"
 import { ContentContainer } from "../../../../modules/elements"

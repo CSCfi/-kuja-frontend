@@ -1,26 +1,23 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { COLORS } from "../../../../../../modules/styles"
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { WizButton } from "./MuutospyyntoWizard"
+import { MUUT_KEYS } from "../modules/constants"
+import { TUTKINTO_TEKSTIT } from "../../../modules/constants"
 import TutkintoList from './TutkintoList'
+import KoulutusList from './KoulutusList'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { ContentContainer } from "../../../../../../modules/elements"
-import {
-  getTutkintoKoodiByMaaraysId,
-  getTutkintoNimiByKoodiarvo,
-  getTutkintoNimiByMaaraysId
-} from "../modules/koulutusUtil"
+import Loading from '../../../../../../modules/Loading'
 import {
   Kohdenumero,
   Otsikko,
-  BottomWrapper,
   Row,
-  Kohde
+  Kohde,
+  Info,
 } from './MuutospyyntoWizardComponents'
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
@@ -33,92 +30,88 @@ class MuutospyyntoWizardTutkinnot extends Component {
         .then(() => {
           if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
             this.props.fetchKoulutuksetAll()
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS)
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS)
+            this.props.fetchKoulutus("999901")
+            this.props.fetchKoulutus("999903")
           }
         })
     }
   }
 
   render() {
-    const { handleSubmit, lupa, tutkintomuutoksetValue, onCancel, previousPage } = this.props
+    const { lupa, tutkintomuutoksetValue } = this.props
     const { kohteet } = lupa
+    const { headingNumber, heading } = kohteet[1]
     const koulutusdata = this.props.koulutukset.koulutusdata
-    const tutkintomuutoksetBool = tutkintomuutoksetValue === undefined || tutkintomuutoksetValue.length === 0
+    const koulutuksetFetched = this.props.koulutukset.fetched
+    const koulutuksetIsFetching = this.props.koulutukset.isFetching
+    const koulutuksetHasErrored = this.props.koulutukset.hasErrored
 
-    let isDisabled = true
-    let hasAdditions = false
-    let hasRemovals = false
+    let muutFetched = undefined
+    let muutIsFetching = undefined
+    let muutHasErrored = undefined
+    let muuData = undefined
+    let poikkeusData = undefined
 
-    if (!tutkintomuutoksetBool) {
-      isDisabled = false
+    const { muut, poikkeukset } = this.props.koulutukset
 
-      tutkintomuutoksetValue.forEach(muutos => {
-        if (muutos.type === "addition") {
-          hasAdditions = true
-        } else if (muutos.type === "removal") {
-          hasRemovals = true
-        }
-      })
+    if (muut) {
+      muutFetched = muut.fetched
+      muutIsFetching = muut.isFetching
+      muutHasErrored = muut.hasErrored
+      muuData = muut.muudata
     }
 
-    return (
-      <div>
-        <form onSubmit={handleSubmit}>
-          <Row>
-            <FieldArray
-              name="tutkintomuutokset"
-              kohde={kohteet[1]}
-              lupa={lupa}
-              data={koulutusdata}
-              editValue={tutkintomuutoksetValue}
-              component={this.renderTutkinnot}
-            />
-          </Row>
+    if (poikkeukset) {
+      poikkeusData = poikkeukset.data
+    }
 
-          <Row marginLeft="30px">
-            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_LISATYT_TUTKINNOT.FI}</h3>
-            {hasAdditions
-              ? tutkintomuutoksetValue.map(muutos => {
-                if (muutos.type === "addition") {
-                  return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
-                } else {
-                  return null
-                }
-              })
-              : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_LISATTYJA.FI
-            }
-          </Row>
+    if (koulutuksetFetched && muutFetched && muuData !== undefined && poikkeusData !== undefined) {
+      return (
+        <Kohde>
+          <ContentContainer>
+            <Kohdenumero>{headingNumber}.</Kohdenumero>
+            <Otsikko>{heading}</Otsikko>
+            <Row>
+              <FieldArray
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
+                kohde={kohteet[1]}
+                lupa={lupa}
+                data={koulutusdata}
+                muut={muuData}
+                editValue={tutkintomuutoksetValue}
+                component={this.renderTutkinnot}
+              />
+            </Row>
 
-          <Row marginLeft="30px">
-            <h3>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_POISTETUT_TUTKINNOT.FI}</h3>
-            <div>
-              {hasRemovals
-                ? tutkintomuutoksetValue.map(muutos => {
-                  if (muutos.type === "removal") {
-                    return <div key={muutos.koodiarvo}>{muutos.koodiarvo}&nbsp;{muutos.nimi}</div>
-                  } else {
-                    return null
-                  }
-                })
-                : MUUTOS_WIZARD_TEKSTIT.MUUTOS_EI_POISTETTUJA.FI
-              }
-            </div>
-          </Row>
-
-          <BottomWrapper>
-            <WizButton type="button" onClick={previousPage}>
-              Edellinen
-            </WizButton>
-            <WizButton type="submit" disabled={isDisabled}>Seuraava</WizButton>
-            <WizButton bgColor={COLORS.OIVA_RED} onClick={(e) => onCancel(e)}>Peruuta</WizButton>
-          </BottomWrapper>
-        </form>
-      </div>
-    )
+            <Row>
+              <FieldArray
+                name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
+                kohde={kohteet[1]}
+                lupa={lupa}
+                muut={muuData}
+                poikkeukset={poikkeusData}
+                editValue={tutkintomuutoksetValue}
+                component={this.renderKoulutukset}
+              />
+            </Row>
+          </ContentContainer>
+        </Kohde>
+      )
+    } else if (koulutuksetIsFetching || muutIsFetching) {
+      return <Loading/>
+    } else if (koulutuksetHasErrored || muutHasErrored) {
+      return <h2>Virhe ladattaessa tietoja</h2>
+    } else {
+      return null
+    }
   }
 
   renderTutkinnot(props) {
     let { fields, data } = props
-    const { kohde, lupa, editValue } = props
+    const { kohde, lupa, editValue, muut } = props
     const { headingNumber, heading, maaraykset, muutMaaraykset } = kohde
 
     data = _.sortBy(data, d => {
@@ -126,49 +119,103 @@ class MuutospyyntoWizardTutkinnot extends Component {
     })
 
     return (
-      <Kohde>
-        <ContentContainer>
-          <Kohdenumero>{headingNumber}.</Kohdenumero>
-          <Otsikko>{heading}</Otsikko>
-          <Row>
-            {_.map(data, (koulutusala, i) => {
-              const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo
-              const { metadata, koulutukset } = koulutusala
-              const nimi = parseLocalizedField(metadata)
-              return (
-                <TutkintoList
-                  key={i}
-                  koodiarvo={koodiarvo}
-                  nimi={nimi}
-                  koulutukset={koulutukset}
-                  maaraykset={maaraykset}
-                  editValues={editValue}
-                  fields={fields}
-                />
-              )
-            })}
-          </Row>
-        </ContentContainer>
-      </Kohde>
+      <Row>
+        {_.map(data, (koulutusala, i) => {
+          const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo
+          const { metadata, koulutukset } = koulutusala
+          const nimi = parseLocalizedField(metadata)
+          return (
+            <TutkintoList
+              key={i}
+              koodiarvo={koodiarvo}
+              nimi={nimi}
+              koulutukset={koulutukset}
+              maaraykset={maaraykset}
+              editValues={editValue}
+              fields={fields}
+            />
+          )
+        })}
+      </Row>
+    )
+  }
+
+  renderKoulutukset(props) {
+    const { kohde, muut, poikkeukset, editValue, fields } = props
+    const { muutMaaraykset } = kohde
+
+    return (
+      <Row>
+        <Info>{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</Info>
+
+        <KoulutusList
+          key="valmentavat"
+          koodisto="koulutus"
+          nimi="Valmentavat koulutukset"
+          koulutukset={poikkeukset}
+          muutMaaraykset={muutMaaraykset}
+          editValues={editValue}
+          fields={fields}
+        />
+
+        {muut.ammatilliseentehtavaanvalmistavakoulutus &&
+          <KoulutusList
+            key="ammatilliseentehtavaanvalmistavakoulutus"
+            koodisto="ammatilliseentehtavaanvalmistavakoulutus"
+            nimi="Ammatilliseen tehtavaan valmistavat koulutukset"
+            koulutukset={muut.ammatilliseentehtavaanvalmistavakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
+
+        {muut.oivatyovoimakoulutus &&
+          <KoulutusList
+            key="oivatyovoimakoulutus"
+            koodisto="oivatyovoimakoulutus"
+            nimi="Työvoimakoulutukset"
+            koulutukset={muut.oivatyovoimakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
+
+        {muut.kuljettajakoulutus &&
+          <KoulutusList
+            key="kuljettajakoulutus"
+            koodisto="kuljettajakoulutus"
+            nimi="Kuljettajakoulutukset"
+            koulutukset={muut.kuljettajakoulutus}
+            muutMaaraykset={muutMaaraykset}
+            editValues={editValue}
+            fields={fields}
+          />
+        }
+
+      </Row>
     )
   }
 }
 
-const selector = formValueSelector('uusiHakemus')
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkinnot = connect(state => {
-  const tutkintomuutoksetValue = selector(state, 'tutkintomuutokset')
+  const tutkintomuutoksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
 
   return {
     tutkintomuutoksetValue,
     koulutusalat: state.koulutusalat,
-    koulutukset: state.koulutukset
+    koulutukset: state.koulutukset,
+    paatoskierrokset: state.paatoskierrokset
   }
 })(MuutospyyntoWizardTutkinnot)
 
 export default reduxForm({
-  form: 'uusiHakemus',
+  form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true,
+  enableReinitialize : true,
   validate
 })(MuutospyyntoWizardTutkinnot)

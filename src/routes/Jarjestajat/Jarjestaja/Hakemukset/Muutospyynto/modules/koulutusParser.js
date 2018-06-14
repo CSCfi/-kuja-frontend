@@ -63,6 +63,8 @@ export const parseKoulutuksetAll = (koulutusdata) => {
 
   koulutusdata.forEach(koulutus => {
     const { koulutusalaKoodiArvo } = koulutus
+    // koulutus.kohde = { id: 1 }
+    // koulutus.maaraystyyppi = { id: 1 }
 
     switch (koulutusalaKoodiArvo) {
       case keys.KEY_01: {
@@ -127,6 +129,14 @@ export const parseKoulutuksetAll = (koulutusdata) => {
   })
 
   return koulutukset
+}
+
+export function parseMuut(muu) {
+  if (!muu) {
+    return null
+  }
+
+  return _.sortBy(muu, ['koodiArvo'])
 }
 
 export function parseKoulutusalat(koulutusalat) {

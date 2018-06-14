@@ -26,7 +26,11 @@ export const COLORS = {
   LIGHT_GRAY: '#D8D8D8',
   BORDER_GRAY: '#DFDFDF',
   BG_GRAY: '#F5F5F5',
-  BG_DARKER_GRAY: '#e6e6e6'
+  BG_DARKER_GRAY: '#e6e6e6',
+  ACTIVE_BLUE: '#E9F6FA',
+  OIVA_OPAQUE_GREEN: 'rgba(90,138,112,0.4)',
+  OIVA_DARK_GREEN: '#517c64',
+  OIVA_LIGHT_GREEN: '#eef3f0'
 }
 
 export const FONT_STACK = {
@@ -47,6 +51,10 @@ export const MEDIA_QUERIES = {
   TABLET_MIN: 'only screen and (min-width: 768px)',
   DESKTOP_NORMAL: 'only screen and (min-width: 1024px) and (max-width: 1279px)',
   DESKTOP_LARGE: 'only screen and (min-width: 1280px)'
+}
+
+export const TRANSITIONS = {
+  EASE_IN_OUT_QUICK: 'all 0.05s ease-in-out'
 }
 
 // Globaalit tyylit
@@ -106,6 +114,130 @@ injectGlobal`
       font-size: 26px;
     }
   }
+  
+  div, p, span {
+    &.is-removed {
+      text-decoration: line-through;
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-added {
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-changed {
+      color: ${COLORS.OIVA_PURPLE};
+    }
+    
+    &.is-in-lupa {
+      font-weight: bold;
+    }
+  }
+  
+  input[type="text"] {
+    font-size: 15px;
+    padding: 8px 16px;
+    width: 320px;
+    margin: 10px 10px 10px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  input[type="number"] {
+    font-size: 15px;
+    padding: 8px 16px;
+    width: 140px;
+    margin: 10px 10px 10px 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    &:focus {
+      outline: none;
+    }
+  }
+  
+  .control {
+    display: flex;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 5px;
+    margin-right: 20px;
+    padding-top: 3px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .control input {
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
+  }
+  .control_indicator {
+      position: absolute;
+      top: -2px;
+      left: 0;
+      height: 24px;
+      width: 24px;
+      background: #ffffff;
+      border: 1px solid #909090;
+  }
+  .control-radio .control_indicator {
+      border-radius: 50%;
+  }
+  
+  .control:hover input ~ .control_indicator,
+  .control input:focus ~ .control_indicator {
+      background: #ffffff;
+  }
+  
+  .control input:checked ~ .control_indicator {
+      background: #ffffff;
+  }
+  .control:hover input:not([disabled]):checked ~ .control_indicator,
+  .control input:checked:focus ~ .control_indicator {
+      background: #ffffff;
+  }
+  .control input:disabled ~ .control_indicator {
+      background: #e6e6e6;
+      opacity: 0.6;
+      pointer-events: none;
+  }
+  .control_indicator:after {
+      box-sizing: unset;
+      content: '';
+      position: absolute;
+      display: none;
+  }
+  .control input:checked ~ .control_indicator:after {
+      display: block;
+  }
+  .control-radio .control_indicator:after {
+      left: 4px;
+      top: 4px;
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      background: #5A8A70;
+  }
+  .control-radio input:disabled ~ .control_indicator:after {
+      background: #7b7b7b;
+  }
+  
+  .react-datepicker-popper {
+    .react-datepicker {
+      border-radius: 0;
+      
+      .react-datepicker__day--selected {
+        background-color: ${COLORS.OIVA_GREEN};
+      }
+    }
+  }
+  
 `
 
 export const P = styled.p`
