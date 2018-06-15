@@ -8,6 +8,7 @@ import arrow from 'static/images/arrow-down.svg'
 import { COLORS } from "../../../../../../modules/styles"
 import { getIndex } from "../modules/muutosUtil"
 import { MUUTOS_TYPES, MUUTOS_TYPE_TEXTS } from "../modules/uusiHakemusFormConstants"
+import { getTutkintoNimiByKoodiarvo } from "../../../../../Asiat/Valmistelu/modules/valmisteluUtils"
 
 const MuutosWrapper = styled.div`
   width: 100%;
@@ -70,8 +71,9 @@ class Muutos extends Component {
   render() {
     const { isHidden } = this.state
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, nimi, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, label, arvo } = muutos
+    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, label, arvo } = muutos
     const { perusteluteksti } = meta
+    const nimi = getTutkintoNimiByKoodiarvo(koodiarvo)
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
     const tyyppi =
       type === MUUTOS_TYPES.ADDITION ? MUUTOS_TYPE_TEXTS.ADDITION.FI :
