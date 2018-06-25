@@ -109,6 +109,8 @@ class MuutospyyntoWizardYhteenveto extends Component {
       jarjestaja = lupa.data.jarjestaja
     }
 
+    const { meta } = formValues
+
     setTimeout(() => console.log('yhteenveto ', formValues), 400)
 
     return (
@@ -129,6 +131,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
           <FieldArray
             name={FIELD_ARRAY_NAMES.HAKIJAN_TIEDOT}
+            meta={meta}
             component={this.renderHakijanTiedot}
           />
 
