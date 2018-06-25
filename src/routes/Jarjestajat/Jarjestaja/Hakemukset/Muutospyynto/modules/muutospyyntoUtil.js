@@ -161,7 +161,22 @@ export function getBaseJarjestajaData(state) {
   }
 }
 
-export function loadFormData(state, muutosdata) {
+function getHakija(meta) {
+  if (!meta) {
+    return
+  }
+
+  const { nimi, puhelin, email, hyvaksyjat, haettupvm } = meta
+  return {
+    nimi,
+    puhelin,
+    email,
+    hyvaksyjat,
+    haettupvm
+  }
+}
+
+export function loadFormData(state, muutosdata, formValues) {
   console.log('loadFormData')
   console.log(state)
   console.log(muutosdata)
@@ -172,12 +187,21 @@ export function loadFormData(state, muutosdata) {
     tila,
     luoja,
     luontipvm,
+    meta,
     lupaUuid,
     paatoskierros,
     muutokset
   } = muutosdata
 
+  let hakija = getHakija(meta)
+  if (formValues) {
+    if (formValues.hakija) {
+      hakija = formValues.hakija
+    }
+  }
+
   let initialData = getBaseJarjestajaData(state)
+
   initialData = {
     ...initialData,
     voimassaalkupvm,
@@ -185,6 +209,7 @@ export function loadFormData(state, muutosdata) {
     tila,
     luoja,
     luontipvm,
+    hakija,
     lupaUuid,
     paatoskierros
   }

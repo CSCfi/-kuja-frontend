@@ -298,8 +298,14 @@ MuutospyyntoEditWizard = reduxForm({
 MuutospyyntoEditWizard = connect(state => {
   const { data } = state.muutospyynto
 
+  let formVals = undefined
+  if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
+    formVals = state.form.uusiHakemus.values
+  }
+
   return {
-    initialValues: loadFormData(state, data)
+    formValues: formVals,
+    initialValues: loadFormData(state, data, formVals)
   }
 })(MuutospyyntoEditWizard)
 

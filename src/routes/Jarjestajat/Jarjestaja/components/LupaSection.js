@@ -138,7 +138,7 @@ class LupaSection extends Component {
             <SectionWrapper>
               <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
               <p>{kohdeKuvaus}</p>
-              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{arvo}</Capitalized>)}
+              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{_.capitalize(arvo.label)}</Capitalized>)}
               <div>
                 <Tutkinnot>
                     {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
