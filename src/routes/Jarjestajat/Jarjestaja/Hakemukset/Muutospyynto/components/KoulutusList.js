@@ -12,7 +12,8 @@ import {
   KoulutusalaListWrapper,
   TutkintoWrapper,
   Koodi,
-  Nimi
+  Nimi,
+  Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
@@ -141,7 +142,7 @@ class KoulutusList extends Component {
                   />
                   <label htmlFor={identifier}></label>
                 </Checkbox>
-                <Nimi>{nimi}</Nimi>
+                {(koodistoUri === 'kuljettajakoulutus' || koodistoUri === 'oivatyovoimakoulutus') ? <Kuvaus>{kuvaus}</Kuvaus> : <Nimi>{nimi}</Nimi>}
               </TutkintoWrapper>
             )
           })}
