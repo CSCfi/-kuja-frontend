@@ -52,7 +52,7 @@ function getKuntaList(kunnat, locale) {
     const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta
 
     if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
-      list.push({ ...kunta, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta" })
+      list.push({ ...kunta, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta", koodisto: "kunta", koodiarvo: koodiArvo })
     }
   })
 
@@ -69,7 +69,7 @@ export function getMaakuntakunnatList(toimialueet, locale) {
 
     if (tila === "HYVAKSYTTY" && koodiArvo !== "99") {
       if (!voimassaLoppuPvm || now < Date.parse(voimassaLoppuPvm)) {
-        let curMaakunta = { ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta" }
+        let curMaakunta = { ...toimialue, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "maakunta", koodisto: "maakunta", koodiarvo: koodiArvo }
         curMaakunta.kunta = getKuntaList(kunta, locale)
         list.push(curMaakunta)
       }

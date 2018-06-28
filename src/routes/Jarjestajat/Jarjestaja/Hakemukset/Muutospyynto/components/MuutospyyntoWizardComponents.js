@@ -153,6 +153,10 @@ export const Nimi = styled.span`
   flex: 6;
 `
 
+export const Kuvaus = styled.span`
+  flex: 6;
+`
+
 export const Kohdenumero = styled.span`
   font-size: 20px;
   position: absolute;
