@@ -68,7 +68,7 @@ class TutkintoKieliList extends Component {
     let muutokset = []
 
     // Sort languages: promote some common languages, sort others alphabetically
-    const kieliListOrdered = kieliList.sort(function(a, b) {
+    const kieliListOrdered = kieliList.sort((a, b) => {
       if (a.koodiArvo === 'FI') return -1;
       if (b.koodiArvo === 'FI') return 1;
       if (a.koodiArvo === 'SV') return -1;
