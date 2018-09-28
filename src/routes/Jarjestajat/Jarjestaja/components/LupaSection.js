@@ -45,12 +45,6 @@ const H3 = styled.h3`
   font-size: 20px;
 `
 
-const MuutosLink = styled(Link)`
-  position: absolute;
-  right: 15px;
-  top: 6px;
-`
-
 const Capitalized = styled.p`
   text-transform: capitalize;
   margin-left: 30px;
@@ -89,7 +83,7 @@ class LupaSection extends Component {
 
 
   render() {
-    const { kohde, diaarinumero, ytunnus, renderMuutosLink, url, linkText } = this.props
+    const { kohde, diaarinumero, ytunnus } = this.props
 
     // const { isRemoving } = this.state
 
@@ -111,10 +105,6 @@ class LupaSection extends Component {
 
               <Kohde1>{`${headingNumber}.`}</Kohde1>
               <H3>{heading}</H3>
-              {url
-                ? <MuutosLink to={url} diaarinumero={diaarinumero} kohdeid={headingNumber}>{linkText}</MuutosLink>
-                : null
-              }
               <div>
                 <Tutkinnot>
                   {_.map(maaraykset, (ala, i) => <Koulutusala key={i} {...ala} />)}

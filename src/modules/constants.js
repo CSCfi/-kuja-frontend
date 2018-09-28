@@ -10,7 +10,7 @@ export const CAS_LOGOUT_URL = `${CAS_BASE_URL}/cas/logout?service=${HOST_BASE_UR
 export const LUPA_EXCEPTION_PATH = `${API_BASE_URL}/pebble/resources/liitteet/lisakoulutusluvat/`
 
 // USERS & ROLES
-export const ROLE_APPLICATION = 'APP_KOUTE'
-export const ROLE_YLLAPITAJA = 'APP_KOUTE_YLLAPITAJA'
-export const ROLE_ESITTELIJA = 'APP_KOUTE_ESITTELIJA'
-export const ROLE_KAYTTAJA = 'APP_KOUTE_KAYTTAJA'
+export const ROLE_APPLICATION = 'OIVA_APP'
+export const ROLE_YLLAPITAJA = 'OIVA_APP_YLLAPITAJA'
+export const ROLE_ESITTELIJA = 'OIVA_APP_ESITTELIJA'
+export const ROLE_KAYTTAJA = 'OIVA_APP_KAYTTAJA'
