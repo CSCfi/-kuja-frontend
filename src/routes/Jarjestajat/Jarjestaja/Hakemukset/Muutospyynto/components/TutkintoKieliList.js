@@ -62,10 +62,11 @@ class TutkintoKieliList extends Component {
   }
 
   render() {
-    const { nimi, koulutukset, maaraykset, editValues, kielet, kieliList, tutkinnotjakielet } = this.props
+    const { nimi, koulutukset, editValues, kielet, kieliList, tutkinnotjakielet } = this.props
     const alaKoodiArvo = this.props.koodiarvo
-    let { fields } = this.props
+    let { fields, maaraykset } = this.props
     let muutokset = []
+
 
     // Sort languages: promote some common languages, sort others alphabetically
     const kieliListOrdered = kieliList.sort((a, b) => {
@@ -81,6 +82,11 @@ class TutkintoKieliList extends Component {
       if (a.label > b.label) return 1;
       return 0;
     });
+
+    maaraykset = _.sortBy(maaraykset, m => {
+      return m.koodi
+    })
+
 
     if (editValues) {
       _.forEach(editValues, value => {
