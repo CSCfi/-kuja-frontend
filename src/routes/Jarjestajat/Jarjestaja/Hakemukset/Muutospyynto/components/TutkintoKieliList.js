@@ -67,9 +67,26 @@ class TutkintoKieliList extends Component {
     let { fields, maaraykset } = this.props
     let muutokset = []
 
+
+    // Sort languages: promote some common languages, sort others alphabetically
+    const kieliListOrdered = kieliList.sort((a, b) => {
+      if (a.koodiArvo === 'FI') return -1;
+      if (b.koodiArvo === 'FI') return 1;
+      if (a.koodiArvo === 'SV') return -1;
+      if (b.koodiArvo === 'SV') return 1;
+      if (a.koodiArvo === 'EN') return -1;
+      if (b.koodiArvo === 'EN') return 1;
+      if (a.koodiArvo === 'RU') return -1;
+      if (b.koodiArvo === 'RU') return 1;
+      if (a.label < b.label) return -1;
+      if (a.label > b.label) return 1;
+      return 0;
+    });
+
     maaraykset = _.sortBy(maaraykset, m => {
       return m.koodi
     })
+
 
     if (editValues) {
       _.forEach(editValues, value => {
@@ -170,7 +187,7 @@ class TutkintoKieliList extends Component {
                 <KieliSelect
                   identifier={identifier}
                   value={value}
-                  kielet={kieliList}
+                  kielet={kieliListOrdered}
                   disabled={!isChecked}
                   editValues={editValues}
                   fields={fields}
