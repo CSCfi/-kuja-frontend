@@ -162,16 +162,8 @@ export const MUUTOS_WIZARD_TEKSTIT = {
           FI: "Vähimmäisopiskelijavuosimäärän rajoitus koskien vaativaa erityistä tukea (65 §)",
           SV: "På svenska"
       },
-      VAATIVA_TUKI_OHJE: {
-          FI: "Tämä tieto on pakollinen vaativaa erityistä tukea haettaessa.",
-          SV: "På svenska"
-      },
       SISAOPPILAITOS: {
           FI: "Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)",
-          SV: "På svenska"
-      },
-      SISAOPPILAITOS_OHJE: {
-          FI: "Tämä tieto on pakollinen sisäoppilaitosmuotoista koulutusta haettaessa.",
           SV: "På svenska"
       },
       ENINTAAN: {
