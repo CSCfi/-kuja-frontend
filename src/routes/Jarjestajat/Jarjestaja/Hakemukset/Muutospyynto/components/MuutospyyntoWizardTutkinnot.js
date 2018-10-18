@@ -162,7 +162,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
           <KoulutusList
             key="ammatilliseentehtavaanvalmistavakoulutus"
             koodisto="ammatilliseentehtavaanvalmistavakoulutus"
-            nimi="Ammatilliseen tehtavaan valmistavat koulutukset"
+            nimi="Ammatilliseen tehtävään valmistavat koulutukset"
             koulutukset={muut.ammatilliseentehtavaanvalmistavakoulutus}
             muutMaaraykset={muutMaaraykset}
             editValues={editValue}
