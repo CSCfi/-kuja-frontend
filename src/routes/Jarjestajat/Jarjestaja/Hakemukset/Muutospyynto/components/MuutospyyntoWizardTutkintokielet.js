@@ -8,7 +8,7 @@ import TutkintoKieliList from './TutkintoKieliList'
 import { ContentContainer} from "../../../../../../modules/elements"
 import { Row } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
@@ -19,10 +19,25 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     if (kielet && !kielet.fetched) {
       this.props.fetchKielet()
     }
+
+    if (!this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
+      this.props.fetchKoulutusalat()
+        .then(() => {
+          if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
+            this.props.fetchKoulutuksetAll()
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS)
+            this.props.fetchKoulutuksetMuut(MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS)
+            this.props.fetchKoulutus("999901")
+            this.props.fetchKoulutus("999903")
+          }
+        })
+    }
+
   }
 
   render() {
-    const { lupa } = this.props
+    const { lupa, koulutukset } = this.props
     const { kohteet} = lupa
     const kohde = kohteet[2]
     const { kielet, tutkintokielimuutoksetValue } = this.props
@@ -36,6 +51,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
               name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
               kohde={kohde}
               kielet={kielet.data}
+              koulutukset={koulutukset}
               kieliList={kielet.kieliList}
               tutkintomaaraykset={kohteet[1].maaraykset}
               editValues={tutkintokielimuutoksetValue}
@@ -54,7 +70,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
   }
 
   renderTutkintokieliList(props) {
-    const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset } = props
+    const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset, koulutukset } = props
     const { kohdeArvot, tutkinnotjakielet } = kohde
 
     // TODO: Tarvitaanko valittujen tutkintokielten listausta tässä?
@@ -63,11 +79,13 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     return (
       <div>
         <Row>
+
           {_.map(tutkintomaaraykset, (koulutusala, i) => {
             const koodiarvo = koulutusala.koodi || koulutusala.koodiarvo || koulutusala.koodiArvo
             const { nimi, metadata, koulutusalat } = koulutusala
             let nimiText = nimi
             let arrays = _.flatten(_.concat(_.map(koulutusalat, ala => { return ala.koulutukset })))
+            let koulutuslista = koulutukset.koulutusdata ? koulutukset.koulutusdata[koodiarvo].koulutukset : []
 
             if (!nimi && metadata) {
               nimiText = parseLocalizedField(metadata)
@@ -80,7 +98,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
                 key={i}
                 koodiarvo={koodiarvo}
                 nimi={nimiText}
-                koulutukset={arrays}
+                koulutukset={koulutuslista}
                 maaraykset={arrays}
                 editValues={editValues}
                 fields={fields}

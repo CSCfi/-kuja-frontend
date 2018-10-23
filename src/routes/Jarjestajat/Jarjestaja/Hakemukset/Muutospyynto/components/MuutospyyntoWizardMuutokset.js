@@ -64,6 +64,10 @@ class MuutospyyntoWizardMuutokset extends Component {
 
             <MuutospyyntoWizardTutkintokieletContainer
               lupa={lupa}
+              fetchKoulutusalat={fetchKoulutusalat}
+              fetchKoulutuksetAll={fetchKoulutuksetAll}
+              fetchKoulutuksetMuut={fetchKoulutuksetMuut}
+              fetchKoulutus={fetchKoulutus}
             />
           </Kohde>
 

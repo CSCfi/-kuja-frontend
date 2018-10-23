@@ -6,7 +6,9 @@ import MuutospyyntoWizardTutkintokielet from '../components/MuutospyyntoWizardTu
 
 const mapStateToProps = (state) => {
   return {
-    kielet: state.kielet
+    kielet: state.kielet,
+    koulutusalat: state.koulutusalat,
+    koulutukset: state.koulutukset
   }
 }
 

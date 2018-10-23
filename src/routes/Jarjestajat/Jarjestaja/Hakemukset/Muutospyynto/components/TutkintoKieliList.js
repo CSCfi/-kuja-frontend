@@ -67,7 +67,6 @@ class TutkintoKieliList extends Component {
     let { fields, maaraykset } = this.props
     let muutokset = []
 
-
     // Sort languages: promote some common languages, sort others alphabetically
     const kieliListOrdered = kieliList.sort((a, b) => {
       if (a.koodiArvo === 'FI') return -1;
@@ -87,10 +86,9 @@ class TutkintoKieliList extends Component {
       return m.koodi
     })
 
-
     if (editValues) {
       _.forEach(editValues, value => {
-        _.forEach(koulutukset, koulutus => {
+        _.forEach(maaraykset, koulutus => {
           if (koulutus.koodiArvo === value.koodiarvo) {
             muutokset.push(value)
           }
@@ -103,7 +101,6 @@ class TutkintoKieliList extends Component {
     if (current) {
       alat = current.koulutusalat
     }
-
 
     return (
       <Wrapper>
@@ -170,6 +167,9 @@ class TutkintoKieliList extends Component {
             if (isInLupa && isRemoved) {
               value = ''
             }
+
+            // Koulutuksen on oltava voimassa
+            if (!_.find(koulutukset, (k) => { return k.koodiArvo === koodi })) {return false}
 
             return (
               <TutkintoWrapper key={i} className={customClassName}>
