@@ -71,7 +71,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
 
   renderTutkintokieliList(props) {
     const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset, koulutukset } = props
-    const { kohdeArvot, tutkinnotjakielet } = kohde
+    const { tutkinnotjakielet } = kohde
 
     // TODO: Tarvitaanko valittujen tutkintokielten listausta tässä?
     // const valitutKielet = getSelectedTutkintoKielet(tutkinnotjakielet, editValues)

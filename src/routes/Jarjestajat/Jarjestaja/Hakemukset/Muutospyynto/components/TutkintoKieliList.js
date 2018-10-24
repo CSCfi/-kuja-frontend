@@ -62,7 +62,7 @@ class TutkintoKieliList extends Component {
   }
 
   render() {
-    const { nimi, koulutukset, editValues, kielet, kieliList, tutkinnotjakielet } = this.props
+    const { nimi, koulutukset, editValues, kieliList, tutkinnotjakielet } = this.props
     const alaKoodiArvo = this.props.koodiarvo
     let { fields, maaraykset } = this.props
     let muutokset = []
@@ -96,12 +96,6 @@ class TutkintoKieliList extends Component {
       })
     }
 
-    const current = _.find(maaraykset, ala => { return ala.koodi === alaKoodiArvo })
-    let alat = undefined
-    if (current) {
-      alat = current.koulutusalat
-    }
-
     return (
       <Wrapper>
         <Heading onClick={this.toggleTutkintoList.bind(this)}>
@@ -116,7 +110,7 @@ class TutkintoKieliList extends Component {
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
           {_.map(maaraykset, (tutkinto, i) => {
-            const { koodi, nimi, maaraysId } = tutkinto
+            const { koodi, nimi } = tutkinto
             const identifier = `input-tutkintokieli-2-${koodi}`
 
             const koodiarvo = koodi
@@ -140,19 +134,28 @@ class TutkintoKieliList extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodi) {
-                  if (val.type === MUUTOS_TYPES.ADDITION) {
-                    valueKoodi = val.value
-                  }
+                  switch(val.type) {
+                    case MUUTOS_TYPES.ADDITION:
+                      valueKoodi = val.value
+                      isAdded = true
+                      break
 
-                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : val.type === MUUTOS_TYPES.CHANGE ? isChanged = true : null
+                    case MUUTOS_TYPES.REMOVAL:
+                      isRemoved = true
+                      break
+
+                    case MUUTOS_TYPES.CHANGE:
+                      isChanged = true
+                      break
+
+                    default:
+                      break
+                  }
                 }
               })
             }
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
-            isChanged ? customClassName = "is-changed" : null
+            customClassName = isInLupa ? "is-in-lupa" : isAdded ? "is-added" : isRemoved ? "is-removed" : isChanged ? "is-changed" : null
 
             if ((isInLupa && !isRemoved)) {
               isChecked = true

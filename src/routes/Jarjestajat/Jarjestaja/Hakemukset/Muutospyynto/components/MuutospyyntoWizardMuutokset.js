@@ -31,7 +31,7 @@ class MuutospyyntoWizardMuutokset extends Component {
     const {
       onSubmit,
       save,
-      update,
+//      update,
       lupa,
       fetchKoulutusalat,
       fetchKoulutuksetAll,
