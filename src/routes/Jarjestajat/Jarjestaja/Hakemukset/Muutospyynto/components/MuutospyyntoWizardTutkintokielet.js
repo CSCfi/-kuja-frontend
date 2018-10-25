@@ -8,7 +8,7 @@ import TutkintoKieliList from './TutkintoKieliList'
 import { ContentContainer} from "../../../../../../modules/elements"
 import { Row } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
-import { MUUTOS_WIZARD_TEKSTIT, MUUT_KEYS } from "../modules/constants"
+import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
@@ -19,21 +19,6 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     if (kielet && !kielet.fetched) {
       this.props.fetchKielet()
     }
-
-    if (!this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
-      this.props.fetchKoulutusalat()
-        .then(() => {
-          if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
-            this.props.fetchKoulutuksetAll()
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS)
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS)
-            this.props.fetchKoulutus("999901")
-            this.props.fetchKoulutus("999903")
-          }
-        })
-    }
-
   }
 
   render() {

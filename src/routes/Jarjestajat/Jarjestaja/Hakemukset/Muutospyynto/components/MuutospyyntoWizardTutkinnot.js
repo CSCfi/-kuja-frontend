@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
-import { MUUT_KEYS } from "../modules/constants"
 import { TUTKINTO_TEKSTIT } from "../../../modules/constants"
 import TutkintoList from './TutkintoList'
 import KoulutusList from './KoulutusList'
@@ -22,22 +21,6 @@ import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modu
 class MuutospyyntoWizardTutkinnot extends Component {
   constructor(props) {
     super(props)
-  }
-
-  componentWillMount() {
-    if (!this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
-      this.props.fetchKoulutusalat()
-        .then(() => {
-          if (this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
-            this.props.fetchKoulutuksetAll()
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS)
-            this.props.fetchKoulutuksetMuut(MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS)
-            this.props.fetchKoulutus("999901")
-            this.props.fetchKoulutus("999903")
-          }
-        })
-    }
   }
 
   render() {
@@ -206,7 +189,6 @@ MuutospyyntoWizardTutkinnot = connect(state => {
 
   return {
     tutkintomuutoksetValue,
-    koulutusalat: state.koulutusalat,
     koulutukset: state.koulutukset,
     paatoskierrokset: state.paatoskierrokset
   }
