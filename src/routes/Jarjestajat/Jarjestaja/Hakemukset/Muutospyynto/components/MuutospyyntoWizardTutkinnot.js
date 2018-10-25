@@ -57,9 +57,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
               <FieldArray
                 name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
-                lupa={lupa}
                 data={koulutusdata}
-                muut={muuData}
                 editValue={tutkintomuutoksetValue}
                 component={this.renderTutkinnot}
               />
@@ -70,6 +68,8 @@ class MuutospyyntoWizardTutkinnot extends Component {
                 name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
                 poikkeukset={poikkeusData}
+                lupa={lupa}
+                muut={muuData}
                 editValue={tutkintomuutoksetValue}
                 component={this.renderKoulutukset}
               />
