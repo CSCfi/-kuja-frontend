@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { TUTKINTO_TEKSTIT } from "../../../modules/constants"
 import TutkintoList from './TutkintoList'
@@ -16,13 +16,9 @@ import {
   Kohde,
   Info,
 } from './MuutospyyntoWizardComponents'
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 
 class MuutospyyntoWizardTutkinnot extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { lupa, tutkintomuutoksetValue } = this.props
     const { kohteet } = lupa
@@ -73,8 +69,6 @@ class MuutospyyntoWizardTutkinnot extends Component {
               <FieldArray
                 name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
                 kohde={kohteet[1]}
-                lupa={lupa}
-                muut={muuData}
                 poikkeukset={poikkeusData}
                 editValue={tutkintomuutoksetValue}
                 component={this.renderKoulutukset}
@@ -94,8 +88,8 @@ class MuutospyyntoWizardTutkinnot extends Component {
 
   renderTutkinnot(props) {
     let { fields, data } = props
-    const { kohde, lupa, editValue, muut } = props
-    const { headingNumber, heading, maaraykset, muutMaaraykset } = kohde
+    const { kohde, editValue } = props
+    const { maaraykset } = kohde
 
     data = _.sortBy(data, d => {
       return d.koodiArvo
