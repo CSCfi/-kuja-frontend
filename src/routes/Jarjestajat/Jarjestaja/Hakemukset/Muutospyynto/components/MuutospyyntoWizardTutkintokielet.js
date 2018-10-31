@@ -19,13 +19,14 @@ class MuutospyyntoWizardTutkintokielet extends Component {
     if (kielet && !kielet.fetched) {
       this.props.fetchKielet()
     }
+
   }
 
   render() {
     const { lupa, koulutukset } = this.props
     const { kohteet} = lupa
     const kohde = kohteet[2]
-    const { kielet, tutkintokielimuutoksetValue } = this.props
+    const { kielet, tutkintokielimuutoksetValue, tutkinnotJaKoulutuksetValue } = this.props
 
     if (kielet.fetched) {
       return (
@@ -39,6 +40,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
               koulutukset={koulutukset}
               kieliList={kielet.kieliList}
               tutkintomaaraykset={kohteet[1].maaraykset}
+              tutkinnotJaKoulutuksetValue={tutkinnotJaKoulutuksetValue}
               editValues={tutkintokielimuutoksetValue}
               component={this.renderTutkintokieliList}
             />
@@ -55,7 +57,7 @@ class MuutospyyntoWizardTutkintokielet extends Component {
   }
 
   renderTutkintokieliList(props) {
-    const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset, koulutukset } = props
+    const { kielet, kieliList, fields, editValues, kohde, tutkintomaaraykset, koulutukset, tutkinnotJaKoulutuksetValue } = props
     const { tutkinnotjakielet } = kohde
 
     // TODO: Tarvitaanko valittujen tutkintokielten listausta tässä?
@@ -90,9 +92,11 @@ class MuutospyyntoWizardTutkintokielet extends Component {
                 kielet={kielet}
                 kieliList={kieliList}
                 tutkinnotjakielet={tutkinnotjakielet}
+                tutkinnotJaKoulutuksetValue={tutkinnotJaKoulutuksetValue}
               />
             )
           })}
+
         </Row>
       </div>
     )
@@ -103,9 +107,11 @@ const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTutkintokielet = connect(state => {
   const tutkintokielimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
+  const tutkinnotJaKoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
 
   return {
-    tutkintokielimuutoksetValue
+    tutkintokielimuutoksetValue,
+    tutkinnotJaKoulutuksetValue
   }
 })(MuutospyyntoWizardTutkintokielet)
 

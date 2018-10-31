@@ -62,9 +62,9 @@ class TutkintoKieliList extends Component {
   }
 
   render() {
-    const { nimi, koulutukset, editValues, kieliList, tutkinnotjakielet } = this.props
+    const { nimi, editValues, kieliList, tutkinnotjakielet, tutkinnotJaKoulutuksetValue } = this.props
     const alaKoodiArvo = this.props.koodiarvo
-    let { fields, maaraykset } = this.props
+    let { fields, maaraykset, koulutukset } = this.props
     let muutokset = []
 
     // Sort languages: promote some common languages, sort others alphabetically
@@ -82,8 +82,8 @@ class TutkintoKieliList extends Component {
       return 0;
     });
 
-    maaraykset = _.sortBy(maaraykset, m => {
-      return m.koodi
+    koulutukset = _.sortBy(koulutukset, k => {
+      return k.koodiArvo
     })
 
     if (editValues) {
@@ -109,23 +109,28 @@ class TutkintoKieliList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
-          {_.map(maaraykset, (tutkinto, i) => {
-            const { koodi, nimi } = tutkinto
-            const identifier = `input-tutkintokieli-2-${koodi}`
+          {_.map(koulutukset, (koulutus, i) => {
 
-            const koodiarvo = koodi
+            // Tässä kohtaa määräyksistä ja koulutuksista on mukana vain 
+            // tähän alaan liittyvät, muutoksista ihan kaikki.
+            // console.log(koulutus) // objekti: koodiArvo: 123, metadata: [{kieli: 'FI', nimi: 'tutkinnon nimi'}]
+            // console.log(maaraykset) // array: koodi: 123, nimi: "koulutus"
+            // console.log(tutkinnotJaKoulutuksetValue) // array: koodiarvo: 123, nimi: "koulutus"
+
+            const identifier = `input-tutkintokieli-2-${koulutus.koodiArvo}`
+            const nimiObjekti = _.filter(koulutus.metadata, (m) => { return m.kieli === "FI" })
+            const koulutuksenNimi = nimiObjekti[0].nimi
 
             let isInLupa = false
             let isAdded = false
             let isRemoved = false
             let isChanged = false
             let isChecked = false
-            let customClassName = ""
-            let value = ""
             let valueKoodi = ""
+            let value = ""
 
             tutkinnotjakielet.forEach(tutkintokieli => {
-              if (tutkintokieli.tutkintokoodi === koodi) {
+              if (tutkintokieli.tutkintokoodi === koulutus.koodiArvo) {
                 isInLupa = true
                 valueKoodi = tutkintokieli.koodi
               }
@@ -133,7 +138,7 @@ class TutkintoKieliList extends Component {
 
             if (editValues) {
               editValues.forEach(val => {
-                if (val.koodiarvo === koodi) {
+                if (val.koodiarvo === koulutus.koodiArvo) {
                   switch(val.type) {
                     case MUUTOS_TYPES.ADDITION:
                       valueKoodi = val.value
@@ -155,7 +160,7 @@ class TutkintoKieliList extends Component {
               })
             }
 
-            customClassName = isInLupa ? "is-in-lupa" : isAdded ? "is-added" : isRemoved ? "is-removed" : isChanged ? "is-changed" : null
+            let customClassName = isInLupa ? "is-in-lupa" : isAdded ? "is-added" : isRemoved ? "is-removed" : isChanged ? "is-changed" : null
 
             if ((isInLupa && !isRemoved)) {
               isChecked = true
@@ -171,8 +176,10 @@ class TutkintoKieliList extends Component {
               value = ''
             }
 
-            // Koulutuksen on oltava voimassa
-            if (!_.find(koulutukset, (k) => { return k.koodiArvo === koodi })) {return false}
+            // Koulutus näytetään luvassa, jos se on (a) luvassa eikä sitä ole poistettu kohdassa 1 tai (b) lisätty kohdassa 1
+            let tutkinto = _.find(maaraykset, (m) => { return m.koodi === koulutus.koodiArvo })
+            if (!tutkinto) { tutkinto = _.find(tutkinnotJaKoulutuksetValue, (t) => { return t.koodiarvo === koulutus.koodiArvo && t.type === MUUTOS_TYPES.ADDITION}) }
+            if (!tutkinto || _.find(tutkinnotJaKoulutuksetValue, (t) => { return t.koodiarvo === koulutus.koodiArvo && t.type === MUUTOS_TYPES.REMOVAL})) { return false }
 
             return (
               <TutkintoWrapper key={i} className={customClassName}>
@@ -185,8 +192,8 @@ class TutkintoKieliList extends Component {
                   />
                   <label htmlFor={identifier}></label>
                 </Checkbox>
-                <Koodi>{koodiarvo}</Koodi>
-                <Nimi>{nimi}</Nimi>
+                <Koodi>{koulutus.koodiArvo}</Koodi>
+                <Nimi>{koulutuksenNimi}</Nimi>
                 <KieliSelect
                   identifier={identifier}
                   value={value}
