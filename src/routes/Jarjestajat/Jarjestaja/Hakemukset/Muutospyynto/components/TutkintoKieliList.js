@@ -111,12 +111,6 @@ class TutkintoKieliList extends Component {
         <KoulutusalaListWrapper>
           {_.map(koulutukset, (koulutus, i) => {
 
-            // Tässä kohtaa määräyksistä ja koulutuksista on mukana vain 
-            // tähän alaan liittyvät, muutoksista ihan kaikki.
-            // console.log(koulutus) // objekti: koodiArvo: 123, metadata: [{kieli: 'FI', nimi: 'tutkinnon nimi'}]
-            // console.log(maaraykset) // array: koodi: 123, nimi: "koulutus"
-            // console.log(tutkinnotJaKoulutuksetValue) // array: koodiarvo: 123, nimi: "koulutus"
-
             const identifier = `input-tutkintokieli-2-${koulutus.koodiArvo}`
             const nimiObjekti = _.filter(koulutus.metadata, (m) => { return m.kieli === "FI" })
             const koulutuksenNimi = nimiObjekti[0].nimi
