@@ -10,7 +10,7 @@ export const ContentContainer = styled.div`
   margin: ${props => props.margin ? props.margin : '28px auto'};  
   padding: ${props => props.padding ? props.padding : '0 15px'};
   box-sizing: border-box;
-  
+  margin-bottom: 170px;
   @media ${MEDIA_QUERIES.MOBILE} {
     margin: 0 auto;
   }
