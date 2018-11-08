@@ -4,6 +4,7 @@ import { getIndex } from "../modules/muutosUtil"
 import { COLORS } from "../../../../../../modules/styles"
 
 import PerusteluSelect from './PerusteluSelect'
+import PerusteluOppisopimus from './PerusteluOppisopimus'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -43,6 +44,16 @@ class Perustelu extends Component {
   render() {
     const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
 
+    if (koodiarvo == 1) {
+      return (
+        <PerusteluWrapper>
+          <PerusteluOppisopimus
+            muutosperustelut={muutosperustelut}
+          />
+        </PerusteluWrapper>
+      )
+    }
+    
     return (
       <PerusteluWrapper>
         <PerusteluSelect
