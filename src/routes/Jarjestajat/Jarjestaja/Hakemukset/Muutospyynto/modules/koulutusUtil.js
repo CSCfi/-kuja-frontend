@@ -268,6 +268,67 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   }
 }
 
+export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa, currentObj) {
+  const { koodiArvo, metadata, koodisto } = currentObj
+  const { koodistoUri } = koodisto
+  const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
+  const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
+
+  const { checked } = event.target
+
+  // osaamisala spesific
+  let kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+  let maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.RAJOITE)
+
+
+  if (checked) {
+    if (isInLupa) {
+      // osaamisala oli luvassa --> poistetaan se formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // osaamisala ei ollut luvassa --> lisätään se formiin
+
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.ADDITION,
+        meta: { perusteluteksti: null },
+        muutosperustelukoodiarvo: null
+      })
+    }
+  } else {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> lisätään muutos formiin
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.REMOVAL,
+        meta: { perusteluteksti: null },
+        muutosperustelukoodiarvo: null
+      })
+    } else {
+      // Tutkinto ei ollut luvassa --> poistetaan muutos formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
 export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isInLupa, value, currentObj) {
   const { nimi, kohde, maaraystyyppi } = currentObj
   let { koodi } = currentObj

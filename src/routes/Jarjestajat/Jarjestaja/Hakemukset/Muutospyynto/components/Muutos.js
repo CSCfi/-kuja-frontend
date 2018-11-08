@@ -70,9 +70,10 @@ class Muutos extends Component {
   render() {
     const { isHidden } = this.state
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, label, arvo } = muutos
+    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, nimi, label, arvo } = muutos
     const { perusteluteksti } = meta
-    const nimi = getTutkintoNimiByKoodiarvo(koodiarvo)
+
+
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
     const tyyppi =
       type === MUUTOS_TYPES.ADDITION ? MUUTOS_TYPE_TEXTS.ADDITION.FI :
@@ -80,6 +81,9 @@ class Muutos extends Component {
       type === MUUTOS_TYPES.CHANGE ? MUUTOS_TYPE_TEXTS.CHANGE.FI : null
 
     let name = `${koodiarvo} ${nimi}`
+    if(koodisto==='osaamisala') {
+      name = `${koodiarvo} ${nimi} (rajoite)`
+    }
 
     if (kategoria === 'toimialue') {
       name = `${label}`
