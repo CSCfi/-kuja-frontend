@@ -239,8 +239,21 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         kohde,
         maaraystyyppi,
         type: MUUTOS_TYPES.ADDITION,
-        meta: { perusteluteksti: null },
-        muutosperustelukoodiarvo: null
+        meta: {
+          perusteluteksti: null,
+          perusteluteksti_oppisopimus: {
+            "tarpeellisuus": null,
+            "henkilosto": null,
+            "osaaminen": null,
+            "sidosryhma": null,
+            "vuodet": {
+              "arvo_1": {"vuosi": null, "maara": null},
+              "arvo_2": {"vuosi": null, "maara": null},
+              "arvo_3": {"vuosi": null, "maara": null}
+            },
+          },
+          muutosperustelukoodiarvo: null
+        }
       })
     }
   } else {
@@ -255,7 +268,20 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         kohde,
         maaraystyyppi,
         type: MUUTOS_TYPES.REMOVAL,
-        meta: { perusteluteksti: null },
+        meta: {
+          perusteluteksti: null,
+          perusteluteksti_oppisopimus: {
+            "tarpeellisuus": null,
+            "henkilosto": null,
+            "osaaminen": null,
+            "sidosryhma": null,
+            "vuodet": {
+              "arvo_1": {"vuosi": null, "maara": null},
+              "arvo_2": {"vuosi": null, "maara": null},
+              "arvo_3": {"vuosi": null, "maara": null}
+            },
+          },
+        },
         muutosperustelukoodiarvo: null
       })
     } else {
