@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { getIndex } from "../modules/muutosUtil"
 import { COLORS } from "../../../../../../modules/styles"
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { KOODISTOT } from "../../../modules/constants"
+
 
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
@@ -42,13 +45,25 @@ class Perustelu extends Component {
   }
 
   render() {
-    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
 
-    if (koodiarvo == 1) {
+    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, perusteluteksti_oppisopimus, muutosperustelukoodiarvo, muutosperustelut } = this.props
+    const { koodisto, type } = muutos
+
+    // lisälomakkeet
+    // tulevat vain lisäyksille tai muutoksille.
+    // koodisto on oiva muut
+
+    // laajennettu oppisopimus
+    if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluOppisopimus
             muutosperustelut={muutosperustelut}
+            perusteluteksti={perusteluteksti}
+            perusteluteksti_oppisopimus={perusteluteksti_oppisopimus}
+            fields={fields}
+            muutokset={muutokset}
+            koodiarvo={koodiarvo}
           />
         </PerusteluWrapper>
       )
