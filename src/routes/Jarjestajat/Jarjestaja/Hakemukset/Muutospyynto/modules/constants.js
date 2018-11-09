@@ -361,6 +361,28 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         FI: "Vankila/t missä opetusta aiotaan järjestää",
         SV: "På svenska"
       }
+    },
+    OHJEET: { // tehdään oppisopimuskohtaisiksi mikäli tarvetta, tarkistettava ovatko nämä samat kaikilla lomakkeilla.
+      TARPEELLISUUS: {
+        FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+        SV: "sv"
+      },
+      HENKILOSTO: {
+        FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+        SV: ""
+      },
+      OSAAMINEN: {
+        FI: "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
+        SV: "sv"
+      },
+      SIDOSRYHMA: {
+        FI: "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+        SV: "sv"
+      },
+      OPISKELIJAVUOSIARVIO: {
+        FI: "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
+        SV: ""
+      }
     }
   }
 }
