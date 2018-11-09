@@ -259,6 +259,40 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         FI: "PerusteluWrapper",
         SV: "På svenska"
       }
+    },
+  },
+  MUUTOS_PERUSTELULOMAKKEET: {
+    YLEINEN: {
+      TARPEELLISUUS: {
+        FI: "Tehtävän tarpeellisuus",
+        SV: "På svenska"
+      },
+      OPISKELIJAVUOSIARVIO: {
+        FI: "Arvio koulutukseen suunnattavista opiskelijavuosista seuraavana kolmena vuotena",
+        SV: "På svenska"
+      },
+      HENKILOSTO: {
+        FI: "Henkilöstöresurssit",
+        SV: "På svenska"
+      },
+      OSAAMINEN: {
+        FI: "Osaaminen",
+        SV: "På svenska"
+      },
+      SIDOSRYHMA: {
+        FI: "Sidosryhmäyhteistyö",
+        SV: "På svenska"
+      }
+    },
+    OPPISOPIMUS: {
+      KUVAUS: {
+        FI: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
+        SV: "På svenska"
+      },
+      JARJESTAMISEDELLYTYKSET: {
+        FI: "Toiminnalliset edellytykset laajennetun oppisopimustehtävän järjestämiseksi",
+        SV: "På svenska"
+      }
     }
   }
 }
