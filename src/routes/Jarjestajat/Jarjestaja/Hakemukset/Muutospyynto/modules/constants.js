@@ -282,6 +282,10 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       SIDOSRYHMA: {
         FI: "Sidosryhmäyhteistyö",
         SV: "På svenska"
+      },
+      PEDAGOGISET: {
+        FI: "Pedagogiset järjestelyt",
+        SV: "På svenska"
       }
     },
     OPPISOPIMUS: {
@@ -291,6 +295,70 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       },
       JARJESTAMISEDELLYTYKSET: {
         FI: "Toiminnalliset edellytykset laajennetun oppisopimustehtävän järjestämiseksi",
+        SV: "På svenska"
+      }
+    },
+    VAATIVA: {
+      KUVAUS: {
+        FI: "Vaativan erityisen tuen tehtävä",
+        SV: "På svenska"
+      },
+      JARJESTAMISEDELLYTYKSET: {
+        FI: "Toiminnalliset edellytykset vaativan erityisen tuen tehtävän järjestämiseksi",
+        SV: "På svenska"
+      },
+      SUUNNITELMA: {
+        FI: "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi",
+        SV: "På svenska"
+      },
+      KOULUTUKSET: {
+        HAETTU: {
+          FI: "Vaativan erityisen tuen tehtävää on haettu seuraaviin koulutuksiin",
+          SV: "På svenska"
+        },
+        TUTKINTO: {
+          FI: "Tutkintokoulutukseen",
+          SV: "På svenska"
+        },
+        AMMATILLINEN: {
+          FI: "Ammatilliseen koulutukseen valmentavaan koulutukseen",
+          SV: "På svenska"
+        },
+        VALMENTAVA: {
+          FI: "Työhön ja itsenäiseen elämään valmentavaan koulutukseen",
+          SV: "På svenska"
+        }
+      }
+    },
+    TYOVOIMA: {
+      KUVAUS: {
+        FI: "Työvoimakoulutuksen tehtävä",
+        SV: "På svenska"
+      },
+      JARJESTAMISEDELLYTYKSET: {
+        FI: "Toiminnalliset edellytykset työvoimakoulutuksen järjestämiseksi",
+        SV: "På svenska"
+      },
+      SUUNNITELMA: {
+        FI: "Suunnitelma työvoimakoulutuksen järjestämiseksi",
+        SV: "På svenska"
+      },
+      YHTEISTYO: {
+        FI: "ELY-keskusten kanssa suunniteltu yhteistyö",
+        SV: "På svenska"
+      }
+    },
+    VANKILA: {
+      KUVAUS: {
+        FI: "Vankilaopetuksen järjestämistehtävä",
+        SV: "På svenska"
+      },
+      JARJESTAMISEDELLYTYKSET: {
+        FI: "Toiminnalliset edellytykset vankilaopetuksen järjestämiseksi",
+        SV: "På svenska"
+      },
+      TOTEUTTAMINEN: {
+        FI: "Vankila/t missä opetusta aiotaan järjestää",
         SV: "På svenska"
       }
     }
