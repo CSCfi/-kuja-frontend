@@ -9,6 +9,7 @@ import { KOODISTOT } from "../../../modules/constants"
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
 import PerusteluVaativa from './PerusteluVaativa'
+import PerusteluTyovoima from './PerusteluTyovoima'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -48,7 +49,7 @@ class Perustelu extends Component {
   render() {
 
     const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
-    const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_vankila } = this.props
+    const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima } = this.props
     const { koodisto, type } = muutos
 
     // lisälomakkeet
@@ -78,6 +79,24 @@ class Perustelu extends Component {
           <PerusteluVaativa
             muutosperustelut={muutosperustelut}
             perusteluteksti_vaativa={perusteluteksti_vaativa}
+            fields={fields}
+            muutokset={muutokset}
+            koodiarvo={koodiarvo}
+            muutos={muutos}
+          />
+        </PerusteluWrapper>
+      )
+    }
+
+    // Työvoimakoulutus
+    // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
+    if (koodisto == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiarvo == 3 || koodiarvo == 1) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+      return (
+        <PerusteluWrapper>
+          <PerusteluTyovoima
+            muutosperustelut={muutosperustelut}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            perusteluteksti_tyovoima={perusteluteksti_tyovoima}
             fields={fields}
             muutokset={muutokset}
             koodiarvo={koodiarvo}

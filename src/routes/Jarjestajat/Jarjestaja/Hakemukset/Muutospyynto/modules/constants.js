@@ -402,6 +402,40 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       YHTEISTYO: {
         FI: "ELY-keskusten kanssa suunniteltu yhteistyö",
         SV: "På svenska"
+      },
+      OHJEET: {
+        TARPEELLISUUS: {
+          FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+          SV: "sv"
+        },
+        HENKILOSTO: {
+          FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+          SV: "på svenska"
+        },
+        OSAAMINEN: {
+          FI:"Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
+          SV:"på svenska"
+        },
+        PEDAGOGISET: {
+          FI:"Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
+          SV:""
+        },
+        SIDOSRYHMA: {
+          FI:"Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+          SV:""
+        },
+        SUUNNITELMA: {
+          FI: "Toimintamalli työvoimakoulutuksen suunnittelusta ja toteutuksesta (mm. koulutusalat, joille työvoimakoulutusta aiotaan järjestää).",
+          SV:"på svenska"
+        },
+        YHTEISTYO: {
+          FI:"Valitkaa listasta ne ELY-keskukset joiden kanssa suunnittelette tekevänne yhteistyötä työvoimakoulutuksen järjestämisessä.",
+          SV:"på svenska"
+        },
+        VUODET: {
+          FI:"Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
+          SV:""
+        }
       }
     },
     VANKILA: {

@@ -315,9 +315,20 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
               "arvo_2": {"vuosi": null, "maara": null},
               "arvo_3": {"vuosi": null, "maara": null}
             },
+            perusteluteksti_tyovoima: {
+              "tarpeellisuus": null,
+              "henkilosto": null,
+              "osaaminen": null,
+              "sidosryhma": null,
+              "vuodet": {
+                "arvo_1": {"vuosi": null, "maara": null},
+                "arvo_2": {"vuosi": null, "maara": null},
+                "arvo_3": {"vuosi": null, "maara": null}
+              }
+            },
           },
-        },
-        muutosperustelukoodiarvo: null
+          muutosperustelukoodiarvo: null
+        }
       })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
