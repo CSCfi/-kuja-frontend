@@ -11,6 +11,8 @@ import PerusteluOppisopimus from './PerusteluOppisopimus'
 import PerusteluVaativa from './PerusteluVaativa'
 import PerusteluTyovoima from './PerusteluTyovoima'
 import PerusteluVankila from './PerusteluVankila'
+import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
+import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -51,6 +53,7 @@ class Perustelu extends Component {
 
     const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
+    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = this.props
     const { koodisto, type } = muutos
 
     // lisälomakkeet
@@ -115,6 +118,42 @@ class Perustelu extends Component {
           <PerusteluVankila
             muutosperustelut={muutosperustelut}
             perusteluteksti_vankila={perusteluteksti_vankila}
+            fields={fields}
+            muutokset={muutokset}
+            koodiarvo={koodiarvo}
+            muutos={muutos}
+          />
+        </PerusteluWrapper>
+      )
+    }
+
+    // Kuljettajakoulutus - perustaso
+    // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
+    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.REMOVAL )) {
+      return (
+        <PerusteluWrapper>
+          <PerusteluKuljettajaPerus
+            muutosperustelut={muutosperustelut}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            perusteluteksti_kuljetus_perus={perusteluteksti_kuljetus_perus}
+            fields={fields}
+            muutokset={muutokset}
+            koodiarvo={koodiarvo}
+            muutos={muutos}
+          />
+        </PerusteluWrapper>
+      )
+    }
+
+    // Kuljettajakoulutus - jatko
+    // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
+    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && koodiarvo == 2 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+      return (
+        <PerusteluWrapper>
+          <PerusteluKuljettajaJatko
+            muutosperustelut={muutosperustelut}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            perusteluteksti_kuljetus_jatko={perusteluteksti_kuljetus_jatko}
             fields={fields}
             muutokset={muutokset}
             koodiarvo={koodiarvo}
