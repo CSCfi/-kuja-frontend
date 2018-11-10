@@ -252,6 +252,41 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
               "arvo_3": {"vuosi": null, "maara": null}
             },
           },
+          perusteluteksti_vaativa: {
+            "tarpeellisuus": null,
+            "henkilosto": null,
+            "osaaminen": null,
+            "sidosryhma": null,
+            "pedagogiset": null,
+            "suunnitelma": null,
+            "vuodet": {
+              "arvo_1": {"vuosi": null, "maara": null},
+              "arvo_2": {"vuosi": null, "maara": null},
+              "arvo_3": {"vuosi": null, "maara": null}
+            },
+          },
+          perusteluteksti_vankila: {
+            "tarpeellisuus": null,
+            "henkilosto": null,
+            "osaaminen": null,
+            "sidosryhma": null,
+            "vuodet": {
+              "arvo_1": {"vuosi": null, "maara": null},
+              "arvo_2": {"vuosi": null, "maara": null},
+              "arvo_3": {"vuosi": null, "maara": null}
+            },
+          },
+          perusteluteksti_tyovoima: {
+            "tarpeellisuus": null,
+            "henkilosto": null,
+            "osaaminen": null,
+            "sidosryhma": null,
+            "vuodet": {
+              "arvo_1": {"vuosi": null, "maara": null},
+              "arvo_2": {"vuosi": null, "maara": null},
+              "arvo_3": {"vuosi": null, "maara": null}
+            },
+          },
           muutosperustelukoodiarvo: null
         }
       })

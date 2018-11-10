@@ -42,7 +42,7 @@ class PerusteluOppisopimus extends Component {
           <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.KUVAUS.FI}</h4>
           <Area>
             <h4>1. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.TARPEELLISUUS.FI}</h4>
-            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OHJEET.TARPEELLISUUS.FI}</Instruction>
+            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.OHJEET.TARPEELLISUUS.FI}</Instruction>
             <textarea
               rows="5"
               defaultValue={tarpeellisuus !== null ? tarpeellisuus : undefined}
@@ -56,7 +56,7 @@ class PerusteluOppisopimus extends Component {
             />
             <h4>2. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.JARJESTAMISEDELLYTYKSET.FI}</h4>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.HENKILOSTO.FI}</Label>
-            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OHJEET.HENKILOSTO.FI}</Instruction>
+            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.OHJEET.HENKILOSTO.FI}</Instruction>
             <textarea
               rows="5"
               defaultValue={henkilosto  !== null ? henkilosto  : undefined}
@@ -69,7 +69,7 @@ class PerusteluOppisopimus extends Component {
               }}
             />
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.OSAAMINEN.FI}</Label>
-            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OHJEET.OSAAMINEN.FI}</Instruction>
+            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.OHJEET.OSAAMINEN.FI}</Instruction>
             <textarea
               rows="5"
               defaultValue={osaaminen  !== null ? osaaminen  : undefined}
@@ -82,7 +82,7 @@ class PerusteluOppisopimus extends Component {
               }}
             />
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.SIDOSRYHMA.FI}</Label>
-            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OHJEET.SIDOSRYHMA.FI}</Instruction>
+            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.OHJEET.SIDOSRYHMA.FI}</Instruction>
             <textarea
               rows="5"
               defaultValue={sidosryhma  !== null ? sidosryhma  : undefined}
@@ -95,7 +95,7 @@ class PerusteluOppisopimus extends Component {
               }}
             />
             <h4>3. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.OPISKELIJAVUOSIARVIO.FI}</h4>
-            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OHJEET.OPISKELIJAVUOSIARVIO.FI}</Instruction>
+            <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.OHJEET.OPISKELIJAVUOSIARVIO.FI}</Instruction>
             <Label>{vuosi}</Label>
             <input 
               type="number"
