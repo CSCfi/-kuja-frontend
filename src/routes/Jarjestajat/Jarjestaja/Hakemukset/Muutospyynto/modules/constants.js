@@ -296,9 +296,35 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       JARJESTAMISEDELLYTYKSET: {
         FI: "Toiminnalliset edellytykset laajennetun oppisopimustehtävän järjestämiseksi",
         SV: "På svenska"
+      },
+      OHJEET: { // tehdään oppisopimuskohtaisiksi mikäli tarvetta, tarkistettava ovatko nämä samat kaikilla lomakkeilla.
+        TARPEELLISUUS: {
+          FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+          SV: "sv"
+        },
+        HENKILOSTO: {
+          FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+          SV: ""
+        },
+        OSAAMINEN: {
+          FI: "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
+          SV: "sv"
+        },
+        SIDOSRYHMA: {
+          FI: "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+          SV: "sv"
+        },
+        OPISKELIJAVUOSIARVIO: {
+          FI: "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
+          SV: ""
+        }
       }
     },
     VAATIVA: {
+      OTSIKKO: {
+        FI:"Vaativan erityisen tuen tehtävää on haettu seuraaviin koulutuksiin:",
+        SV:""
+      },
       KUVAUS: {
         FI: "Vaativan erityisen tuen tehtävä",
         SV: "På svenska"
@@ -327,6 +353,36 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         VALMENTAVA: {
           FI: "Työhön ja itsenäiseen elämään valmentavaan koulutukseen",
           SV: "På svenska"
+        }
+      },
+      OHJEET: {
+        TARPEELLISUUS: {
+          FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+          SV: "sv"
+        },
+        HENKILOSTO: {
+            FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+            SV: "på svenska"
+          },
+        OSAAMINEN: {
+            FI:"Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
+            SV:"på svenska"
+        },
+        PEDAGOGISET: {
+            FI:"Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
+            SV:""
+        },
+        SIDOSRYHMA: {
+            FI:"Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+            SV:""
+        },
+        SUUNNITELMA: {
+            FI: "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta).",
+            SV:"på svenska"
+        },
+        VUODET: {
+            FI:"Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina. ",
+            SV:""
         }
       }
     },
@@ -360,28 +416,6 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       TOTEUTTAMINEN: {
         FI: "Vankila/t missä opetusta aiotaan järjestää",
         SV: "På svenska"
-      }
-    },
-    OHJEET: { // tehdään oppisopimuskohtaisiksi mikäli tarvetta, tarkistettava ovatko nämä samat kaikilla lomakkeilla.
-      TARPEELLISUUS: {
-        FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
-        SV: "sv"
-      },
-      HENKILOSTO: {
-        FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
-        SV: ""
-      },
-      OSAAMINEN: {
-        FI: "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
-        SV: "sv"
-      },
-      SIDOSRYHMA: {
-        FI: "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
-        SV: "sv"
-      },
-      OPISKELIJAVUOSIARVIO: {
-        FI: "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
-        SV: ""
       }
     }
   }
