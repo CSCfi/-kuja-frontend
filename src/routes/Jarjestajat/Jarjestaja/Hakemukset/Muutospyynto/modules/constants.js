@@ -263,6 +263,10 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_PERUSTELULOMAKKEET: {
     YLEINEN: {
+      KYLLA: {
+        FI:"Kyllä",
+        SV:"Ja"
+      },
       TARPEELLISUUS: {
         FI: "Tehtävän tarpeellisuus",
         SV: "På svenska"
@@ -485,7 +489,188 @@ export const MUUTOS_WIZARD_TEKSTIT = {
           SV:""
         }
       }
+    },
+    KULJETTAJAKOULUTUS: {
+      PERUS: {
+        FI:"Perustason ammattipätevyyskoulutusta antavan koulutuskeskuksen tehtävä",
+        SV:"på svenska"
+      },
+      JATKO: {
+        FI:"Jatkokoulutusta antavan koulutuskeskuksen tehtävä",
+        SV:""
+      },
+      OSAAMINEN: {
+        FI:"Koulutusohjelmien edellyttämä osaaminen",
+        SV:""
+      },
+      VOIMASSAOLEVA: {
+        FI: "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?",
+        SV: "På svenska"
+      },
+      VOIMASSAOLEVA_PVM: {
+        FI: "pvm",
+        SV: "På svenska"
+      },
+      JOHTAJA: {
+        FI: "Opetuksesta vastaavan johtajan kelpoisuus ja työkokemus",
+        SV: "På svenska"
+      },
+      TOIMIPISTE: {
+        FI: "Toimipiste",
+        SV: "På svenska"
+      },
+      SUUNNITELMA: {
+        FI: "Suunnitelma ammattipätevyyskoulutuksen järjestämiseksi",
+        SV: "På svenska"
+      },
+      SUUNNITELMA_JATKO: {
+        FI: "Suunnitelma jatkoulutuksen järjestämiseksi",
+        SV: "På svenska"
+      },
+      KOULUTUSOHJELMA: {
+        FI:"Koulutusohjelmien edellyttämä osaaminen",
+        SV:""
+      },
+      LUPA: {
+        FI:"Liikenneopettajalupa (pakollinen)",
+        SV:"på svenska"
+      },
+      KUORMA_AUTO: {
+        FI:"voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
+        SV:"på svenska"
+      },
+      LINJA_AUTO: {
+        FI:"voimassa olevalinja-autonkuljettajan ammattipätevyys",
+        SV:"på svenska"
+      },
+      KOKEMUS: {
+        FI:"a) vähintään 1 vuoden kokemus johonkin seuraavista luokista kuuluvan ajoneuvonpäätoimisena kuljettajana:",
+        SV:"på svenska"
+      },
+      KOKEMUS_C: {
+        FI:"C-luokka",
+        SV:"på svenska"
+      },
+      KOKEMUS_CE: {
+        FI:"CE-luokka",
+        SV:"på svenska"
+      },
+      KOKEMUS_D: {
+        FI:"D-luokka",
+        SV:"på svenska"
+      },
+      TUTKINTO: {
+        FI:"b) jokin seuraavista tutkinnoista:",
+        SV:"på svenska"
+      },
+      TUTKINTO_LINJA_AUTO: {
+        FI:"linja-autonkuljettajan ammattitutkinto",
+        SV:"på svenska"
+      },
+      TUTKINTO_YHDISTELMA: {
+        FI:"yhdistelmäajoneuvonkuljettajan ammattitutkinto",
+        SV:""
+      },
+      TUTKINTO_PUUTAVARA: {
+        FI:"puutavaran autonkuljetuksen ammattitutkinto",
+        SV:"på svenska"
+      },
+      TUTKINTO_KULJETUSPALVELU: {
+        FI:"kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
+        SV:"på svenska"
+      },
+      TUTKINTO_KULJETUSALA: {
+        FI:"kuljetusalan ammattitutkinto",
+        SV:"på svenska"
+      },
+      OPETTAJA: {
+        FI:"Opettajien kelpoisuus ja työkokemus",
+        SV:"på svenska"
+      },
+      KANTA: {
+        FI:"Ajoneuvokanta ",
+        SV:"på svenska"
+      },
+      KANTA_LINJA_AUTO: {
+        FI:"linja-autot",
+        SV:"på svenska"
+      },
+      KANTA_KUORMA_AUTO: {
+        FI:"kuorma-autot",
+        SV:"på svenska"
+      },
+      KANTA_PERAVAUNU: {
+        FI:"perävaunut",
+        SV:"på svenska"
+      },
+      KANTA_MUUT: {
+        FI:"muut, mitkä?",
+        SV:"på svenska"
+      },
+      OPETUSVALINEET: {
+        FI:"Muut opetusvälineet?",
+        SV:"på svenska"
+      },
+      OPETUSVALINEET_ASETUS: {
+        FI:"Asetuksen mukaiset opetus- ja havaintovälineet (VnAsetus 434/2018, 11 § 1 ja 2 mom.)",
+        SV:"på svenska"
+      },
+      OPETUSVALINEET_MUUT: {
+        FI:"Muut opetus- ja havaintovälineet",
+        SV:"på svenska"
+      },
+      HENKILO: {
+        FI:"Henkilö",
+        SV:""
+      },
+      LISAA_HENKILO: {
+        FI:"Lisää henkilö",
+        SV:""
+      },
+      OHJEET: {
+        TARPEELLISUUS: {
+          FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+          SV: "sv"
+        },
+        VOIMASSAOLEVA: {
+          FI: "Päivämäärä, jolloin Trafi on myöntänyt luvan.",
+          SV: "på svenska"
+        },
+        SUUNNITELMA: {
+          FI: "Toimintamalli ammattipätevyyskoulutuksen suunnittelusta ja toteutuksesta.",
+          SV:"på svenska"
+        },
+        JOHTAJA_TARKENNUS: {
+          FI:"Valtioneuvoston asetus 434/2018 10 §",
+          SV:"på svenska"
+        },
+        JOHTAJA: {
+          FI:"Selvitys opetuksesta vastaavan johtajan/johtajien kelpoisuudesta ja työkokemuksesta toimipisteittäin.",
+          SV:""
+        },
+        OPETTAJA: {
+          FI:"Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista",
+          SV:""
+        },
+        OPETTAJA_JATKO: {
+          FI:"Selvitys jatkokoulutuksen opettajien kelpoisuuksista ja työkokemuksista",
+          SV:""
+        },
+        OPETTAJA_TARKENNUS: {
+          FI:"Valtioneuvoston asetus 434/2018 10 §",
+          SV:""
+        },
+        KANTA: {
+          FI:"Selvitys opetuksessa käytettävästä ajoneuvokannasta ja opetusvälineistä ja niiden soveltuvuudesta ammattipätevyyskoulutukseen",
+          SV:""
+        },
+        OPETUSVALINEET: {
+          FI:"Muut oppilaitoksen oppimisympäristöissä tapahtuvaan osaamisen hankkimiseen liittyvät välineet",
+          SV:""
+        }
+      }
     }
+
   }
 }
 
