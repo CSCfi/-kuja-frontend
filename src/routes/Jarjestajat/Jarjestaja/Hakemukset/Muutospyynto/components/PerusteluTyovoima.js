@@ -50,8 +50,6 @@ class PerusteluTyovoima extends Component {
       const { tarpeellisuus, henkilosto, osaaminen, pedagogiset, sidosryhma, suunnitelma, vuodet } = perusteluteksti_tyovoima
       const { arvo_1, arvo_2, arvo_3 } = vuodet
 
-//      const { kuvaus } = muutos
-
       // ELY-keskukset hardcode
       const options = [
         { value: 'Etelä-Pohjanmaa', label: 'Etelä-Pohjanmaa' },

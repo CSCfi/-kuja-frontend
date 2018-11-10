@@ -448,8 +448,42 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         SV: "På svenska"
       },
       TOTEUTTAMINEN: {
+        FI: "Vankilaopetuksen toteuttaminen",
+        SV: "På svenska"
+      },
+      SUUNNITELMA: {
         FI: "Vankila/t missä opetusta aiotaan järjestää",
         SV: "På svenska"
+      },
+      OHJEET: {
+        TARPEELLISUUS: {
+          FI: "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+          SV: "sv"
+        },
+        HENKILOSTO: {
+          FI: "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+          SV: "på svenska"
+        },
+        OSAAMINEN: {
+          FI:"Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
+          SV:"på svenska"
+        },
+        PEDAGOGISET: {
+          FI:"Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
+          SV:""
+        },
+        SIDOSRYHMA: {
+          FI:"Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+          SV:""
+        },
+        SUUNNITELMA: {
+          FI: "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta.",
+          SV:"på svenska"
+        },
+        VUODET: {
+          FI:"Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina. ",
+          SV:""
+        }
       }
     }
   }
