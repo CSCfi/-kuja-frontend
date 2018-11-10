@@ -10,6 +10,7 @@ import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
 import PerusteluVaativa from './PerusteluVaativa'
 import PerusteluTyovoima from './PerusteluTyovoima'
+import PerusteluVankila from './PerusteluVankila'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -49,7 +50,7 @@ class Perustelu extends Component {
   render() {
 
     const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
-    const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima } = this.props
+    const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { koodisto, type } = muutos
 
     // lisälomakkeet
@@ -57,7 +58,7 @@ class Perustelu extends Component {
     // koodisto on oiva muut
 
     // laajennettu oppisopimus
-    if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.REMOVAL )) {
+    if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluOppisopimus
@@ -97,6 +98,23 @@ class Perustelu extends Component {
             muutosperustelut={muutosperustelut}
             muutosperustelukoodiarvo={muutosperustelukoodiarvo}
             perusteluteksti_tyovoima={perusteluteksti_tyovoima}
+            fields={fields}
+            muutokset={muutokset}
+            koodiarvo={koodiarvo}
+            muutos={muutos}
+          />
+        </PerusteluWrapper>
+      )
+    }
+
+    // Vankilakoulutus
+    // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
+    if (koodisto == KOODISTOT.OIVA_MUUT  && (koodiarvo == 5 || koodiarvo == 13) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+      return (
+        <PerusteluWrapper>
+          <PerusteluVankila
+            muutosperustelut={muutosperustelut}
+            perusteluteksti_vankila={perusteluteksti_vankila}
             fields={fields}
             muutokset={muutokset}
             koodiarvo={koodiarvo}
