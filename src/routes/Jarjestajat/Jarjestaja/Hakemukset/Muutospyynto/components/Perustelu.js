@@ -14,6 +14,8 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
+import LiiteKategoriaSelect from './LiiteKategoriaSelect'
+
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,6 +42,13 @@ const PerusteluTopArea = styled.div`
   margin-bottom: 10px;
 `
 
+const LiiteTopArea = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+`
+
 class Perustelu extends Component {
   componentWillMount() {
     const { muutosperustelut } = this.props
@@ -53,7 +62,7 @@ class Perustelu extends Component {
 
     const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
-    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = this.props
+    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type } = muutos
 
     // lisälomakkeet
@@ -186,6 +195,39 @@ class Perustelu extends Component {
             fields.remove(i)
             fields.insert(i, obj)
           }}
+        />
+        <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
+        <div>
+          <input
+            type="file"
+            defaultValue={file !== null ? file : undefined}
+            onBlur={(e) => {
+              const i = getIndex(muutokset, koodiarvo)
+              let obj = fields.get(i)
+              obj.file = e.target
+              fields.remove(i)
+              fields.insert(i, obj)
+            }}/>
+
+        </div>
+        <div>
+          <input type="text"
+                 placeholder="Anna liitteelle nimi (valinnainen)..."
+                 defaultValue={filename !== null ? filename : undefined}
+                 onBlur={(e) => {
+                   const i = getIndex(muutokset, koodiarvo)
+                   let obj = fields.get(i)
+                   obj.filename = e.target.value
+                   fields.remove(i)
+                   fields.insert(i, obj)
+                 }}/>
+        </div>
+        <LiiteKategoriaSelect
+          muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+          muutosperustelut={muutosperustelut.muutosperusteluList}
+          muutos={muutos}
+          muutokset={muutokset}
+          fields={fields}
         />
       </PerusteluWrapper>
     )
