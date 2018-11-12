@@ -213,7 +213,12 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       },
       FI: "Perustele lyhyesti miksi tälle muutokselle olisi tarvetta",
       SV: "På svenska"
+    },
+    YHTEISTYO: {
+      FI: "Yhteistyö",
+      SV: "på svenska"
     }
+
   },
   YHTEENVETO: {
     HEADING: {
