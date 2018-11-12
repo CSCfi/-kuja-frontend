@@ -31,6 +31,10 @@ export const MUUTOS_WIZARD_TEKSTIT = {
     FI: "Mikä on aiheuttanut muutostarpeen?",
     SV: "På svenska"
   },
+  LIITE_KATEGORIA: {
+    FI: "Liitekategoria",
+    SV: "På svenska"
+  },
   MUUTOS_EHDOTETUT_LISAYKSET: {
     FI: "Tutkinnot ja koulutukset: ehdotetut lisäykset",
     SV: "På svenska"
