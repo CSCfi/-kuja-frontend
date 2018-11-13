@@ -6,7 +6,6 @@ import Indikaattori from './Indikaattori'
 
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES, MUUTOS_TYPE_TEXTS } from "../modules/uusiHakemusFormConstants"
-import { getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 
 const MuutosWrapper = styled.div`
   width: 100%;
@@ -47,8 +46,7 @@ const MuutosTyyppi = styled.div`
 class MuutosYhteenveto extends Component {
   render() {
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, nimi, label, arvo } = muutos
-    //const nimi = getTutkintoNimiByKoodiarvo(koodiarvo)
+    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, nimi, label, arvo } = muutos
 
     const { perusteluteksti } = meta
     const helpText = "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
