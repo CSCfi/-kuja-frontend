@@ -70,8 +70,7 @@ class Perustelu extends Component {
     // koodisto on oiva muut
 
     // laajennettu oppisopimus
-//    if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
-// DEBUG: näytä aina
+   if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluOppisopimus
@@ -83,7 +82,7 @@ class Perustelu extends Component {
           />
         </PerusteluWrapper>
       )
-//    }
+   }
 
     // vaativa erityinen tuki
     // pitääkö tulla vain yksi perustelu-lomake, vaikka kaikki kolme eri vaihtoehtoa on valittu?

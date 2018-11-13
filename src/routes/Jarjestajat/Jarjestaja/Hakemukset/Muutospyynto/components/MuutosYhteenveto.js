@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 
 import PerusteluSimple from './PerusteluSimple'
+import PerusteluOppisopimusYhteenveto from './PerusteluOppisopimusYhteenveto'
 import Indikaattori from './Indikaattori'
 
 import { COLORS } from "../../../../../../modules/styles"
@@ -89,15 +90,27 @@ class MuutosYhteenveto extends Component {
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
-        <PerusteluSimple
-          helpText={helpText}
-          koodiarvo={koodiarvo}
-          perusteluteksti={perusteluteksti}
-          muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-          muutokset={muutokset}
-          muutos={muutos}
-          fields={fields}
-        />
+        { koodiarvo === "1" ? 
+          <PerusteluOppisopimusYhteenveto 
+            helpText={helpText}
+            koodiarvo={koodiarvo}
+            perustelut={meta.perusteluteksti_oppisopimus}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            muutokset={muutokset}
+            muutos={muutos}
+            fields={fields}
+          />
+         :
+          <PerusteluSimple
+            helpText={helpText}
+            koodiarvo={koodiarvo}
+            perusteluteksti={perusteluteksti}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            muutokset={muutokset}
+            muutos={muutos}
+            fields={fields}
+          />
+          }
       </MuutosWrapper>
     )
   }
