@@ -7,6 +7,7 @@ import Indikaattori from './Indikaattori'
 
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES, MUUTOS_TYPE_TEXTS } from "../modules/uusiHakemusFormConstants"
+import { KOODISTOT } from "../../../modules/constants"
 
 const MuutosWrapper = styled.div`
   width: 100%;
@@ -90,7 +91,7 @@ class MuutosYhteenveto extends Component {
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
-        { koodiarvo === "1" ? 
+        { koodisto === KOODISTOT.OIVA_MUUT && koodiarvo === "1" && type === MUUTOS_TYPES.ADDITION ? 
           <PerusteluOppisopimusYhteenveto 
             helpText={helpText}
             koodiarvo={koodiarvo}
