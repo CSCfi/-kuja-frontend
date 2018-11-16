@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { getIndex } from "../modules/muutosUtil"
 import Select from '../../../../../../modules/Select'
@@ -43,21 +44,13 @@ class PerusteluVankila extends Component {
     render() {
       const vuosi = this.props.muutosperustelut.data[0].voimassaAlkuPvm.split("-")[0]
 
-      const { muutokset, fields, koodiarvo, perusteluteksti_vankila, koodisto } = this.props
+      const { muutokset, fields, koodiarvo, perusteluteksti_vankila, koodisto} = this.props
       const { tarpeellisuus, henkilosto, osaaminen, pedagogiset, sidosryhma, suunnitelma, vuodet } = perusteluteksti_vankila
       const { arvo_1, arvo_2, arvo_3 } = vuodet
 
-      // vankilat hardcode
-      const options = [
-        { value: 'Helsingin vankila', label: 'Helsingin vankila' },
-        { value: 'Helsingin avovankila, Suomenlinnan osasto', label: 'Helsingin avovankila, Suomenlinnan osasto' },
-        { value: 'Helsingin avovankila, Vantaan osasto', label: 'Helsingin avovankila, Vantaan osasto' },
-        { value: 'Jokelan vankila, Tuusula', label: 'Jokelan vankila, Tuusula' },
-        { value: 'Keravan vankila, Kerava', label: 'Keravan vankila, Kerava' },
-        { value: 'Vanajan vankila (Avo-osastot Vanajalla ja Ojoisilla)', label: 'Vanajan vankila (Avo-osastot Vanajalla ja Ojoisilla)' },
-        { value: 'Riihimäen vankila, Riihimäki', label: 'Riihimäen vankila, Riihimäki' },
-        { value: 'Vantaan vankila, Vantaa (t.)', label: 'Vantaan vankila, Vantaa (t.)' },
-      ];
+      let { vankilat } = this.props
+      vankilat = _.sortBy(vankilat, v => { return v.label })
+      console.log(vankilat)
 
       const { selectedOption } = this.state
 
@@ -137,7 +130,7 @@ class PerusteluVankila extends Component {
             <Select
               name={`select-muutosperustelu-${koodisto}-${koodiarvo}`}
               value={selectedOption}
-              options={options}
+              options={vankilat}
               onChange={this.handleChange.bind(this)}
               placeholder="Valitse vankila..."
 
