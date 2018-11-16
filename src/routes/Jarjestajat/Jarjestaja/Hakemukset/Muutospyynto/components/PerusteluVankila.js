@@ -45,7 +45,7 @@ class PerusteluVankila extends Component {
       const vuosi = this.props.muutosperustelut.data[0].voimassaAlkuPvm.split("-")[0]
 
       const { muutokset, fields, koodiarvo, perusteluteksti_vankila, koodisto} = this.props
-      const { tarpeellisuus, henkilosto, osaaminen, pedagogiset, sidosryhma, suunnitelma, vuodet } = perusteluteksti_vankila
+      const { tarpeellisuus, henkilosto, osaaminen, pedagogiset, sidosryhma, vuodet } = perusteluteksti_vankila
       const { arvo_1, arvo_2, arvo_3 } = vuodet
 
       let { vankilat } = this.props
