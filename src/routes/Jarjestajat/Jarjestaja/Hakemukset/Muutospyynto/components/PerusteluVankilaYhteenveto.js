@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
@@ -43,6 +44,7 @@ class PerusteluVankilaYhteenveto extends Component {
   render() {
     const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
+    let vankilanMetaSuomeksi = _.find(perustelut.toteuttaminen.metadata, (m) => {return m.kieli === "FI"})
 
     return (
       <PerusteluWrapper>
@@ -69,7 +71,7 @@ class PerusteluVankilaYhteenveto extends Component {
           </Area>
           <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.VANKILA.TOTEUTTAMINEN.FI}</Label>
-            <Content>Ei vielä tietomallissa, toteutetaan myöhemmin</Content>
+            <Content>{vankilanMetaSuomeksi.nimi || perusteluText}</Content>
           </Area>
           <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.OPISKELIJAVUOSIARVIO.FI}</Label>
