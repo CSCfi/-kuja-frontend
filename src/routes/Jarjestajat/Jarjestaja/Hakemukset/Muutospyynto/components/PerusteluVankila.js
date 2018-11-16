@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { getIndex } from "../modules/muutosUtil"
 import Select from '../../../../../../modules/Select'
-import { handleMuutosperusteluSelectChange } from "../modules/muutosperusteluUtil"
+import { handleVankilaSelectChange } from "../modules/vankilaUtil"
 
 const PerusteluVankilaWrapper = styled.div`
   margin-bottom: 20px;
@@ -31,14 +31,14 @@ class PerusteluVankila extends Component {
     constructor(props) {
       super(props)
       this.state = {
-        selectedOption: props.muutosperustelukoodiarvo
+        selectedOption: props.vankilakoodiarvo
       }
     }
 
     handleChange(selectedOption) {
       this.setState({ selectedOption })
       const { muutokset, fields, muutos } = this.props
-      handleMuutosperusteluSelectChange(muutokset, fields, muutos, selectedOption)
+      handleVankilaSelectChange(muutokset, fields, muutos, selectedOption)
     }
 
     render() {
@@ -128,7 +128,7 @@ class PerusteluVankila extends Component {
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.VANKILA.SUUNNITELMA.FI}</Label>
             <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.VANKILA.OHJEET.SUUNNITELMA.FI}</Instruction>
             <Select
-              name={`select-muutosperustelu-${koodisto}-${koodiarvo}`}
+              name={`select-vankila-${koodisto}-${koodiarvo}`}
               value={selectedOption}
               options={vankilat}
               onChange={this.handleChange.bind(this)}

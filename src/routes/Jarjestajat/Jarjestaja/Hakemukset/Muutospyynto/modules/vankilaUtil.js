@@ -1,4 +1,4 @@
-// import _ from 'lodash'
+import _ from 'lodash'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 // import store from '../../../../../../store'
 
@@ -15,36 +15,37 @@ export function getVankilaList(vankilat, locale) {
   return array
 }
 
-// export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, selectedValue) {
-//   let muutosperusteluValue = null
+export function handleVankilaSelectChange(muutokset, fields, muutos, selectedValue) {
+  let vankilaValue = null
 
-//   if (selectedValue !== null) {
-//     muutosperusteluValue = selectedValue.koodiArvo
-//   }
+  if (selectedValue !== null) {
+    vankilaValue = selectedValue.koodiArvo
+  }
 
-//   const { koodiarvo } = muutos
+  const { koodiarvo } = muutos
 
-//   const i = getMuutosperusteluEditIndex(muutokset, koodiarvo)
+  const i = getVankilaEditIndex(muutokset, koodiarvo)
 
-//   if (i !== undefined) {
-//     let obj = fields.get(i)
-//     fields.remove(i)
-//     obj.muutosperustelukoodiarvo = muutosperusteluValue
-//     fields.insert(i, obj)
-//   }
-// }
+  if (i !== undefined) {
+    let obj = fields.get(i)
+    fields.remove(i)
+    obj.meta.perusteluteksti_vankila.toteuttaminen = vankilaValue
+    fields.insert(i, obj)
+  }
 
-// function getMuutosperusteluEditIndex(muutokset, koodiarvo) {
-//   let i = undefined
+}
 
-//   _.forEach(muutokset, (muutos, idx) => {
-//     if (muutos.koodiarvo === koodiarvo) {
-//       i = idx
-//     }
-//   })
+function getVankilaEditIndex(muutokset, koodiarvo) {
+  let i = undefined
 
-//   return i
-// }
+  _.forEach(muutokset, (muutos, idx) => {
+    if (muutos.koodiarvo === koodiarvo) {
+      i = idx
+    }
+  })
+
+  return i
+}
 
 // export function getMuutosperusteluByKoodiArvo(koodiarvo) {
 //   const state = store.getState()
