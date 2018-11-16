@@ -103,7 +103,7 @@ class MuutosYhteenveto extends Component {
             fields={fields}
           />
          :
-         KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "5" || koodiarvo === "13") ?
+         koodisto === KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "5" || koodiarvo === "13") ?
           <PerusteluVankilaYhteenveto 
             helpText={helpText}
             koodiarvo={koodiarvo}

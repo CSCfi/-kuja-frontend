@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
-import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
+// import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ const Area = styled.div`
   margin: 15px 0;
 `
 
-class PerusteluSimple extends Component {
+class PerusteluVankilaYhteenveto extends Component {
   componentWillMount() {
     const { muutosperustelut } = this.props
 
@@ -41,12 +41,8 @@ class PerusteluSimple extends Component {
   }
 
   render() {
-    const { perustelut, muutosperustelukoodiarvo } = this.props
+    const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
-    const perusteluObj = getMuutosperusteluByKoodiArvo(muutosperustelukoodiarvo)
-    if (perusteluObj) {
-      perusteluText = perusteluObj.label
-    }
 
     return (
       <PerusteluWrapper>
@@ -87,4 +83,4 @@ class PerusteluSimple extends Component {
   }
 }
 
-export default PerusteluSimple
+export default PerusteluVankilaYhteenveto
