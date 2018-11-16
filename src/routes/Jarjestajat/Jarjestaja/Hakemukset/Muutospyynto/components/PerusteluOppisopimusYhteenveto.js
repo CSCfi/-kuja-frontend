@@ -32,21 +32,9 @@ const Area = styled.div`
 `
 
 class PerusteluSimple extends Component {
-  componentWillMount() {
-    const { muutosperustelut } = this.props
-
-    if (muutosperustelut && !muutosperustelut.fetched) {
-      this.props.fetchMuutosperustelut()
-    }
-  }
-
   render() {
     const { perustelut, muutosperustelukoodiarvo } = this.props
     let perusteluText = 'Ei saatavilla'
-    const perusteluObj = getMuutosperusteluByKoodiArvo(muutosperustelukoodiarvo)
-    if (perusteluObj) {
-      perusteluText = perusteluObj.label
-    }
 
     return (
       <PerusteluWrapper>
