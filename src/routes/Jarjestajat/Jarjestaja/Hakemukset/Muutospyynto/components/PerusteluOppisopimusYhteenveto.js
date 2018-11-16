@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
-import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
-
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -33,7 +31,7 @@ const Area = styled.div`
 
 class PerusteluSimple extends Component {
   render() {
-    const { perustelut, muutosperustelukoodiarvo } = this.props
+    const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
 
     return (
