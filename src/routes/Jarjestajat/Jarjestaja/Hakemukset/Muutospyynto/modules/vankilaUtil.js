@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-// import store from '../../../../../../store'
+import store from '../../../../../../store'
 
 export function getVankilaList(vankilat, locale) {
   let array = []
@@ -29,7 +29,10 @@ export function handleVankilaSelectChange(muutokset, fields, muutos, selectedVal
   if (i !== undefined) {
     let obj = fields.get(i)
     fields.remove(i)
-    obj.meta.perusteluteksti_vankila.toteuttaminen = vankilaValue
+    let vankila = getVankilaByKoodiArvo(vankilaValue)
+    obj.meta.perusteluteksti_vankila.toteuttaminen = _.pickBy(vankila, (value, key) => {
+    	return key === "koodiArvo" || key === "koodisto" || key === "versio" || key === "metadata"
+    })
     fields.insert(i, obj)
   }
 
@@ -47,14 +50,16 @@ function getVankilaEditIndex(muutokset, koodiarvo) {
   return i
 }
 
-// export function getMuutosperusteluByKoodiArvo(koodiarvo) {
-//   const state = store.getState()
+export function getVankilaByKoodiArvo(koodiarvo) {
+  const state = store.getState()
 
-//   const { muutosperustelut } = state
+  const { vankilat } = state
 
-//   if (muutosperustelut && muutosperustelut.fetched) {
-//     return _.find(muutosperustelut.muutosperusteluList, (muutosperustelu) => { return muutosperustelu.koodiArvo === koodiarvo })
-//   } else {
-//     return undefined
-//   }
-// }
+  if (vankilat && vankilat.fetched) {
+    return _.find(vankilat.vankilaList, (vankila) => { 
+    	return vankila.koodiArvo === koodiarvo
+    })
+  } else {
+    return undefined
+  }
+}
