@@ -3,8 +3,6 @@ import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
-import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
-
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,21 +30,9 @@ const Area = styled.div`
 `
 
 class PerusteluSimple extends Component {
-  componentWillMount() {
-    const { muutosperustelut } = this.props
-
-    if (muutosperustelut && !muutosperustelut.fetched) {
-      this.props.fetchMuutosperustelut()
-    }
-  }
-
   render() {
-    const { perustelut, muutosperustelukoodiarvo } = this.props
+    const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
-    const perusteluObj = getMuutosperusteluByKoodiArvo(muutosperustelukoodiarvo)
-    if (perusteluObj) {
-      perusteluText = perusteluObj.label
-    }
 
     return (
       <PerusteluWrapper>
