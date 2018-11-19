@@ -74,7 +74,7 @@ class Muutos extends Component {
   render() {
     const { isHidden } = this.state
     const { muutokset, muutos, fields, kategoria } = this.props
-    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, nimi, label, arvo, parent_koodiarvo } = muutos
+    const { koodiarvo, type, meta, muutosperustelukoodiarvo, koodisto, kuvaus, nimi, label, arvo, parentId } = muutos
     const { perusteluteksti, perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima} = meta
     const { perusteluteksti_vankila, perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = meta
 
@@ -112,8 +112,8 @@ class Muutos extends Component {
         <MuutosTop>
           <MuutosHeader isActive={!isHidden}  onClick={this.toggleMuutos}>
             <MuutosTyyppi>{tyyppi}</MuutosTyyppi>
-            {parent_koodiarvo != null && parent_koodiarvo != '' ?
-              <Parent>{getTutkintoNimiByKoodiarvo(parent_koodiarvo)}: </Parent>
+            {parentId != null && parentId != '' ?
+              <Parent>{getTutkintoNimiByKoodiarvo(parentId)}: </Parent>
               : ''
             }
             <Div>{name}</Div>

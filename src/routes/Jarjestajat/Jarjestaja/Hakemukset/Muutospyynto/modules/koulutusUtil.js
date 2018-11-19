@@ -530,7 +530,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   }
 }
 
-export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa, currentObj, parentKoodiarvo) {
+export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa, currentObj, parentId) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto
   const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
@@ -556,7 +556,7 @@ export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa
       fields.push({
         koodiarvo: koodiArvo,
         koodisto: koodistoUri,
-        parent_koodiarvo: parentKoodiarvo,  // tutkinnon koodiarvo
+        parentId: parentId,  // tutkinnon koodiarvo
         nimi,
         kuvaus,
         isInLupa,
@@ -573,7 +573,7 @@ export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa
       fields.push({
         koodiarvo: koodiArvo,
         koodisto: koodistoUri,
-        parent_koodiarvo: parentKoodiarvo,  // tutkinnon koodiarvo
+        parentId: parentId,  // tutkinnon koodiarvo
         nimi,
         kuvaus,
         isInLupa,
