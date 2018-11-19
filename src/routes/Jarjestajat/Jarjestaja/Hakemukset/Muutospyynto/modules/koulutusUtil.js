@@ -271,6 +271,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
             "osaaminen": null,
             "sidosryhma": null,
             "pedagogiset": null,
+            "toteuttaminen": null,
             "vuodet": {
               "arvo_1": {"vuosi": null, "maara": null},
               "arvo_2": {"vuosi": null, "maara": null},
@@ -417,6 +418,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
               "osaaminen": null,
               "sidosryhma": null,
               "pedagogiset": null,
+              "toteuttaminen": null,
               "vuodet": {
                 "arvo_1": {"vuosi": null, "maara": null},
                 "arvo_2": {"vuosi": null, "maara": null},

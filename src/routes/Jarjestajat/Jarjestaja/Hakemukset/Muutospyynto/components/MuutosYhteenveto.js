@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import PerusteluSimple from './PerusteluSimple'
 import PerusteluOppisopimusYhteenveto from './PerusteluOppisopimusYhteenveto'
+import PerusteluVankilaYhteenveto from './PerusteluVankilaYhteenveto'
 import Indikaattori from './Indikaattori'
 
 import { COLORS } from "../../../../../../modules/styles"
@@ -91,7 +92,7 @@ class MuutosYhteenveto extends Component {
             <Indikaattori status="ok" text="Perusteltu" />
           }
         </MuutosTop>
-        { koodisto === KOODISTOT.OIVA_MUUT && koodiarvo === "1" && type === MUUTOS_TYPES.ADDITION ? 
+        { koodisto === KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && koodiarvo === "1" ? 
           <PerusteluOppisopimusYhteenveto 
             helpText={helpText}
             koodiarvo={koodiarvo}
@@ -102,6 +103,17 @@ class MuutosYhteenveto extends Component {
             fields={fields}
           />
          :
+         koodisto === KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "5" || koodiarvo === "13") ?
+          <PerusteluVankilaYhteenveto 
+            helpText={helpText}
+            koodiarvo={koodiarvo}
+            perustelut={meta.perusteluteksti_vankila}
+            muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+            muutokset={muutokset}
+            muutos={muutos}
+            fields={fields}
+          />
+          :         
           <PerusteluSimple
             helpText={helpText}
             koodiarvo={koodiarvo}

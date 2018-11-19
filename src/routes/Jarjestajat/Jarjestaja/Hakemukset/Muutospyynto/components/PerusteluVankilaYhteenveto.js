@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+
+// import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -29,10 +32,19 @@ const Area = styled.div`
   margin: 15px 0;
 `
 
-class PerusteluSimple extends Component {
+class PerusteluVankilaYhteenveto extends Component {
+  componentWillMount() {
+    const { muutosperustelut } = this.props
+
+    if (muutosperustelut && !muutosperustelut.fetched) {
+      this.props.fetchMuutosperustelut()
+    }
+  }
+
   render() {
     const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
+    let vankilanMetaSuomeksi = _.find(perustelut.toteuttaminen.metadata, (m) => {return m.kieli === "FI"})
 
     return (
       <PerusteluWrapper>
@@ -42,7 +54,7 @@ class PerusteluSimple extends Component {
             <Content>{perustelut.tarpeellisuus || perusteluText}</Content>
           </Area>
           <Area>
-            <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.OPPISOPIMUS.JARJESTAMISEDELLYTYKSET.FI}</Label>
+            <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.VANKILA.JARJESTAMISEDELLYTYKSET.FI}</Label>
             <Content>{perustelut.henkilosto || perusteluText}</Content>
           </Area>
           <Area>
@@ -50,8 +62,16 @@ class PerusteluSimple extends Component {
             <Content>{perustelut.osaaminen || perusteluText}</Content>
           </Area>
           <Area>
+            <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.PEDAGOGISET.FI}</Label>
+            <Content>{perustelut.pedagogiset || perusteluText}</Content>
+          </Area>
+          <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.SIDOSRYHMA.FI}</Label>
             <Content>{perustelut.sidosryhma || perusteluText}</Content>
+          </Area>
+          <Area>
+            <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.VANKILA.TOTEUTTAMINEN.FI}</Label>
+            <Content>{vankilanMetaSuomeksi.nimi || perusteluText}</Content>
           </Area>
           <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.OPISKELIJAVUOSIARVIO.FI}</Label>
@@ -65,4 +85,4 @@ class PerusteluSimple extends Component {
   }
 }
 
-export default PerusteluSimple
+export default PerusteluVankilaYhteenveto
