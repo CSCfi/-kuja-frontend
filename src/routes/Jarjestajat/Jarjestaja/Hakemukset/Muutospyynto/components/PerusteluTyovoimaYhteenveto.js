@@ -40,10 +40,12 @@ class PerusteluTyovoimaYhteenveto extends Component {
   }
 
   render() {
-    console.log(this.props)
     const { perustelut } = this.props
     let perusteluText = 'Ei saatavilla'
-    let tyovoimaMetaSuomeksi = _.find(perustelut.yhteistyo.metadata, (m) => {return m.kieli === "FI"})
+    let tyovoimaMetaSuomeksi = null
+    if (perustelut.yhteistyo && 'metadata' in perustelut.yhteistyo) {
+      tyovoimaMetaSuomeksi = _.find(perustelut.yhteistyo.metadata, (m) => {return m.kieli === "FI"})
+    }
 
     return (
       <PerusteluWrapper>
@@ -74,7 +76,7 @@ class PerusteluTyovoimaYhteenveto extends Component {
           </Area>
           <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.TYOVOIMA.YHTEISTYO.FI}</Label>
-            <Content>{tyovoimaMetaSuomeksi.nimi || perusteluText}</Content>
+            <Content>{(tyovoimaMetaSuomeksi && 'nimi' in tyovoimaMetaSuomeksi && tyovoimaMetaSuomeksi.nimi) || perusteluText}</Content>
           </Area>
           <Area>
             <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.OPISKELIJAVUOSIARVIO.FI}</Label>
