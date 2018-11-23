@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import PerusteluSimple from './PerusteluSimple'
 import PerusteluOppisopimusYhteenveto from './PerusteluOppisopimusYhteenveto'
+import PerusteluTyovoimaYhteenveto from './PerusteluTyovoimaYhteenveto'
 import PerusteluVaativaYhteenveto from './PerusteluVaativaYhteenveto'
 import PerusteluVankilaYhteenveto from './PerusteluVankilaYhteenveto'
 import Indikaattori from './Indikaattori'
@@ -115,26 +116,37 @@ class MuutosYhteenveto extends Component {
               fields={fields}
             />
           :         
-           koodisto === KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "3" || koodiarvo === "2" || koodiarvo === "12") ?
-            <PerusteluVaativaYhteenveto 
-              helpText={helpText}
-              koodiarvo={koodiarvo}
-              perustelut={meta.perusteluteksti_vaativa}
-              muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-              muutokset={muutokset}
-              muutos={muutos}
-              fields={fields}
-            />
+            koodisto === KOODISTOT.OIVA_MUUT && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "3" || koodiarvo === "2" || koodiarvo === "12") ?
+              <PerusteluVaativaYhteenveto 
+                helpText={helpText}
+                koodiarvo={koodiarvo}
+                perustelut={meta.perusteluteksti_vaativa}
+                muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+                muutokset={muutokset}
+                muutos={muutos}
+                fields={fields}
+              />
             :
-            <PerusteluSimple
-              helpText={helpText}
-              koodiarvo={koodiarvo}
-              perusteluteksti={perusteluteksti}
-              muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-              muutokset={muutokset}
-              muutos={muutos}
-              fields={fields}
-            />
+              koodisto === KOODISTOT.OIVA_TYOVOIMAKOULUTUS && type === MUUTOS_TYPES.ADDITION && (koodiarvo === "3" || koodiarvo === "1") ?
+                <PerusteluTyovoimaYhteenveto 
+                  helpText={helpText}
+                  koodiarvo={koodiarvo}
+                  perustelut={meta.perusteluteksti_tyovoima}
+                  muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+                  muutokset={muutokset}
+                  muutos={muutos}
+                  fields={fields}
+                />
+              :
+                <PerusteluSimple
+                  helpText={helpText}
+                  koodiarvo={koodiarvo}
+                  perusteluteksti={perusteluteksti}
+                  muutosperustelukoodiarvo={muutosperustelukoodiarvo}
+                  muutokset={muutokset}
+                  muutos={muutos}
+                  fields={fields}
+                />
           }
       </MuutosWrapper>
     )
