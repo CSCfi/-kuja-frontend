@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from "react"
+import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 import arrow from 'static/images/koulutusala-arrow.svg'
 import {
@@ -20,6 +21,15 @@ import {
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange, handleOsaamislaCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+
+const KoulutustyyppiWrapper = styled.div`
+  margin: 5px 0 20px;
+`
+
+const Koulutustyyppi = styled.div`
+  font-size: 15px;
+  font-weight: bold;
+`
 
 class TutkintoList extends Component {
   constructor(props) {
@@ -109,8 +119,8 @@ class TutkintoList extends Component {
             {_.map(koulutustyypit, (koulutustyyppi, i) => {
               const koulutustyyppiSuomeksi = _.find(koulutustyyppi.metadata, (m) => {return m.kieli === "FI" }) || ""
               return (
-                <div key={ i }>
-                  <div>{ koulutustyyppiSuomeksi.nimi }</div>
+                <KoulutustyyppiWrapper key={ i }>
+                  <Koulutustyyppi>{ koulutustyyppiSuomeksi.nimi }</Koulutustyyppi>
                   {_.map(koulutustyyppi.koulutukset, (koulutus, i) => {
                     const koodiarvo = koulutus.koodiarvo || koulutus.koodiArvo
                     const identifier = `input-${koodiarvo}`
@@ -230,7 +240,7 @@ class TutkintoList extends Component {
                 )
 
                   })}
-                </div>
+                </KoulutustyyppiWrapper>
                 )
             })}
           </KoulutusalaListWrapper>
