@@ -52,9 +52,7 @@ class MuutospyyntoWizardMuutokset extends Component {
 
   render() {
     const {
-      onSubmit,
       save,
-//      update,
       lupa,
       formValues
     } = this.props

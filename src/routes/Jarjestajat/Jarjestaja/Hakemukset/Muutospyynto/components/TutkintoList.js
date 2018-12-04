@@ -18,7 +18,7 @@ import {
   Nimi
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange, handleOsaamislaCheckboxChange, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
+import { handleCheckboxChange, handleOsaamislaCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class TutkintoList extends Component {
@@ -147,14 +147,14 @@ class TutkintoList extends Component {
                           if (editValues) {
                             editValues.forEach(val => {
                               if (val.koodiarvo === koodiarvo) {
-                                val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                                val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                                isAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
+                                isRemoved =val.type === MUUTOS_TYPES.REMOVAL ? true : null
                               }
 
                           if (osaamisala) {
                             if (val.koodiarvo === osaamisala.koodiArvo) {
-                              val.type === MUUTOS_TYPES.ADDITION ? isOaAdded = true : null
-                              val.type === MUUTOS_TYPES.REMOVAL ? isOaRemoved = true : null
+                              isOaAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
+                              isOaRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
                             }
                           }
     
@@ -167,17 +167,17 @@ class TutkintoList extends Component {
                   if (editValues) {
                     editValues.forEach(val => {
                       if (val.koodiarvo === koodiarvo) {
-                        val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                        val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                        isAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
+                        isRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
                       }
                     })
                   }
                 }
     
                 let customClassName = ""
-                isInLupa ? customClassName = "is-in-lupa" : null
-                isAdded ? customClassName = "is-added" : null
-                isRemoved ? customClassName = "is-removed" : null
+                customClassName = isInLupa ? "is-in-lupa" : null
+                customClassName = isAdded ? "is-added" : null
+                customClassName = isRemoved ? "is-removed" : null
     
                 let isChecked = false
                 if ((isInLupa && !isRemoved) || isAdded) {
@@ -185,9 +185,9 @@ class TutkintoList extends Component {
                 }
     
                 let customClassNameForOa = ""
-                isOaInLupa ? customClassNameForOa = "is-in-lupa" : null
-                isOaAdded ? customClassNameForOa = "is-added" : null
-                isOaRemoved ? customClassNameForOa = "is-removed" : null
+                customClassNameForOa = isOaInLupa ? "is-in-lupa" : null
+                customClassNameForOa = isOaAdded ? "is-added" : null
+                customClassNameForOa = isOaRemoved ? "is-removed" : null
     
                 let isOaChecked = false
                 if ((isOaInLupa && !isOaRemoved) || isOaAdded) {
