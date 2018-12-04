@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { Component } from "react"
-import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 import arrow from 'static/images/koulutusala-arrow.svg'
 import {
@@ -16,20 +15,13 @@ import {
   Osaamisala,
   TutkintoBlock,
   Koodi,
-  Nimi
+  Nimi,
+  Koulutustyyppi,
+  KoulutustyyppiWrapper
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange, handleOsaamislaCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
-
-const KoulutustyyppiWrapper = styled.div`
-  margin: 5px 0 20px;
-`
-
-const Koulutustyyppi = styled.div`
-  font-size: 15px;
-  font-weight: bold;
-`
 
 class TutkintoList extends Component {
   constructor(props) {
