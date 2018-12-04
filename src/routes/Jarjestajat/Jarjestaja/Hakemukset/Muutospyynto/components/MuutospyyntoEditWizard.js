@@ -230,6 +230,7 @@ class MuutospyyntoEditWizard extends Component {
                     lupa={lupa}
                     initialValues={initialValues}
                     fetchKoulutusalat={this.props.fetchKoulutusalat}
+                    fetchKoulutustyypit={this.props.fetchKoulutustyypit}
                     fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
                     fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
                     fetchKoulutus={this.props.fetchKoulutus}

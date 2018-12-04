@@ -25,6 +25,14 @@ export function getKoulutusAlat() {
   }
 }
 
+export function getKoulutusTyypit() {
+  const state = store.getState()
+
+  if (state.koulutustyypit && state.koulutustyypit.fetched) {
+    return state.koulutustyypit.data
+  }
+}
+
 export function getTutkintoNimiByKoodiarvo(koodi) {
   const state = store.getState()
 

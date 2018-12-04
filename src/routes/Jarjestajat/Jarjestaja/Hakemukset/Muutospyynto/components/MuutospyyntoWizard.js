@@ -225,6 +225,7 @@ class MuutospyyntoWizard extends Component {
                       save={this.save}
                       lupa={lupa}
                       fetchKoulutusalat={this.props.fetchKoulutusalat}
+                      fetchKoulutustyypit={this.props.fetchKoulutustyypit}
                       fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
                       fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
                       fetchKoulutus={this.props.fetchKoulutus}

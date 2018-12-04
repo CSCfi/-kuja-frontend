@@ -18,7 +18,7 @@ import {
   Nimi
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange, handleOsaamislaCheckboxChange } from "../modules/koulutusUtil"
+import { handleCheckboxChange, handleOsaamislaCheckboxChange, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class TutkintoList extends Component {
@@ -71,10 +71,6 @@ class TutkintoList extends Component {
     let { fields, koulutukset } = this.props
     let muutokset = []
 
-    koulutukset = _.sortBy(koulutukset, k => {
-      return k.koodiArvo
-    })
-
     if (editValues) {
       _.forEach(editValues, value => {
         _.forEach(koulutukset, koulutus => {
@@ -91,6 +87,11 @@ class TutkintoList extends Component {
       alat = current.koulutusalat
     }
 
+    let koulutustyypit = []
+    _.forOwn(koulutukset, k => {
+      koulutustyypit.push(k)
+    })
+
     return (
       <Wrapper>
         <Heading onClick={this.toggleTutkintoList.bind(this)}>
@@ -102,129 +103,139 @@ class TutkintoList extends Component {
             : null
           }
         </Heading>
-        {!this.state.isHidden &&
-        <KoulutusalaListWrapper>
-          {_.map(koulutukset, (koulutus, i) => {
-            const koodiarvo = koulutus.koodiarvo || koulutus.koodiArvo
-            const identifier = `input-${koodiarvo}`
-            const { nimi, metadata } = koulutus
 
-            let nimiText = ""
-            if (!nimi && metadata) {
-              nimiText = parseLocalizedField(metadata)
-            } else {
-              nimiText = nimi
-            }
+        {!this.state.isHidden && 
+          <KoulutusalaListWrapper>
+            {_.map(koulutustyypit, (koulutustyyppi, i) => {
+              const koulutustyyppiSuomeksi = _.find(koulutustyyppi.metadata, (m) => {return m.kieli === "FI" }) || ""
+              return (
+                <div key={ i }>
+                  <div>{ koulutustyyppiSuomeksi.nimi }</div>
+                  {_.map(koulutustyyppi.koulutukset, (koulutus, i) => {
+                    const koodiarvo = koulutus.koodiarvo || koulutus.koodiArvo
+                    const identifier = `input-${koodiarvo}`
+                    const { nimi, metadata } = koulutus
+        
+                    let nimiText = ""
+                    if (!nimi && metadata) {
+                      nimiText = parseLocalizedField(metadata)
+                    } else {
+                      nimiText = nimi
+                    }
+        
+                    let isInLupa = false
+                    let isAdded = false
+                    let isRemoved = false
+        
+                    // osaamisala addons
+                    let isOaInLupa = false
+                    let isOaAdded = false
+                    let isOaRemoved = false
+                    const osaamisala = koulutus.osaamisala
+                    let identifierOa = ''
+                    if(osaamisala) {
+                      identifierOa = `input-${osaamisala.koodiArvo}`
+                    }
 
-            let isInLupa = false
-            let isAdded = false
-            let isRemoved = false
+                    if (alat) {
+                      _.forEach(alat, ({ koulutukset }) => {
+                        koulutukset.forEach(({ koodi }) => {
+                          if (koodi === koodiarvo) {
+                            isInLupa = true
+                          }
+        
+                          if (editValues) {
+                            editValues.forEach(val => {
+                              if (val.koodiarvo === koodiarvo) {
+                                val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
+                                val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                              }
 
-            // osaamisala addons
-            let isOaInLupa = false
-            let isOaAdded = false
-            let isOaRemoved = false
-            const osaamisala = koulutus.osaamisala
-            let identifierOa = ''
-            if(osaamisala) {
-              identifierOa = `input-${osaamisala.koodiArvo}`
-            }
-
-
-            if (alat) {
-              _.forEach(alat, ({ koulutukset }) => {
-                koulutukset.forEach(({ koodi }) => {
-                  if (koodi === koodiarvo) {
-                    isInLupa = true
-                  }
-
+                          if (osaamisala) {
+                            if (val.koodiarvo === osaamisala.koodiArvo) {
+                              val.type === MUUTOS_TYPES.ADDITION ? isOaAdded = true : null
+                              val.type === MUUTOS_TYPES.REMOVAL ? isOaRemoved = true : null
+                            }
+                          }
+    
+                        })
+                      }
+                    })
+                  })
+                } else {
+                  // Tarkastetaan myös tilanne, jossa koulutusalalla ei ollut yhtään tutkintoa luvassa, mutta alalle on lisätty tutkintoja
                   if (editValues) {
                     editValues.forEach(val => {
                       if (val.koodiarvo === koodiarvo) {
                         val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
                         val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
                       }
-
-                      if(osaamisala) {
-                        if (val.koodiarvo === osaamisala.koodiArvo) {
-                          val.type === MUUTOS_TYPES.ADDITION ? isOaAdded = true : null
-                          val.type === MUUTOS_TYPES.REMOVAL ? isOaRemoved = true : null
-                        }
-                      }
-
                     })
                   }
-                })
-              })
-            } else {
-              // Tarkastetaan myös tilanne, jossa koulutusalalla ei ollut yhtään tutkintoa luvassa, mutta alalle on lisätty tutkintoja
-              if (editValues) {
-                editValues.forEach(val => {
-                  if (val.koodiarvo === koodiarvo) {
-                    val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                    val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
-                  }
-                })
-              }
-            }
-
-            let customClassName = ""
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
-
-            let isChecked = false
-            if ((isInLupa && !isRemoved) || isAdded) {
-              isChecked = true
-            }
-
-            let customClassNameForOa = ""
-            isOaInLupa ? customClassNameForOa = "is-in-lupa" : null
-            isOaAdded ? customClassNameForOa = "is-added" : null
-            isOaRemoved ? customClassNameForOa = "is-removed" : null
-
-            let isOaChecked = false
-            if ((isOaInLupa && !isOaRemoved) || isOaAdded) {
-              isOaChecked = true
-            }
-
-
-            return (
-              <TutkintoBlock>
-                <TutkintoWrapper key={i} className={customClassName}>
-                  <Checkbox>
-                    <input
-                      type="checkbox"
-                      id={identifier}
-                      checked={isChecked}
-                      onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
-                    />
-                    <label htmlFor={identifier}></label>
-                  </Checkbox>
-                  <Koodi>{koodiarvo}</Koodi>
-                  <Nimi>{nimiText}</Nimi>
-                </TutkintoWrapper>
-
-                { osaamisala ?
-                  <OsaamisalaWrapper key={i+999} className={customClassNameForOa}>
-                    <Checkbox>
-                      <input
-                        type="checkbox"
-                        id={identifierOa}
-                        checked={isOaChecked}
-                        onChange={(eoa) => { handleOsaamislaCheckboxChange(eoa, editValues, fields, isOaInLupa, osaamisala, koodiarvo) }}
-                      />
-                      <label htmlFor={identifierOa}></label>
-                    </Checkbox>
-                    <Osaamisala>{osaamisala.koodiArvo} {parseLocalizedField(osaamisala.metadata)} (rajoite)</Osaamisala>
-                  </OsaamisalaWrapper> : ""
                 }
+    
+                let customClassName = ""
+                isInLupa ? customClassName = "is-in-lupa" : null
+                isAdded ? customClassName = "is-added" : null
+                isRemoved ? customClassName = "is-removed" : null
+    
+                let isChecked = false
+                if ((isInLupa && !isRemoved) || isAdded) {
+                  isChecked = true
+                }
+    
+                let customClassNameForOa = ""
+                isOaInLupa ? customClassNameForOa = "is-in-lupa" : null
+                isOaAdded ? customClassNameForOa = "is-added" : null
+                isOaRemoved ? customClassNameForOa = "is-removed" : null
+    
+                let isOaChecked = false
+                if ((isOaInLupa && !isOaRemoved) || isOaAdded) {
+                  isOaChecked = true
+                }
+    
+    
+                return (
+                  <TutkintoBlock key={i}>
+                    <TutkintoWrapper key={i} className={customClassName}>
+                      <Checkbox>
+                        <input
+                          type="checkbox"
+                          id={identifier}
+                          checked={isChecked}
+                          onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                        />
+                        <label htmlFor={identifier}></label>
+                      </Checkbox>
+                      <Koodi>{koodiarvo}</Koodi>
+                      <Nimi>{nimiText}</Nimi>
+                    </TutkintoWrapper>
+    
+                    { osaamisala ?
+                      <OsaamisalaWrapper key={i+999} className={customClassNameForOa}>
+                        <Checkbox>
+                          <input
+                            type="checkbox"
+                            id={identifierOa}
+                            checked={isOaChecked}
+                            onChange={(eoa) => { handleOsaamislaCheckboxChange(eoa, editValues, fields, isOaInLupa, osaamisala, koodiarvo) }}
+                          />
+                          <label htmlFor={identifierOa}></label>
+                        </Checkbox>
+                        <Osaamisala>{osaamisala.koodiArvo} {parseLocalizedField(osaamisala.metadata)} (rajoite)</Osaamisala>
+                      </OsaamisalaWrapper> : ""
+                    }
+    
+                  </TutkintoBlock>
+                )
 
-              </TutkintoBlock>
-            )
-          })}
-        </KoulutusalaListWrapper>
+                  })}
+                </div>
+                )
+            })}
+          </KoulutusalaListWrapper>
         }
+
       </Wrapper>
     )
   }
