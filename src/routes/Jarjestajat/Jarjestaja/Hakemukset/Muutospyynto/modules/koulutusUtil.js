@@ -248,6 +248,8 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         maaraystyyppi,
         type: MUUTOS_TYPES.ADDITION,
         meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
           perusteluteksti_oppisopimus: {
             "tarpeellisuus": null,
@@ -396,6 +398,8 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         maaraystyyppi,
         type: MUUTOS_TYPES.REMOVAL,
         meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
           perusteluteksti_oppisopimus: {
             "tarpeellisuus": null,

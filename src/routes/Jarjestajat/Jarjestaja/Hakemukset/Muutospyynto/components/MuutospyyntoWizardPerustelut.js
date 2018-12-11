@@ -4,6 +4,7 @@ import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import validate from '../modules/validateWizard'
 import { Separator, Button, SubtleButton, Container, WizardBottom } from './MuutospyyntoWizardComponents'
 import MuutosList from './MuutosList'
+import MuutosListTutkinnot from './MuutosListTutkinnot'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
@@ -35,7 +36,7 @@ let MuutospyyntoWizardPerustelut = props => {
           kategoria="tutkinto"
           headingNumber="1"
           heading="Tutkinnot ja koulutukset"
-          component={MuutosList}
+          component={MuutosListTutkinnot}
         />
 
         <FieldArray
