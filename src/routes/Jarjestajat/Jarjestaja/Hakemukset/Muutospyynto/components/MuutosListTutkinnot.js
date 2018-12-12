@@ -18,11 +18,15 @@ const MuutosWrapper = styled.div`
 const MuutosAla = styled.div`
     margin: 10px 0 5px 0;
     width: 100%;
+    font-weight: bold;
 `
 
 const MuutosTyyppi = styled.div`
     margin: 10px 0 5px 0;
     width: 100%;
+    font-weight: bold;
+    font-size: 90%;
+    padding-left: 10px;
 `
 
 const Heading = styled.h4`
