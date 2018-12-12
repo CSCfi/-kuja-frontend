@@ -25,11 +25,33 @@ export function getKoulutusAlat() {
   }
 }
 
+export function getKoulutusalaByKoodiarvo(koodi) {
+  const state = store.getState()
+  const { koulutusalat } = state
+
+  if (koulutusalat && koulutusalat.data) {
+    return _.find(koulutusalat.data, (a) => { return a.koodiArvo === koodi })
+  } else {
+    return undefined
+  }
+}
+
 export function getKoulutusTyypit() {
   const state = store.getState()
 
   if (state.koulutustyypit && state.koulutustyypit.fetched) {
     return state.koulutustyypit.data
+  }
+}
+
+export function getKoulutustyyppiByKoodiarvo(koodi) {
+  const state = store.getState()
+  const { koulutustyypit } = state
+
+  if (koulutustyypit && koulutustyypit.data) {
+    return _.find(koulutustyypit.data, (t) => { return t.koodiArvo === koodi })
+  } else {
+    return undefined
   }
 }
 

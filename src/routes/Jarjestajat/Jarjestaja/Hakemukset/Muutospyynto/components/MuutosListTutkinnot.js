@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import Muutos from './Muutos'
 import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
+import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo } from "../modules/koulutusUtil"
+import { parseLocalizedField } from "../../../../../../modules/helpers"
 
 const MuutosListWrapper = styled.div`
 `
@@ -54,18 +56,35 @@ class MuutosListTutkinnot extends Component {
         return 0
     })
 
+    // apumuuttujia alan ja tyypin vaihtumisen havaitsemiseen
+    var koulutusalaA = undefined
+    var koulutusalaB = undefined
+    var koulutustyyppiA = undefined
+    var koulutustyyppiB = undefined
+
     return (
       <MuutosListWrapper>
         {length > 0 &&
         <Heading>{`${headingNumber}. ${heading}`}</Heading>
         }
         {muutokset.map((field, index) => {
+          koulutusalaA = koulutusalaB
+          koulutustyyppiA = koulutustyyppiB
+        
           const muutos = fields.get(index)
-          const { koodiarvo, koodisto } = muutos
+          const { koodiarvo, koodisto, meta } = muutos
+          const { koulutusala, koulutustyyppi } = meta
+          koulutusalaB = koulutusala
+          koulutustyyppiB = koulutustyyppi
+
           const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+          const koulutusalanNimiSuomeksi = parseLocalizedField(getKoulutusalaByKoodiarvo(koulutusala).metadata)
+          const koulutustyypinNimiSuomeksi = parseLocalizedField(getKoulutustyyppiByKoodiarvo(koulutustyyppi).metadata)
 
           return (
             <MuutosWrapper key={identifier}>
+              { koulutusala !== koulutusalaA && <MuutosAla>{ koulutusalanNimiSuomeksi }</MuutosAla> }
+              { (koulutusala !== koulutusalaA || koulutustyyppi !== koulutustyyppiA) && <MuutosTyyppi>{ koulutustyypinNimiSuomeksi }</MuutosTyyppi> }
               <MuutosComponent
                 key={index}
                 muutos={muutos}
