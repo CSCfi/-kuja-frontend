@@ -82,13 +82,18 @@ class MuutosListTutkinnot extends Component {
           koulutustyyppiB = koulutustyyppi
 
           const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
-          const koulutusalanNimiSuomeksi = parseLocalizedField(getKoulutusalaByKoodiarvo(koulutusala).metadata)
-          const koulutustyypinNimiSuomeksi = parseLocalizedField(getKoulutustyyppiByKoodiarvo(koulutustyyppi).metadata)
+          var koulutusalanNimiSuomeksi = undefined
+          var koulutustyypinNimiSuomeksi = undefined
+
+          if (koulutusala) {
+              koulutusalanNimiSuomeksi = parseLocalizedField(getKoulutusalaByKoodiarvo(koulutusala).metadata)
+              koulutustyypinNimiSuomeksi = parseLocalizedField(getKoulutustyyppiByKoodiarvo(koulutustyyppi).metadata)
+          }
 
           return (
             <MuutosWrapper key={identifier}>
-              { koulutusala !== koulutusalaA && <MuutosAla>{ koulutusalanNimiSuomeksi }</MuutosAla> }
-              { (koulutusala !== koulutusalaA || koulutustyyppi !== koulutustyyppiA) && <MuutosTyyppi>{ koulutustyypinNimiSuomeksi }</MuutosTyyppi> }
+              { koulutusala && koulutusala !== koulutusalaA && <MuutosAla>{ koulutusalanNimiSuomeksi }</MuutosAla> }
+              { koulutusala && koulutustyyppi && (koulutusala !== koulutusalaA || koulutustyyppi !== koulutustyyppiA) && <MuutosTyyppi>{ koulutustyypinNimiSuomeksi }</MuutosTyyppi> }
               <MuutosComponent
                 key={index}
                 muutos={muutos}
