@@ -64,10 +64,12 @@ export function getTutkintoNimiByKoodiarvo(koodi) {
     let nimi = undefined
 
     _.forEach(koulutusdata, ala => {
-      _.forEach(ala.koulutukset, koulutus => {
-        if (koulutus.koodiArvo === koodi) {
-          nimi = parseLocalizedField(koulutus.metadata)
-        }
+      _.forEach(ala.koulutukset, tyyppi => {
+        _.forEach(tyyppi.koulutukset, koulutus => {
+          if (koulutus.koodiArvo === koodi) {
+            nimi = parseLocalizedField(koulutus.metadata)
+          }
+        })
       })
     })
 
