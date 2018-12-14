@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Muutos from './Muutos'
 import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
-import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo } from "../modules/koulutusUtil"
+import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
 const MuutosListWrapper = styled.div`
@@ -51,12 +51,25 @@ class MuutosListTutkinnot extends Component {
     }
 
     muutokset = muutokset.sort((a, b) => {
+    
+        // Osaamisalat aakkostetaan parent-tutkinnon kohdalle
+        a.aakkostusNimi = a.nimi
+        b.aakkostusNimi = b.nimi
+        if ("parentId" in a) {
+          a.aakkostusNimi = getTutkintoNimiByKoodiarvo(a.parentId)
+        }
+        if ("parentId" in b) {
+          b.aakkostusNimi = getTutkintoNimiByKoodiarvo(b.parentId)
+        }
+
         if (a.meta.koulutusala < b.meta.koulutusala) { return -1 }
         else if (a.meta.koulutusala > b.meta.koulutusala) { return 1 }
         else if (a.meta.koulutustyyppi < b.meta.koulutustyyppi) { return -1 }
         else if (a.meta.koulutustyyppi > b.meta.koulutustyyppi) { return 1 }
-        else if (a.meta.nimi < b.meta.nimi) { return -1 }
-        else if (a.meta.nimi > b.meta.nimi) { return 1 }
+        else if ("parentId" in a && a.parentId === b.koodiarvo) { return 1 }
+        else if ("parentId" in b && b.parentId === a.koodiarvo) { return -1 }
+        else if (a.aakkostusNimi < b.aakkostusNimi) { return -1 }
+        else if (a.aakkostusNimi > b.aakkostusNimi) { return 1 }
         return 0
     })
 
