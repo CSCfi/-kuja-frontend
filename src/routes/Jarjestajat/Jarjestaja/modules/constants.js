@@ -34,6 +34,11 @@ export const TUTKINNOT_SECTIONS = {
     KULJETTAJAT: "Kuljettajakoulutukset"
 }
 
+export const KIELET_SECTIONS = {
+    OPETUSKIELET: "Opetuskielet",
+    TUTKINTOKIELET: "Tutkintokielet"
+}
+
 export const KOHTEET = {
   TUTKINNOT: 'tutkinnotjakoulutukset',
   KIELI: 'opetusjatutkintokieli',

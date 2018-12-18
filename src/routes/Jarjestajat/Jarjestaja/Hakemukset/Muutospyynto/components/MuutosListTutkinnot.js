@@ -5,7 +5,8 @@ import _ from 'lodash'
 import Muutos from './Muutos'
 import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
-import { TUTKINNOT_SECTIONS } from "../../../modules/constants"
+import { TUTKINNOT_SECTIONS, KIELET_SECTIONS } from "../../../modules/constants"
+import { FIELD_ARRAY_NAMES} from "../modules/uusiHakemusFormConstants"
 import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
@@ -47,7 +48,7 @@ const components = {
 class MuutosListTutkinnot extends Component {
   render() {
 
-    var { muutokset } = this.props
+    var { muutokset, nimi } = this.props
     const { kategoria, fields, headingNumber, heading } = this.props
     const { length } = fields
     let { componentType } = this.props
@@ -60,10 +61,14 @@ class MuutosListTutkinnot extends Component {
       m.indeksi = index
     })
 
-    var tutkinnot = _.filter(muutokset, (m) => {
-      return (m.koodisto === "koulutus" || m.koodisto === "osaamisala") && (m.koodiarvo !== "999901" && m.koodiarvo !== "999903")
+    var opetuskielet = _.filter(muutokset, (m) => {
+      return m.koodisto === "oppilaitoksenopetuskieli"
     })
+    opetuskielet = _.sortBy(opetuskielet, (k) => { return k.koodiarvo })
 
+    var tutkinnot = _.filter(muutokset, (m) => {
+      return (m.koodisto === "koulutus" || m.koodisto === "osaamisala" || m.koodisto === "kieli") && (m.koodiarvo !== "999901" && m.koodiarvo !== "999903")
+    })
     tutkinnot = tutkinnot.sort((a, b) => {
       // Apumuuttujat osaamisalojen järjestämiseen
       a.aakkostusNimi = a.nimi
@@ -117,9 +122,39 @@ class MuutosListTutkinnot extends Component {
         {length > 0 &&
         <Heading>{`${headingNumber}. ${heading}`}</Heading>
         }
+        { opetuskielet.length !== 0 &&
+          <div>
+            <SubHeading>{ KIELET_SECTIONS.OPETUSKIELET }</SubHeading>
+            {opetuskielet.map((field, index) => {
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto } = muutos
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+          </div>
+        }
         { tutkinnot.length !== 0 &&
           <div>
-            <SubHeading>{ TUTKINNOT_SECTIONS.TUTKINNOT }</SubHeading>
+            <SubHeading>
+              { nimi === FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET
+                ? TUTKINNOT_SECTIONS.TUTKINNOT
+                : nimi === FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET
+                  ? KIELET_SECTIONS.TUTKINTOKIELET
+                  : ""
+              }
+            </SubHeading>
             {tutkinnot.map((field, index) => {
               koulutusalaA = koulutusalaB
               koulutustyyppiA = koulutustyyppiB
