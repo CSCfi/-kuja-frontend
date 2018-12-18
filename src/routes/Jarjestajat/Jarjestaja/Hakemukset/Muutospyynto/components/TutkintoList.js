@@ -76,7 +76,7 @@ class TutkintoList extends Component {
     if (editValues) {
       _.forEach(editValues, value => {
         _.forEach(koulutukset, koulutus => {
-          if (koulutus.koodiArvo === value.koodiarvo) {
+          if (koulutus.koodiArvo === value.koodiarvo && koulutus.koodisto === value.koodisto) {
             muutokset.push(value)
           }
         })
