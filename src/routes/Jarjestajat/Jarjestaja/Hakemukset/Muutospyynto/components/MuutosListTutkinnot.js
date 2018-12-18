@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import Muutos from './Muutos'
 import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
+import { TUTKINNOT_SECTIONS } from "../../../modules/constants"
 import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
@@ -33,6 +35,10 @@ const Heading = styled.h4`
   margin: 18px 0;
 `
 
+const SubHeading = styled.h4`
+  margin: 10px 0;
+`
+
 const components = {
   [COMPONENT_TYPES.MUUTOS]: Muutos,
   [COMPONENT_TYPES.MUUTOS_YHTEENVETO]: MuutosYhteenveto
@@ -50,30 +56,57 @@ class MuutosListTutkinnot extends Component {
       componentType = COMPONENT_TYPES.MUUTOS
     }
 
-    muutokset = muutokset.sort((a, b) => {
-    
-        // Osaamisalat aakkostetaan parent-tutkinnon kohdalle
-        a.aakkostusNimi = a.nimi
-        b.aakkostusNimi = b.nimi
-        if ("parentId" in a) {
-          a.aakkostusNimi = getTutkintoNimiByKoodiarvo(a.parentId)
-        }
-        if ("parentId" in b) {
-          b.aakkostusNimi = getTutkintoNimiByKoodiarvo(b.parentId)
-        }
-
-        if (a.meta.koulutusala < b.meta.koulutusala) { return -1 }
-        else if (a.meta.koulutusala > b.meta.koulutusala) { return 1 }
-        else if (a.meta.koulutustyyppi < b.meta.koulutustyyppi) { return -1 }
-        else if (a.meta.koulutustyyppi > b.meta.koulutustyyppi) { return 1 }
-        else if ("parentId" in a && a.parentId === b.koodiarvo) { return 1 }
-        else if ("parentId" in b && b.parentId === a.koodiarvo) { return -1 }
-        else if (a.aakkostusNimi < b.aakkostusNimi) { return -1 }
-        else if (a.aakkostusNimi > b.aakkostusNimi) { return 1 }
-        return 0
+    _.forEach(muutokset, (m, index) => {
+      m.indeksi = index
     })
 
-    // apumuuttujia alan ja tyypin vaihtumisen havaitsemiseen
+    var tutkinnot = _.filter(muutokset, (m) => {
+      return (m.koodisto === "koulutus" || m.koodisto === "osaamisala") && (m.koodiarvo !== "999901" && m.koodiarvo !== "999903")
+    })
+
+    tutkinnot = tutkinnot.sort((a, b) => {
+      // Apumuuttujat osaamisalojen järjestämiseen
+      a.aakkostusNimi = a.nimi
+      b.aakkostusNimi = b.nimi
+      if ("parentId" in a) {
+        a.aakkostusNimi = getTutkintoNimiByKoodiarvo(a.parentId)
+      }
+      if ("parentId" in b) {
+        b.aakkostusNimi = getTutkintoNimiByKoodiarvo(b.parentId)
+      }
+
+      if (a.meta.koulutusala < b.meta.koulutusala) { return -1 }
+      else if (a.meta.koulutusala > b.meta.koulutusala) { return 1 }
+      else if (a.meta.koulutustyyppi < b.meta.koulutustyyppi) { return -1 }
+      else if (a.meta.koulutustyyppi > b.meta.koulutustyyppi) { return 1 }
+      else if ("parentId" in a && a.parentId === b.koodiarvo) { return 1 }
+      else if ("parentId" in b && b.parentId === a.koodiarvo) { return -1 }
+      else if (a.aakkostusNimi < b.aakkostusNimi) { return -1 }
+      else if (a.aakkostusNimi > b.aakkostusNimi) { return 1 }
+      return 0
+    })
+
+    var poikkeukset = _.filter(muutokset, (m) => {
+      return m.koodisto === "koulutus" && (m.koodiarvo === "999901" || m.koodiarvo === "999903")
+    })
+    poikkeukset = _.sortBy(poikkeukset, (p) => { return p.koodiarvo })
+
+    var valmistavat = _.filter(muutokset, (m) => {
+      return m.koodisto === "ammatilliseentehtavaanvalmistavakoulutus"
+    })
+    valmistavat = _.sortBy(valmistavat, (v) => { return v.koodiarvo })
+
+    var tyovoimat = _.filter(muutokset, (m) => {
+      return m.koodisto === "oivatyovoimakoulutus"
+    })
+    tyovoimat = _.sortBy(tyovoimat, (t) => { return t.koodiarvo })
+
+    var kuljettajat = _.filter(muutokset, (m) => {
+      return m.koodisto === "kuljettajakoulutus"
+    })
+    kuljettajat = _.sortBy(kuljettajat, (k) => { return k.koodiarvo })
+
+    // apumuuttujia väliotsikoiden paikkojen havaitsemiseen
     var koulutusalaA = undefined
     var koulutusalaB = undefined
     var koulutustyyppiA = undefined
@@ -84,40 +117,137 @@ class MuutosListTutkinnot extends Component {
         {length > 0 &&
         <Heading>{`${headingNumber}. ${heading}`}</Heading>
         }
-        {muutokset.map((field, index) => {
-          koulutusalaA = koulutusalaB
-          koulutustyyppiA = koulutustyyppiB
-        
-          const muutos = fields.get(index)
-          const { koodiarvo, koodisto, meta } = muutos
-          const { koulutusala, koulutustyyppi } = meta
-          koulutusalaB = koulutusala
-          koulutustyyppiB = koulutustyyppi
+        { tutkinnot.length !== 0 &&
+          <div>
+            <SubHeading>{ TUTKINNOT_SECTIONS.TUTKINNOT }</SubHeading>
+            {tutkinnot.map((field, index) => {
+              koulutusalaA = koulutusalaB
+              koulutustyyppiA = koulutustyyppiB
 
-          const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
-          var koulutusalanNimiSuomeksi = undefined
-          var koulutustyypinNimiSuomeksi = undefined
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto, meta } = muutos
+              const { koulutusala, koulutustyyppi } = meta
+              koulutusalaB = koulutusala
+              koulutustyyppiB = koulutustyyppi
 
-          if (koulutusala) {
-              koulutusalanNimiSuomeksi = parseLocalizedField(getKoulutusalaByKoodiarvo(koulutusala).metadata)
-              koulutustyypinNimiSuomeksi = parseLocalizedField(getKoulutustyyppiByKoodiarvo(koulutustyyppi).metadata)
-          }
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+              var koulutusalanNimiSuomeksi = undefined
+              var koulutustyypinNimiSuomeksi = undefined
 
-          return (
-            <MuutosWrapper key={identifier}>
-              { koulutusala && koulutusala !== koulutusalaA && <MuutosAla>{ koulutusalanNimiSuomeksi }</MuutosAla> }
-              { koulutusala && koulutustyyppi && (koulutusala !== koulutusalaA || koulutustyyppi !== koulutustyyppiA) && <MuutosTyyppi>{ koulutustyypinNimiSuomeksi }</MuutosTyyppi> }
-              <MuutosComponent
-                key={index}
-                muutos={muutos}
-                muutokset={muutokset}
-                fields={fields}
-                kategoria={kategoria}
-                componentType={componentType}
-              />
-            </MuutosWrapper>
-          )
-        })}
+              if (koulutusala) {
+                  koulutusalanNimiSuomeksi = parseLocalizedField(getKoulutusalaByKoodiarvo(koulutusala).metadata)
+                  koulutustyypinNimiSuomeksi = parseLocalizedField(getKoulutustyyppiByKoodiarvo(koulutustyyppi).metadata)
+              }
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  { koulutusala && koulutusala !== koulutusalaA && <MuutosAla>{ koulutusalanNimiSuomeksi }</MuutosAla> }
+                  { koulutusala && koulutustyyppi && (koulutusala !== koulutusalaA || koulutustyyppi !== koulutustyyppiA) && <MuutosTyyppi>{ koulutustyypinNimiSuomeksi }</MuutosTyyppi> }
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+          </div>
+        }
+        { poikkeukset.length !== 0 &&
+          <div>
+            <SubHeading>{ TUTKINNOT_SECTIONS.POIKKEUKSET }</SubHeading>
+            {poikkeukset.map((field, index) => {
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto } = muutos
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+          </div>
+        }
+        { valmistavat.length !== 0 &&
+          <div>
+            <SubHeading>{ TUTKINNOT_SECTIONS.VALMISTAVAT }</SubHeading>
+            {valmistavat.map((field, index) => {
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto } = muutos
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+        </div>
+        }
+        { tyovoimat.length !== 0 &&
+          <div>
+            <SubHeading>{ TUTKINNOT_SECTIONS.TYOVOIMAT }</SubHeading>
+            {tyovoimat.map((field, index) => {
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto } = muutos
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+          </div>
+        }
+        { kuljettajat.length !== 0 &&
+          <div>
+            <SubHeading>{ TUTKINNOT_SECTIONS.KULJETTAJAT }</SubHeading>
+            {kuljettajat.map((field, index) => {
+              const muutos = fields.get(field.indeksi)
+              const { koodiarvo, koodisto } = muutos
+              const identifier = `muutoscomponent-${koodisto}-${koodiarvo}-${index}`
+
+              return (
+                <MuutosWrapper key={identifier}>
+                  <MuutosComponent
+                    key={index}
+                    muutos={muutos}
+                    muutokset={muutokset}
+                    fields={fields}
+                    kategoria={kategoria}
+                    componentType={componentType}
+                  />
+                </MuutosWrapper>
+              )
+            })}
+          </div>
+        }
       </MuutosListWrapper>
     )
   }
