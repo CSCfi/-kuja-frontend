@@ -18,8 +18,9 @@ import {
   KoulutustyyppiWrapper,
   TutkintoBlock
 } from './MuutospyyntoWizardComponents'
-import { handleTutkintoKieliCheckboxChange } from "../modules/koulutusUtil"
+import { handleTutkintoKieliCheckboxChange, getTutkintokieliBy } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { parseLocalizedField } from "../../../../../../modules/helpers"
 
 class TutkintoKieliList extends Component {
   constructor(props) {
@@ -114,10 +115,9 @@ class TutkintoKieliList extends Component {
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
           {_.map(koulutustyypit, (koulutustyyppi, i) => {
-            const koulutustyyppiSuomeksi = _.find(koulutustyyppi.metadata, (m) => {return m.kieli === "FI" }) || ""
             return (
               <KoulutustyyppiWrapper key={ i }>
-                <Koulutustyyppi>{ koulutustyyppiSuomeksi.nimi }</Koulutustyyppi>
+                <Koulutustyyppi>{ parseLocalizedField(koulutustyyppi.metadata) }</Koulutustyyppi>
                 {_.map(koulutustyyppi.koulutukset, (koulutus, i) => {
                   const identifier = `input-tutkintokieli-2-${koulutus.koodiArvo}`
                   const nimiObjekti = _.filter(koulutus.metadata, (m) => { return m.kieli === "FI" })
@@ -178,10 +178,25 @@ class TutkintoKieliList extends Component {
                     value = ''
                   }
 
-                  // Koulutus näytetään luvassa, jos se on (a) luvassa eikä sitä ole poistettu kohdassa 1 tai (b) lisätty kohdassa 1
-                  let tutkinto = _.find(maaraykset, (m) => { return m.koodi === koulutus.koodiArvo })
-                  if (!tutkinto) { tutkinto = _.find(tutkinnotJaKoulutuksetValue, (t) => { return t.koodiarvo === koulutus.koodiArvo && t.type === MUUTOS_TYPES.ADDITION}) }
-                  if (!tutkinto || _.find(tutkinnotJaKoulutuksetValue, (t) => { return t.koodiarvo === koulutus.koodiArvo && t.type === MUUTOS_TYPES.REMOVAL})) { return false }
+                  // Koulutus näytetään luvassa, jos se on (a) luvassa eikä sitä ole
+                  // poistettu kohdassa 1 tai (b) lisätty kohdassa 1
+                  var tutkinto = _.find(maaraykset, (m) => {
+                    return m.koodi === koulutus.koodiArvo
+                  })
+                  if (!tutkinto) {
+                    tutkinto = _.find(tutkinnotJaKoulutuksetValue, (t) => {
+                      return (t.koodiarvo === koulutus.koodiArvo
+                        && t.type === MUUTOS_TYPES.ADDITION)
+                    })
+                  }
+                  if (!tutkinto || _.find(tutkinnotJaKoulutuksetValue, (t) => {
+                    return (t.koodiarvo === koulutus.koodiArvo
+                      && t.type === MUUTOS_TYPES.REMOVAL)})) {
+                    return false
+                  }
+
+                  tutkinto['koulutusalaKoodiArvo'] = koulutus.koulutusalaKoodiArvo
+                  tutkinto['koulutustyyppiKoodiArvo'] = koulutus.koulutustyyppiKoodiArvo
 
                   return (
                     <TutkintoBlock key={i}>

@@ -674,6 +674,8 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
 
   const { checked } = event.target
 
+  console.log(currentObj)
+
   if (checked) {
     if (isInLupa) {
       // Tutkinto oli luvassa --> poistetaan se formista
@@ -693,7 +695,10 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         kuvaus: null,
         isInLupa,
         type: MUUTOS_TYPES.ADDITION,
-        meta: { perusteluteksti: null },
+        meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
+          perusteluteksti: null },
         muutosperustelukoodiarvo: null
       })
     }
@@ -711,7 +716,10 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
         kuvaus: null,
         isInLupa,
         type: MUUTOS_TYPES.REMOVAL,
-        meta: { perusteluteksti: null },
+        meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
+          perusteluteksti: null },
         muutosperustelukoodiarvo: null
       })
     } else {
