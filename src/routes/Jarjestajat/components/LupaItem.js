@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { parseLocalizedField } from "../../../modules/helpers"
-import { Th, Tr } from "../../../modules/Table"
+import { Td, Tr } from "../../../modules/Table"
 
 const Lupa = (props) => {
   const { lupa } = props
@@ -12,8 +12,8 @@ const Lupa = (props) => {
 
   return (
     <Tr>
-      <Th flex="3" className="lupa-jarjestaja"><Link ytunnus={jarjestajaYtunnus} to={{pathname: "/jarjestajat/" + jarjestajaYtunnus + "/jarjestamislupa", ytunnus: jarjestajaYtunnus}}>{jarjestajaNimi}</Link></Th>
-      <Th className="lupa-maakunta">{maakunta}</Th>
+      <Td flex="4" className="lupa-jarjestaja"><Link ytunnus={jarjestajaYtunnus} to={{pathname: "/jarjestajat/" + jarjestajaYtunnus + "/jarjestamislupa", ytunnus: jarjestajaYtunnus}}>{jarjestajaNimi}</Link></Td>
+      <Td className="lupa-maakunta">{maakunta}</Td>
     </Tr>
   )
 }

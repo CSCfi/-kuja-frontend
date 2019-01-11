@@ -50,7 +50,7 @@ export const Tr = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  
+
   &:nth-child(even) {
     background: #F9F9F9;
   }
@@ -72,6 +72,11 @@ export const Th = styled.div`
     margin-right: 5px;
   }
   
+  &:hover {
+    cursor: pointer;
+    background: #ffffff20;
+  }
+
   @media ${MEDIA_QUERIES.MOBILE} {
     &.lupa-diaarinumero {
       padding-bottom: 4px;
@@ -85,12 +90,31 @@ export const Th = styled.div`
     &.lupa-maakunta {
       padding-top: 2px;
     }
+  }
+`
+
+export const Td = styled.div`
+  display: flex;
+  flex: ${props => props.flex ? props.flex : 1};
+  padding: 10px 20px;
+  align-items: ${props => props.alignItems ? props.alignItems : 'stretch'};
+  
+  img {
+    margin-right: 5px;
+  }
+  
+  @media ${MEDIA_QUERIES.MOBILE} {
+    &.lupa-diaarinumero {
+      padding-bottom: 4px;
+    }
     
-    &.lupa-pdf {
-    padding-top: 4px;
-      a {
-        font-size: 17px;
-      }
+    &.lupa-jarjestaja {
+      font-size: 18px;
+      padding-bottom: 2px;
+    }
+    
+    &.lupa-maakunta {
+      padding-top: 2px;
     }
   }
 `
