@@ -12,7 +12,7 @@ export const Thead = styled.div`
   display: flex;
   flex-direction: column;
   color: ${COLORS.WHITE};
-  background: ${COLORS.OIVA_GREEN};
+  background: ${COLORS.OIVA_TABLE_BG_COLOR};
   
   div {
     font-size: 13px;

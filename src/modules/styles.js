@@ -36,8 +36,8 @@ export const COLORS = {
   OIVA_MENU_BG_COLOR: '#70A489',
   OIVA_MENU_HOVER_COLOR: '#A8C8B7',
   OIVA_MENU_HOVER_2_COLOR: '#99C6C6',
-  OIVA_MENU_BG_2_COLOR: '#519D9D'
-
+  OIVA_MENU_BG_2_COLOR: '#519D9D',
+  OIVA_TABLE_BG_COLOR: '#70A489'
 }
 
 
@@ -79,7 +79,7 @@ injectGlobal`
   
   thead {
     color: ${COLORS.WHITE};
-    background: ${COLORS.OIVA_GREEN};
+    background: ${COLORS.OIVA_TABLE_BG_COLOR};
   }
   
   thead {
