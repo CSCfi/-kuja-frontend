@@ -42,7 +42,6 @@ class LuvatList extends Component {
             <Tr>
               <Th flex="3">Koulutuksen järjestäjä</Th>
               <Th>Kotipaikan maakunta</Th>
-              <Th>Ajantasainen järjestämislupa</Th>
             </Tr>
             </Thead>
             <Tbody>
