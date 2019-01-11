@@ -12,8 +12,10 @@ const Lupa = (props) => {
 
   return (
     <Tr>
-      <Td flex="4" className="lupa-jarjestaja"><Link ytunnus={jarjestajaYtunnus} to={{pathname: "/jarjestajat/" + jarjestajaYtunnus + "/jarjestamislupa", ytunnus: jarjestajaYtunnus}}>{jarjestajaNimi}</Link></Td>
-      <Td className="lupa-maakunta">{maakunta}</Td>
+      <Link ytunnus={jarjestajaYtunnus} to={{pathname: "/jarjestajat/" + jarjestajaYtunnus + "/jarjestamislupa", ytunnus: jarjestajaYtunnus}}>
+        <Td flex="4" className="lupa-jarjestaja">{jarjestajaNimi}</Td>
+        <Td className="lupa-maakunta">{maakunta}</Td>
+      </Link>
     </Tr>
   )
 }

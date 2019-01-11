@@ -45,7 +45,7 @@ class LuvatList extends Component {
             </Tr>
             </Thead>
             <Tbody>
-            {this.renderPermits()}
+              {this.renderPermits()}
             </Tbody>
           </Table>
         }/>
@@ -58,7 +58,7 @@ class LuvatList extends Component {
             </Tr>
             </Thead>
             <Tbody>
-            {this.renderPermits()}
+              {this.renderPermits()}
             </Tbody>
           </Table>
         }/>
