@@ -13,11 +13,12 @@ import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
 
 const TopSectionWrapper = styled.div`
   padding: 5px 30px;
+  margin: 0 -30px;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `
 
 const H2 = styled.h2`
-  margin: 0 0 20px 0;
+  margin: 0 30px 24px 30px;
 `
 
 const LupaDetailsWrapper = styled.div`
@@ -53,7 +54,7 @@ class Jarjestamislupa extends Component {
               </TopSectionWrapper>
               :
               <TopSectionWrapper>
-                <H2>Ajantasainen järjestämislupa&nbsp;(<Moment format="DD.MM.YYYY"></Moment>)</H2>
+                <H2>Ajantasainen järjestämislupa (<Moment format="DD.MM.YYYY"></Moment>)</H2>
               </TopSectionWrapper>
             }
 
