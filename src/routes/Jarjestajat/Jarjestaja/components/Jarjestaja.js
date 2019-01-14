@@ -58,7 +58,7 @@ class Jarjestaja extends Component {
         const tabNavRoutes = [
             {
                 path: `${match.url}/jarjestamislupa`,
-                text: 'Ajantasainen järjestämislupa',
+                text: 'Järjestämislupa',
                 authenticated: true
             },
             {
