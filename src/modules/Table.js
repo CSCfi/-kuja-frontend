@@ -53,6 +53,7 @@ export const Tr = styled.div`
 
   &:nth-child(even) {
     background: #F9F9F9;
+    z-index: -1;
   }
 
   a {
@@ -75,12 +76,11 @@ export const Tr = styled.div`
     }
   }
 
-
-
   &:hover {
     cursor: pointer;
     background: ${COLORS.OIVA_TABLE_HOVER_COLOR};
   }
+
 `
 
 export const Th = styled.div`

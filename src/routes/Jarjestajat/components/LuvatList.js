@@ -12,7 +12,6 @@ const WrapTable = styled.div`
   padding-bottom: 200px;
   widht: 100%;
 `
-
 class LuvatList extends Component {
 
   constructor(props) {
