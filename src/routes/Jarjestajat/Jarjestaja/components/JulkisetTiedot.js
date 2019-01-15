@@ -21,7 +21,6 @@ const LupaInfoWrapper = styled.div`
     font-weight: bold;
   }
 `
-
 const LupaInnerContentWrapper = styled.div`
   margin: 40px 50px;
 `

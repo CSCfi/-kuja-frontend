@@ -26,6 +26,10 @@ const CurrentLupaWrapper = styled.div`
   img {
     height: 68px;
   }
+
+  &:hover {
+    background-color: ${COLORS.OIVA_TABLE_HOVER_COLOR};
+  }
   
   @media ${MEDIA_QUERIES.MOBILE} {
     padding: 14px;
