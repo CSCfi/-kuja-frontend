@@ -6,6 +6,7 @@ export const Table = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid #D5D5D5;
+  border-bottom: none;
 `
 
 export const Thead = styled.div`
@@ -51,10 +52,7 @@ export const Tr = styled.div`
   flex-direction: row;
   align-items: center;
 
-  &:nth-child(even) {
-    background: #F9F9F9;
-    z-index: -1;
-  }
+  border-bottom: 1px solid #D5D5D5;
 
   a {
     width: 100%;
