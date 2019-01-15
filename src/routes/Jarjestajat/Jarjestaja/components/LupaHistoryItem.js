@@ -67,7 +67,7 @@ const LupaHistoryItem = (props) => {
               <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
             {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
-              ? <Td>Kumottu: 12.12.2017</Td>
+              ? <Td>12.12.2017</Td>
               : <Td></Td>
             }
           </Tr>
