@@ -62,6 +62,8 @@ export const Tr = styled.div`
     color: ${COLORS.BLACK};
   }
 
+  color: ${COLORS.BLACK};
+
   @media ${MEDIA_QUERIES.MOBILE} {
     flex-direction: column;
     align-items: flex-start;
@@ -86,6 +88,7 @@ export const Th = styled.div`
   flex: ${props => props.flex ? props.flex : 1};
   padding: 10px 20px;
   align-items: ${props => props.alignItems ? props.alignItems : 'stretch'};
+  color: ${COLORS.WHITE};
   
   img {
     margin-right: 5px;
