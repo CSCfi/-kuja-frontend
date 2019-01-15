@@ -22,6 +22,10 @@ const LupaInfoWrapper = styled.div`
   }
 `
 
+const LupaInnerContentWrapper = styled.div`
+  margin: 40px 50px;
+`
+
 const JulkisetTiedot = (props) => {
   const { lupadata } = props
   const { jarjestaja } = lupadata
@@ -36,7 +40,7 @@ const JulkisetTiedot = (props) => {
 
   return (
     <InnerContentContainer>
-      <InnerContentWrapper>
+      <LupaInnerContentWrapper>
         <LupaInfoWrapper>
           <h2>Päätökset</h2>
           <LargeParagraph>Viimeisin päätös</LargeParagraph>
@@ -50,9 +54,10 @@ const JulkisetTiedot = (props) => {
         />
 
         <LargeParagraph>Historiatiedot</LargeParagraph>
+        <br />
 
         <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
-      </InnerContentWrapper>
+      </LupaInnerContentWrapper>
 
     </InnerContentContainer>
   )

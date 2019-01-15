@@ -62,11 +62,8 @@ export const Tr = styled.div`
     color: ${COLORS.BLACK};
   }
 
-<<<<<<< HEAD
   color: ${COLORS.BLACK};
 
-=======
->>>>>>> develop
   @media ${MEDIA_QUERIES.MOBILE} {
     flex-direction: column;
     align-items: flex-start;

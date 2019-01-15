@@ -17,7 +17,7 @@ const LupaHistoryItemWrapper = styled.div`
 `
 
 const LupaText = styled.span`
-  margin: 3px 10px 0 10px;
+  margin: 10px;
   
   @media ${MEDIA_QUERIES.MOBILE} {
     display: flex;
@@ -43,7 +43,7 @@ const LupaHistoryItem = (props) => {
               <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
               {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
-                ? <TextPartial>Kumottu: 12.12.2017</TextPartial>
+                ? <TextPartial>Kumottu: <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></TextPartial>
                 : (
                   <TextPartial>Voimassa:&nbsp;
                     <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
@@ -55,22 +55,34 @@ const LupaHistoryItem = (props) => {
           </Tr>
         } />
         <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
-          <Tr>
-            <Td>{diaarinumero}</Td>
-            <Td>
-              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
-            </Td>
-            <Td>
-              <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-            </Td>
-            <Td>
-              <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-            </Td>
-            {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
-              ? <Td>12.12.2017</Td>
-              : <Td></Td>
-            }
-          </Tr>
+          <div>
+              {voimassaoloalkupvm === voimassaololoppupvm
+              ?
+                <Tr>
+                  <Td>{diaarinumero}</Td>
+                  <Td>
+                    <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                  </Td>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td><Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></Td>
+                </Tr>
+              :
+                <Tr>
+                  <Td>{diaarinumero}</Td>
+                  <Td>
+                    <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                  </Td>
+                  <Td>
+                    <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
+                  </Td>
+                  <Td>
+                    <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+                  </Td>
+                  <Td></Td>
+                </Tr>
+              }
+            </div>
         } />
     </a>
   )
