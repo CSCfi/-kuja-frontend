@@ -1,8 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
 import Moment from 'react-moment'
 
-import { MEDIA_QUERIES } from "../../../../modules/styles"
 import { API_BASE_URL } from "../../../../modules/constants"
 import { Td, Tr } from "../../../../modules/Table"
 
