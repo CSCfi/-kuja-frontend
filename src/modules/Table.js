@@ -111,6 +111,12 @@ export const Th = styled.div`
     }
   }
 `
+export const Thn = styled(Th)`
+  &:hover {
+    cursor: default;
+    background: inherit;
+  }
+`
 
 export const Td = styled.div`
   display: flex;

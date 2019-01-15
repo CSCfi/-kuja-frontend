@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
-import { Table, Thead, Tbody, Th, Tr } from "../../../../modules/Table"
+import { Table, Thead, Tbody, Thn, Tr } from "../../../../modules/Table"
 import { MEDIA_QUERIES } from "../../../../modules/styles"
 
 import LupaHistoryItem from './LupaHistoryItem'
@@ -29,11 +29,6 @@ class LupaHistory extends Component {
         <WrapTable>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
-              <Thead>
-              <Tr>
-                <Th>Voimassa olevat luvat</Th>
-              </Tr>
-              </Thead>
               <Tbody>
                 {this.renderLupaHistoryList(data)}
               </Tbody>
@@ -43,11 +38,11 @@ class LupaHistory extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Th>Diaarinumero</Th>
-                <Th>Päätöspvm</Th>
-                <Th>Voimaantulopvm</Th>
-                <Th>Päättymispvm</Th>
-                <Th>Kumottu</Th>
+                <Thn>Diaarinumero</Thn>
+                <Thn>Päätöspvm</Thn>
+                <Thn>Voimaantulopvm</Thn>
+                <Thn>Päättymispvm</Thn>
+                <Thn>Kumottu</Thn>
               </Tr>
               </Thead>
               <Tbody>

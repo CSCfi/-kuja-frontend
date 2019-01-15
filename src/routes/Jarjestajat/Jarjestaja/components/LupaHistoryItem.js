@@ -11,7 +11,7 @@ const LupaHistoryItem = (props) => {
 
   return (
     <a href={`${API_BASE_URL}/pebble/resources/liitteet/lupahistoria/${filename}`} target="_blank">
-    <Tr>
+      <Tr>
           <Td>{diaarinumero}</Td>
           <Td>
             <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
