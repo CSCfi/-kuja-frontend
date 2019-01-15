@@ -62,8 +62,11 @@ export const Tr = styled.div`
     color: ${COLORS.BLACK};
   }
 
+<<<<<<< HEAD
   color: ${COLORS.BLACK};
 
+=======
+>>>>>>> develop
   @media ${MEDIA_QUERIES.MOBILE} {
     flex-direction: column;
     align-items: flex-start;
@@ -120,7 +123,6 @@ export const Thn = styled(Th)`
     background: inherit;
   }
 `
-
 export const Td = styled.div`
   display: flex;
   flex: ${props => props.flex ? props.flex : 1};
