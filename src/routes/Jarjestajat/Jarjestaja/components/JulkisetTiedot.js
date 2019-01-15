@@ -38,7 +38,7 @@ const JulkisetTiedot = (props) => {
     <InnerContentContainer>
       <InnerContentWrapper>
         <LupaInfoWrapper>
-          <h2>Päätöshistoria</h2>
+          <h2>Päätökset</h2>
           <LargeParagraph>Viimeisin päätös</LargeParagraph>
         </LupaInfoWrapper>
 
