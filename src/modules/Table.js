@@ -81,6 +81,11 @@ export const Tr = styled.div`
 
 `
 
+export const Selected = styled.div`
+  cursor: hand !important;
+  background: ${COLORS.OIVA_TABLE_HEADER_HOVER_COLOR};
+`
+
 export const Th = styled.div`
   display: flex;
   flex: ${props => props.flex ? props.flex : 1};
