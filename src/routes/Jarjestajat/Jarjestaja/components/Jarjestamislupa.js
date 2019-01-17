@@ -12,7 +12,7 @@ import { COLORS } from "../../../../modules/styles"
 import { LUPA_LISAKOULUTTAJAT } from "../../modules/constants"
 
 const TopSectionWrapper = styled.div`
-  padding: 5px 30px;
+  padding: 5px 20px;
   margin: 0 -30px;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `

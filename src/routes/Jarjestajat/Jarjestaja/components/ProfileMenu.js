@@ -28,9 +28,12 @@ const MenuItem = styled(NavLink)`
   }
   
   &:hover {
-    background-color: ${COLORS.WHITE};
-    color: ${COLORS.BLACK};
+    background-color: ${COLORS.OIVA_TABLE_HEADER_HOVER_COLOR};
     border-left: 1px solid transparent;
+  }
+  &.active:hover {
+    background-color: ${COLORS.WHITE};
+    cursor: default;
   }
   
   &:first-child {
