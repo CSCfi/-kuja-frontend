@@ -126,9 +126,31 @@ class LupaSection extends Component {
                 <Tietoa>
                     {TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}
                 </Tietoa>
-                <MuutMaaraykset>
-                  {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
-                </MuutMaaraykset>
+                {muutMaaraykset.length === 4 ?
+                  <MuutMaaraykset>
+                    <MuuMaarays key={1} {...muutMaaraykset[1]} />
+                    <MuuMaarays key={0} {...muutMaaraykset[0]} />
+                    <MuuMaarays key={3} {...muutMaaraykset[3]} />
+                    <MuuMaarays key={2} {...muutMaaraykset[2]} />
+                  </MuutMaaraykset> 
+                :
+                  null
+                }
+                {muutMaaraykset.length === 3 ?
+                  <MuutMaaraykset>
+                    <MuuMaarays key={2} {...muutMaaraykset[2]} />
+                    <MuuMaarays key={0} {...muutMaaraykset[0]} />
+                    <MuuMaarays key={1} {...muutMaaraykset[1]} />
+                   </MuutMaaraykset> 
+                 :
+                  null
+                }
+                {muutMaaraykset.length < 3 || muutMaaraykset.length > 4 ?
+                  <MuutMaaraykset>
+                    {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
+                  </MuutMaaraykset> 
+                  : null
+                }
               </div>
             </SectionWrapper>
           )
@@ -170,8 +192,6 @@ class LupaSection extends Component {
         // Kohde 3: Toiminta-alueet
         case KOHTEET.TOIMIALUE: {
           const { kohdeKuvaus, maakunnat, kunnat } = kohde
-          console.log(maakunnat.length);
-          console.log(kunnat.length);
 
           return (
             <SectionWrapper>
