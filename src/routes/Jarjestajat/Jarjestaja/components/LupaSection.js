@@ -13,10 +13,10 @@ import Tutkintokieli from "./Tutkintokieli";
 
 
 const SectionWrapper = styled.div`
-  margin: 0 30px;
+  margin: 0 30px 0 30px;
   position: relative;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
-  padding: 10px 0 10px 0;
+  padding: 10px 0 0 0;
   
   &:last-child {
     border-bottom: none;
@@ -44,13 +44,26 @@ const Span = styled.span`
 
 const H3 = styled.h3`
   text-transform: uppercase;
+  margin-left: 30px;
   font-size: 18px;
   margin-left: 10px;
 `
 
-const Capitalized = styled.p`
-  text-transform: capitalize;
+const List = styled.p`
   margin-left: 30px;
+  margin-bottom: 20px;
+`
+const Capitalized = styled.span`
+  text-transform: capitalize;
+  &:after {
+    content: ", "
+  }
+  &:last-child:after {
+    content: ""
+  }
+`
+const MuutToimialueet = styled.p`
+   margin-bottom: 20px;
 `
 
 const Bold = styled.span`
@@ -58,19 +71,19 @@ const Bold = styled.span`
 `
 
 const Tietoa = styled.div`
-  margin: 20px 0 30px 0;
+  margin: 20px 0 20px 0;
 `
 
 const Tutkinnot = styled.div`
+  margin: 0 0 10px 0;
 `
 
 const MuutMaaraykset = styled.div`
-  margin-bottom: 30px;
 `
 
 const OpiskelijavuosiRajoitukset = styled.div`
   margin-left: 30px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 `
 
 const KohdeKuvaus = styled.div`
@@ -80,10 +93,8 @@ const KohdeKuvaus = styled.div`
 
 class LupaSection extends Component {
 
-
-
   render() {
-    const { kohde, diaarinumero, ytunnus } = this.props
+    const { kohde, ytunnus } = this.props
 
     // const { isRemoving } = this.state
 
@@ -134,7 +145,7 @@ class LupaSection extends Component {
                 <H3>{heading}</H3>
               </Span>
               <p>{kohdeKuvaus}</p>
-              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{_.capitalize(arvo.label)}</Capitalized>)}
+              <List>{_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{_.capitalize(arvo.label)}</Capitalized>)}</List>
               <Tutkinnot>
                   {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
                   {(tutkinnotjakieletEn.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_YKSIKKO.FI : null }
@@ -159,6 +170,8 @@ class LupaSection extends Component {
         // Kohde 3: Toiminta-alueet
         case KOHTEET.TOIMIALUE: {
           const { kohdeKuvaus, maakunnat, kunnat } = kohde
+          console.log(maakunnat.length);
+          console.log(kunnat.length);
 
           return (
             <SectionWrapper>
@@ -167,15 +180,16 @@ class LupaSection extends Component {
                 <H3>{heading}</H3>
               </Span>
               <p>{kohdeKuvaus}</p>
-              {_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}
-              {_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}
+              <List>{_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}</List>
+              <List>{_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}</List>
+              { maakunnat.length > 0 || kunnat.length > 0 ? <MuutToimialueet>{LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI}</MuutToimialueet> : null }
             </SectionWrapper>
           )
         }
 
         // Kohde 4: Opiskelijavuodet
         case KOHTEET.OPISKELIJAVUODET: {
-          const { opiskelijavuodet, rajoitukset, kohdeKuvaus, eiMaaraysta } = kohde
+          const { opiskelijavuodet, rajoitukset, kohdeKuvaus } = kohde
           return (
             <SectionWrapper>
               <Span>
@@ -184,7 +198,7 @@ class LupaSection extends Component {
               </Span>
               {_.map(opiskelijavuodet, (obj, i) => {
                 const { arvo } = obj
-                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}</span>
+                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}.</span>
               })}
               <KohdeKuvaus>{(ytunnus === '0244767-4') ? LUPA_TEKSTIT.OPISKELIJAVUODET.VALTIO.FI : kohdeKuvaus}</KohdeKuvaus>
               {_.map(rajoitukset, (obj, i) => {
