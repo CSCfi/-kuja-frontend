@@ -8,14 +8,6 @@ import { MEDIA_QUERIES } from "../../../../modules/styles"
 import { API_BASE_URL } from "../../../../modules/constants"
 import { Td, Tr } from "../../../../modules/Table"
 
-import pdf from 'static/images/icon-pdf-small.png'
-
-const LupaHistoryItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-`
-
 const LupaText = styled.span`
   margin: 10px;
   
@@ -39,8 +31,8 @@ const LupaHistoryItem = (props) => {
             <LupaText>
               <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
               <TextPartial>
-                Paatos tehty:&nbsp;
-              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                Päätös tehty:&nbsp;
+                <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
               {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
                 ? <TextPartial>Kumottu: <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></TextPartial>

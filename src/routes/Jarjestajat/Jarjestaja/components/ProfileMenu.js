@@ -20,6 +20,7 @@ const MenuItem = styled(NavLink)`
   border: 1px solid ${COLORS.DARK_GRAY};
   border-right: 1px solid ${COLORS.BORDER_GRAY};
   position: relative;
+  cursor: default;
   
   &.active {
     background-color: ${COLORS.WHITE};
@@ -30,6 +31,7 @@ const MenuItem = styled(NavLink)`
   &:hover {
     background-color: ${COLORS.OIVA_TABLE_HEADER_HOVER_COLOR};
     border-left: 1px solid transparent;
+    cursor: pointer;
   }
   &.active:hover {
     background-color: ${COLORS.WHITE};
