@@ -107,7 +107,6 @@ class LupaSection extends Component {
         // Kohde 1: Tutkinnot
         case KOHTEET.TUTKINNOT: {
           const { maaraykset, muutMaaraykset } = kohde
-          console.log(muutMaaraykset);
 
           return (
             <SectionWrapper>
