@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom'
 
 import Koulutusala from './Koulutusala'
 import MuuMaarays from './MuuMaarays'
+import VT from './VT'
 
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
@@ -81,6 +82,10 @@ const Tutkinnot = styled.div`
 const Koulutukset = styled.div`
 `
 
+const VALMATELMA = styled.div`
+  margin: 0 0 20px 0;
+`
+
 const OpiskelijavuosiRajoitukset = styled.div`
   margin-left: 30px;
   margin-bottom: 20px;
@@ -110,6 +115,9 @@ class LupaSection extends Component {
 
           console.log(muutMaaraykset);
 
+          // VALMA ja TELMA
+          const vt = muutMaaraykset.filter(item => item.koodi === "999901" || item.koodi === "999903");
+
           return (
             <SectionWrapper>
 
@@ -130,11 +138,22 @@ class LupaSection extends Component {
                 </Tietoa>
                 
                 <Koulutukset>
-                  {_.map(muutMaaraykset.filter(item => item.koodi === "999901"), (items, i) => <MuuMaarays key={"valma"+i} {...items} />)}
-                  {_.map(muutMaaraykset.filter(item => item.koodi === "999903"), (items, i) => <MuuMaarays key={"telma"+i} {...items} />)}
-                  {_.map(muutMaaraykset.filter(item => item.koodisto === "koulutus"), (items, i) => <MuuMaarays key={i} {...items} />)}
-                  {_.map(muutMaaraykset.filter(item => item.koodisto === "kuljettajakoulutus"), (items, i) => <MuuMaarays key={"k"+i} {...items} />)}
-                  {_.map(muutMaaraykset.filter(item => item.koodisto === "oivatyovoimakoulutus"), (items, i) => <MuuMaarays key={"t"+i} {...items} />)}
+                  { vt && vt[0] &&
+                    <VALMATELMA>
+                      {/* Selite vain yhden kerran */}
+                      <p>{ vt[0].selite }</p> 
+                      {_.map(vt, (items, i) => <VT key={"vt"+i} {...items} />)}
+                    </VALMATELMA>
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "koulutus" || item.koodisto === "ammatilliseentehtavaanvalmistavakoulutus" ), (items, i) =>
+                    <MuuMaarays key={i} {...items} />)
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "kuljettajakoulutus"), (items, i) =>
+                    <MuuMaarays key={"k"+i} {...items} />)
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "oivatyovoimakoulutus"), (items, i) => 
+                    <MuuMaarays key={"t"+i} {...items} />)
+                  }
                 </Koulutukset> 
 
               </div>
