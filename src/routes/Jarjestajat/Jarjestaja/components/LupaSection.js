@@ -78,7 +78,7 @@ const Tutkinnot = styled.div`
   margin: 0 0 10px 0;
 `
 
-const MuutMaaraykset = styled.div`
+const Koulutukset = styled.div`
 `
 
 const OpiskelijavuosiRajoitukset = styled.div`
@@ -108,6 +108,8 @@ class LupaSection extends Component {
         case KOHTEET.TUTKINNOT: {
           const { maaraykset, muutMaaraykset } = kohde
 
+          console.log(muutMaaraykset);
+
           return (
             <SectionWrapper>
 
@@ -126,29 +128,14 @@ class LupaSection extends Component {
                 <Tietoa>
                     {TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}
                 </Tietoa>
-                {/* {muutMaaraykset.length === 4 &&
-                  <MuutMaaraykset>
-                    <MuuMaarays key={1} {...muutMaaraykset[1]} />
-                    <MuuMaarays key={0} {...muutMaaraykset[0]} />
-                    <MuuMaarays key={3} {...muutMaaraykset[3]} />
-                    <MuuMaarays key={2} {...muutMaaraykset[2]} />
-                  </MuutMaaraykset> 
-                }
-                {muutMaaraykset.length === 3 &&
-                  <MuutMaaraykset>
-                    <MuuMaarays key={2} {...muutMaaraykset[2]} />
-                    <MuuMaarays key={0} {...muutMaaraykset[0]} />
-                    <MuuMaarays key={1} {...muutMaaraykset[1]} />
-                   </MuutMaaraykset> 
-                }
-                {muutMaaraykset.length < 3 || muutMaaraykset.length > 4 ?
-                  <MuutMaaraykset>
-                    {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
-                  </MuutMaaraykset> 
-                  : null
-                } */}
                 
-                {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
+                <Koulutukset>
+                  {_.map(muutMaaraykset.filter(item => item.koodi === "999901"), (items, i) => <MuuMaarays key={"valma"+i} {...items} />)}
+                  {_.map(muutMaaraykset.filter(item => item.koodi === "999903"), (items, i) => <MuuMaarays key={"telma"+i} {...items} />)}
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "koulutus"), (items, i) => <MuuMaarays key={i} {...items} />)}
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "kuljettajakoulutus"), (items, i) => <MuuMaarays key={"k"+i} {...items} />)}
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "oivatyovoimakoulutus"), (items, i) => <MuuMaarays key={"t"+i} {...items} />)}
+                </Koulutukset> 
 
               </div>
             </SectionWrapper>
