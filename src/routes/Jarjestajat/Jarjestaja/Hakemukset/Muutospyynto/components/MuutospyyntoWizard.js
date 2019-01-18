@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { reduxForm } from 'redux-form'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
@@ -137,6 +137,13 @@ class MuutospyyntoWizard extends Component {
 
     console.log('save', data)
     this.props.saveMuutospyynto(data)
+    const url = `/jarjestajat/${this.props.match.params.ytunnus}`
+    this.props.saveMuutospyynto(data).then(() => {
+       let uuid = this.props.muutospyynto.save.response.data
+       let newurl = url + "/hakemukset-ja-paatokset/" + uuid
+       this.props.history.push(newurl)
+       })
+
   }
 
   preview(event, data) {
