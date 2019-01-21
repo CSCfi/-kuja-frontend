@@ -1,10 +1,11 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import Koulutusala from './Koulutusala'
 import MuuMaarays from './MuuMaarays'
+import VT from './VT'
 
 import { KOHTEET } from '../modules/constants'
 import { COLORS, FONT_STACK } from "../../../../modules/styles"
@@ -13,10 +14,10 @@ import Tutkintokieli from "./Tutkintokieli";
 
 
 const SectionWrapper = styled.div`
-  margin-left: 30px;
+  margin: 0 30px 0 30px;
   position: relative;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
-  padding: 0 0 26px;
+  padding: 10px 0 0 0;
   
   &:last-child {
     border-bottom: none;
@@ -29,25 +30,41 @@ const Otsikko = styled.div`
 
 const Kohde1 = styled.span`
   font-size: 20px;
-  position: absolute;
-  left: -30px;
   margin-top:19px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
 `
 
 const Span = styled.span`
   font-size: 20px;
-  position: absolute;
-  left: -30px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
 `
 
 const H3 = styled.h3`
   text-transform: uppercase;
-  font-size: 20px;
+  margin-left: 30px;
+  font-size: 18px;
+  margin-left: 10px;
 `
 
-const Capitalized = styled.p`
-  text-transform: capitalize;
+const List = styled.p`
   margin-left: 30px;
+  margin-bottom: 20px;
+`
+const Capitalized = styled.span`
+  text-transform: capitalize;
+  &:after {
+    content: ", "
+  }
+  &:last-child:after {
+    content: ""
+  }
+`
+const MuutToimialueet = styled.p`
+   margin-bottom: 20px;
 `
 
 const Bold = styled.span`
@@ -55,21 +72,23 @@ const Bold = styled.span`
 `
 
 const Tietoa = styled.div`
-  margin-bottom: 30px;
-  margin-left:20px;
+  margin: 20px 0 20px 0;
 `
 
 const Tutkinnot = styled.div`
-  margin-bottom: 30px;
+  margin: 0 0 10px 0;
 `
 
-const MuutMaaraykset = styled.div`
-  margin-bottom: 30px;
+const Koulutukset = styled.div`
+`
+
+const VALMATELMA = styled.div`
+  margin: 0 0 20px 0;
 `
 
 const OpiskelijavuosiRajoitukset = styled.div`
   margin-left: 30px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 `
 
 const KohdeKuvaus = styled.div`
@@ -79,10 +98,8 @@ const KohdeKuvaus = styled.div`
 
 class LupaSection extends Component {
 
-
-
   render() {
-    const { kohde, diaarinumero, ytunnus } = this.props
+    const { kohde, ytunnus } = this.props
 
     // const { isRemoving } = this.state
 
@@ -96,14 +113,22 @@ class LupaSection extends Component {
         case KOHTEET.TUTKINNOT: {
           const { maaraykset, muutMaaraykset } = kohde
 
+          console.log(muutMaaraykset);
+
+          // VALMA ja TELMA
+          const vt = muutMaaraykset.filter(item => item.koodi === "999901" || item.koodi === "999903");
 
           return (
             <SectionWrapper>
 
               <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
 
-              <Kohde1>{`${headingNumber}.`}</Kohde1>
-              <H3>{heading}</H3>
+              <span>
+                <Kohde1>
+                  {`${headingNumber}.`}
+                  <H3>{heading}</H3>
+                </Kohde1>
+              </span>
               <div>
                 <Tutkinnot>
                   {_.map(maaraykset, (ala, i) => <Koulutusala key={i} {...ala} />)}
@@ -111,9 +136,26 @@ class LupaSection extends Component {
                 <Tietoa>
                     {TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}
                 </Tietoa>
-                <MuutMaaraykset>
-                  {_.map(muutMaaraykset, (poikkeus, i) => <MuuMaarays key={i} {...poikkeus} />)}
-                </MuutMaaraykset>
+                
+                <Koulutukset>
+                  { vt && vt[0] &&
+                    <VALMATELMA>
+                      {/* Selite vain yhden kerran */}
+                      <p>{ vt[0].selite }</p> 
+                      {_.map(vt, (items, i) => <VT key={"vt"+i} {...items} />)}
+                    </VALMATELMA>
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "koulutus" || item.koodisto === "ammatilliseentehtavaanvalmistavakoulutus" ), (items, i) =>
+                    <MuuMaarays key={i} {...items} />)
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "kuljettajakoulutus"), (items, i) =>
+                    <MuuMaarays key={"k"+i} {...items} />)
+                  }
+                  {_.map(muutMaaraykset.filter(item => item.koodisto === "oivatyovoimakoulutus"), (items, i) => 
+                    <MuuMaarays key={"t"+i} {...items} />)
+                  }
+                </Koulutukset> 
+
               </div>
             </SectionWrapper>
           )
@@ -125,29 +167,29 @@ class LupaSection extends Component {
 
             return (
             <SectionWrapper>
-              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
+              <Span>
+                {`${headingNumber}.`}
+                <H3>{heading}</H3>
+              </Span>
               <p>{kohdeKuvaus}</p>
-              {_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{_.capitalize(arvo.label)}</Capitalized>)}
-              <div>
-                <Tutkinnot>
-                    {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
-                    {(tutkinnotjakieletEn.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_YKSIKKO.FI : null }
-                    {_.map(tutkinnotjakieletEn, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+              <List>{_.map(kohdeArvot, (arvo, i) => <Capitalized key={i}>{_.capitalize(arvo.label)}</Capitalized>)}</List>
+              <Tutkinnot>
+                  {(tutkinnotjakieletEn.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_MONIKKO.FI : null }
+                  {(tutkinnotjakieletEn.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_ENGLANTI_YKSIKKO.FI : null }
+                  {_.map(tutkinnotjakieletEn, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
 
-                    {(tutkinnotjakieletSv.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_MONIKKO.FI : null }
-                    {(tutkinnotjakieletSv.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_YKSIKKO.FI : null }
-                    {_.map(tutkinnotjakieletSv, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+                  {(tutkinnotjakieletSv.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_MONIKKO.FI : null }
+                  {(tutkinnotjakieletSv.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_RUOTSI_YKSIKKO.FI : null }
+                  {_.map(tutkinnotjakieletSv, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
 
-                    {(tutkinnotjakieletFi.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_MONIKKO.FI : null }
-                    {(tutkinnotjakieletFi.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_YKSIKKO.FI : null }
-                    {_.map(tutkinnotjakieletFi, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+                  {(tutkinnotjakieletFi.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_MONIKKO.FI : null }
+                  {(tutkinnotjakieletFi.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_SUOMI_YKSIKKO.FI : null }
+                  {_.map(tutkinnotjakieletFi, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
 
-                    {(tutkinnotjakieletRu.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_MONIKKO.FI : null }
-                    {(tutkinnotjakieletRu.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_YKSIKKO.FI : null }
-                    {_.map(tutkinnotjakieletRu, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
-                </Tutkinnot>
-              </div>
-
+                  {(tutkinnotjakieletRu.length > 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_MONIKKO.FI : null }
+                  {(tutkinnotjakieletRu.length === 1) ? LUPA_TEKSTIT.KIELI.LISA_VENAJA_YKSIKKO.FI : null }
+                  {_.map(tutkinnotjakieletRu, (obj, i) => <Tutkintokieli key={i} {...obj} />)}
+              </Tutkinnot>
             </SectionWrapper>
           )
         }
@@ -158,23 +200,30 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
+              <Span>
+                {`${headingNumber}.`}
+                <H3>{heading}</H3>
+              </Span>
               <p>{kohdeKuvaus}</p>
-              {_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}
-              {_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}
+              <List>{_.map(maakunnat, (maakunta, i) => <Capitalized key={i}>{maakunta.arvo}</Capitalized>)}</List>
+              <List>{_.map(kunnat, (kunta, i) => <Capitalized key={i}>{kunta.arvo}</Capitalized>)}</List>
+              { maakunnat.length > 0 || kunnat.length > 0 ? <MuutToimialueet>{LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI}</MuutToimialueet> : null }
             </SectionWrapper>
           )
         }
 
         // Kohde 4: Opiskelijavuodet
         case KOHTEET.OPISKELIJAVUODET: {
-          const { opiskelijavuodet, rajoitukset, kohdeKuvaus, eiMaaraysta } = kohde
+          const { opiskelijavuodet, rajoitukset, kohdeKuvaus } = kohde
           return (
             <SectionWrapper>
-              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
+              <Span>
+                {`${headingNumber}.`}
+                <H3>{heading}</H3>
+              </Span>
               {_.map(opiskelijavuodet, (obj, i) => {
                 const { arvo } = obj
-                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}</span>
+                return <span key={i}>{LUPA_TEKSTIT.OPISKELIJAVUODET.VAHIMMAISMAARA.FI}&nbsp;{arvo}.</span>
               })}
               <KohdeKuvaus>{(ytunnus === '0244767-4') ? LUPA_TEKSTIT.OPISKELIJAVUODET.VALTIO.FI : kohdeKuvaus}</KohdeKuvaus>
               {_.map(rajoitukset, (obj, i) => {
@@ -191,7 +240,10 @@ class LupaSection extends Component {
 
           return (
             <SectionWrapper>
-              <Span>{`${headingNumber}.`}</Span><H3>{heading}</H3>
+              <Span>
+                {`${headingNumber}.`}
+                <H3>{heading}</H3>
+              </Span>
               {_.map(muut, (muu, i) => {
                 const { tyyppi, kuvaus } = muu
                 return (
