@@ -86,7 +86,7 @@ export const Tr = styled.div`
 export const Th = styled.div`
   display: flex;
   flex: ${props => props.flex ? props.flex : 1};
-  padding: 10px 20px;
+  padding: 10px 10px;
   align-items: ${props => props.alignItems ? props.alignItems : 'stretch'};
   color: ${COLORS.WHITE};
   
@@ -123,9 +123,8 @@ export const Thn = styled(Th)`
 export const Td = styled.div`
   display: flex;
   flex: ${props => props.flex ? props.flex : 1};
-  padding: 10px 20px;
+  padding: 10px 10px;
   align-items: ${props => props.alignItems ? props.alignItems : 'stretch'};
-  
   img {
     margin-right: 5px;
   }
@@ -144,4 +143,10 @@ export const Td = styled.div`
       padding-top: 2px;
     }
   }
+`
+
+export const TdButton = styled(Td)`
+  background: white;
+  padding: 0;
+  margin: 0;
 `

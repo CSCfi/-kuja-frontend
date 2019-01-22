@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
 import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
+import JarjestamislupaAsiat from './Jarjestamislupa-asiat'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
 import Loading from '../../../../modules/Loading'
@@ -62,20 +63,25 @@ class Jarjestaja extends Component {
                 authenticated: true
             },
             {
-                path: `${match.url}`,
-                exact: true,
-                text: 'Päätökset',
-                authenticated: true
+              path: `${match.url}`,
+              exact: true,
+              text: 'Päätökset',
+              authenticated: true
             },
             {
-                path: `${match.url}/hakemukset-ja-paatokset`,
-                text: 'Hakemukset',
-                authenticated: authenticated
+              path: `${match.url}/jarjestamislupa-asia`,
+              text: 'Järjestämislupa-asiat',
+              authenticated: true
             },
             {
-                path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-                text: 'Uusi hakemus',
-                authenticated: authenticated
+              path: `${match.url}/hakemukset-ja-paatokset`,
+              text: 'Hakemukset',
+              authenticated: authenticated
+            },
+            {
+              path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+              text: 'Uusi hakemus',
+              authenticated: authenticated
             }
         ]
 
@@ -98,6 +104,7 @@ class Jarjestaja extends Component {
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                <Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />
                 {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
               </ContentContainer>
             </FullWidthWrapper>
