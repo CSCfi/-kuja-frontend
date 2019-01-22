@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
 import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
-import { MEDIA_QUERIES } from "../../../../modules/styles"
+import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
 
 import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
 import Loading from '../../../../modules/Loading'
@@ -11,8 +11,51 @@ import Loading from '../../../../modules/Loading'
 const WrapTable = styled.div`
    padding-bottom: 200px;
 `
+const Button = styled.div`
+  color: ${props => props.textColor ? props.textColor : COLORS.WHITE};
+  background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+  border: 1px solid ${props => props.disabled ? COLORS.LIGHT_GRAY : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  width: auto;
+  padding: 0 16px;
+  line-height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  border-radius: 2px;
+  min-width: 24px;
+  margin: 0 10px 10px 0;
+  &:hover {
+    color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
+    background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
+    ${props => props.disabled ? 'cursor: not-allowed;' : null}
+  }
+`
+
+const BackButton = styled(Button)`
+  margin: 0 10px 0 0;
+`
+
+const Header = styled.div`
+   width: 100%;
+   display: flex;
+   flex-flow: row;
+   align-items: center;
+   h2 {
+     margin-bottom: 20px;
+   }
+`
 
 class JarjestamislupaAsiatLuettelo extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      opened: 0
+    };
+  }
+
   componentWillMount() {
     const { jarjestajaOid } = this.props
 
@@ -21,12 +64,24 @@ class JarjestamislupaAsiatLuettelo extends Component {
     }
   }
 
+  setOpened = dnro => {
+    this.setState({opened: dnro});
+  }
+
   render() {
     const { fetched, isFetching, hasErrored, data } = this.props.lupaHistory
-
-    if (fetched) {
+    if (this.state.opened !== 0) {
+      return (
+        <Header>
+          <BackButton onClick={(e) => this.setOpened(0)}>&#8592;</BackButton>
+          <h2>Asiakirjat ({this.state.opened})</h2>
+        </Header>
+      )
+    } else if (fetched) {
       return (
         <WrapTable>
+          <Button>+ Uusi hakemus</Button>
+          <Button>x Järjestämisluvan peruutus</Button>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
               <Tbody>
@@ -66,7 +121,7 @@ class JarjestamislupaAsiatLuettelo extends Component {
 
   renderJarjestamislupaAsiatList = data => {
     data = _.orderBy(data, ['paatospvm'], ['desc']);
-    return _.map(data, historyData => <JarjestamislupaAsiatListItem lupaHistoria={historyData} key={historyData.diaarinumero} />)
+    return _.map(data, historyData => <JarjestamislupaAsiatListItem lupaHistoria={historyData} key={historyData.diaarinumero} setOpened={this.setOpened}/>)
 
   }
 }

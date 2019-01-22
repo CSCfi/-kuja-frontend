@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import JarjestamislupaAsiatContainer from '../containers/JarjestamislupaAsiatContainer'
-
+import { COLORS } from "../../../../modules/styles" 
 import { InnerContentContainer } from "../../../../modules/elements"
 
 const LupaInfoWrapper = styled.div`
@@ -28,6 +28,7 @@ const JarjestamislupaAsiat = (props) => {
         </LupaInfoWrapper>
 
         <JarjestamislupaAsiatContainer jarjestajaOid={jarjestajaOid} />
+
       </LupaInnerContentWrapper>
 
     </InnerContentContainer>

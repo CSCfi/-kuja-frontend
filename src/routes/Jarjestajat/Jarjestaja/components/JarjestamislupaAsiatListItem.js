@@ -45,22 +45,23 @@ const Button = styled.div`
 `
 
 const JarjestamislupaAsiaListItem = (props) => {
-  const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria
+  const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria;
 
-  function Test(e) {
-    console.log("test");
+  function open(e,nro) {
+    console.log(nro);
+    props.setOpened(nro);
     e.preventDefault()
   }
 
   return (
-    <a href={`${API_BASE_URL}/pebble/resources/liitteet/lupahistoria/${filename}`} target="_blank">
+    <a onClick={(e) => open(e,diaarinumero)}>
       <Media query={MEDIA_QUERIES.MOBILE} render={() =>
           <Tr>
             <LupaText>
               <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
               <TextPartial>
-                Päätös tehty:&nbsp;
-              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                Asia:&nbsp;
+                <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
               {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
                 ? <TextPartial>Kumottu: <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></TextPartial>
@@ -91,12 +92,10 @@ const JarjestamislupaAsiaListItem = (props) => {
               <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
             <TdButton flex="1">
-              <Button onClick={Test}>X</Button>
+              <Button onClick={(e) => open(e,diaarinumero)}>x</Button>
             </TdButton>
-
             <TdButton flex="1">
-
-              <Button onClick={Test}>T</Button>
+              <Button onClick={(e) => open(e,diaarinumero)}>T</Button>
             </TdButton>
           </Tr>
         } />

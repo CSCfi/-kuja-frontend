@@ -117,7 +117,7 @@ export const Th = styled.div`
 export const Thn = styled(Th)`
   &:hover {
     cursor: default;
-    background: inherit;
+    background: initial;
   }
 `
 export const Td = styled.div`
