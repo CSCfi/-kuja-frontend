@@ -50,11 +50,11 @@ class Jarjestamislupa extends Component {
 
             {lupaException ?
               <TopSectionWrapper>
-                <H2>Ajantasainen järjestämislupa</H2>
+                <H2>Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa</H2>
               </TopSectionWrapper>
               :
               <TopSectionWrapper>
-                <H2>Ajantasainen järjestämislupa (<Moment format="DD.MM.YYYY"></Moment>)</H2>
+                <H2>Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa <Moment format="DD.MM.YYYY"></Moment></H2>
               </TopSectionWrapper>
             }
 
