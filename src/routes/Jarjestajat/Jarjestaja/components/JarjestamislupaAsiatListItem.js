@@ -28,11 +28,14 @@ const Button = styled.div`
   cursor: pointer;
   display: inline-block;
   position: relative;
-  padding: 0 8px;
+  width: 100%;
+  padding: 0 4px;
   line-height: 36px;
   vertical-align: middle;
   text-align: center;
   border-radius: 2px;
+  min-width: 24px;
+  margin: 1px;
   z-index: 10;
   &:hover {
     color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
@@ -56,7 +59,7 @@ const JarjestamislupaAsiaListItem = (props) => {
             <LupaText>
               <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
               <TextPartial>
-                Paatos tehty:&nbsp;
+                Päätös tehty:&nbsp;
               <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
               {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
@@ -78,17 +81,22 @@ const JarjestamislupaAsiaListItem = (props) => {
             </Td>
             <Td flex="2">
             </Td>
-            <Td flex="3">
+            <Td flex="2">
               <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
             </Td>
-            <Td flex="3">
+            <Td flex="2">
               <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
             </Td>
             <Td flex="2">
               <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
-            <TdButton>
-              <Button onClick={Test}>Peruuta</Button>
+            <TdButton flex="1">
+              <Button onClick={Test}>X</Button>
+            </TdButton>
+
+            <TdButton flex="1">
+
+              <Button onClick={Test}>T</Button>
             </TdButton>
           </Tr>
         } />

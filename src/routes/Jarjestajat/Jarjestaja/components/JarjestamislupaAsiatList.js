@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
-import { Table, Thead, Tbody, Thn, Tr } from "../../../../modules/Table"
+import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
 import { MEDIA_QUERIES } from "../../../../modules/styles"
 
 import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
@@ -40,11 +40,12 @@ class JarjestamislupaAsiatLuettelo extends Component {
               <Tr>
                 <Thn flex="2">Diaarinumero</Thn>
                 <Thn flex="2">Asia</Thn>
-                <Thn flex="2">Asiat tila</Thn>
-                <Thn flex="3">Määräaika</Thn>
-                <Thn flex="3">Hakemus lähetetty</Thn>
+                <Thn flex="2">Asian tila</Thn>
+                <Thn flex="2">Määräaika</Thn>
+                <Thn flex="2">Lähetetty</Thn>
                 <Thn flex="2">Päätetty</Thn>
-                <Thn></Thn>
+                <ThButton flex="1"></ThButton>
+                <ThButton flex="1"></ThButton>
               </Tr>
               </Thead>
               <Tbody>

@@ -22,11 +22,11 @@ export const Thead = styled.div`
     &:after {
       content: '';
       width: 1px;
-      height: 22px;
       background-color: rgba(255, 255, 255, 1);
       position: absolute;
       right: 0;
       top: 7px;
+      bottom: 7px;
     }
     
     &:last-child {
@@ -143,6 +143,11 @@ export const Td = styled.div`
       padding-top: 2px;
     }
   }
+`
+
+export const ThButton = styled(Thn)`
+  padding: 0;
+  margin: 0;
 `
 
 export const TdButton = styled(Td)`
