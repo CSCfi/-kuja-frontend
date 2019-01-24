@@ -4,6 +4,7 @@ import Media from 'react-media'
 import styled from 'styled-components'
 import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
+import { FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
 
 import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
 import Loading from '../../../../modules/Loading'
@@ -31,6 +32,9 @@ const Button = styled.div`
     color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.OIVA_GREEN};
     background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
     ${props => props.disabled ? 'cursor: not-allowed;' : null}
+  }
+  svg {
+    margin-bottom: -2px;
   }
 `
 
@@ -75,7 +79,10 @@ class JarjestamislupaAsiatList extends Component {
       return (
         <WrapTable>
           <Header>
-            <BackButton onClick={(e) => this.setOpened(0)}>&#8592;</BackButton>
+            <BackButton 
+              onClick={(e) => this.setOpened(0)}>
+              <FaArrowLeft />
+            </BackButton>
             <h2>Järjestämislupa-asian asiakirjat (OKM/{this.state.opened})</h2>
           </Header>
           <JarjestamislupaAsiakirjat lupaHistory={this.props.lupaHistory} />
@@ -84,8 +91,8 @@ class JarjestamislupaAsiatList extends Component {
     } else if (fetched) {
       return (
         <WrapTable>
-          <Button>&#43; Uusi hakemus</Button>
-          <Button>&#215; Järjestämisluvan peruutus</Button>
+          <Button><FaPlus /> Uusi hakemus</Button>
+          <Button><FaTrash /> Järjestämisluvan peruutus</Button>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
               <Tbody>

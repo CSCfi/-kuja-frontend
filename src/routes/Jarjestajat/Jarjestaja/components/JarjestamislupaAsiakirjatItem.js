@@ -2,6 +2,7 @@ import React from 'react'
 import Moment from 'react-moment'
 import styled from 'styled-components'
 import Media from 'react-media'
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 import { Td, Tr, TdButton } from "../../../../modules/Table"
 
@@ -87,10 +88,18 @@ const JarjestamislupaAsiakirjatItem = (props) => {
               <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
             </Td>
             <TdButton flex="1">
-              <Button title="Peruuta hakemus" onClick={(e) => open(e,diaarinumero)}>&#215;</Button>
+              <Button 
+                title="Peruuta hakemus" 
+                onClick={(e) => open(e,diaarinumero)}>
+                  <FaTrash />
+              </Button>
             </TdButton>
             <TdButton flex="1">
-              <Button title="Täydennä hakemusta" onClick={(e) => open(e,diaarinumero)}>T</Button>
+              <Button 
+                title="Täydennä hakemusta" 
+                onClick={(e) => open(e,diaarinumero)}>
+                  <FaEdit />
+                </Button>
             </TdButton>
           </Tr>
         } />
