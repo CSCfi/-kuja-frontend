@@ -7,6 +7,7 @@ import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
 
 import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
 import Loading from '../../../../modules/Loading'
+import JarjestamislupaAsiakirjat from './JarjestamislupaAsiakirjat';
 
 const WrapTable = styled.div`
    padding-bottom: 200px;
@@ -34,7 +35,7 @@ const Button = styled.div`
 `
 
 const BackButton = styled(Button)`
-  margin: 0 10px 0 0;
+  margin: 0 10px 10px 0;
 `
 
 const Header = styled.div`
@@ -43,11 +44,11 @@ const Header = styled.div`
    flex-flow: row;
    align-items: center;
    h2 {
-     margin-bottom: 20px;
+     margin: 0 0 10px 0;
    }
 `
 
-class JarjestamislupaAsiatLuettelo extends Component {
+class JarjestamislupaAsiatList extends Component {
 
   constructor(props) {
     super(props);
@@ -72,16 +73,19 @@ class JarjestamislupaAsiatLuettelo extends Component {
     const { fetched, isFetching, hasErrored, data } = this.props.lupaHistory
     if (this.state.opened !== 0) {
       return (
-        <Header>
-          <BackButton onClick={(e) => this.setOpened(0)}>&#8592;</BackButton>
-          <h2>Asiakirjat ({this.state.opened})</h2>
-        </Header>
+        <WrapTable>
+          <Header>
+            <BackButton onClick={(e) => this.setOpened(0)}>&#8592;</BackButton>
+            <h2>Järjestämislupa-asian asiakirjat (OKM/{this.state.opened})</h2>
+          </Header>
+          <JarjestamislupaAsiakirjat lupaHistory={this.props.lupaHistory} />
+        </WrapTable>
       )
     } else if (fetched) {
       return (
         <WrapTable>
-          <Button>+ Uusi hakemus</Button>
-          <Button>x Järjestämisluvan peruutus</Button>
+          <Button>&#43; Uusi hakemus</Button>
+          <Button>&#215; Järjestämisluvan peruutus</Button>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
               <Tbody>
@@ -93,7 +97,7 @@ class JarjestamislupaAsiatLuettelo extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Thn flex="2">Diaarinumero</Thn>
+                <Thn flex="3">OKM:n Dnro</Thn>
                 <Thn flex="2">Asia</Thn>
                 <Thn flex="2">Asian tila</Thn>
                 <Thn flex="2">Määräaika</Thn>
@@ -126,4 +130,4 @@ class JarjestamislupaAsiatLuettelo extends Component {
   }
 }
 
-export default JarjestamislupaAsiatLuettelo
+export default JarjestamislupaAsiatList

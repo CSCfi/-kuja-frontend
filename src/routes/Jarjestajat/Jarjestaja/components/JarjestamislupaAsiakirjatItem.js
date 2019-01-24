@@ -3,7 +3,6 @@ import Moment from 'react-moment'
 import styled from 'styled-components'
 import Media from 'react-media'
 
-import { API_BASE_URL } from "../../../../modules/constants"
 import { Td, Tr, TdButton } from "../../../../modules/Table"
 
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
@@ -44,7 +43,7 @@ const Button = styled.div`
   }
 `
 
-const JarjestamislupaAsiaListItem = (props) => {
+const JarjestamislupaAsiakirjatItem = (props) => {
   const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria;
 
   function open(e,nro) {
@@ -77,21 +76,15 @@ const JarjestamislupaAsiaListItem = (props) => {
         } />
         <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
           <Tr>
-            <Td flex="3">OKM/{diaarinumero}</Td>
+            <Td flex="3">Hakemus</Td>
             <Td flex="2">
               muutos
             </Td>
             <Td flex="2">
-              lähetetty
-            </Td>
-            <Td flex="2">
-              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+              Mr Mime
             </Td>
             <Td flex="2">
               <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-            </Td>
-            <Td flex="2">
-              <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
             <TdButton flex="1">
               <Button title="Peruuta hakemus" onClick={(e) => open(e,diaarinumero)}>&#215;</Button>
@@ -105,4 +98,4 @@ const JarjestamislupaAsiaListItem = (props) => {
   )
 }
 
-export default JarjestamislupaAsiaListItem
+export default JarjestamislupaAsiakirjatItem
