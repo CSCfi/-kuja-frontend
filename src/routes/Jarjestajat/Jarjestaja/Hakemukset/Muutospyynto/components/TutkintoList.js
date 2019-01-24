@@ -153,12 +153,12 @@ class TutkintoList extends Component {
                                 isRemoved =val.type === MUUTOS_TYPES.REMOVAL ? true : null
                               }
 
-                          if (osaamisala) {
-                            if (val.koodiarvo === osaamisala.koodiArvo) {
-                              isOaAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
-                              isOaRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
+                            if (osaamisala) {
+                              if (val.koodiarvo === osaamisala.koodiArvo) {
+                                isOaAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
+                                isOaRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
+                              }
                             }
-                          }
     
                         })
                       }
@@ -171,6 +171,13 @@ class TutkintoList extends Component {
                       if (val.koodiarvo === koodiarvo) {
                         isAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
                         isRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
+                      }
+
+                      if (osaamisala) {
+                        if (val.koodiarvo === osaamisala.koodiArvo) {
+                          isOaAdded = val.type === MUUTOS_TYPES.ADDITION ? true : null
+                          isOaRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : null
+                        }
                       }
                     })
                   }
@@ -195,7 +202,7 @@ class TutkintoList extends Component {
                 if ((isOaInLupa && !isOaRemoved) || isOaAdded) {
                   isOaChecked = true
                 }
-    
+
                 return (
                   <TutkintoBlock key={i}>
                     <TutkintoWrapper key={i} className={customClassName}>
