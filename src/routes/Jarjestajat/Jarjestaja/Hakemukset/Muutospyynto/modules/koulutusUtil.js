@@ -252,7 +252,6 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   const { checked } = event.target
 
   if (!kohde) {
-    console.log('koulutusUtil.handleCheckboxChange kohdetta ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
       kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
@@ -263,7 +262,6 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   }
 
   if (!maaraystyyppi) {
-    console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
@@ -427,8 +425,6 @@ export function handleTutkintoKieliCheckboxChange(event, editValue, fields, isIn
   }
 
   const { checked } = event.target
-
-  console.log(currentObj)
 
   if (checked) {
     if (isInLupa) {
