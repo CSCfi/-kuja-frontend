@@ -2,13 +2,11 @@ import React from 'react'
 import Moment from 'react-moment'
 import styled from 'styled-components'
 import Media from 'react-media'
-
 import { FaEdit} from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
-
 import { Td, Tr, TdButton } from "../../../../modules/Table"
-
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 
 const LupaText = styled.span`
   margin: 10px;
@@ -78,20 +76,17 @@ const JarjestamislupaAsiaListItem = (props) => {
       <Media query={MEDIA_QUERIES.MOBILE} render={() =>
           <Tr>
             <LupaText>
-              <TextPartial>Diaarinumero: OKM/{diaarinumero}</TextPartial>
+              <TextPartial>{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI}: OKM/{diaarinumero}</TextPartial>
               <TextPartial>
-                Asia:&nbsp;
+                {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI}:&nbsp;
                 <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
-              {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
-                ? <TextPartial>Kumottu: <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></TextPartial>
-                : (
-                  <TextPartial>Voimassa:&nbsp;
-                    <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-                    &nbsp;-&nbsp;
-                    <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-                  </TextPartial>)
-              }
+                <TextPartial>{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI}:&nbsp;
+                  <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
+                </TextPartial>
+                <TextPartial>{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI}:&nbsp;
+                  <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                </TextPartial>
             </LupaText>
           </Tr>
         } />
@@ -107,10 +102,10 @@ const JarjestamislupaAsiaListItem = (props) => {
                 { diaarinumero.endsWith("7") ? "Käsittelyssä" : "Täydennettävä" }
             </Td>
             <Td flex="2">
-              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+              <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
             <Td flex="2">
-              <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+              <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
             </Td>
             <TdButton>
               {/* Mok */}

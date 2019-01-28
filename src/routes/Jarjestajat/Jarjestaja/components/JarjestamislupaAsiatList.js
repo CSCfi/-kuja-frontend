@@ -11,6 +11,9 @@ import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
 import Loading from '../../../../modules/Loading'
 import JarjestamislupaAsiakirjat from './JarjestamislupaAsiakirjat';
 
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
+import { LUPA_EXCEPTIONS } from '../../modules/constants';
+
 const WrapTable = styled.div`
    padding-bottom: 200px;
 `
@@ -81,11 +84,11 @@ class JarjestamislupaAsiatList extends Component {
         <WrapTable>
           <Header>
             <BackButton 
-              title="Palaa järjestämislupa-asiat listaukseen"
+              title={LUPA_TEKSTIT.ASIAT.PALAA.FI}
               onClick={(e) => this.setOpened(0)}>
               <FaArrowLeft />
             </BackButton>
-            <h3>Järjestämislupa-asian asiakirjat (OKM/{this.state.opened})</h3>
+            <h3>{LUPA_TEKSTIT.ASIAT.ASIAKIRJAT_OTSIKKO.FI} (OKM/{this.state.opened})</h3>
           </Header>
           <JarjestamislupaAsiakirjat lupaHistory={this.props.lupaHistory} />
         </WrapTable>
@@ -93,9 +96,9 @@ class JarjestamislupaAsiatList extends Component {
     } else if (fetched) {
       return (
         <WrapTable>
-          <h2>Ammatillisen koulutuksen järjestämislupa-asiat</h2>
-          <Button><FaPlus /> Uusi hakemus</Button>
-          <Button><MdCancel /> Järjestämisluvan peruutus</Button>
+          <h2>{LUPA_TEKSTIT.ASIAT.OTSIKKO.FI}</h2>
+          <Button><FaPlus /> {LUPA_TEKSTIT.ASIAT.UUSI_HAKEMUS.FI}</Button>
+          <Button><MdCancel /> {LUPA_TEKSTIT.ASIAT.JARJESTAMISLUVAN_PERUUTUS.FI}</Button>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
               <Tbody>
@@ -107,11 +110,11 @@ class JarjestamislupaAsiatList extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Thn flex="3">OKM:n Dnro</Thn>
-                <Thn flex="3">Asia</Thn>
-                <Thn flex="2">Asian tila</Thn>
-                <Thn flex="2">Määräaika</Thn>
-                <Thn flex="2">Päätetty</Thn>
+                <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI}</Thn>
+                <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI}</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI}</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI}</Thn>
                 <ThButton flex="1"></ThButton>
                 <ThButton flex="1"></ThButton>
               </Tr>
@@ -126,7 +129,7 @@ class JarjestamislupaAsiatList extends Component {
     } else if (isFetching) {
       return <Loading />
     } else if (hasErrored) {
-      return <h2>Järjestämislupa-asioita ladattaessa tapahtui virhe</h2>
+      return <h2>{LUPA_EXCEPTIONS}</h2>
     } else {
       return null
     }

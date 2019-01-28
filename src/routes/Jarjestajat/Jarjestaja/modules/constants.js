@@ -201,6 +201,77 @@ export const LUPA_TEKSTIT = {
             SV: 'I detta anordnartillstånd anges inga andra rättigheter, skyldigheter, villkor eller uppgifter för utbildningsanordnaren.'
         }
 
+    },
+    ASIAT: {
+        OTSIKKO: {
+            FI: 'Ammatillisen koulutuksen järjestämislupa-asiat',
+            SV: 'OTSIKKO'
+        },
+        UUSI_HAKEMUS: {
+            FI: 'Uusi hakemus',
+            SV: 'UUSI_HAKEMUS'
+        },
+        JARJESTAMISLUVAN_PERUUTUS: {
+            FI: 'Järjestämisluvan peruutus',
+            SV: 'JARJESTAMISLUVAN_PERUUTUS'
+        },     
+        ASIAT_TAULUKKO: {
+            DNRO: {
+                FI: 'OKM:n Dnro',
+                SV: 'DNRO'
+            },
+            ASIA: {
+                FI: 'Asia',
+                SV: 'ASIA'
+            },
+            TILA: {
+                FI: 'Asian tila',
+                SV: 'TILA'
+            },
+            MAARAAIKA: {
+                FI: 'Määräaika',
+                SV: 'MAARAAIKA'
+            },
+            PAATETTY: {
+                FI: 'Päätetty',
+                SV: 'PAATETTY'
+            }
+        },
+        ASIATKIRJAT_TAULUKKO: {
+            ASIAKIRJA: {
+                FI: 'Asiakirja',
+                SV: 'ASIAKIRJA'
+            },
+            TILA: {
+                FI: 'Tila',
+                SV: 'TILA'
+            },
+            LAATIJA: {
+                FI: 'Laatija',
+                SV: 'LAATIJA'
+            },
+            VALMIS: {
+                FI: 'Valmis',
+                SV: 'VALMIS'
+            },
+        },
+        POISTA_TAYDENNYS: {
+            FI: 'Poista täydennys',
+            SV: 'POISTA_TAYDENNYS'
+        },
+        PERUUTA_HAKEMUS: {
+            FI: 'Peruuta hakemus',
+            SV: 'PERUUTA_HAKEMUS'
+        },
+        PALAA: {
+            FI: 'Palaa järjestämislupa-asiat listaukseen',
+            SV: 'PALAA'
+        },
+        ASIAKIRJAT_OTSIKKO: {
+            FI: 'Järjestämislupa-asian asiakirjat',
+            SV: 'ASIAKIRJAT_OTSIKKO'
+        }
+        
     }
 }
 

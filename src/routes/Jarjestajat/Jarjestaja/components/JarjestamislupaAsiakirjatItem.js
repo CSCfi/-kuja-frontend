@@ -4,10 +4,9 @@ import styled from 'styled-components'
 import Media from 'react-media'
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
-
 import { Td, Tr, TdButton } from "../../../../modules/Table"
-
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 
 const LupaText = styled.span`
   margin: 10px;
@@ -83,20 +82,17 @@ const JarjestamislupaAsiakirjatItem = (props) => {
       <Media query={MEDIA_QUERIES.MOBILE} render={() =>
           <Tr>
             <LupaText>
-              <TextPartial>Diaarinumero: OKM/{diaarinumero}</TextPartial>
+              <TextPartial>{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.ASIAKIRJA.FI}</TextPartial>
               <TextPartial>
-                Asia:&nbsp;
+               {LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.TILA.FI}:&nbsp;
+              </TextPartial>
+              <TextPartial>
+               {LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.LAATIJA.FI}:&nbsp;
+              </TextPartial>
+              <TextPartial>
+                {LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.VALMIS.FI}:&nbsp;
                 <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
               </TextPartial>
-              {voimassaoloalkupvm === "2018-01-01" && voimassaololoppupvm === "2018-01-01"
-                ? <TextPartial>Kumottu: <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment></TextPartial>
-                : (
-                  <TextPartial>Voimassa:&nbsp;
-                    <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-                    &nbsp;-&nbsp;
-                    <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-                  </TextPartial>)
-              }
             </LupaText>
           </Tr>
         } />
@@ -131,13 +127,13 @@ const JarjestamislupaAsiakirjatItem = (props) => {
             <TdButton>
             { !diaarinumero.endsWith("7") ?
                 <Button 
-                  title="Poista täydennys" 
+                  title={LUPA_TEKSTIT.ASIAT.POISTA_TAYDENNYS.FI}
                   onClick={(e) => open(e,diaarinumero)}>
                     <FaTrash />
                 </Button>
               :
               <Button 
-                title="Peruuta hakemus" 
+              title={LUPA_TEKSTIT.ASIAT.PERUUTA_HAKEMUS.FI}
                 onClick={(e) => open(e,diaarinumero)}>
                   <MdCancel />
               </Button>

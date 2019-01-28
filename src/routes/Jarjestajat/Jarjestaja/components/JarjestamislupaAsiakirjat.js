@@ -3,10 +3,11 @@ import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
 import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
-import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
-
+import { MEDIA_QUERIES } from "../../../../modules/styles"
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import JarjestamislupaAsiakirjatItem from './JarjestamislupaAsiakirjatItem'
 import Loading from '../../../../modules/Loading'
+import { LUPA_EXCEPTIONS } from '../../modules/constants';
 
 const WrapTable = styled.div`
    padding-bottom: 200px;
@@ -48,10 +49,10 @@ class JarjestamislupaAsiakirjat extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Thn flex="2">Asiakirja</Thn>
-                <Thn flex="2">Tila</Thn>
-                <Thn flex="3">Laatija</Thn>
-                <Thn flex="2">Valmis</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.ASIAKIRJA.FI}</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.TILA.FI}</Thn>
+                <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.LAATIJA.FI}</Thn>
+                <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.VALMIS.FI}</Thn>
                 <ThButton></ThButton>
                 <ThButton></ThButton>
               </Tr>
@@ -66,7 +67,7 @@ class JarjestamislupaAsiakirjat extends Component {
     } else if (isFetching) {
       return <Loading />
     } else if (hasErrored) {
-      return <h2>Järjestämislupa-asioita ladattaessa tapahtui virhe</h2>
+      return <h2>{LUPA_EXCEPTIONS}</h2>
     } else {
       return null
     }
