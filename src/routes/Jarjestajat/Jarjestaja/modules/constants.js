@@ -202,6 +202,52 @@ export const LUPA_TEKSTIT = {
         }
 
     },
+    LUPA: {
+        OTSIKKO: {
+            FI: 'Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa',
+            SV: 'OTSIKKO'
+        }
+    },
+    PAATOKSET: {
+        OTSIKKO: {
+            FI: 'Päätökset',
+            SV: 'PAATOKSET'
+        },
+        VIIMEISIN: {
+            FI: 'Viimeisin päätös',
+            SV: 'VIIMEISIN'
+        },
+        HISTORIATIEDOT: {
+            FI: 'Historiatiedot',
+            SV: 'HISTORIATIEDOT'
+        },
+        HISTORIA_TAULUKKO: {
+            DIANAARINUMERO: {
+                FI: 'DIanaarinumero',
+                SV: 'DIANAARINUMERO'
+            },
+            PAATOSPVM: {
+                FI: 'Päätöspvm',
+                SV: 'PAATOSPVM'
+            },
+            VOIMAANTULOPVM: {
+                FI: 'Voimaantulopvm',
+                SV: 'VOIMAANTULOPVM'
+            },
+            PAATTAMISPVM: {
+                FI: 'Päättämispvm',
+                SV: 'PAATTAMISPVM'
+            },
+            KUMOTTU: {
+                FI: 'Kumotttu',
+                SV: 'KUMOTTU'
+            },
+        },
+        VIRHE: {
+            FI: 'Lupahistoriaa ladattaessa tapahtui virhe',
+            SV: 'VIRHE'
+        }
+    },
     ASIAT: {
         OTSIKKO: {
             FI: 'Ammatillisen koulutuksen järjestämislupa-asiat',
