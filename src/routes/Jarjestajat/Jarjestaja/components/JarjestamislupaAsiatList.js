@@ -4,7 +4,8 @@ import Media from 'react-media'
 import styled from 'styled-components'
 import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
-import { FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { FaPlus, FaArrowLeft } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 
 import JarjestamislupaAsiatListItem from './JarjestamislupaAsiatListItem'
 import Loading from '../../../../modules/Loading'
@@ -47,7 +48,7 @@ const Header = styled.div`
    display: flex;
    flex-flow: row;
    align-items: center;
-   h2 {
+   h3 {
      margin: 0 0 10px 0;
    }
 `
@@ -80,10 +81,11 @@ class JarjestamislupaAsiatList extends Component {
         <WrapTable>
           <Header>
             <BackButton 
+              title="Palaa järjestämislupa-asiat listaukseen"
               onClick={(e) => this.setOpened(0)}>
               <FaArrowLeft />
             </BackButton>
-            <h2>Järjestämislupa-asian asiakirjat (OKM/{this.state.opened})</h2>
+            <h3>Järjestämislupa-asian asiakirjat (OKM/{this.state.opened})</h3>
           </Header>
           <JarjestamislupaAsiakirjat lupaHistory={this.props.lupaHistory} />
         </WrapTable>
@@ -91,8 +93,9 @@ class JarjestamislupaAsiatList extends Component {
     } else if (fetched) {
       return (
         <WrapTable>
+          <h2>Ammatillisen koulutuksen järjestämislupa-asiat</h2>
           <Button><FaPlus /> Uusi hakemus</Button>
-          <Button><FaTrash /> Järjestämisluvan peruutus</Button>
+          <Button><MdCancel /> Järjestämisluvan peruutus</Button>
           <Media query={MEDIA_QUERIES.MOBILE} render={() =>
             <Table>
               <Tbody>
@@ -105,10 +108,9 @@ class JarjestamislupaAsiatList extends Component {
               <Thead>
               <Tr>
                 <Thn flex="3">OKM:n Dnro</Thn>
-                <Thn flex="2">Asia</Thn>
+                <Thn flex="3">Asia</Thn>
                 <Thn flex="2">Asian tila</Thn>
                 <Thn flex="2">Määräaika</Thn>
-                <Thn flex="2">Lähetetty</Thn>
                 <Thn flex="2">Päätetty</Thn>
                 <ThButton flex="1"></ThButton>
                 <ThButton flex="1"></ThButton>

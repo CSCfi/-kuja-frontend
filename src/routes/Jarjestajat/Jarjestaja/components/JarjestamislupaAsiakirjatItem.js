@@ -3,6 +3,7 @@ import Moment from 'react-moment'
 import styled from 'styled-components'
 import Media from 'react-media'
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 
 import { Td, Tr, TdButton } from "../../../../modules/Table"
 
@@ -28,8 +29,7 @@ const Button = styled.div`
   cursor: pointer;
   display: inline-block;
   position: relative;
-  width: 100%;
-  padding: 0 4px;
+  width: 42px;
   line-height: 36px;
   vertical-align: middle;
   text-align: center;
@@ -42,10 +42,35 @@ const Button = styled.div`
     background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
     ${props => props.disabled ? 'cursor: not-allowed;' : null}
   }
+  svg {
+    margin-bottom: -2px;
+  }
 `
 
 const JarjestamislupaAsiakirjatItem = (props) => {
+
   const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria;
+
+  const state = {
+    draft: "Luonnos",
+    ready: "Valmis"
+  }
+
+  const type = {
+    application: "Hakemus",
+    attachement: "Liite",
+    attachementConfidential: "Liite (salassa pidettävä)",
+    supplement: "Täydennys",
+    answer: "Vastaus kuulemispyyntöön",
+    cancelation: "Hakemuksen peruutu",
+    supplementRequest: "Täydennyspyyntö",
+    auditionRequest: "Kuulemispyyntö",
+    decision: "Päätös",
+    correctionDecision: "Korjauspäätös",
+    remediationDecision: "Oikaisupäätös",
+    arrangementCancelation: "Järjestämisluvan peruutus",
+    decisionArrangementCancelation: "Päätös järjestämisluvan peruuttamisesta"
+  }
 
   function open(e,nro) {
     console.log(nro);
@@ -77,29 +102,46 @@ const JarjestamislupaAsiakirjatItem = (props) => {
         } />
         <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
           <Tr>
-            <Td flex="3">Hakemus</Td>
             <Td flex="2">
-              muutos
+              {/* Mok */}
+              { diaarinumero.endsWith("7") ? type.application : type.supplement }
             </Td>
             <Td flex="2">
-              Mr Mime
+              {/* Mok */}
+              { diaarinumero.endsWith("7") ? state.ready : state.draft }
+            </Td>
+            <Td flex="3">
+              Jyväskylän koulutuskuntayhtymä
             </Td>
             <Td flex="2">
               <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
             </Td>
-            <TdButton flex="1">
+            <TdButton>
+              {/* Mok */}
+              { diaarinumero.endsWith("7") ?
+                <Button 
+                  title="Täydennä hakemusta" 
+                  onClick={(e) => open(e,diaarinumero)}>
+                    <FaEdit />
+                </Button>
+                :
+                  null 
+                }
+            </TdButton>
+            <TdButton>
+            { !diaarinumero.endsWith("7") ?
+                <Button 
+                  title="Poista täydennys" 
+                  onClick={(e) => open(e,diaarinumero)}>
+                    <FaTrash />
+                </Button>
+              :
               <Button 
                 title="Peruuta hakemus" 
                 onClick={(e) => open(e,diaarinumero)}>
-                  <FaTrash />
+                  <MdCancel />
               </Button>
-            </TdButton>
-            <TdButton flex="1">
-              <Button 
-                title="Täydennä hakemusta" 
-                onClick={(e) => open(e,diaarinumero)}>
-                  <FaEdit />
-                </Button>
+              }
             </TdButton>
           </Tr>
         } />

@@ -23,9 +23,6 @@ const JarjestamislupaAsiat = (props) => {
   return (
     <InnerContentContainer>
       <LupaInnerContentWrapper>
-        <LupaInfoWrapper>
-          <h2>Ammatillisen koulutuksen järjestämislupa-asiat</h2>
-        </LupaInfoWrapper>
 
         <JarjestamislupaAsiatContainer jarjestajaOid={jarjestajaOid} />
 

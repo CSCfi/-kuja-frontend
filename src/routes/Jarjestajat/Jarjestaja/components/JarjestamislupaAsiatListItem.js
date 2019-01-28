@@ -3,7 +3,8 @@ import Moment from 'react-moment'
 import styled from 'styled-components'
 import Media from 'react-media'
 
-import { FaTrash, FaEdit} from 'react-icons/fa';
+import { FaEdit} from 'react-icons/fa';
+import { MdCancel } from 'react-icons/md';
 
 import { Td, Tr, TdButton } from "../../../../modules/Table"
 
@@ -29,13 +30,11 @@ const Button = styled.div`
   cursor: pointer;
   display: inline-block;
   position: relative;
-  width: 100%;
-  padding: 0 4px;
+  width: 40px;
   line-height: 36px;
   vertical-align: middle;
   text-align: center;
   border-radius: 2px;
-  min-width: 24px;
   margin: 1px;
   z-index: 10;
   &:hover {
@@ -43,10 +42,30 @@ const Button = styled.div`
     background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.WHITE};
     ${props => props.disabled ? 'cursor: not-allowed;' : null}
   }
+  svg {
+    margin-bottom: -2px;
+  }
 `
 
 const JarjestamislupaAsiaListItem = (props) => {
+
   const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria;
+
+  const asia = [
+    "Järjestämisluvan muutos",
+    "Järjestämisluvan peruutus",
+    "Uusi järjestämislupa"
+  ]
+
+  const tila = [
+    "Lähetetty",
+    "Käsittelyssä",
+    "Täydennettävä",
+    "Vastatttava",
+    "Peruutettu",
+    "Päätettävänä",
+    "Päätetty"
+  ]
 
   function open(e,nro) {
     console.log(nro);
@@ -79,34 +98,42 @@ const JarjestamislupaAsiaListItem = (props) => {
         <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
           <Tr>
             <Td flex="3">OKM/{diaarinumero}</Td>
-            <Td flex="2">
-              muutos
+            <Td flex="3">
+              {/* Mok */}
+              { diaarinumero.endsWith("7") ? "Uusi järjestämislupa" : "Järjestämisluvan muutos" }
             </Td>
             <Td flex="2">
-              lähetetty
+                {/* Mok */}
+                { diaarinumero.endsWith("7") ? "Käsittelyssä" : "Täydennettävä" }
             </Td>
             <Td flex="2">
               <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
             </Td>
             <Td flex="2">
-              <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-            </Td>
-            <Td flex="2">
               <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
             </Td>
-            <TdButton flex="1">
-              <Button 
-                title="Peruuta hakemus"
-                onClick={(e) => open(e,diaarinumero)}>
-                  <FaTrash />
-                </Button>
-            </TdButton>
-            <TdButton flex="1">
+            <TdButton>
+              {/* Mok */}
+              {/* { diaarinumero.endsWith("7") ? */}
               <Button 
                 title="Täydennä hakemusta" 
                 onClick={(e) => open(e,diaarinumero)}>
                   <FaEdit />
                 </Button>
+              {/* :
+                null
+              } */}
+            </TdButton>
+            <TdButton>
+            { diaarinumero.endsWith("7") ?
+                <Button 
+                title="Peruuta hakemus"
+                onClick={(e) => open(e,diaarinumero)}>
+                  <MdCancel />
+                </Button>
+              :
+                null
+              }
             </TdButton>
           </Tr>
         } />

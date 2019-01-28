@@ -48,12 +48,12 @@ class JarjestamislupaAsiakirjat extends Component {
             <Table>
               <Thead>
               <Tr>
-                <Thn flex="3">Asiakirja</Thn>
+                <Thn flex="2">Asiakirja</Thn>
                 <Thn flex="2">Tila</Thn>
-                <Thn flex="2">Laatija</Thn>
+                <Thn flex="3">Laatija</Thn>
                 <Thn flex="2">Valmis</Thn>
-                <ThButton flex="1"></ThButton>
-                <ThButton flex="1"></ThButton>
+                <ThButton></ThButton>
+                <ThButton></ThButton>
               </Tr>
               </Thead>
               <Tbody>
