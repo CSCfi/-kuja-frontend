@@ -10,6 +10,7 @@ import JarjestamislupaAsiat from './Jarjestamislupa-asiat'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
 import Loading from '../../../../modules/Loading'
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 // import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
 // import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
@@ -59,28 +60,29 @@ class Jarjestaja extends Component {
         const tabNavRoutes = [
             {
                 path: `${match.url}/jarjestamislupa`,
-                text: 'Järjestämislupa',
+                text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
                 authenticated: true
             },
             {
               path: `${match.url}`,
               exact: true,
               text: 'Päätökset',
+              text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
               authenticated: true
             },
             {
               path: `${match.url}/jarjestamislupa-asia`,
-              text: 'Järjestämislupa-asiat',
+              text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
               authenticated: true
             },
             {
               path: `${match.url}/hakemukset-ja-paatokset`,
-              text: 'Hakemukset',
+              text: LUPA_TEKSTIT.MUUT.HAKEMUKSET_OTSIKKO.FI,
               authenticated: authenticated
             },
             {
               path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-              text: 'Uusi hakemus',
+              text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
               authenticated: authenticated
             }
         ]

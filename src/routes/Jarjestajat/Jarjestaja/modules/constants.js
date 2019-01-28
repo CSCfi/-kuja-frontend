@@ -199,14 +199,25 @@ export const LUPA_TEKSTIT = {
         EI_MAARAYKSIA: {
             FI: 'Koulutuksen järjestäjälle ei tässä järjestämisluvassa määrätä muita oikeuksia, velvollisuuksia, ehtoja tai tehtäviä.',
             SV: 'I detta anordnartillstånd anges inga andra rättigheter, skyldigheter, villkor eller uppgifter för utbildningsanordnaren.'
-        }
-
+        },
+        HAKEMUKSET_OTSIKKO: {
+            FI: 'Hakemukset',
+            SV: 'HAKEMUKSET_OTSIKKO'
+        },
+        UUSI_HAKEMUS_OTSIKKO: {
+            FI: 'Uuusi hakemukset',
+            SV: 'UUSI_HAKEMUS_OTSIKKO'
+        },
     },
     LUPA: {
         OTSIKKO: {
             FI: 'Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa',
             SV: 'OTSIKKO'
-        }
+        },
+        OTSIKKO_LYHYT: {
+            FI: 'Järjestämislupa',
+            SV: 'OTSIKKO_LYHYT'
+        },
     },
     PAATOKSET: {
         OTSIKKO: {
@@ -252,6 +263,10 @@ export const LUPA_TEKSTIT = {
         OTSIKKO: {
             FI: 'Ammatillisen koulutuksen järjestämislupa-asiat',
             SV: 'OTSIKKO'
+        },
+        OTSIKKO_LYHYT: {
+            FI: 'Järjestämislupa-asiat',
+            SV: 'OTSIKKO_LYHYT'
         },
         UUSI_HAKEMUS: {
             FI: 'Uusi hakemus',
