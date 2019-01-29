@@ -57,6 +57,12 @@ class Jarjestaja extends Component {
         // Alanavigaation tabivalikon routet
         const tabNavRoutes = [
             {
+              path: `${match.url}/omattiedot`,
+              text: 'Omat tiedot',
+              authenticated: true
+              // authenticated: authenticated
+            },
+            {
                 path: `${match.url}/jarjestamislupa`,
                 text: 'Järjestämislupa',
                 authenticated: true
