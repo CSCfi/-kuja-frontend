@@ -59,9 +59,9 @@ class Jarjestaja extends Component {
         // Alanavigaation tabivalikon routet
         const tabNavRoutes = [
             {
-                path: `${match.url}/jarjestamislupa`,
-                text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
-                authenticated: true
+              path: `${match.url}/jarjestamislupa`,
+              text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+              authenticated: true
             },
             {
               path: `${match.url}`,
@@ -74,6 +74,7 @@ class Jarjestaja extends Component {
               path: `${match.url}/jarjestamislupa-asia`,
               text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
               authenticated: true
+              //authenticated: authenticated
             },
             {
               path: `${match.url}/hakemukset-ja-paatokset`,

@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
-import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
+import { Table, Thead, Tbody, Thn, Trn, ThButton } from "../../../../modules/Table"
 import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles"
 import { FaPlus, FaArrowLeft } from 'react-icons/fa';
 import { MdCancel } from 'react-icons/md';
@@ -109,7 +109,7 @@ class JarjestamislupaAsiatList extends Component {
           <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
             <Table>
               <Thead>
-              <Tr>
+              <Trn>
                 <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI}</Thn>
                 <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI}</Thn>
                 <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}</Thn>
@@ -117,7 +117,7 @@ class JarjestamislupaAsiatList extends Component {
                 <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI}</Thn>
                 <ThButton flex="1"></ThButton>
                 <ThButton flex="1"></ThButton>
-              </Tr>
+              </Trn>
               </Thead>
               <Tbody>
                 {this.renderJarjestamislupaAsiatList(data)}

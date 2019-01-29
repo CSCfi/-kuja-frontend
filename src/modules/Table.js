@@ -80,9 +80,14 @@ export const Tr = styled.div`
     cursor: pointer;
     background: ${COLORS.OIVA_TABLE_HOVER_COLOR};
   }
+  `
 
+export const Trn = styled(Tr)`
+  &:hover {
+    cursor: default;
+    background: transparent;
+  }
 `
-
 export const Th = styled.div`
   display: flex;
   flex: ${props => props.flex ? props.flex : 1};

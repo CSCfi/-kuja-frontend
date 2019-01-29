@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
-import { Table, Thead, Tbody, Thn, Tr, ThButton } from "../../../../modules/Table"
+import { Table, Thead, Tbody, Thn, Trn, ThButton } from "../../../../modules/Table"
 import { MEDIA_QUERIES } from "../../../../modules/styles"
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import JarjestamislupaAsiakirjatItem from './JarjestamislupaAsiakirjatItem'
@@ -48,14 +48,14 @@ class JarjestamislupaAsiakirjat extends Component {
           <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
             <Table>
               <Thead>
-              <Tr>
+              <Trn>
                 <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.ASIAKIRJA.FI}</Thn>
                 <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.TILA.FI}</Thn>
                 <Thn flex="3">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.LAATIJA.FI}</Thn>
                 <Thn flex="2">{LUPA_TEKSTIT.ASIAT.ASIATKIRJAT_TAULUKKO.VALMIS.FI}</Thn>
                 <ThButton></ThButton>
                 <ThButton></ThButton>
-              </Tr>
+              </Trn>
               </Thead>
               <Tbody>
                 {this.renderJarjestamislupaAsiatList(data)}

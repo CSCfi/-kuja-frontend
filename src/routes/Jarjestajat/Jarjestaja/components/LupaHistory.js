@@ -2,7 +2,7 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import Media from 'react-media'
 import styled from 'styled-components'
-import { Table, Thead, Tbody, Thn, Tr } from "../../../../modules/Table"
+import { Table, Thead, Tbody, Thn, Trn } from "../../../../modules/Table"
 import { MEDIA_QUERIES } from "../../../../modules/styles"
 import { LUPA_TEKSTIT } from "../modules/constants"
 import LupaHistoryItem from './LupaHistoryItem'
@@ -37,13 +37,13 @@ class LupaHistory extends Component {
           <Media query={MEDIA_QUERIES.TABLET_MIN} render={() =>
             <Table>
               <Thead>
-              <Tr>
+              <Trn>
                 <Thn>{LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.DIANAARINUMERO.FI}</Thn>
                 <Thn>{LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATOSPVM.FI}</Thn>
                 <Thn>{LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.VOIMAANTULOPVM.FI}</Thn>
                 <Thn>{LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATTAMISPVM.FI}</Thn>
                 <Thn>{LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.KUMOTTU.FI}</Thn>
-              </Tr>
+              </Trn>
               </Thead>
               <Tbody>
                 {this.renderLupaHistoryList(data)}
