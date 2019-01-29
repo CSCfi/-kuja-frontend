@@ -71,10 +71,24 @@ const JarjestamislupaAsiakirjatItem = (props) => {
     decisionArrangementCancelation: "Päätös järjestämisluvan peruuttamisesta"
   }
 
-  function open(e,nro) {
-    console.log(nro);
-    props.setOpened(nro);
-    e.preventDefault()
+  const open = (e,nro) => {
+    e.stopPropagation();
+    console.log("open " + nro);
+  }
+
+  const refill = (e,nro) => {
+    e.stopPropagation();
+    console.log("refill " + nro);
+  }
+
+  const cancel = (e,nro) => {
+    e.stopPropagation();
+    console.log("cancel " + nro);
+  }
+
+  const remove = (e,nro) => {
+    e.stopPropagation();
+    console.log("delete " + nro);
   }
 
   return (
@@ -117,7 +131,7 @@ const JarjestamislupaAsiakirjatItem = (props) => {
               { diaarinumero.endsWith("7") ?
                 <Button 
                   title="Täydennä hakemusta" 
-                  onClick={(e) => open(e,diaarinumero)}>
+                  onClick={(e) => refill(e,diaarinumero)}>
                     <FaEdit />
                 </Button>
                 :
@@ -128,13 +142,13 @@ const JarjestamislupaAsiakirjatItem = (props) => {
             { !diaarinumero.endsWith("7") ?
                 <Button 
                   title={LUPA_TEKSTIT.ASIAT.POISTA_TAYDENNYS.FI}
-                  onClick={(e) => open(e,diaarinumero)}>
+                  onClick={(e) => remove(e,diaarinumero)}>
                     <FaTrash />
                 </Button>
               :
               <Button 
               title={LUPA_TEKSTIT.ASIAT.PERUUTA_HAKEMUS.FI}
-                onClick={(e) => open(e,diaarinumero)}>
+                onClick={(e) => cancel(e,diaarinumero)}>
                   <MdCancel />
               </Button>
               }

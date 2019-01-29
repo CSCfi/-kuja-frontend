@@ -73,8 +73,8 @@ class Jarjestaja extends Component {
             {
               path: `${match.url}/jarjestamislupa-asia`,
               text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
-              authenticated: true
-              //authenticated: authenticated
+              // authenticated: true
+              authenticated: authenticated
             },
             {
               path: `${match.url}/hakemukset-ja-paatokset`,

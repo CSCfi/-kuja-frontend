@@ -65,10 +65,19 @@ const JarjestamislupaAsiaListItem = (props) => {
     "Päätetty"
   ]
 
-  function open(e,nro) {
-    console.log(nro);
+  const open = (e,nro) => {
+    e.stopPropagation();
     props.setOpened(nro);
-    e.preventDefault()
+  }
+
+  const refill = (e,nro) => {
+    e.stopPropagation();
+    console.log("refill " + nro);
+  }
+
+  const cancel = (e,nro) => {
+    e.stopPropagation();
+    console.log("cancel " + nro);
   }
 
   return (
@@ -112,7 +121,7 @@ const JarjestamislupaAsiaListItem = (props) => {
               {/* { diaarinumero.endsWith("7") ? */}
               <Button 
                 title="Täydennä hakemusta" 
-                onClick={(e) => open(e,diaarinumero)}>
+                onClick={(e) => refill(e,diaarinumero)}>
                   <FaEdit />
                 </Button>
               {/* :
@@ -123,7 +132,7 @@ const JarjestamislupaAsiaListItem = (props) => {
             { diaarinumero.endsWith("7") ?
                 <Button 
                 title="Peruuta hakemus"
-                onClick={(e) => open(e,diaarinumero)}>
+                onClick={(e) => cancel(e,diaarinumero)}>
                   <MdCancel />
                 </Button>
               :
