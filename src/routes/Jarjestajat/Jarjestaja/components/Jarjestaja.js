@@ -107,7 +107,7 @@ class Jarjestaja extends Component {
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
                 <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-                <Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />
+                {(authenticated) ? (<Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />) : null }
                 {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
               </ContentContainer>
             </FullWidthWrapper>
