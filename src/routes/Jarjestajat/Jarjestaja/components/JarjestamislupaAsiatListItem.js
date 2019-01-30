@@ -59,7 +59,7 @@ const JarjestamislupaAsiaListItem = (props) => {
     "Lähetetty",
     "Käsittelyssä",
     "Täydennettävä",
-    "Vastatttava",
+    "Vastattava",
     "Peruutettu",
     "Päätettävänä",
     "Päätetty"

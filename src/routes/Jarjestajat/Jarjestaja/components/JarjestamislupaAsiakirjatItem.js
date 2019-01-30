@@ -48,7 +48,7 @@ const Button = styled.div`
 
 const JarjestamislupaAsiakirjatItem = (props) => {
 
-  const { filename, diaarinumero, voimassaoloalkupvm, voimassaololoppupvm, paatospvm } = props.lupaHistoria;
+  const { diaarinumero, voimassaoloalkupvm, paatospvm } = props.lupaHistoria;
 
   const state = {
     draft: "Luonnos",
@@ -61,7 +61,7 @@ const JarjestamislupaAsiakirjatItem = (props) => {
     attachementConfidential: "Liite (salassa pidettävä)",
     supplement: "Täydennys",
     answer: "Vastaus kuulemispyyntöön",
-    cancelation: "Hakemuksen peruutu",
+    cancelation: "Hakemuksen peruutus",
     supplementRequest: "Täydennyspyyntö",
     auditionRequest: "Kuulemispyyntö",
     decision: "Päätös",
