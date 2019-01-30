@@ -7,9 +7,11 @@ import JarjestajaBasicInfo from './JarjestajaBasicInfo'
 import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
 import OmatTiedot from './OmatTiedot'
+import JarjestamislupaAsiat from './Jarjestamislupa-asiat'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
 import Loading from '../../../../modules/Loading'
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 // import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
 // import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
@@ -56,34 +58,60 @@ class Jarjestaja extends Component {
         }
 
         // Alanavigaation tabivalikon routet
-        const tabNavRoutes = [
+        var tabNavRoutes = [];
+
+        if (authenticated)
+          tabNavRoutes = [
             {
               path: `${match.url}/omattiedot`,
+              exact: true,
               text: 'Omat tiedot',
               authenticated: authenticated
             },
             {
-                path: `${match.url}/jarjestamislupa`,
-                text: 'Järjestämislupa',
-                authenticated: true
+              path: `${match.url}/jarjestamislupa`,
+              exact: true,
+              text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+              authenticated: true
             },
             {
+              path: `${match.url}`,
+              exact: true,
+              text: 'Päätökset',
+              text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
+              authenticated: true
+            },
+            {
+              path: `${match.url}/jarjestamislupa-asia`,
+              text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
+              authenticated: authenticated
+            },
+            {
+              path: `${match.url}/hakemukset-ja-paatokset`,
+              text: LUPA_TEKSTIT.MUUT.HAKEMUKSET_OTSIKKO.FI,
+              authenticated: authenticated
+            },
+            {
+              path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+              text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
+              authenticated: authenticated
+            }
+          ]
+          else
+            tabNavRoutes = [
+              {
+                path: `${match.url}/jarjestamislupa`,
+                text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+                authenticated: true
+              },
+              {
                 path: `${match.url}`,
                 exact: true,
                 text: 'Päätökset',
+                text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
                 authenticated: true
-            },
-            {
-                path: `${match.url}/hakemukset-ja-paatokset`,
-                text: 'Hakemukset',
-                authenticated: authenticated
-            },
-            {
-                path: `${match.url}/hakemukset-ja-paatokset/uusi`,
-                text: 'Uusi hakemus',
-                authenticated: authenticated
-            }
-        ]
+              }
+            ]
 
 
         return (
@@ -103,9 +131,10 @@ class Jarjestaja extends Component {
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
               { authenticated ? 
                 <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
-                  <Route path={`${match.path}`} render={(props) =>  <OmatTiedot {...props} />} />              
+                  <Route path={`${match.path}/omattiedot`} exact render={(props) =>  <OmatTiedot {...props} />} />              
                   <Route path={`${match.url}/jarjestamislupa`} exact render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
-                  <Route path={`${match.url}/paatokset`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                  <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                  <Route path={`${match.url}/jarjestamislupa-asia`} exact render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />
                   <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
                 </ContentContainer>
                :
