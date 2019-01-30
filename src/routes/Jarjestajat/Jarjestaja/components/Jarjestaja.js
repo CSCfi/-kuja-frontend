@@ -101,12 +101,19 @@ class Jarjestaja extends Component {
             </ContentContainer>
 
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
-              <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
-                {(authenticated) ? (<Route path={`${match.path}/omattiedot`} exact render={(props) =>  <OmatTiedot {...props} />} />) : null }                
-                <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
-                <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-                {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
-              </ContentContainer>
+              { authenticated ? 
+                <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                  <Route path={`${match.path}`} render={(props) =>  <OmatTiedot {...props} />} />              
+                  <Route path={`${match.url}/jarjestamislupa`} exact render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
+                  <Route path={`${match.url}/paatokset`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                  <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
+                </ContentContainer>
+               :
+                <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                  <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
+                  <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                </ContentContainer>
+              }
             </FullWidthWrapper>
           </div>
         )
