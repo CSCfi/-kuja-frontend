@@ -8,42 +8,8 @@ import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
-
-const HeaderTitle = styled.div`
-  font-family: 'Arial';
-  font-size: 16px;
-  color: black;
-  text-decoration: none;
-  padding: 14px 0px;
-  margin-left: 30px;
-  line-height: 18px;
-`
-
-const HeaderBarUpper = styled.div`
-  display: flex;
-  justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
-  margin: 0 auto;
-  width: 100%;
-  background: ${COLORS.WHITE};
-  max-height: 50px;
-
-`
-
-const HeaderBarLower = styled.div`
-  display: flex;
-  justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
-  margin: 0 auto;
-  padding-left:20px;
-  width: 100%;
-  background: ${COLORS.OIVA_MENU_BG_COLOR};
-  max-height: 50px;
-`
-
-const HeaderUpperRight = styled.div`
-  padding: 14px 20px;
-  line-height: 18px;
-
-`
+import Loading from '../../../../modules/Loading'
+import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/elements"
 
 class OmatTiedot extends Component {
 
@@ -57,52 +23,60 @@ class OmatTiedot extends Component {
   render() {
 
     console.log(this.props.user);
-    const { oppilaitos } = this.props.user
-    let ytunnus = undefined
+    const { oppilaitos } = this.props.user;
+    let ytunnus = undefined;
+    let postinumero = undefined;
+    let ppostinumero = undefined;
     if (oppilaitos) {
         if (oppilaitos.organisaatio) {
             ytunnus = oppilaitos.organisaatio.ytunnus
+            postinumero = oppilaitos.organisaatio.kayntiosoite.postinumeroUri.substr(6)
+            ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(6)
         }
     }
 
-    return (
-      <div>
-        <HeaderBar>
-          <HeaderBarUpper maxWidth="1280px" justifyContent="space-between">
-              <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
+    if (oppilaitos && oppilaitos.organisaatio)
+      return (
+        <InnerContentContainer>
+          <InnerContentWrapper>
+            <h2>Omat tiedot</h2>
+            <h3>Käyntiosoite</h3>
+            <p>
+              {oppilaitos.organisaatio.kayntiosoite.osoite},&nbsp;
+              {postinumero}&nbsp;
+              {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka}
+            </p>
+            <h3>Postiosoite</h3>
+            <p>
+              {oppilaitos.organisaatio.postiosoite.osoite},&nbsp;
+              {ppostinumero}&nbsp;
+              {oppilaitos.organisaatio.postiosoite.postitoimipaikka}
+            </p>
+            <h3>Yhteystiedot</h3>
+            <p>
+              <b>Puhelinnumero:</b> {oppilaitos.organisaatio.yhteystiedot[9].numero}
+            </p>
+            <p>
+              <b>Www-osoite:</b> <a href={oppilaitos.organisaatio.yhteystiedot[2].www} target="full">{oppilaitos.organisaatio.yhteystiedot[2].www}</a>
+            </p>
+            <p>
+              <b>Sähköpostiosoite:</b> {oppilaitos.organisaatio.yhteystiedot[6].email}
+            </p>
+            <br />
+            <p>Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.</p>
+          </InnerContentWrapper>
+        </InnerContentContainer>
+      ) 
+    else
+      return <Loading />
 
-              <HeaderUpperRight>
-                {(sessionStorage.getItem('role')!==ROLE_ESITTELIJA && sessionStorage.getItem('role')!==ROLE_KAYTTAJA)
-                ? (<LinkItemUpper to="/cas-auth" className="has-separator pull-right">Kirjaudu sisään</LinkItemUpper>) : null}
-
-                {(sessionStorage.getItem('role')===ROLE_ESITTELIJA || sessionStorage.getItem('role')===ROLE_KAYTTAJA)
-                ? (<LinkItemUpper to="/cas-logout" className="has-separator pull-right">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItemUpper>) : null}
-
-                <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
-                <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
-              </HeaderUpperRight>
-
-          </HeaderBarUpper>
-        </HeaderBar>
-        <HeaderBar>
-          <HeaderBarLower>
-            {/* TODO: localization! */}
-            <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>Etusivu</LinkItem>
-            <LinkItem to="/esi-ja-perusopetus">Esi- ja perusopetus</LinkItem>
-            <LinkItem to="/lukiokoulutus">Lukiokoulutus</LinkItem>
-            <LinkItem to="/jarjestajat">Ammatillinen koulutus</LinkItem>
-            <LinkItem to="/vapaa-sivistystyo">Vapaa sivistystyö</LinkItem>
-            <LinkItem to="/tilastot">Tilastot</LinkItem>
-
-             { ytunnus ? 
-            <LinkItem ytunnus={ytunnus} to={{pathname: "/jarjestajat/" + ytunnus + "/jarjestamislupa", ytunnus: ytunnus}} exact>Oma organisaatio</LinkItem>
-            : "" }
-
-            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/asiat" >Asiat</LinkItem>) : null}
-          </HeaderBarLower>
-        </HeaderBar>
-      </div>
-    )
+      // Käyntiosoite: Hallilantie 24 , 33820  TAMPERE
+      // Postiosoite: Ahlmanin koulu Hallilantie 24 , 33820  TAMPERE
+      // Puhelinnumero: 03 3399 2500
+      // Www-osoite: http://www.ahlman.fi
+      // Sähköpostiosoite: ahlman@ahlman.fi
+      // Sivulle myös info: Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.
+      
   }
 }
 

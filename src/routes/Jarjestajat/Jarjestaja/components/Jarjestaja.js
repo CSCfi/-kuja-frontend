@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
 import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
+import OmatTiedot from './OmatTiedot'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
 import Loading from '../../../../modules/Loading'
@@ -59,8 +60,7 @@ class Jarjestaja extends Component {
             {
               path: `${match.url}/omattiedot`,
               text: 'Omat tiedot',
-              authenticated: true
-              // authenticated: authenticated
+              authenticated: authenticated
             },
             {
                 path: `${match.url}/jarjestamislupa`,
@@ -102,6 +102,7 @@ class Jarjestaja extends Component {
 
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
               <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                {(authenticated) ? (<Route path={`${match.path}/omattiedot`} exact render={(props) =>  <OmatTiedot {...props} />} />) : null }                
                 <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
