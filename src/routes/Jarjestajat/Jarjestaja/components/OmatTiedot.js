@@ -6,6 +6,7 @@ import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItemUpper from 'modules/Header/components/LinkItemUpper'
 import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
+import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import { COLORS, FONT_STACK } from 'modules/styles'
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 import Loading from '../../../../modules/Loading'
@@ -39,44 +40,44 @@ class OmatTiedot extends Component {
       return (
         <InnerContentContainer>
           <InnerContentWrapper>
-            <h2>Omat tiedot</h2>
-            <h3>Käyntiosoite</h3>
+            <h2>{LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}</h2>
+            <h3>{LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}</h3>
             <p>
               {oppilaitos.organisaatio.kayntiosoite.osoite},&nbsp;
               {postinumero}&nbsp;
               {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka}
             </p>
-            <h3>Postiosoite</h3>
+            <h3>{LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}</h3>
             <p>
               {oppilaitos.organisaatio.postiosoite.osoite},&nbsp;
               {ppostinumero}&nbsp;
               {oppilaitos.organisaatio.postiosoite.postitoimipaikka}
             </p>
-            <h3>Yhteystiedot</h3>
+            <h3>{LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}</h3>
             <p>
-              <b>Puhelinnumero:</b> {oppilaitos.organisaatio.yhteystiedot[9].numero}
+              <b>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</b> {oppilaitos.organisaatio.yhteystiedot[9].numero}
             </p>
             <p>
-              <b>Www-osoite:</b> <a href={oppilaitos.organisaatio.yhteystiedot[2].www} target="full">{oppilaitos.organisaatio.yhteystiedot[2].www}</a>
+              <b>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</b> <a href={oppilaitos.organisaatio.yhteystiedot[2].www} target="full">{oppilaitos.organisaatio.yhteystiedot[2].www}</a>
             </p>
             <p>
-              <b>Sähköpostiosoite:</b> {oppilaitos.organisaatio.yhteystiedot[6].email}
+              <b>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</b> {oppilaitos.organisaatio.yhteystiedot[6].email}
             </p>
             <br />
-            <p>Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.</p>
+            <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
           </InnerContentWrapper>
         </InnerContentContainer>
       ) 
     else
       return <Loading />
 
-      // Käyntiosoite: Hallilantie 24 , 33820  TAMPERE
-      // Postiosoite: Ahlmanin koulu Hallilantie 24 , 33820  TAMPERE
-      // Puhelinnumero: 03 3399 2500
-      // Www-osoite: http://www.ahlman.fi
-      // Sähköpostiosoite: ahlman@ahlman.fi
-      // Sivulle myös info: Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.
-      
+    // Käyntiosoite: Hallilantie 24 , 33820  TAMPERE
+    // Postiosoite: Ahlmanin koulu Hallilantie 24 , 33820  TAMPERE
+    // Puhelinnumero: 03 3399 2500
+    // Www-osoite: http://www.ahlman.fi
+    // Sähköpostiosoite: ahlman@ahlman.fi
+    // Sivulle myös info: Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.
+    
   }
 }
 

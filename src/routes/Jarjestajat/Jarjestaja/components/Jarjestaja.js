@@ -65,7 +65,7 @@ class Jarjestaja extends Component {
             {
               path: `${match.url}/omattiedot`,
               exact: true,
-              text: 'Omat tiedot',
+              text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
               authenticated: authenticated
             },
             {
