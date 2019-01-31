@@ -15,7 +15,7 @@ import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 // import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
 
 import { COLORS } from "../../../../modules/styles"
-import { ContentContainer, FullWidthWrapper } from '../../../../modules/elements'
+import { ContentContainer, FullWidthWrapper, ContentWrapper } from '../../../../modules/elements'
 import {ROLE_KAYTTAJA} from "../../../../modules/constants";
 import _ from 'lodash'
 
@@ -84,7 +84,7 @@ class Jarjestaja extends Component {
 
 
         return (
-          <div>
+          <ContentWrapper>
             <ContentContainer>
               <BreadcrumbsItem to='/'>Etusivu</BreadcrumbsItem>
               <BreadcrumbsItem to='/jarjestajat'>Ammatillinen koulutus</BreadcrumbsItem>
@@ -104,7 +104,7 @@ class Jarjestaja extends Component {
                 {(authenticated) ? (<Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />) : null }
               </ContentContainer>
             </FullWidthWrapper>
-          </div>
+          </ContentWrapper>
         )
       } else if (lupa.isFetching || muutospyynnot.isFetching) {
         return <Loading />
