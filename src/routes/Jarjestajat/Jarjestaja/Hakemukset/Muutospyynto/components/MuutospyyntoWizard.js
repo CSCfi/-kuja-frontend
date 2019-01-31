@@ -54,8 +54,9 @@ const HideFooter = styled.div`
   width:100%;
   background-color: white;
   width: 100%;
-  z-index: 1;
+  z-index: 10;
   position: relative;
+  margin-bottom: -190px;
 `
 
 
