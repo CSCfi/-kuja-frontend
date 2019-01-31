@@ -24,7 +24,6 @@ class OmatTiedot extends Component {
 
   render() {
 
-    console.log(this.props.user);
     const { oppilaitos } = this.props.user;
     let ytunnus = undefined;
     let postinumero = undefined;
