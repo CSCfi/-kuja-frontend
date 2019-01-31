@@ -8,6 +8,7 @@ import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import { COLORS, FONT_STACK } from 'modules/styles'
+import { MdEmail } from 'react-icons/md';
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 import Loading from '../../../../modules/Loading'
 import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/elements"
@@ -28,11 +29,21 @@ class OmatTiedot extends Component {
     let ytunnus = undefined;
     let postinumero = undefined;
     let ppostinumero = undefined;
+    let numero = undefined;
+    let www = undefined;
+    let email = undefined;
     if (oppilaitos) {
         if (oppilaitos.organisaatio) {
             ytunnus = oppilaitos.organisaatio.ytunnus
-            postinumero = oppilaitos.organisaatio.kayntiosoite.postinumeroUri.substr(6)
-            ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(6)
+            if (oppilaitos.organisaatio.kayntiosoite.postinumeroUri) postinumero = oppilaitos.organisaatio.kayntiosoite.postinumeroUri.substr(6)
+            if (oppilaitos.organisaatio.postiosoite.postinumeroUri) ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(6)
+            // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
+            oppilaitos.organisaatio.yhteystiedot.map(item => {
+                if (item.www) www = item.www;
+                if (item.numero) numero = item.numero;
+                if (item.email) email = item.email;
+              }
+            )
         }
     }
 
@@ -43,26 +54,36 @@ class OmatTiedot extends Component {
             <h2>{LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}</h2>
             <h3>{LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}</h3>
             <p>
-              {oppilaitos.organisaatio.kayntiosoite.osoite},&nbsp;
-              {postinumero}&nbsp;
+              {oppilaitos.organisaatio.kayntiosoite.osoite}
+              {postinumero && <span>,&nbsp;</span> }
+              {postinumero}
+              {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka && <span>&nbsp;</span> }
               {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka}
             </p>
             <h3>{LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}</h3>
             <p>
-              {oppilaitos.organisaatio.postiosoite.osoite},&nbsp;
-              {ppostinumero}&nbsp;
+              {oppilaitos.organisaatio.postiosoite.osoite && oppilaitos.organisaatio.postiosoite.osoite}
+              {ppostinumero && <span>,&nbsp;</span> }
+              {ppostinumero && ppostinumero}&nbsp;
+              {oppilaitos.organisaatio.postiosoite.postitoimipaikka && <span>&nbsp;</span> }
               {oppilaitos.organisaatio.postiosoite.postitoimipaikka}
             </p>
             <h3>{LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}</h3>
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</b> {oppilaitos.organisaatio.yhteystiedot[9].numero}
-            </p>
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</b> <a href={oppilaitos.organisaatio.yhteystiedot[2].www} target="full">{oppilaitos.organisaatio.yhteystiedot[2].www}</a>
-            </p>
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</b> {oppilaitos.organisaatio.yhteystiedot[6].email}
-            </p>
+            { numero &&
+              <p>
+                <b>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</b> {numero}
+              </p>
+            }
+            { www &&
+              <p>
+                <b>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}:</b> <a href={www} target="full">{www}</a>
+              </p>
+            }
+            { email &&
+              <p>
+                <b>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</b> {email}
+              </p>
+            }
             <br />
             <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
           </InnerContentWrapper>
