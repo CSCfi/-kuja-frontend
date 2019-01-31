@@ -15,7 +15,6 @@ const FooterBar = styled.div`
   padding: 1rem;
   height:100px;
   bottom:0;
-  width:100%;
 `
 
 const FooterBarUpper = styled.div`
