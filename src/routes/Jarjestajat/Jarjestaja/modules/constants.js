@@ -205,7 +205,7 @@ export const LUPA_TEKSTIT = {
             SV: 'HAKEMUKSET_OTSIKKO'
         },
         UUSI_HAKEMUS_OTSIKKO: {
-            FI: 'Uuusi hakemukset',
+            FI: 'Uusi hakemus',
             SV: 'UUSI_HAKEMUS_OTSIKKO'
         },
     },

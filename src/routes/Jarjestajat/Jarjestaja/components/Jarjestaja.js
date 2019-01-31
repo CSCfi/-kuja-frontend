@@ -76,11 +76,6 @@ class Jarjestaja extends Component {
               authenticated: authenticated
             },
             {
-              path: `${match.url}/hakemukset-ja-paatokset`,
-              text: LUPA_TEKSTIT.MUUT.HAKEMUKSET_OTSIKKO.FI,
-              authenticated: authenticated
-            },
-            {
               path: `${match.url}/hakemukset-ja-paatokset/uusi`,
               text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
               authenticated: authenticated
@@ -107,7 +102,6 @@ class Jarjestaja extends Component {
                 <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
                 <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
                 {(authenticated) ? (<Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />) : null }
-                {(authenticated) ? (<Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />) : null }
               </ContentContainer>
             </FullWidthWrapper>
           </div>
