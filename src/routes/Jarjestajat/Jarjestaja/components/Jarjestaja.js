@@ -87,11 +87,6 @@ class Jarjestaja extends Component {
               authenticated: authenticated
             },
             {
-              path: `${match.url}/hakemukset-ja-paatokset`,
-              text: LUPA_TEKSTIT.MUUT.HAKEMUKSET_OTSIKKO.FI,
-              authenticated: authenticated
-            },
-            {
               path: `${match.url}/hakemukset-ja-paatokset/uusi`,
               text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
               authenticated: authenticated
