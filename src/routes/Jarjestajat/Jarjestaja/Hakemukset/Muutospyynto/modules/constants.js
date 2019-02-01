@@ -276,6 +276,10 @@ export const MUUTOS_WIZARD_TEKSTIT = {
         FI:"Kyllä",
         SV:"Ja"
       },
+      EI: {
+        FI:"Ei",
+        SV:"Nej"
+      },
       TARPEELLISUUS: {
         FI: "Tehtävän tarpeellisuus",
         SV: "På svenska"

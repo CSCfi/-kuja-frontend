@@ -42,6 +42,13 @@ const CheckboxWrapper= styled.div`
 const InputWrapper= styled.div`
   margin-left: 20px;
 `
+const Radio = styled.input`
+  float: left;
+`
+const RadioWrapper= styled.div`
+  margin-left: 14px;
+  margin-top: 10px;
+`
 
 class PerusteluKuljettajaPerus extends Component {
   constructor(props) {
@@ -55,21 +62,6 @@ class PerusteluKuljettajaPerus extends Component {
     const { tarpeellisuus, voimassaoleva, voimassaoleva_pvm, suunnitelma } = perusteluteksti_kuljetus_perus
     const { osaaminen ,toimipisteet, henkilot, kanta_linja_auto, kanta_kuorma_auto } = perusteluteksti_kuljetus_perus
     const { kanta_peravaunu, kanta_muut, valineet_asetus, valineet_muut } = perusteluteksti_kuljetus_perus
-
-       /*
-         "nimi": null,
-        "lupa": null,
-        "voimassa_kuorma_auto": null,
-        "voimassa_linja_auto": null,
-        "luokka_C" : null,
-        "luokka_CE": null,
-        "luokka_D": null,
-        "tutkinto_linja_auto": null,
-        "tutkinto_yhdistelma": null,
-        "tutkinto_puutavara": null,
-        "tutkinto_kuljetuspalvelu": null,
-        "tutkinto_kuljetusala": null
-        */
 
     return (
       <PerusteluKuljettajaPerusWrapper>
@@ -89,17 +81,36 @@ class PerusteluKuljettajaPerus extends Component {
             }}
           />
           <h4>2. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA.FI}</h4>
-          <CheckboxWrapper>
-            <Checkbox>
-            <input
-              type="checkbox"
-              id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}
+          <RadioWrapper>
+            <Radio
+              type="radio"
+              name={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}
+              checked={!voimassaoleva}
+              onChange={(e) => {
+                const i = getIndex(muutokset, koodiarvo)
+                let obj = fields.get(i)
+                obj.meta.perusteluteksti_kuljetus_perus.voimassaoleva = false
+                fields.remove(i)
+                fields.insert(i, obj)  
+              }}
+            />
+            <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.EI.FI}</ChkTitle></label>
+          </RadioWrapper>
+          <RadioWrapper>
+            <Radio
+              type="radio"
+              name={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}
               checked={voimassaoleva}
-              //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+              onChange={(e) => {
+                const i = getIndex(muutokset, koodiarvo)
+                let obj = fields.get(i)
+                obj.meta.perusteluteksti_kuljetus_perus.voimassaoleva = true
+                fields.remove(i)
+                fields.insert(i, obj)  
+              }}
             />
             <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.KYLLA.FI}</ChkTitle></label>
-            </Checkbox>
-          </CheckboxWrapper>
+          </RadioWrapper>
           <Tarkenne>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.VOIMASSAOLEVA.FI}</Tarkenne>
           <InputWrapper>
             <input
