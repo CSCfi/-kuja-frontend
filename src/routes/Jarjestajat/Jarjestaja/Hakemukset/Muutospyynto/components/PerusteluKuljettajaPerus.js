@@ -106,7 +106,7 @@ class PerusteluKuljettajaPerus extends Component {
                 let obj = fields.get(i)
                 obj.meta.perusteluteksti_kuljetus_perus.voimassaoleva = true
                 fields.remove(i)
-                fields.insert(i, obj)  
+                fields.insert(i, obj)
               }}
             />
             <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.KYLLA.FI}</ChkTitle></label>
@@ -114,7 +114,7 @@ class PerusteluKuljettajaPerus extends Component {
           <Tarkenne>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.VOIMASSAOLEVA.FI}</Tarkenne>
           <InputWrapper>
             <input
-            type="text"
+            type="date"
             defaultValue={voimassaoleva_pvm !== null ? voimassaoleva_pvm : undefined}
             onBlur={(e) => {
               const i = getIndex(muutokset, koodiarvo)
