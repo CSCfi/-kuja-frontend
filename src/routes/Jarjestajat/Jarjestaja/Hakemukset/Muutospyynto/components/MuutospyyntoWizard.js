@@ -21,11 +21,23 @@ import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import { getJarjestajaData } from "../modules/muutospyyntoUtil"
 
+import Draggable from 'react-draggable';
+
 Modal.setAppElement('#root')
 
 const CloseButton = styled.img`
   height: 20px;
   cursor: pointer;
+  padding: 4px;
+`
+
+const CloseHelpButton = styled.div`
+  height: 20px;
+  cursor: pointer;
+  padding: 4px;
+  &:hover {
+    background: ${COLORS.OIVA_TABLE_HOVER_COLOR};
+  }
 `
 
 const PhaseStyle = styled.div`
@@ -57,6 +69,29 @@ const HideFooter = styled.div`
   bottom: -100px;
   height: 100px;
 `
+const Help = styled.div`
+  background-color: #fffff0;
+  border: 1px solid #afafa0;
+  width: 20vw;
+  min-width: 300px;
+  position: fixed;
+  top: 120px;
+  min-height: 200px;
+  max-height: 90vh;
+  right: 20px;
+  z-index: 100;
+  opacity: 0.9;
+  cursor: move;
+  padding: 10px 20px;
+  overflow-y: auto;
+  overflow-x: wrap; 
+
+  h3 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+`
 
 const Phase = ({ number, text, activePage, disabled, handleClick }) => {
   const isActive = Number(number) === Number(activePage)
@@ -85,7 +120,8 @@ class MuutospyyntoWizard extends Component {
     this.state = {
       page: 1,
       visitedPages: [1],
-      isCloseModalOpen: false
+      isCloseModalOpen: false,
+      showHelp: true
     }
   }
 
@@ -220,8 +256,7 @@ class MuutospyyntoWizard extends Component {
               </Container>
             </WizardHeader>
 
-
-            <ContentContainer maxWidth="1085px" margin="50px auto">
+            <ContentContainer maxWidth="1085px" margin={this.state.showHelp ? "50px auto 50px 20vw": "50px auto"}>
               <WizardContent>
                 {page === 1 && (
                   <MuutospyyntoWizardMuutokset
@@ -269,6 +304,31 @@ class MuutospyyntoWizard extends Component {
               </WizardContent>
             </ContentContainer>
           </WizardWrapper>
+
+
+          <Draggable
+            handle=".handle"
+            defaultPosition={{x: 0, y: 0}}
+            position={null}
+            grid={[25, 25]}
+            scale={1}
+            onStart={this.handleStart}
+            onDrag={this.handleDrag}
+            onStop={this.handleStop}>
+
+            <Help className="handle" hidden={!this.state.showHelp}>
+              <h3
+                >Ohje 
+                <CloseHelpButton src={close} onClick={() => this.setState( {showHelp: false })}>
+                   &#10005;
+                </CloseHelpButton>
+              </h3>
+              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>
+              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>
+              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>            
+            </Help>
+
+          </Draggable>
 
           <HideFooter />
 
