@@ -6,6 +6,7 @@ import { Route } from 'react-router-dom'
 import JarjestajaBasicInfo from './JarjestajaBasicInfo'
 import ProfileMenu from './ProfileMenu'
 import JulkisetTiedot from './JulkisetTiedot'
+import OmatTiedot from './OmatTiedot'
 import JarjestamislupaAsiat from './Jarjestamislupa-asiat'
 import JarjestamislupaContainer from '../containers/JarjestamislupaContainer'
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer"
@@ -57,9 +58,19 @@ class Jarjestaja extends Component {
         }
 
         // Alanavigaation tabivalikon routet
-        const tabNavRoutes = [
+        var tabNavRoutes = [];
+
+        if (authenticated)
+          tabNavRoutes = [
+            {
+              path: `${match.url}/omattiedot`,
+              exact: true,
+              text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
+              authenticated: authenticated
+            },
             {
               path: `${match.url}/jarjestamislupa`,
+              exact: true,
               text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
               authenticated: true
             },
@@ -80,7 +91,22 @@ class Jarjestaja extends Component {
               text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
               authenticated: authenticated
             }
-        ]
+          ]
+          else
+            tabNavRoutes = [
+              {
+                path: `${match.url}/jarjestamislupa`,
+                text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+                authenticated: true
+              },
+              {
+                path: `${match.url}`,
+                exact: true,
+                text: 'Päätökset',
+                text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
+                authenticated: true
+              }
+            ]
 
 
         return (
@@ -98,11 +124,20 @@ class Jarjestaja extends Component {
             </ContentContainer>
 
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
-              <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
-                <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
-                <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
-                {(authenticated) ? (<Route path={`${match.url}/jarjestamislupa-asia`}  render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />) : null }
-              </ContentContainer>
+              { authenticated ? 
+                <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                  <Route path={`${match.path}/omattiedot`} exact render={(props) =>  <OmatTiedot {...props} />} />              
+                  <Route path={`${match.url}/jarjestamislupa`} exact render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
+                  <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                  <Route path={`${match.url}/jarjestamislupa-asia`} exact render={() => <JarjestamislupaAsiat lupadata={lupadata} /> } />
+                  <Route path={`${match.path}/hakemukset-ja-paatokset`} exact render={(props) =>  <HakemuksetJaPaatoksetContainer {...props} />} />
+                </ContentContainer>
+               :
+                <ContentContainer padding={'40px 15px 80px'} margin={'28px auto 0'}>
+                  <Route path={`${match.url}/jarjestamislupa`}  render={() => <JarjestamislupaContainer ytunnus={match.params.ytunnus} /> } />
+                  <Route path={`${match.url}`} exact render={() => <JulkisetTiedot lupadata={lupadata} />} />
+                </ContentContainer>
+              }
             </FullWidthWrapper>
           </div>
         )
