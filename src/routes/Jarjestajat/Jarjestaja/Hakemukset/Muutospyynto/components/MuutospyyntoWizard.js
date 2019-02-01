@@ -21,23 +21,11 @@ import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import { getJarjestajaData } from "../modules/muutospyyntoUtil"
 
-import Draggable from 'react-draggable';
-
 Modal.setAppElement('#root')
 
 const CloseButton = styled.img`
   height: 20px;
   cursor: pointer;
-  padding: 4px;
-`
-
-const CloseHelpButton = styled.div`
-  height: 20px;
-  cursor: pointer;
-  padding: 4px;
-  &:hover {
-    background: ${COLORS.OIVA_TABLE_HOVER_COLOR};
-  }
 `
 
 const PhaseStyle = styled.div`
@@ -304,31 +292,6 @@ class MuutospyyntoWizard extends Component {
               </WizardContent>
             </ContentContainer>
           </WizardWrapper>
-
-
-          <Draggable
-            handle=".handle"
-            defaultPosition={{x: 0, y: 0}}
-            position={null}
-            grid={[25, 25]}
-            scale={1}
-            onStart={this.handleStart}
-            onDrag={this.handleDrag}
-            onStop={this.handleStop}>
-
-            <Help className="handle" hidden={!this.state.showHelp}>
-              <h3
-                >Ohje 
-                <CloseHelpButton src={close} onClick={() => this.setState( {showHelp: false })}>
-                   &#10005;
-                </CloseHelpButton>
-              </h3>
-              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>
-              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>
-              <p>Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.</p>            
-            </Help>
-
-          </Draggable>
 
           <HideFooter />
 
