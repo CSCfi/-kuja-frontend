@@ -1,8 +1,15 @@
+import moment from 'moment'
 import React, { Component } from 'react'
+import DatePicker from 'react-datepicker'
 import styled from 'styled-components'
+
+import "react-datepicker/dist/react-datepicker.css"
+
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { getIndex } from "../modules/muutosUtil"
+
 import { Checkbox } from './MuutospyyntoWizardComponents'
+
 const PerusteluKuljettajaPerusWrapper = styled.div`
   margin-bottom: 20px;
 `
@@ -113,17 +120,16 @@ class PerusteluKuljettajaPerus extends Component {
           </RadioWrapper>
           <Tarkenne>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.VOIMASSAOLEVA.FI}</Tarkenne>
           <InputWrapper>
-            <input
-            type="date"
-            defaultValue={voimassaoleva_pvm !== null ? voimassaoleva_pvm : undefined}
-            onBlur={(e) => {
-              const i = getIndex(muutokset, koodiarvo)
-              let obj = fields.get(i)
-              obj.meta.perusteluteksti_kuljetus_perus.voimassaoleva_pvm = e.target.value
-              fields.remove(i)
-              fields.insert(i, obj)
-            }}
-          />
+            <DatePicker
+              selected={voimassaoleva_pvm !== null ? moment(voimassaoleva_pvm, "DD.MM.YYYY") : undefined}
+              onChange={(date) => {
+                const i = getIndex(muutokset, koodiarvo)
+                let obj = fields.get(i)
+                obj.meta.perusteluteksti_kuljetus_perus.voimassaoleva_pvm = date.format("DD.MM.YYYY")
+                fields.remove(i)
+                fields.insert(i, obj)
+              }}
+            />
           </InputWrapper>
           <h4>3. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.SUUNNITELMA.FI}</h4>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.SUUNNITELMA.FI}</Instruction>
