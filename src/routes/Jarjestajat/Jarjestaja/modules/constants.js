@@ -346,6 +346,10 @@ export const LUPA_TEKSTIT = {
             FI: 'Postiosoite',
             SV: 'POSTIOSOITE'
         },
+        KOTIPAIKKA: {
+            FI: 'Kotipaikka',
+            SV: 'KOTIPAIKKA'
+        },
         YHTEYSTIEDOT: {
             FI: 'Yhteystiedot',
             SV: 'YHTEYSTIEDOT'
