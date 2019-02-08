@@ -57,14 +57,26 @@ const InputWrapper= styled.div`
 const Radio = styled.input`
   float: left;
 `
-const RadioWrapper= styled.div`
+const RadioWrapper = styled.div`
   margin-left: 14px;
   margin-top: 10px;
 `
 
+const LisaaButton = styled.button`
+  font-size: 14px;
+  margin: 5px 0 5px 20px;
+`
+
+const Opettaja = styled.div`
+  border-left: 1px solid #DFDFDF;
+  border-top: 1px solid #DFDFDF;
+  margin: 5px 0 5px 20px;
+  padding: 5px;
+`
+
 class PerusteluKuljettajaPerus extends Component {
 
-  // Luo tiettyn FieldArrayn sisään valintaruutu-Fieldin
+  // Luo FieldArrayn sisään valintaruutu-Fieldin
   // props = {'id': string, 'title': string}
   // fieldarray = fieldarrayn nimi, string
   // index = fieldarrayn käsiteltävä indeksi, int
@@ -302,17 +314,19 @@ class PerusteluKuljettajaPerus extends Component {
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.OPETTAJA_TARKENNUS.FI}</Instruction>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.OPETTAJA.FI}</Instruction>
 
-          {/* FieldArrayn tallennus tutkinnotjakoulutukset-rakenteen sisään tässä kohtaa tekee lomakkeesta mahdottoman hitaan. 
-          Tallenna erilliseen muuttujaan ja siirrä oikeaan paikkaan vasta tallennuksen yhteydessä. */} 
-          <FieldArray name={`perusteluteksti_kuljetus_perus.henkilot`} component={({fields}) => 
+          {/* FieldArrayn tallennus tutkinnotjakoulutukset-rakenteen sisään tässä kohtaa tekee lomakkeesta mahdottoman hitaan.
+          Tallenna erilliseen muuttujaan ja siirrä oikeaan paikkaan vasta tallennuksen yhteydessä. */}
+          <FieldArray name={`perusteluteksti_kuljetus_perus.henkilot`} component={({fields}) =>
             <div>
-              <button type="button" onClick={() => fields.push(meta_kuljettaja_perus_henkilo)}>
+              <LisaaButton type="button" onClick={() => fields.push(meta_kuljettaja_perus_henkilo)}>
                 {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LISAA_HENKILO.FI}
-              </button>
-              {fields.map((opettaja, index) => 
-                <div key={index}>
+              </LisaaButton>
+              {fields.map((opettaja, index) =>
+                <Opettaja key={index}>
                   <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.HENKILO.FI}</Instruction>
-                  <Field name={`${opettaja}.nimi`} type="text" component="input" />
+                  <InputWrapper>
+                    <Field name={`${opettaja}.nimi`} type="text" component="input" />
+                  </InputWrapper>
 
                   <CheckboxWrapper>
                     {_.map([
@@ -347,7 +361,7 @@ class PerusteluKuljettajaPerus extends Component {
                       props, 'henkilot', index, this.renderCheckbox
                     ))}
                   </CheckboxWrapper>
-                </div>
+                </Opettaja>
               )}
             </div>
           } />
