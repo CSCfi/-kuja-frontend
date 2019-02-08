@@ -109,7 +109,7 @@ class PerusteluKuljettajaPerus extends Component {
     const { muutokset, fields, koodiarvo, perusteluteksti_kuljetus_perus } = this.props
     const { tarpeellisuus, voimassaoleva, voimassaoleva_pvm, suunnitelma } = perusteluteksti_kuljetus_perus
     const { toimipisteet, kanta_linja_auto, kanta_kuorma_auto } = perusteluteksti_kuljetus_perus
-    const { kanta_peravaunu, kanta_muut, valineet_asetus, valineet_muut } = perusteluteksti_kuljetus_perus
+    const { kanta_peravaunu, valineet_asetus, valineet_muut } = perusteluteksti_kuljetus_perus
 
     return (
       <PerusteluKuljettajaPerusWrapper>
@@ -334,7 +334,7 @@ class PerusteluKuljettajaPerus extends Component {
                       {'id': 'voimassa_kuorma_auto', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KUORMA_AUTO.FI},
                       {'id': 'voimassa_linja_auto', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LINJA_AUTO.FI}
                     ], props => this.createCheckboxField(
-                      props, 'henkilot', index, this.renderCheckbox
+                      props, 'perusteluteksti_kuljetus_perus.henkilot', index, this.renderCheckbox
                     ))}
                   </CheckboxWrapper>
 
@@ -345,7 +345,7 @@ class PerusteluKuljettajaPerus extends Component {
                       {'id': 'kokemus_ce', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_CE.FI},
                       {'id': 'kokemus_d', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_D.FI}
                     ], props => this.createCheckboxField(
-                      props, 'henkilot', index, this.renderCheckbox
+                      props, 'perusteluteksti_kuljetus_perus.henkilot', index, this.renderCheckbox
                     ))}
                   </CheckboxWrapper>
 
@@ -358,7 +358,7 @@ class PerusteluKuljettajaPerus extends Component {
                       {'id': 'tutkinto_kuljetuspalvelu', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSPALVELU.FI},
                       {'id': 'tutkinto_kuljetusala', 'title': MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}
                     ], props => this.createCheckboxField(
-                      props, 'henkilot', index, this.renderCheckbox
+                      props, 'perusteluteksti_kuljetus_perus.henkilot', index, this.renderCheckbox
                     ))}
                   </CheckboxWrapper>
                 </Opettaja>
