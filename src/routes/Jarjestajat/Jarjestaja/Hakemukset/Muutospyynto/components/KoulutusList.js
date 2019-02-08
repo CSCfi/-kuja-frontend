@@ -7,6 +7,7 @@ import {
   Heading,
   Arrow,
   Checkbox,
+  Radiobutton,
   Span,
   SpanMuutos,
   KoulutusalaListWrapper,
@@ -16,14 +17,14 @@ import {
   Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange } from "../modules/koulutusUtil"
+import { handleCheckboxChange, handleRadioChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 class KoulutusList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isHidden: true
+      isHidden: true,
     }
   }
 
@@ -133,15 +134,28 @@ class KoulutusList extends Component {
 
             return (
               <TutkintoWrapper key={i} className={customClassName}>
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    id={identifier}
-                    checked={isChecked}
-                    onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
-                  />
-                  <label htmlFor={identifier}></label>
-                </Checkbox>
+                { koodistoUri === 'oivatyovoimakoulutus' ?
+                  <Radiobutton>
+                    <input
+                      type="checkbox"
+                      // name="oivatyovoimakoulutus"
+                      id={identifier}
+                      checked={isChecked}
+                      onChange={(e) => { handleRadioChange(e, editValues, fields, isInLupa, koulutus) }}
+                    />
+                    <label htmlFor={identifier}></label>
+                  </Radiobutton>
+                :
+                  <Checkbox>
+                    <input
+                      type="checkbox"
+                      id={identifier}
+                      checked={isChecked}
+                      onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                    />
+                    <label htmlFor={identifier}></label>
+                  </Checkbox> 
+                }
                 {(koodistoUri === 'kuljettajakoulutus' || koodistoUri === 'oivatyovoimakoulutus') ? <Kuvaus>{kuvaus}</Kuvaus> : <Nimi>{nimi}</Nimi>}
               </TutkintoWrapper>
             )

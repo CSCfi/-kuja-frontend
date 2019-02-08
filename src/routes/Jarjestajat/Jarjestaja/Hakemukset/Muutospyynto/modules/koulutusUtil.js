@@ -344,6 +344,118 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   }
 }
 
+export function handleRadioChange(event, editValue, fields, isInLupa, currentObj) {
+  const { koodiArvo, metadata, koodisto } = currentObj
+  let { kohde, maaraystyyppi } = currentObj
+  const { koodistoUri } = koodisto
+  const nimi = parseLocalizedField(metadata, 'FI', 'nimi')
+  const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus')
+
+  const { checked } = event.target;
+  console.log(checked);
+
+  if (!kohde) {
+    console.log('koulutusUtil.handleCheckboxChange kohdetta ei löytynyt', currentObj)
+    if (koodistoUri === KOODISTOT.KOULUTUS) {
+      kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      kohde = getKohdeByTunniste(KOHTEET.KIELI)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      kohde = getKohdeByTunniste(KOHTEET.MUUT)
+    }
+  }
+
+  if (!maaraystyyppi) {
+    console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
+    if (koodistoUri === KOODISTOT.KOULUTUS) {
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
+    } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
+      maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+    } else if (koodistoUri === KOODISTOT.OIVA_MUUT) {
+      if (koodiArvo === "3") {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
+      } else {
+        maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
+      }
+    }
+  }
+
+  if (checked) {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> poistetaan se formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    } else {
+      // Poistetaan aiemmat luvasta --> vain yksi
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+      _.forEach(editValue, (value, idx) => {
+        fields.remove(idx)
+      })
+      // Tutkinto ei ollut luvassa --> lisätään se formiin
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.ADDITION,
+        meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
+          perusteluteksti: null,
+          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+        },
+        muutosperustelukoodiarvo: null
+      })
+    }
+  } else {
+    if (isInLupa) {
+      // Tutkinto oli luvassa --> lisätään muutos formiin
+      fields.push({
+        koodiarvo: koodiArvo,
+        koodisto: koodistoUri,
+        nimi,
+        kuvaus,
+        isInLupa,
+        kohde,
+        maaraystyyppi,
+        type: MUUTOS_TYPES.REMOVAL,
+        meta: {
+          koulutusala: currentObj.koulutusalaKoodiArvo,
+          koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
+          perusteluteksti: null,
+          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+        },
+        muutosperustelukoodiarvo: null
+      })
+    } else {
+      // Tutkinto ei ollut luvassa --> poistetaan muutos formista
+      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
+      if (i !== undefined) {
+        fields.remove(i)
+      }
+    }
+  }
+}
+
+
 export function handleOsaamislaCheckboxChange(event, editValue, fields, isInLupa, currentObj, parentId) {
   const { koodiArvo, metadata, koodisto } = currentObj
   const { koodistoUri } = koodisto
