@@ -371,7 +371,7 @@ class PerusteluKuljettajaPerus extends Component {
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA_LINJA_AUTO.FI}</Instruction>
           <InputWrapper>
             <input
-              type="text"
+              type="number"
               defaultValue={kanta_linja_auto !== null ? kanta_linja_auto : undefined}
               onBlur={(e) => {
                 const i = getIndex(muutokset, koodiarvo)
@@ -385,7 +385,7 @@ class PerusteluKuljettajaPerus extends Component {
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA_KUORMA_AUTO.FI}</Instruction>
           <InputWrapper>
             <input
-              type="text"
+              type="number"
               defaultValue={kanta_kuorma_auto !== null ? kanta_kuorma_auto : undefined}
               onBlur={(e) => {
                 const i = getIndex(muutokset, koodiarvo)
@@ -399,26 +399,12 @@ class PerusteluKuljettajaPerus extends Component {
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA_PERAVAUNU.FI}</Instruction>
           <InputWrapper>
             <input
-              type="text"
+              type="number"
               defaultValue={kanta_peravaunu !== null ? kanta_peravaunu : undefined}
               onBlur={(e) => {
                 const i = getIndex(muutokset, koodiarvo)
                 let obj = fields.get(i)
                 obj.meta.perusteluteksti_kuljetus_perus.kanta_peravaunu = e.target.value
-                fields.remove(i)
-                fields.insert(i, obj)
-              }}
-            />
-          </InputWrapper>
-          <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA_MUUT.FI}</Instruction>
-          <InputWrapper>
-            <input
-              type="text"
-              defaultValue={kanta_muut !== null ? kanta_muut : undefined}
-              onBlur={(e) => {
-                const i = getIndex(muutokset, koodiarvo)
-                let obj = fields.get(i)
-                obj.meta.perusteluteksti_kuljetus_perus.kanta_muut = e.target.value
                 fields.remove(i)
                 fields.insert(i, obj)
               }}
