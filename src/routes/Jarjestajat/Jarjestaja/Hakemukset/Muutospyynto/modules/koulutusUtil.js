@@ -388,13 +388,33 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
         fields.remove(i)
       }
     } else {
-      // Poistetaan aiemmat luvasta --> vain yksi
-      const i = getEditIndex(editValue, koodiArvo, koodistoUri)
-      if (i !== undefined) {
-        fields.remove(i)
-      }
-      _.forEach(editValue, (value, idx) => {
-        fields.remove(idx)
+      // Poistetaan aiemmat luvasta --> vain yksi kerrallaan sallittu
+      _.forEach(fields, (value, idx) => {
+        if (fields.get(idx).koodiarvo === koodiArvo && fields.get(idx).koodisto === koodistoUri) {
+          fields.push({
+            koodiarvo: koodiArvo,
+            koodisto: koodistoUri,
+            nimi,
+            kuvaus,
+            isInLupa,
+            kohde,
+            maaraystyyppi,
+            type: MUUTOS_TYPES.REMOVAL,
+            meta: {
+              koulutusala: currentObj.koulutusalaKoodiArvo,
+              koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
+              perusteluteksti: null,
+              ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+              ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
+              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
+              ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+            },
+            muutosperustelukoodiarvo: null
+          })
+        } else
+          fields.remove(idx);
       })
       // Tutkinto ei ollut luvassa --> lisätään se formiin
       fields.push({
@@ -418,7 +438,8 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
           ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
         },
         muutosperustelukoodiarvo: null
-      })
+      });
+      console.log(fields);
     }
   } else {
     if (isInLupa) {

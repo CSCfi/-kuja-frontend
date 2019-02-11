@@ -66,6 +66,18 @@ class KoulutusList extends Component {
     return i
   }
 
+  handleRadioChange = (e, editValues, fields, isInLupa, koulutus) => {
+
+    const { koulutukset } = this.props;
+
+    _.map(koulutukset, (koulutus, i) => {
+      koulutus.koodistoUri === 'oivatyovoimakoulutus' ? console.log("hep!") : null;
+    });
+
+    handleRadioChange(e, editValues, fields, isInLupa, koulutus)
+
+  }
+
   render() {
     const { nimi, koulutukset, muutMaaraykset, editValues, koodisto } = this.props
     let { fields } = this.props
@@ -110,7 +122,7 @@ class KoulutusList extends Component {
             let customClassName = ""
 
             muutMaaraykset.forEach(muuMaarays => {
-              if (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo) {
+              if (!isRemoved && (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo)) {
                 isInLupa = true
               }
             })
@@ -128,7 +140,7 @@ class KoulutusList extends Component {
             isAdded ? customClassName = "is-added" : null
             isRemoved ? customClassName = "is-removed" : null
 
-            if ((isInLupa && !isRemoved) || isAdded) {
+            if ((isInLupa && !isRemoved && fields) || isAdded) {
               isChecked = true
             }
 
@@ -140,8 +152,8 @@ class KoulutusList extends Component {
                       type="checkbox"
                       // name="oivatyovoimakoulutus"
                       id={identifier}
-                      checked={isChecked}
-                      onChange={(e) => { handleRadioChange(e, editValues, fields, isInLupa, koulutus) }}
+                      checked={ isChecked }
+                      onChange={(e) => { this.handleRadioChange(e, editValues, fields, isInLupa, koulutus) }}
                     />
                     <label htmlFor={identifier}></label>
                   </Radiobutton>
