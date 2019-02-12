@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import { COLORS, MEDIA_QUERIES, TRANSITIONS } from "../../../../../../modules/styles"
 import arrowDown from 'static/images/arrow-down.svg'
 
+export const Area = styled.div`
+  margin: 15px 0;
+`
+
 export const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
