@@ -199,8 +199,177 @@ export const LUPA_TEKSTIT = {
         EI_MAARAYKSIA: {
             FI: 'Koulutuksen järjestäjälle ei tässä järjestämisluvassa määrätä muita oikeuksia, velvollisuuksia, ehtoja tai tehtäviä.',
             SV: 'I detta anordnartillstånd anges inga andra rättigheter, skyldigheter, villkor eller uppgifter för utbildningsanordnaren.'
+        },
+        HAKEMUKSET_OTSIKKO: {
+            FI: 'Hakemukset',
+            SV: 'HAKEMUKSET_OTSIKKO'
+        },
+        UUSI_HAKEMUS_OTSIKKO: {
+            FI: 'Uusi hakemus',
+            SV: 'UUSI_HAKEMUS_OTSIKKO'
+        },
+    },
+    LUPA: {
+        OTSIKKO: {
+            FI: 'Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa',
+            SV: 'OTSIKKO'
+        },
+        OTSIKKO_LYHYT: {
+            FI: 'Järjestämislupa',
+            SV: 'OTSIKKO_LYHYT'
+        },
+    },
+    PAATOKSET: {
+        OTSIKKO: {
+            FI: 'Päätökset',
+            SV: 'PAATOKSET'
+        },
+        VIIMEISIN: {
+            FI: 'Viimeisin päätös',
+            SV: 'VIIMEISIN'
+        },
+        HISTORIATIEDOT: {
+            FI: 'Historiatiedot',
+            SV: 'HISTORIATIEDOT'
+        },
+        HISTORIA_TAULUKKO: {
+            DIANAARINUMERO: {
+                FI: 'DIanaarinumero',
+                SV: 'DIANAARINUMERO'
+            },
+            PAATOSPVM: {
+                FI: 'Päätöspvm',
+                SV: 'PAATOSPVM'
+            },
+            VOIMAANTULOPVM: {
+                FI: 'Voimaantulopvm',
+                SV: 'VOIMAANTULOPVM'
+            },
+            PAATTAMISPVM: {
+                FI: 'Päättämispvm',
+                SV: 'PAATTAMISPVM'
+            },
+            KUMOTTU: {
+                FI: 'Kumotttu',
+                SV: 'KUMOTTU'
+            },
+        },
+        VIRHE: {
+            FI: 'Lupahistoriaa ladattaessa tapahtui virhe',
+            SV: 'VIRHE'
         }
-
+    },
+    ASIAT: {
+        OTSIKKO: {
+            FI: 'Ammatillisen koulutuksen järjestämislupa-asiat',
+            SV: 'OTSIKKO'
+        },
+        OTSIKKO_LYHYT: {
+            FI: 'Järjestämislupa-asiat',
+            SV: 'OTSIKKO_LYHYT'
+        },
+        UUSI_HAKEMUS: {
+            FI: 'Uusi hakemus',
+            SV: 'UUSI_HAKEMUS'
+        },
+        JARJESTAMISLUVAN_PERUUTUS: {
+            FI: 'Järjestämisluvan peruutus',
+            SV: 'JARJESTAMISLUVAN_PERUUTUS'
+        },     
+        ASIAT_TAULUKKO: {
+            DNRO: {
+                FI: 'OKM:n Dnro',
+                SV: 'DNRO'
+            },
+            ASIA: {
+                FI: 'Asia',
+                SV: 'ASIA'
+            },
+            TILA: {
+                FI: 'Asian tila',
+                SV: 'TILA'
+            },
+            MAARAAIKA: {
+                FI: 'Määräaika',
+                SV: 'MAARAAIKA'
+            },
+            PAATETTY: {
+                FI: 'Päätetty',
+                SV: 'PAATETTY'
+            }
+        },
+        ASIATKIRJAT_TAULUKKO: {
+            ASIAKIRJA: {
+                FI: 'Asiakirja',
+                SV: 'ASIAKIRJA'
+            },
+            TILA: {
+                FI: 'Tila',
+                SV: 'TILA'
+            },
+            LAATIJA: {
+                FI: 'Laatija',
+                SV: 'LAATIJA'
+            },
+            VALMIS: {
+                FI: 'Valmis',
+                SV: 'VALMIS'
+            },
+        },
+        POISTA_TAYDENNYS: {
+            FI: 'Poista täydennys',
+            SV: 'POISTA_TAYDENNYS'
+        },
+        PERUUTA_HAKEMUS: {
+            FI: 'Peruuta hakemus',
+            SV: 'PERUUTA_HAKEMUS'
+        },
+        PALAA: {
+            FI: 'Palaa järjestämislupa-asiat listaukseen',
+            SV: 'PALAA'
+        },
+        ASIAKIRJAT_OTSIKKO: {
+            FI: 'Järjestämislupa-asian asiakirjat',
+            SV: 'ASIAKIRJAT_OTSIKKO'
+        }
+    },   
+    OMATTIEDOT: {
+        OTSIKKO: {
+            FI: 'Omat tiedot',
+            SV: 'OTSIKKO'
+        },
+        KAYNTIOSOITE: {
+            FI: 'Käyntiosoite',
+            SV: 'KAYNTIOSOITE'
+        },
+        POSTIOSOITE: {
+            FI: 'Postiosoite',
+            SV: 'POSTIOSOITE'
+        },
+        KOTIPAIKKA: {
+            FI: 'Kotipaikka',
+            SV: 'KOTIPAIKKA'
+        },
+        YHTEYSTIEDOT: {
+            FI: 'Yhteystiedot',
+            SV: 'YHTEYSTIEDOT'
+        },
+        PUHELINNUMERO: {
+            FI: 'Puhelinnumero',
+            SV: 'PUHELINNUMERO'
+        },
+        WWWW: {
+            FI: 'Www-osoite',
+            SV: 'WWW'
+        },
+        EMAIL: {
+            FI: 'Sähköpostiosoite',
+            SV: 'EMAIL'
+        },
+        INFO: {
+            FI: 'Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.',
+            SV: 'INFO'
+        }
     }
 }
 

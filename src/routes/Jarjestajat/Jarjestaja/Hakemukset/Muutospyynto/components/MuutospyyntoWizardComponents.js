@@ -10,10 +10,11 @@ export const Area = styled.div`
 export const WizardBackground = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   top: 0;
   left: 0;
+  flex: 1;
 `
 
 export const WizardTop = styled.div`
@@ -58,8 +59,9 @@ export const WizardContent = styled.div`
 `
 
 export const WizardWrapper = styled.div`
-  position: relative;
-  top: -45px;
+  // position: relative;
+  maring-top: -45px;
+  flex: 1;
 `
 
 export const Container = styled.div`
