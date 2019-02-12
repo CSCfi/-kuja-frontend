@@ -1,6 +1,6 @@
 export const meta_kuljettaja_jatko = {
   "tarpeellisuus": null,
-  "voimassaoleva": null,
+  "voimassaoleva": "false",
   "voimassaoleva_pvm": null,
   "suunnitelma": null,
   "osaaminen":null,
@@ -29,7 +29,7 @@ export const meta_kuljettaja_jatko = {
 
 export const meta_kuljettaja_perus = {
   "tarpeellisuus": null,
-  "voimassaoleva": null,
+  "voimassaoleva": "false",
   "voimassaoleva_pvm": null,
   "suunnitelma": null,
   "toimipisteet": {

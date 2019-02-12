@@ -9,16 +9,12 @@ import { meta_kuljettaja_jatko_henkilo } from "../modules/lisaperusteluUtil"
 import { getIndex } from "../modules/muutosUtil"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
-import { Checkbox } from './MuutospyyntoWizardComponents'
-
+import { Area, Checkbox } from './MuutospyyntoWizardComponents'
 
 const PerusteluKuljettajaJatkoWrapper = styled.div`
   margin-bottom: 20px;
 `
 
-const Area = styled.div`
-  margin: 15px 0;
-`
 const Label = styled.label`
   flex: 1;
   font-size: 14px;
@@ -53,9 +49,6 @@ const InputWrapper= styled.div`
   margin-left: 20px;
 `
 
-const Radio = styled.input`
-  float: left;
-`
 const RadioWrapper = styled.div`
   margin-left: 14px;
   margin-top: 10px;
@@ -110,6 +103,8 @@ class PerusteluKuljettajaJatko extends Component {
     const { osaaminen ,toimipisteet, kanta_linja_auto, kanta_kuorma_auto } = perusteluteksti_kuljetus_jatko
     const { kanta_peravaunu, valineet_asetus, valineet_muut } = perusteluteksti_kuljetus_jatko
 
+    const i = getIndex(muutokset, koodiarvo)
+
     return (
       <PerusteluKuljettajaJatkoWrapper>
         <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.JATKO.FI}</h4>
@@ -129,33 +124,21 @@ class PerusteluKuljettajaJatko extends Component {
           />
           <h4>2. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA.FI}</h4>
           <RadioWrapper>
-            <Radio
+            <Field
+              name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
+              component="input"
               type="radio"
-              name={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}
-              checked={!voimassaoleva}
-              onChange={(e) => {
-                const i = getIndex(muutokset, koodiarvo)
-                let obj = fields.get(i)
-                obj.meta.perusteluteksti_kuljetus_jatko.voimassaoleva = false
-                fields.remove(i)
-                fields.insert(i, obj)
-              }}
-            />
+              value="false"
+              />
             <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.EI.FI}</ChkTitle></label>
           </RadioWrapper>
           <RadioWrapper>
-            <Radio
+            <Field
+              name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
+              component="input"
               type="radio"
-              name={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}
-              checked={voimassaoleva}
-              onChange={(e) => {
-                const i = getIndex(muutokset, koodiarvo)
-                let obj = fields.get(i)
-                obj.meta.perusteluteksti_kuljetus_jatko.voimassaoleva = true
-                fields.remove(i)
-                fields.insert(i, obj)
-              }}
-            />
+              value="true"
+              />
             <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.KYLLA.FI}</ChkTitle></label>
           </RadioWrapper>
           <Tarkenne>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.VOIMASSAOLEVA.FI}</Tarkenne>
@@ -218,7 +201,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LUPA.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LUPA.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LUPA.FI}</ChkTitle></label>
@@ -227,7 +210,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KUORMA_AUTO.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KUORMA_AUTO.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KUORMA_AUTO.FI}</ChkTitle></label>
@@ -236,7 +219,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LINJA_AUTO.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LINJA_AUTO.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LINJA_AUTO.FI}</ChkTitle></label>
@@ -248,7 +231,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_C.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_C.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_C.FI}</ChkTitle></label>
@@ -257,7 +240,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_CE.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_CE.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_CE.FI}</ChkTitle></label>
@@ -266,7 +249,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_D.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_D.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KOKEMUS_D.FI}</ChkTitle></label>
@@ -278,7 +261,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_LINJA_AUTO.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_LINJA_AUTO.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_LINJA_AUTO.FI}</ChkTitle></label>
@@ -287,7 +270,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_YHDISTELMA.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_YHDISTELMA.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_YHDISTELMA.FI}</ChkTitle></label>
@@ -296,7 +279,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_PUUTAVARA.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_PUUTAVARA.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_PUUTAVARA.FI}</ChkTitle></label>
@@ -305,7 +288,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSPALVELU.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSPALVELU.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSPALVELU.FI}</ChkTitle></label>
@@ -314,7 +297,7 @@ class PerusteluKuljettajaJatko extends Component {
               <input
                 type="checkbox"
                 id={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}
-                checked={voimassaoleva}
+                checked={false}
                 //onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
               />
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}</ChkTitle></label>
