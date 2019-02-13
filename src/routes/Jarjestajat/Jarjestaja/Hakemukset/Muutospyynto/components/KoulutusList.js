@@ -17,8 +17,9 @@ import {
   Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange, handleRadioChange } from "../modules/koulutusUtil"
+import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { HAKEMUS_TEKSTIT } from "../../../modules/constants"
 
 class KoulutusList extends Component {
   constructor(props) {
@@ -66,18 +67,6 @@ class KoulutusList extends Component {
     return i
   }
 
-  handleRadioChange = (e, editValues, fields, isInLupa, koulutus) => {
-
-    const { koulutukset } = this.props;
-
-    _.map(koulutukset, (koulutus, i) => {
-      koulutus.koodistoUri === 'oivatyovoimakoulutus' ? console.log("hep!") : null;
-    });
-
-    handleRadioChange(e, editValues, fields, isInLupa, koulutus)
-
-  }
-
   render() {
     const { nimi, koulutukset, muutMaaraykset, editValues, koodisto } = this.props
     let { fields } = this.props
@@ -93,6 +82,8 @@ class KoulutusList extends Component {
         })
       })
     }
+    console.log(koodisto);
+
 
     return (
       <Wrapper>
@@ -107,6 +98,9 @@ class KoulutusList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
+          { (koodisto === 'oivatyovoimakoulutus' ||  koodisto === 'kuljettajakoulutus') &&
+            <p>{HAKEMUS_TEKSTIT.VAINYKSIVALINTA.FI}:</p>
+          }
           {_.map(koulutukset, (koulutus, i) => {
 
             const { koodiArvo, metadata } = koulutus
@@ -145,31 +139,35 @@ class KoulutusList extends Component {
             }
 
             return (
-              <TutkintoWrapper key={i} className={customClassName}>
-                { koodistoUri === 'oivatyovoimakoulutus' ?
-                  <Radiobutton>
-                    <input
-                      type="checkbox"
-                      // name="oivatyovoimakoulutus"
-                      id={identifier}
-                      checked={ isChecked }
-                      onChange={(e) => { this.handleRadioChange(e, editValues, fields, isInLupa, koulutus) }}
-                    />
-                    <label htmlFor={identifier}></label>
-                  </Radiobutton>
+              <div key={i}>
+                { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
+                  <TutkintoWrapper className={customClassName}>
+                    <Radiobutton>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={ isChecked }
+                        onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </Radiobutton>
+                    <Kuvaus>{kuvaus}</Kuvaus> 
+                  </TutkintoWrapper>
                 :
-                  <Checkbox>
-                    <input
-                      type="checkbox"
-                      id={identifier}
-                      checked={isChecked}
-                      onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
-                    />
-                    <label htmlFor={identifier}></label>
-                  </Checkbox> 
+                  <TutkintoWrapper key={i} className={customClassName}>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={isChecked}
+                        onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </Checkbox>
+                    {nimi}
+                  </TutkintoWrapper>                  
                 }
-                {(koodistoUri === 'kuljettajakoulutus' || koodistoUri === 'oivatyovoimakoulutus') ? <Kuvaus>{kuvaus}</Kuvaus> : <Nimi>{nimi}</Nimi>}
-              </TutkintoWrapper>
+              </div>
             )
           })}
         </KoulutusalaListWrapper>

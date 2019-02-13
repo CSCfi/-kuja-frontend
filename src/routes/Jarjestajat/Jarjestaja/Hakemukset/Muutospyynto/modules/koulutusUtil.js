@@ -355,7 +355,7 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
   console.log(checked);
 
   if (!kohde) {
-    console.log('koulutusUtil.handleCheckboxChange kohdetta ei löytynyt', currentObj)
+    console.log('koulutusUtil.handleRadioChange kohdetta ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
       kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
@@ -366,7 +366,7 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
   }
 
   if (!maaraystyyppi) {
-    console.log('koulutusUtil.handleCheckboxChange määräystyyppiä ei löytynyt', currentObj)
+    console.log('koulutusUtil.handleRadioChange määräystyyppiä ei löytynyt', currentObj)
     if (koodistoUri === KOODISTOT.KOULUTUS) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
