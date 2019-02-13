@@ -148,6 +148,10 @@ export const TutkintoWrapper = styled.div`
   &.is-in-lupa {
     font-weight: bold;
   }
+  &.longtext {
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
 `
 
 export const OsaamisalaWrapper = styled.div`

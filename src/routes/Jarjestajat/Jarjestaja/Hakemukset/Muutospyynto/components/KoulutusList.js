@@ -141,7 +141,7 @@ class KoulutusList extends Component {
             return (
               <div key={i}>
                 { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
-                  <TutkintoWrapper className={customClassName}>
+                  <TutkintoWrapper className={ koodistoUri !== 'kuljettajakoulutus' ? 'customClassName' : 'customClassName longtext'}>
                     <RadioCheckbox>
                       <input
                         type="checkbox"
