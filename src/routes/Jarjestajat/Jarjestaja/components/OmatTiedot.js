@@ -34,7 +34,7 @@ class OmatTiedot extends Component {
             if (oppilaitos.organisaatio.postiosoite.postinumeroUri) ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(6)
             if (this.props.kunnat && this.props.kunnat.fetched && oppilaitos.organisaatio.kotipaikkaUri) kotipaikka = getToimialueByKoodiArvo(oppilaitos.organisaatio.kotipaikkaUri.substr(6)).label;
             // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
-            oppilaitos.organisaatio.yhteystiedot.map(item => {
+            if (oppilaitos.organisaatio.yhteystiedot) oppilaitos.organisaatio.yhteystiedot.map(item => {
                 if (item.www) www = item.www;
                 if (item.numero) numero = item.numero;
                 if (item.email) email = item.email;
