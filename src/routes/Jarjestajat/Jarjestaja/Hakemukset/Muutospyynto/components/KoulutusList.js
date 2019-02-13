@@ -7,7 +7,7 @@ import {
   Heading,
   Arrow,
   Checkbox,
-  Radiobutton,
+  RadioCheckbox,
   Span,
   SpanMuutos,
   KoulutusalaListWrapper,
@@ -142,7 +142,7 @@ class KoulutusList extends Component {
               <div key={i}>
                 { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
                   <TutkintoWrapper className={customClassName}>
-                    <Radiobutton>
+                    <RadioCheckbox>
                       <input
                         type="checkbox"
                         id={identifier}
@@ -150,7 +150,7 @@ class KoulutusList extends Component {
                         onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
                       />
                       <label htmlFor={identifier}></label>
-                    </Radiobutton>
+                    </RadioCheckbox>
                     <Kuvaus>{kuvaus}</Kuvaus> 
                   </TutkintoWrapper>
                 :
