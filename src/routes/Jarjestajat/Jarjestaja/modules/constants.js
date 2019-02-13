@@ -436,7 +436,7 @@ export const LUPA_VOIMASSAOLO_20190101_LUKIEN =
 export const HAKEMUS_TEKSTIT = {
 
     VAINYKSIVALINTA: {
-        FI: 'Valitse vain yksi seuraavista',
+        FI: 'Voit valita vain yhden seuraavista',
         SV: 'VAINYKSIVALINTA'
     }
 }
