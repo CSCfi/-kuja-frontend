@@ -35,10 +35,12 @@ class MuutospyyntoWizardMuut extends Component {
       let vankilat = []
       let kokeilut = []
       let yhteistyo = []
+      let yhteistyosopimukset = []
       let laajennettu = []
       let sisaoppilaitos = []
       let urheilijat = []
-      let luokittelemattomat = []
+      let muumaarays = []
+      let luokattomat = []
 
       console.log("muutList " + JSON.stringify(muutList));
 
@@ -73,6 +75,10 @@ class MuutospyyntoWizardMuut extends Component {
               yhteistyo.push(maarays)
               break
             }
+            case "yhteistyosopimukset": {
+              yhteistyosopimukset.push(maarays)
+              break
+            }
             case "vaativa": {
               vaativat.push(maarays)
               break
@@ -82,11 +88,11 @@ class MuutospyyntoWizardMuut extends Component {
               break
             }
             case "muumaarays": {
-              luokittelemattomat.push(maarays)
+              muumaarays.push(maarays)
               break
             }
             default: {
-              luokittelemattomat.push(maarays)
+              luokattomat.push(maarays)
               break
             }
           }
@@ -218,8 +224,16 @@ class MuutospyyntoWizardMuut extends Component {
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
-              muutList={luokittelemattomat}
-              otsikko='Muut'
+              muutList={muumaarays}
+              otsikko=''
+              component={this.renderMuutMuutokset}
+            />
+            <FieldArray
+              name={FIELD_ARRAY_NAMES.MUUT}
+              muut={muutCombined}
+              editValues={muutmuutoksetValue}
+              muutList={luokattomat}
+              otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.EI_LUOKKAA.FI}
               component={this.renderMuutMuutokset}
             />
 
@@ -299,26 +313,32 @@ class MuutospyyntoWizardMuut extends Component {
             if (kuvaus && kuvaus !== '') {
 
               return (
-                <CheckboxRowContainer key={identifier} className={customClassName}>
-                  <Checkbox>
-                    <input
-                      type="checkbox"
-                      id={identifier}
-                      checked={isChecked}
-                      disabled={voimassaLoppuPvm !== undefined}
-                      onChange={(e) => {
-                        handleCheckboxChange(e, editValues, fields, isInLupa, muu)
-                      }}
-                    />
-                    <label htmlFor={identifier}></label>
-                  </Checkbox>
-                  <Div margin="0 10px" flex="5">{kuvaus}</Div>
-                </CheckboxRowContainer>
+                <div>
+                  { koodiArvo === "2" && 
+                    <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
+                  }
+                  { koodiArvo === "3" && 
+                    <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.LISAALINTA.FI}:</p> 
+                  }
+                  <CheckboxRowContainer key={identifier} className={customClassName}>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={isChecked}
+                        disabled={voimassaLoppuPvm !== undefined}
+                        onChange={(e) => {
+                          handleCheckboxChange(e, editValues, fields, isInLupa, muu)
+                        }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </Checkbox>
+                    <Div margin="0 10px" flex="5">{kuvaus}</Div>
+                  </CheckboxRowContainer>
+                  </div>
               )
             }
           })}
-
-
         </Row>
       </div>
     )
