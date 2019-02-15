@@ -40,57 +40,55 @@ class MuutospyyntoWizardMuut extends Component {
       let urheilijat = []
       let luokittelemattomat = []
 
-      // console.log("muutList " + JSON.stringify(muutList));
+      console.log("muutList " + JSON.stringify(muutList));
 
 
       _.forEach(muutList, (maarays) => {
 
-
         const { metadata, koodiArvo, koodisto } = maarays;
+        const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
+        const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus');
 
-      console.log("metadata " + JSON.stringify(metadata));
-      
-      const kasite = parseLocalizedField(metadata, 'FI', 'kasite') 
-      console.log("kasite " + kasite);
+        if (kuvaus) {
 
+          switch (kasite) {
 
-        switch (kasite) {
-
-          case "laajennettu": {
-            laajennettu.push(maarays)
-            break
-          }
-          case "sisaoppilaitos": {
-            sisaoppilaitos.push(maarays)
-            break
-          }
-          case "urheilu": {
-            urheilijat.push(maarays)
-            break
-          }
-          case "kokeilu": {
-            kokeilut.push(maarays)
-            break
-          }
-          case "yhteistyo": {
-            yhteistyo.push(maarays)
-            break
-          }
-          case "vaativa": {
-            vaativat.push(maarays)
-            break
-          }
-          case "vankila": {
-            vankilat.push(maarays)
-            break
-          }
-          case "muumaarays": {
-            luokittelemattomat.push(maarays)
-            break
-          }
-          default: {
-            luokittelemattomat.push(maarays)
-            break
+            case "laajennettu": {
+              laajennettu.push(maarays)
+              break
+            }
+            case "sisaoppilaitos": {
+              sisaoppilaitos.push(maarays)
+              break
+            }
+            case "urheilu": {
+              urheilijat.push(maarays)
+              break
+            }
+            case "kokeilu": {
+              kokeilut.push(maarays)
+              break
+            }
+            case "yhteistyo": {
+              yhteistyo.push(maarays)
+              break
+            }
+            case "vaativa": {
+              vaativat.push(maarays)
+              break
+            }
+            case "vankila": {
+              vankilat.push(maarays)
+              break
+            }
+            case "muumaarays": {
+              luokittelemattomat.push(maarays)
+              break
+            }
+            default: {
+              luokittelemattomat.push(maarays)
+              break
+            }
           }
         }
 
@@ -245,7 +243,6 @@ class MuutospyyntoWizardMuut extends Component {
   renderMuutMuutokset = (props) => {
     const { muut, editValues, fields, otsikko } = props
     let { muutList } = props
-    console.log("renderMuutMuutokset");
     muutList = muutList.sort((a,b) => 
       this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
     );
@@ -262,11 +259,10 @@ class MuutospyyntoWizardMuut extends Component {
           <h4>{title}</h4>
 
           {muutList.map((muu, i) => {
-            const {koodiArvo, koodisto, metadata} = muu
+            const {koodiArvo, koodisto, metadata, voimassaLoppuPvm} = muu
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
             // let kuvaus = parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi') + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-
             let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
             const identifier = `input-${koodistoUri}-${koodiArvo}`
 
@@ -279,12 +275,6 @@ class MuutospyyntoWizardMuut extends Component {
             muut.forEach(m => {
               if (m.koodiarvo === koodiArvo) {
                 isInLupa = true
-              }
-              if (m.kasite === "kokeilu" ) {
-                kuvaus = m.kuvaus
-              }
-              if (m.kasite === "yhteistyo" ) {
-                kuvaus = m.kuvaus
               }
             })
 
@@ -300,12 +290,13 @@ class MuutospyyntoWizardMuut extends Component {
             isInLupa ? customClassName = "is-in-lupa" : null
             isAdded ? customClassName = "is-added" : null
             isRemoved ? customClassName = "is-removed" : null
+            voimassaLoppuPvm !== undefined ? customClassName = "is-out-of-date" : null
 
             if ((isInLupa && !isRemoved) || isAdded) {
               isChecked = true
             }
 
-            if (kuvaus !== '') {
+            if (kuvaus && kuvaus !== '') {
 
               return (
                 <CheckboxRowContainer key={identifier} className={customClassName}>
@@ -314,6 +305,7 @@ class MuutospyyntoWizardMuut extends Component {
                       type="checkbox"
                       id={identifier}
                       checked={isChecked}
+                      disabled={voimassaLoppuPvm !== undefined}
                       onChange={(e) => {
                         handleCheckboxChange(e, editValues, fields, isInLupa, muu)
                       }}
