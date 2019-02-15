@@ -11,6 +11,8 @@ import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
 import { Area, Checkbox } from './MuutospyyntoWizardComponents'
 
+import { COLORS } from "../../../../../../modules/styles"
+
 const PerusteluKuljettajaJatkoWrapper = styled.div`
   margin-bottom: 20px;
 `
@@ -64,6 +66,87 @@ const Opettaja = styled.div`
   border-top: 1px solid #DFDFDF;
   margin: 5px 0 5px 20px;
   padding: 5px;
+`
+
+const Radiobutton = styled.div`
+  width: 20px;
+  position: relative;
+  margin: 6px 10px;
+  
+  label {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: -3px;
+    left: 0;
+    background: white;
+    border-radius: 0;
+    border: 1px solid ${COLORS.OIVA_GREEN};
+    border-radius: 16px;
+    
+    &:hover {
+      &:after {
+        border-color: ${COLORS.OIVA_GREEN};
+        opacity: 0.5;
+      }
+    }
+    
+    &:after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid #fcfff4;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+      border-radius: 0;
+    }
+
+  }
+  input[type=radio] {
+    visibility: hidden;
+    
+    &:checked + label {
+      background: ${COLORS.OIVA_GREEN};
+      border-radius: 16px;
+      
+      &:hover {
+        &:after {
+          background: rgba(90, 138, 112, 0.0);
+        }
+      }
+    }
+    
+    &:hover {
+      background: rgba(90, 138, 112, 0.5);
+      border-radius: 16px;
+    }
+    
+    &:checked + label:after {
+      opacity: 1;
+      background: ${COLORS.OIVA_GREEN};
+      
+      &:hover {
+        background: rgba(90, 138, 112, 0.5);
+      }
+    }
+    
+    &:checked + label:hover {
+      background: rgba(90, 138, 112, 0.5);
+      border-radius: 16px;
+      
+      &:after {
+        border-color: white;
+        opacity: 1;
+      }
+    }
+  }
 `
 
 class PerusteluKuljettajaJatko extends Component {
@@ -122,25 +205,32 @@ class PerusteluKuljettajaJatko extends Component {
               fields.insert(i, obj)
             }}
           />
+
           <h4>2. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA.FI}</h4>
           <RadioWrapper>
-            <Field
-              name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
-              component="input"
-              type="radio"
-              value="false"
-              />
-            <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.EI.FI}</ChkTitle></label>
-          </RadioWrapper>
-          <RadioWrapper>
-            <Field
-              name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
-              component="input"
-              type="radio"
-              value="true"
-              />
-            <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.VOIMASSAOLEVA_PVM.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.KYLLA.FI}</ChkTitle></label>
-          </RadioWrapper>
+            <Radiobutton>
+                <Field
+                  name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
+                  id="kuljetus_jatko_voimassa_ei"
+                  component="input"
+                  type="radio"
+                  value="false"
+                  />
+                <label htmlFor="kuljetus_jatko_voimassa_ei"><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.EI.FI}</ChkTitle></label>
+              </Radiobutton>
+            </RadioWrapper>
+            <RadioWrapper>
+              <Radiobutton>
+                <Field
+                  name={`tutkinnotjakoulutukset[${i}].meta.perusteluteksti_kuljetus_jatko.voimassaoleva`}
+                  id="kuljetus_jatko_voimassa_on"
+                  component="input"
+                  type="radio"
+                  value="true"
+                  />
+                <label htmlFor="kuljetus_jatko_voimassa_on"><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.YLEINEN.KYLLA.FI}</ChkTitle></label>
+              </Radiobutton>
+         </RadioWrapper>
           <Tarkenne>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.VOIMASSAOLEVA.FI}</Tarkenne>
           <InputWrapper>
             <DatePicker
@@ -154,6 +244,7 @@ class PerusteluKuljettajaJatko extends Component {
               }}
             />
           </InputWrapper>
+
           <h4>3. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.SUUNNITELMA.FI}</h4>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.SUUNNITELMA.FI}</Instruction>
           <textarea
