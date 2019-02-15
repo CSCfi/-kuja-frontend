@@ -54,8 +54,6 @@ class MuutospyyntoWizardMuut extends Component {
       console.log("kasite " + kasite);
 
 
-
-
         switch (kasite) {
 
           case "laajennettu": {
@@ -210,13 +208,12 @@ class MuutospyyntoWizardMuut extends Component {
               otsikko=''
               component={this.renderMuutMuutokset}
             />
-            {/* {MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYO.FI} */}
             <FieldArray
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={yhteistyo}
-              otsikko=''
+              otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYO.FI}
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -240,8 +237,18 @@ class MuutospyyntoWizardMuut extends Component {
     }
   }
 
-  renderMuutMuutokset(props) {
-    const { muut, muutList, editValues, fields, otsikko } = props
+  getHuomioitavaKoodi = (data) => {
+    let { metadata } = data;
+    return parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi');
+  }
+
+  renderMuutMuutokset = (props) => {
+    const { muut, editValues, fields, otsikko } = props
+    let { muutList } = props
+    console.log("renderMuutMuutokset");
+    muutList = muutList.sort((a,b) => 
+      this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
+    );
 
     let title = undefined;
     if (muutList.length > 0) title = parseLocalizedField(muutList[0].metadata)
@@ -258,6 +265,8 @@ class MuutospyyntoWizardMuut extends Component {
             const {koodiArvo, koodisto, metadata} = muu
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
+            // let kuvaus = parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi') + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+
             let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
             const identifier = `input-${koodistoUri}-${koodiArvo}`
 
