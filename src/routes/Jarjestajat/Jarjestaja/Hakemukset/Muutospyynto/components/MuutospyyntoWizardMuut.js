@@ -38,70 +38,122 @@ class MuutospyyntoWizardMuut extends Component {
       let laajennettu = []
       let sisaoppilaitos = []
       let urheilijat = []
+      let luokittelemattomat = []
+
+      // console.log("muutList " + JSON.stringify(muutList));
 
 
       _.forEach(muutList, (maarays) => {
-        const { metadata, koodiArvo, koodisto } = maarays
 
-        if (koodiArvo) {
 
-          switch (koodiArvo){
+        const { metadata, koodiArvo, koodisto } = maarays;
 
-            case "1": {
-              laajennettu.push(maarays)
-              break
-            }
-            case "4": {
-              sisaoppilaitos.push(maarays)
-              break
-            }
-            case "6": {
-              urheilijat.push(maarays)
-              break
-            }
-            case "7": {
-              kokeilut.push(maarays)
-              break
-            }
-            case "8": {
-              yhteistyo.push(maarays)
-              break
-            }
-            case "9": {
-              muutCombined.push(maarays)
-              break
-            }
-            case "10": {
-              yhteistyo.push(maarays)
-              break
-            }
-            case "11": {
-              yhteistyo.push(maarays)
-              break
-            }
-            case "2": {
-              vaativat.push(maarays)
-              break
-            }
-            case "3": {
-              vaativat.push(maarays)
-              break
-            }
-            case "12": {
-              vaativat.push(maarays)
-              break
-            }
-            case "5": {
-              vankilat.push(maarays)
-              break
-            }
-            case "13": {
-              vankilat.push(maarays)
-              break
-            }
+      console.log("metadata " + JSON.stringify(metadata));
+      
+      const kasite = parseLocalizedField(metadata, 'FI', 'kasite') 
+      console.log("kasite " + kasite);
+
+
+
+
+        switch (kasite) {
+
+          case "laajennettu": {
+            laajennettu.push(maarays)
+            break
           }
-
+          case "sisaoppilaitos": {
+            sisaoppilaitos.push(maarays)
+            break
+          }
+          case "urheilu": {
+            urheilijat.push(maarays)
+            break
+          }
+          case "kokeilu": {
+            kokeilut.push(maarays)
+            break
+          }
+          case "yhteistyo": {
+            yhteistyo.push(maarays)
+            break
+          }
+          case "vaativa": {
+            vaativat.push(maarays)
+            break
+          }
+          case "vankila": {
+            vankilat.push(maarays)
+            break
+          }
+          case "muumaarays": {
+            luokittelemattomat.push(maarays)
+            break
+          }
+          default: {
+            luokittelemattomat.push(maarays)
+            break
+          }
         }
+
+        // if (koodiArvo) {
+
+        //   switch (koodiArvo){
+
+        //     case "1": {
+        //       laajennettu.push(maarays)
+        //       break
+        //     }
+        //     case "4": {
+        //       sisaoppilaitos.push(maarays)
+        //       break
+        //     }
+        //     case "6": {
+        //       urheilijat.push(maarays)
+        //       break
+        //     }
+        //     case "7": {
+        //       kokeilut.push(maarays)
+        //       break
+        //     }
+        //     case "8": {
+        //       yhteistyo.push(maarays)
+        //       break
+        //     }
+        //     case "9": {
+        //       muutCombined.push(maarays)
+        //       break
+        //     }
+        //     case "10": {
+        //       yhteistyo.push(maarays)
+        //       break
+        //     }
+        //     case "11": {
+        //       yhteistyo.push(maarays)
+        //       break
+        //     }
+        //     case "2": {
+        //       vaativat.push(maarays)
+        //       break
+        //     }
+        //     case "3": {
+        //       vaativat.push(maarays)
+        //       break
+        //     }
+        //     case "12": {
+        //       vaativat.push(maarays)
+        //       break
+        //     }
+        //     case "5": {
+        //       vankilat.push(maarays)
+        //       break
+        //     }
+        //     case "13": {
+        //       vankilat.push(maarays)
+        //       break
+        //     }
+        //   }
+
 
       })
 
@@ -158,12 +210,21 @@ class MuutospyyntoWizardMuut extends Component {
               otsikko=''
               component={this.renderMuutMuutokset}
             />
+            {/* {MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYO.FI} */}
             <FieldArray
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={yhteistyo}
-              otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYO.FI}
+              otsikko=''
+              component={this.renderMuutMuutokset}
+            />
+            <FieldArray
+              name={FIELD_ARRAY_NAMES.MUUT}
+              muut={muutCombined}
+              editValues={muutmuutoksetValue}
+              muutList={luokittelemattomat}
+              otsikko='Muut'
               component={this.renderMuutMuutokset}
             />
 
@@ -182,8 +243,9 @@ class MuutospyyntoWizardMuut extends Component {
   renderMuutMuutokset(props) {
     const { muut, muutList, editValues, fields, otsikko } = props
 
-    let title = parseLocalizedField(muutList[0].metadata)
-    if(otsikko != '') {
+    let title = undefined;
+    if (muutList.length > 0) title = parseLocalizedField(muutList[0].metadata)
+    if(otsikko !== '') {
       title = otsikko
     }
 
@@ -209,10 +271,10 @@ class MuutospyyntoWizardMuut extends Component {
               if (m.koodiarvo === koodiArvo) {
                 isInLupa = true
               }
-              if (koodiArvo == 7 && m.koodiarvo == 7) {
+              if (m.kasite === "kokeilu" ) {
                 kuvaus = m.kuvaus
               }
-              if (koodiArvo == 8 && m.koodiarvo == 8) {
+              if (m.kasite === "yhteistyo" ) {
                 kuvaus = m.kuvaus
               }
             })
@@ -234,7 +296,7 @@ class MuutospyyntoWizardMuut extends Component {
               isChecked = true
             }
 
-            if (kuvaus != '') {
+            if (kuvaus !== '') {
 
               return (
                 <CheckboxRowContainer key={identifier} className={customClassName}>
