@@ -9,7 +9,7 @@ import { meta_kuljettaja_jatko_henkilo } from "../modules/lisaperusteluUtil"
 import { getIndex } from "../modules/muutosUtil"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
-import { Area, Checkbox } from './MuutospyyntoWizardComponents'
+import { Area, Button, Checkbox } from './MuutospyyntoWizardComponents'
 
 import { COLORS } from "../../../../../../modules/styles"
 
@@ -54,11 +54,6 @@ const InputWrapper= styled.div`
 const RadioWrapper = styled.div`
   margin-left: 14px;
   margin-top: 10px;
-`
-
-const LisaaButton = styled.button`
-  font-size: 14px;
-  margin: 5px 0 5px 20px;
 `
 
 const Opettaja = styled.div`
@@ -402,9 +397,9 @@ class PerusteluKuljettajaJatko extends Component {
           Tallenna erilliseen muuttujaan ja siirrä oikeaan paikkaan vasta tallennuksen yhteydessä. */}
           <FieldArray name={`perusteluteksti_kuljetus_jatko.henkilot`} component={({fields}) =>
             <div>
-              <LisaaButton type="button" onClick={() => fields.push(meta_kuljettaja_jatko_henkilo)}>
+              <Button type="button" onClick={() => fields.push(meta_kuljettaja_jatko_henkilo)}>
                 {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LISAA_HENKILO.FI}
-              </LisaaButton>
+              </Button>
               {fields.map((opettaja, index) =>
                 <Opettaja key={index}>
                   <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.HENKILO.FI}</Instruction>

@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 import "react-datepicker/dist/react-datepicker.css"
 
-import { Area, Checkbox } from './MuutospyyntoWizardComponents'
+import { Area, Button, Checkbox } from './MuutospyyntoWizardComponents'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { meta_kuljettaja_perus_henkilo } from "../modules/lisaperusteluUtil"
@@ -55,11 +55,6 @@ const RadioWrapper = styled.div`
   margin-top: 10px;
 `
 
-const LisaaButton = styled.button`
-  font-size: 14px;
-  margin: 5px 0 5px 20px;
-`
-
 const Opettaja = styled.div`
   border-left: 1px solid #DFDFDF;
   border-top: 1px solid #DFDFDF;
@@ -67,7 +62,7 @@ const Opettaja = styled.div`
   padding: 5px;
 `
 
-export const Radiobutton = styled.div`
+const Radiobutton = styled.div`
   width: 20px;
   position: relative;
   margin: 6px 10px;
@@ -390,9 +385,9 @@ class PerusteluKuljettajaPerus extends Component {
           Tallenna erilliseen muuttujaan ja siirrä oikeaan paikkaan vasta tallennuksen yhteydessä. */}
           <FieldArray name={`perusteluteksti_kuljetus_perus.henkilot`} component={({fields}) =>
             <div>
-              <LisaaButton type="button" onClick={() => fields.push(meta_kuljettaja_perus_henkilo)}>
+              <Button type="button" onClick={() => fields.push(meta_kuljettaja_perus_henkilo)}>
                 {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.LISAA_HENKILO.FI}
-              </LisaaButton>
+              </Button>
               {fields.map((opettaja, index) =>
                 <Opettaja key={index}>
                   <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.HENKILO.FI}</Instruction>
