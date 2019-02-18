@@ -227,7 +227,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
       SV: "YKSIVALINTA"
     },
     LISAALINTA: {
-      FI: "Lisäksi voit valita seuraava",
+      FI: "Lisäksi voit valita seuraavat",
       SV: "LISAALINTA"
     },
     EI_LUOKKAA: {
