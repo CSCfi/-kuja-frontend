@@ -132,7 +132,7 @@ class Perustelu extends Component {
 
     // Vankilakoulutus
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.OIVA_MUUT  && (koodiarvo == 5 || koodiarvo == 13) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto == KOODISTOT.OIVA_MUUT  && koodiarvo == 5 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluVankila

@@ -91,10 +91,10 @@ class MuutospyyntoWizardMuut extends Component {
               muumaarays.push(maarays)
               break
             }
-            default: {
-              luokattomat.push(maarays)
-              break
-            }
+            // default: {
+            //   luokattomat.push(maarays)
+            //   break
+            // }
           }
         }
 
@@ -216,6 +216,14 @@ class MuutospyyntoWizardMuut extends Component {
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
+              muutList={yhteistyosopimukset}
+              otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYOSOPIMUKSET.FI}
+              component={this.renderMuutMuutokset}
+            />
+            <FieldArray
+              name={FIELD_ARRAY_NAMES.MUUT}
+              muut={muutCombined}
+              editValues={muutmuutoksetValue}
               muutList={yhteistyo}
               otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YHTEISTYO.FI}
               component={this.renderMuutMuutokset}
@@ -228,14 +236,14 @@ class MuutospyyntoWizardMuut extends Component {
               otsikko=''
               component={this.renderMuutMuutokset}
             />
-            <FieldArray
+            {/* <FieldArray
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={luokattomat}
               otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.EI_LUOKKAA.FI}
               component={this.renderMuutMuutokset}
-            />
+            /> */}
 
           </Row>
         </ContentContainer>
