@@ -7,6 +7,7 @@ import {
   Heading,
   Arrow,
   Checkbox,
+  RadioCheckbox,
   Span,
   SpanMuutos,
   KoulutusalaListWrapper,
@@ -18,12 +19,13 @@ import {
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { HAKEMUS_TEKSTIT } from "../../../modules/constants"
 
 class KoulutusList extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isHidden: true
+      isHidden: true,
     }
   }
 
@@ -80,6 +82,8 @@ class KoulutusList extends Component {
         })
       })
     }
+    console.log(koodisto);
+
 
     return (
       <Wrapper>
@@ -94,6 +98,9 @@ class KoulutusList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
+          { (koodisto === 'oivatyovoimakoulutus' ||  koodisto === 'kuljettajakoulutus') &&
+            <p>{HAKEMUS_TEKSTIT.VAINYKSIVALINTA.FI}:</p>
+          }
           {_.map(koulutukset, (koulutus, i) => {
 
             const { koodiArvo, metadata } = koulutus
@@ -109,7 +116,7 @@ class KoulutusList extends Component {
             let customClassName = ""
 
             muutMaaraykset.forEach(muuMaarays => {
-              if (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo) {
+              if (!isRemoved && (muuMaarays.koodisto === koodistoUri && muuMaarays.koodiarvo === koodiArvo)) {
                 isInLupa = true
               }
             })
@@ -127,23 +134,40 @@ class KoulutusList extends Component {
             isAdded ? customClassName = "is-added" : null
             isRemoved ? customClassName = "is-removed" : null
 
-            if ((isInLupa && !isRemoved) || isAdded) {
+            if ((isInLupa && !isRemoved && fields) || isAdded) {
               isChecked = true
             }
 
             return (
-              <TutkintoWrapper key={i} className={customClassName}>
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    id={identifier}
-                    checked={isChecked}
-                    onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
-                  />
-                  <label htmlFor={identifier}></label>
-                </Checkbox>
-                {(koodistoUri === 'kuljettajakoulutus' || koodistoUri === 'oivatyovoimakoulutus') ? <Kuvaus>{kuvaus}</Kuvaus> : <Nimi>{nimi}</Nimi>}
-              </TutkintoWrapper>
+              <div key={i}>
+                { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
+                  <TutkintoWrapper className={ koodistoUri !== 'kuljettajakoulutus' ? 'customClassName' : 'customClassName longtext'}>
+                    <RadioCheckbox>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={ isChecked }
+                        onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </RadioCheckbox>
+                    <Kuvaus>{kuvaus}</Kuvaus> 
+                  </TutkintoWrapper>
+                :
+                  <TutkintoWrapper key={i} className={customClassName}>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        id={identifier}
+                        checked={isChecked}
+                        onChange={(e) => { handleCheckboxChange(e, editValues, fields, isInLupa, koulutus) }}
+                      />
+                      <label htmlFor={identifier}></label>
+                    </Checkbox>
+                    {nimi}
+                  </TutkintoWrapper>                  
+                }
+              </div>
             )
           })}
         </KoulutusalaListWrapper>
