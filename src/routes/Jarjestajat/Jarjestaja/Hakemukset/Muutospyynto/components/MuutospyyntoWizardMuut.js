@@ -42,9 +42,6 @@ class MuutospyyntoWizardMuut extends Component {
       let muumaarays = []
       let luokattomat = []
 
-      console.log("muutList " + JSON.stringify(muutList));
-
-
       _.forEach(muutList, (maarays) => {
 
         const { metadata, koodiArvo, koodisto } = maarays;
@@ -91,71 +88,12 @@ class MuutospyyntoWizardMuut extends Component {
               muumaarays.push(maarays)
               break
             }
-            // default: {
+            default: {
             //   luokattomat.push(maarays)
             //   break
-            // }
+            }
           }
         }
-
-        // if (koodiArvo) {
-
-        //   switch (koodiArvo){
-
-        //     case "1": {
-        //       laajennettu.push(maarays)
-        //       break
-        //     }
-        //     case "4": {
-        //       sisaoppilaitos.push(maarays)
-        //       break
-        //     }
-        //     case "6": {
-        //       urheilijat.push(maarays)
-        //       break
-        //     }
-        //     case "7": {
-        //       kokeilut.push(maarays)
-        //       break
-        //     }
-        //     case "8": {
-        //       yhteistyo.push(maarays)
-        //       break
-        //     }
-        //     case "9": {
-        //       muutCombined.push(maarays)
-        //       break
-        //     }
-        //     case "10": {
-        //       yhteistyo.push(maarays)
-        //       break
-        //     }
-        //     case "11": {
-        //       yhteistyo.push(maarays)
-        //       break
-        //     }
-        //     case "2": {
-        //       vaativat.push(maarays)
-        //       break
-        //     }
-        //     case "3": {
-        //       vaativat.push(maarays)
-        //       break
-        //     }
-        //     case "12": {
-        //       vaativat.push(maarays)
-        //       break
-        //     }
-        //     case "5": {
-        //       vankilat.push(maarays)
-        //       break
-        //     }
-        //     case "13": {
-        //       vankilat.push(maarays)
-        //       break
-        //     }
-        //   }
-
 
       })
 
