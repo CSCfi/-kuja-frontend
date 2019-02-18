@@ -322,6 +322,9 @@ export const CheckboxRowContainer = styled.div`
   &.is-in-lupa {
     font-weight: bold;
   }
+  &.is-out-of-date {
+    opacity: 0.5;
+  }
 `
 
 export const CheckboxRowContainerSmall = styled.div`
