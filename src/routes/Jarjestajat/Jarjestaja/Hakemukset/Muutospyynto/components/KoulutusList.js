@@ -82,8 +82,6 @@ class KoulutusList extends Component {
         })
       })
     }
-    console.log(koodisto);
-
 
     return (
       <Wrapper>

@@ -299,12 +299,12 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo === 2 || koodiArvo === 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo === 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && koodiArvo === 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 5 || koodiArvo === 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 2 || (koodiArvo >= 16 && koodiArvo <= 21) || koodiArvo === 3 || koodiArvo === 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === 1 || koodiArvo === 3) && {perusteluteksti_tyovoima: meta_tyovoima})
         },
         muutosperustelukoodiarvo: null
       })
@@ -325,13 +325,13 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
-        },
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo === 2 || koodiArvo === 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo === 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && koodiArvo === 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 5 || koodiArvo === 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 2 || (koodiArvo >= 16 && koodiArvo <= 21) || koodiArvo === 3 || koodiArvo === 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === 1 || koodiArvo === 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+       },
         muutosperustelukoodiarvo: null
       })
     } else {
@@ -404,13 +404,13 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
               koulutusala: currentObj.koulutusalaKoodiArvo,
               koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
               perusteluteksti: null,
-              ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
-              ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
-              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
-              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
-              ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
-              ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
-            },
+              ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo === 2 || koodiArvo === 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+              ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo === 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+              ...(koodistoUri === KOODISTOT.OIVA_MUUT  && koodiArvo === 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+              ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 5 || koodiArvo === 13) && {perusteluteksti_vankila: meta_vankila}),
+              ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 2 || (koodiArvo >= 16 && koodiArvo <= 21) || koodiArvo === 3 || koodiArvo === 12) && {perusteluteksti_vaativa: meta_vaativa}),
+              ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === 1 || koodiArvo === 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+           },
             muutosperustelukoodiarvo: null
           })
         } else
@@ -430,13 +430,13 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
-        },
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo === 2 || koodiArvo === 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo === 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && koodiArvo === 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 5 || koodiArvo === 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 2 || (koodiArvo >= 16 && koodiArvo <= 21) || koodiArvo === 3 || koodiArvo === 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === 1 || koodiArvo === 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+       },
         muutosperustelukoodiarvo: null
       });
       console.log(fields);
@@ -457,13 +457,13 @@ export function handleRadioChange(event, editValue, fields, isInLupa, currentObj
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo == 2 || koodiArvo == 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
-          ...(koodistoUri == KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo == 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && koodiArvo == 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 5 || koodiArvo == 13) && {perusteluteksti_vankila: meta_vankila}),
-          ...(koodistoUri == KOODISTOT.OIVA_MUUT  && (koodiArvo == 2 || koodiArvo == 3 || koodiArvo == 12) && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo == 1 || koodiArvo == 3) && {perusteluteksti_tyovoima: meta_tyovoima})
-        },
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && (koodiArvo === 2 || koodiArvo === 3) &&  {perusteluteksti_kuljetus_jatko: meta_kuljettaja_jatko}),
+          ...(koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS  && koodiArvo === 1 && {perusteluteksti_kuljetus_perus: meta_kuljettaja_perus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && koodiArvo === 1 && {perusteluteksti_oppisopimus: meta_oppisopimus}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 5 || koodiArvo === 13) && {perusteluteksti_vankila: meta_vankila}),
+          ...(koodistoUri === KOODISTOT.OIVA_MUUT  && (koodiArvo === 2 || (koodiArvo >= 16 && koodiArvo <= 21) || koodiArvo === 3 || koodiArvo === 12) && {perusteluteksti_vaativa: meta_vaativa}),
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === 1 || koodiArvo === 3) && {perusteluteksti_tyovoima: meta_tyovoima})
+       },
         muutosperustelukoodiarvo: null
       })
     } else {

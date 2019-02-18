@@ -223,7 +223,10 @@ class MuutospyyntoWizardMuut extends Component {
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
             // let kuvaus = parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi') + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-            let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            // let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+
+            let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+          
             const identifier = `input-${koodistoUri}-${koodiArvo}`
 
             let isInLupa = false
@@ -259,7 +262,7 @@ class MuutospyyntoWizardMuut extends Component {
             if (kuvaus && kuvaus !== '') {
 
               return (
-                <div>
+                <div key={identifier}>
                   { koodiArvo === "2" && 
                     <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
                   }
