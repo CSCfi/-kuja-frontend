@@ -233,9 +233,9 @@ export const LUPA_TEKSTIT = {
             SV: 'HISTORIATIEDOT'
         },
         HISTORIA_TAULUKKO: {
-            DIANAARINUMERO: {
-                FI: 'DIanaarinumero',
-                SV: 'DIANAARINUMERO'
+            DIAARINUMERO: {
+                FI: 'Diaarinumero',
+                SV: 'DIAARINUMERO'
             },
             PAATOSPVM: {
                 FI: 'Päätöspvm',
