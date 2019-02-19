@@ -19,6 +19,7 @@ import {
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { MUUT_KEYS } from "../modules/constants"
 import { HAKEMUS_TEKSTIT } from "../../../modules/constants"
 
 class KoulutusList extends Component {
@@ -98,7 +99,7 @@ class KoulutusList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
-          { (koodisto === 'oivatyovoimakoulutus' ||  koodisto === 'kuljettajakoulutus') &&
+          { (koodisto === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodisto === MUUT_KEYS.KULJETTAJAKOULUTUS) &&
             <p>{HAKEMUS_TEKSTIT.VAINYKSIVALINTA.FI}:</p>
           }
           {_.map(koulutukset, (koulutus, i) => {
@@ -140,8 +141,8 @@ class KoulutusList extends Component {
 
             return (
               <div key={i}>
-                { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
-                  <TutkintoWrapper className={ koodistoUri !== 'kuljettajakoulutus' ? 'customClassName' : 'customClassName longtext'}>
+                { koodistoUri === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodistoUri === MUUT_KEYS.KULJETTAJAKOULUTUS ?
+                  <TutkintoWrapper className={ koodistoUri !== MUUT_KEYS.KULJETTAJAKOULUTUS ? 'customClassName' : 'customClassName longtext'}>
                     <RadioCheckbox>
                       <input
                         type="checkbox"
