@@ -141,7 +141,8 @@ class KoulutusList extends Component {
 
             return (
               <div key={i}>
-                { koodistoUri === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodistoUri === MUUT_KEYS.KULJETTAJAKOULUTUS ?
+                { koodistoUri === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodistoUri === MUUT_KEYS.KULJETTAJAKOULUTUS ||
+                  koodistoUri === MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS ?
                   <TutkintoWrapper className={ koodistoUri !== MUUT_KEYS.KULJETTAJAKOULUTUS ? 'customClassName' : 'customClassName longtext'}>
                     <RadioCheckbox>
                       <input
