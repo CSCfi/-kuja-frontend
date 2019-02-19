@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { Component } from "react"
-import { COLORS } from "../../../../../../modules/styles"
 import arrow from 'static/images/koulutusala-arrow.svg'
 import {
   Wrapper,
@@ -9,11 +8,8 @@ import {
   Checkbox,
   RadioCheckbox,
   Span,
-  SpanMuutos,
   KoulutusalaListWrapper,
   TutkintoWrapper,
-  Koodi,
-  Nimi,
   Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
@@ -125,15 +121,15 @@ class KoulutusList extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                  isAdded = val.type === MUUTOS_TYPES.ADDITION ? true : isAdded
+                  isRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : isRemoved
                 }
               })
             }
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
+            customClassName = isInLupa ? "is-in-lupa" : customClassName
+            customClassName = isAdded ? "is-added" : customClassName
+            customClassName = isRemoved ? "is-removed" : customClassName
 
             if ((isInLupa && !isRemoved && fields) || isAdded) {
               isChecked = true
