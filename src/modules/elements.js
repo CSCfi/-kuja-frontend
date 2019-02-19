@@ -37,7 +37,7 @@ export const ContentWrapper  = styled.div`
 export const MessageWrapper  = styled.div`
   display: flex;
   flex-flow: column;
-  margin: 0 auto;;
+  margin: auto;
   border: 1px solid ${COLORS.BORDER_GRAY};
   background-color: ${COLORS.BG_GRAY};
   padding: 40px 60px;
