@@ -38,10 +38,13 @@ export const MessageWrapper  = styled.div`
   display: flex;
   flex-flow: column;
   margin: 0 auto;;
-  font-weight: 500;
   border: 1px solid ${COLORS.BORDER_GRAY};
   background-color: ${COLORS.BG_GRAY};
-  padding: 30px;
+  padding: 40px 60px;
+  h3 {
+    margin: auto;
+  }
+  line-height: 30px;
 `
 
 export const FullWidthWrapper = styled.div`

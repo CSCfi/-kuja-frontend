@@ -211,7 +211,7 @@ class MuutospyyntoWizard extends Component {
 
     if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
         return (
-            <MessageWrapper>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</MessageWrapper>
+            <MessageWrapper><h3>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun</h3></MessageWrapper>
         )
     }
 
@@ -219,7 +219,7 @@ class MuutospyyntoWizard extends Component {
     const { jarjestajaOid } = this.props.lupa.data
     if (sessionStorage.getItem('oid') !== jarjestajaOid) {
         return (
-            <MessageWrapper>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</MessageWrapper>
+            <MessageWrapper><h3>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia</h3></MessageWrapper>
         )
     }
 
@@ -316,15 +316,15 @@ class MuutospyyntoWizard extends Component {
     } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
       return <Loading />
     } else if (muutosperustelut.hasErrored) {
-      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</MessageWrapper>
+      return <MessageWrapper><h3>Muutospyyntöä ei voida tehdä</h3>Muutosperusteluita ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (vankilat.hasErrored) {
-      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Vankilalistausta ladattaessa tapahtui virhe.</MessageWrapper>
+      return <MessageWrapper><h3>Muutospyyntöä ei voida tehdä</h3>Vankilalistausta ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (ELYkeskukset.hasErrored) {
-      return <MessageWrapper>Muutospyyntöä ei voida tehdä. ELY-keskuslistausta ladattaessa tapahtui virhe.</MessageWrapper>
+      return <MessageWrapper><h3>Muutospyyntöä ei voida tehdä</h3>ELY-keskuslistausta ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (paatoskierrokset.hasErrored) {
-      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Päätoskierroksia ladattaessa tapahtui virhe.</MessageWrapper>
+      return <MessageWrapper><h3>Muutospyyntöä ei voida tehdä</h3>Päätoskierroksia ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (lupa.hasErrored) {
-      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Lupaa haettaessa tapahtui virhe.</MessageWrapper>
+      return <MessageWrapper><h3>Muutospyyntöä ei voida tehdä</h3>Lupaa haettaessa tapahtui virhe.</MessageWrapper>
     } else {
       return null
     }

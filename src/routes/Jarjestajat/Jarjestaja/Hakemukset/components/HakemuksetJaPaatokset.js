@@ -48,7 +48,7 @@ class HakemuksetJaPaatokset extends Component {
 
     if(sessionStorage.getItem('role')!==ROLE_KAYTTAJA) {
         return (
-            <MessageWrapper>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.</MessageWrapper>
+            <MessageWrapper><h3>Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun</h3></MessageWrapper>
         )
     }
 
@@ -56,7 +56,7 @@ class HakemuksetJaPaatokset extends Component {
     const { jarjestajaOid } = this.props.lupa.data
     if(sessionStorage.getItem('oid')!==jarjestajaOid) {
         return (
-            <MessageWrapper>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</MessageWrapper>
+            <MessageWrapper><h3>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia</h3></MessageWrapper>
         )
     }
 
@@ -75,7 +75,7 @@ class HakemuksetJaPaatokset extends Component {
         )
     } else if (hasErrored) {
         return (
-            <MessageWrapper>Hakemuksia ladattessa tapahtui virhe</MessageWrapper>
+            <MessageWrapper><h3>Hakemuksia ladattessa tapahtui virhe</h3></MessageWrapper>
         )
     } else {
         return null
