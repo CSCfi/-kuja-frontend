@@ -165,7 +165,7 @@ class KoulutusList extends Component {
                       />
                       <label htmlFor={identifier}></label>
                     </Checkbox>
-                    {nimi}
+                    {koodistoUri === MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS ? kuvaus : nimi}
                   </TutkintoWrapper>                  
                 }
               </div>
