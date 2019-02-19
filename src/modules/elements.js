@@ -34,6 +34,16 @@ export const ContentWrapper  = styled.div`
   flex: 1;
 `
 
+export const MessageWrapper  = styled.div`
+  display: flex;
+  flex-flow: column;
+  margin: 0 auto;;
+  font-weight: 500;
+  border: 1px solid ${COLORS.BORDER_GRAY};
+  background-color: ${COLORS.BG_GRAY};
+  padding: 30px;
+`
+
 export const FullWidthWrapper = styled.div`
   background-color: ${props => props.backgroundColor ? props.backgroundColor : COLORS.WHITE};
   flex: 1;

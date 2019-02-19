@@ -12,7 +12,7 @@ import MuutospyyntoWizardYhteenveto from './MuutospyyntoWizardYhteenveto'
 
 import Loading from '../../../../../../modules/Loading'
 
-import { ContentContainer } from "../../../../../../modules/elements"
+import { ContentContainer, MessageWrapper } from "../../../../../../modules/elements"
 import { WizardBackground, WizardTop, WizardWrapper, WizardHeader, WizardContent, Container } from "./MuutospyyntoWizardComponents"
 import { COLORS } from "../../../../../../modules/styles"
 import close from 'static/images/close-x.svg'
@@ -191,7 +191,7 @@ class MuutospyyntoEditWizard extends Component {
     const { jarjestajaOid } = this.props.lupa.data
     if (sessionStorage.getItem('oid') !== jarjestajaOid) {
       return (
-        <h2>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</h2>
+        <MessageWrapper>Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia.</MessageWrapper>
       )
     }
 
@@ -288,20 +288,22 @@ class MuutospyyntoEditWizard extends Component {
     } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching || muutospyynto.isFetching) {
       return <Loading />
     } else if (muutosperustelut.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Muutosperusteluita ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (vankilat.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. Vankilalistausta ladattaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Vankilalistausta ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (ELYkeskukset.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. ELY-keskuslistausta ladattaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. ELY-keskuslistausta ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (paatoskierrokset.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. Päätoskierroksia ladattaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Päätoskierroksia ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (muutospyynto.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. Muutospyyntöä ladattaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Muutospyyntöä ladattaessa tapahtui virhe.</MessageWrapper>
     } else if (lupa.hasErrored) {
-      return <div>Muutospyyntöä ei voida tehdä. Lupaa haettaessa tapahtui virhe.</div>
+      return <MessageWrapper>Muutospyyntöä ei voida tehdä. Lupaa haettaessa tapahtui virhe.</MessageWrapper>
     } else {
       return null
     }
+
+    
   }
 }
 
