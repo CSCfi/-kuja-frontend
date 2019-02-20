@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import React, { Component } from "react"
-import { COLORS } from "../../../../../../modules/styles"
 import arrow from 'static/images/koulutusala-arrow.svg'
 import {
   Wrapper,
@@ -9,16 +8,14 @@ import {
   Checkbox,
   RadioCheckbox,
   Span,
-  SpanMuutos,
   KoulutusalaListWrapper,
   TutkintoWrapper,
-  Koodi,
-  Nimi,
   Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
+import { MUUT_KEYS } from "../modules/constants"
 import { HAKEMUS_TEKSTIT } from "../../../modules/constants"
 
 class KoulutusList extends Component {
@@ -96,7 +93,7 @@ class KoulutusList extends Component {
         </Heading>
         {!this.state.isHidden &&
         <KoulutusalaListWrapper>
-          { (koodisto === 'oivatyovoimakoulutus' ||  koodisto === 'kuljettajakoulutus') &&
+          { (koodisto === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodisto === MUUT_KEYS.KULJETTAJAKOULUTUS) &&
             <p>{HAKEMUS_TEKSTIT.VAINYKSIVALINTA.FI}:</p>
           }
           {_.map(koulutukset, (koulutus, i) => {
@@ -122,15 +119,15 @@ class KoulutusList extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.koodisto === koodistoUri) {
-                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                  isAdded = val.type === MUUTOS_TYPES.ADDITION ? true : isAdded
+                  isRemoved = val.type === MUUTOS_TYPES.REMOVAL ? true : isRemoved
                 }
               })
             }
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
+            customClassName = isInLupa ? "is-in-lupa" : customClassName
+            customClassName = isAdded ? "is-added" : customClassName
+            customClassName = isRemoved ? "is-removed" : customClassName
 
             if ((isInLupa && !isRemoved && fields) || isAdded) {
               isChecked = true
@@ -138,8 +135,8 @@ class KoulutusList extends Component {
 
             return (
               <div key={i}>
-                { koodistoUri === 'oivatyovoimakoulutus' ||  koodistoUri === 'kuljettajakoulutus' ?
-                  <TutkintoWrapper className={ koodistoUri !== 'kuljettajakoulutus' ? 'customClassName' : 'customClassName longtext'}>
+                { koodistoUri === MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS ||  koodistoUri === MUUT_KEYS.KULJETTAJAKOULUTUS ?
+                  <TutkintoWrapper className={ koodistoUri !== MUUT_KEYS.KULJETTAJAKOULUTUS ? 'customClassName' : 'customClassName longtext'}>
                     <RadioCheckbox>
                       <input
                         type="checkbox"
@@ -162,7 +159,7 @@ class KoulutusList extends Component {
                       />
                       <label htmlFor={identifier}></label>
                     </Checkbox>
-                    {nimi}
+                    {koodistoUri === MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS ? kuvaus : nimi}
                   </TutkintoWrapper>                  
                 }
               </div>
