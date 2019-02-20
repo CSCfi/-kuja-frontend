@@ -12,6 +12,7 @@ import _ from 'lodash'
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
 class MuutospyyntoWizardMuut extends Component {
+
   componentWillMount() {
     const { muut } = this.props
 
@@ -31,7 +32,8 @@ class MuutospyyntoWizardMuut extends Component {
       const { muutCombined } = kohde
       const { data } = muut
       let muutList = data
-      let vaativat = []
+      let vaativat1 = []
+      let vaativat2 = []
       let vankilat = []
       let kokeilut = []
       let yhteistyo = []
@@ -40,7 +42,7 @@ class MuutospyyntoWizardMuut extends Component {
       let sisaoppilaitos = []
       let urheilijat = []
       let muumaarays = []
-      let luokattomat = []
+      // let luokattomat = []
 
       _.forEach(muutList, (maarays) => {
 
@@ -76,8 +78,12 @@ class MuutospyyntoWizardMuut extends Component {
               yhteistyosopimukset.push(maarays)
               break
             }
-            case "vaativa": {
-              vaativat.push(maarays)
+            case "vaativa_1": {
+              vaativat1.push(maarays)
+              break
+            }
+            case "vaativa_2": {
+              vaativat2.push(maarays)
               break
             }
             case "vankila": {
@@ -114,8 +120,16 @@ class MuutospyyntoWizardMuut extends Component {
               name={FIELD_ARRAY_NAMES.MUUT}
               muut={muutCombined}
               editValues={muutmuutoksetValue}
-              muutList={vaativat}
+              muutList={vaativat1}
               otsikko=''
+              component={this.renderMuutMuutokset}
+            />
+            <FieldArray
+              name={FIELD_ARRAY_NAMES.MUUT}
+              muut={muutCombined}
+              editValues={muutmuutoksetValue}
+              muutList={vaativat2}
+              otsikko=' '
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -203,29 +217,47 @@ class MuutospyyntoWizardMuut extends Component {
   renderMuutMuutokset = (props) => {
     const { muut, editValues, fields, otsikko } = props
     let { muutList } = props
+    let { metadata } = muutList
     muutList = muutList.sort((a,b) => 
       this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
     );
 
     let title = undefined;
-    if (muutList.length > 0) title = parseLocalizedField(muutList[0].metadata)
-    if(otsikko !== '') {
-      title = otsikko
+    let showGuide1 = false;
+    let showGuide2 = 0;
+
+    if (muutList.length > 0) {
+      title = parseLocalizedField(muutList[0].metadata)
+    
+      if(otsikko !== '') {
+        title = otsikko
+      }
+
+      const kasite = parseLocalizedField(muutList[0].metadata, 'FI', 'kasite');
+
+      if (kasite === "vaativa_1") {
+        showGuide1 = true;
+      }
+      if (kasite === "vaativa_2") {
+        showGuide2 = 1;
+      }
     }
+    
 
     return (
       <div>
         <Row>
           <h4>{title}</h4>
+          { showGuide1 && 
+            <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
+          }
 
           {muutList.map((muu, i) => {
             const {koodiArvo, koodisto, metadata, voimassaLoppuPvm} = muu
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
-            // let kuvaus = parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi') + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-            // let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-
-            let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            // let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
           
             const identifier = `input-${koodistoUri}-${koodiArvo}`
 
@@ -263,10 +295,9 @@ class MuutospyyntoWizardMuut extends Component {
 
               return (
                 <div key={identifier}>
-                  { koodiArvo === "2" && 
-                    <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
-                  }
-                  { koodiArvo === "3" && 
+                
+                  {/* Näytä vain kerran ohjeteksti */}
+                  { showGuide2 === 1 && showGuide2++ &&
                     <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.LISAALINTA.FI}:</p> 
                   }
                   <CheckboxRowContainer key={identifier} className={customClassName}>
