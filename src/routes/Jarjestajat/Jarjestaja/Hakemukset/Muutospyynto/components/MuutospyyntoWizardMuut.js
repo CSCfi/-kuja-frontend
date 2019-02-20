@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 
 import { ContentContainer } from "../../../../../../modules/elements"
-import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, Div } from "./MuutospyyntoWizardComponents"
+import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, RadioCheckbox, Div } from "./MuutospyyntoWizardComponents"
 import Loading from "../../../../../../modules/Loading"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 import { handleCheckboxChange } from "../modules/koulutusUtil"
@@ -223,7 +223,10 @@ class MuutospyyntoWizardMuut extends Component {
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
             // let kuvaus = parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi') + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-            let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            // let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+
+            let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+          
             const identifier = `input-${koodistoUri}-${koodiArvo}`
 
             let isInLupa = false
@@ -259,7 +262,7 @@ class MuutospyyntoWizardMuut extends Component {
             if (kuvaus && kuvaus !== '') {
 
               return (
-                <div>
+                <div key={identifier}>
                   { koodiArvo === "2" && 
                     <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
                   }
@@ -267,18 +270,35 @@ class MuutospyyntoWizardMuut extends Component {
                     <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.LISAALINTA.FI}:</p> 
                   }
                   <CheckboxRowContainer key={identifier} className={customClassName}>
-                    <Checkbox>
-                      <input
-                        type="checkbox"
-                        id={identifier}
-                        checked={isChecked}
-                        disabled={voimassaLoppuPvm !== undefined}
-                        onChange={(e) => {
-                          handleCheckboxChange(e, editValues, fields, isInLupa, muu)
-                        }}
-                      />
+                    
+                  { koodiArvo === "2" || koodiArvo === "16" || koodiArvo === "17" || koodiArvo === "18"
+                    || koodiArvo === "19" || koodiArvo === "20" || koodiArvo === "21"    ?
+                      <RadioCheckbox>
+                        <input
+                          type="checkbox"
+                          id={identifier}
+                          checked={isChecked}
+                          disabled={voimassaLoppuPvm !== undefined}
+                          onChange={(e) => {
+                            handleCheckboxChange(e, editValues, fields, isInLupa, muu)
+                          }}
+                        />
+                      <label htmlFor={identifier}></label>
+                      </RadioCheckbox>
+                    :
+                      <Checkbox>
+                        <input
+                          type="checkbox"
+                          id={identifier}
+                          checked={isChecked}
+                          disabled={voimassaLoppuPvm !== undefined}
+                          onChange={(e) => {
+                            handleCheckboxChange(e, editValues, fields, isInLupa, muu)
+                          }}
+                        />
                       <label htmlFor={identifier}></label>
                     </Checkbox>
+                    }
                     <Div margin="0 10px" flex="5">{kuvaus}</Div>
                   </CheckboxRowContainer>
                   </div>
