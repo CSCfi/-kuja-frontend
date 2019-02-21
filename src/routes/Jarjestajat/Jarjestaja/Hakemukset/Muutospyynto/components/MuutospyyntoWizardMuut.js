@@ -256,8 +256,8 @@ class MuutospyyntoWizardMuut extends Component {
             const {koodiArvo, koodisto, metadata, voimassaLoppuPvm} = muu
             const {koodistoUri} = koodisto
             const nimi = parseLocalizedField(metadata)
-            // let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-            let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            // let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
           
             const identifier = `input-${koodistoUri}-${koodiArvo}`
             const kasite = parseLocalizedField(muutList[0].metadata, 'FI', 'kasite');
