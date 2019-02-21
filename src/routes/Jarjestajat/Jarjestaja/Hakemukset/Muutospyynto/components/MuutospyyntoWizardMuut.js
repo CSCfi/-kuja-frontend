@@ -260,6 +260,7 @@ class MuutospyyntoWizardMuut extends Component {
             // let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
           
             const identifier = `input-${koodistoUri}-${koodiArvo}`
+            const kasite = parseLocalizedField(muutList[0].metadata, 'FI', 'kasite');
 
             let isInLupa = false
             let isAdded = false
@@ -302,8 +303,7 @@ class MuutospyyntoWizardMuut extends Component {
                   }
                   <CheckboxRowContainer key={identifier} className={customClassName}>
                     
-                  { koodiArvo === "2" || koodiArvo === "16" || koodiArvo === "17" || koodiArvo === "18"
-                    || koodiArvo === "19" || koodiArvo === "20" || koodiArvo === "21"    ?
+                  { kasite === "vaativa_1" ?
                       <RadioCheckbox>
                         <input
                           type="checkbox"
