@@ -303,7 +303,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && {perusteluteksti_oppisopimus: meta_oppisopimus}),
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && kasite === "vankila"  && {perusteluteksti_vankila: meta_vankila}),
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2") && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && kasite === "tyovoima" && {perusteluteksti_tyovoima: meta_tyovoima})
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === "1" || koodiArvo === "3") && {perusteluteksti_tyovoima: meta_tyovoima})
         },
         muutosperustelukoodiarvo: null
       })
@@ -329,7 +329,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && {perusteluteksti_oppisopimus: meta_oppisopimus}),
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && kasite === "vankila"  && {perusteluteksti_vankila: meta_vankila}),
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2") && {perusteluteksti_vaativa: meta_vaativa}),
-          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && kasite === "tyovoima" && {perusteluteksti_tyovoima: meta_tyovoima})
+          ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === "1" || koodiArvo === "3") && {perusteluteksti_tyovoima: meta_tyovoima})
         },
         muutosperustelukoodiarvo: null
       })
