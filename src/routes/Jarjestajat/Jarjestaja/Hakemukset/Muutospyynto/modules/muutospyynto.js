@@ -63,14 +63,20 @@ export function createMuutospyynto(muutospyynto) {
 
 export function saveMuutospyynto(muutospyynto) {
 
-  const formatted = formatMuutospyynto(muutospyynto)
-
+  const formatted = formatMuutospyynto(muutospyynto);
+  let data = new FormData();
+  var blob = new Blob([JSON.stringify(formatted)], { type: "application/json"});
+  data.append('muutospyynto', blob);
+  // data.append('file0', null);
   console.log('formatted-save', JSON.stringify(formatted, null, 3))
-
+  // formData.append('title', title, { header: { contentType: 'text/plain; charset=UTF-8' } });
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})
 
-    return axios.put(`${API_BASE_URL}/muutospyynnot/tallenna`, formatted, { withCredentials: true })
+    return axios.post(`${API_BASE_URL}/muutospyynnot/tallenna`, 
+        data, 
+        { withCredentials: true },
+      )
       .then(response => {
         dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: response })
       })
