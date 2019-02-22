@@ -185,6 +185,7 @@ class Perustelu extends Component {
     }
 
     const setAttachment = e => {
+      console.log("File selected");
       const i = getIndex(muutokset, koodiarvo)
       let obj = fields.get(i)
       obj.file = e.target

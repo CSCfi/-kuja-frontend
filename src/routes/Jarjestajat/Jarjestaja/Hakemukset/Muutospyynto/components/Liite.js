@@ -18,7 +18,7 @@ class Liite extends Component {
           <input
             type="file"
             defaultValue={this.props.file !== null ? this.props.file : undefined}
-            onBlur={this.props.setAttachment}
+            onChange={this.props.setAttachment}
           />
         </div>
         <div>
