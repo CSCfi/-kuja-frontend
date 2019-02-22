@@ -14,7 +14,7 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
-import LiiteKategoriaSelect from './LiiteKategoriaSelect'
+import Liite from './Liite'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -184,6 +184,22 @@ class Perustelu extends Component {
       )
     }
 
+    const setAttachment = e => {
+      const i = getIndex(muutokset, koodiarvo)
+      let obj = fields.get(i)
+      obj.file = e.target
+      fields.remove(i)
+      fields.insert(i, obj)
+    }
+
+    const setAttachmentName = e => {
+      const i = getIndex(muutokset, koodiarvo)
+      let obj = fields.get(i)
+      obj.filename = e.target.value
+      fields.remove(i)
+      fields.insert(i, obj)
+    }
+
     return (
       <PerusteluWrapper>
         <PerusteluSelect
@@ -208,7 +224,8 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
+        <Liite setAttachment={setAttachment} setAttachment={setAttachmentName} file={file} file={filename} />
+        {/* <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
         <div>
           <input
             type="file"
@@ -233,14 +250,14 @@ class Perustelu extends Component {
                    fields.remove(i)
                    fields.insert(i, obj)
                  }}/>
-        </div>
-        <LiiteKategoriaSelect
+        </div> */}
+        {/* <LiiteKategoriaSelect
           muutosperustelukoodiarvo={muutosperustelukoodiarvo}
           muutosperustelut={muutosperustelut.muutosperusteluList}
           muutos={muutos}
           muutokset={muutokset}
           fields={fields}
-        />
+        /> */}
       </PerusteluWrapper>
     )
   }
