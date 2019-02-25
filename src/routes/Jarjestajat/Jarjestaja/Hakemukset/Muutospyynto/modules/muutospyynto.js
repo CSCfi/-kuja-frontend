@@ -61,14 +61,14 @@ export function createMuutospyynto(muutospyynto) {
   }
 }
 
-export function saveMuutospyynto(muutospyynto) {
+export function saveMuutospyynto(muutospyynto, files) {
 
   const formatted = formatMuutospyynto(muutospyynto);
   let data = new FormData();
   var muutos = new Blob([JSON.stringify(formatted)], { type: "application/json"});
   data.append('muutospyynto', muutos);
-  // data.append('file0', null);
-  // console.log('formatted-save', JSON.stringify(formatted, null, 3))
+  data.append('file0', files);
+  console.log('formatted-save', JSON.stringify(formatted, null, 3))
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})
 

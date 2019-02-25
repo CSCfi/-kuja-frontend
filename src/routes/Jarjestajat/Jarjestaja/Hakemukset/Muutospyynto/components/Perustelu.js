@@ -41,14 +41,6 @@ const PerusteluTopArea = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 `
-
-const LiiteTopArea = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 10px;
-`
-
 class Perustelu extends Component {
   componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
@@ -225,7 +217,7 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <Liite setAttachment={setAttachment} setAttachment={setAttachmentName} file={file} file={filename} />
+        <Liite setAttachment={setAttachment} setAttachment={setAttachmentName} file={file} filename={filename} />
         {/* <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
         <div>
           <input
