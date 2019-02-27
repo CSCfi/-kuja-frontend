@@ -26,7 +26,7 @@ class Liite extends Component {
             type="text"
             placeholder="Anna liitteelle nimi (valinnainen)..."
             defaultValue={this.props.filename !== null ? this.props.filename : undefined}
-            onBlur={this.props.setAttachment}
+            onBlur={this.props.setAttachmentName}
           />
         </div>
       </div>

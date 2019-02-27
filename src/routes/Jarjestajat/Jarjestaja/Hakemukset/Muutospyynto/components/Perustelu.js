@@ -61,7 +61,7 @@ class Perustelu extends Component {
 
   render() {
 
-    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset, liitteet } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type } = muutos
@@ -178,19 +178,26 @@ class Perustelu extends Component {
 
     const setAttachment = e => {
       console.log("File selected");
-      const i = getIndex(muutokset, koodiarvo)
-      let obj = fields.get(i)
-      obj.file = e.target
-      fields.remove(i)
-      fields.insert(i, obj)
+      const i = getIndex(muutokset, koodiarvo);
+      const obj = fields.get(i);
+      obj.liitteet.tiedostoId = "file"+koodiarvo+"-"+Math.random();
+      obj.liitteet.kieli = "fi";
+      fields.remove(i);
+      fields.insert(i, obj);
+      console.log(fields.get(i));
+
+      const j = getIndex(liitteet,obj.liitteet.tiedostoId);
+      liitteet.remove(j);
+      liitteet.insert(j, e.file);
     }
 
     const setAttachmentName = e => {
-      const i = getIndex(muutokset, koodiarvo)
-      let obj = fields.get(i)
-      obj.filename = e.target.value
-      fields.remove(i)
-      fields.insert(i, obj)
+      const i = getIndex(muutokset, koodiarvo);
+      let obj = fields.get(i);
+      obj.liitteet.nimi = e.target.value;
+      fields.remove(i);
+      fields.insert(i, obj);
+      console.log(fields.get(i));
     }
 
     return (
@@ -217,7 +224,7 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <Liite setAttachment={setAttachment} setAttachment={setAttachmentName} file={file} filename={filename} />
+        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
         {/* <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
         <div>
           <input
