@@ -278,6 +278,11 @@ class MuutospyyntoWizardYhteenveto extends Component {
           label="Muutoksien voimaantulo"
           component={this.renderDatePicker}
         />
+        <Field
+          name="hakija.saate"
+          label="Saate"
+          component={this.renderTextarea}
+        />
       </div>
     )
   }
@@ -288,6 +293,18 @@ class MuutospyyntoWizardYhteenveto extends Component {
         <Label>{label}</Label>
         <FormField>
           <input {...input} type={type} />
+          {touched && error && <span>{error}</span>}
+        </FormField>
+      </FormGroup>
+    )
+  }
+
+  renderTextarea({ input, label, meta: { touched, error } }) {
+    return (
+      <FormGroup>
+        <Label>{label}</Label>
+        <FormField>
+          <textarea {...input} rows="5"></textarea>
           {touched && error && <span>{error}</span>}
         </FormField>
       </FormGroup>
