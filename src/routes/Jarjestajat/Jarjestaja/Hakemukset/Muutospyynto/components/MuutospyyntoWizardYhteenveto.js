@@ -1,28 +1,25 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import Modal from 'react-modal'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { reduxForm, formValueSelector, FieldArray, Field, change } from 'redux-form'
-import Modal from 'react-modal'
 
-import OrganisaationTiedot from './OrganisaationTiedot'
-import DatePicker from "../../../../../../modules/DatePicker"
+import { Content, ModalButton, modalStyles, ModalText } from "./ModalComponents"
 import MuutosList from './MuutosList'
 import MuutosListTutkinnot from './MuutosListTutkinnot'
+import { hasFormChanges } from "../modules/muutospyyntoUtil"
+import { Button, Container, FormField, FormGroup, Label, Separator, 
+  SubtleButton, Textarea, WizardBottom } from "./MuutospyyntoWizardComponents"
+import OrganisaationTiedot from './OrganisaationTiedot'
 import TaloudellisetYhteenveto from './TaloudellisetYhteenveto'
 
-import validate from '../modules/validateWizard'
-import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator } from "./MuutospyyntoWizardComponents"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import {
-  COMPONENT_TYPES,
-  FIELD_ARRAY_NAMES,
-  FIELDS,
-  FORM_NAME_UUSI_HAKEMUS
-} from "../modules/uusiHakemusFormConstants"
-import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
-import { hasFormChanges } from "../modules/muutospyyntoUtil"
+import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FIELDS, FORM_NAME_UUSI_HAKEMUS } 
+  from "../modules/uusiHakemusFormConstants"
+import validate from '../modules/validateWizard'
 
+import DatePicker from "../../../../../../modules/DatePicker"
 
 Modal.setAppElement('#root')
 
@@ -304,7 +301,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
       <FormGroup>
         <Label>{label}</Label>
         <FormField>
-          <textarea {...input} rows="5"></textarea>
+          <Textarea {...input} rows="5"></Textarea>
           {touched && error && <span>{error}</span>}
         </FormField>
       </FormGroup>
