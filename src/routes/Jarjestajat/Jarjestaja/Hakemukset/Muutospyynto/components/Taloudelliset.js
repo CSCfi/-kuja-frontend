@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
-import { FormField, FormGroup, Separator } from './MuutospyyntoWizardComponents'
+import { FormField, FormGroup, Separator, Textarea } from './MuutospyyntoWizardComponents'
 
 const H4 = styled.h4 `
   margin: 20px 0;
@@ -12,12 +12,6 @@ const H4 = styled.h4 `
 export const Label = styled.label`
   align-self: center;
   flex: 1;
-`
-
-const Textarea = styled.textarea `
-  display: block;
-  margin-bottom: 10px;
-  width: 100%;
 `
 
 class Taloudelliset extends Component {

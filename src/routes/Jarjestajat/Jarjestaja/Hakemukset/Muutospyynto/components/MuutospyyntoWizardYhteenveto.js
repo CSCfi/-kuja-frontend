@@ -1,28 +1,25 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import Modal from 'react-modal'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { reduxForm, formValueSelector, FieldArray, Field, change } from 'redux-form'
-import Modal from 'react-modal'
 
-import OrganisaationTiedot from './OrganisaationTiedot'
-import DatePicker from "../../../../../../modules/DatePicker"
+import { Content, ModalButton, modalStyles, ModalText } from "./ModalComponents"
 import MuutosList from './MuutosList'
 import MuutosListTutkinnot from './MuutosListTutkinnot'
+import { hasFormChanges } from "../modules/muutospyyntoUtil"
+import { Button, Container, FormField, FormGroup, Label, Separator, 
+  SubtleButton, Textarea, WizardBottom } from "./MuutospyyntoWizardComponents"
+import OrganisaationTiedot from './OrganisaationTiedot'
 import TaloudellisetYhteenveto from './TaloudellisetYhteenveto'
 
-import validate from '../modules/validateWizard'
-import { WizardBottom, Container, SubtleButton, Button, FormGroup, Label, FormField, Separator } from "./MuutospyyntoWizardComponents"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import {
-  COMPONENT_TYPES,
-  FIELD_ARRAY_NAMES,
-  FIELDS,
-  FORM_NAME_UUSI_HAKEMUS
-} from "../modules/uusiHakemusFormConstants"
-import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
-import { hasFormChanges } from "../modules/muutospyyntoUtil"
+import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FIELDS, FORM_NAME_UUSI_HAKEMUS } 
+  from "../modules/uusiHakemusFormConstants"
+import validate from '../modules/validateWizard'
 
+import DatePicker from "../../../../../../modules/DatePicker"
 
 Modal.setAppElement('#root')
 
@@ -63,18 +60,14 @@ class MuutospyyntoWizardYhteenveto extends Component {
       event.preventDefault()
     }
 
-    console.log('firing change')
     data.tila = FIELDS.TILA.VALUES.AVOIN
 
     setTimeout(() => {
-      console.log('setTimeout over')
       this.props.createMuutospyynto(data)
         .then(() => {
           if (this.props.muutospyynto.create && this.props.muutospyynto.create.isCreated) {
-            console.log('is created')
             this.setState({ isSent: true})
           } else {
-            console.log('not created', this.props.muutospyynto.create)
             this.setState({ hasErrored: true })
           }
         })
@@ -83,7 +76,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 
   onDone() {
-    console.log('onDone')
     this.closeSendModal()
     const url = `/jarjestajat/${this.props.match.params.ytunnus}/hakemukset-ja-paatokset`
     this.props.history.push(url)
@@ -92,7 +84,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
   render() {
     const {
       handleSubmit,
-      onSubmit,
       previousPage,
       preview,
       save,
@@ -103,8 +94,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
       toimialueValue,
       opiskelijavuosiValue,
       muutmuutoksetValue,
-      taloudellisetValue,
-      tila
+      taloudellisetValue
     } = this.props
 
     let jarjestaja = undefined
@@ -113,8 +103,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
     }
 
     const { meta } = formValues
-
-    setTimeout(() => console.log('yhteenveto ', formValues), 400)
 
     return (
       <div>
@@ -287,6 +275,11 @@ class MuutospyyntoWizardYhteenveto extends Component {
           label="Muutoksien voimaantulo"
           component={this.renderDatePicker}
         />
+        <Field
+          name="hakija.saate"
+          label="Saate"
+          component={this.renderTextarea}
+        />
       </div>
     )
   }
@@ -303,8 +296,20 @@ class MuutospyyntoWizardYhteenveto extends Component {
     )
   }
 
+  renderTextarea({ input, label, meta: { touched, error } }) {
+    return (
+      <FormGroup>
+        <Label>{label}</Label>
+        <FormField>
+          <Textarea {...input} rows="5"></Textarea>
+          {touched && error && <span>{error}</span>}
+        </FormField>
+      </FormGroup>
+    )
+  }
+
   renderDatePicker(props) {
-    const { input, label, type, meta: { touched, error } } = props
+    const { input, label } = props
     return (
       <FormGroup>
         <Label>{label}</Label>
