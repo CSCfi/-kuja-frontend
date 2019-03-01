@@ -92,7 +92,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
   render() {
     const {
       handleSubmit,
-      onSubmit,
       previousPage,
       preview,
       save,
@@ -103,8 +102,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
       toimialueValue,
       opiskelijavuosiValue,
       muutmuutoksetValue,
-      taloudellisetValue,
-      tila
+      taloudellisetValue
     } = this.props
 
     let jarjestaja = undefined
@@ -304,7 +302,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 
   renderDatePicker(props) {
-    const { input, label, type, meta: { touched, error } } = props
+    const { input, label } = props
     return (
       <FormGroup>
         <Label>{label}</Label>
