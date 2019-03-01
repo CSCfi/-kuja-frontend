@@ -63,18 +63,14 @@ class MuutospyyntoWizardYhteenveto extends Component {
       event.preventDefault()
     }
 
-    console.log('firing change')
     data.tila = FIELDS.TILA.VALUES.AVOIN
 
     setTimeout(() => {
-      console.log('setTimeout over')
       this.props.createMuutospyynto(data)
         .then(() => {
           if (this.props.muutospyynto.create && this.props.muutospyynto.create.isCreated) {
-            console.log('is created')
             this.setState({ isSent: true})
           } else {
-            console.log('not created', this.props.muutospyynto.create)
             this.setState({ hasErrored: true })
           }
         })
@@ -83,7 +79,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 
   onDone() {
-    console.log('onDone')
     this.closeSendModal()
     const url = `/jarjestajat/${this.props.match.params.ytunnus}/hakemukset-ja-paatokset`
     this.props.history.push(url)
@@ -111,8 +106,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
     }
 
     const { meta } = formValues
-
-    setTimeout(() => console.log('yhteenveto ', formValues), 400)
 
     return (
       <div>
