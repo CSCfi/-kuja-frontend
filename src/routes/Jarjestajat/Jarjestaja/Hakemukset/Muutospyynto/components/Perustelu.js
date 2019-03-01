@@ -61,7 +61,7 @@ class Perustelu extends Component {
 
   render() {
 
-    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset, liitteet } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type } = muutos
@@ -175,20 +175,33 @@ class Perustelu extends Component {
         </PerusteluWrapper>
       )
     }
+    let fileReader = new FileReader();
+    const liitteet = {};
+    let obj = undefined;
+
+    const handleFileRead = (e) => {
+      const i = getIndex(muutokset, koodiarvo);
+      const content = fileReader.result;
+      liitteet.tiedosto = fileReader.result;
+      console.log(content);
+      console.log(liitteet);
+      obj.liitteet.push(liitteet);
+      fields.remove(i);
+      fields.insert(i, obj);
+      console.log(fields.get(i));
+    };
 
     const setAttachment = e => {
       console.log("File selected");
       const i = getIndex(muutokset, koodiarvo);
-      const obj = fields.get(i);
-      obj.liitteet.tiedostoId = "file"+koodiarvo+"-"+Math.random();
-      obj.liitteet.kieli = "fi";
-      fields.remove(i);
-      fields.insert(i, obj);
-      console.log(fields.get(i));
-
-      const j = getIndex(liitteet,obj.liitteet.tiedostoId);
-      liitteet.remove(j);
-      liitteet.insert(j, e.file);
+      obj = fields.get(i);
+      liitteet.tiedostoId = "file"+koodiarvo+"-"+Math.random();
+      liitteet.kieli = "fi";
+      // if (e.target.files.length > 0) 
+      fileReader.onload= handleFileRead;
+      fileReader.readAsBinaryString(e.target.files[0])
+      // liitteet.tiedosto = window.URL.createObjectURL(e.target.files[0]);
+      // console.log(window.URL.createObjectURL(e.target.files[0]));
     }
 
     const setAttachmentName = e => {

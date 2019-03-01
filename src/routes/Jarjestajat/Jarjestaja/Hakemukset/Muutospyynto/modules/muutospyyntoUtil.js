@@ -22,7 +22,7 @@ export function formatMuutospyynto(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
-    hakija = []
+    hakija = [],
   } = muutospyynto
 
   let muutokset = [
@@ -33,6 +33,9 @@ export function formatMuutospyynto(muutospyynto) {
     ...formatMuutosArray(muutmuutokset)
   ]
 
+  muutokset.map(item => {
+    if (item.liitteet.length > 0) delete(item.liitteet[0].tiedosto);
+  });
 
   return {
     diaarinumero,
@@ -49,7 +52,41 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
     meta: hakija,
-    muutokset: muutokset
+    muutokset: muutokset,
+  }
+}
+
+export function getAttachments(muutospyynto) {
+
+  const {
+    tutkinnotjakoulutukset = [],
+    opetusjatutkintokielet = [],
+    toimintaalueet = [],
+    opiskelijavuodet = [],
+    muutmuutokset = [],
+  } = muutospyynto
+
+  let muutokset = [
+    ...formatMuutosArray(tutkinnotjakoulutukset),
+    ...formatMuutosArray(opetusjatutkintokielet),
+    ...formatMuutosArray(toimintaalueet),
+    ...formatMuutosArray(opiskelijavuodet),
+    ...formatMuutosArray(muutmuutokset)
+  ]
+
+  const liitteet = [] ;
+  muutokset.map(item => {
+    if (item.liitteet.length > 0) {
+      let liite = {};
+      liite.tiedostoId = item.liitteet[0].tiedostoId;
+      liite.tiedosto = item.liitteet[0].tiedosto;
+      liitteet.push(liite);
+    }
+  });
+  console.log(liitteet);
+
+  return {
+    liitteet
   }
 }
 
