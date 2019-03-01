@@ -76,8 +76,6 @@ export function saveMuutospyynto(muutospyynto) {
   attachments.liitteet.map( item => {
     data.append(item.tiedostoId, item.tiedosto);
   });
-  // data.append('liitteet', muutos);
-  // this.props.liitteet.map( attachment => data.append(attachment.name, attachment.file));
   console.log('save', data)
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})

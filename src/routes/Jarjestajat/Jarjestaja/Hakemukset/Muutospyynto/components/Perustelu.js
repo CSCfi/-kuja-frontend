@@ -4,7 +4,7 @@ import { getIndex } from "../modules/muutosUtil"
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { KOODISTOT } from "../../../modules/constants"
-
+import _ from 'lodash'
 
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
@@ -42,6 +42,14 @@ const PerusteluTopArea = styled.div`
   margin-bottom: 10px;
 `
 class Perustelu extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      liitteet: {}
+    }
+  }
+
   componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
 
@@ -65,6 +73,10 @@ class Perustelu extends Component {
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type } = muutos
+
+    let fileReader = new FileReader();
+    let liite = {};
+    let obj = undefined;
 
     // lisälomakkeet
     // tulevat vain lisäyksille tai muutoksille.
@@ -175,43 +187,43 @@ class Perustelu extends Component {
         </PerusteluWrapper>
       )
     }
-    let fileReader = new FileReader();
-    const liitteet = {};
-    let obj = undefined;
 
-    const handleFileRead = (e) => {
+    const handleFileRead = (e, obj) => {
       const i = getIndex(muutokset, koodiarvo);
-      const content = fileReader.result;
-      liitteet.tiedosto = fileReader.result;
-      console.log(content);
-      console.log(liitteet);
-      obj.liitteet.push(liitteet);
+      liite.tiedosto = fileReader.result;
+      obj.liitteet.push(liite);
+      console.log(this.state.liitteet);
       fields.remove(i);
       fields.insert(i, obj);
-      console.log(fields.get(i));
     };
 
     const setAttachment = e => {
       console.log("File selected");
       const i = getIndex(muutokset, koodiarvo);
       obj = fields.get(i);
-      liitteet.tiedostoId = "file"+koodiarvo+"-"+Math.random();
-      liitteet.kieli = "fi";
-      // if (e.target.files.length > 0) 
-      fileReader.onload= handleFileRead;
+      console.log(obj);
+      if (!obj.liitteet) {
+        console.log("New liitteet");
+        obj.liitteet = new Array;
+      }
+      liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
+      liite.kieli = "fi";
+      liite.tyyppi = e.target.files[0].name.split('.').pop();
+      liite.nimi = e.target.files[0].name;
+      this.setState({
+        liitteet: [...this.state.liitteet, liite]
+      })
+      fileReader.onload= e => handleFileRead(e,obj);
       fileReader.readAsBinaryString(e.target.files[0])
-      // liitteet.tiedosto = window.URL.createObjectURL(e.target.files[0]);
-      // console.log(window.URL.createObjectURL(e.target.files[0]));
     }
 
     const setAttachmentName = e => {
       const i = getIndex(muutokset, koodiarvo);
-      let obj = fields.get(i);
-      obj.liitteet.nimi = e.target.value;
-      fields.remove(i);
-      fields.insert(i, obj);
-      console.log(fields.get(i));
+      obj = fields.get(i);
+      obj.liitteet[0].nimi = e.target.value;
     }
+
+    console.log(this.state.liitteet);
 
     return (
       <PerusteluWrapper>
@@ -238,39 +250,7 @@ class Perustelu extends Component {
           }}
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
-        {/* <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
-        <div>
-          <input
-            type="file"
-            defaultValue={file !== null ? file : undefined}
-            onBlur={(e) => {
-              const i = getIndex(muutokset, koodiarvo)
-              let obj = fields.get(i)
-              obj.file = e.target
-              fields.remove(i)
-              fields.insert(i, obj)
-            }}/>
-
-        </div>
-        <div>
-          <input type="text"
-                 placeholder="Anna liitteelle nimi (valinnainen)..."
-                 defaultValue={filename !== null ? filename : undefined}
-                 onBlur={(e) => {
-                   const i = getIndex(muutokset, koodiarvo)
-                   let obj = fields.get(i)
-                   obj.filename = e.target.value
-                   fields.remove(i)
-                   fields.insert(i, obj)
-                 }}/>
-        </div> */}
-        {/* <LiiteKategoriaSelect
-          muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-          muutosperustelut={muutosperustelut.muutosperusteluList}
-          muutos={muutos}
-          muutokset={muutokset}
-          fields={fields}
-        /> */}
+        { this.state.liitteet.lenght > 0 ? <span>{this.state.liitteet.map( liite => liite.name )}</span> : null }
       </PerusteluWrapper>
     )
   }

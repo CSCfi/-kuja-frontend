@@ -24,6 +24,7 @@ class Liite extends Component {
         <div>
           <input 
             type="text"
+            disabled={!this.props.file}
             placeholder="Anna liitteelle nimi (valinnainen)..."
             defaultValue={this.props.filename !== null ? this.props.filename : undefined}
             onBlur={this.props.setAttachmentName}
