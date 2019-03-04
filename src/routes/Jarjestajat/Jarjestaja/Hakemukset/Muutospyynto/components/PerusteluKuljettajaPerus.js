@@ -176,7 +176,7 @@ class PerusteluKuljettajaPerus extends Component {
 
   render() {
     const { muutokset, fields, koodiarvo, perusteluteksti_kuljetus_perus } = this.props
-    const { tarpeellisuus, voimassaoleva, voimassaoleva_pvm, suunnitelma } = perusteluteksti_kuljetus_perus
+    const { tarpeellisuus, voimassaoleva_pvm, suunnitelma } = perusteluteksti_kuljetus_perus
     const { toimipisteet, kanta_linja_auto, kanta_kuorma_auto } = perusteluteksti_kuljetus_perus
     const { kanta_peravaunu, valineet_asetus, valineet_muut } = perusteluteksti_kuljetus_perus
 
