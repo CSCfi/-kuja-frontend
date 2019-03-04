@@ -34,7 +34,10 @@ export function formatMuutospyynto(muutospyynto) {
   ]
 
   muutokset.map(item => {
-    if (item.liitteet.length > 0) delete(item.liitteet[0].tiedosto);
+    if (item.liitteet.length > 0) 
+      item.liitteet.map ( liite =>
+        delete(liite.tiedosto)
+      )
   });
 
   return {

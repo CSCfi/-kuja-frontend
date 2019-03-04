@@ -43,13 +43,6 @@ const PerusteluTopArea = styled.div`
 `
 class Perustelu extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      liitteet: {}
-    }
-  }
-
   componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
 
@@ -74,10 +67,11 @@ class Perustelu extends Component {
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type, metadata } = muutos
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
+    const i = getIndex(muutokset, koodiarvo);
 
     let fileReader = new FileReader();
     let liite = {};
-    let obj = undefined;
+    let obj = fields.get(i);
 
     // lisälomakkeet
     // tulevat vain lisäyksille tai muutoksille.
@@ -190,17 +184,14 @@ class Perustelu extends Component {
     }
 
     const handleFileRead = (e, obj) => {
-      const i = getIndex(muutokset, koodiarvo);
       liite.tiedosto = fileReader.result;
       obj.liitteet.push(liite);
-      console.log(this.state.liitteet);
       fields.remove(i);
       fields.insert(i, obj);
     };
 
     const setAttachment = e => {
       console.log("File selected");
-      const i = getIndex(muutokset, koodiarvo);
       obj = fields.get(i);
       console.log(obj);
       if (!obj.liitteet) {
@@ -211,20 +202,16 @@ class Perustelu extends Component {
       liite.kieli = "fi";
       liite.tyyppi = e.target.files[0].name.split('.').pop();
       liite.nimi = e.target.files[0].name;
-      this.setState({
-        liitteet: [...this.state.liitteet, liite]
-      })
       fileReader.onload= e => handleFileRead(e,obj);
       fileReader.readAsBinaryString(e.target.files[0])
     }
 
     const setAttachmentName = e => {
-      const i = getIndex(muutokset, koodiarvo);
       obj = fields.get(i);
       obj.liitteet[0].nimi = e.target.value;
     }
 
-    console.log(this.state.liitteet);
+    console.log(obj.liitteet);
 
     return (
       <PerusteluWrapper>
@@ -243,7 +230,6 @@ class Perustelu extends Component {
           rows="5"
           defaultValue={perusteluteksti !== null ? perusteluteksti : undefined}
           onBlur={(e) => {
-            const i = getIndex(muutokset, koodiarvo)
             let obj = fields.get(i)
             obj.meta.perusteluteksti = e.target.value
             fields.remove(i)
@@ -251,7 +237,10 @@ class Perustelu extends Component {
           }}
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
-        { this.state.liitteet.lenght > 0 ? <span>{this.state.liitteet.map( liite => liite.name )}</span> : null }
+        {/* Liite listaus */}
+        { obj.liitteet.length > 0 &&  obj.liitteet.map( 
+          liite => <span key={liite.tiedostoId}>{liite.nimi}</span> 
+        )}
       </PerusteluWrapper>
     )
   }
