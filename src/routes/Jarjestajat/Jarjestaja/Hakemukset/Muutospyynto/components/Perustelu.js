@@ -62,7 +62,7 @@ class Perustelu extends Component {
 
   render() {
 
-    const { helpText, muutos, muutokset, koodiarvo, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, sisaltaa_merkityksen, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type, metadata } = muutos
@@ -149,7 +149,7 @@ class Perustelu extends Component {
 
     // Kuljettajakoulutus - perustaso
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen == "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaPerus
@@ -167,7 +167,7 @@ class Perustelu extends Component {
 
     // Kuljettajakoulutus - jatko
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && koodiarvo == 2 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && sisaltaa_merkityksen == "jatko" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaJatko

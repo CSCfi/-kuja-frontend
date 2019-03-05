@@ -35,7 +35,7 @@ export function formatMuutospyynto(muutospyynto) {
 
   // Itse liitteitä ei tarvita tallennuksen json:nissa
   muutokset.map(item => {
-    if (item.liitteet.length > 0) 
+    if (item.liitteet && item.liitteet.length > 0) 
       item.liitteet.map ( liite =>
         delete(liite.tiedosto)
       )
@@ -63,7 +63,7 @@ export function formatMuutospyynto(muutospyynto) {
 export function createAttachmentArray(muutokset) {
   const liitteet = [] ;
   muutokset.map( item => {
-    if (item.liitteet.length > 0) {
+    if (item.liitteet && item.liitteet.length > 0) {
       item.liitteet.map( liite => {
         let tulosliite = {};
         tulosliite.tiedostoId = liite.tiedostoId;
