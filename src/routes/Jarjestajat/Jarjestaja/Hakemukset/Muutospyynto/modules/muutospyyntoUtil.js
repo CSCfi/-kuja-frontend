@@ -33,6 +33,7 @@ export function formatMuutospyynto(muutospyynto) {
     ...formatMuutosArray(muutmuutokset)
   ]
 
+  // Itse liitteitä ei tarvita tallennuksen json:nissa
   muutokset.map(item => {
     if (item.liitteet.length > 0) 
       item.liitteet.map ( liite =>
@@ -59,6 +60,22 @@ export function formatMuutospyynto(muutospyynto) {
   }
 }
 
+export function createAttachmentArray(muutokset) {
+  const liitteet = [] ;
+  muutokset.map( item => {
+    if (item.liitteet.length > 0) {
+      item.liitteet.map( liite => {
+        let tulosliite = {};
+        tulosliite.tiedostoId = liite.tiedostoId;
+        tulosliite.tiedosto = new Blob([liite.tiedosto]);
+        liitteet.push(tulosliite);
+      })
+    }
+  })
+  console.log(liitteet);
+  return liitteet;
+}
+
 export function getAttachments(muutospyynto) {
 
   const {
@@ -77,20 +94,10 @@ export function getAttachments(muutospyynto) {
     ...formatMuutosArray(muutmuutokset)
   ]
 
-  const liitteet = [] ;
-  muutokset.map(item => {
-    if (item.liitteet.length > 0) {
-      let liite = {};
-      liite.tiedostoId = item.liitteet[0].tiedostoId;
-      liite.tiedosto = item.liitteet[0].tiedosto;
-      liitteet.push(liite);
-    }
-  });
+  let liitteet = createAttachmentArray(muutokset);
   console.log(liitteet);
 
-  return {
-    liitteet
-  }
+  return liitteet;
 }
 
 function formatMuutosArray(muutokset) {

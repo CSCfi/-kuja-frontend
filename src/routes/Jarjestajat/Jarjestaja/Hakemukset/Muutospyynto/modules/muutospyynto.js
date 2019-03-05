@@ -69,14 +69,16 @@ export function saveMuutospyynto(muutospyynto) {
   console.log('muutospyynto', muutospyynto);
   console.log('attachments', attachments);
 
+
   let data = new FormData();
   var muutos = new Blob([JSON.stringify(formatted)], { type: "application/json"});
   data.append('muutospyynto', muutos);
   
-  attachments.liitteet.map( item => {
+  attachments.map( item => {
     data.append(item.tiedostoId, item.tiedosto);
   });
-  console.log('save', data)
+  console.log('save', data);
+
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})
 
@@ -91,6 +93,7 @@ export function saveMuutospyynto(muutospyynto) {
         dispatch({ type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err })
       })
   }
+  
 }
 
 export function updateMuutospyynto(muutospyynto) {

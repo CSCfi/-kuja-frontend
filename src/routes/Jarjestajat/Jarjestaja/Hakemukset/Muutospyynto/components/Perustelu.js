@@ -69,7 +69,7 @@ class Perustelu extends Component {
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
     const i = getIndex(muutokset, koodiarvo);
 
-    let fileReader = new FileReader();
+    // let fileReader = new FileReader();
     let liite = {};
     let obj = fields.get(i);
 
@@ -183,27 +183,22 @@ class Perustelu extends Component {
       )
     }
 
-    const handleFileRead = (e, obj) => {
-      liite.tiedosto = fileReader.result;
-      obj.liitteet.push(liite);
-      fields.remove(i);
-      fields.insert(i, obj);
-    };
-
     const setAttachment = e => {
       console.log("File selected");
+      console.log(e.target.files[0]);
+
       obj = fields.get(i);
-      console.log(obj);
       if (!obj.liitteet) {
-        console.log("New liitteet");
         obj.liitteet = new Array;
       }
       liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
       liite.kieli = "fi";
       liite.tyyppi = e.target.files[0].name.split('.').pop();
       liite.nimi = e.target.files[0].name;
-      fileReader.onload= e => handleFileRead(e,obj);
-      fileReader.readAsBinaryString(e.target.files[0])
+      liite.tiedosto = e.target.files[0];
+      obj.liitteet.push(liite);
+      fields.remove(i);
+      fields.insert(i, obj);
     }
 
     const setAttachmentName = e => {
@@ -238,7 +233,7 @@ class Perustelu extends Component {
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
         {/* Liite listaus */}
-        { obj.liitteet.length > 0 &&  obj.liitteet.map( 
+        { obj && obj.liitteet && obj.liitteet.length > 0 &&  obj.liitteet.map( 
           liite => <span key={liite.tiedostoId}>{liite.nimi}</span> 
         )}
       </PerusteluWrapper>
