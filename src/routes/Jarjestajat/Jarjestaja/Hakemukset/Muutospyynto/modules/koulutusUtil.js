@@ -267,7 +267,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   console.log(kohde);
 
   if (!maaraystyyppi) {
-    if (koodistoUri === KOODISTOT.KOULUTUS) {
+    if (koodistoUri === KOODISTOT.KOULUTUS || koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS || koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS || koodistoUri === KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
