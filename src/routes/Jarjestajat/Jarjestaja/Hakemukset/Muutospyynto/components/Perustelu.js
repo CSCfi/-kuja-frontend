@@ -235,7 +235,7 @@ class Perustelu extends Component {
         <br />
         {/* Liite listaus */}
         { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <span key={liite.tiedostoId}>{liite.nimi}</span> 
+          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi}</span> 
         )}
       </PerusteluWrapper>
     )

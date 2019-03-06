@@ -35,7 +35,6 @@ export function fetchMuutospyynto(uuid) {
       request
         .then((response) => response.json())
         .then((data) => {
-          console.log(JSON.stringify(data));
           dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
         })
         .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))
@@ -73,12 +72,12 @@ export function saveMuutospyynto(muutospyynto) {
 
   let data = new FormData();
   var muutos = new Blob([JSON.stringify(formatted)], { type: "application/json"});
-  data.append('muutospyynto', muutos);
+  data.append('muutospyynto', muutos, "muutospyynnön json-data");
   
   attachments.map( item => {
-    data.append(item.tiedostoId, item.tiedosto);
+    console.log(item.tiedosto);
+    if (item.tiedosto) data.append(item.tiedostoId, item.tiedosto, item.nimi);
   });
-  console.log('save', data);
 
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})

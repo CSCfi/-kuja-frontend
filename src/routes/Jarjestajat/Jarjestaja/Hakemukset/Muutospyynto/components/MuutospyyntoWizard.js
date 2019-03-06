@@ -160,7 +160,7 @@ class MuutospyyntoWizard extends Component {
     }
 
     console.log('save', data)
-    this.props.saveMuutospyynto(data)
+    // this.props.saveMuutospyynto(data)
     const url = `/jarjestajat/${this.props.match.params.ytunnus}`
     this.props.saveMuutospyynto(data).then(() => {
       let uuid = undefined;

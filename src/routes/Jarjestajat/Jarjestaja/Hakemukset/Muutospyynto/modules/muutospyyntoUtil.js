@@ -67,7 +67,9 @@ export function createAttachmentArray(muutokset) {
       item.liitteet.map( liite => {
         let tulosliite = {};
         tulosliite.tiedostoId = liite.tiedostoId;
-        tulosliite.tiedosto = new Blob([liite.tiedosto]);
+        tulosliite.tyyppi = liite.tyyppi;
+        tulosliite.nimi = liite.nimi;
+        if (liite.tiedosto) tulosliite.tiedosto = new Blob([liite.tiedosto]);
         liitteet.push(tulosliite);
       })
     }
