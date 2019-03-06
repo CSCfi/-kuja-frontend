@@ -252,6 +252,12 @@ class MuutospyyntoWizardYhteenveto extends Component {
           component={this.renderField}
         />
         <Field
+          name="hakija.nimike"
+          type="text"
+          label="Yhteyshenkilön nimike"
+          component={this.renderField}
+        />
+        <Field
           name="hakija.puhelin"
           type="text"
           label="Yhteyshenkilön puhelinnumero"
@@ -266,7 +272,13 @@ class MuutospyyntoWizardYhteenveto extends Component {
         <Field
           name="hakija.hyvaksyjat"
           type="text"
-          label="Hakemuksen hyväksyjät/allekirjoittajat"
+          label="Hakemuksen hyväksyjä/allekirjoittaja"
+          component={this.renderField}
+        />
+        <Field
+          name="hakija.hyvaksyja_nimike"
+          type="text"
+          label="Hyväksyjän/allekirjoittajan nimike"
           component={this.renderField}
         />
         <Field
