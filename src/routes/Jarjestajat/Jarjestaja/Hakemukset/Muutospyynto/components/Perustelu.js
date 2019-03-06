@@ -233,7 +233,7 @@ class Perustelu extends Component {
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
         {/* Liite listaus */}
-        { obj && obj.liitteet && obj.liitteet.length > 0 &&  obj.liitteet.map( 
+        { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
           liite => <span key={liite.tiedostoId}>{liite.nimi}</span> 
         )}
       </PerusteluWrapper>
