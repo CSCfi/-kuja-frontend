@@ -22,7 +22,7 @@ export function formatMuutospyynto(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
-    hakija = []
+    hakija = [],
   } = muutospyynto
 
   let muutokset = [
@@ -33,6 +33,13 @@ export function formatMuutospyynto(muutospyynto) {
     ...formatMuutosArray(muutmuutokset)
   ]
 
+  // Itse liitteitä ei tarvita tallennuksen json:nissa
+  muutokset.map(item => {
+    if (item.liitteet && item.liitteet.length > 0) 
+      item.liitteet.map ( liite =>
+        delete(liite.tiedosto)
+      )
+  });
 
   return {
     diaarinumero,
@@ -49,8 +56,50 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
     meta: hakija,
-    muutokset: muutokset
+    muutokset: muutokset,
   }
+}
+
+export function createAttachmentArray(muutokset) {
+  const liitteet = [] ;
+  muutokset.map( item => {
+    if (item.liitteet && item.liitteet.length > 0) {
+      item.liitteet.map( liite => {
+        let tulosliite = {};
+        tulosliite.tiedostoId = liite.tiedostoId;
+        tulosliite.tyyppi = liite.tyyppi;
+        tulosliite.nimi = liite.nimi;
+        if (liite.tiedosto) tulosliite.tiedosto = new Blob([liite.tiedosto]);
+        liitteet.push(tulosliite);
+      })
+    }
+  })
+  console.log(liitteet);
+  return liitteet;
+}
+
+export function getAttachments(muutospyynto) {
+
+  const {
+    tutkinnotjakoulutukset = [],
+    opetusjatutkintokielet = [],
+    toimintaalueet = [],
+    opiskelijavuodet = [],
+    muutmuutokset = [],
+  } = muutospyynto
+
+  let muutokset = [
+    ...formatMuutosArray(tutkinnotjakoulutukset),
+    ...formatMuutosArray(opetusjatutkintokielet),
+    ...formatMuutosArray(toimintaalueet),
+    ...formatMuutosArray(opiskelijavuodet),
+    ...formatMuutosArray(muutmuutokset)
+  ]
+
+  let liitteet = createAttachmentArray(muutokset);
+  console.log(liitteet);
+
+  return liitteet;
 }
 
 function formatMuutosArray(muutokset) {

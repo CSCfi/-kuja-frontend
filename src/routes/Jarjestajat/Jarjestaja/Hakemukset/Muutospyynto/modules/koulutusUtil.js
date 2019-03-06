@@ -254,7 +254,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
   const { checked } = event.target
 
   if (!kohde) {
-    if (koodistoUri === KOODISTOT.KOULUTUS) {
+    if (koodistoUri === KOODISTOT.KOULUTUS || koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS || koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS || koodistoUri === KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS) {
       kohde = getKohdeByTunniste(KOHTEET.TUTKINNOT)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       kohde = getKohdeByTunniste(KOHTEET.KIELI)
@@ -262,9 +262,12 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       kohde = getKohdeByTunniste(KOHTEET.MUUT)
     }
   }
+  console.log("koodistoUri");
+  console.log(koodistoUri);
+  console.log(kohde);
 
   if (!maaraystyyppi) {
-    if (koodistoUri === KOODISTOT.KOULUTUS) {
+    if (koodistoUri === KOODISTOT.KOULUTUS || koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS || koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS || koodistoUri === KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.OIKEUS)
     } else if (koodistoUri === KOODISTOT.OPPILAITOKSENOPETUSKIELI) {
       maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
@@ -297,6 +300,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         type: MUUTOS_TYPES.ADDITION,
         sisaltaa_merkityksen: sisaltaa_merkityksen,
         meta: {
+          nimi,
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,
@@ -323,6 +327,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
         maaraystyyppi,
         type: MUUTOS_TYPES.REMOVAL,
         meta: {
+          nimi,
           koulutusala: currentObj.koulutusalaKoodiArvo,
           koulutustyyppi: currentObj.koulutustyyppiKoodiArvo,
           perusteluteksti: null,

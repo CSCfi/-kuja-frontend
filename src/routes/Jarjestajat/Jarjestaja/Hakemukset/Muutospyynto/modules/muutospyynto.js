@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
 import axios from "axios/index"
-import { formatMuutospyynto } from "./muutospyyntoUtil"
+import { formatMuutospyynto, getAttachments } from "./muutospyyntoUtil"
 
 // Constants
 export const FETCH_MUUTOSPYYNTO_START = 'FETCH_MUUTOSPYYNTO_START'
@@ -63,12 +63,22 @@ export function createMuutospyynto(muutospyynto) {
 
 export function saveMuutospyynto(muutospyynto) {
 
+  const attachments = getAttachments(muutospyynto);
   const formatted = formatMuutospyynto(muutospyynto);
+
+  console.log('muutospyynto', muutospyynto);
+  console.log('attachments', attachments);
+
+
   let data = new FormData();
   var muutos = new Blob([JSON.stringify(formatted)], { type: "application/json"});
-  data.append('muutospyynto', muutos);
-  // data.append('file0', null);
-  // console.log('formatted-save', JSON.stringify(formatted, null, 3))
+  data.append('muutospyynto', muutos, "muutospyynnön json-data");
+  
+  attachments.map( item => {
+    console.log(item.tiedosto);
+    if (item.tiedosto) data.append(item.tiedostoId, item.tiedosto, item.nimi);
+  });
+
   return (dispatch) => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START})
 
@@ -83,6 +93,7 @@ export function saveMuutospyynto(muutospyynto) {
         dispatch({ type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err })
       })
   }
+  
 }
 
 export function updateMuutospyynto(muutospyynto) {

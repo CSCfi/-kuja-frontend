@@ -14,7 +14,7 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
-import LiiteKategoriaSelect from './LiiteKategoriaSelect'
+import Liite from './Liite'
 
 const PerusteluWrapper = styled.div`
   display: flex;
@@ -41,15 +41,8 @@ const PerusteluTopArea = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 `
-
-const LiiteTopArea = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 10px;
-`
-
 class Perustelu extends Component {
+
   componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
 
@@ -74,6 +67,11 @@ class Perustelu extends Component {
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
     const { koodisto, type, metadata } = muutos
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
+    const i = getIndex(muutokset, koodiarvo);
+
+    // let fileReader = new FileReader();
+    let liite = {};
+    let obj = fields.get(i);
 
     // lisälomakkeet
     // tulevat vain lisäyksille tai muutoksille.
@@ -185,6 +183,31 @@ class Perustelu extends Component {
       )
     }
 
+    const setAttachment = e => {
+      console.log("File selected");
+      console.log(e.target.files[0]);
+
+      obj = fields.get(i);
+      if (!obj.liitteet) {
+        obj.liitteet = new Array;
+      }
+      liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
+      liite.kieli = "fi";
+      liite.tyyppi = e.target.files[0].name.split('.').pop();
+      liite.nimi = e.target.files[0].name;
+      liite.tiedosto = e.target.files[0];
+      obj.liitteet.push(liite);
+      fields.remove(i);
+      fields.insert(i, obj);
+    }
+
+    const setAttachmentName = e => {
+      obj = fields.get(i);
+      obj.liitteet[0].nimi = e.target.value;
+    }
+
+    console.log(obj.liitteet);
+
     return (
       <PerusteluWrapper>
         <PerusteluSelect
@@ -202,46 +225,18 @@ class Perustelu extends Component {
           rows="5"
           defaultValue={perusteluteksti !== null ? perusteluteksti : undefined}
           onBlur={(e) => {
-            const i = getIndex(muutokset, koodiarvo)
             let obj = fields.get(i)
             obj.meta.perusteluteksti = e.target.value
             fields.remove(i)
             fields.insert(i, obj)
           }}
         />
-        <LiiteTopArea>Lisää muutokselle liite:</LiiteTopArea>
-        <div>
-          <input
-            type="file"
-            defaultValue={file !== null ? file : undefined}
-            onBlur={(e) => {
-              const i = getIndex(muutokset, koodiarvo)
-              let obj = fields.get(i)
-              obj.file = e.target
-              fields.remove(i)
-              fields.insert(i, obj)
-            }}/>
-
-        </div>
-        <div>
-          <input type="text"
-                 placeholder="Anna liitteelle nimi (valinnainen)..."
-                 defaultValue={filename !== null ? filename : undefined}
-                 onBlur={(e) => {
-                   const i = getIndex(muutokset, koodiarvo)
-                   let obj = fields.get(i)
-                   obj.filename = e.target.value
-                   fields.remove(i)
-                   fields.insert(i, obj)
-                 }}/>
-        </div>
-        <LiiteKategoriaSelect
-          muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-          muutosperustelut={muutosperustelut.muutosperusteluList}
-          muutos={muutos}
-          muutokset={muutokset}
-          fields={fields}
-        />
+        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
+        <br />
+        {/* Liite listaus */}
+        { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
+          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi}</span> 
+        )}
       </PerusteluWrapper>
     )
   }
