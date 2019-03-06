@@ -21,7 +21,7 @@ class Liite extends Component {
             onChange={this.props.setAttachment}
           />
         </div>
-        <div>
+        {/* <div>
           <input 
             type="text"
             disabled={!this.props.file}
@@ -29,7 +29,7 @@ class Liite extends Component {
             defaultValue={this.props.filename !== null ? this.props.filename : undefined}
             onBlur={this.props.setAttachmentName}
           />
-        </div>
+        </div> */}
       </div>
     )
   }

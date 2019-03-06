@@ -35,6 +35,7 @@ export function fetchMuutospyynto(uuid) {
       request
         .then((response) => response.json())
         .then((data) => {
+          console.log(JSON.stringify(data));
           dispatch({ type: FETCH_MUUTOSPYYNTO_SUCCESS, payload: data })
         })
         .catch((err) => dispatch({ type: FETCH_MUUTOSPYYNTO_FAILURE, payload: err }))

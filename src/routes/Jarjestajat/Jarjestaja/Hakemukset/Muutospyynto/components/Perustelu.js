@@ -231,7 +231,8 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} file={file} filename={filename} />
+        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
+        <br />
         {/* Liite listaus */}
         { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
           liite => <span key={liite.tiedostoId}>{liite.nimi}</span> 
