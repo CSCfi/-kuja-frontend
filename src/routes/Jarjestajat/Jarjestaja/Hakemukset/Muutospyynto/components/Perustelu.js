@@ -43,6 +43,13 @@ const PerusteluTopArea = styled.div`
 `
 class Perustelu extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      fileError: false
+    }
+  }
+
   componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
 
@@ -187,18 +194,28 @@ class Perustelu extends Component {
       console.log("File selected");
       console.log(e.target.files[0]);
 
-      obj = fields.get(i);
-      if (!obj.liitteet) {
-        obj.liitteet = new Array;
-      }
-      liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
-      liite.kieli = "fi";
-      liite.tyyppi = e.target.files[0].name.split('.').pop();
-      liite.nimi = e.target.files[0].name;
-      liite.tiedosto = e.target.files[0];
-      obj.liitteet.push(liite);
-      fields.remove(i);
-      fields.insert(i, obj);
+      const type = e.target.files[0].name.split('.').pop().toLowerCase();
+
+      // Rajoitetaan max kooksi 25MB ja vain pdf, word, excel, jpeg ja gif on sallittuja
+      if (e.target.files[0].size <= 26214400 && 
+          ['pdf', 'doc', 'txt', 'docx', 'xls', 'xlsx', 'xlsm', 'jpg', 'jpeg', 'jpe', 'jfif', 'gif'].includes(type)) {
+        obj = fields.get(i);
+        if (!obj.liitteet) {
+          obj.liitteet = new Array;
+        }
+        liite.tiedostoId = e.target.files[0].name+"-"+Math.random();
+        liite.kieli = "fi";
+        liite.tyyppi = type;
+        liite.nimi = e.target.files[0].name;
+        liite.tiedosto = e.target.files[0];
+        liite.size = e.target.files[0].size;
+        console.log(e.target.files[0].size);
+        obj.liitteet.push(liite);
+        fields.remove(i);
+        fields.insert(i, obj);
+      } else return (
+        this.setState({fileError: true})
+      )
     }
 
     const setAttachmentName = e => {
@@ -206,7 +223,13 @@ class Perustelu extends Component {
       obj.liitteet[0].nimi = e.target.value;
     }
 
-    console.log(obj.liitteet);
+    const bytesToSize = (bytes)  => {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      if (bytes === 0) return '';
+      const i = parseInt(Math.floor(Math.log(Math.abs(bytes)) / Math.log(1024)), 10);
+      if (i === 0) return `${bytes} ${sizes[i]})`;
+      return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
+    }
 
     return (
       <PerusteluWrapper>
@@ -233,9 +256,10 @@ class Perustelu extends Component {
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
         <br />
+        { this.state.fileError && <span>Liitteen pitää olla korkeintaan 25 MB ja pdf, word, excel, jpeg tai gif formaatissa</span> }
         {/* Liite listaus */}
         { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi}</span> 
+          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi} ({ bytesToSize(liite.size) })</span> 
         )}
       </PerusteluWrapper>
     )
