@@ -69,6 +69,7 @@ export function createAttachmentArray(muutokset) {
         tulosliite.tiedostoId = liite.tiedostoId;
         tulosliite.tyyppi = liite.tyyppi;
         tulosliite.nimi = liite.nimi;
+        tulosliite.removed = liite.removed;      
         if (liite.tiedosto) tulosliite.tiedosto = new Blob([liite.tiedosto]);
         liitteet.push(tulosliite);
       })

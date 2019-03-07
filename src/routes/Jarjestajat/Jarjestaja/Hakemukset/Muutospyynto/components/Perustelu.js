@@ -223,6 +223,7 @@ class Perustelu extends Component {
         liite.nimi = e.target.files[0].name;
         liite.tiedosto = e.target.files[0];
         liite.size = e.target.files[0].size;
+        liite.removed = false;
         obj.liitteet.push(liite);
         fields.remove(i);
         fields.insert(i, obj);
@@ -236,6 +237,20 @@ class Perustelu extends Component {
       obj.liitteet[0].nimi = e.target.value;
     }
 
+    const removeAttachment = (e, tiedostoId) => {
+      obj = fields.get(i);
+      let index = 0;
+      obj.liitteet.map( liite => {
+        if (liite.tiedostoId === tiedostoId) {
+          liite.removed = true;
+          obj.liitteet[index] = liite;
+          fields.remove(i);
+          fields.insert(i, obj);
+        }
+        index++;
+      })
+    }
+    
     const bytesToSize = (bytes)  => {
       if (!bytes || bytes === 0) return '';
 
@@ -245,6 +260,20 @@ class Perustelu extends Component {
         return `(${bytes} ${sizes[i]}))`;
       else
         return `(${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]})`;
+    }
+
+    const Liitteet = () => {
+      return (
+        fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => 
+            <LiiteListItem key={liite.tiedostoId}>
+              {!liite.removed &&
+                <div>
+                  {liite.nimi} { bytesToSize(liite.size) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button>
+                </div>
+              }
+            </LiiteListItem> 
+        )
+      )
     }
 
     return (
@@ -273,9 +302,7 @@ class Perustelu extends Component {
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
         { this.state.fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error> }
         {/* Liite listaus */}
-        { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <LiiteListItem key={liite.nimi+liite.tiedostoId}>{liite.nimi} { bytesToSize(liite.size) }</LiiteListItem> 
-        )}
+        < Liitteet />
       </PerusteluWrapper>
     )
   }
