@@ -237,14 +237,14 @@ class Perustelu extends Component {
     }
 
     const bytesToSize = (bytes)  => {
-      if (bytes === 0) return '';
+      if (!bytes || bytes === 0) return '';
 
       const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       const i = parseInt(Math.floor(Math.log(Math.abs(bytes)) / Math.log(1024)), 10);
       if (i === 0)
-        return `${bytes} ${sizes[i]})`;
+        return `(${bytes} ${sizes[i]}))`;
       else
-        return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
+        return `(${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]})`;
     }
 
     return (
@@ -274,7 +274,7 @@ class Perustelu extends Component {
         { this.state.fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error> }
         {/* Liite listaus */}
         { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <LiiteListItem key={liite.nimi+liite.tiedostoId}>{liite.nimi} ({ bytesToSize(liite.size) })</LiiteListItem> 
+          liite => <LiiteListItem key={liite.nimi+liite.tiedostoId}>{liite.nimi} { bytesToSize(liite.size) }</LiiteListItem> 
         )}
       </PerusteluWrapper>
     )
