@@ -57,7 +57,7 @@ class Liite extends Component {
           {HAKEMUS_OTSIKOT.LIITE_HEADER.FI}
         </LiiteTopArea>
         <FileInput>
-          <div><FaPlus /> {HAKEMUS_OTSIKOT.LISAA_LIITE.FI}</div>
+          <div><FaPlus /> {HAKEMUS_OTSIKOT.LISAA_LIITE.FI}...</div>
           <input
             type="file"
             defaultValue=""
