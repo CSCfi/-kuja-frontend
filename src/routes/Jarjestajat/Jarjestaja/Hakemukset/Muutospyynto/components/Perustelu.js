@@ -14,6 +14,8 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
+import { HAKEMUS_VIRHE } from "../modules/uusiHakemusFormConstants"
+
 import Liite from './Liite'
 
 const PerusteluWrapper = styled.div`
@@ -41,6 +43,15 @@ const PerusteluTopArea = styled.div`
   justify-content: space-between;
   margin-bottom: 10px;
 `
+const Error = styled.div`
+  color: ${COLORS.OIVA_RED};
+  margin-bottom: 8px;
+`
+const LiiteListItem = styled.div`
+  font-size: 14px;
+  line-height: 18px;
+`
+
 class Perustelu extends Component {
 
   constructor(props) {
@@ -199,6 +210,9 @@ class Perustelu extends Component {
       // Rajoitetaan max kooksi 25MB ja vain pdf, word, excel, jpeg ja gif on sallittuja
       if (e.target.files[0].size <= 26214400 && 
           ['pdf', 'doc', 'txt', 'docx', 'xls', 'xlsx', 'xlsm', 'jpg', 'jpeg', 'jpe', 'jfif', 'gif'].includes(type)) {
+  
+        this.setState({fileError: false});
+  
         obj = fields.get(i);
         if (!obj.liitteet) {
           obj.liitteet = new Array;
@@ -209,7 +223,6 @@ class Perustelu extends Component {
         liite.nimi = e.target.files[0].name;
         liite.tiedosto = e.target.files[0];
         liite.size = e.target.files[0].size;
-        console.log(e.target.files[0].size);
         obj.liitteet.push(liite);
         fields.remove(i);
         fields.insert(i, obj);
@@ -224,11 +237,14 @@ class Perustelu extends Component {
     }
 
     const bytesToSize = (bytes)  => {
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       if (bytes === 0) return '';
+
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
       const i = parseInt(Math.floor(Math.log(Math.abs(bytes)) / Math.log(1024)), 10);
-      if (i === 0) return `${bytes} ${sizes[i]})`;
-      return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
+      if (i === 0)
+        return `${bytes} ${sizes[i]})`;
+      else
+        return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
     }
 
     return (
@@ -255,11 +271,10 @@ class Perustelu extends Component {
           }}
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
-        <br />
-        { this.state.fileError && <span>Liitteen pitää olla korkeintaan 25 MB ja pdf, word, excel, jpeg tai gif formaatissa</span> }
+        { this.state.fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error> }
         {/* Liite listaus */}
         { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi} ({ bytesToSize(liite.size) })</span> 
+          liite => <LiiteListItem key={liite.nimi+liite.tiedostoId}>{liite.nimi} ({ bytesToSize(liite.size) })</LiiteListItem> 
         )}
       </PerusteluWrapper>
     )

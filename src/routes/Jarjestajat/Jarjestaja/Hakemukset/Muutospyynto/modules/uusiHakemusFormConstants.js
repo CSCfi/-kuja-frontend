@@ -101,6 +101,10 @@ export const HAKEMUS_VIRHE = {
   OIKEUS: {
     FI: 'Sinulla ei ole oikeuksia katsoa toisen organisaation hakemuksia',
     SV: 'På Svenska'
+  },
+  LIITE: {
+    FI: 'Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi',
+    SV: 'På Svenska'
   }
 }
 
@@ -148,6 +152,14 @@ export const HAKEMUS_OTSIKOT = {
     FI: 'Yhteenveto',
     SV: 'På Svenska'
   },
+  LIITE_HEADER: {
+    FI: 'Liitteet (koko korkeintaan 25 MB ja tyyppiltään pdf, word, excel, jpeg tai gif)',
+    SV: 'På Svenska'
+  },
+  LISAA_LIITE: {
+    FI: 'Lisää liite',
+    SV: 'På Svenska'
+  }
 }
 
 export const COMPONENT_TYPES = {
