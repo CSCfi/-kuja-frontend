@@ -15,7 +15,7 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
-import { HAKEMUS_VIRHE } from "../modules/uusiHakemusFormConstants"
+import { HAKEMUS_VIRHE, HAKEMUS_OTSIKOT } from "../modules/uusiHakemusFormConstants"
 
 import Liite from './Liite'
 
@@ -324,7 +324,7 @@ class Perustelu extends Component {
                   <FaFileAlt />
                   <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
                   <span className="size">{ bytesToSize(liite.koko) }</span>
-                  <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                 </LiiteListItem>
               }
               {/* Liite tallennettu */}
@@ -333,7 +333,7 @@ class Perustelu extends Component {
                   <FaFileAlt />
                   <span className="name">{liite.nimi}</span>
                   <span className="size">{ bytesToSize(liite.koko) }</span>
-                  <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                 </LiiteListItem>
               }
             </div> 

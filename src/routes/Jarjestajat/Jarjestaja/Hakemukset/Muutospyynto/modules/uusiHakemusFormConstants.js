@@ -163,6 +163,10 @@ export const HAKEMUS_OTSIKOT = {
   LISAA_LIITE: {
     FI: 'Lisää liite',
     SV: 'På Svenska'
+  },
+  POISTA_LIITE: {
+    FI: 'Poista liite',
+    SV: 'På Svenska'
   }
 }
 
