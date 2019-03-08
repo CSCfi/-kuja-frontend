@@ -294,6 +294,8 @@ class Perustelu extends Component {
       obj.liitteet.map( liite => {
         if ( tiedostoId && (liite.tiedostoId === tiedostoId) || (uuid && (liite.uuid === uuid)) ) {
           liite.nimi = e.target.value;
+          const type = liite.nimi.split('.').pop().toLowerCase();
+          if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
           obj.liitteet[index] = liite;
           fields.remove(i);
           fields.insert(i, obj);
@@ -315,29 +317,30 @@ class Perustelu extends Component {
     }
 
     const Liitteet = () => {
-      return (
-        fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => 
-            <div key={liite.tiedostoId ? liite.tiedostoId : liite.uuid} >
-              {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa) */}
-              {!liite.removed && liite.tiedostoId &&
-                <LiiteListItem>
-                  <FaFile />
-                  <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
-                  <span className="size">{ bytesToSize(liite.koko) }</span>
-                  <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
-                </LiiteListItem>
-              }
-              {/* Liite tallennettu */}
-              {!liite.removed && !liite.tiedostoId &&
-                <LiiteListItem>     
-                  <FaRegFile />
-                  <span className="name">{liite.nimi}</span>
-                  <span className="size">{ bytesToSize(liite.koko) }</span>
-                  <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
-                </LiiteListItem>
-              }
-            </div> 
-        )
+        return fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => {
+          if (!liite.removed) {
+            return (
+              <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
+                {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}
+                {liite.tiedostoId ?
+                  <LiiteListItem>
+                    <FaFile />
+                    <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
+                    <span className="size">{ bytesToSize(liite.koko) }</span>
+                    <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  </LiiteListItem>
+                :
+                  <LiiteListItem>     
+                    <FaRegFile />
+                    <span className="name">{liite.nimi}</span>
+                    <span className="size">{ bytesToSize(liite.koko) }</span>
+                    <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  </LiiteListItem>
+                }
+              </div> 
+            )
+          }
+        }
       )
     }
 
