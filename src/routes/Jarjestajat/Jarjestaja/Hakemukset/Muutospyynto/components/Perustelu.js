@@ -5,7 +5,7 @@ import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { KOODISTOT } from "../../../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { FaFileAlt } from 'react-icons/fa';
+import { FaFileAlt, FaTimes } from 'react-icons/fa';
 
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
@@ -49,11 +49,6 @@ const Error = styled.div`
   margin-bottom: 8px;
 `
 const LiiteListItem = styled.div`
-    height: 24px;
-    margin-bottom: 4px;
-    width: 100%;
-`
-const LiiteListItemContent = styled.div`
   font-size: 14px;
   display: flex;
   justify-content: stretch;
@@ -61,25 +56,37 @@ const LiiteListItemContent = styled.div`
   width: 100%;
   padding: 2px;
   button {
+    background-color: transparent;
+    border: 0;
     height: 24px;
     width: 24px;
     margin-left: 8px;
     cursor: cursor;
+    &:hover {
+      color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
+      background-color: ${props => props.disabled ? COLORS.LIGHT_GRAY : props.textColor ? props.textColor : COLORS.OIVA_GREEN};
+      ${props => props.disabled ? 'cursor: not-allowed;' : null}
+      cursor: pointer;
+    }
   }
   svg {
-    margin: 0 4px -2px 0;
+    margin: 0 0 -2px 0;
   }
   input {
     min-width: 300px;
     height: 24px;
     font-size: 14px;
     flex: 1;
-    margin-right: 8px;
-    padding: 0 8px;
+    margin: 0 8px 0 4px;
+    padding: 0 8px 0 4px;
   }
-  span {
+  .name {
     flex: 1;
     margin-left: 8px;
+  }
+  .size {
+    min-width: 70px;
+    text-align: right;
   }
   &:hover {
     background-color: ${COLORS.OIVA_TABLE_HOVER_COLOR};
@@ -310,20 +317,20 @@ class Perustelu extends Component {
     const Liitteet = () => {
       return (
         fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => 
-            <LiiteListItem key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
+            <div key={liite.tiedostoId ? liite.tiedostoId : liite.uuid} >
               {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa) */}
               {!liite.removed && liite.tiedostoId &&
-                <LiiteListItemContent>
-                  <FaFileAlt /> <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
-                </LiiteListItemContent>
+                <LiiteListItem>
+                  <FaFileAlt /> <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} /> <span className="size">{ bytesToSize(liite.koko) }</span> <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                </LiiteListItem>
               }
               {/* Liite tallennettu */}
               {!liite.removed && !liite.tiedostoId &&
-                <LiiteListItemContent>     
-                  <FaFileAlt /> <span>{liite.nimi}</span> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
-                </LiiteListItemContent>
+                <LiiteListItem>     
+                  <FaFileAlt /> <span className="name">{liite.nimi}</span> <span className="size"> { bytesToSize(liite.koko) }</span> <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                </LiiteListItem>
               }
-            </LiiteListItem> 
+            </div> 
         )
       )
     }
