@@ -290,6 +290,7 @@ export function loadFormData(state, muutosdata, formValues) {
 }
 
 function getMuutosArray(muutokset, kohdeUuid) {
+  console.log(muutokset);
   if (!muutokset || !kohdeUuid) {
     return
   }

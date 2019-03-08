@@ -222,7 +222,7 @@ class Perustelu extends Component {
         liite.tyyppi = type;
         liite.nimi = e.target.files[0].name;
         liite.tiedosto = e.target.files[0];
-        liite.size = e.target.files[0].size;
+        liite.koko = e.target.files[0].size;
         liite.removed = false;
         obj.liitteet.push(liite);
         fields.remove(i);
@@ -232,17 +232,26 @@ class Perustelu extends Component {
       )
     }
 
-    const setAttachmentName = e => {
-      obj = fields.get(i);
-      obj.liitteet[0].nimi = e.target.value;
-    }
-
     const removeAttachment = (e, tiedostoId) => {
       obj = fields.get(i);
       let index = 0;
       obj.liitteet.map( liite => {
         if (liite.tiedostoId === tiedostoId) {
           liite.removed = true;
+          obj.liitteet[index] = liite;
+          fields.remove(i);
+          fields.insert(i, obj);
+        }
+        index++;
+      })
+    }
+
+    const setAttachmentName = (e, tiedostoId) => {
+      obj = fields.get(i);
+      let index = 0;
+      obj.liitteet.map( liite => {
+        if (liite.tiedostoId === tiedostoId) {
+          liite.nimi = e.target.value;
           obj.liitteet[index] = liite;
           fields.remove(i);
           fields.insert(i, obj);
@@ -268,7 +277,8 @@ class Perustelu extends Component {
             <LiiteListItem key={liite.tiedostoId}>
               {!liite.removed &&
                 <div>
-                  {liite.nimi} { bytesToSize(liite.size) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button>
+                  {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button>
+                  {/* <input onChange={(e) => setAttachmentName(e, liite.tiedostoId)} value={liite.nimi} /> {liite.tiedostoId} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button> */}
                 </div>
               }
             </LiiteListItem> 
@@ -301,7 +311,6 @@ class Perustelu extends Component {
         />
         <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
         { this.state.fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error> }
-        {/* Liite listaus */}
         < Liitteet />
       </PerusteluWrapper>
     )
