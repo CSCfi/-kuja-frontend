@@ -6,7 +6,7 @@ import { HAKEMUS_OTSIKOT  } from "../modules/uusiHakemusFormConstants"
 
 const LiiteTopArea = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   margin-top: 20px;
 `
@@ -54,7 +54,8 @@ class Liite extends Component {
     return (
       <div>
         <LiiteTopArea>
-          {HAKEMUS_OTSIKOT.LIITE_HEADER.FI}
+          <h4>{HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
+          {HAKEMUS_OTSIKOT.LIITE_OHJE.FI}
         </LiiteTopArea>
         <FileInput>
           <div><FaPlus /> {HAKEMUS_OTSIKOT.LISAA_LIITE.FI}...</div>

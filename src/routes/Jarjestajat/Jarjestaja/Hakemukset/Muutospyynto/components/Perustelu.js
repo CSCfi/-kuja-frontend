@@ -321,13 +321,19 @@ class Perustelu extends Component {
               {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa) */}
               {!liite.removed && liite.tiedostoId &&
                 <LiiteListItem>
-                  <FaFileAlt /> <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} /> <span className="size">{ bytesToSize(liite.koko) }</span> <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  <FaFileAlt />
+                  <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
+                  <span className="size">{ bytesToSize(liite.koko) }</span>
+                  <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                 </LiiteListItem>
               }
               {/* Liite tallennettu */}
               {!liite.removed && !liite.tiedostoId &&
                 <LiiteListItem>     
-                  <FaFileAlt /> <span className="name">{liite.nimi}</span> <span className="size"> { bytesToSize(liite.koko) }</span> <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                  <FaFileAlt />
+                  <span className="name">{liite.nimi}</span>
+                  <span className="size">{ bytesToSize(liite.koko) }</span>
+                  <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                 </LiiteListItem>
               }
             </div> 
