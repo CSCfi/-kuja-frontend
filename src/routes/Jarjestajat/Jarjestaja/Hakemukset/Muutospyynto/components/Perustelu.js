@@ -82,7 +82,7 @@ class Perustelu extends Component {
 
     const { helpText, muutos, muutokset, koodiarvo, sisaltaa_merkityksen, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
-    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
+    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = this.props
     const { koodisto, type, metadata } = muutos
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
     const i = getIndex(muutokset, koodiarvo);
@@ -97,7 +97,7 @@ class Perustelu extends Component {
 
     // laajennettu oppisopimus
 
-    if (koodisto == KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && (type === MUUTOS_TYPES.ADDITION )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && (type === MUUTOS_TYPES.ADDITION )) {
       return (
         <PerusteluWrapper>
           <PerusteluOppisopimus
@@ -113,7 +113,7 @@ class Perustelu extends Component {
 
     // vaativa erityinen tuki
     // pitääkö tulla vain yksi perustelu-lomake, vaikka kaikki kolme eri vaihtoehtoa on valittu: ohjeistettu valitsemaan vain yksi
-    if (koodisto == KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2" ) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2" ) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluVaativa
@@ -130,7 +130,7 @@ class Perustelu extends Component {
 
     // Työvoimakoulutus
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluTyovoima
@@ -149,7 +149,7 @@ class Perustelu extends Component {
 
     // Vankilakoulutus
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.OIVA_MUUT && koodiarvo == 5 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && koodiarvo == 5 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluVankila
@@ -167,7 +167,7 @@ class Perustelu extends Component {
 
     // Kuljettajakoulutus - perustaso
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen == "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen == "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaPerus
@@ -185,7 +185,7 @@ class Perustelu extends Component {
 
     // Kuljettajakoulutus - jatko
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && sisaltaa_merkityksen == "jatko" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.KULJETTAJAKOULUTUS  && sisaltaa_merkityksen == "jatko" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaJatko
@@ -215,7 +215,7 @@ class Perustelu extends Component {
   
         obj = fields.get(i);
         if (!obj.liitteet) {
-          obj.liitteet = new Array;
+          obj.liitteet = new Array();
         }
         liite.tiedostoId = e.target.files[0].name+"-"+Math.random();
         liite.kieli = "fi";
@@ -232,29 +232,31 @@ class Perustelu extends Component {
       )
     }
 
-    const removeAttachment = (e, tiedostoId) => {
+    const removeAttachment = (e, tiedostoId, uuid) => {
       obj = fields.get(i);
       let index = 0;
       obj.liitteet.map( liite => {
-        if (liite.tiedostoId === tiedostoId) {
+        if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
           liite.removed = true;
           obj.liitteet[index] = liite;
           fields.remove(i);
           fields.insert(i, obj);
+          return;
         }
         index++;
       })
     }
 
-    const setAttachmentName = (e, tiedostoId) => {
+    const setAttachmentName = (e, tiedostoId, uuid) => {
       obj = fields.get(i);
       let index = 0;
       obj.liitteet.map( liite => {
-        if (liite.tiedostoId === tiedostoId) {
+        if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
           liite.nimi = e.target.value;
           obj.liitteet[index] = liite;
           fields.remove(i);
           fields.insert(i, obj);
+          return;
         }
         index++;
       })
@@ -274,11 +276,11 @@ class Perustelu extends Component {
     const Liitteet = () => {
       return (
         fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => 
-            <LiiteListItem key={liite.tiedostoId}>
+            <LiiteListItem key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
               {!liite.removed &&
                 <div>
-                  {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button>
-                  {/* <input onChange={(e) => setAttachmentName(e, liite.tiedostoId)} value={liite.nimi} /> {liite.tiedostoId} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId)}>x</button> */}
+                  {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
+                  {/* <input onChange={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} value={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button> */}
                 </div>
               }
             </LiiteListItem> 
