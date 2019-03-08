@@ -279,8 +279,15 @@ class Perustelu extends Component {
             <LiiteListItem key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
               {!liite.removed &&
                 <div>
-                  {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
-                  {/* <input onChange={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} value={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button> */}
+                  { liite.tiedostoId ?
+                    <div>
+                      <input onChange={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} value={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
+                    </div>
+                    :
+                    <div>
+                      {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
+                    </div>
+                  }
                 </div>
               }
             </LiiteListItem> 
