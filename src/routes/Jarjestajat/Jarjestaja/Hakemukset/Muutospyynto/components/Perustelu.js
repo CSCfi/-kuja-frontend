@@ -5,7 +5,7 @@ import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { KOODISTOT } from "../../../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { FaFileAlt, FaTimes } from 'react-icons/fa';
+import { FaRegFile, FaFile, FaTimes } from 'react-icons/fa';
 
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
@@ -321,7 +321,7 @@ class Perustelu extends Component {
               {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa) */}
               {!liite.removed && liite.tiedostoId &&
                 <LiiteListItem>
-                  <FaFileAlt />
+                  <FaFile />
                   <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
                   <span className="size">{ bytesToSize(liite.koko) }</span>
                   <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
@@ -330,7 +330,7 @@ class Perustelu extends Component {
               {/* Liite tallennettu */}
               {!liite.removed && !liite.tiedostoId &&
                 <LiiteListItem>     
-                  <FaFileAlt />
+                  <FaRegFile />
                   <span className="name">{liite.nimi}</span>
                   <span className="size">{ bytesToSize(liite.koko) }</span>
                   <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
