@@ -5,6 +5,7 @@ import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { KOODISTOT } from "../../../modules/constants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import { FaFileAlt } from 'react-icons/fa';
 
 import PerusteluSelect from './PerusteluSelect'
 import PerusteluOppisopimus from './PerusteluOppisopimus'
@@ -48,8 +49,41 @@ const Error = styled.div`
   margin-bottom: 8px;
 `
 const LiiteListItem = styled.div`
+    height: 24px;
+    margin-bottom: 4px;
+    width: 100%;
+`
+const LiiteListItemContent = styled.div`
   font-size: 14px;
-  line-height: 18px;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  width: 100%;
+  padding: 2px;
+  button {
+    height: 24px;
+    width: 24px;
+    margin-left: 8px;
+    cursor: cursor;
+  }
+  svg {
+    margin: 0 4px -2px 0;
+  }
+  input {
+    min-width: 300px;
+    height: 24px;
+    font-size: 14px;
+    flex: 1;
+    margin-right: 8px;
+    padding: 0 8px;
+  }
+  span {
+    flex: 1;
+    margin-left: 8px;
+  }
+  &:hover {
+    background-color: ${COLORS.OIVA_TABLE_HOVER_COLOR};
+  }
 `
 
 class Perustelu extends Component {
@@ -251,7 +285,7 @@ class Perustelu extends Component {
       obj = fields.get(i);
       let index = 0;
       obj.liitteet.map( liite => {
-        if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+        if ( tiedostoId && (liite.tiedostoId === tiedostoId) || (uuid && (liite.uuid === uuid)) ) {
           liite.nimi = e.target.value;
           obj.liitteet[index] = liite;
           fields.remove(i);
@@ -270,25 +304,24 @@ class Perustelu extends Component {
       if (i === 0)
         return `(${bytes} ${sizes[i]}))`;
       else
-        return `(${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]})`;
+        return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`;
     }
 
     const Liitteet = () => {
       return (
         fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( liite => 
             <LiiteListItem key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
-              {!liite.removed &&
-                <div>
-                  { liite.tiedostoId ?
-                    <div>
-                      <input onChange={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} value={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
-                    </div>
-                    :
-                    <div>
-                      {liite.nimi} { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
-                    </div>
-                  }
-                </div>
+              {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa) */}
+              {!liite.removed && liite.tiedostoId &&
+                <LiiteListItemContent>
+                  <FaFileAlt /> <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} /> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
+                </LiiteListItemContent>
+              }
+              {/* Liite tallennettu */}
+              {!liite.removed && !liite.tiedostoId &&
+                <LiiteListItemContent>     
+                  <FaFileAlt /> <span>{liite.nimi}</span> { bytesToSize(liite.koko) } <button onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}>x</button>
+                </LiiteListItemContent>
               }
             </LiiteListItem> 
         )
