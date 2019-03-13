@@ -5,8 +5,6 @@ import Muutos from './Muutos'
 import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
 
-import Liitteet from './Liitteet'
-
 const MuutosListWrapper = styled.div`
 `
 
@@ -57,7 +55,6 @@ class MuutosList extends Component {
             </MuutosWrapper>
           )
         })}
-        <Liitteet {...this.props} />
       </MuutosListWrapper>
     )
   }

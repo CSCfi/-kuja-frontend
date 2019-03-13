@@ -21,6 +21,8 @@ import validate from '../modules/validateWizard'
 
 import DatePicker from "../../../../../../modules/DatePicker"
 
+import Liitteet from './Liitteet'
+
 Modal.setAppElement('#root')
 
 class MuutospyyntoWizardYhteenveto extends Component {
@@ -94,7 +96,8 @@ class MuutospyyntoWizardYhteenveto extends Component {
       toimialueValue,
       opiskelijavuosiValue,
       muutmuutoksetValue,
-      taloudellisetValue
+      taloudellisetValue,
+      muutospyynto
     } = this.props
 
     let jarjestaja = undefined
@@ -189,6 +192,8 @@ class MuutospyyntoWizardYhteenveto extends Component {
             heading="Taloudelliset edellytykset"
             component={TaloudellisetYhteenveto}
           />
+
+          <Liitteet {...this.props} fields={muutospyynto.data} />
 
           <WizardBottom>
             <Container maxWidth="1085px" padding="15px">

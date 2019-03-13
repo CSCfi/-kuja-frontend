@@ -106,7 +106,6 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
   const opiskelijavuosiValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
   const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
-  console.log(state);
   const muutospyynto = state.muutospyynto.data;
   let formVals = undefined
   if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
