@@ -23,6 +23,7 @@ export function formatMuutospyynto(muutospyynto) {
     opiskelijavuodet = [],
     muutmuutokset = [],
     hakija = [],
+    liitteet = []
   } = muutospyynto
 
   let muutokset = [
@@ -30,8 +31,7 @@ export function formatMuutospyynto(muutospyynto) {
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset)
-  ]
+    ...formatMuutosArray(muutmuutokset),  ]
 
   // Itse liitteitä ei tarvita tallennuksen json:nissa
   muutokset.map(item => {
@@ -57,10 +57,12 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaloppupvm: "2018-12-31",
     meta: hakija,
     muutokset: muutokset,
+    liitteet
   }
 }
 
 export function createAttachmentArray(muutokset) {
+  console.log(muutokset);
   const liitteet = [] ;
   muutokset.map( item => {
     if (item.liitteet && item.liitteet.length > 0) {
@@ -87,20 +89,25 @@ export function getAttachments(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
+    liitteet = []
   } = muutospyynto
+
+  const commonAttachments = {};
+  commonAttachments.liitteet = liitteet;
 
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset)
-  ]
+    ...formatMuutosArray(muutmuutokset),
+    commonAttachments
+ ]
 
-  let liitteet = createAttachmentArray(muutokset);
-  console.log(liitteet);
+  let kaikkiliitteet = createAttachmentArray(muutokset);
+  console.log(kaikkiliitteet);
 
-  return liitteet;
+  return kaikkiliitteet;
 }
 
 function formatMuutosArray(muutokset) {
@@ -243,7 +250,8 @@ export function loadFormData(state, muutosdata, formValues) {
     lupaUuid,
     uuid,
     paatoskierros,
-    muutokset
+    muutokset,
+    liitteet
   } = muutosdata
 
   let hakija = getHakija(meta)
@@ -265,7 +273,8 @@ export function loadFormData(state, muutosdata, formValues) {
     hakija,
     lupaUuid,
     uuid,
-    paatoskierros
+    paatoskierros,
+    liitteet
   }
 
   // formatoi muutokset

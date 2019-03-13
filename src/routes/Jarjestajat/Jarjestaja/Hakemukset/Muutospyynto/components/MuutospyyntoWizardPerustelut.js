@@ -23,10 +23,10 @@ let MuutospyyntoWizardPerustelut = props => {
     opiskelijavuosiValue,
     muutmuutoksetValue,
     formValues,
-    allValues
+    muutospyynto
   } = props
 
-  console.log(allValues);
+  console.log(muutospyynto);
 
   return (
     <div>
@@ -82,7 +82,7 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
-        {/* <Liitteet fields={allValues} /> */}
+        <Liitteet fields={muutospyynto} />
 
         <WizardBottom>
           <Container maxWidth="1085px" padding="15px">
@@ -106,7 +106,8 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
   const opiskelijavuosiValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
   const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
-  const allValues = state;
+  console.log(state);
+  const muutospyynto = state.muutospyynto.data;
   let formVals = undefined
   if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
     formVals = state.form.uusiHakemus.values
@@ -119,7 +120,7 @@ MuutospyyntoWizardPerustelut = connect(state => {
     opiskelijavuosiValue,
     muutmuutoksetValue,
     formValues: formVals,
-    allValues
+    muutospyynto
   }
 })(MuutospyyntoWizardPerustelut)
 

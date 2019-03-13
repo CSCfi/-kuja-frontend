@@ -92,11 +92,12 @@ class Liiteet extends Component {
         if (koodiarvo) {
           i = getIndex(muutokset, koodiarvo);
           obj = fields.get(i);
+          if (!obj) return;
+          if (!obj.liitteet) {
+            obj.liitteet = new Array();
+          }
         }
-        if (!obj) return;
-        if (!obj.liitteet) {
-          obj.liitteet = new Array();
-        }
+    
         liite.tiedostoId = e.target.files[0].name+"-"+Math.random();
         liite.kieli = "fi";
         liite.tyyppi = type;
@@ -112,6 +113,7 @@ class Liiteet extends Component {
           if (!fields.liitteet) {
             fields.liitteet = new Array();
           }
+          console.log("add");
           fields.liitteet.push(liite);
         }
         this.setState({fileAdded: liite.nimi })
