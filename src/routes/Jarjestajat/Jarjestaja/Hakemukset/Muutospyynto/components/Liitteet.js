@@ -113,7 +113,6 @@ class Liiteet extends Component {
           if (!fields.liitteet) {
             fields.liitteet = new Array();
           }
-          console.log("add");
           fields.liitteet.push(liite);
         }
         this.setState({fileAdded: liite.nimi })
@@ -130,18 +129,24 @@ class Liiteet extends Component {
       if (koodiarvo) {
         i = getIndex(muutokset, koodiarvo);
         obj = fields.get(i);
+        obj.liitteet.map( (liite, index) => {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+            liite.removed = true;
+            obj.liitteet[index] = liite;
+            fields.remove(i);
+            fields.insert(i, obj);
+            return;
+          }
+        })
+      } else {
+        fields.liitteet.map( (liite, index) => {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+            liite.removed = true;
+            fields.liitteet[index] = liite;
+            return;
+          }
+        })
       }
-      else 
-        obj = fields;
-      obj.liitteet.map( (liite, index) => {
-        if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
-          liite.removed = true;
-          obj.liitteet[index] = liite;
-          fields.remove(i);
-          fields.insert(i, obj);
-          return;
-        }
-      })
     }
 
     const setAttachmentName = (e, tiedostoId, uuid) => {
@@ -152,20 +157,28 @@ class Liiteet extends Component {
       if (koodiarvo) {
         i = getIndex(muutokset, koodiarvo);
         obj = fields.get(i);
-      }
-      else 
-        obj = fields;
-      obj.liitteet.map( (liite, index) => {
-        if ( tiedostoId && (liite.tiedostoId === tiedostoId) || (uuid && (liite.uuid === uuid)) ) {
-          liite.nimi = e.target.value;
-          const type = liite.nimi.split('.').pop().toLowerCase();
-          if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
-          obj.liitteet[index] = liite;
-          fields.remove(i);
-          fields.insert(i, obj);
-          return;
+        obj.liitteet.map( (liite, index) => {
+          if ( tiedostoId && (liite.tiedostoId === tiedostoId) || (uuid && (liite.uuid === uuid)) ) {
+            liite.nimi = e.target.value;
+            const type = liite.nimi.split('.').pop().toLowerCase();
+            if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
+            obj.liitteet[index] = liite;
+            fields.remove(i);
+            fields.insert(i, obj);
+            return;
+          }
         }
-      })
+      )} else {
+        fields.liitteet.map( (liite, index) => {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+            liite.nimi = e.target.value;
+            const type = liite.nimi.split('.').pop().toLowerCase();
+            if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
+            fields.liitteet[index] = liite;
+            return;
+          }
+        })
+      }
     }
     
     const bytesToSize = (bytes)  => {
