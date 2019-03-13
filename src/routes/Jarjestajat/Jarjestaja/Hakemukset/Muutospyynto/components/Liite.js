@@ -8,7 +8,6 @@ const LiiteTopArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 20px;
 `
 
 const FileInput = styled.div`
@@ -54,7 +53,6 @@ class Liite extends Component {
     return (
       <div>
         <LiiteTopArea>
-          <h4>{HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
           {HAKEMUS_OTSIKOT.LIITE_OHJE.FI}
         </LiiteTopArea>
         <FileInput>

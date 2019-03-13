@@ -10,6 +10,7 @@ import { getIndex } from "../modules/muutosUtil"
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
 import { Area, Button, Checkbox } from './MuutospyyntoWizardComponents'
+import Liitteet from './Liitteet'
 
 import { COLORS } from "../../../../../../modules/styles"
 
@@ -389,6 +390,9 @@ class PerusteluKuljettajaJatko extends Component {
               <label htmlFor={MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}><ChkTitle>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.TUTKINTO_KULJETUSALA.FI}</ChkTitle></label>
             </Checkbox>
           </CheckboxWrapper>
+          <CheckboxWrapper>
+            <Liitteet {...this.props} listHidden={true} />
+          </CheckboxWrapper>
           <h4>6. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OPETTAJA.FI}</h4>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.OPETTAJA_TARKENNUS.FI}</Instruction>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.OPETTAJA.FI}</Instruction>
@@ -444,6 +448,10 @@ class PerusteluKuljettajaJatko extends Component {
               )}
             </div>
           } />
+          <CheckboxWrapper>
+            <Liitteet {...this.props} listHidden={true} />
+          </CheckboxWrapper>
+
           <h4>7. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA.FI}</h4>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.KANTA.FI}</Instruction>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA_LINJA_AUTO.FI}</Instruction>
@@ -488,6 +496,9 @@ class PerusteluKuljettajaJatko extends Component {
               }}
             />
           </InputWrapper>
+          <CheckboxWrapper>
+            <Liitteet {...this.props} listHidden={true} />
+          </CheckboxWrapper>
 
           <h4>8. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OPETUSVALINEET.FI}</h4>
           <Label>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OPETUSVALINEET_ASETUS.FI}</Label>
@@ -515,6 +526,9 @@ class PerusteluKuljettajaJatko extends Component {
               fields.insert(i, obj)
             }}
           />
+          <CheckboxWrapper>
+            <Liitteet {...this.props} />
+          </CheckboxWrapper>
         </Area>
       </PerusteluKuljettajaJatkoWrapper>
     )

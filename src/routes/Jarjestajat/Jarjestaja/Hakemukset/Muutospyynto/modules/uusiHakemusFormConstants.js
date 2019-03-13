@@ -128,6 +128,10 @@ export const HAKEMUS_VIESTI = {
   EI: {
     FI: 'Ei',
     SV: 'Nej'
+  },
+  LIITE_LISATTY: {
+    FI: 'Liite lisätty',
+    SV: 'LIITE_LISATTY'
   }
 }
 

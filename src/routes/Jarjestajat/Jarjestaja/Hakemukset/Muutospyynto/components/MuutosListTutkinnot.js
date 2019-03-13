@@ -9,6 +9,7 @@ import { TUTKINNOT_SECTIONS, KIELET_SECTIONS } from "../../../modules/constants"
 import { FIELD_ARRAY_NAMES} from "../modules/uusiHakemusFormConstants"
 import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
+import Liitteet from './Liitteet'
 
 const MuutosListWrapper = styled.div`
 `
@@ -284,6 +285,9 @@ class MuutosListTutkinnot extends Component {
             })}
           </div>
         }
+        {/* { (tutkinnot.length !== 0 || poikkeukset.length !== 0 || valmistavat.length !== 0 || tyovoimat.length !== 0 || kuljettajat.length !== 0) && 
+          <Liitteet fields={fields} muutokset={muutokset} listHidden={true}/>            
+        } */}
       </MuutosListWrapper>
     )
   }
@@ -291,7 +295,9 @@ class MuutosListTutkinnot extends Component {
 
 const MuutosComponent = (props) => {
   const MuutosSubComponent = components[props.componentType]
-  return <MuutosSubComponent {...props} />
+  return (
+    <MuutosSubComponent {...props} />
+  )
 }
 
 export default MuutosListTutkinnot
