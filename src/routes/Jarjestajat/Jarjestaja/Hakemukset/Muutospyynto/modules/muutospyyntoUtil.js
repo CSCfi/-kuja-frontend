@@ -22,7 +22,6 @@ export function formatMuutospyynto(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
-    taloudelliset = [],
     hakija = [],
     liitteet = []
   } = muutospyynto
@@ -61,7 +60,6 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaloppupvm: "2018-12-31",
     meta: hakija,
     muutokset: muutokset,
-    taloudelliset: taloudelliset,
     liitteet
   }
 }
@@ -109,7 +107,6 @@ export function getAttachments(muutospyynto) {
  ]
 
   let kaikkiliitteet = createAttachmentArray(muutokset);
-  console.log(kaikkiliitteet);
 
   return kaikkiliitteet;
 }
