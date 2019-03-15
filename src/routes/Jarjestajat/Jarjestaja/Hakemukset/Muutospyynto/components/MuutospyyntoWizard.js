@@ -115,6 +115,7 @@ class MuutospyyntoWizard extends Component {
 
   componentWillMount() {
     this.props.fetchMuutosperustelut()
+    this.props.fetchMuutosperustelutOpiskelijavuodet()
     this.props.fetchVankilat()
     this.props.fetchELYkeskukset()
     const { ytunnus } = this.props.match.params
@@ -205,7 +206,7 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, vankilat, ELYkeskukset, lupa, paatoskierrokset } = this.props
+    const { muutosperustelut, muutosperustelutOpiskelijavuodet, vankilat, ELYkeskukset, lupa, paatoskierrokset } = this.props
     const { page, visitedPages } = this.state
 
     if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
@@ -222,7 +223,7 @@ class MuutospyyntoWizard extends Component {
         )
     }
 
-    if (muutosperustelut.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched) {
+    if (muutosperustelut.fetched && muutosperustelutOpiskelijavuodet.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched) {
       return (
         <ContentWrapper>
           <WizardBackground />
@@ -267,6 +268,7 @@ class MuutospyyntoWizard extends Component {
                     onCancel={this.onCancel}
                     save={this.save}
                     muutosperustelut={this.props.muutosperustelut.data}
+                    muutosperustelutOpiskelijavuodet={this.props.muutosperustelutOpiskelijavuodet.data}
                     vankilat={this.props.vankilat.data}
                     ELYkeskukset={this.props.ELYkeskukset.data}
                   />
@@ -312,9 +314,9 @@ class MuutospyyntoWizard extends Component {
           </Modal>
         </ContentWrapper>
       )
-    } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
+    } else if (muutosperustelut.isFetching || muutosperustelutOpiskelijavuodet.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
       return <Loading />
-    } else if (muutosperustelut.hasErrored) {
+    } else if (muutosperustelut.hasErrored || muutosperustelutOpiskelijavuodet.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.PERUSTELU.FI}</MessageWrapper>
     } else if (vankilat.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.VANKILA.FI}</MessageWrapper>

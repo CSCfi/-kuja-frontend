@@ -44,10 +44,14 @@ const PerusteluTopArea = styled.div`
 class Perustelu extends Component {
 
   componentWillMount() {
-    const { muutosperustelut, vankilat, ELYkeskukset } = this.props
+    const { muutosperustelut, muutosperustelutOpiskelijavuodet, vankilat, ELYkeskukset } = this.props
 
     if (muutosperustelut && !muutosperustelut.fetched) {
       this.props.fetchMuutosperustelut()
+    }
+
+    if (muutosperustelutOpiskelijavuodet && !muutosperustelutOpiskelijavuodet.fetched) {
+      this.props.fetchMuutosperustelutOpiskelijavuodet()
     }
 
     if (vankilat && !vankilat.fetched) {
@@ -62,7 +66,7 @@ class Perustelu extends Component {
 
   render() {
 
-    const { helpText, muutos, muutokset, koodiarvo, sisaltaa_merkityksen, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
+    const { helpText, muutos, muutokset, koodiarvo, sisaltaa_merkityksen, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, muutosperustelutOpiskelijavuodet, vankilat, ELYkeskukset } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
     const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = this.props
     const { koodisto, type, metadata } = muutos
@@ -153,7 +157,6 @@ class Perustelu extends Component {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaPerus
-            muutosperustelut={muutosperustelut}
             muutosperustelukoodiarvo={muutosperustelukoodiarvo}
             perusteluteksti_kuljetus_perus={perusteluteksti_kuljetus_perus}
             fields={fields}
@@ -171,7 +174,6 @@ class Perustelu extends Component {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaJatko
-            muutosperustelut={muutosperustelut}
             muutosperustelukoodiarvo={muutosperustelukoodiarvo}
             perusteluteksti_kuljetus_jatko={perusteluteksti_kuljetus_jatko}
             fields={fields}
@@ -222,13 +224,12 @@ class Perustelu extends Component {
         { koodisto === KOODISTOT.KOULUTUSSEKTORI && 
           <PerusteluSelect
             muutosperustelukoodiarvo={muutosperustelukoodiarvo}
-            muutosperustelut={muutosperustelut.muutosperusteluList}
+            muutosperustelut={muutosperustelutOpiskelijavuodet.muutosperusteluList}
             muutos={muutos}
             muutokset={muutokset}
             fields={fields}
           />
         }
-
 
         <PerusteluTopArea>
           <span>{helpText}</span>

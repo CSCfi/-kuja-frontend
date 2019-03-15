@@ -137,6 +137,16 @@ export function getMuutosperusteluObjectById(muutosperustelukoodiarvo) {
   }
 }
 
+export function getMuutosperusteluOpiskelijavuodetObjectById(muutosperustelukoodiarvo) {
+  const state = store.getState()
+
+  if (state.muutosperustelutOpiskelijavuodet && state.muutosperustelutOpiskelijavuodet.data) {
+    return _.find(state.muutosperustelutOpiskelijavuodet.data, mperustelu => {
+      return String(mperustelu.koodiArvo) === String(muutosperustelukoodiarvo)
+    })
+  }
+}
+
 export function getPaatoskierrosByUuid(paatoskierrosUuid) {
   const state = store.getState()
 
