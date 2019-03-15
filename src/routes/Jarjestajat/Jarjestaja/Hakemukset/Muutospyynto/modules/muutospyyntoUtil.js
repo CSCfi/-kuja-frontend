@@ -47,7 +47,6 @@ export function formatMuutospyynto(muutospyynto) {
 
   let meta = hakija;
   meta.taloudelliset = taloudelliset;
-  console.log(meta);
 
   return {
     diaarinumero,
@@ -99,7 +98,6 @@ export function getAttachments(muutospyynto) {
     taloudelliset = [],
     liitteet = []
   } = muutospyynto
-
   const commonAttachments = {};
   commonAttachments.liitteet = liitteet;
 
@@ -109,9 +107,11 @@ export function getAttachments(muutospyynto) {
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
     ...formatMuutosArray(muutmuutokset),
-    taloudelliset,
+    taloudelliset[0],
     commonAttachments
  ]
+
+ console.log(muutokset);
 
   let kaikkiliitteet = createAttachmentArray(muutokset);
 
