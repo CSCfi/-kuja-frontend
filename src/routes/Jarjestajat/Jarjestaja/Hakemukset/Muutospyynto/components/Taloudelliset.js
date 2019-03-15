@@ -23,6 +23,9 @@ class Taloudelliset extends Component {
       omavaraisuusaste, maksuvalmius, velkaantuneisuus, kannattavuus, 
       kumulatiivinen } = taloudellisetValue[0]
 
+    console.log(fields);
+    console.log(fields.get(0));
+
     if (!fields.get(0)) {
       fields.push({
         "edellytykset": null,

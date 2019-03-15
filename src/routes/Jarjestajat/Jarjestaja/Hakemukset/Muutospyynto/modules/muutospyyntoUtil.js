@@ -22,16 +22,20 @@ export function formatMuutospyynto(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
+    taloudelliset = [],
     hakija = [],
     liitteet = []
   } = muutospyynto
+
+  // let taloudelliset = { formatMuutosArray(taloudelliset) };
 
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset),  ]
+    ...formatMuutosArray(muutmuutokset),
+  ]
 
   // Itse liitteitä ei tarvita tallennuksen json:nissa
   muutokset.map(item => {
@@ -57,12 +61,12 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaloppupvm: "2018-12-31",
     meta: hakija,
     muutokset: muutokset,
+    taloudelliset: taloudelliset,
     liitteet
   }
 }
 
 export function createAttachmentArray(muutokset) {
-  console.log(muutokset);
   const liitteet = [] ;
   muutokset.map( item => {
     if (item.liitteet && item.liitteet.length > 0) {
@@ -324,7 +328,7 @@ function getMuutosArray(muutokset, kohdeUuid) {
 
 export function hasFormChanges(formValues) {
   if (formValues) {
-    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset } = formValues
+    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset, taloudelliset } = formValues
 
     if (tutkinnotjakoulutukset && tutkinnotjakoulutukset.length > 0) {
       return true
@@ -333,6 +337,8 @@ export function hasFormChanges(formValues) {
     } else if (toimintaalueet && toimintaalueet.length > 0) {
       return true
     } else if (opiskelijavuodet && opiskelijavuodet.length > 0) {
+      return true
+    } else if (taloudelliset && taloudelliset.length > 0) {
       return true
     } else if (muutmuutokset && muutmuutokset.length > 0) {
       return true
