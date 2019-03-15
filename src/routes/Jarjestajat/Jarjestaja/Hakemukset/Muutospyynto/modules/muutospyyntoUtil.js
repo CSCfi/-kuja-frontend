@@ -23,6 +23,7 @@ export function formatMuutospyynto(muutospyynto) {
     opiskelijavuodet = [],
     muutmuutokset = [],
     hakija = [],
+    taloudelliset = [],
     liitteet = []
   } = muutospyynto
 
@@ -44,6 +45,10 @@ export function formatMuutospyynto(muutospyynto) {
       )
   });
 
+  let meta = hakija;
+  meta.taloudelliset = taloudelliset;
+  console.log(meta);
+
   return {
     diaarinumero,
     jarjestajaOid,
@@ -58,7 +63,7 @@ export function formatMuutospyynto(muutospyynto) {
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
-    meta: hakija,
+    meta: meta,
     muutokset: muutokset,
     liitteet
   }
@@ -91,6 +96,7 @@ export function getAttachments(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
+    taloudelliset = [],
     liitteet = []
   } = muutospyynto
 
@@ -103,6 +109,7 @@ export function getAttachments(muutospyynto) {
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
     ...formatMuutosArray(muutmuutokset),
+    taloudelliset,
     commonAttachments
  ]
 
