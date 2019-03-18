@@ -77,12 +77,13 @@ class Liiteet extends Component {
 
     const setAttachment = e => {
 
+      this.setState({fileError: false});
+      this.setState({fileAdded: ""});
+
       if (e.target.files.length == 0) return;
 
       console.log("File selected");
       console.log(e.target.files[0]);
-      this.setState({fileError: false});
-      this.setState({fileAdded: false});
 
       const type = e.target.files[0].name.split('.').pop().toLowerCase();
 
