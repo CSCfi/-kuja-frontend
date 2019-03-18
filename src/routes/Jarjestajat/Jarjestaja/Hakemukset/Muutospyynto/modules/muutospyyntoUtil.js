@@ -23,14 +23,18 @@ export function formatMuutospyynto(muutospyynto) {
     opiskelijavuodet = [],
     muutmuutokset = [],
     hakija = [],
+    taloudelliset = [],
+    liitteet = []
   } = muutospyynto
+
+  // let taloudelliset = { formatMuutosArray(taloudelliset) };
 
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset)
+    ...formatMuutosArray(muutmuutokset),
   ]
 
   // Itse liitteitä ei tarvita tallennuksen json:nissa
@@ -40,6 +44,9 @@ export function formatMuutospyynto(muutospyynto) {
         delete(liite.tiedosto)
       )
   });
+
+  let meta = hakija;
+  meta.taloudelliset = taloudelliset;
 
   return {
     diaarinumero,
@@ -55,8 +62,9 @@ export function formatMuutospyynto(muutospyynto) {
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
-    meta: hakija,
+    meta: meta,
     muutokset: muutokset,
+    liitteet
   }
 }
 
@@ -69,7 +77,8 @@ export function createAttachmentArray(muutokset) {
         tulosliite.tiedostoId = liite.tiedostoId;
         tulosliite.tyyppi = liite.tyyppi;
         tulosliite.nimi = liite.nimi;
-        if (liite.tiedosto) tulosliite.tiedosto = new Blob([liite.tiedosto]);
+        tulosliite.removed = liite.removed;      
+        if (liite.tiedosto && !liite.removed) tulosliite.tiedosto = new Blob([liite.tiedosto]);
         liitteet.push(tulosliite);
       })
     }
@@ -86,20 +95,27 @@ export function getAttachments(muutospyynto) {
     toimintaalueet = [],
     opiskelijavuodet = [],
     muutmuutokset = [],
+    taloudelliset = [],
+    liitteet = []
   } = muutospyynto
+  const commonAttachments = {};
+  commonAttachments.liitteet = liitteet;
 
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset)
-  ]
+    ...formatMuutosArray(muutmuutokset),
+    taloudelliset[0],
+    commonAttachments
+ ]
 
-  let liitteet = createAttachmentArray(muutokset);
-  console.log(liitteet);
+ console.log(muutokset);
 
-  return liitteet;
+  let kaikkiliitteet = createAttachmentArray(muutokset);
+
+  return kaikkiliitteet;
 }
 
 function formatMuutosArray(muutokset) {
@@ -227,6 +243,17 @@ function getHakija(meta) {
   }
 }
 
+function getTaloudelliset(meta) {
+  if (!meta) {
+    return
+  }
+
+  const { taloudelliset } = meta
+  return {
+    taloudelliset
+  }
+}
+
 export function loadFormData(state, muutosdata, formValues) {
   console.log('loadFormData')
   console.log(state)
@@ -242,9 +269,11 @@ export function loadFormData(state, muutosdata, formValues) {
     lupaUuid,
     uuid,
     paatoskierros,
-    muutokset
+    muutokset,
+    liitteet
   } = muutosdata
 
+  const taloudelliset = getTaloudelliset(meta)
   let hakija = getHakija(meta)
   if (formValues) {
     if (formValues.hakija) {
@@ -253,6 +282,8 @@ export function loadFormData(state, muutosdata, formValues) {
   }
 
   let initialData = getBaseJarjestajaData(state)
+
+  console.log(meta);
 
   initialData = {
     ...initialData,
@@ -264,7 +295,9 @@ export function loadFormData(state, muutosdata, formValues) {
     hakija,
     lupaUuid,
     uuid,
-    paatoskierros
+    paatoskierros,
+    taloudelliset,
+    liitteet
   }
 
   // formatoi muutokset
@@ -289,6 +322,7 @@ export function loadFormData(state, muutosdata, formValues) {
 }
 
 function getMuutosArray(muutokset, kohdeUuid) {
+  console.log(muutokset);
   if (!muutokset || !kohdeUuid) {
     return
   }
@@ -313,7 +347,7 @@ function getMuutosArray(muutokset, kohdeUuid) {
 
 export function hasFormChanges(formValues) {
   if (formValues) {
-    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset } = formValues
+    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset, taloudelliset } = formValues
 
     if (tutkinnotjakoulutukset && tutkinnotjakoulutukset.length > 0) {
       return true
@@ -322,6 +356,8 @@ export function hasFormChanges(formValues) {
     } else if (toimintaalueet && toimintaalueet.length > 0) {
       return true
     } else if (opiskelijavuodet && opiskelijavuodet.length > 0) {
+      return true
+    } else if (taloudelliset && taloudelliset.length > 0) {
       return true
     } else if (muutmuutokset && muutmuutokset.length > 0) {
       return true

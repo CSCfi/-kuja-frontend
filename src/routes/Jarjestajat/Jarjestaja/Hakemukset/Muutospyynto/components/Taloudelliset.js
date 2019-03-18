@@ -5,6 +5,8 @@ import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 
 import { FormField, FormGroup, Separator, Textarea } from './MuutospyyntoWizardComponents'
 
+import Liitteet from './Liitteet'
+
 const H4 = styled.h4 `
   margin: 20px 0;
 `
@@ -19,7 +21,10 @@ class Taloudelliset extends Component {
     var { fields, taloudellisetValue } = this.props
     const { edellytykset, vaikutukset, sopeuttaminen, investoinnit, kustannukset, rahoitus, 
       omavaraisuusaste, maksuvalmius, velkaantuneisuus, kannattavuus, 
-      kumulatiivinen } = taloudellisetValue[0]
+      kumulatiivinen } = taloudellisetValue
+
+    console.log(fields);
+    console.log(fields.get(0));
 
     if (!fields.get(0)) {
       fields.push({
@@ -211,10 +216,7 @@ class Taloudelliset extends Component {
           </FormGroup>
 
           <FormGroup>
-            <Label>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.TILINPAATOSASIAKIRJAT.FI}</Label>
-            <FormField><input type="file" /></FormField>
-            <FormField><input type="text"
-              placeholder="Anna liitteelle nimi (valinnainen)..." /></FormField>
+            <Liitteet {...this.props} fields={fields.get(0)}/>
           </FormGroup>
         </div>
     )

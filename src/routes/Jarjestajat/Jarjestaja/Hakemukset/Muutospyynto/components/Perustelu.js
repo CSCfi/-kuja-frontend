@@ -14,8 +14,6 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
-import Liite from './Liite'
-
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -64,14 +62,12 @@ class Perustelu extends Component {
 
     const { helpText, muutos, muutokset, koodiarvo, sisaltaa_merkityksen, fields, perusteluteksti, muutosperustelukoodiarvo, muutosperustelut, vankilat, ELYkeskukset } = this.props
     const { perusteluteksti_oppisopimus, perusteluteksti_vaativa, perusteluteksti_tyovoima, perusteluteksti_vankila } = this.props
-    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko, filename, file} = this.props
+    const { perusteluteksti_kuljetus_perus, perusteluteksti_kuljetus_jatko} = this.props
     const { koodisto, type, metadata } = muutos
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
     const i = getIndex(muutokset, koodiarvo);
-
-    // let fileReader = new FileReader();
-    let liite = {};
-    let obj = fields.get(i);
+    console.log("metadata " + metadata);
+    console.log("muutos " + JSON.stringify(muutos));
 
     // lisälomakkeet
     // tulevat vain lisäyksille tai muutoksille.
@@ -79,7 +75,7 @@ class Perustelu extends Component {
 
     // laajennettu oppisopimus
 
-    if (koodisto == KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && (type === MUUTOS_TYPES.ADDITION )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && kasite === "laajennettu" && (type === MUUTOS_TYPES.ADDITION )) {
       return (
         <PerusteluWrapper>
           <PerusteluOppisopimus
@@ -95,7 +91,7 @@ class Perustelu extends Component {
 
     // vaativa erityinen tuki
     // pitääkö tulla vain yksi perustelu-lomake, vaikka kaikki kolme eri vaihtoehtoa on valittu: ohjeistettu valitsemaan vain yksi
-    if (koodisto == KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2" ) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2" ) && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluVaativa
@@ -112,7 +108,7 @@ class Perustelu extends Component {
 
     // Työvoimakoulutus
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && koodiarvo == 1 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluTyovoima
@@ -131,7 +127,7 @@ class Perustelu extends Component {
 
     // Vankilakoulutus
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.OIVA_MUUT && koodiarvo == 5 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.OIVA_MUUT && koodiarvo == 5 && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluVankila
@@ -146,10 +142,9 @@ class Perustelu extends Component {
         </PerusteluWrapper>
       )
     }
-
     // Kuljettajakoulutus - perustaso
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen == "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen == "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaPerus
@@ -167,7 +162,7 @@ class Perustelu extends Component {
 
     // Kuljettajakoulutus - jatko
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
-    if (koodisto == KOODISTOT.KULJETTAJAKOULUTUS  && sisaltaa_merkityksen == "jatko" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
+    if (koodisto === KOODISTOT.KULJETTAJAKOULUTUS  && sisaltaa_merkityksen == "jatko" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
       return (
         <PerusteluWrapper>
           <PerusteluKuljettajaJatko
@@ -183,30 +178,6 @@ class Perustelu extends Component {
       )
     }
 
-    const setAttachment = e => {
-      console.log("File selected");
-      console.log(e.target.files[0]);
-
-      obj = fields.get(i);
-      if (!obj.liitteet) {
-        obj.liitteet = new Array;
-      }
-      liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
-      liite.kieli = "fi";
-      liite.tyyppi = e.target.files[0].name.split('.').pop();
-      liite.nimi = e.target.files[0].name;
-      liite.tiedosto = e.target.files[0];
-      obj.liitteet.push(liite);
-      fields.remove(i);
-      fields.insert(i, obj);
-    }
-
-    const setAttachmentName = e => {
-      obj = fields.get(i);
-      obj.liitteet[0].nimi = e.target.value;
-    }
-
-    console.log(obj.liitteet);
 
     return (
       <PerusteluWrapper>
@@ -231,12 +202,6 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
-        <br />
-        {/* Liite listaus */}
-        { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi}</span> 
-        )}
       </PerusteluWrapper>
     )
   }

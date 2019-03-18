@@ -10,6 +10,8 @@ import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import { hasFormChanges } from "../modules/muutospyyntoUtil"
 
+import Liitteet from './Liitteet'
+
 let MuutospyyntoWizardPerustelut = props => {
   const {
     handleSubmit,
@@ -20,8 +22,11 @@ let MuutospyyntoWizardPerustelut = props => {
     toimialueValue,
     opiskelijavuosiValue,
     muutmuutoksetValue,
-    formValues
+    formValues,
+    muutospyynto
   } = props
+
+  console.log(muutospyynto);
 
   return (
     <div>
@@ -77,6 +82,8 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
+        <Liitteet fields={muutospyynto} />
+
         <WizardBottom>
           <Container maxWidth="1085px" padding="15px">
             <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
@@ -99,6 +106,7 @@ MuutospyyntoWizardPerustelut = connect(state => {
   const toimialueValue = selector(state, FIELD_ARRAY_NAMES.TOIMINTA_ALUEET)
   const opiskelijavuosiValue = selector(state, FIELD_ARRAY_NAMES.OPISKELIJAVUODET)
   const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
+  const muutospyynto = state.muutospyynto.data;
   let formVals = undefined
   if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
     formVals = state.form.uusiHakemus.values
@@ -110,7 +118,8 @@ MuutospyyntoWizardPerustelut = connect(state => {
     toimialueValue,
     opiskelijavuosiValue,
     muutmuutoksetValue,
-    formValues: formVals
+    formValues: formVals,
+    muutospyynto
   }
 })(MuutospyyntoWizardPerustelut)
 
