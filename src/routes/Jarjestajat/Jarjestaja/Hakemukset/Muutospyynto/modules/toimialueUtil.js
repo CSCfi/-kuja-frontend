@@ -46,12 +46,13 @@ export function getToimialueList(toimialueet, locale, tyyppi) {
 }
 
 function getKuntaList(kunnat, locale) {
+  const now = new Date()
   let list = []
 
   _.forEach(kunnat, kunta => {
     const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta
 
-    if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
+    if (tila === "HYVAKSYTTY" && koodiArvo !== "999" && (!voimassaLoppuPvm || now < Date.parse(voimassaLoppuPvm))) {
       list.push({ ...kunta, label: parseLocalizedField(metadata, locale), value: koodiArvo, tyyppi: "kunta", koodisto: "kunta", koodiarvo: koodiArvo })
     }
   })
