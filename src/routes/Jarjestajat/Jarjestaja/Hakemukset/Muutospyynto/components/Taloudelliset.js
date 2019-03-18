@@ -21,7 +21,7 @@ class Taloudelliset extends Component {
     var { fields, taloudellisetValue } = this.props
     const { edellytykset, vaikutukset, sopeuttaminen, investoinnit, kustannukset, rahoitus, 
       omavaraisuusaste, maksuvalmius, velkaantuneisuus, kannattavuus, 
-      kumulatiivinen } = taloudellisetValue[0]
+      kumulatiivinen } = taloudellisetValue
 
     console.log(fields);
     console.log(fields.get(0));

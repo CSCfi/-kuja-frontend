@@ -76,6 +76,9 @@ class Liiteet extends Component {
     let liite = {};
 
     const setAttachment = e => {
+
+      if (e.target.files.length == 0) return;
+
       console.log("File selected");
       console.log(e.target.files[0]);
       this.setState({fileError: false});

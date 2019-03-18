@@ -243,6 +243,17 @@ function getHakija(meta) {
   }
 }
 
+function getTaloudelliset(meta) {
+  if (!meta) {
+    return
+  }
+
+  const { taloudelliset } = meta
+  return {
+    taloudelliset
+  }
+}
+
 export function loadFormData(state, muutosdata, formValues) {
   console.log('loadFormData')
   console.log(state)
@@ -262,6 +273,7 @@ export function loadFormData(state, muutosdata, formValues) {
     liitteet
   } = muutosdata
 
+  const taloudelliset = getTaloudelliset(meta)
   let hakija = getHakija(meta)
   if (formValues) {
     if (formValues.hakija) {
@@ -270,6 +282,8 @@ export function loadFormData(state, muutosdata, formValues) {
   }
 
   let initialData = getBaseJarjestajaData(state)
+
+  console.log(meta);
 
   initialData = {
     ...initialData,
@@ -282,6 +296,7 @@ export function loadFormData(state, muutosdata, formValues) {
     lupaUuid,
     uuid,
     paatoskierros,
+    taloudelliset,
     liitteet
   }
 
