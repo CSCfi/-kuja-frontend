@@ -82,7 +82,7 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
-        <Liitteet fields={muutospyynto} />
+        <Liitteet fields={formValues} />
 
         <WizardBottom>
           <Container maxWidth="1085px" padding="15px">
