@@ -15,6 +15,7 @@ import OrganisaationTiedot from './OrganisaationTiedot'
 import TaloudellisetYhteenveto from './TaloudellisetYhteenveto'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { HAKEMUS_OTSIKOT  } from "../modules/uusiHakemusFormConstants"
 import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FIELDS, FORM_NAME_UUSI_HAKEMUS } 
   from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
@@ -193,7 +194,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
             component={TaloudellisetYhteenveto}
           />
 
-          <Liitteet {...this.props} fields={muutospyynto.data} />
+          <Liitteet {...this.props} fields={muutospyynto.data}  header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI }/>
 
           <WizardBottom>
             <Container maxWidth="1085px" padding="15px">

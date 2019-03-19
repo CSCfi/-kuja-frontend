@@ -6,6 +6,7 @@ import { Separator, Button, SubtleButton, Container, WizardBottom } from './Muut
 import MuutosList from './MuutosList'
 import MuutosListTutkinnot from './MuutosListTutkinnot'
 
+import { HAKEMUS_OTSIKOT  } from "../modules/uusiHakemusFormConstants"
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
 import { hasFormChanges } from "../modules/muutospyyntoUtil"
@@ -82,7 +83,7 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
-        <Liitteet fields={formValues} />
+        <Liitteet fields={formValues} header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI } />
 
         <WizardBottom>
           <Container maxWidth="1085px" padding="15px">

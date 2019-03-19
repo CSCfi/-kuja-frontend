@@ -241,7 +241,7 @@ class Liiteet extends Component {
     return (
       <div>
         { !this.props.listHidden && 
-          <h4>{HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
+          <h4>{this.props.header ? this.props.header: HAKEMUS_OTSIKOT.LIITE_HEADER.FI }</h4>
         }
         { this.props.listHidden && <br /> }
         { !this.props.showListOnly && 
