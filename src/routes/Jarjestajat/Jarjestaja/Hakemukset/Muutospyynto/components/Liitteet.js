@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { COLORS, TRANSITIONS } from "../../../../../../modules/styles"
+import { COLORS } from "../../../../../../modules/styles"
 import { FaRegFile, FaFile, FaTimes } from 'react-icons/fa';
 import { HAKEMUS_VIRHE, HAKEMUS_OTSIKOT, HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants"
 import Liite from './Liite'
@@ -80,7 +80,7 @@ class Liiteet extends Component {
       this.setState({fileError: false});
       this.setState({fileAdded: ""});
 
-      if (e.target.files.length == 0) return;
+      if (e.target.files.length === 0) return;
 
       console.log("File selected");
       console.log(e.target.files[0]);
@@ -98,7 +98,7 @@ class Liiteet extends Component {
           obj = fields.get(i);
           if (!obj) return;
           if (!obj.liitteet) {
-            obj.liitteet = new Array();
+            obj.liitteet = []
           }
         }
     
@@ -109,15 +109,19 @@ class Liiteet extends Component {
         liite.tiedosto = e.target.files[0];
         liite.koko = e.target.files[0].size;
         liite.removed = false;
+        console.log(koodiarvo);
+
         if (koodiarvo) {
           obj.liitteet.push(liite);
           fields.remove(i);
           fields.insert(i, obj);
+          console.log(fields);
         } else {
           if (!fields.liitteet) {
-            fields.liitteet = new Array();
+            fields.liitteet = [];
           }
           fields.liitteet.push(liite);
+          console.log(fields.liitteet);
         }
         this.setState({fileAdded: liite.nimi })
       } else return (
@@ -139,7 +143,7 @@ class Liiteet extends Component {
             obj.liitteet[index] = liite;
             fields.remove(i);
             fields.insert(i, obj);
-            return;
+            return true;
           }
         })
       } else {
@@ -147,7 +151,7 @@ class Liiteet extends Component {
           if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
             liite.removed = true;
             fields.liitteet[index] = liite;
-            return;
+            return true;
           }
         })
       }
@@ -162,14 +166,14 @@ class Liiteet extends Component {
         i = getIndex(muutokset, koodiarvo);
         obj = fields.get(i);
         obj.liitteet.map( (liite, index) => {
-          if ( tiedostoId && (liite.tiedostoId === tiedostoId) || (uuid && (liite.uuid === uuid)) ) {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
             liite.nimi = e.target.value;
             const type = liite.nimi.split('.').pop().toLowerCase();
             if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
             obj.liitteet[index] = liite;
             fields.remove(i);
             fields.insert(i, obj);
-            return;
+            return true;
           }
         }
       )} else {
@@ -179,7 +183,7 @@ class Liiteet extends Component {
             const type = liite.nimi.split('.').pop().toLowerCase();
             if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
             fields.liitteet[index] = liite;
-            return;
+            return true;
           }
         })
       }
@@ -228,7 +232,7 @@ class Liiteet extends Component {
               </div> 
             )
           }
-        }
+        } 
       )
      else
       return null;

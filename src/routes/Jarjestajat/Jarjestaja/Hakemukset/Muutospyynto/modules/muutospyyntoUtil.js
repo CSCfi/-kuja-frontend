@@ -27,8 +27,6 @@ export function formatMuutospyynto(muutospyynto) {
     liitteet = []
   } = muutospyynto
 
-  // let taloudelliset = { formatMuutosArray(taloudelliset) };
-
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
@@ -71,7 +69,7 @@ export function formatMuutospyynto(muutospyynto) {
 export function createAttachmentArray(muutokset) {
   const liitteet = [] ;
   muutokset.map( item => {
-    if (item.liitteet && item.liitteet.length > 0) {
+    if (item && item.liitteet && item.liitteet.length > 0) {
       item.liitteet.map( liite => {
         let tulosliite = {};
         tulosliite.tiedostoId = liite.tiedostoId;
