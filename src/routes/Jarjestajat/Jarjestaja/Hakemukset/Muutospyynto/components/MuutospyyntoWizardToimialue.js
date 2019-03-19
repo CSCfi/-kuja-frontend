@@ -23,7 +23,11 @@ import { handleSimpleCheckboxChange } from "../modules/koulutusUtil";
 import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS,
-  MUUTOS_TYPES
+  HAKEMUS_OHJEET,
+  HAKEMUS_VIESTI,
+  HAKEMUS_VIRHE,
+  MUUTOS_TYPES,
+  HAKEMUS_OTSIKOT
 } from "../modules/uusiHakemusFormConstants";
 
 class MuutospyyntoWizardToimialue extends Component {
@@ -64,7 +68,7 @@ class MuutospyyntoWizardToimialue extends Component {
           <Kohdenumero>{headingNumber}.</Kohdenumero>
           <Otsikko>{heading}</Otsikko>
           <Row>
-            <p>Tähän lyhyt ohjeteksti kohteen täyttämisestä</p>
+            <p>{HAKEMUS_OHJEET.TOIMINTAALUE.FI}</p>
           </Row>
           <Row>
             <FieldArray
@@ -94,7 +98,7 @@ class MuutospyyntoWizardToimialue extends Component {
       maakunnat.hasErrored ||
       maakuntakunnat.hasErrored
     ) {
-      return <h2>Toiminta-aluetta ladattaessa tapahtui virhe</h2>;
+      return <h2>{HAKEMUS_VIRHE.TOIMINTAALUE.FI}</h2>;
     } else if (
       kunnat.isFetching ||
       maakunnat.isFetching ||
@@ -131,11 +135,6 @@ class MuutospyyntoWizardToimialue extends Component {
       editValues.forEach(value => {
         if (value.type === MUUTOS_TYPES.ADDITION) {
           initialValue.push(value.value);
-        } else if (value.type === MUUTOS_TYPES.REMOVAL) {
-          // Jätetään poistettu toimialue näkyville
-          // if (_.includes(initialValue, value.value)) {
-          //   _.pull(initialValue, value.value)
-          // }
         }
       });
     }
@@ -165,7 +164,7 @@ class MuutospyyntoWizardToimialue extends Component {
 
     return (
       <div>
-        <p>Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen</p>
+        <p>{HAKEMUS_OHJEET.TOIMINTAALUE_VALINTA.FI}</p>
         <ToimialueSelect
           options={opts}
           value={initialValue}
@@ -175,7 +174,7 @@ class MuutospyyntoWizardToimialue extends Component {
         />
 
         {initialValue && initialValue.length === 0 && (
-          <h4>Toiminta-aluetta ei määritetty</h4>
+          <h4>{HAKEMUS_VIESTI.TOIMINTAALUE_EI_MAARITETTY.FI}</h4>
         )}
 
         {valitutMaakunnat.length > 0 && (
@@ -246,7 +245,7 @@ class MuutospyyntoWizardToimialue extends Component {
 
     return (
       <div>
-        <p>Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen</p>
+        <p>{HAKEMUS_OHJEET.VALTAKUNNALLINEN.FI}</p>
         <CheckboxRowContainer>
           <Checkbox>
             <input
@@ -267,9 +266,7 @@ class MuutospyyntoWizardToimialue extends Component {
             <label htmlFor="valtakunnallinencheckbox" />
           </Checkbox>
           <Nimi>
-            Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
-            koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
-            osaamis- ja koulutustarpeeseen.
+            {HAKEMUS_OTSIKOT.VALTAKUNNALLINEN.FI}
           </Nimi>
         </CheckboxRowContainer>
       </div>
@@ -326,5 +323,4 @@ export default reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
   forceUnregisterOnUnmount: true
-  // validate,
 })(MuutospyyntoWizardToimialue);
