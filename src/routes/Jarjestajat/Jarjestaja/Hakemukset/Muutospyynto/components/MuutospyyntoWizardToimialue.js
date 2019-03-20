@@ -91,16 +91,12 @@ class MuutospyyntoWizardToimialue extends Component {
 
   renderToimialueMuutokset(props) {
     const { maakunnat, kunnat, maakuntakunnatList, editValues, fields } = props;
-    const now = new Date();
     let opts = [];
     let initialValue = [];
     let valitutMaakunnat = [];
     let valitutKunnat = [];
 
     // Kerää voimassa olevat koodiarvot valikon vaihtoehdoiksi
-    const onVoimassa = n => {
-      return !n.voimassaLoppuPvm || n.voimassaLoppuPvm >= now;
-    };
     _(maakuntakunnatList)
       .filter(onVoimassa)
       .forEach(maakunta => {
@@ -171,10 +167,10 @@ class MuutospyyntoWizardToimialue extends Component {
             {valitutMaakunnat.map(alue => {
               const { label, type } = alue;
               const customClass =
-                type === MUUTOS_TYPES.ADDITION
-                  ? "is-added"
-                  : type === MUUTOS_TYPES.REMOVAL
+                type === MUUTOS_TYPES.REMOVAL || !onVoimassa(alue)
                   ? "is-removed"
+                  : type === MUUTOS_TYPES.ADDITION
+                  ? "is-added"
                   : "is-in-lupa";
               return (
                 <div key={label} className={customClass}>
@@ -191,10 +187,10 @@ class MuutospyyntoWizardToimialue extends Component {
             {valitutKunnat.map(alue => {
               const { label, type } = alue;
               const customClass =
-                type === MUUTOS_TYPES.ADDITION
-                  ? "is-added"
-                  : type === MUUTOS_TYPES.REMOVAL
+                type === MUUTOS_TYPES.REMOVAL || !onVoimassa(alue)
                   ? "is-removed"
+                  : type === MUUTOS_TYPES.ADDITION
+                  ? "is-added"
                   : "is-in-lupa";
               return (
                 <div key={label} className={customClass}>
@@ -289,6 +285,11 @@ class ToimialueSelect extends Component {
     );
   }
 }
+
+const now = new Date();
+const onVoimassa = n => {
+  return !n.voimassaLoppuPvm || n.voimassaLoppuPvm >= now;
+};
 
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS);
 
