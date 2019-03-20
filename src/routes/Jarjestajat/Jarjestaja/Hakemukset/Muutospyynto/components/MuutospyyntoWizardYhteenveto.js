@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 import { connect } from 'react-redux'
@@ -18,6 +19,7 @@ import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { COMPONENT_TYPES, FIELD_ARRAY_NAMES, FIELDS, FORM_NAME_UUSI_HAKEMUS } 
   from "../modules/uusiHakemusFormConstants"
 import validate from '../modules/validateWizard'
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 
 import DatePicker from "../../../../../../modules/DatePicker"
 
@@ -107,6 +109,9 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
     const { meta } = formValues
 
+    const tutkintojaLisatty = _.find(tutkinnotjakoulutuksetValue, function(t) { 
+      return t.type === MUUTOS_TYPES.ADDITION })
+
     return (
       <div>
         <h2>{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
@@ -185,13 +190,13 @@ class MuutospyyntoWizardYhteenveto extends Component {
             componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
           />
 
-          <FieldArray
+          {tutkintojaLisatty && <FieldArray
             name={FIELD_ARRAY_NAMES.TALOUDELLISET}
             muutokset={taloudellisetValue}
             kategoria="taloudelliset"
             heading="Taloudelliset edellytykset"
             component={TaloudellisetYhteenveto}
-          />
+          /> }
 
           <Liitteet {...this.props} fields={muutospyynto.data} />
 
