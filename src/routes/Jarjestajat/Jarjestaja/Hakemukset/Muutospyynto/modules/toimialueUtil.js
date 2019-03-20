@@ -18,19 +18,20 @@ export function getToimialueByKoodiArvo(koodiarvo) {
 
   if (koodiarvo.length === 2) {
     // Kyseessä maakunta
-    if (state.maakunnat && state.maakunnat.fetched) {
-      const { maakuntaList } = state.maakunnat;
-      return _.find(maakuntaList, maakunta => {
+    if (state.maakuntakunnat && state.maakuntakunnat.fetched) {
+      const { maakuntakunnatList } = state.maakuntakunnat;
+      return _.find(maakuntakunnatList, maakunta => {
         return maakunta.koodiArvo === koodiarvo;
       });
     }
   } else if (koodiarvo.length === 3) {
     // Kyseessä kunta
-    if (state.kunnat && state.kunnat.fetched) {
-      const { kuntaList } = state.kunnat;
-      return _.find(kuntaList, kunta => {
-        return kunta.koodiArvo === koodiarvo;
-      });
+    if (state.maakuntakunnat && state.maakuntakunnat.fetched) {
+      const { maakuntakunnatList } = state.maakuntakunnat;   
+      return _(maakuntakunnatList)
+        .map('kunta')
+        .flatten()
+        .find(kunta => {return kunta.koodiArvo === koodiarvo})
     }
   } else {
     return undefined;
