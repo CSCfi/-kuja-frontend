@@ -32,15 +32,7 @@ import {
 
 class MuutospyyntoWizardToimialue extends Component {
   componentWillMount() {
-    const { kunnat, maakunnat, maakuntakunnat } = this.props;
-
-    if (kunnat && !kunnat.fetched) {
-      this.props.fetchKunnat();
-    }
-
-    if (maakunnat && !maakunnat.fetched) {
-      this.props.fetchMaakunnat();
-    }
+    const { maakuntakunnat } = this.props;
 
     if (maakuntakunnat && !maakuntakunnat.fetched) {
       this.props.fetchMaakuntakunnat();
@@ -52,8 +44,6 @@ class MuutospyyntoWizardToimialue extends Component {
       lupa,
       valtakunnallinenmuutoksetValue,
       toimialuemuutoksetValue,
-      kunnat,
-      maakunnat,
       maakuntakunnat
     } = this.props;
     const { kohteet } = lupa;
@@ -62,7 +52,7 @@ class MuutospyyntoWizardToimialue extends Component {
     const kuntaMaaraykset = kohteet[3].kunnat;
     const valtakunnallinen = kohteet[3].valtakunnallinen || false;
 
-    if (kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched) {
+    if (maakuntakunnat.fetched) {
       return (
         <ContentContainer>
           <Kohdenumero>{headingNumber}.</Kohdenumero>
@@ -76,10 +66,7 @@ class MuutospyyntoWizardToimialue extends Component {
               maakunnat={maakuntaMaaraykset}
               kunnat={kuntaMaaraykset}
               editValues={toimialuemuutoksetValue}
-              maakuntaList={maakunnat.maakuntaList}
-              kuntaList={kunnat.kuntaList}
               maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
-              valtakunnallinen={valtakunnallinen}
               component={this.renderToimialueMuutokset}
             />
           </Row>
@@ -93,17 +80,9 @@ class MuutospyyntoWizardToimialue extends Component {
           </Row>
         </ContentContainer>
       );
-    } else if (
-      kunnat.hasErrored ||
-      maakunnat.hasErrored ||
-      maakuntakunnat.hasErrored
-    ) {
+    } else if (maakuntakunnat.hasErrored) {
       return <h2>{HAKEMUS_VIRHE.TOIMINTAALUE.FI}</h2>;
-    } else if (
-      kunnat.isFetching ||
-      maakunnat.isFetching ||
-      maakuntakunnat.isFetching
-    ) {
+    } else if (maakuntakunnat.isFetching) {
       return <Loading />;
     } else {
       return null;
@@ -265,9 +244,7 @@ class MuutospyyntoWizardToimialue extends Component {
             />
             <label htmlFor="valtakunnallinencheckbox" />
           </Checkbox>
-          <Nimi>
-            {HAKEMUS_OTSIKOT.VALTAKUNNALLINEN.FI}
-          </Nimi>
+          <Nimi>{HAKEMUS_OTSIKOT.VALTAKUNNALLINEN.FI}</Nimi>
         </CheckboxRowContainer>
       </div>
     );

@@ -8,16 +8,12 @@ import MuutospyyntoWizardToimialue from '../components/MuutospyyntoWizardToimial
 
 const mapStateToProps = (state) => {
   return {
-    kunnat: state.kunnat,
-    maakunnat: state.maakunnat,
     maakuntakunnat: state.maakuntakunnat
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchKunnat: () => dispatch(fetchKunnat()),
-    fetchMaakunnat: () => dispatch(fetchMaakunnat()),
     fetchMaakuntakunnat: () => dispatch(fetchMaakuntakunnat())
   }
 }
