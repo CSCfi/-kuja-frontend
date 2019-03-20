@@ -91,17 +91,26 @@ class MuutospyyntoWizardToimialue extends Component {
 
   renderToimialueMuutokset(props) {
     const { maakunnat, kunnat, maakuntakunnatList, editValues, fields } = props;
+    const now = new Date();
     let opts = [];
     let initialValue = [];
     let valitutMaakunnat = [];
     let valitutKunnat = [];
 
-    _.forEach(maakuntakunnatList, maakunta => {
-      opts.push(maakunta);
-      _.forEach(maakunta.kunta, kunta => {
-        opts.push(kunta);
+    // Kerää voimassa olevat koodiarvot valikon vaihtoehdoiksi
+    const onVoimassa = n => {
+      return !n.voimassaLoppuPvm || n.voimassaLoppuPvm >= now;
+    };
+    _(maakuntakunnatList)
+      .filter(onVoimassa)
+      .forEach(maakunta => {
+        opts.push(maakunta);
+        _(maakunta.kunta)
+          .filter(onVoimassa)
+          .forEach(kunta => {
+            opts.push(kunta);
+          });
       });
-    });
 
     maakunnat.forEach(maakunta => {
       initialValue.push(maakunta.koodiarvo);
