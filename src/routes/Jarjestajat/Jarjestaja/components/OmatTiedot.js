@@ -6,7 +6,7 @@ import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 import Loading from '../../../../modules/Loading'
 import { InnerContentContainer, InnerContentWrapper  } from "../../../../modules/elements"
 import { getToimialueByKoodiArvo } from "../Hakemukset/Muutospyynto/modules/toimialueUtil"
-import { fetchKunnat } from "../../../../modules/reducers/kunnat"
+import { fetchMaakuntakunnat } from "../../../../modules/reducers/maakuntakunnat"
 class OmatTiedot extends Component {
 
   componentDidMount() {
@@ -14,8 +14,8 @@ class OmatTiedot extends Component {
     this.props.getRoles().then(() => {
        this.props.getOrganisation(sessionStorage.getItem('oid'))
     })
-    if (this.props.kunnat && !this.props.kunnat.fetched) {
-      this.props.fetchKunnat()
+    if (this.props.maakuntakunnat && !this.props.maakuntakunnat.fetched) {
+      this.props.fetchMaakuntakunnat()
     }
   }
 
@@ -32,7 +32,7 @@ class OmatTiedot extends Component {
         if (oppilaitos.organisaatio) {
             if (oppilaitos.organisaatio.kayntiosoite.postinumeroUri) postinumero = oppilaitos.organisaatio.kayntiosoite.postinumeroUri.substr(6)
             if (oppilaitos.organisaatio.postiosoite.postinumeroUri) ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(6)
-            if (this.props.kunnat && this.props.kunnat.fetched && oppilaitos.organisaatio.kotipaikkaUri) kotipaikka = getToimialueByKoodiArvo(oppilaitos.organisaatio.kotipaikkaUri.substr(6)).label;
+            if (this.props.maakuntakunnat && this.props.maakuntakunnat.fetched && oppilaitos.organisaatio.kotipaikkaUri) kotipaikka = getToimialueByKoodiArvo(oppilaitos.organisaatio.kotipaikkaUri.substr(6)).label;
             // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
             if (oppilaitos.organisaatio.yhteystiedot) oppilaitos.organisaatio.yhteystiedot.map(item => {
                 if (item.www) www = item.www;
@@ -107,7 +107,7 @@ class OmatTiedot extends Component {
 function mapStateToProps(state) {
   return { 
     user: state.user,
-    kunnat: state.kunnat
+    maakuntakunnat: state.maakuntakunnat
   }
 }
 
@@ -115,7 +115,7 @@ function mapDispatchToProps(dispatch) {
   return {
     getRoles: () => dispatch(getRoles()),
     getOrganisation: (oid) => dispatch(getOrganisation(oid)),
-    fetchKunnat: () => dispatch(fetchKunnat())
+    fetchMaakuntakunnat: () => dispatch(fetchMaakuntakunnat())
   }
 }
 
