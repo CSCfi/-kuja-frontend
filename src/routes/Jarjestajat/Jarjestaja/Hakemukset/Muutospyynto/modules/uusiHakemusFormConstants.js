@@ -164,6 +164,10 @@ export const HAKEMUS_OTSIKOT = {
     FI: 'Yleiset liitteet',
     SV: 'På Svenska'
   },
+  LIITE_YHTEENVETO_HEADER: {
+    FI: 'Hakemuksen yleiset liitteet',
+    SV: 'På Svenska'
+  },
   LIITE_OHJE: {
     FI: 'Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif.',
     SV: 'På Svenska'
@@ -181,11 +185,11 @@ export const HAKEMUS_OTSIKOT = {
     SV: 'På Svenska'
   },
   SALAINEN_LIITE_VALINTA: {
-    FI: 'Merkkaaa liite salaiseksi',
+    FI: 'Merkitse liite salaiseksi',
     SV: 'På Svenska'
   },
   SALAINEN_LIITE_VALINTA_POISTA: {
-    FI: 'Poista liitteen salaisuus merkintä',
+    FI: 'Merkitse liite julkiseksi',
     SV: 'På Svenska'
   }
 }

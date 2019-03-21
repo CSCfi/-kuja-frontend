@@ -46,6 +46,10 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosListTutkinnot}
         />
 
+        {tutkinnotjakoulutuksetValue && tutkinnotjakoulutuksetValue.length > 0 && 
+            <Liitteet fields={formValues} paikka="tutkinnot" /> 
+        }
+
         <FieldArray
           name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
           nimi={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
@@ -83,7 +87,9 @@ let MuutospyyntoWizardPerustelut = props => {
           component={MuutosList}
         />
 
-        <Liitteet fields={formValues} header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI } />
+        <Separator />
+
+        <Liitteet fields={formValues} paikka="petustelut" header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI } />
 
         <WizardBottom>
           <Container maxWidth="1085px" padding="15px">

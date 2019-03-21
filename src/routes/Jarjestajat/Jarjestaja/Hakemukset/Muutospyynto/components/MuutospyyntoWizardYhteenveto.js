@@ -132,6 +132,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
           <Separator />
 
+          <Liitteet {...this.props} fields={muutospyynto.data} header={ HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_HEADER.FI }/>
+
+          <Separator />
+
           <h3>Muutokset perusteluineen</h3>
 
           <FieldArray
@@ -193,8 +197,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
             heading="Taloudelliset edellytykset"
             component={TaloudellisetYhteenveto}
           />
-
-          <Liitteet {...this.props} fields={muutospyynto.data}  header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI }/>
 
           <WizardBottom>
             <Container maxWidth="1085px" padding="15px">

@@ -125,7 +125,7 @@ class Liiteet extends Component {
     }
   }
   render() {
-    const { muutokset, fields, koodiarvo } = this.props
+    const { muutokset, fields, koodiarvo, paikka } = this.props
 
     let liite = {};
 
@@ -164,6 +164,7 @@ class Liiteet extends Component {
         liite.koko = e.target.files[0].size;
         liite.removed = false;
         liite.salainen = false;
+        liite.paikka = paikka;
 
         if (koodiarvo) {
           obj.liitteet.push(liite);
@@ -291,7 +292,7 @@ class Liiteet extends Component {
         obj = fields;
       if (obj && obj.liitteet)
         return  obj.liitteet.map( liite => {
-          if (!liite.removed) {
+          if ( liite.paikka === paikka && !liite.removed) {
             return (
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
                 {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}

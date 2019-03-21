@@ -215,8 +215,10 @@ class Taloudelliset extends Component {
 
           </FormGroup>
 
+          <Separator />
+
           <FormGroup>
-            <Liitteet {...this.props} fields={fields.get(0)}/>
+            <Liitteet {...this.props} fields={fields.get(0)} paikka="taloudelliset"/>
           </FormGroup>
         </div>
     )

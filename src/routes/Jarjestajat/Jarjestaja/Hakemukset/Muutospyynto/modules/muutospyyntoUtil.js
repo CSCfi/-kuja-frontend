@@ -77,6 +77,7 @@ export function createAttachmentArray(muutokset) {
         tulosliite.nimi = liite.nimi;
         tulosliite.salainen = liite.salainen;
         tulosliite.removed = liite.removed;
+        tulosliite.paikka = liite.paikka;
         if (liite.tiedosto && !liite.removed) {
           tulosliite.tiedosto = new Blob([liite.tiedosto]);
           liite.tiedosto = null;
