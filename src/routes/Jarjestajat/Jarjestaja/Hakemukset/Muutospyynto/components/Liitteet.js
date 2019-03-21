@@ -127,9 +127,6 @@ class Liiteet extends Component {
   render() {
     const { muutokset, fields, koodiarvo } = this.props
 
-    console.log(fields);
-    console.log(koodiarvo);
-
     let liite = {};
 
     const setAttachment = e => {
@@ -167,7 +164,6 @@ class Liiteet extends Component {
         liite.koko = e.target.files[0].size;
         liite.removed = false;
         liite.salainen = false;
-        console.log(koodiarvo);
 
         if (koodiarvo) {
           obj.liitteet.push(liite);
@@ -299,12 +295,12 @@ class Liiteet extends Component {
             return (
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
                 {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}
-                {liite.tiedostoId ?
+                {liite.tiedostoId && liite.tiedosto ?
                   <LiiteListItem>
                     <FaFile />
                     <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
                     <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Checkbox title="Salainen">
+                    <Checkbox title={ liite.salainen ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI}>
                       <input
                         type="checkbox"
                         checked={liite.salainen}
@@ -322,13 +318,13 @@ class Liiteet extends Component {
                     <FaRegFile />
                     <span className="name">{liite.nimi}</span>
                     <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Secret title="Salainen">{ liite.salainen && <FaLock/> }</Secret>
+                    <Secret title={HAKEMUS_OTSIKOT.SALAINEN_LIITE.FI}>{ liite.salainen && <FaLock/> }</Secret>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                   </LiiteListItem>
                 }
               </div> 
             )
-          } else return false;
+          } else return null;
         } 
       )
      else

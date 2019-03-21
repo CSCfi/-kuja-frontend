@@ -175,6 +175,18 @@ export const HAKEMUS_OTSIKOT = {
   POISTA_LIITE: {
     FI: 'Poista liite',
     SV: 'På Svenska'
+  },
+  SALAINEN_LIITE: {
+    FI: 'Salainen liite',
+    SV: 'På Svenska'
+  },
+  SALAINEN_LIITE_VALINTA: {
+    FI: 'Merkkaaa liite salaiseksi',
+    SV: 'På Svenska'
+  },
+  SALAINEN_LIITE_VALINTA_POISTA: {
+    FI: 'Poista liitteen salaisuus merkintä',
+    SV: 'På Svenska'
   }
 }
 
