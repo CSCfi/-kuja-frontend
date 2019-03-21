@@ -14,6 +14,118 @@ const Message = styled.div`
   color: ${COLORS.OIVA_GREEN};
   margin-bottom: 8px;
 `
+const Checkbox = styled.div`
+  width: 20px;
+  position: relative;
+  margin: 6px 10px 0 10px;
+  
+  label {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: -3px;
+    left: 0;
+    background: white;
+    border-radius: 0;
+    border: 1px solid ${COLORS.OIVA_GREEN};
+    
+    &:hover {
+      &:after {
+        border-color: ${COLORS.OIVA_GREEN};
+        opacity: 0.5;
+      }
+    }
+    
+    &:after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid #fcfff4;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+   
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+
+    &:checked + label {
+      background: ${COLORS.OIVA_GREEN};
+      
+      &:hover {
+        &:after {
+          background: rgba(90, 138, 112, 0.0);
+        }
+      }
+    }
+    
+    &:hover {
+      background: rgba(90, 138, 112, 0.5);
+    }
+    
+    &:checked + label:after {
+      opacity: 1;
+      background: ${COLORS.OIVA_GREEN};
+      
+      &:hover {
+        background: rgba(90, 138, 112, 0.5);
+      }
+    }
+    
+    &:checked + label:hover {
+      background: rgba(90, 138, 112, 0.5);
+      
+      &:after {
+        border-color: white;
+        opacity: 1;
+      }
+    }
+  }
+`
+const Checked = styled.div`
+  width: 20px;
+  position: relative;
+  margin: 6px 10px 0 10px;
+  
+  label {
+    width: 20px;
+    height: 20px;
+    cursor: default;
+    position: absolute;
+    top: -3px;
+    left: 0;
+
+    &:after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid ${COLORS.OIVA_GREEN};
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+   
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+    
+    &:checked + label:after {
+      opacity: 1;
+    }
+  }
+`
 const LiiteListItem = styled.div`
   font-size: 14px;
   display: flex;
@@ -26,7 +138,6 @@ const LiiteListItem = styled.div`
     border: 0;
     height: 24px;
     width: 24px;
-    margin-left: 8px;
     cursor: cursor;
     &:hover {
       color: ${props => props.disabled ? COLORS.WHITE : props.bgColor ? props.bgColor : COLORS.WHITE};
@@ -109,6 +220,7 @@ class Liiteet extends Component {
         liite.tiedosto = e.target.files[0];
         liite.koko = e.target.files[0].size;
         liite.removed = false;
+        liite.salainen = false;
         console.log(koodiarvo);
 
         if (koodiarvo) {
@@ -144,7 +256,7 @@ class Liiteet extends Component {
             fields.remove(i);
             fields.insert(i, obj);
             return true;
-          }
+          } else return false;
         })
       } else {
         fields.liitteet.map( (liite, index) => {
@@ -152,7 +264,7 @@ class Liiteet extends Component {
             liite.removed = true;
             fields.liitteet[index] = liite;
             return true;
-          }
+          } else return false;
         })
       }
     }
@@ -174,7 +286,7 @@ class Liiteet extends Component {
             fields.remove(i);
             fields.insert(i, obj);
             return true;
-          }
+          } return false;
         }
       )} else {
         fields.liitteet.map( (liite, index) => {
@@ -184,7 +296,35 @@ class Liiteet extends Component {
             if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
             fields.liitteet[index] = liite;
             return true;
-          }
+          } else return false;
+        })
+      }
+    }
+
+    const setAttachmentVisibility= (e, tiedostoId, uuid) => {
+      this.setState({fileError: false});
+      this.setState({fileAdded: ""});
+      let obj = undefined;
+      let i = 0;
+      if (koodiarvo) {
+        i = getIndex(muutokset, koodiarvo);
+        obj = fields.get(i);
+        obj.liitteet.map( (liite, index) => {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+            liite.salainen = e.target.checked;
+            obj.liitteet[index] = liite;
+            fields.remove(i);
+            fields.insert(i, obj);
+            return true;
+          } return false;
+        }
+      )} else {
+        fields.liitteet.map( (liite, index) => {
+          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+            liite.salainen = e.target.checked;
+            fields.liitteet[index] = liite;
+            return true;
+          } else return false;
         })
       }
     }
@@ -219,6 +359,15 @@ class Liiteet extends Component {
                     <FaFile />
                     <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
                     <span className="size">{ bytesToSize(liite.koko) }</span>
+                    <Checkbox>
+                      <input
+                        type="checkbox"
+                        checked={liite.salainen}
+                        onChange={e => setAttachmentVisibility(e,liite.tiedostoId,liite.uuid)}
+                        id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
+                      />
+                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }></label>
+                    </Checkbox>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                   </LiiteListItem>
                 :
@@ -226,12 +375,20 @@ class Liiteet extends Component {
                     <FaRegFile />
                     <span className="name">{liite.nimi}</span>
                     <span className="size">{ bytesToSize(liite.koko) }</span>
+                    <Checked>
+                      <input
+                        type="checkbox"
+                        checked={liite.salainen}
+                        id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
+                      />
+                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }></label>
+                    </Checked>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                   </LiiteListItem>
                 }
               </div> 
             )
-          }
+          } else return false;
         } 
       )
      else
