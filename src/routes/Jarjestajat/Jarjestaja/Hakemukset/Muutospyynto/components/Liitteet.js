@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
-import { FaRegFile, FaFile, FaTimes } from 'react-icons/fa';
+import { FaRegFile, FaFile, FaTimes, FaLock } from 'react-icons/fa';
 import { HAKEMUS_VIRHE, HAKEMUS_OTSIKOT, HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants"
 import Liite from './Liite'
 import { getIndex } from "../modules/muutosUtil"
@@ -29,6 +29,10 @@ const Checkbox = styled.div`
     background: white;
     border-radius: 0;
     border: 1px solid ${COLORS.OIVA_GREEN};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2px;
     
     &:hover {
       &:after {
@@ -36,29 +40,12 @@ const Checkbox = styled.div`
         opacity: 0.5;
       }
     }
-    
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border: 3px solid #fcfff4;
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-   
   }
   input[type=checkbox] {
     visibility: hidden;
 
     &:checked + label {
-      background: ${COLORS.OIVA_GREEN};
-      
+      color: ${COLORS.OIVA_GREEN};
       &:hover {
         &:after {
           background: rgba(90, 138, 112, 0.0);
@@ -66,22 +53,11 @@ const Checkbox = styled.div`
       }
     }
     
-    &:hover {
-      background: rgba(90, 138, 112, 0.5);
-    }
-    
     &:checked + label:after {
       opacity: 1;
-      background: ${COLORS.OIVA_GREEN};
-      
-      &:hover {
-        background: rgba(90, 138, 112, 0.5);
-      }
     }
     
     &:checked + label:hover {
-      background: rgba(90, 138, 112, 0.5);
-      
       &:after {
         border-color: white;
         opacity: 1;
@@ -89,42 +65,12 @@ const Checkbox = styled.div`
     }
   }
 `
-const Checked = styled.div`
+const Secret = styled.div`
   width: 20px;
   position: relative;
-  margin: 6px 10px 0 10px;
-  
-  label {
-    width: 20px;
-    height: 20px;
-    cursor: default;
-    position: absolute;
-    top: -3px;
-    left: 0;
-
-    &:after {
-      content: '';
-      width: 9px;
-      height: 5px;
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      border: 3px solid ${COLORS.OIVA_GREEN};
-      border-top: none;
-      border-right: none;
-      background: transparent;
-      opacity: 0;
-      transform: rotate(-45deg);
-    }
-   
-  }
-  input[type=checkbox] {
-    visibility: hidden;
-    
-    &:checked + label:after {
-      opacity: 1;
-    }
-  }
+  margin: 0 10px 0;
+  display: flex;
+  justify-content: center;
 `
 const LiiteListItem = styled.div`
   font-size: 14px;
@@ -303,7 +249,6 @@ class Liiteet extends Component {
 
     const setAttachmentVisibility= (e, tiedostoId, uuid) => {
       this.setState({fileError: false});
-      this.setState({fileAdded: ""});
       let obj = undefined;
       let i = 0;
       if (koodiarvo) {
@@ -359,14 +304,16 @@ class Liiteet extends Component {
                     <FaFile />
                     <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
                     <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Checkbox>
+                    <Checkbox title="Salainen">
                       <input
                         type="checkbox"
                         checked={liite.salainen}
                         onChange={e => setAttachmentVisibility(e,liite.tiedostoId,liite.uuid)}
                         id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
                       />
-                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }></label>
+                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }>
+                        { liite.salainen && <FaLock/> }
+                      </label>
                     </Checkbox>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                   </LiiteListItem>
@@ -375,14 +322,7 @@ class Liiteet extends Component {
                     <FaRegFile />
                     <span className="name">{liite.nimi}</span>
                     <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Checked>
-                      <input
-                        type="checkbox"
-                        checked={liite.salainen}
-                        id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
-                      />
-                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }></label>
-                    </Checked>
+                    <Secret title="Salainen">{ liite.salainen && <FaLock/> }</Secret>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
                   </LiiteListItem>
                 }
