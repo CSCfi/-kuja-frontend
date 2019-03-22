@@ -191,6 +191,10 @@ export const HAKEMUS_OTSIKOT = {
   SALAINEN_LIITE_VALINTA_POISTA: {
     FI: 'Merkitse liite julkiseksi',
     SV: 'På Svenska'
+  },
+  EI_MUUTOKSIA: {
+    FI: 'Ei muutoksia.',
+    SV: 'På Svenska'
   }
 }
 
