@@ -97,8 +97,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
       toimialueValue,
       opiskelijavuosiValue,
       muutmuutoksetValue,
-      taloudellisetValue,
-      muutospyynto
+      taloudellisetValue
     } = this.props
 
     let jarjestaja = undefined
@@ -132,7 +131,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
           <Separator />
 
-          <Liitteet {...this.props} fields={muutospyynto.data} header={ HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_HEADER.FI }/>
+          <Liitteet {...this.props} fields={formValues} paikka="yhteenveto" header={ HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_HEADER.FI }/>
 
           <Separator />
 

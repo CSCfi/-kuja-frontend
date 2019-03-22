@@ -290,9 +290,11 @@ class Liiteet extends Component {
       }
       else 
         obj = fields;
+
+      console.log(liite.paikka);
       if (obj && obj.liitteet)
         return  obj.liitteet.map( liite => {
-          if ( liite.paikka === paikka && !liite.removed) {
+          if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
             return (
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
                 {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}
