@@ -163,7 +163,9 @@ class MuutospyyntoWizard extends Component {
     const url = `/jarjestajat/${this.props.match.params.ytunnus}`
     this.props.saveMuutospyynto(data).then(() => {
       let uuid = undefined;
-      if (this.props.muutospyynto.save.response) uuid = this.props.muutospyynto.save.response.data;
+      console.log('load', this.props.muutospyynto.save.data)
+
+      if (this.props.muutospyynto.save.data.data) uuid = this.props.muutospyynto.save.data.data.uuid;
       let newurl = url + "/hakemukset-ja-paatokset/" + uuid
       this.props.history.push(newurl)
     })
@@ -173,7 +175,7 @@ class MuutospyyntoWizard extends Component {
       event.preventDefault()
       this.props.previewMuutospyynto(data).then(() => {
 
-          var binaryData = [];
+          var binaryData = [];   
           binaryData.push(this.props.muutospyynto.pdf.data);
           const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
           //const data =  window.URL.createObjectURL(response.data)

@@ -13,10 +13,10 @@ const Error = styled.div`
   margin-bottom: 8px;
   min-height: 20px;
 `
-const Message = styled.div`
-  color: ${COLORS.OIVA_GREEN};
-  margin-bottom: 8px;
-`
+// const Message = styled.div`
+//   color: ${COLORS.OIVA_GREEN};
+//   margin-bottom: 8px;
+// `
 const Checkbox = styled.div`
   width: 20px;
   position: relative;
@@ -67,13 +67,6 @@ const Checkbox = styled.div`
       }
     }
   }
-`
-const Secret = styled.div`
-  width: 20px;
-  position: relative;
-  margin: 0 10px 0;
-  display: flex;
-  justify-content: center;
 `
 const LiiteListItem = styled.div`
   font-size: 14px;
@@ -173,7 +166,9 @@ class Liiteet extends Component {
       if (this.state.fileName) {
         this.setState( {nameMissing: false })
         this.closeNameModal();
-        this.state.liite.nimi = this.state.fileName;
+        let items = [...this.state.liite];
+        items.nimi = this.state.fileName;
+        this.setState( {liite: items });
         if (koodiarvo) {
           this.state.liitteetObj.liitteet.push(this.state.liite);
           fields.remove(index);
@@ -344,36 +339,24 @@ class Liiteet extends Component {
           if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
             return (
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
-                {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}
-                {liite.tiedostoId && liite.tiedosto ?
-                  <LiiteListItem>
-                    {liite.new ? <FaFile /> : <FaRegFile /> }
-                    <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
-                    <span className="type">{ liite.tyyppi }</span>                    
-                    <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Checkbox title={ liite.salainen ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI}>
-                      <input
-                        type="checkbox"
-                        checked={liite.salainen}
-                        onChange={e => setAttachmentVisibility(e,liite.tiedostoId,liite.uuid)}
-                        id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
-                      />
-                      <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }>
-                        { liite.salainen && <FaLock/> }
-                      </label>
-                    </Checkbox>
-                    <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
-                  </LiiteListItem>
-                :
-                  <LiiteListItem>     
-                    <FaRegFile />
-                    <span className="name">{liite.nimi}</span>
-                    <span className="type">{ liite.tyyppi }</span>
-                    <span className="size">{ bytesToSize(liite.koko) }</span>
-                    <Secret title={HAKEMUS_OTSIKOT.SALAINEN_LIITE.FI}>{ liite.salainen && <FaLock/> }</Secret>
-                    <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
-                  </LiiteListItem>
-                }
+                <LiiteListItem>
+                  {liite.new ? <FaFile /> : <FaRegFile /> }
+                  <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
+                  <span className="type">{ liite.tyyppi }</span>                    
+                  <span className="size">{ bytesToSize(liite.koko) }</span>
+                  <Checkbox title={ liite.salainen ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI}>
+                    <input
+                      type="checkbox"
+                      checked={liite.salainen}
+                      onChange={e => setAttachmentVisibility(e,liite.tiedostoId,liite.uuid)}
+                      id={ liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }
+                    />
+                    <label htmlFor={liite.tiedostoId ? "c"+liite.tiedostoId : "c"+liite.uuid }>
+                      { liite.salainen && <FaLock/> }
+                    </label>
+                  </Checkbox>
+                  <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
+                </LiiteListItem>
               </div> 
             )
           } else return null;
@@ -413,6 +396,11 @@ class Liiteet extends Component {
             <Input 
               defaultValue={this.state.fileName}
               autoFocus
+              onFocus={(e) => {
+                var val = e.target.value;
+                e.target.value = '';
+                e.target.value = val;
+              }}
               onBlur={(e) => {
                   this.setState( {fileName: e.target.value} )
                 }}
