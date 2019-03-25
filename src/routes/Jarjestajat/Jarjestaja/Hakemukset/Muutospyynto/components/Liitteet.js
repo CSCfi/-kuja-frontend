@@ -5,10 +5,13 @@ import { FaRegFile, FaFile, FaTimes, FaLock } from 'react-icons/fa';
 import { HAKEMUS_VIRHE, HAKEMUS_OTSIKOT, HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants"
 import Liite from './Liite'
 import { getIndex } from "../modules/muutosUtil"
+import Modal from 'react-modal'
+import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 
 const Error = styled.div`
   color: ${COLORS.OIVA_RED};
   margin-bottom: 8px;
+  min-height: 20px;
 `
 const Message = styled.div`
   color: ${COLORS.OIVA_GREEN};
@@ -107,6 +110,10 @@ const LiiteListItem = styled.div`
     flex: 1;
     margin-left: 8px;
   }
+  .type {
+    min-width: 40px;
+    text-align: right;
+  }
   .size {
     min-width: 70px;
     text-align: right;
@@ -115,19 +122,71 @@ const LiiteListItem = styled.div`
     background-color: ${COLORS.OIVA_TABLE_HOVER_COLOR};
   }
 `
+export const Input = styled.input`
+  font-size: 15px;
+  padding: 8px 16px;
+  width: 320px;
+  margin: 10px 10px 10px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  &:focus {
+    outline: none;
+  }
+`
 
 class Liiteet extends Component {
   constructor(props) {
     super(props)
     this.state = {
       fileError: false,
-      fileAdded: ""
+      fileAdded: "",
+      isNameModalOpen: false,
+      fileName: "",
+      liite: {},
+      liitteetObj: {},
+      nameMissing: false
     }
   }
+
+  openNameModal = () => {
+    this.setState( {nameMissing: false })
+    this.setState({ isNameModalOpen: true });
+  }
+
+  afterOpenNamneModal = () => {
+  }
+
+  closeNameModal = () => {
+    this.setState({ isNameModalOpen: false })
+  }
+
   render() {
     const { muutokset, fields, koodiarvo, paikka } = this.props
 
     let liite = {};
+    let liitteetObj = {};
+    let index = 0;
+
+    const addAttachment = () => {
+      if (this.state.fileName) {
+        this.setState( {nameMissing: false })
+        this.closeNameModal();
+        this.state.liite.nimi = this.state.fileName;
+        if (koodiarvo) {
+          this.state.liitteetObj.liitteet.push(this.state.liite);
+          fields.remove(index);
+          fields.insert(index, this.state.liitteetObj);
+        } else {
+          if (!fields.liitteet) {
+            fields.liitteet = [];
+          }
+          fields.liitteet.push(this.state.liite);
+        }
+        this.setState({fileAdded: this.state.liite.nimi })
+      } else this.setState( {nameMissing: true })
+    }
 
     const setAttachment = e => {
 
@@ -137,7 +196,6 @@ class Liiteet extends Component {
       if (e.target.files.length === 0) return;
 
       console.log("File selected");
-      console.log(e.target.files[0]);
 
       const type = e.target.files[0].name.split('.').pop().toLowerCase();
 
@@ -145,40 +203,32 @@ class Liiteet extends Component {
       if (e.target.files[0].size <= 26214400 && 
           ['pdf', 'doc', 'txt', 'docx', 'xls', 'xlsx', 'xlsm', 'jpg', 'jpeg', 'jpe', 'jfif', 'gif'].includes(type)) {
   
-        let obj = undefined;
-        let i = 0;
         if (koodiarvo) {
-          i = getIndex(muutokset, koodiarvo);
-          obj = fields.get(i);
-          if (!obj) return;
-          if (!obj.liitteet) {
-            obj.liitteet = []
+          index = getIndex(muutokset, koodiarvo);
+          liitteetObj = fields.get(index);
+          if (!liitteetObj) return;
+          if (!liitteetObj.liitteet) {
+            liitteetObj.liitteet = []
           }
         }
     
         liite.tiedostoId = e.target.files[0].name+"-"+Math.random();
         liite.kieli = "fi";
         liite.tyyppi = type;
-        liite.nimi = e.target.files[0].name;
+        liite.nimi = e.target.files[0].name.split('.')[0].toLowerCase();
         liite.tiedosto = e.target.files[0];
         liite.koko = e.target.files[0].size;
         liite.removed = false;
         liite.salainen = false;
         liite.paikka = paikka;
+        liite.new = true;
 
-        if (koodiarvo) {
-          obj.liitteet.push(liite);
-          fields.remove(i);
-          fields.insert(i, obj);
-          console.log(fields);
-        } else {
-          if (!fields.liitteet) {
-            fields.liitteet = [];
-          }
-          fields.liitteet.push(liite);
-          console.log(fields.liitteet);
-        }
-        this.setState({fileAdded: liite.nimi })
+        this.setState( {liite: liite} );
+        this.setState( {liitteetObj: liitteetObj} );
+        this.setState( {fileName: liite.nimi} );
+
+        this.openNameModal();
+
       } else return (
         this.setState({fileError: true })
       )
@@ -217,31 +267,29 @@ class Liiteet extends Component {
       this.setState({fileAdded: ""});
       let obj = undefined;
       let i = 0;
-      if (koodiarvo) {
-        i = getIndex(muutokset, koodiarvo);
-        obj = fields.get(i);
-        obj.liitteet.map( (liite, index) => {
-          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
-            liite.nimi = e.target.value;
-            const type = liite.nimi.split('.').pop().toLowerCase();
-            if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
-            obj.liitteet[index] = liite;
-            fields.remove(i);
-            fields.insert(i, obj);
-            return true;
-          } return false;
+
+      if (e.target.value)
+        if (koodiarvo) {
+          i = getIndex(muutokset, koodiarvo);
+          obj = fields.get(i);
+          obj.liitteet.map( (liite, index) => {
+            if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+              liite.nimi = e.target.value;
+              obj.liitteet[index] = liite;
+              fields.remove(i);
+              fields.insert(i, obj);
+              return true;
+            } return false;
+          }
+        )} else {
+          fields.liitteet.map( (liite, index) => {
+            if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
+              liite.nimi = e.target.value;
+              fields.liitteet[index] = liite;
+              return true;
+            } else return false;
+          })
         }
-      )} else {
-        fields.liitteet.map( (liite, index) => {
-          if ( (tiedostoId && (liite.tiedostoId === tiedostoId)) || (uuid && (liite.uuid === uuid)) ) {
-            liite.nimi = e.target.value;
-            const type = liite.nimi.split('.').pop().toLowerCase();
-            if (type !== liite.tyyppi) liite.nimi = liite.nimi + "." + liite.tyyppi;
-            fields.liitteet[index] = liite;
-            return true;
-          } else return false;
-        })
-      }
     }
 
     const setAttachmentVisibility= (e, tiedostoId, uuid) => {
@@ -291,7 +339,6 @@ class Liiteet extends Component {
       else 
         obj = fields;
 
-      console.log(liite.paikka);
       if (obj && obj.liitteet)
         return  obj.liitteet.map( liite => {
           if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
@@ -300,8 +347,9 @@ class Liiteet extends Component {
                 {/* Liite tallentamaton: nimeäminen mahdollista (tiedostoId olemassa), vai liite tallennettu */}
                 {liite.tiedostoId && liite.tiedosto ?
                   <LiiteListItem>
-                    <FaFile />
+                    {liite.new ? <FaFile /> : <FaRegFile /> }
                     <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
+                    <span className="type">{ liite.tyyppi }</span>                    
                     <span className="size">{ bytesToSize(liite.koko) }</span>
                     <Checkbox title={ liite.salainen ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI}>
                       <input
@@ -320,6 +368,7 @@ class Liiteet extends Component {
                   <LiiteListItem>     
                     <FaRegFile />
                     <span className="name">{liite.nimi}</span>
+                    <span className="type">{ liite.tyyppi }</span>
                     <span className="size">{ bytesToSize(liite.koko) }</span>
                     <Secret title={HAKEMUS_OTSIKOT.SALAINEN_LIITE.FI}>{ liite.salainen && <FaLock/> }</Secret>
                     <button title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI} onClick={(e) => removeAttachment(e,liite.tiedostoId,liite.uuid)}><FaTimes /></button>
@@ -344,14 +393,42 @@ class Liiteet extends Component {
           <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} /> 
         }
         { this.state.fileError && 
-          <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error> 
+          <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error>
         }
-        { this.state.fileAdded !=="" && 
+        {/* { this.state.fileAdded !=="" && 
           <Message>{HAKEMUS_VIESTI.LIITE_LISATTY.FI}: {this.state.fileAdded}</Message> 
-        }
+        } */}
         { !this.props.listHidden &&
            < LiiteList /> 
         }
+        <Modal
+          isOpen={this.state.isNameModalOpen}
+          onAfterOpen={this.afterOpenNameModal}
+          onRequestClose={this.closeNameModal}
+          contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
+          style={modalStyles}
+        >
+          <Content>
+            <ModalText>{HAKEMUS_VIESTI.TIEDOSTON_NIMI.FI}</ModalText>
+            <Input 
+              defaultValue={this.state.fileName}
+              autoFocus
+              onBlur={(e) => {
+                  this.setState( {fileName: e.target.value} )
+                }}
+              />
+            <Error>
+              { this.state.nameMissing && HAKEMUS_VIESTI.TIEDOSTO_NIMI_ERROR.FI }
+            </Error>
+          </Content>
+          <div>
+            <ModalButton primary onClick={addAttachment}>{HAKEMUS_VIESTI.OK.FI}</ModalButton>
+            <ModalButton
+              onClick={this.closeNameModal}>
+              {HAKEMUS_VIESTI.PERUUTA.FI}
+            </ModalButton>
+          </div>
+        </Modal>
       </div>
     )
 
