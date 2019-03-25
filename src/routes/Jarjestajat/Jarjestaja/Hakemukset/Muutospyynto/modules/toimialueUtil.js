@@ -210,11 +210,16 @@ function hasToimialueChanged(initialValues, values) {
 function getToimialueRemovals(initialValues, values) {
   let removals = [];
   initialValues.forEach(ival => {
-    const obj = _.find(values, val => {
-      return val.koodiArvo === ival;
-    });
-    if (!obj) {
-      removals.push(ival);
+    if (!onVoimassa(getToimialueByKoodiArvo(ival))) {
+      return false;
+    }
+    else {
+      const obj = _.find(values, val => {
+        return val.koodiArvo === ival;
+      });
+      if (!obj) {
+        removals.push(ival);
+      }  
     }
   });
   return removals;
@@ -230,4 +235,9 @@ function getIndex(editValues, koodiarvo) {
   });
 
   return i;
+}
+
+export function onVoimassa(n) {
+  const now = new Date();
+  return !n.voimassaLoppuPvm || n.voimassaLoppuPvm >= now;
 }
