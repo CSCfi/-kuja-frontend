@@ -98,7 +98,7 @@ let MuutospyyntoWizardPerustelut = props => {
 
             <Separator />
 
-            <Liitteet fields={formValues} paikka="petustelut" header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI } />
+            <Liitteet fields={formValues} paikka="perustelut" header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI } />
             
             </div>
           : 
