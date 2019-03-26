@@ -58,7 +58,7 @@ function getKuntaList(kunnat, locale) {
   let list = [];
 
   _.forEach(kunnat, kunta => {
-    const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta;
+    const { koodiArvo, metadata, tila } = kunta;
 
     if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
       list.push({
@@ -79,7 +79,7 @@ export function getMaakuntakunnatList(toimialueet, locale) {
   let list = [];
 
   _.forEach(toimialueet, toimialue => {
-    const { koodiArvo, metadata, kunta, tila, voimassaLoppuPvm } = toimialue;
+    const { koodiArvo, metadata, kunta, tila } = toimialue;
 
     if (tila === "HYVAKSYTTY" && koodiArvo !== "99") {
       let curMaakunta = {

@@ -17,7 +17,8 @@ import {
 } from "./MuutospyyntoWizardComponents";
 import {
   getToimialueByKoodiArvo,
-  handleToimialueSelectChange
+  handleToimialueSelectChange,
+  onVoimassa
 } from "../modules/toimialueUtil";
 import { handleSimpleCheckboxChange } from "../modules/koulutusUtil";
 import {
@@ -285,11 +286,6 @@ class ToimialueSelect extends Component {
     );
   }
 }
-
-const now = new Date();
-const onVoimassa = n => {
-  return !n.voimassaLoppuPvm || n.voimassaLoppuPvm >= now;
-};
 
 const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS);
 
