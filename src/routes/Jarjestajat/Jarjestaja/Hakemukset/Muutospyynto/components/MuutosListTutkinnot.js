@@ -284,9 +284,6 @@ class MuutosListTutkinnot extends Component {
             })}
           </div>
         }
-        {/* { (tutkinnot.length !== 0 || poikkeukset.length !== 0 || valmistavat.length !== 0 || tyovoimat.length !== 0 || kuljettajat.length !== 0) && 
-          <Liitteet fields={fields} muutokset={muutokset} listHidden={true}/>            
-        } */}
       </MuutosListWrapper>
     )
   }

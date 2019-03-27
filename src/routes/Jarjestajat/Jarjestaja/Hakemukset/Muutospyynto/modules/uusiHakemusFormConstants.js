@@ -132,7 +132,23 @@ export const HAKEMUS_VIESTI = {
   LIITE_LISATTY: {
     FI: 'Liite lisätty',
     SV: 'LIITE_LISATTY'
-  }
+  },
+  TIEDOSTON_NIMI: {
+    FI: 'Liitteen nimi *',
+    SV: 'TIEDOSTON_NIMI'
+  },
+  OK: {
+    FI: 'OK',
+    SV: 'OK'
+  },
+  PERUUTA: {
+    FI: 'Peruuta',
+    SV: 'PERUUTA'
+  },
+  TIEDOSTO_NIMI_ERROR: {
+    FI: 'Nimi on pakkollinen',
+    SV: 'TIEDOSTO_NIMI_ERROR'
+  },
 }
 
 export const HAKEMUS_OTSIKOT = {
@@ -160,6 +176,14 @@ export const HAKEMUS_OTSIKOT = {
     FI: 'Liitteet',
     SV: 'På Svenska'
   },
+  LIITE_YLEISET_HEADER: {
+    FI: 'Yleiset liitteet',
+    SV: 'På Svenska'
+  },
+  LIITE_YHTEENVETO_HEADER: {
+    FI: 'Hakemuksen yleiset liitteet',
+    SV: 'På Svenska'
+  },
   LIITE_OHJE: {
     FI: 'Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif.',
     SV: 'På Svenska'
@@ -170,6 +194,22 @@ export const HAKEMUS_OTSIKOT = {
   },
   POISTA_LIITE: {
     FI: 'Poista liite',
+    SV: 'På Svenska'
+  },
+  SALAINEN_LIITE: {
+    FI: 'Salainen liite',
+    SV: 'På Svenska'
+  },
+  SALAINEN_LIITE_VALINTA: {
+    FI: 'Merkitse liite salaiseksi',
+    SV: 'På Svenska'
+  },
+  SALAINEN_LIITE_VALINTA_POISTA: {
+    FI: 'Merkitse liite julkiseksi',
+    SV: 'På Svenska'
+  },
+  EI_MUUTOKSIA: {
+    FI: 'Ei muutoksia.',
     SV: 'På Svenska'
   }
 }

@@ -117,10 +117,9 @@ export function updateMuutospyynto(muutospyynto) {
 
 export function previewMuutospyynto(muutospyynto) {
 
-    const formatted = formatMuutospyynto(muutospyynto)
+  const formatted = formatMuutospyynto(muutospyynto)
 
   console.log('formatted-preview', JSON.stringify(formatted))
-
 
   return (dispatch) => {
         dispatch({ type: PREVIEW_MUUTOSPYYNTO_START })
@@ -252,7 +251,7 @@ const ACTION_HANDLERS = {
         isSaving: false,
         saved: true,
         hasErrored: false,
-        response: action.payload
+        data: action.payload
       }
     }
   },
