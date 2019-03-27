@@ -207,7 +207,7 @@ export const HAKEMUS_OTSIKOT = {
   VALTAKUNNALLINEN: {
     FI: 'Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen osaamis- ja koulutustarpeeseen.',
     SV: 'På svenska',
-  }
+  },
   SALAINEN_LIITE: {
     FI: 'Salainen liite',
     SV: 'På Svenska'
