@@ -391,7 +391,7 @@ class PerusteluKuljettajaJatko extends Component {
             </Checkbox>
           </CheckboxWrapper>
           <CheckboxWrapper>
-            <Liitteet {...this.props} listHidden={true} />
+            <Liitteet {...this.props} paikka="kuljettaja-jatko1"/>
           </CheckboxWrapper>
           <h4>6. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OPETTAJA.FI}</h4>
           <Instruction>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OHJEET.OPETTAJA_TARKENNUS.FI}</Instruction>
@@ -449,7 +449,7 @@ class PerusteluKuljettajaJatko extends Component {
             </div>
           } />
           <CheckboxWrapper>
-            <Liitteet {...this.props} listHidden={true} />
+            <Liitteet {...this.props} paikka="kuljettaja-jatko2"/>
           </CheckboxWrapper>
 
           <h4>7. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.KANTA.FI}</h4>
@@ -497,7 +497,7 @@ class PerusteluKuljettajaJatko extends Component {
             />
           </InputWrapper>
           <CheckboxWrapper>
-            <Liitteet {...this.props} listHidden={true} />
+            <Liitteet {...this.props} paikka="kuljettaja-jatko3" />
           </CheckboxWrapper>
 
           <h4>8. {MUUTOS_WIZARD_TEKSTIT.MUUTOS_PERUSTELULOMAKKEET.KULJETTAJAKOULUTUS.OPETUSVALINEET.FI}</h4>
