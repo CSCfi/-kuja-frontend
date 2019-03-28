@@ -286,7 +286,7 @@ export function loadFormData(state, muutosdata, formValues) {
 
   let initialData = getBaseJarjestajaData(state)
 
-  console.log(meta);
+  console.log(initialData);
 
   initialData = {
     ...initialData,

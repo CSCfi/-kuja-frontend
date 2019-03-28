@@ -252,6 +252,7 @@ class MuutospyyntoEditWizard extends Component {
                       onCancel={this.onCancel}
                       onSubmit={this.nextPage}
                       save={this.save}
+                      initialValues={initialValues}
                   />
                   )}
                   {page === 4 && (

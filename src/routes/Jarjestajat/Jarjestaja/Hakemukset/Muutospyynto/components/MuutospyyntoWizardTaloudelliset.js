@@ -13,25 +13,36 @@ import Taloudelliset from './Taloudelliset'
 
 class MuutospyyntoWizardTaloudelliset extends Component {
   render() {
-    const { formValues, handleSubmit, previousPage, save, tutkinnotjakoulutuksetValue } = this.props
-    var { taloudellisetValue } = this.props
+    const { formValues, handleSubmit, previousPage, save, tutkinnotjakoulutuksetValue, initialValues } = this.props
+    let { taloudellisetValue } = this.props
     const tutkintojaLisatty = _.find(tutkinnotjakoulutuksetValue, function(t) { 
       return t.type === MUUTOS_TYPES.ADDITION })
 
+    if (initialValues) console.log(initialValues)
     if (!taloudellisetValue) {
-      taloudellisetValue = [{
-        "edellytykset": null,
-        "vaikutukset": null,
-        "sopeuttaminen": null,
-        "investoinnit": null,
-        "kustannukset": null,
-        "rahoitus": null,
-        "omavaraisuusaste": null,
-        "maksuvalmius": null,
-        "velkaantuneisuus": null,
-        "kannattavuus": null,
-        "kumulatiivinen": null
-      }]
+      if (this.props.initialValues && this.props.initialValues.taloudelliset) taloudellisetValue = this.props.initialValues.taloudelliset[0];
+    }
+    let taloudellisetValues = {};
+    if ( !taloudellisetValue && initialValues && initialValues.taloudelliset ) {
+      taloudellisetValues = initialValues.taloudelliset.taloudelliset[0]
+    }
+    if (!taloudellisetValues || taloudellisetValues.length === 0) {
+      if (!taloudellisetValue) {
+        taloudellisetValues = [{
+          "edellytykset": null,
+          "vaikutukset": null,
+          "sopeuttaminen": null,
+          "investoinnit": null,
+          "kustannukset": null,
+          "rahoitus": null,
+          "omavaraisuusaste": null,
+          "maksuvalmius": null,
+          "velkaantuneisuus": null,
+          "kannattavuus": null,
+          "kumulatiivinen": null
+        }]
+      }
+      else taloudellisetValues = taloudellisetValue;
     }
 
     return (
@@ -45,7 +56,7 @@ class MuutospyyntoWizardTaloudelliset extends Component {
             <FieldArray 
               name="taloudelliset" 
               component={Taloudelliset}
-              taloudellisetValue={taloudellisetValue} />
+              taloudellisetValue={taloudellisetValues} />
           }
 
           <WizardBottom>
@@ -66,12 +77,14 @@ const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
 
 MuutospyyntoWizardTaloudelliset = connect(state => {
   const tutkinnotjakoulutuksetValue = selector(state, FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET)
-  const taloudellisetValue = selector(state, FIELD_ARRAY_NAMES.TALOUDELLISET)
+  // const taloudellisetValue = selector(state, FIELD_ARRAY_NAMES.TALOUDELLISET)
   let formVals = undefined
+  let taloudellisetValue = undefined
   if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
-    formVals = state.form.uusiHakemus.values
+    formVals = state.form.uusiHakemus.values;
+    if (state.form.uusiHakemus.values.taloudelliset && state.form.uusiHakemus.values.taloudelliset.length>0) taloudellisetValue = state.form.uusiHakemus.values.taloudelliset[0];
   }
-
+console.log(taloudellisetValue);
   return {
     tutkinnotjakoulutuksetValue,
     taloudellisetValue,
