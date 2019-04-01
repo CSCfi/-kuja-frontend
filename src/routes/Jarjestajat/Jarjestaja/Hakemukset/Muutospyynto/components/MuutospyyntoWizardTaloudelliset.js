@@ -12,6 +12,8 @@ import { Button, Container, SubtleButton, WizardBottom } from './MuutospyyntoWiz
 import Taloudelliset from './Taloudelliset'
 
 class MuutospyyntoWizardTaloudelliset extends Component {
+
+
   render() {
     const { formValues, handleSubmit, previousPage, save, tutkinnotjakoulutuksetValue, initialValues } = this.props
     let { taloudellisetValue } = this.props
@@ -20,15 +22,13 @@ class MuutospyyntoWizardTaloudelliset extends Component {
 
     if (initialValues) console.log(initialValues)
     if (!taloudellisetValue) {
-      if (this.props.initialValues && this.props.initialValues.taloudelliset) taloudellisetValue = this.props.initialValues.taloudelliset[0];
-    }
-    let taloudellisetValues = {};
-    if ( !taloudellisetValue && initialValues && initialValues.taloudelliset ) {
-      taloudellisetValues = initialValues.taloudelliset.taloudelliset[0]
-    }
-    if (!taloudellisetValues || taloudellisetValues.length === 0) {
-      if (!taloudellisetValue) {
-        taloudellisetValues = [{
+      if ( initialValues && initialValues.taloudelliset && initialValues.taloudelliset.taloudelliset ) {
+        taloudellisetValue = initialValues.taloudelliset.taloudelliset[0]
+      }
+      else taloudellisetValue = taloudellisetValue;
+
+      if (!taloudellisetValue || taloudellisetValue.length === 0) {
+        taloudellisetValue = [{
           "edellytykset": null,
           "vaikutukset": null,
           "sopeuttaminen": null,
@@ -42,33 +42,35 @@ class MuutospyyntoWizardTaloudelliset extends Component {
           "kumulatiivinen": null
         }]
       }
-      else taloudellisetValues = taloudellisetValue;
+      console.log(taloudellisetValue)
+
     }
 
+
     return (
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
 
-          <h2>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}</h2>
+        <h2>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}</h2>
 
-          {!tutkintojaLisatty && <div>{ MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI }</div>}
+        {!tutkintojaLisatty && <div>{ MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI }</div>}
 
-          {tutkintojaLisatty &&          
-            <FieldArray 
-              name="taloudelliset" 
-              component={Taloudelliset}
-              taloudellisetValue={taloudellisetValues} />
-          }
+        {tutkintojaLisatty &&    
+          <FieldArray 
+            name="taloudelliset" 
+            component={Taloudelliset}
+            taloudellisetValue={taloudellisetValue} />
+        }
 
-          <WizardBottom>
-          <Container maxWidth="1085px" padding="15px">
-              <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
-              <div>
-              <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
-              </div>
-              <Button type="submit" className="next button-right">Seuraava</Button>
-          </Container>
-          </WizardBottom>
-        </form>
+        <WizardBottom>
+        <Container maxWidth="1085px" padding="15px">
+            <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
+            <div>
+            <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
+            </div>
+            <Button type="submit" className="next button-right">Seuraava</Button>
+        </Container>
+        </WizardBottom>
+      </form>
     )
   }
 }

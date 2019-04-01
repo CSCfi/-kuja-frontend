@@ -24,7 +24,8 @@ export function formatMuutospyynto(muutospyynto) {
     muutmuutokset = [],
     hakija = [],
     taloudelliset = [],
-    liitteet = []
+    liitteet = [],
+    meta = []
   } = muutospyynto
 
   let muutokset = [
@@ -43,8 +44,8 @@ export function formatMuutospyynto(muutospyynto) {
       )
   });
 
-  let meta = hakija;
-  meta.taloudelliset = taloudelliset;
+  let metadata = { meta, ...hakija };
+  if (taloudelliset) metadata.taloudelliset = taloudelliset;
 
   return {
     diaarinumero,
@@ -60,7 +61,7 @@ export function formatMuutospyynto(muutospyynto) {
     paivityspvm: null,
     voimassaalkupvm: "2018-01-01",
     voimassaloppupvm: "2018-12-31",
-    meta: meta,
+    meta: metadata,
     muutokset: muutokset,
     liitteet
   }

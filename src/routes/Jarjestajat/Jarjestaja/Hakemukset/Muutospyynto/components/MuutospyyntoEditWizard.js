@@ -323,9 +323,10 @@ MuutospyyntoEditWizard = connect(state => {
     formVals = state.form.uusiHakemus.values
   }
 
+  let init = loadFormData(state, data, formVals)
   return {
     formValues: formVals,
-    initialValues: loadFormData(state, data, formVals)
+    initialValues: init
   }
 })(MuutospyyntoEditWizard)
 
