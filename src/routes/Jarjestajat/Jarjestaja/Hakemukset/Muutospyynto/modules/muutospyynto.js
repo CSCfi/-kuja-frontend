@@ -45,7 +45,7 @@ export function fetchMuutospyynto(uuid) {
 export function createMuutospyynto(uuid) {
     return (dispatch) => {
       dispatch({ type: CREATE_MUUTOSPYYNTO_START })
-      return axios.put(`${API_BASE_URL}/muutospyynnot/tila/avoin/${uuid}`)
+      return axios.post(`${API_BASE_URL}/muutospyynnot/tila/avoin/${uuid}`)
         .then(response => {
           dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
         })
