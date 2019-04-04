@@ -173,14 +173,14 @@ class MuutospyyntoWizard extends Component {
 
   create = (data) => {
     console.log('create', data)
-    this.props.saveMuutospyynto(data).then(() => {
+    return this.props.saveMuutospyynto(data).then(() => {
       let uuid = undefined;
       if (this.props.muutospyynto.save.data.data) {
         uuid = this.props.muutospyynto.save.data.data.uuid;
         const url = `/jarjestajat/${this.props.match.params.ytunnus}`
         this.props.createMuutospyynto(uuid).then(() => {
-          let newurl = url + "/hakemukset-ja-paatokset/" + uuid
-          this.props.history.push(newurl)
+          let newurl = url + "/hakemukset-ja-paatokset/"
+          this.props.history.push(newurl);
         })
       }
     })
