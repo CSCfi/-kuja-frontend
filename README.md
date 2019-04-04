@@ -30,3 +30,7 @@ Suorita projektin juurihakemistossa seuraava komento:
 ```
 npm run start
 ```
+
+Navigoi osoitteeseen [http://localhost](http://localhost).
+
+**Huom!** Jotta sinun on mahdollista saada dataa [Oivan backend](https://github.com/CSCfi/oiva-backend)istä, sinulla tulee olla myös backend-projekti asennettuna koneellesi.
