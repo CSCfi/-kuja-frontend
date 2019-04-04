@@ -10,7 +10,7 @@
     |  |    |  |\  \  | \___   | |  | |   |    |  |    |   ____  |  | |   |  |  |_/   |
     |__|    |__| |__|  \______/  |__| |__/     |__|    |______/  |__| |__/   |_______/
 
-# Buildaus- ja kehitysympäristön asentaminen
+# Kehitysympäristön asentaminen
 
 Tervetuloa Oiva-projektin pariin! Tämä on projektin frontend-osuus, joka pohjautuu [Create React App](https://github.com/facebook/create-react-app) -projektipohjaan.
 
