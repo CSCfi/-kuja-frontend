@@ -181,7 +181,7 @@ export const HAKEMUS_OTSIKOT = {
     SV: 'På Svenska'
   },
   LIITE_OHJE: {
-    FI: 'Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salaiset liitteet.',
+    FI: 'Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassapidettävät liitteet.',
     SV: 'På Svenska'
   },
   LISAA_LIITE: {
