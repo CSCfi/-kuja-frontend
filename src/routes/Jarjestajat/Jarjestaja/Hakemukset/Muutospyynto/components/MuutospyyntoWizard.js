@@ -20,7 +20,6 @@ import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS, HAKEMUS_VIRHE, HAKEMUS_VIESTI, HAKEMUS_OTSIKOT } from "../modules/uusiHakemusFormConstants"
 import { getJarjestajaData } from "../modules/muutospyyntoUtil"
-import {reset} from 'redux-form';
 
 Modal.setAppElement('#root')
 
