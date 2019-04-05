@@ -177,10 +177,6 @@ export const HAKEMUS_OTSIKOT = {
     SV: 'På Svenska'
   },
   LIITE_YLEISET_HEADER: {
-    FI: 'Yleiset liitteet',
-    SV: 'På Svenska'
-  },
-  LIITE_YHTEENVETO_HEADER: {
     FI: 'Hakemuksen yleiset liitteet',
     SV: 'På Svenska'
   },
