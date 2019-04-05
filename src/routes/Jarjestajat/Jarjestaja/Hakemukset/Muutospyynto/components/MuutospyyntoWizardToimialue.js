@@ -97,12 +97,13 @@ class MuutospyyntoWizardToimialue extends Component {
       maakunnatLuvassa,
       kunnatLuvassa,
       maakuntakunnatList,
+      toimialuemuutokset,
       fields
     } = props;
     let opts = []; // kaikki olemassa olevat alueet
     let initialValue = []; // luvassa olevat alueet
-    let valitutMaakunnat = [];
-    let valitutKunnat = [];
+    let valitutMaakunnat = {};
+    let valitutKunnat = {};
 
     // opts = olemassa olevat maakunnat ja kunnat (ei lopettaneita)
     _(maakuntakunnatList)
@@ -124,28 +125,41 @@ class MuutospyyntoWizardToimialue extends Component {
       initialValue.push(kunta.koodiarvo);
     });
 
-    // if (initialValue) {
-    //   initialValue.forEach(value => {
-    //     const alue = getToimialueByKoodiArvo(value);
-
-    //     if (alue) {
-    //       if (editValues) {
-    //         const val = _.find(editValues, editValue => {
-    //           return editValue.koodiArvo === value;
-    //         });
-    //         if (val) {
-    //           alue.type = val.type;
-    //         }
-    //       }
-
-    //       if (alue.tyyppi === "maakunta") {
-    //         valitutMaakunnat.push(alue);
-    //       } else if (alue.tyyppi === "kunta") {
-    //         valitutKunnat.push(alue);
-    //       }
-    //     }
-    //   });
-    // }
+    // valitutMaakunnat, valitutKunnat = luvassa olevat ja lisätyt alueet
+    initialValue.forEach(value => {
+      const { label, tyyppi, voimassaoloLoppuPvm } = getToimialueByKoodiArvo(value);
+      const alue = { label, voimassaoloLoppuPvm, onLuvassa: true };
+      if (tyyppi === "maakunta") {
+        valitutMaakunnat[value] = alue;
+      } else if (tyyppi === "kunta") {
+        valitutKunnat[value] = alue;
+      }
+    });
+    if (toimialuemuutokset) {
+      toimialuemuutokset.forEach(value => {
+        const type = value.type;
+        const { label, tyyppi, voimassaoloLoppuPvm } = getToimialueByKoodiArvo(
+          value.koodiArvo
+        );
+        if (tyyppi === "maakunta") {
+          valitutMaakunnat[value.koodiArvo] = {
+            ...valitutMaakunnat[value.koodiArvo],
+            label,
+            type,
+            voimassaoloLoppuPvm
+          };
+        } else if (tyyppi === "kunta") {
+          valitutKunnat[value.koodiArvo] = {
+            ...valitutKunnat[value.koodiArvo],
+            label,
+            type,
+            voimassaoloLoppuPvm
+          };
+        }
+      });
+    }
+    valitutMaakunnat = _.values(valitutMaakunnat);
+    valitutKunnat = _.values(valitutKunnat);
 
     return (
       <div>
@@ -161,7 +175,7 @@ class MuutospyyntoWizardToimialue extends Component {
           <h4>{HAKEMUS_VIESTI.TOIMINTAALUE_EI_MAARITETTY.FI}</h4>
         )}
 
-        {/* {valitutMaakunnat.length > 0 && (
+        {valitutMaakunnat.length > 0 && (
           <div>
             <h4>Maakunnat</h4>
             {valitutMaakunnat.map(alue => {
@@ -199,7 +213,7 @@ class MuutospyyntoWizardToimialue extends Component {
               );
             })}
           </div>
-        )} */}
+        )}
       </div>
     );
   }
