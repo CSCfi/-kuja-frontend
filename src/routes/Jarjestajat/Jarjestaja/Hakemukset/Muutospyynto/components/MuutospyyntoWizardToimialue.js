@@ -5,22 +5,16 @@ import { FieldArray, reduxForm, formValueSelector } from "redux-form";
 import Select from "react-select";
 
 import Loading from "../../../../../../modules/Loading";
-
 import { ContentContainer } from "../../../../../../modules/elements";
-import {
-  Kohdenumero,
-  Otsikko,
-  Row,
-  CheckboxRowContainer,
-  Checkbox,
-  Nimi
-} from "./MuutospyyntoWizardComponents";
-import {
-  getToimialueByKoodiArvo,
-  handleToimialueSelectChange,
-  onVoimassa
-} from "../modules/toimialueUtil";
+
+import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants";
+
 import { handleSimpleCheckboxChange } from "../modules/koulutusUtil";
+import {
+  getKohdeByTunniste,
+  getMaaraystyyppiByTunniste
+} from "../modules/muutospyyntoUtil";
+import { getToimialueByKoodiArvo, onVoimassa } from "../modules/toimialueUtil";
 import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS,
@@ -31,10 +25,18 @@ import {
   HAKEMUS_OTSIKOT
 } from "../modules/uusiHakemusFormConstants";
 
+import {
+  Kohdenumero,
+  Otsikko,
+  Row,
+  CheckboxRowContainer,
+  Checkbox,
+  Nimi
+} from "./MuutospyyntoWizardComponents";
+
 class MuutospyyntoWizardToimialue extends Component {
   componentWillMount() {
     const { maakuntakunnat } = this.props;
-
     if (maakuntakunnat && !maakuntakunnat.fetched) {
       this.props.fetchMaakuntakunnat();
     }
@@ -64,9 +66,9 @@ class MuutospyyntoWizardToimialue extends Component {
           <Row>
             <FieldArray
               name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
-              maakunnat={maakuntaMaaraykset}
-              kunnat={kuntaMaaraykset}
-              editValues={toimialuemuutoksetValue}
+              maakunnatLuvassa={maakuntaMaaraykset}
+              kunnatLuvassa={kuntaMaaraykset}
+              toimialuemuutokset={toimialuemuutoksetValue}
               maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
               component={this.renderToimialueMuutokset}
             />
@@ -91,13 +93,18 @@ class MuutospyyntoWizardToimialue extends Component {
   }
 
   renderToimialueMuutokset(props) {
-    const { maakunnat, kunnat, maakuntakunnatList, editValues, fields } = props;
-    let opts = [];
-    let initialValue = [];
+    const {
+      maakunnatLuvassa,
+      kunnatLuvassa,
+      maakuntakunnatList,
+      fields
+    } = props;
+    let opts = []; // kaikki olemassa olevat alueet
+    let initialValue = []; // luvassa olevat alueet
     let valitutMaakunnat = [];
     let valitutKunnat = [];
 
-    // Kerää voimassa olevat koodiarvot valikon vaihtoehdoiksi
+    // opts = olemassa olevat maakunnat ja kunnat (ei lopettaneita)
     _(maakuntakunnatList)
       .filter(onVoimassa)
       .forEach(maakunta => {
@@ -109,43 +116,36 @@ class MuutospyyntoWizardToimialue extends Component {
           });
       });
 
-    maakunnat.forEach(maakunta => {
+    // initialValues = luvassa olevat alueet
+    maakunnatLuvassa.forEach(maakunta => {
       initialValue.push(maakunta.koodiarvo);
     });
-    kunnat.forEach(kunta => {
+    kunnatLuvassa.forEach(kunta => {
       initialValue.push(kunta.koodiarvo);
     });
 
-    if (editValues) {
-      editValues.forEach(value => {
-        if (value.type === MUUTOS_TYPES.ADDITION) {
-          initialValue.push(value.value);
-        }
-      });
-    }
+    // if (initialValue) {
+    //   initialValue.forEach(value => {
+    //     const alue = getToimialueByKoodiArvo(value);
 
-    if (initialValue) {
-      initialValue.forEach(value => {
-        const alue = getToimialueByKoodiArvo(value);
+    //     if (alue) {
+    //       if (editValues) {
+    //         const val = _.find(editValues, editValue => {
+    //           return editValue.koodiArvo === value;
+    //         });
+    //         if (val) {
+    //           alue.type = val.type;
+    //         }
+    //       }
 
-        if (alue) {
-          if (editValues) {
-            const val = _.find(editValues, editValue => {
-              return editValue.koodiArvo === value;
-            });
-            if (val) {
-              alue.type = val.type;
-            }
-          }
-
-          if (alue.tyyppi === "maakunta") {
-            valitutMaakunnat.push(alue);
-          } else if (alue.tyyppi === "kunta") {
-            valitutKunnat.push(alue);
-          }
-        }
-      });
-    }
+    //       if (alue.tyyppi === "maakunta") {
+    //         valitutMaakunnat.push(alue);
+    //       } else if (alue.tyyppi === "kunta") {
+    //         valitutKunnat.push(alue);
+    //       }
+    //     }
+    //   });
+    // }
 
     return (
       <div>
@@ -154,7 +154,6 @@ class MuutospyyntoWizardToimialue extends Component {
           options={opts}
           value={initialValue}
           initialValue={initialValue}
-          editValues={editValues}
           fields={fields}
         />
 
@@ -162,7 +161,7 @@ class MuutospyyntoWizardToimialue extends Component {
           <h4>{HAKEMUS_VIESTI.TOIMINTAALUE_EI_MAARITETTY.FI}</h4>
         )}
 
-        {valitutMaakunnat.length > 0 && (
+        {/* {valitutMaakunnat.length > 0 && (
           <div>
             <h4>Maakunnat</h4>
             {valitutMaakunnat.map(alue => {
@@ -200,7 +199,7 @@ class MuutospyyntoWizardToimialue extends Component {
               );
             })}
           </div>
-        )}
+        )} */}
       </div>
     );
   }
@@ -261,25 +260,79 @@ class ToimialueSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      value: props.value,
+      kohde: getKohdeByTunniste(KOHTEET.TOIMIALUE),
+      maaraystyyppi: getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE)
     };
   }
 
+  // Ainoa funktio, joka saa muuttaa toimialue-fieldarrayn arvoja. Ylikirjoittaa kaiken.
   handleSelectChange(value) {
     this.setState({ value });
-    const { editValues, fields, initialValue } = this.props;
-    handleToimialueSelectChange(editValues, fields, initialValue, value);
+    const { fields, initialValue } = this.props;
+    const { kohde, maaraystyyppi } = this.state;
+
+    const luvassaEiValittu = _.filter(initialValue, iVal => {
+      if (
+        _.find(value, val => {
+          return val.koodiArvo === iVal;
+        })
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    const eiLuvassaValittu = _.filter(value, val => {
+      if (
+        _.find(initialValue, iVal => {
+          return iVal === val.koodiArvo;
+        })
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+    fields.removeAll();
+
+    _.forEach(luvassaEiValittu, poisto => {
+      const toimialue = getToimialueByKoodiArvo(poisto);
+      if (onVoimassa(toimialue)) {
+        fields.push({
+          ...toimialue,
+          type: MUUTOS_TYPES.REMOVAL,
+          meta: { perusteluteksti: null },
+          muutosperustelukoodiarvo: null,
+          kohde,
+          maaraystyyppi
+        });
+      }
+    });
+
+    _.forEach(eiLuvassaValittu, lisays => {
+      fields.push({
+        ...lisays,
+        type: MUUTOS_TYPES.ADDITION,
+        meta: { perusteluteksti: null },
+        muutosperustelukoodiarvo: null,
+        kohde,
+        maaraystyyppi
+      });
+    });
   }
 
   render() {
     const { value } = this.state;
-    const { options } = this.props;
+    const { options, toimialuemuutokset } = this.props;
 
     return (
       <Select
         name="toimialue"
         multi
         options={options}
+        toimialuemuutokset={toimialuemuutokset}
         value={value}
         onChange={this.handleSelectChange.bind(this)}
       />
