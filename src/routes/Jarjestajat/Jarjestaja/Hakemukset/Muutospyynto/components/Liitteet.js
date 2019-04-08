@@ -230,6 +230,7 @@ class Liiteet extends Component {
     }
 
     const removeAttachment = (e, tiedostoId, uuid) => {
+      e.preventDefault();
       this.setState({fileError: false});
       this.setState({fileAdded: ""});
       let obj = undefined;
@@ -258,6 +259,7 @@ class Liiteet extends Component {
     }
 
     const setAttachmentName = (e, tiedostoId, uuid) => {
+      e.preventDefaults;
       this.setState({fileError: false});
       this.setState({fileAdded: ""});
       let obj = undefined;
@@ -341,7 +343,15 @@ class Liiteet extends Component {
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
                 <LiiteListItem>
                   {liite.new ? <FaFile /> : <FaRegFile /> }
-                  <input onBlur={(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)} defaultValue={liite.nimi} />
+                  <input 
+                    onBlur={(e) => {(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)}} 
+                    defaultValue={liite.nimi} 
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') {
+                        setAttachmentName(e, liite.tiedostoId, liite.uuid)
+                      }
+                    }}
+                  />
                   <span className="type">{ liite.tyyppi }</span>                    
                   <span className="size">{ bytesToSize(liite.koko) }</span>
                   <Checkbox title={ liite.salainen ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI}>
