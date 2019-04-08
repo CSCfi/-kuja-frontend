@@ -148,6 +148,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
             componentType={COMPONENT_TYPES.MUUTOS_YHTEENVETO}
           />
 
+          {tutkinnotjakoulutuksetValue && tutkinnotjakoulutuksetValue.length > 0 && 
+            <Liitteet {...this.props} fields={formValues} paikka="tutkinnot" />
+          }
+
           <FieldArray
             name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
             nimi={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
