@@ -131,7 +131,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
           <Separator />
 
-          <Liitteet {...this.props} fields={formValues} paikka="yhteenveto" header={ HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_HEADER.FI }/>
+          <Liitteet {...this.props} fields={formValues} paikka="yleiset" header={ HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI }/>
 
           <Separator />
 
