@@ -149,7 +149,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
           />
 
           {tutkinnotjakoulutuksetValue && tutkinnotjakoulutuksetValue.length > 0 && 
-            <Liitteet {...this.props} fields={formValues} paikka="tutkinnot" />
+            <Liitteet {...this.props} fields={formValues} paikka="tutkinnot" showListOnly={true} isIntend={true}/>
           }
 
           <FieldArray
@@ -200,6 +200,10 @@ class MuutospyyntoWizardYhteenveto extends Component {
             heading="Taloudelliset edellytykset"
             component={TaloudellisetYhteenveto}
           />
+
+          {taloudellisetValue && taloudellisetValue.length > 0 && 
+            <Liitteet {...this.props} fields={formValues.taloudelliset[0]} paikka="taloudelliset" showListOnly={true} isIntend={true}/>
+          }
 
           <WizardBottom>
             <Container maxWidth="1085px" padding="15px">

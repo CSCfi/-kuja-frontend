@@ -56,7 +56,7 @@ let MuutospyyntoWizardPerustelut = props => {
             />
 
             {tutkinnotjakoulutuksetValue && tutkinnotjakoulutuksetValue.length > 0 && 
-              <Liitteet fields={formValues} paikka="tutkinnot" /> 
+              <Liitteet fields={formValues} paikka="tutkinnot" isIntend={true}/> 
             }
 
             <FieldArray

@@ -68,6 +68,11 @@ const Checkbox = styled.div`
     }
   }
 `
+const AttachmentWrapper = styled.div`
+  &.intend {
+    margin-left: 30px;
+  }
+`
 const LiiteListItem = styled.div`
   font-size: 14px;
   display: flex;
@@ -376,9 +381,30 @@ class Liiteet extends Component {
       return null;
     }
 
+    const showHeader = () => {
+      let obj = undefined;
+      if (koodiarvo) {
+        const i = getIndex(muutokset, koodiarvo);
+        obj = fields.get(i);
+      }
+      else 
+        obj = fields;
+
+      if (obj && obj.liitteet) {
+
+        obj.liitteet.map( liite => {
+          if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
+            return true
+          }
+        })
+        return false
+      }
+      else return false
+    }
+
     return (
-      <div>
-        { !this.props.listHidden && 
+      <AttachmentWrapper className={this.props.isIntend ? 'intend' :''}>
+        { ((!this.props.listHidden && !this.props.showListOnly) || (this.props.showListOnly && showHeader())) &&
           <h4>{this.props.header ? this.props.header: HAKEMUS_OTSIKOT.LIITE_HEADER.FI }</h4>
         }
         { this.props.listHidden && <br /> }
@@ -427,7 +453,7 @@ class Liiteet extends Component {
             </ModalButton>
           </div>
         </Modal>
-      </div>
+      </AttachmentWrapper>
     )
 
   }
