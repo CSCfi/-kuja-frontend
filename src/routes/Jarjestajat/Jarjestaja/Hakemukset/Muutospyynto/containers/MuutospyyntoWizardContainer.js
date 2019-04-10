@@ -4,7 +4,7 @@ import { fetchMuutosperustelut } from "../../../../../../modules/reducers/muutos
 import { fetchVankilat } from "../../../../../../modules/reducers/vankilat"
 import { fetchELYkeskukset } from "../../../../../../modules/reducers/elykeskukset"
 import { fetchLupa } from "../../../modules/lupa"
-import { createMuutospyynto, saveMuutospyynto } from "../modules/muutospyynto"
+import { createMuutospyynto, saveMuutospyynto, fetchMuutospyynto, updateMuutospyynto } from "../modules/muutospyynto"
 import { previewMuutospyynto } from "../modules/muutospyynto"
 import { fetchKoulutusalat } from "../../../../../../modules/reducers/koulutusalat"
 import { fetchKoulutustyypit } from "../../../../../../modules/reducers/koulutustyypit"
@@ -12,6 +12,7 @@ import { fetchKoulutuksetAll, fetchKoulutuksetMuut, fetchKoulutus } from "../../
 import { fetchPaatoskierrokset } from "../../../../../../modules/reducers/paatoskierrokset"
 import { fetchMaaraystyypit } from "../../../../../../modules/reducers/maaraystyyppi"
 import { fetchKohteet } from "../../../../../../modules/reducers/kohde"
+import { withRouter } from 'react-router-dom'
 
 import MuutospyyntoWizard from '../components/MuutospyyntoWizard'
 
@@ -38,6 +39,8 @@ const mapDispatchToProps = (dispatch, props) => {
     createMuutospyynto: (uuid) => dispatch(createMuutospyynto(uuid)),
     saveMuutospyynto: (muutospyynto) => dispatch(saveMuutospyynto(muutospyynto)),
     previewMuutospyynto: (muutospyynto) => dispatch(previewMuutospyynto(muutospyynto)),
+    updateMuutospyynto: (muutospyynto) => dispatch(updateMuutospyynto(muutospyynto)),
+    fetchMuutospyynto: (uuid) => dispatch(fetchMuutospyynto(uuid)),
     fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),
     fetchKoulutustyypit: () => dispatch(fetchKoulutustyypit()),
     fetchKoulutuksetAll: () => dispatch(fetchKoulutuksetAll()),
@@ -49,4 +52,4 @@ const mapDispatchToProps = (dispatch, props) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MuutospyyntoWizard)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MuutospyyntoWizard))
