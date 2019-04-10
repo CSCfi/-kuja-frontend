@@ -102,8 +102,9 @@ class MuutospyyntoWizardToimialue extends Component {
     } = props;
     let opts = []; // kaikki olemassa olevat alueet
     let initialValue = []; // luvassa olevat alueet
-    let valitutMaakunnat = {};
-    let valitutKunnat = {};
+    let valitutMaakunnat = {}; // luvassa olevat ja lisätyt maakunnat
+    let valitutKunnat = {}; // luvassa olevat ja lisätyt kunnat
+    let valittuinaNaytettavatAlueet = []; // luvassa olevat ei-poistetut ja lisätyt alueet
 
     // opts = olemassa olevat maakunnat ja kunnat (ei lopettaneita)
     _(maakuntakunnatList)
@@ -127,7 +128,9 @@ class MuutospyyntoWizardToimialue extends Component {
 
     // valitutMaakunnat, valitutKunnat = luvassa olevat ja lisätyt alueet
     initialValue.forEach(value => {
-      const { label, tyyppi, voimassaoloLoppuPvm } = getToimialueByKoodiArvo(value);
+      const { label, tyyppi, voimassaoloLoppuPvm } = getToimialueByKoodiArvo(
+        value
+      );
       const alue = { label, voimassaoloLoppuPvm, onLuvassa: true };
       if (tyyppi === "maakunta") {
         valitutMaakunnat[value] = alue;
@@ -161,12 +164,38 @@ class MuutospyyntoWizardToimialue extends Component {
     valitutMaakunnat = _.values(valitutMaakunnat);
     valitutKunnat = _.values(valitutKunnat);
 
+    // valittuinaNaytettavatAlueet = select-komponentin alkuarvo, luvassa olevat ei-poistetut ja lisätyt alueet
+    if (!toimialuemuutokset) {
+      valittuinaNaytettavatAlueet = initialValue;
+    } else {
+      const poistettavatAlueet = _.map(
+        _.filter(toimialuemuutokset, muutos => {
+          return muutos.type === MUUTOS_TYPES.REMOVAL;
+        }),
+        alue => {
+          return alue.koodiArvo;
+        }
+      );
+      const lisattavatAlueet = _.map(
+        _.filter(toimialuemuutokset, muutos => {
+          return muutos.type === MUUTOS_TYPES.ADDITION;
+        }),
+        alue => {
+          return alue.koodiArvo;
+        }
+      );
+      valittuinaNaytettavatAlueet = _.difference(
+        initialValue,
+        poistettavatAlueet
+      ).concat(lisattavatAlueet);
+    }
+
     return (
       <div>
         <p>{HAKEMUS_OHJEET.TOIMINTAALUE_VALINTA.FI}</p>
         <ToimialueSelect
           options={opts}
-          value={initialValue}
+          value={valittuinaNaytettavatAlueet}
           initialValue={initialValue}
           fields={fields}
         />
