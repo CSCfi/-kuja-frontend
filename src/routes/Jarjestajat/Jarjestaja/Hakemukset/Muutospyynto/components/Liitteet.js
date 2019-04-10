@@ -167,24 +167,24 @@ class Liiteet extends Component {
     let liitteetObj = {};
     let index = 0;
 
-    const addAttachment = () => {
-      if (this.state.fileName) {
+    const addAttachment = (e, name) => {
+      if (this.state.fileName || name) {
         this.setState( {nameMissing: false })
         this.closeNameModal();
-        let items = [...this.state.liite];
-        items.nimi = this.state.fileName;
-        this.setState( {liite: items });
+        liite = this.state.liite;
+        name ? liite.nimi = name : liite.nimi = this.state.fileName;
+        this.setState( {liite: liite });
         if (koodiarvo) {
-          this.state.liitteetObj.liitteet.push(this.state.liite);
+          this.state.liitteetObj.liitteet.push(liite);
           fields.remove(index);
           fields.insert(index, this.state.liitteetObj);
         } else {
           if (!fields.liitteet) {
             fields.liitteet = [];
           }
-          fields.liitteet.push(this.state.liite);
+          fields.liitteet.push(liite);
         }
-        this.setState({fileAdded: this.state.liite.nimi })
+        this.setState({fileAdded: liite.nimi })
       } else this.setState( {nameMissing: true })
     }
 
@@ -349,7 +349,7 @@ class Liiteet extends Component {
                 <LiiteListItem>
                   {liite.new ? <FaFile /> : <FaRegFile /> }
                   <input 
-                    onBlur={(e) => {(e) => setAttachmentName(e, liite.tiedostoId, liite.uuid)}} 
+                    onBlur={(e) => {setAttachmentName(e, liite.tiedostoId, liite.uuid)}} 
                     defaultValue={liite.nimi} 
                     onKeyPress={e => {
                       if (e.key === 'Enter') {
@@ -437,16 +437,24 @@ class Liiteet extends Component {
                 e.target.value = '';
                 e.target.value = val;
               }}
-              onBlur={(e) => {
+              onBlur={e => {
                   this.setState( {fileName: e.target.value} )
-                }}
+              }}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  this.setState({
+                    fileName: e.target.value
+                  });
+                  addAttachment(e, e.target.value)
+                }
+              }}
               />
             <Error>
               { this.state.nameMissing && HAKEMUS_VIESTI.TIEDOSTO_NIMI_ERROR.FI }
             </Error>
           </Content>
           <div>
-            <ModalButton primary onClick={addAttachment}>{HAKEMUS_VIESTI.OK.FI}</ModalButton>
+            <ModalButton primary onClick={(e) => addAttachment(e)}>{HAKEMUS_VIESTI.OK.FI}</ModalButton>
             <ModalButton
               onClick={this.closeNameModal}>
               {HAKEMUS_VIESTI.PERUUTA.FI}
