@@ -14,8 +14,6 @@ import PerusteluVankila from './PerusteluVankila'
 import PerusteluKuljettajaPerus from './PerusteluKuljettajaPerus'
 import PerusteluKuljettajaJatko from './PerusteluKuljettajaJatko'
 
-import Liite from './Liite'
-
 const PerusteluWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,10 +70,8 @@ class Perustelu extends Component {
     const { koodisto, type, metadata } = muutos
     const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
     const i = getIndex(muutokset, koodiarvo);
-
-    // let fileReader = new FileReader();
-    let liite = {};
-    let obj = fields.get(i);
+    console.log("metadata " + metadata);
+    console.log("muutos " + JSON.stringify(muutos));
 
     // lisälomakkeet
     // tulevat vain lisäyksille tai muutoksille.
@@ -150,7 +146,6 @@ class Perustelu extends Component {
         </PerusteluWrapper>
       )
     }
-
     // Kuljettajakoulutus - perustaso
     // lisäykset ja muutokset tässä, mikäli oikeus poistetaan, tulee se normiperusteluilla
     if (koodisto === KOODISTOT.KULJETTAJAKOULUTUS && sisaltaa_merkityksen === "perus" && (type === MUUTOS_TYPES.ADDITION || type === MUUTOS_TYPES.CHANGE )) {
@@ -245,12 +240,6 @@ class Perustelu extends Component {
             fields.insert(i, obj)
           }}
         />
-        <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} />
-        <br />
-        {/* Liite listaus */}
-        { fields && fields.get(i) && fields.get(i).liitteet && fields.get(i).liitteet.map( 
-          liite => <span key={liite.nimi+liite.tiedostoId}>{liite.nimi}</span> 
-        )}
       </PerusteluWrapper>
     )
   }

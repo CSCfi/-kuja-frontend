@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchVankilat: () => dispatch(fetchVankilat()),
     fetchELYkeskukset: () => dispatch(fetchELYkeskukset()),
     fetchLupa: (ytunnus, query) => dispatch(fetchLupa(ytunnus, query)),
-    createMuutospyynto: (muutospyynto) => dispatch(createMuutospyynto(muutospyynto)),
+    createMuutospyynto: (uuid) => dispatch(createMuutospyynto(uuid)),
     saveMuutospyynto: (muutospyynto) => dispatch(saveMuutospyynto(muutospyynto)),
     previewMuutospyynto: (muutospyynto) => dispatch(previewMuutospyynto(muutospyynto)),
     fetchKoulutusalat: () => dispatch(fetchKoulutusalat()),

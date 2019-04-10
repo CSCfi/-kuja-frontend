@@ -42,23 +42,17 @@ export function fetchMuutospyynto(uuid) {
   }
 }
 
-export function createMuutospyynto(muutospyynto) {
-
-  const formatted = formatMuutospyynto(muutospyynto)
-
-  console.log('formatted-create', JSON.stringify(formatted))
-
-  return (dispatch) => {
-    dispatch({ type: CREATE_MUUTOSPYYNTO_START })
-
-    return axios.put(`${API_BASE_URL}/muutospyynnot/create`, formatted)
-      .then(response => {
-        dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
-      })
-      .catch(err => {
-        dispatch({ type: CREATE_MUUTOSPYYNTO_FAILURE, payload: err })
-      })
-  }
+export function createMuutospyynto(uuid) {
+    return (dispatch) => {
+      dispatch({ type: CREATE_MUUTOSPYYNTO_START })
+      return axios.post(`${API_BASE_URL}/muutospyynnot/tila/avoin/${uuid}`)
+        .then(response => {
+          dispatch({ type: CREATE_MUUTOSPYYNTO_SUCCESS, payload: response })
+        })
+        .catch(err => {
+          dispatch({ type: CREATE_MUUTOSPYYNTO_FAILURE, payload: err })
+        })
+    }
 }
 
 export function saveMuutospyynto(muutospyynto) {
@@ -67,15 +61,12 @@ export function saveMuutospyynto(muutospyynto) {
   const formatted = formatMuutospyynto(muutospyynto);
 
   console.log('muutospyynto', muutospyynto);
-  console.log('attachments', attachments);
-
 
   let data = new FormData();
   var muutos = new Blob([JSON.stringify(formatted)], { type: "application/json"});
   data.append('muutospyynto', muutos, "muutospyynnön json-data");
   
   attachments.map( item => {
-    console.log(item.tiedosto);
     if (item.tiedosto) data.append(item.tiedostoId, item.tiedosto, item.nimi);
   });
 
@@ -117,10 +108,9 @@ export function updateMuutospyynto(muutospyynto) {
 
 export function previewMuutospyynto(muutospyynto) {
 
-    const formatted = formatMuutospyynto(muutospyynto)
+  const formatted = formatMuutospyynto(muutospyynto)
 
   console.log('formatted-preview', JSON.stringify(formatted))
-
 
   return (dispatch) => {
         dispatch({ type: PREVIEW_MUUTOSPYYNTO_START })
@@ -252,7 +242,7 @@ const ACTION_HANDLERS = {
         isSaving: false,
         saved: true,
         hasErrored: false,
-        response: action.payload
+        data: action.payload
       }
     }
   },

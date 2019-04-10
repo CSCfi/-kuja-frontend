@@ -18,6 +18,8 @@ export function getMuutosperusteluList(muutosperustelut, locale) {
 export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, selectedValue) {
   let muutosperusteluValue = null
 
+  console.log(selectedValue);
+
   if (selectedValue !== null) {
     muutosperusteluValue = selectedValue.koodiArvo
   }
