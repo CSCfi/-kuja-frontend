@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
+import WizardPage from './WizardPage'
+
 import MuutospyyntoWizardMuutokset from './MuutospyyntoWizardMuutokset'
 import MuutospyyntoWizardPerustelut from './MuutospyyntoWizardPerustelut'
 import MuutospyyntoWizardTaloudelliset from './MuutospyyntoWizardTaloudelliset'
@@ -20,6 +22,7 @@ import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS, HAKEMUS_VIRHE, HAKEMUS_VIESTI, HAKEMUS_OTSIKOT } from "../modules/uusiHakemusFormConstants"
 import { getJarjestajaData } from "../modules/muutospyyntoUtil"
+import { loadFormData } from "../modules/muutospyyntoUtil"
 
 Modal.setAppElement('#root')
 
@@ -72,7 +75,7 @@ const Help = styled.div`
   cursor: move;
   padding: 10px 20px;
   overflow-y: auto;
-  overflow-x: wrap; 
+  overflow-x: wrap;
 
   h3 {
     width: 100%;
@@ -102,6 +105,7 @@ class MuutospyyntoWizard extends Component {
     this.changePhase = this.changePhase.bind(this)
     this.preview = this.preview.bind(this)
     this.save = this.save.bind(this)
+    this.update = this.update.bind(this)
     this.openCancelModal = this.openCancelModal.bind(this)
     this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this)
     this.closeCancelModal = this.closeCancelModal.bind(this)
@@ -117,27 +121,24 @@ class MuutospyyntoWizard extends Component {
     this.props.fetchMuutosperustelut()
     this.props.fetchVankilat()
     this.props.fetchELYkeskukset()
-    const { ytunnus } = this.props.match.params
+    const { ytunnus, uuid } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
     this.props.fetchPaatoskierrokset()
     this.props.fetchMaaraystyypit()
     this.props.fetchKohteet()
+    this.props.fetchMuutospyynto(uuid) // from EDIT form
   }
 
-  nextPage() {
-    const next = this.state.page + 1
-    let visited = this.state.visitedPages
-
-    if (visited.indexOf(next) === -1) {
-      visited.push(next)
-      this.setState({ page: next, visitedPages: visited })
-    } else {
-      this.setState({ page: next })
+  nextPage(pageNumber) {
+    if (pageNumber !== 4) { 
+      this.props.history.push(String(pageNumber + 1))
     }
   }
 
-  previousPage() {
-    this.setState({ page: this.state.page - 1 })
+  previousPage(pageNumber) {
+    if (pageNumber !== 1) {
+      this.props.history.push(String(pageNumber - 1))
+    }
   }
 
   onCancel(event) {
@@ -149,30 +150,29 @@ class MuutospyyntoWizard extends Component {
   }
 
   onSubmit(data) {
-
-
-    // this.onCancel() // TODO: tehdään onDone-funktio
+    this.props.createMuutospyynto(data) // from EDIT form
   }
 
-  save(event, data) {
-    if (event) {
-      event.preventDefault()
+  save(data) {
+    if (this.props.match.params.uuid) {
+      this.props.saveMuutospyynto(data)
+    } else {
+      const url = `/jarjestajat/${this.props.match.params.ytunnus}`
+      this.props.saveMuutospyynto(data).then(() => {
+        let uuid = undefined;
+  
+        if (this.props.muutospyynto.save.data.data) uuid = this.props.muutospyynto.save.data.data.uuid;
+        let newurl = url + "/hakemukset-ja-paatokset/" + uuid
+        this.props.history.push(newurl)
+      })
     }
+  }
 
-    console.log('save', data)
-    const url = `/jarjestajat/${this.props.match.params.ytunnus}`
-    this.props.saveMuutospyynto(data).then(() => {
-      let uuid = undefined;
-      console.log('load', this.props.muutospyynto.save.data)
-
-      if (this.props.muutospyynto.save.data.data) uuid = this.props.muutospyynto.save.data.data.uuid;
-      let newurl = url + "/hakemukset-ja-paatokset/" + uuid
-      this.props.history.push(newurl)
-    })
+  update(data) {
+    this.props.updateMuutospyynto(data)
   }
 
   create = (data) => {
-    console.log('create', data)
     return this.props.saveMuutospyynto(data).then(() => {
       let uuid = undefined;
       if (this.props.muutospyynto.save.data.data) {
@@ -189,7 +189,6 @@ class MuutospyyntoWizard extends Component {
   preview(event, data) {
     event.preventDefault()
     this.props.previewMuutospyynto(data).then(() => {
-
         var binaryData = [];   
         binaryData.push(this.props.muutospyynto.pdf.data);
         const data =  window.URL.createObjectURL(new Blob(binaryData, {type: "application/pdf"}))
@@ -200,7 +199,6 @@ class MuutospyyntoWizard extends Component {
         link.click();
         // For Firefox it is necessary to delay revoking the ObjectURL
         setTimeout(window.URL.revokeObjectURL(data), 100)
-
     })
   }
 
@@ -221,8 +219,9 @@ class MuutospyyntoWizard extends Component {
   }
 
   render() {
-    const { muutosperustelut, vankilat, ELYkeskukset, lupa, paatoskierrokset } = this.props
-    const { page, visitedPages } = this.state
+    const { muutosperustelut, vankilat, ELYkeskukset, lupa, paatoskierrokset, muutospyynto, initialValues } = this.props
+    const { visitedPages } = this.state
+    const page = parseInt(this.props.match.params.page, 10)
 
     if (sessionStorage.getItem('role') !== ROLE_KAYTTAJA) {
         return (
@@ -238,7 +237,7 @@ class MuutospyyntoWizard extends Component {
         )
     }
 
-    if (muutosperustelut.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched) {
+    if (muutosperustelut.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched && muutospyynto.fetched) { // muutospyynto.fetched is from EDIT FORM
       return (
         <ContentWrapper>
           <WizardBackground />
@@ -263,47 +262,69 @@ class MuutospyyntoWizard extends Component {
             <ContentContainer maxWidth="1085px" margin={this.state.showHelp ? "50px auto 50px 20vw": "50px auto"}>
               <WizardContent>
                 {page === 1 && (
-                  <MuutospyyntoWizardMuutokset
-                    previousPage={this.previousPage}
-                    onSubmit={this.nextPage}
-                    onCancel={this.onCancel}
-                    save={this.save}
-                    lupa={lupa}
-                    fetchKoulutusalat={this.props.fetchKoulutusalat}
-                    fetchKoulutustyypit={this.props.fetchKoulutustyypit}
-                    fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
-                    fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
-                    fetchKoulutus={this.props.fetchKoulutus}
-                  />
+                  <WizardPage
+                    pageNumber={1}
+                    onNext={ this.nextPage }
+                    onSave={ this.save }
+                    render={
+                      props => <MuutospyyntoWizardMuutokset
+                        onCancel={this.onCancel}
+                        update={this.update}
+                        lupa={lupa}
+                        initialValues={initialValues}
+                        fetchKoulutusalat={this.props.fetchKoulutusalat}
+                        fetchKoulutustyypit={this.props.fetchKoulutustyypit}
+                        fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
+                        fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
+                        fetchKoulutus={this.props.fetchKoulutus}
+                        {...props}
+                      />
+                    } />
                 )}
                 {page === 2 && (
-                  <MuutospyyntoWizardPerustelut
-                    previousPage={this.previousPage}
-                    onSubmit={this.nextPage}
-                    onCancel={this.onCancel}
-                    save={this.save}
-                    muutosperustelut={this.props.muutosperustelut.data}
-                    vankilat={this.props.vankilat.data}
-                    ELYkeskukset={this.props.ELYkeskukset.data}
-                  />
+                  <WizardPage
+                    pageNumber={2}
+                    onPrev={ this.previousPage }
+                    onNext={ this.nextPage }
+                    onSave={ this.save }
+                    render={
+                      props => <MuutospyyntoWizardPerustelut
+                        onCancel={this.onCancel}
+                        muutosperustelut={this.props.muutosperustelut.data}
+                        vankilat={this.props.vankilat.data}
+                        ELYkeskukset={this.props.ELYkeskukset.data}
+                        {...props}
+                      />
+                    } />
                 )}
                 {page === 3 && (
-                  <MuutospyyntoWizardTaloudelliset
-                    previousPage={this.previousPage}
-                    onCancel={this.onCancel}
-                    onSubmit={this.nextPage}
-                    save={this.save}
-                />
+                  <WizardPage
+                    pageNumber={3}
+                    onPrev={ this.previousPage }
+                    onNext={ this.nextPage }
+                    onSave={ this.save }
+                    render={
+                      props => <MuutospyyntoWizardTaloudelliset
+                        onCancel={this.onCancel}
+                        initialValues={initialValues}
+                        {...props}
+                      />
+                    } />
                 )}
                 {page === 4 && (
-                  <MuutospyyntoWizardYhteenveto
-                    previousPage={this.previousPage}
-                    onCancel={this.onCancel}
-                    onSubmit={this.onSubmit}
-                    save={this.save}
-                    preview={this.preview}
-                    createMuutospyynto={this.create}
-                  />
+                  <WizardPage
+                    pageNumber={4}
+                    onPrev={ this.previousPage }
+                    onSave={ this.save }
+                    render={
+                      props => <MuutospyyntoWizardYhteenveto
+                        onCancel={this.onCancel}
+                        preview={this.preview}
+                        initialValues={initialValues}
+                        createMuutospyynto={this.create}
+                        {...props}
+                      />
+                    } />
                 )}
               </WizardContent>
             </ContentContainer>
@@ -328,7 +349,7 @@ class MuutospyyntoWizard extends Component {
           </Modal>
         </ContentWrapper>
       )
-    } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching) {
+    } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching || muutospyynto.isFetching) { // muutospyynto.isFetching is from EDIT form
       return <Loading />
     } else if (muutosperustelut.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.PERUSTELU.FI}</MessageWrapper>
@@ -338,6 +359,8 @@ class MuutospyyntoWizard extends Component {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.ELY.FI}</MessageWrapper>
     } else if (paatoskierrokset.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.PAATOSKIERROS.FI}</MessageWrapper>
+    } else if (muutospyynto.hasErrored) {
+      return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.MUUTOSPYYNTO.FI}</MessageWrapper>
     } else if (lupa.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.LUVANLATAUS.FI}</MessageWrapper>
     } else {
@@ -349,12 +372,22 @@ class MuutospyyntoWizard extends Component {
 MuutospyyntoWizard = reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: true,
-  forceUnregisterOnUnmount: true
+  forceUnregisterOnUnmount: true,
+  enableReinitialize : true
 })(MuutospyyntoWizard)
 
 MuutospyyntoWizard = connect(state => {
+  const { data } = state.muutospyynto
+
+  let formVals = undefined
+  if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
+    formVals = state.form.uusiHakemus.values
+  }
+
+  let init = loadFormData(state, data, formVals)
   return {
-    initialValues: getJarjestajaData(state)
+    formValues: formVals,
+    initialValues: init
   }
 })(MuutospyyntoWizard)
 
