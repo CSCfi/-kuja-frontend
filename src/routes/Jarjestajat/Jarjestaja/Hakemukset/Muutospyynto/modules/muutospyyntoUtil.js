@@ -87,7 +87,6 @@ export function createAttachmentArray(muutokset) {
       })
     }
   })
-  console.log(liitteet);
   return liitteet;
 }
 
@@ -114,8 +113,6 @@ export function getAttachments(muutospyynto) {
     taloudelliset[0],
     commonAttachments
  ]
-
- console.log(muutokset);
 
   let kaikkiliitteet = createAttachmentArray(muutokset);
 
@@ -259,10 +256,6 @@ function getTaloudelliset(meta) {
 }
 
 export function loadFormData(state, muutosdata, formValues) {
-  console.log('loadFormData')
-  console.log(state)
-  console.log(muutosdata)
-
   const {
     voimassaalkupvm,
     voimassaloppupvm,
@@ -286,8 +279,6 @@ export function loadFormData(state, muutosdata, formValues) {
   }
 
   let initialData = getBaseJarjestajaData(state)
-
-  console.log(initialData);
 
   initialData = {
     ...initialData,
@@ -320,13 +311,10 @@ export function loadFormData(state, muutosdata, formValues) {
     }
   }
 
-  console.log(initialData)
-
   return initialData
 }
 
 function getMuutosArray(muutokset, kohdeUuid) {
-  console.log(muutokset);
   if (!muutokset || !kohdeUuid) {
     return
   }
