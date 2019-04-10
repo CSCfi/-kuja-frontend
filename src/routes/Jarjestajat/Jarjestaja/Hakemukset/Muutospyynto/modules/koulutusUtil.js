@@ -262,9 +262,6 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
       kohde = getKohdeByTunniste(KOHTEET.MUUT)
     }
   }
-  console.log("koodistoUri");
-  console.log(koodistoUri);
-  console.log(kohde);
 
   if (!maaraystyyppi) {
     if (koodistoUri === KOODISTOT.KOULUTUS || koodistoUri === KOODISTOT.KULJETTAJAKOULUTUS || koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS || koodistoUri === KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS) {
