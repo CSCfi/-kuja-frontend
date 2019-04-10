@@ -25,7 +25,6 @@ export const UPDATE_MUUTOSPYYNTO_FAILURE = 'UPDATE_MUUTOSPYYNTO_FAILURE'
 
 // Actions
 export function fetchMuutospyynto(uuid) {
-  console.log('fetchMuutospyynto ', uuid)
   if (uuid) {
     return (dispatch) => {
       dispatch({ type: FETCH_MUUTOSPYYNTO_START })
