@@ -343,7 +343,7 @@ class Liiteet extends Component {
 
       if (obj && obj.liitteet)
         return  obj.liitteet.map( liite => {
-          if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
+          if ( (!paikka || liite.paikka.startsWith(paikka)) && !liite.removed) {
             return (
               <div key={ liite.tiedostoId ? liite.tiedostoId : liite.uuid }>
                 <LiiteListItem>
@@ -393,7 +393,7 @@ class Liiteet extends Component {
       if (obj && obj.liitteet) {
 
         obj.liitteet.map( liite => {
-          if ( (!paikka || liite.paikka === paikka) && !liite.removed) {
+          if ( (!paikka || liite.paikka.startsWith(paikka)) && !liite.removed) {
             return true
           }
         })
@@ -409,7 +409,7 @@ class Liiteet extends Component {
         }
         { this.props.listHidden && <br /> }
         { !this.props.showListOnly && 
-          <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} /> 
+          <Liite setAttachment={setAttachment} setAttachmentName={setAttachmentName} helpText={this.props.helpText} /> 
         }
         { this.state.fileError && 
           <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error>
