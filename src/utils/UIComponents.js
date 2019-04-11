@@ -15,6 +15,10 @@ export const Container2 = styled.div`
   padding: 2em;
 `
 
+export const ContainerMs1 = styled.span`
+  margin-left: 1em;
+`
+
 export const Area = styled.div`
   margin: 15px 0;
 `
