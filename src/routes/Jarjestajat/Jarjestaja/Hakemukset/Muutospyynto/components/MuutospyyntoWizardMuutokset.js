@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 import MuutospyyntoWizardTutkinnot from './MuutospyyntoWizardTutkinnot'
 import MuutospyyntoWizardOpetuskieletContainer from '../containers/MuutospyyntoWizardOpetuskieletContainer'
@@ -8,10 +9,9 @@ import MuutospyyntoWizardTutkintokieletContainer from '../containers/Muutospyynt
 import MuutospyyntoWizardToimialueContainer from '../containers/MuutospyyntoWizardToimialueContainer'
 import MuutospyyntoWizardOpiskelijavuodet from './MuutospyyntoWizardOpiskelijavuodet'
 import MuutospyyntoWizardMuutContainer from '../containers/MuutospyyntoWizardMuutContainer'
-import { Button, SubtleButton, Kohde, WizardBottom, Container } from "./MuutospyyntoWizardComponents"
+import { Kohde } from "./MuutospyyntoWizardComponents"
 import styled from 'styled-components'
 import { FORM_NAME_UUSI_HAKEMUS } from "../modules/uusiHakemusFormConstants"
-import { hasFormChanges } from "../modules/muutospyyntoUtil"
 import { MUUT_KEYS } from "../modules/constants"
 
 const Otsikko = styled.div`
@@ -19,12 +19,19 @@ const Otsikko = styled.div`
   align-items: baseline;
 `
 
-class MuutospyyntoWizardMuutokset extends Component {
-  constructor(props) {
-    super(props)
+class MuutospyyntoWizardMuutokset extends Component { 
+  constructor() {
+    super()
 
     this.state = {
       modalIsOpen: false
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const isFormModified = !_.isEqual(prevProps.formValues, this.props.formValues);
+    if (isFormModified) {
+      this.props.onChildComponentUpdate(this.props.formValues)
     }
   }
 
@@ -52,9 +59,7 @@ class MuutospyyntoWizardMuutokset extends Component {
 
   render() {
     const {
-      save,
-      lupa,
-      formValues
+      lupa
     } = this.props
 
     return (
@@ -97,20 +102,6 @@ class MuutospyyntoWizardMuutokset extends Component {
               lupa={lupa}
             />
           </Kohde>
-
-          <WizardBottom>
-            <Container maxWidth="1085px" padding="15px">
-              <Button className="previous button-left button-hidden">Edellinen</Button>
-              <div>
-                {/*{update !== undefined*/}
-                  {/*? <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => update(e, formValues)}>Päivitä luonnos</SubtleButton>*/}
-                  {/*: <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>*/}
-                {/*}*/}
-                <SubtleButton disabled={!hasFormChanges(formValues)} onClick={(e) => save(e, formValues)}>Tallenna luonnos</SubtleButton>
-              </div>
-              <Button type="submit" className="next button-right">Seuraava</Button>
-            </Container>
-          </WizardBottom>
         </form>
       </div>
     )
