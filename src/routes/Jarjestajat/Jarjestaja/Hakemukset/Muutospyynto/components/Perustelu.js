@@ -180,26 +180,6 @@ class Perustelu extends Component {
       )
     }
 
-    const setAttachment = e => {
-      obj = fields.get(i);
-      if (!obj.liitteet) {
-        obj.liitteet = [];
-      }
-      liite.tiedostoId = "file"+koodiarvo+"-"+Math.random();
-      liite.kieli = "fi";
-      liite.tyyppi = e.target.files[0].name.split('.').pop();
-      liite.nimi = e.target.files[0].name;
-      liite.tiedosto = e.target.files[0];
-      obj.liitteet.push(liite);
-      fields.remove(i);
-      fields.insert(i, obj);
-    }
-
-    const setAttachmentName = e => {
-      obj = fields.get(i);
-      obj.liitteet[0].nimi = e.target.value;
-    }
-
     return (
       <PerusteluWrapper>
 
