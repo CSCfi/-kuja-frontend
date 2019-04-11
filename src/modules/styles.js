@@ -127,7 +127,7 @@ injectGlobal`
     }
   }
   
-  div, p, span {
+  div, p, span, label {
     &.is-removed {
       text-decoration: line-through;
       color: ${COLORS.OIVA_PURPLE};
