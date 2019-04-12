@@ -15,19 +15,6 @@ class ExpandableRowContent extends React.Component {
   };
 
   render() {
-    const editValues = this.props.changes;
-    let muutokset = [];
-
-    if (editValues) {
-      _.forEach(editValues, value => {
-        _.forEach(this.props.content, koulutus => {
-          if (koulutus.koodiArvo === value.koodiarvo) {
-            muutokset.push(value);
-          }
-        });
-      });
-    }
-
     return (
       <div>
         {_.map(this.props.categories, (category, i) => {
@@ -58,10 +45,7 @@ class ExpandableRowContent extends React.Component {
 }
 
 ExpandableRowContent.propTypes = {
-  areaCode: PropTypes.string,
-  article: PropTypes.object,
   categories: PropTypes.array,
-  code: PropTypes.string,
   onFormModification: PropTypes.func
 };
 
