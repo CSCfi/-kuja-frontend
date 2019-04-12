@@ -76,14 +76,12 @@ class TutkintoList extends React.Component {
     return (
       <Wrapper>
         <ExpandableRow
-          article={this.state.article}
-          areaCode={this.props.koodiarvo}
-          code={this.props.koodiarvo}
           categories={this.state.categories}
           changes={this.state.changes}
+          code={this.props.koodiarvo}
+          onFormModification={this.onFormModification}
           shouldBeExpanded={false}
           title={this.props.nimi}
-          onFormModification={this.onFormModification}
         />
       </Wrapper>
     );
