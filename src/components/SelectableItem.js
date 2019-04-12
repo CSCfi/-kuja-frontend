@@ -33,7 +33,7 @@ class SelectableItem extends React.Component {
           </ContainerMs1>
           <ContainerMs1>{this.props.item.title}</ContainerMs1>
           <ContainerMs1 style={{ marginLeft: 20 }}>
-            {this.props.item.shouldHavePermission ? "LUPA" : ""}
+            {this.props.item.hasPermission ? "LUPA" : ""}
           </ContainerMs1>
           <ContainerMs1 style={{ marginLeft: 20 }}>
             {this.props.item.shouldBeRemoved ? "POISTETTU" : ""}
