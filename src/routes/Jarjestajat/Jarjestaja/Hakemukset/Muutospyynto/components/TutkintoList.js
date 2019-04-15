@@ -8,24 +8,25 @@ import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 class TutkintoList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = this.formState();
+    this.onChanges = this.onChanges.bind(this)
+  }
 
-    var article = _.find(props.articles, article => {
-      return article.koodi === props.areaCode;
+  getArticle = articles => {
+    return _.find(articles, article => {
+      return article.koodi === this.props.areaCode;
     });
+  };
 
-    var changes = _.map(props.changes, change => {
-      return !!_.find(props.koulutustyypit, koulutustyyppi => {
-        return !!_.find(koulutustyyppi.koulutukset, {
-          koodiArvo: change.koodiarvo
-        });
-      })
-        ? change
-        : null;
-    }).filter(Boolean);
+  onChanges = (item, isSubItemTarget) => {
+    this.props.onChanges(item, isSubItemTarget, this.props.listId)
+  }
 
-    this.state = {
+  formState = () => {
+    const article = this.getArticle(this.props.articles);
+    const state = {
       article,
-      categories: _.map(props.koulutustyypit, koulutustyyppi => {
+      categories: _.map(this.props.koulutustyypit, koulutustyyppi => {
         return {
           code: koulutustyyppi.koodiArvo,
           title:
@@ -34,10 +35,10 @@ class TutkintoList extends React.Component {
             }).nimi || "[Koulutustyypin otsikko tähän]",
           items: _.map(koulutustyyppi.koulutukset, koulutus => {
             const isAdded = !!_.find(
-              _.filter(changes, { koodiarvo: koulutus.koodiArvo }),
+              _.filter(this.props.changes, { koodiarvo: koulutus.koodiArvo }),
               { type: MUUTOS_TYPES.ADDITION }
             );
-            const hasPermission = article
+            const isInLupa = article
               ? !!_.find(article.koulutusalat, koulutusala => {
                   return !!_.find(koulutusala.koulutukset, {
                     koodi: koulutus.koodiArvo
@@ -45,7 +46,7 @@ class TutkintoList extends React.Component {
                 })
               : false;
             const isRemoved = !!_.find(
-              _.filter(changes, { koodiarvo: koulutus.koodiArvo }),
+              _.filter(this.props.changes, { koodiarvo: koulutus.koodiArvo }),
               { type: MUUTOS_TYPES.REMOVAL }
             );
             return {
@@ -54,23 +55,60 @@ class TutkintoList extends React.Component {
                 _.find(koulutus.metadata, m => {
                   return m.kieli === "FI";
                 }).nimi || "[Koulutuksen otsikko tähän]",
-              hasPermission,
               isAdded,
+              isInLupa,
               isRemoved,
-              shouldBeSelected: (hasPermission && !isRemoved) || isAdded
+              shouldBeSelected: (isInLupa && !isRemoved) || isAdded,
+              subItems: koulutus.osaamisala
+                ? (osaamisala => {
+                    const isAdded = !!_.find(
+                      _.filter(this.props.changes, {
+                        koodiArvo: osaamisala.koodiArvo
+                      }),
+                      { type: MUUTOS_TYPES.ADDITION }
+                    );
+                    const isInLupa = article
+                      ? !!_.find(article.koulutusalat, koulutusala => {
+                          return !!_.find(koulutusala.koulutukset, {
+                            koodi: osaamisala.koodiArvo
+                          });
+                        })
+                      : false;
+                    const isRemoved = !!_.find(
+                      _.filter(this.props.changes, {
+                        koodiarvo: osaamisala.koodiArvo
+                      }),
+                      { type: MUUTOS_TYPES.REMOVAL }
+                    );
+                    return [
+                      {
+                        code: osaamisala.koodiArvo,
+                        title:
+                          _.find(osaamisala.metadata, m => {
+                            return m.kieli === "FI";
+                          }).nimi || "[Osaamisalan otsikko tähän]",
+                        isAdded,
+                        isInLupa,
+                        isRemoved,
+                        shouldBeSelected: (isInLupa && !isRemoved) || isAdded
+                      }
+                    ];
+                  })(koulutus.osaamisala)
+                : []
             };
           })
         };
       }),
-      changes
+      changes: this.props.changes || []
     };
-
-    this.onFormModification = this.onFormModification.bind(this);
-  }
-
-  onFormModification = (item) => {
-    console.info(item)
+    return state;
   };
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(this.props, prevProps)) {
+      this.setState(this.formState);
+    }
+  }
 
   render() {
     return (
@@ -79,7 +117,7 @@ class TutkintoList extends React.Component {
           categories={this.state.categories}
           changes={this.state.changes}
           code={this.props.koodiarvo}
-          onFormModification={this.onFormModification}
+          onChanges={this.onChanges}
           shouldBeExpanded={false}
           title={this.props.nimi}
         />
@@ -93,7 +131,9 @@ TutkintoList.propTypes = {
   articles: PropTypes.array,
   changes: PropTypes.array,
   fields: PropTypes.object,
-  koulutustyypit: PropTypes.object
+  koulutustyypit: PropTypes.object,
+  onChanges: PropTypes.func,
+  listId: PropTypes.string
 };
 
 export default TutkintoList;
