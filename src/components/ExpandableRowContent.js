@@ -10,10 +10,6 @@ class ExpandableRowContent extends React.Component {
     super();
   }
 
-  onSelectableItemStatusChange = (item, operation) => {
-    this.props.onFormModification(item, operation);
-  };
-
   render() {
     return (
       <div>
@@ -31,7 +27,7 @@ class ExpandableRowContent extends React.Component {
                   <Container05 key={`item-${ii}`}>
                     <SelectableItem
                       item={item}
-                      onStatusChange={this.onSelectableItemStatusChange}
+                      onChanges={this.props.onChanges}
                     />
                   </Container05>
                 );
@@ -46,7 +42,7 @@ class ExpandableRowContent extends React.Component {
 
 ExpandableRowContent.propTypes = {
   categories: PropTypes.array,
-  onFormModification: PropTypes.func
+  onChanges: PropTypes.func
 };
 
 export default ExpandableRowContent;
