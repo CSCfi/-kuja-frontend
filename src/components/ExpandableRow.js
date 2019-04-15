@@ -43,7 +43,7 @@ class ExpandableRow extends React.Component {
         {this.state.shouldBeExpanded && (
           <ExpandableRowContent
             categories={this.props.categories}
-            onFormModification={this.props.onFormModification}
+            onChanges={this.props.onChanges}
           />
         )}
       </div>
@@ -55,7 +55,7 @@ ExpandableRow.propTypes = {
   categories: PropTypes.array,
   changes: PropTypes.array,
   code: PropTypes.string,
-  onFormModification: PropTypes.func,
+  onChanges: PropTypes.func,
   shouldBeExpanded: PropTypes.bool,
   title: PropTypes.string
 };
