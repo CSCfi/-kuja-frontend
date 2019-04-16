@@ -172,7 +172,6 @@ class MuutospyyntoWizardTutkinnot extends React.Component {
               const { metadata, koulutukset } = koulutusala;
               const nimi = parseLocalizedField(metadata);
               return (
-                this.state.changes && (
                   <TutkintoList
                     key={i}
                     koodiarvo={koodiarvo}
@@ -180,11 +179,10 @@ class MuutospyyntoWizardTutkinnot extends React.Component {
                     nimi={nimi}
                     koulutustyypit={koulutukset}
                     articles={kohteet[1].maaraykset}
-                    changes={this.state.changes[koodiarvo]}
+                    changes={this.state.changes ? this.state.changes[koodiarvo] : []}
                     onChanges={this.handleChanges}
                     listId={koodiarvo}
                   />
-                )
               );
             })}
           </Row>
