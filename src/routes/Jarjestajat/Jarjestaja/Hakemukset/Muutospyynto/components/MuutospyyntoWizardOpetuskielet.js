@@ -88,15 +88,15 @@ class MuutospyyntoWizardKielet extends Component {
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                  isAdded = val.type === MUUTOS_TYPES.ADDITION || null
+                  isRemoved = val.type === MUUTOS_TYPES.REMOVAL || null
                 }
               })
             }
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
+            customClassName = isInLupa ? "is-in-lupa" : null
+            customClassName = isAdded ? "is-added" : null
+            customClassName = isRemoved ? "is-removed" : null
 
             if ((isInLupa && !isRemoved) || isAdded) {
               isChecked = true

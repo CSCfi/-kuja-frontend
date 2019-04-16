@@ -1,107 +1,114 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { FieldArray, reduxForm, formValueSelector } from "redux-form";
 
-import { ContentContainer } from "../../../../../../modules/elements"
-import { Kohdenumero, Otsikko, Row, Checkbox, CheckboxRowContainer, RadioCheckbox, Div } from "./MuutospyyntoWizardComponents"
-import Loading from "../../../../../../modules/Loading"
-import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange } from "../modules/koulutusUtil"
-import { FIELD_ARRAY_NAMES, FORM_NAME_UUSI_HAKEMUS, MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
-import _ from 'lodash'
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
+import { ContentContainer } from "../../../../../../modules/elements";
+import {
+  Kohdenumero,
+  Otsikko,
+  Row,
+  Checkbox,
+  CheckboxRowContainer,
+  RadioCheckbox,
+  Div
+} from "./MuutospyyntoWizardComponents";
+import Loading from "../../../../../../modules/Loading";
+import { parseLocalizedField } from "../../../../../../modules/helpers";
+import { handleCheckboxChange } from "../modules/koulutusUtil";
+import {
+  FIELD_ARRAY_NAMES,
+  FORM_NAME_UUSI_HAKEMUS,
+  MUUTOS_TYPES
+} from "../modules/uusiHakemusFormConstants";
+import _ from "lodash";
+import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 
 class MuutospyyntoWizardMuut extends Component {
-
   componentWillMount() {
-    const { muut } = this.props
+    const { muut } = this.props;
 
     if (muut && !muut.fetched) {
-      this.props.fetchMuut()
+      this.props.fetchMuut();
     }
   }
 
   render() {
-    const { lupa, muut, muutmuutoksetValue } = this.props
-    const { kohteet } = lupa
-    const kohde = kohteet[5]
-    const { headingNumber, heading } = kohde
+    const { lupa, muut, muutmuutoksetValue } = this.props;
+    const { kohteet } = lupa;
+    const kohde = kohteet[5];
+    const { headingNumber, heading } = kohde;
 
     if (muut.fetched) {
       // Muut, vaativat, vankilat, kokeilut
-      const { muutCombined } = kohde
-      const { data } = muut
-      let muutList = data
-      let vaativat1 = []
-      let vaativat2 = []
-      let vankilat = []
-      let kokeilut = []
-      let yhteistyo = []
-      let yhteistyosopimukset = []
-      let laajennettu = []
-      let sisaoppilaitos = []
-      let urheilijat = []
-      let muumaarays = []
+      const { muutCombined } = kohde;
+      const { data } = muut;
+      let muutList = data;
+      let vaativat1 = [];
+      let vaativat2 = [];
+      let vankilat = [];
+      let kokeilut = [];
+      let yhteistyo = [];
+      let yhteistyosopimukset = [];
+      let laajennettu = [];
+      let sisaoppilaitos = [];
+      let urheilijat = [];
+      let muumaarays = [];
       // let luokattomat = []
 
-      _.forEach(muutList, (maarays) => {
-
+      _.forEach(muutList, maarays => {
         const { metadata } = maarays;
-        const kasite = parseLocalizedField(metadata, 'FI', 'kasite');
-        const kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus');
+        const kasite = parseLocalizedField(metadata, "FI", "kasite");
+        const kuvaus = parseLocalizedField(metadata, "FI", "kuvaus");
 
         if (kuvaus) {
-
           switch (kasite) {
-
             case "laajennettu": {
-              laajennettu.push(maarays)
-              break
+              laajennettu.push(maarays);
+              break;
             }
             case "sisaoppilaitos": {
-              sisaoppilaitos.push(maarays)
-              break
+              sisaoppilaitos.push(maarays);
+              break;
             }
             case "urheilu": {
-              urheilijat.push(maarays)
-              break
+              urheilijat.push(maarays);
+              break;
             }
             case "kokeilu": {
-              kokeilut.push(maarays)
-              break
+              kokeilut.push(maarays);
+              break;
             }
             case "yhteistyo": {
-              yhteistyo.push(maarays)
-              break
+              yhteistyo.push(maarays);
+              break;
             }
             case "yhteistyosopimukset": {
-              yhteistyosopimukset.push(maarays)
-              break
+              yhteistyosopimukset.push(maarays);
+              break;
             }
             case "vaativa_1": {
-              vaativat1.push(maarays)
-              break
+              vaativat1.push(maarays);
+              break;
             }
             case "vaativa_2": {
-              vaativat2.push(maarays)
-              break
+              vaativat2.push(maarays);
+              break;
             }
             case "vankila": {
-              vankilat.push(maarays)
-              break
+              vankilat.push(maarays);
+              break;
             }
             case "muumaarays": {
-              muumaarays.push(maarays)
-              break
+              muumaarays.push(maarays);
+              break;
             }
             default: {
-            //   luokattomat.push(maarays)
-            //   break
+              //   luokattomat.push(maarays)
+              //   break
             }
           }
         }
-
-      })
+      });
 
       return (
         <ContentContainer>
@@ -113,7 +120,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={laajennettu}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -121,7 +128,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={vaativat1}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -129,7 +136,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={vaativat2}
-              otsikko=' '
+              otsikko=" "
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -137,7 +144,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={sisaoppilaitos}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -145,7 +152,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={vankilat}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -153,7 +160,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={urheilijat}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -161,7 +168,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={kokeilut}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             <FieldArray
@@ -185,7 +192,7 @@ class MuutospyyntoWizardMuut extends Component {
               muut={muutCombined}
               editValues={muutmuutoksetValue}
               muutList={muumaarays}
-              otsikko=''
+              otsikko=""
               component={this.renderMuutMuutokset}
             />
             {/* <FieldArray
@@ -196,30 +203,29 @@ class MuutospyyntoWizardMuut extends Component {
               otsikko={MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.EI_LUOKKAA.FI}
               component={this.renderMuutMuutokset}
             /> */}
-
           </Row>
         </ContentContainer>
-      )
+      );
     } else if (muut.hasErrored) {
-      return <h2>Muita määräyksiä ladattaessa tapahtui virhe</h2>
+      return <h2>Muita määräyksiä ladattaessa tapahtui virhe</h2>;
     } else if (muut.isFetching) {
-      return <Loading/>
+      return <Loading />;
     } else {
-      return null
+      return null;
     }
   }
 
-  getHuomioitavaKoodi = (data) => {
+  getHuomioitavaKoodi = data => {
     let { metadata } = data;
-    return parseLocalizedField(metadata, 'FI', 'huomioitavaKoodi');
-  }
+    return parseLocalizedField(metadata, "FI", "huomioitavaKoodi");
+  };
 
-  renderMuutMuutokset = (props) => {
-    const { muut, editValues, fields, otsikko } = props
-    let { muutList } = props
-    let { metadata } = muutList
-    muutList = muutList.sort((a,b) => 
-      this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
+  renderMuutMuutokset = props => {
+    const { muut, editValues, fields, otsikko } = props;
+    let { muutList } = props;
+    let { metadata } = muutList;
+    muutList = muutList.sort(
+      (a, b) => this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
     );
 
     let title = undefined;
@@ -227,13 +233,13 @@ class MuutospyyntoWizardMuut extends Component {
     let showGuide2 = 0;
 
     if (muutList.length > 0) {
-      title = parseLocalizedField(muutList[0].metadata)
-    
-      if(otsikko !== '') {
-        title = otsikko
+      title = parseLocalizedField(muutList[0].metadata);
+
+      if (otsikko !== "") {
+        title = otsikko;
       }
 
-      const kasite = parseLocalizedField(muutList[0].metadata, 'FI', 'kasite');
+      const kasite = parseLocalizedField(muutList[0].metadata, "FI", "kasite");
 
       if (kasite === "vaativa_1") {
         showGuide1 = true;
@@ -242,118 +248,135 @@ class MuutospyyntoWizardMuut extends Component {
         showGuide2 = 1;
       }
     }
-    
 
     return (
       <div>
         <Row>
           <h4>{title}</h4>
-          { showGuide1 && 
-            <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p> 
-          }
+          {showGuide1 && (
+            <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.YKSIVALINTA.FI}:</p>
+          )}
 
           {muutList.map((muu, i) => {
-            const {koodiArvo, koodisto, metadata, voimassaLoppuPvm} = muu
-            const {koodistoUri} = koodisto
-            const nimi = parseLocalizedField(metadata)
-            let kuvaus = parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
+            const { koodiArvo, koodisto, metadata, voimassaLoppuPvm } = muu;
+            const { koodistoUri } = koodisto;
+            const nimi = parseLocalizedField(metadata);
+            let kuvaus = parseLocalizedField(metadata, "FI", "kuvaus") || "";
             // let kuvaus = koodiArvo + " - " + parseLocalizedField(metadata, 'FI', 'kuvaus') || ''
-          
-            const identifier = `input-${koodistoUri}-${koodiArvo}`
-            const kasite = parseLocalizedField(muutList[0].metadata, 'FI', 'kasite');
 
-            let isInLupa = false
-            let isAdded = false
-            let isRemoved = false
-            let isChecked = false
-            let customClassName = ""
+            const identifier = `input-${koodistoUri}-${koodiArvo}`;
+            const kasite = parseLocalizedField(
+              muutList[0].metadata,
+              "FI",
+              "kasite"
+            );
+
+            let isInLupa = false;
+            let isAdded = false;
+            let isRemoved = false;
+            let isChecked = false;
+            let customClassName = "";
 
             muut.forEach(m => {
               if (m.koodiarvo === koodiArvo) {
-                isInLupa = true
+                isInLupa = true;
               }
-            })
+            });
 
             if (editValues) {
               editValues.forEach(val => {
                 if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  val.type === MUUTOS_TYPES.ADDITION ? isAdded = true : null
-                  val.type === MUUTOS_TYPES.REMOVAL ? isRemoved = true : null
+                  isAdded = val.type === MUUTOS_TYPES.ADDITION || null;
+                  isRemoved = val.type === MUUTOS_TYPES.REMOVAL || null;
                 }
-              })
+              });
             }
 
-            isInLupa ? customClassName = "is-in-lupa" : null
-            isAdded ? customClassName = "is-added" : null
-            isRemoved ? customClassName = "is-removed" : null
-            voimassaLoppuPvm !== undefined ? customClassName = "is-out-of-date" : null
+            customClassName = isInLupa ? "is-in-lupa" : null;
+            customClassName = isAdded ? "is-added" : null;
+            customClassName = isRemoved ? "is-removed" : null;
+            customClassName = voimassaLoppuPvm !== undefined ? "is-out-of-date" : null;
 
             if ((isInLupa && !isRemoved) || isAdded) {
-              isChecked = true
+              isChecked = true;
             }
 
-            if (kuvaus && kuvaus !== '') {
-
+            if (kuvaus && kuvaus !== "") {
               return (
                 <div key={identifier}>
-                
                   {/* Näytä vain kerran ohjeteksti */}
-                  { showGuide2 === 1 && showGuide2++ &&
-                    <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.LISAALINTA.FI}:</p> 
-                  }
-                  <CheckboxRowContainer key={identifier} className={customClassName}>
-                    
-                  { kasite === "vaativa_1" ?
+                  {showGuide2 === 1 && showGuide2++ && (
+                    <p>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_MUUT.LISAALINTA.FI}:</p>
+                  )}
+                  <CheckboxRowContainer
+                    key={identifier}
+                    className={customClassName}
+                  >
+                    {kasite === "vaativa_1" ? (
                       <RadioCheckbox>
                         <input
                           type="checkbox"
                           id={identifier}
                           checked={isChecked}
                           disabled={voimassaLoppuPvm !== undefined}
-                          onChange={(e) => {
-                            handleCheckboxChange(e, editValues, fields, isInLupa, muu)
+                          onChange={e => {
+                            handleCheckboxChange(
+                              e,
+                              editValues,
+                              fields,
+                              isInLupa,
+                              muu
+                            );
                           }}
                         />
-                      <label htmlFor={identifier}></label>
+                        <label htmlFor={identifier} />
                       </RadioCheckbox>
-                    :
+                    ) : (
                       <Checkbox>
                         <input
                           type="checkbox"
                           id={identifier}
                           checked={isChecked}
                           disabled={voimassaLoppuPvm !== undefined}
-                          onChange={(e) => {
-                            handleCheckboxChange(e, editValues, fields, isInLupa, muu)
+                          onChange={e => {
+                            handleCheckboxChange(
+                              e,
+                              editValues,
+                              fields,
+                              isInLupa,
+                              muu
+                            );
                           }}
                         />
-                      <label htmlFor={identifier}></label>
-                    </Checkbox>
-                    }
-                    <Div margin="0 10px" flex="5">{kuvaus}</Div>
+                        <label htmlFor={identifier} />
+                      </Checkbox>
+                    )}
+                    <Div margin="0 10px" flex="5">
+                      {kuvaus}
+                    </Div>
                   </CheckboxRowContainer>
-                  </div>
-              )
+                </div>
+              );
             }
           })}
         </Row>
       </div>
-    )
-  }
+    );
+  };
 }
-const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
+const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS);
 
 MuutospyyntoWizardMuut = connect(state => {
-  const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT)
+  const muutmuutoksetValue = selector(state, FIELD_ARRAY_NAMES.MUUT);
 
   return {
     muutmuutoksetValue
-  }
-})(MuutospyyntoWizardMuut)
+  };
+})(MuutospyyntoWizardMuut);
 
 export default reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
   destroyOnUnmount: false,
-  forceUnregisterOnUnmount: true,
+  forceUnregisterOnUnmount: true
   // validate,
-})(MuutospyyntoWizardMuut)
+})(MuutospyyntoWizardMuut);
