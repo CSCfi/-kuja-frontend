@@ -36,7 +36,7 @@ export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, sel
   }
 }
 
-function getMuutosperusteluEditIndex(muutokset, koodiarvo) {
+export function getMuutosperusteluEditIndex(muutokset, koodiarvo) {
   let i = undefined
 
   _.forEach(muutokset, (muutos, idx) => {

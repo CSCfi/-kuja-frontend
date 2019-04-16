@@ -321,7 +321,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2") && {perusteluteksti_vaativa: meta_vaativa}),
           ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === "1" || koodiArvo === "3") && {perusteluteksti_tyovoima: meta_tyovoima})
         },
-        muutosperustelukoodiarvo: null
+        muutosperustelukoodiarvo: []
       })
     }
   } else {
@@ -348,7 +348,7 @@ export function handleCheckboxChange(event, editValue, fields, isInLupa, current
           ...(koodistoUri === KOODISTOT.OIVA_MUUT && (kasite === "vaativa_1" || kasite === "vaativa_2") && {perusteluteksti_vaativa: meta_vaativa}),
           ...(koodistoUri === KOODISTOT.OIVA_TYOVOIMAKOULUTUS  && (koodiArvo === "1" || koodiArvo === "3") && {perusteluteksti_tyovoima: meta_tyovoima})
         },
-        muutosperustelukoodiarvo: null
+        muutosperustelukoodiarvo: []
       })
     } else {
       // Tutkinto ei ollut luvassa --> poistetaan muutos formista
