@@ -1,42 +1,27 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { BrowserRouter, NavLink } from 'react-router-dom'
-import { BreadcrumbsProvider, Breadcrumbs } from 'react-breadcrumbs-dynamic'
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+import configureStore, { history } from "./configureStore";
+import App from "./scenes/App";
 
-import 'modules/polyfills'
-import store from 'store'
-import Header from 'modules/Header/containers/HeaderContainer'
-import Footer from 'modules/Footer/containers/FooterContainer'
-import Routes from 'routes'
-import { COLORS, APP_WIDTH } from './modules/styles'
-import { AppContainer, BreadcrumbsContainer, RoutesContainer } from './modules/elements'
+import "./css/tailwind.css";
 
-ReactDOM.render(
+const store = configureStore({
+  user: {
+    user: 'Raipe'
+  }
+});
+
+const target = document.querySelector("#root");
+
+render(
   <Provider store={store}>
-    <BreadcrumbsProvider>
-      <BrowserRouter>
-        <AppContainer>
-          <Header maxWidth={`${APP_WIDTH}`}/>
-          <BreadcrumbsContainer>
-            <Breadcrumbs
-              separator={<b> / </b>}
-              item={NavLink}
-              finalItem={'b'}
-              finalProps={{
-                style: {
-                  color: COLORS.BLACK
-                }
-              }}
-            />
-          </BreadcrumbsContainer>
-          <RoutesContainer>
-            <Routes />
-          </RoutesContainer>
-          <Footer maxWidth={`${APP_WIDTH}`}/>
-        </AppContainer>
-      </BrowserRouter>
-    </BreadcrumbsProvider>
+    <ConnectedRouter history={history}>
+      <div>
+        <App />
+      </div>
+    </ConnectedRouter>
   </Provider>,
-  document.getElementById("root")
-)
+  target
+);
