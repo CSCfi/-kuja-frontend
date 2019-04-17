@@ -348,7 +348,7 @@ class MuutospyyntoWizard extends Component {
 
 MuutospyyntoWizard = reduxForm({
   form: FORM_NAME_UUSI_HAKEMUS,
-  destroyOnUnmount: false,
+  destroyOnUnmount: true,
   forceUnregisterOnUnmount: true
 })(MuutospyyntoWizard)
 

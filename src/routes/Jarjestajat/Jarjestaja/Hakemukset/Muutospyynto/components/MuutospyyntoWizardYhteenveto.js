@@ -130,13 +130,9 @@ class MuutospyyntoWizardYhteenveto extends Component {
 
           <FieldArray
             name={FIELD_ARRAY_NAMES.HAKIJAN_TIEDOT}
-            meta={meta}
+            formValues={formValues}
             component={this.renderHakijanTiedot}
           />
-
-          <Separator />
-
-          <Liitteet {...this.props} fields={formValues} paikka="yhteenveto" header={ HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_HEADER.FI }/>
 
           <Separator />
 
@@ -202,6 +198,14 @@ class MuutospyyntoWizardYhteenveto extends Component {
             component={TaloudellisetYhteenveto}
           /> }
 
+          {taloudellisetValue && taloudellisetValue.length > 0 && 
+            <Liitteet {...this.props} fields={formValues.taloudelliset[0]} paikka="taloudelliset" showListOnly={true} isIntend={true}/>
+          }
+
+          <Separator />
+
+          <Liitteet {...this.props} fields={this.props.formValues} paikka="yleiset" header={HAKEMUS_OTSIKOT.LIITE_YLEISET_HEADER.FI}/>
+
           <WizardBottom>
             <Container maxWidth="1085px" padding="15px">
               <Button onClick={previousPage} className="previous button-left">Edellinen</Button>
@@ -255,6 +259,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 
   renderHakijanTiedot() {
+    const { meta } = this.props.formValues
     return (
       <div>
         <Field
@@ -281,6 +286,17 @@ class MuutospyyntoWizardYhteenveto extends Component {
           label="Yhteyshenkilön sähköposti"
           component={this.renderField}
         />
+       <Field
+          name="hakija.haettupvm"
+          type="text"
+          label="Muutoksien voimaantulo"
+          component={this.renderDatePicker}
+        />
+        <Field
+          name="hakija.saate"
+          label="Saate"
+          component={this.renderTextarea}
+        />
         <Field
           name="hakija.hyvaksyjat"
           type="text"
@@ -293,17 +309,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
           label="Hyväksyjän/allekirjoittajan nimike"
           component={this.renderField}
         />
-        <Field
-          name="hakija.haettupvm"
-          type="text"
-          label="Muutoksien voimaantulo"
-          component={this.renderDatePicker}
-        />
-        <Field
-          name="hakija.saate"
-          label="Saate"
-          component={this.renderTextarea}
-        />
+        <Liitteet {...this.props} fields={this.props.formValues} paikka="yhteenveto" header={ " " } helpText={HAKEMUS_OTSIKOT.LIITE_YHTEENVETO_OHJE.FI}/>
       </div>
     )
   }
