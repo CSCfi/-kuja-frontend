@@ -146,6 +146,7 @@ class MuutosYhteenveto extends Component {
                   muutokset={muutokset}
                   muutos={muutos}
                   fields={fields}
+                  kategoria={kategoria}
                 />
           }
       </MuutosWrapper>
