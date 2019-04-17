@@ -1,3 +1,4 @@
+import _ from "lodash";
 import React, { Component } from "react";
 import styled from "styled-components";
 
@@ -10,7 +11,6 @@ const PerusteluSelectWrapper = styled.div`
 
 class PerusteluSelect extends Component {
   handleChange(e, selectedOption) {
-    console.log(selectedOption);
     const { muutokset, fields, muutos } = this.props;
 
     const i = getMuutosperusteluEditIndex(muutokset, muutos.koodiarvo);
@@ -46,6 +46,11 @@ class PerusteluSelect extends Component {
         <div>{MUUTOS_WIZARD_TEKSTIT.TAUSTA_SYYT_TARKENNE.FI}</div>
 
         {muutosperustelut.map(m => {
+          const valittu = _.includes(
+            muutos.muutosperustelukoodiarvo,
+            m.koodiArvo
+          );
+
           return (
             <div key={m.koodiArvo}>
               <input
@@ -57,6 +62,7 @@ class PerusteluSelect extends Component {
                 }-${m.koodiArvo}`}
                 type="checkbox"
                 value={m.koodiArvo}
+                checked={valittu}
                 onChange={e => {
                   this.handleChange(e, m.koodiArvo);
                 }}
