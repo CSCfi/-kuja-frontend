@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
 import { connectRouter } from 'connected-react-router'
 
-// import luvatReducer from 'routes/Jarjestajat/modules/luvat'
-// import lupaReducer from 'routes/Jarjestajat/Jarjestaja/modules/lupa'
-// import historyReducer from 'routes/Jarjestajat/Jarjestaja/modules/history'
 import userReducer from 'services/users/reducer'
+import luvatReducer from 'scenes/Jarjestajat/reducer'
+import vankilatReducer from 'services/vankilat/reducer'
+// import lupaReducer from 'scenes/Jarjestajat/Jarjestaja/modules/lupa'
+// import historyReducer from 'routes/Jarjestajat/Jarjestaja/modules/history'
 // import muutospyynnotReducer from 'routes/Jarjestajat/Jarjestaja/Hakemukset/modules/muutospyynnot'
 // import muutospyyntoReducer from 'routes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/muutospyynto'
 // import muutosperustelutReducer from 'modules/reducers/muutosperustelut'
-// import vankilatReducer from 'modules/reducers/vankilat'
 // import ELYkeskuksetReducer from 'modules/reducers/elykeskukset'
 // import koulutusalatReducer from 'modules/reducers/koulutusalat'
 // import koulutustyypitReducer from 'modules/reducers/koulutustyypit'
@@ -26,14 +26,14 @@ import userReducer from 'services/users/reducer'
 
 export default (history) => combineReducers({
   router: connectRouter(history),
-  user: userReducer
-  // luvat: luvatReducer
-//   lupa: lupaReducer,
+  user: userReducer,
+  luvat: luvatReducer,
+  // lupa: lupaReducer,
 //   lupaHistory: historyReducer,
 //   muutospyynnot: muutospyynnotReducer,
 //   muutospyynto: muutospyyntoReducer,
 //   muutosperustelut: muutosperustelutReducer,
-//   vankilat: vankilatReducer,
+  vankilat: vankilatReducer,
 //   ELYkeskukset: ELYkeskuksetReducer,
 //   koulutusalat: koulutusalatReducer,
 //   koulutustyypit: koulutustyypitReducer,

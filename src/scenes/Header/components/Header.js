@@ -5,9 +5,9 @@ import styled from 'styled-components'
 import HeaderBar from './HeaderBar'
 import LinkItemUpper from './LinkItemUpper'
 import LinkItem from './LinkItem'
-import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
+import { ROLE_ESITTELIJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
-import { getRoles, getOrganisation } from 'services/users/reducer'
+import { getRoles, getOrganisation } from 'services/users/actions'
 
 const HeaderTitle = styled.div`
   font-family: 'Arial';
@@ -71,10 +71,10 @@ class Header extends Component {
               <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
 
               <HeaderUpperRight>
-                {(sessionStorage.getItem('role')!==ROLE_ESITTELIJA && sessionStorage.getItem('role')!==ROLE_KAYTTAJA)
+              {!sessionStorage.getItem('role')
                 ? (<LinkItemUpper to="/cas-auth" className="has-separator pull-right">Kirjaudu sisään</LinkItemUpper>) : null}
 
-                {(sessionStorage.getItem('role')===ROLE_ESITTELIJA || sessionStorage.getItem('role')===ROLE_KAYTTAJA)
+                {sessionStorage.getItem('role')
                 ? (<LinkItemUpper to="/cas-logout" className="has-separator pull-right">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItemUpper>) : null}
 
                 <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>

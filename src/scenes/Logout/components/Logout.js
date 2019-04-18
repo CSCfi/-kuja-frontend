@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { logoutUser } from 'services/users/reducer'
+import { logoutUser } from 'services/users/actions'
 import styled from 'styled-components'
 
 const LogoutText = styled.div`

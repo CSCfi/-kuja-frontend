@@ -1,55 +1,19 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { COLORS, Leijona } from 'modules/styles'
+import React from 'react'
+import { Leijona } from 'modules/styles'
 
-
-const FooterBar = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background: ${COLORS.WHITE};
-  color: black;
-  border-top: 2px solid #70A489;
-  padding: 1rem;
-  padding-bottom: 40px;
-  height:100px;
-  bottom:0;
-`
-
-const FooterBarUpper = styled.div`
-  display:flex;
-  margin: 0 auto;
-  width: 100%;
-  background: ${COLORS.WHITE};
-  font-size:11px;
-`
-
-const FooterLeft = styled.div`
-`
-
-const FooterRight = styled.div`
-  margin-left:30px;
-`
-
-class Footer extends Component {
-
+export default class Footer extends React.Component {
   render() {
-
     return (
-      <FooterBar>
-        <FooterBarUpper maxWidth="1280px">
-          <FooterLeft>
-            <Leijona/>
-          </FooterLeft>
-          <FooterRight>
-            <p>&nbsp;</p>
-            <p>OPETUS- JA KULTTUURIMINISTERIÖ</p>
-            <p>PL 29, 00023 VALTIONEUVOSTO</p>
-            <p>PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
-          </FooterRight>
-        </FooterBarUpper>
-      </FooterBar>
+      <div className="flex bg-white border-green-light border-t-2 text-xxs p-4">
+        <div>
+          <Leijona/>
+        </div>
+        <div className="flex flex-col justify-center ml-10">
+          <p className="mt-4 mb-2">OPETUS- JA KULTTUURIMINISTERIÖ</p>
+          <p className="my-1">PL 29, 00023 VALTIONEUVOSTO</p>
+          <p className="mt-2">PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
+        </div>
+      </div>
     )
   }
 }
-export default Footer
