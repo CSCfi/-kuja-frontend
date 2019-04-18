@@ -157,6 +157,10 @@ export const HAKEMUS_VIESTI = {
     FI: 'Nimi on pakkollinen',
     SV: 'TIEDOSTO_NIMI_ERROR'
   },
+  TALLENNUS_ERROR: {
+    FI: 'Tallennus epäonnistui. Yritä tallennusta uudelleen hetken kuluttua. Virheen toistuessa ota yhteyttä pääkäyttäjään.',
+    SV: 'TALLENNUS_ERROR'
+  },
 }
 
 export const HAKEMUS_OTSIKOT = {
