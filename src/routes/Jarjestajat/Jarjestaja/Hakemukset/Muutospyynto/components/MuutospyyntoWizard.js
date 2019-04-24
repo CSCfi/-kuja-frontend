@@ -109,7 +109,7 @@ class MuutospyyntoWizard extends Component {
       page: 1,
       visitedPages: [1],
       isCloseModalOpen: false,
-      isCloseErrorModalOpen: false,
+      isErrorModalOpen: false,
       showHelp: true
     }
   }
