@@ -132,7 +132,6 @@ class MuutospyyntoEditWizard extends Component {
 
     console.log('save', data)
     let result = this.props.saveMuutospyynto(data).then(() => {
-      console.log(this.props.muutospyynto);
       if (!this.props.muutospyynto.save || this.props.muutospyynto.save.hasErrored)
         return (
           this.setState({ isErrorModalOpen: true })
