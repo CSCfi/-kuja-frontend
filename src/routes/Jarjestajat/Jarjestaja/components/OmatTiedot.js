@@ -32,11 +32,12 @@ class OmatTiedot extends Component {
             if (oppilaitos.organisaatio.kuntaKoodi.metadata) kotipaikka = parseLocalizedField(oppilaitos.organisaatio.kuntaKoodi.metadata)
             // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
             if (oppilaitos.organisaatio.yhteystiedot) oppilaitos.organisaatio.yhteystiedot.map(item => {
-                if (item.www) www = item.www;
-                if (item.numero) numero = item.numero;
-                if (item.email) email = item.email;
-              }
-            )
+              if (item.www) www = item.www;
+              if (item.numero) numero = item.numero;
+              if (item.email) email = item.email;
+              return true;
+            }
+          )
         }
     }
 

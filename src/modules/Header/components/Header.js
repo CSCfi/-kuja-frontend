@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItemUpper from 'modules/Header/components/LinkItemUpper'
 import LinkItem from 'modules/Header/components/LinkItem'
-import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
+import { ROLE_ESITTELIJA } from 'modules/constants'
 import { COLORS, FONT_STACK } from 'modules/styles'
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 

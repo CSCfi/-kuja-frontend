@@ -217,7 +217,6 @@ class MuutospyyntoWizardMuut extends Component {
   renderMuutMuutokset = (props) => {
     const { muut, editValues, fields, otsikko } = props
     let { muutList } = props
-    let { metadata } = muutList
     muutList = muutList.sort((a,b) => 
       this.getHuomioitavaKoodi(a) - this.getHuomioitavaKoodi(b)
     );
@@ -335,6 +334,7 @@ class MuutospyyntoWizardMuut extends Component {
                   </div>
               )
             }
+            return true;
           })}
         </Row>
       </div>

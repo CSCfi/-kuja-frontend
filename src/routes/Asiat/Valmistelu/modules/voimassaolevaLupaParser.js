@@ -161,7 +161,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
 
         _.forEach(maaraykset, (maarays) => {
             const {koodisto, uuid} = maarays
-            const {koodi, aliMaaraykset} = maarays
+            const {aliMaaraykset} = maarays
 
             // Alimääräykset
             if (aliMaaraykset) {
@@ -343,6 +343,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                         vankilat.push({ tyyppi: type, kuvaus: desc })
                         break
                     }
+                    default: {}
                 }
             }
 
@@ -467,7 +468,7 @@ function parseMaaraykset(maaraykset, kohdeTunniste) {
         return null
     }
 
-    if (kohdeTunniste != KOHTEET.KIELI) {
+    if (kohdeTunniste !== KOHTEET.KIELI) {
         return _.filter(maaraykset, (maarays) => {
             return maarays.kohde.tunniste === kohdeTunniste
         })

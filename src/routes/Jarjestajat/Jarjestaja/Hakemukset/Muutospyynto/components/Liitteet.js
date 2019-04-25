@@ -396,6 +396,7 @@ class Liiteet extends Component {
           if ( (!paikka || liite.paikka.startsWith(paikka)) && !liite.removed) {
             return true
           }
+          return false
         })
         return false
       }
