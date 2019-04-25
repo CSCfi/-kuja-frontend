@@ -107,8 +107,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
       jarjestaja = lupa.data.jarjestaja
     }
 
-    const { meta } = formValues
-
     const tutkintojaLisatty = _.find(tutkinnotjakoulutuksetValue, function(t) { 
       return t.type === MUUTOS_TYPES.ADDITION })
 
@@ -259,7 +257,6 @@ class MuutospyyntoWizardYhteenveto extends Component {
   }
 
   renderHakijanTiedot() {
-    const { meta } = this.props.formValues
     return (
       <div>
         <Field
