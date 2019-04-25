@@ -97,8 +97,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                 }
 
                 case KOODISTOT.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS: {
-                    const { koodiarvo } = maarays
-
                     const ammatillinenNimi = parseLocalizedField(maarays.koodi.metadata, 'FI', 'nimi', 'kieli')
 
                     muutMaaraykset.push({
@@ -111,8 +109,6 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                 }
 
                 case KOODISTOT.KULJETTAJAKOULUTUS: {
-                    const { koodiarvo } = maarays
-
                     const kuljettajaSelite = parseLocalizedField(maarays.koodi.metadata, 'FI', 'kuvaus', 'kieli')
 
                     muutMaaraykset.push({
@@ -171,7 +167,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
             if (aliMaaraykset) {
                 _.forEach(aliMaaraykset, (alimaarays) => {
                     const {koodi} = alimaarays
-                    const {koodiArvo, metadata} = koodi
+                    const {koodiArvo } = koodi
                     const nimi  = parseLocalizedField(maarays.koodi.metadata)
                     const tutkintokoodi = maarays.koodiarvo
                     switch (koodiArvo) {
@@ -185,6 +181,9 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
                             tutkintokieletRu.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
                             break
                         case "FI":
+                            tutkintokieletFi.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
+                            break
+                        default:
                             tutkintokieletFi.push({koodi: koodiArvo, maaraysId: uuid, nimi, tutkintokoodi})
                             break
                     }

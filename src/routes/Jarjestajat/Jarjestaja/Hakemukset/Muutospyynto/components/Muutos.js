@@ -112,7 +112,7 @@ class Muutos extends Component {
         <MuutosTop>
           <MuutosHeader isActive={!isHidden}  onClick={this.toggleMuutos}>
             <MuutosTyyppi>{tyyppi}</MuutosTyyppi>
-            {parentId != null && parentId != '' ?
+            {parentId !== null && parentId !== '' ?
               <Parent>{getTutkintoNimiByKoodiarvo(parentId)}: </Parent>
               : ''
             }
