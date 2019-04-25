@@ -234,7 +234,7 @@ const parseSectionData = (heading, target, maaraykset, headingNumber, tyovoimaMa
         if(maakunnat.length < 1 && kunnat.length < 1) { returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.EI_VELVOLLISUUTTA.FI}
 
         _.filter(toimintaalueet, alue => {
-            (alue.koodisto === 'nuts1') ? returnobj.kohdeKuvaus = LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI : null
+            returnobj.kohdeKuvaus = (alue.koodisto === 'nuts1') ? LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI : null
         })
 
 

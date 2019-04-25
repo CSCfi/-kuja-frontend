@@ -264,7 +264,7 @@ class Liiteet extends Component {
     }
 
     const setAttachmentName = (e, tiedostoId, uuid) => {
-      e.preventDefaults;
+      e.preventDefaults();
       this.setState({fileError: false});
       this.setState({fileAdded: ""});
       let obj = undefined;

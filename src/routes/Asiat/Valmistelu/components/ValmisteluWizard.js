@@ -170,8 +170,7 @@ class ValmisteluWizard extends Component {
       link.click();
       setTimeout(function () {
         // For Firefox it is necessary to delay revoking the ObjectURL
-        window.URL.revokeObjectURL(data)
-          , 100
+        return window.URL.revokeObjectURL(data), 100
       })
 
     })
