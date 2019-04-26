@@ -9,6 +9,7 @@
     "lodash": "^4.17.11",
     "lowdash": "^1.2.0",
     "moment": "^2.24.0",
+    "node-sass": "^4.11.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-breadcrumbs-dynamic": "^1.0.10",
@@ -27,7 +28,8 @@
     "redux": "^3.7.2",
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.2.0",
-    "styled-components": "^2.2.1"
+    "styled-components": "^2.2.1",
+    "tar": "^4.4.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,7 +38,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "tailwindcss": "^0.7.4"
   },
   "browserslist": {
     "production": [
