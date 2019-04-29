@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../../../../../../modules/constants"
-import { getKieliList } from "./koulutusUtil"
+import { getKieliList } from "../../../../../../services/koulutukset/koulutusUtil"
 
 // Constants
 export const FETCH_KIELET_START = 'FETCH_KIELET_START'

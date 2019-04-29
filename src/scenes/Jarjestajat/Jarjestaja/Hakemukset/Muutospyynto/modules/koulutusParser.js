@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { getKoulutusAlat } from "./koulutusUtil"
-import { getKoulutusTyypit} from "./koulutusUtil"
+import { getKoulutusAlat } from "../../../../../../services/koulutukset/koulutusUtil"
+import { getKoulutusTyypit} from "../../../../../../services/koulutukset/koulutusUtil"
 
 export const parseKoulutukset = (koulutusdata, koodiarvo, metadata) => {
 

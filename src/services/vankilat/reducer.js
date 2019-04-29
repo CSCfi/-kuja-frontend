@@ -1,21 +1,19 @@
-import { getVankilat } from "./utils";
+import { getVankilat } from "./selectors";
 
 import {
   FETCH_VANKILAT_START,
   FETCH_VANKILAT_SUCCESS,
   FETCH_VANKILAT_FAILURE,
+  ADD_VANKILA,
   GET_VANKILAT
-} from "./actions";
+} from "./actionTypes";
 
-const initialState = {
-  isFetching: false,
-  fetched: false,
-  hasErrored: false,
-  data: []
-};
-
-export default function(state = initialState, action) {
+export default function(state, action) {
   switch (action.type) {
+    case ADD_VANKILA:
+    return {
+
+    }
     case FETCH_VANKILAT_START:
       return {
         ...state,

@@ -19,7 +19,7 @@ import close from 'static/images/close-x.svg'
 import { ROLE_KAYTTAJA } from "../../../../../../modules/constants";
 import { modalStyles, ModalButton, ModalText, Content } from "./ModalComponents"
 import { FORM_NAME_UUSI_HAKEMUS, HAKEMUS_VIRHE, HAKEMUS_VIESTI, HAKEMUS_OTSIKOT } from "../modules/uusiHakemusFormConstants"
-import { loadFormData } from "../modules/muutospyyntoUtil"
+import { loadFormData } from "services/muutospyynnot/muutospyyntoUtil"
 
 Modal.setAppElement('#root')
 

@@ -19,7 +19,7 @@ import {
   getToimialueByKoodiArvo,
   handleToimialueSelectChange
 } from "../modules/toimialueUtil";
-import { handleSimpleCheckboxChange } from "../modules/koulutusUtil";
+import { handleSimpleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
 import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS,

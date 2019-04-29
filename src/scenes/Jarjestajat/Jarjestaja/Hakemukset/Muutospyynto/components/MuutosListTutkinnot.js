@@ -7,7 +7,7 @@ import MuutosYhteenveto from './MuutosYhteenveto'
 import { COMPONENT_TYPES } from "../modules/uusiHakemusFormConstants"
 import { TUTKINNOT_SECTIONS, KIELET_SECTIONS } from "../../../modules/constants"
 import { FIELD_ARRAY_NAMES} from "../modules/uusiHakemusFormConstants"
-import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../modules/koulutusUtil"
+import { getKoulutusalaByKoodiarvo, getKoulutustyyppiByKoodiarvo, getTutkintoNimiByKoodiarvo } from "../../../../../../services/koulutukset/koulutusUtil"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 
 const MuutosListWrapper = styled.div`

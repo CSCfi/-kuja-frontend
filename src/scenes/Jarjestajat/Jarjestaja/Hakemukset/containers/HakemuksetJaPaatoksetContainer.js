@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import HakemuksetJaPaatokset from '../components/HakemuksetJaPaatokset'
-import { fetchMuutospyynnot } from "../modules/muutospyynnot"
+import { fetchMuutospyynnot } from "services/muutospyynnot/actions"
 
 const mapStateToProps = (state) => {
   return {

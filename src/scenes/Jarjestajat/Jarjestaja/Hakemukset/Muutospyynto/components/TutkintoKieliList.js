@@ -18,7 +18,7 @@ import {
   KoulutustyyppiWrapper,
   TutkintoBlock
 } from './MuutospyyntoWizardComponents'
-import { handleTutkintoKieliCheckboxChange, getTutkintokieliBy } from "../modules/koulutusUtil"
+import { handleTutkintoKieliCheckboxChange, getTutkintokieliBy } from "../../../../../../services/koulutukset/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { parseLocalizedField } from "../../../../../../modules/helpers"
 

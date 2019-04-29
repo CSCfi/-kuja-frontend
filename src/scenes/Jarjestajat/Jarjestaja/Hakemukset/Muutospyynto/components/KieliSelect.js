@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import Select from 'react-select'
 import styled from 'styled-components'
-import { handleTutkintokieliSelectChange } from "../modules/koulutusUtil"
+import { handleTutkintokieliSelectChange } from "../../../../../../services/koulutukset/koulutusUtil"
 
 const SelectWrapper = styled.div`
   flex: 3;

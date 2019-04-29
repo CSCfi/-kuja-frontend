@@ -7,7 +7,7 @@ import arrow from 'static/images/arrow-down.svg'
 
 import { COLORS } from "../../../../../../modules/styles"
 import { MUUTOS_TYPES, MUUTOS_TYPE_TEXTS } from "../modules/uusiHakemusFormConstants"
-import { getTutkintoNimiByKoodiarvo} from "../modules/koulutusUtil"
+import { getTutkintoNimiByKoodiarvo} from "../../../../../../services/koulutukset/koulutusUtil"
 
 const MuutosWrapper = styled.div`
   width: 100%;

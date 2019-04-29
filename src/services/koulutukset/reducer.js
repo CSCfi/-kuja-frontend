@@ -3,6 +3,18 @@ import {
   parseMuut
 } from "scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusParser";
 
+import {
+  FETCH_KOULUTUKSET_ALL_START,
+  FETCH_KOULUTUKSET_ALL_SUCCESS,
+  FETCH_KOULUTUKSET_ALL_FAILURE,
+  FETCH_KOULUTUKSET_MUUT_START,
+  FETCH_KOULUTUKSET_MUUT_SUCCESS,
+  FETCH_KOULUTUKSET_MUUT_FAILURE,
+  FETCH_KOULUTUS_START,
+  FETCH_KOULUTUS_SUCCESS,
+  FETCH_KOULUTUS_FAILURE
+} from "./actionTypes";
+
 const initialState = {
   isFetching: false,
   fetched: false,

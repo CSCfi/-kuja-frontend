@@ -1,9 +1,10 @@
 import { API_BASE_URL } from "modules/constants";
-
-export const GET_VANKILAT = "GET_VANKILAT";
-export const FETCH_VANKILAT_START = "FETCH_VANKILAT_START";
-export const FETCH_VANKILAT_SUCCESS = "FETCH_VANKILAT_SUCCESS";
-export const FETCH_VANKILAT_FAILURE = "FETCH_VANKILAT_FAILURE";
+import {
+  FETCH_VANKILAT_START,
+  FETCH_VANKILAT_SUCCESS,
+  GET_VANKILAT,
+  FETCH_VANKILAT_FAILURE
+} from "./actionTypes";
 
 export function fetchVankilat() {
   return dispatch => {
@@ -21,7 +22,7 @@ export function fetchVankilat() {
 }
 
 export function getVankilat() {
-    return dispatch => {
-        dispatch({ type: GET_VANKILAT });
-    }
+  return dispatch => {
+    dispatch({ type: GET_VANKILAT });
+  };
 }

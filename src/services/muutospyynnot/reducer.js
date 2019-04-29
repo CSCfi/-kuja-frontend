@@ -1,76 +1,32 @@
 import {
-  LOGIN_GET_ROLES_START,
-  LOGIN_GET_ROLES_SUCCESS,
-  LOGIN_GET_ROLES_FAILURE,
-  LOGOUT_USER_START,
-  GET_ORGANISATION_START,
-  GET_ORGANISATION_SUCCESS,
-  GET_ORGANISATION_FAILURE
-} from "./actions";
+  FETCH_MUUTOSPYYNNOT_START,
+  FETCH_MUUTOSPYYNNOT_SUCCESS,
+  FETCH_MUUTOSPYYNNOT_FAILURE
+} from "./actionTypes";
 
-const initialState = {
-  user: {},
-  isFetching: false,
-  fetched: false,
-  hasErrored: false
-}
-
-export default function(state = initialState, action) {
+export default function(state, action) {
   switch (action.type) {
-    case LOGIN_GET_ROLES_START:
+    case FETCH_MUUTOSPYYNNOT_START:
       return {
         ...state,
         isFetching: true,
         fetched: false,
         hasErrored: false
       };
-    case LOGIN_GET_ROLES_SUCCESS:
+    case FETCH_MUUTOSPYYNNOT_SUCCESS:
       return {
         ...state,
-        user: action.payload,
         isFetching: false,
         fetched: true,
-        hasErrored: false
+        hasErrored: false,
+        data: action.payload
       };
-    case LOGIN_GET_ROLES_FAILURE:
+    case FETCH_MUUTOSPYYNNOT_FAILURE:
       return {
         ...state,
         isFetching: false,
         fetched: false,
         hasErrored: true
-      };
-    case GET_ORGANISATION_START:
-      return {
-        ...state,
-        oppilaitos: {
-          isFetching: true,
-          fetched: false,
-          hasErrored: false
-        }
-      };
-    case GET_ORGANISATION_SUCCESS:
-      return {
-        ...state,
-        oppilaitos: {
-          organisaatio: action.payload,
-          isFetching: false,
-          fetched: true,
-          hasErrored: false
-        }
-      };
-    case GET_ORGANISATION_FAILURE:
-      return {
-        ...state,
-        oppilaitos: {
-          isFetching: true,
-          fetched: false,
-          hasErrored: false
-        }
-      };
-    case LOGOUT_USER_START:
-      return {
-        ...state,
-        user: null
       };
     default:
       return state;

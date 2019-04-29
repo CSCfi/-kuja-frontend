@@ -17,7 +17,7 @@ import {
 import { LUPA_TEKSTIT } from "../../../modules/constants";
 import Loading from "../../../../../../modules/Loading";
 import { parseLocalizedField } from "../../../../../../modules/helpers";
-import { handleCheckboxChange } from "../modules/koulutusUtil";
+import { handleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import {
   FIELD_ARRAY_NAMES,

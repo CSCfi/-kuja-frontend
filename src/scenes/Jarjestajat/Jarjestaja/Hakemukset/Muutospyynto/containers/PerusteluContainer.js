@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import Perustelu from '../components/Perustelu'
 import { fetchMuutosperustelut } from "../../../../../../modules/reducers/muutosperustelut"
-import { fetchVankilat } from "../../../../../../modules/reducers/vankilat"
+import { fetchVankilat } from "services/vankilat/actions"
 import { fetchELYkeskukset } from "../../../../../../modules/reducers/elykeskukset"
 
 const mapStateToProps = (state) => {

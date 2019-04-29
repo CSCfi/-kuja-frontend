@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
 import { getIndex } from "../modules/muutosUtil"
 import Select from 'modules/Select'
-import { handleVankilaSelectChange } from "../modules/vankilaUtil"
+import { handleVankilaSelectChange } from "services/vankilat/selectors"
 import { Area } from './MuutospyyntoWizardComponents'
 
 const PerusteluVankilaWrapper = styled.div`

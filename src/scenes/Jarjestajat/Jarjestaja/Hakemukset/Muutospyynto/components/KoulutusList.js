@@ -13,7 +13,7 @@ import {
   Kuvaus
 } from './MuutospyyntoWizardComponents'
 import { parseLocalizedField } from "../../../../../../modules/helpers"
-import { handleCheckboxChange } from "../modules/koulutusUtil"
+import { handleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil"
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants"
 import { MUUT_KEYS } from "../modules/constants"
 import { HAKEMUS_TEKSTIT } from "../../../modules/constants"

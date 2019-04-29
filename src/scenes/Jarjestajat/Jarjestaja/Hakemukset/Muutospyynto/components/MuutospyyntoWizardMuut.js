@@ -14,7 +14,7 @@ import {
 } from "./MuutospyyntoWizardComponents";
 import Loading from "../../../../../../modules/Loading";
 import { parseLocalizedField } from "../../../../../../modules/helpers";
-import { handleCheckboxChange } from "../modules/koulutusUtil";
+import { handleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
 import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS,

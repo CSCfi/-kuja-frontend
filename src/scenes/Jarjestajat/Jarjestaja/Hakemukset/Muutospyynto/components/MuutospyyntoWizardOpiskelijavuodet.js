@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import { ContentContainer } from "../../../../../../modules/elements";
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents";
-import { getOpiskelijavuosiIndex } from "../modules/koulutusUtil";
+import { getOpiskelijavuosiIndex } from "../../../../../../services/koulutukset/koulutusUtil";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import {
   FIELD_ARRAY_NAMES,
