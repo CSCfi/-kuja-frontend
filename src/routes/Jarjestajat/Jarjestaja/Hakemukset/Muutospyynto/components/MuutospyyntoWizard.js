@@ -110,6 +110,7 @@ class MuutospyyntoWizard extends Component {
       page: 1,
       visitedPages: [1],
       isCloseModalOpen: false,
+      isErrorModalOpen: false,
       showHelp: true
     }
   }
@@ -163,12 +164,16 @@ class MuutospyyntoWizard extends Component {
     console.log('save', data)
     const url = `/jarjestajat/${this.props.match.params.ytunnus}`
     this.props.saveMuutospyynto(data).then(() => {
-      let uuid = undefined;
-      console.log('load', this.props.muutospyynto.save.data)
-
-      if (this.props.muutospyynto.save.data.data) uuid = this.props.muutospyynto.save.data.data.uuid;
-      let newurl = url + "/hakemukset-ja-paatokset/" + uuid
-      this.props.history.push(newurl)
+      if (this.props.muutospyynto.save && this.props.muutospyynto.save.data && this.props.muutospyynto.save.data.data) {
+        console.log('load', this.props.muutospyynto.save.data)
+        let uuid = this.props.muutospyynto.save.data.data.uuid;
+        let newurl = url + "/hakemukset-ja-paatokset/" + uuid
+        this.props.history.push(newurl)
+      }
+      else
+        return (
+          this.setState({ isErrorModalOpen: true })
+      )
     })
   }
 
@@ -219,6 +224,10 @@ class MuutospyyntoWizard extends Component {
 
   closeCancelModal() {
     this.setState({ isCloseModalOpen: false })
+  }
+
+  closeErrorModal = () => {
+    this.setState({ isErrorModalOpen: false })
   }
 
   render() {
@@ -325,6 +334,18 @@ class MuutospyyntoWizard extends Component {
             <div>
               <ModalButton primary onClick={this.onCancel}>{HAKEMUS_VIESTI.KYLLA.FI}</ModalButton>
               <ModalButton onClick={this.closeCancelModal}>{HAKEMUS_VIESTI.EI.FI}</ModalButton>
+            </div>
+          </Modal>
+          <Modal
+            isOpen={this.state.isErrorModalOpen}
+            onRequestClose={this.closeErrorlModal}
+            style={modalStyles}
+          >
+            <Content>
+              <ModalText>{HAKEMUS_VIESTI.TALLENNUS_ERROR.FI}</ModalText>
+            </Content>
+            <div>
+              <ModalButton primary onClick={this.closeErrorModal}>{HAKEMUS_VIESTI.OK.FI}</ModalButton>
             </div>
           </Modal>
         </ContentWrapper>
