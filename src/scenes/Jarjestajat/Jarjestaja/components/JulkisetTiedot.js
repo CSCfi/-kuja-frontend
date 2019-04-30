@@ -2,7 +2,7 @@ import React from 'react'
 import { LUPA_EXCEPTION_PATH } from "../../../../modules/constants"
 import styled from 'styled-components'
 
-import LupaHistoryContainer from '../containers/LupaHistoryContainer'
+import LupaHistory from './LupaHistory'
 import CurrentLupa from './CurrentLupa'
 import { LUPA_TEKSTIT } from "../modules/constants"
 import { InnerContentContainer } from "../../../../modules/elements"
@@ -26,6 +26,7 @@ const LupaInnerContentWrapper = styled.div`
 `
 
 const JulkisetTiedot = (props) => {
+  console.info(props);
   const { lupadata } = props
   const { jarjestaja } = lupadata
   const { diaarinumero, jarjestajaOid } = lupadata
@@ -55,7 +56,7 @@ const JulkisetTiedot = (props) => {
         <LargeParagraph>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</LargeParagraph>
         <br />
 
-        <LupaHistoryContainer jarjestajaOid={jarjestajaOid} />
+        <LupaHistory jarjestajaOid={jarjestajaOid} />
       </LupaInnerContentWrapper>
 
     </InnerContentContainer>

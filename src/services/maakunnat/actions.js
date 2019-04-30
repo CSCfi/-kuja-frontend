@@ -1,5 +1,11 @@
 import { API_BASE_URL } from "modules/constants";
 
+import {
+  FETCH_MAAKUNNAT_START,
+  FETCH_MAAKUNNAT_SUCCESS,
+  FETCH_MAAKUNNAT_FAILURE
+} from "./actionTypes";
+
 export function fetchMaakunnat() {
     return dispatch => {
       dispatch({ type: FETCH_MAAKUNNAT_START });

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import arrow from 'static/images/koulutusala-arrow.svg'
 import { COLORS } from "../../../../modules/styles"
-import TutkintoContainer from '../containers/TutkintoContainer'
+import Tutkinto from './Tutkinto'
 
 const Wrapper = styled.div`
   margin: 4px 0;
@@ -48,7 +48,7 @@ const SubAla = (props) => {
     <SubAlaWrapper>
       <div>{nimi}</div>
       {_.map(koulutukset, (tutkinto, i) => {
-        return <TutkintoContainer {...tutkinto} key={i} renderCheckbox={renderCheckbox} />
+        return <Tutkinto {...tutkinto} key={i} renderCheckbox={renderCheckbox} />
       })}
     </SubAlaWrapper>
   )

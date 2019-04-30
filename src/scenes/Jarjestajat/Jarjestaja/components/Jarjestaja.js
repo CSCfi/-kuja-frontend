@@ -7,7 +7,7 @@ import ProfileMenu from "./ProfileMenu";
 import JulkisetTiedot from "./JulkisetTiedot";
 import OmatTiedot from "./OmatTiedot";
 import JarjestamislupaAsiat from "./Jarjestamislupa-asiat";
-import JarjestamislupaContainer from "../containers/JarjestamislupaContainer";
+import Jarjestamislupa from "./Jarjestamislupa";
 import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer";
 import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
@@ -18,9 +18,8 @@ import {
   ContentWrapper
 } from "../../../../modules/elements";
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
-import { JarjestajatContext } from "context/jarjestajatContext";
-import { MuutospyynnotContext } from "context/muutospyynnotContext";
-import { LuvatContext } from "context/luvatContext";
+import { fetchLupaHistory } from "services/lupahistoria/actions";
+import { LupahistoriaContext } from "context/lupahistoriaContext";
 import _ from "lodash";
 
 const Separator = styled.div`
@@ -34,17 +33,18 @@ const Separator = styled.div`
   }
 `;
 
-const Jarjestaja = props => {
-  const { jarjestajat, jarjestajatDispatch } = useContext(JarjestajatContext);
-  const { muutospyynnot } = useContext(
-    MuutospyynnotContext
-  );
-  const { luvat, luvatDispatch } = useContext(LuvatContext);
-  const { match } = props;
+const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
+  const { state: lupahistory, dispatch } = useContext(LupahistoriaContext);
 
-  if (match.params && luvat && muutospyynnot) {
-    if (luvat.fetched && muutospyynnot.fetched) {
-      const lupadata = this.props.lupa.data;
+  useEffect(() => {
+    if (lupa && lupa.data && lupa.data.jarjestajaOid) {
+      fetchLupaHistory(lupa.data.jarjestajaOid)(dispatch);
+    }
+  }, [lupa, muutospyynnot]);
+
+  if (match.params) {
+    if (lupa && lupa.fetched && muutospyynnot && muutospyynnot.fetched) {
+      const lupadata = lupa.data;
       const { jarjestaja } = lupadata;
       const breadcrumb = `/jarjestajat/${match.params.id}`;
       const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || "";
@@ -140,7 +140,7 @@ const Jarjestaja = props => {
                   path={`${match.url}/jarjestamislupa`}
                   exact
                   render={() => (
-                    <JarjestamislupaContainer ytunnus={match.params.ytunnus} />
+                    <Jarjestamislupa ytunnus={match.params.ytunnus} />
                   )}
                 />
                 <Route
@@ -151,7 +151,7 @@ const Jarjestaja = props => {
                 <Route
                   path={`${match.url}/jarjestamislupa-asia`}
                   exact
-                  render={() => <JarjestamislupaAsiat lupadata={lupadata} />}
+                  render={() => <JarjestamislupaAsiat lupadata={lupadata} lupahistory={lupahistory} />}
                 />
                 <Route
                   path={`${match.path}/hakemukset-ja-paatokset`}
@@ -168,9 +168,7 @@ const Jarjestaja = props => {
               >
                 <Route
                   path={`${match.url}/jarjestamislupa`}
-                  render={() => (
-                    <JarjestamislupaContainer ytunnus={match.params.ytunnus} />
-                  )}
+                  render={() => <Jarjestamislupa />}
                 />
                 <Route
                   path={`${match.url}`}
@@ -182,12 +180,20 @@ const Jarjestaja = props => {
           </FullWidthWrapper>
         </ContentWrapper>
       );
-    } else if (luvat.isFetching || muutospyynnot.isFetching) {
-      return <Loading />;
-    } else if (luvat.hasErrored) {
+    } else if (
+      (lupa && lupa.isFetching) ||
+      (muutospyynnot && muutospyynnot.isFetching)
+    ) {
+      return (
+        <div>
+          Lataillaan...
+          <Loading />
+        </div>
+      );
+    } else if (lupa && lupa.hasErrored) {
       return <h2>Luvan lataamisessa tapahtui virhe</h2>;
     } else {
-      return null;
+      return <div>Jotain muuta</div>;
     }
   } else {
     return null;

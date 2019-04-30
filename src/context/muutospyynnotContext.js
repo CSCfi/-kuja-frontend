@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import reducer from "services/muutospyynnot/reducer";
+import reducer from "../services/muutospyynnot/reducer";
 
 const initialState = {
   isFetching: false,

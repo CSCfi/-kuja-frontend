@@ -1,30 +1,27 @@
-import { getToimialueList } from "services/toimialueet/toimialueUtil";
-
 import {
-  FETCH_MAAKUNNAT_START,
-  FETCH_MAAKUNNAT_SUCCESS,
-  FETCH_MAAKUNNAT_FAILURE
+  FETCH_HISTORY_START,
+  FETCH_HISTORY_SUCCESS,
+  FETCH_HISTORY_FAILURE
 } from "./actionTypes";
 
 export default function(state, action) {
   switch (action.type) {
-    case FETCH_MAAKUNNAT_START:
+    case FETCH_HISTORY_START:
       return {
         ...state,
         isFetching: true,
         fetched: false,
         hasErrored: false
       };
-    case FETCH_MAAKUNNAT_SUCCESS:
+    case FETCH_HISTORY_SUCCESS:
       return {
         ...state,
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        data: action.payload,
-        maakuntaList: getToimialueList(action.payload, "FI", "maakunta")
+        data: action.payload
       };
-    case FETCH_MAAKUNNAT_FAILURE:
+    case FETCH_HISTORY_FAILURE:
       return {
         ...state,
         isFetching: false,

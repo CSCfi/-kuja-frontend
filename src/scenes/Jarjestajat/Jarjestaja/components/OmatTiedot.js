@@ -9,16 +9,17 @@ import { getToimialueByKoodiArvo } from "services/toimialueet/toimialueUtil";
 import { fetchKunnat } from "../../../../services/kunnat/actions";
 import { UserContext } from "context/userContext";
 import { KunnatContext } from "context/kunnatContext";
+import { MaakunnatContext } from "context/maakunnatContext";
 
 const OmatTiedot = props => {
-  const { user, userDispatch } = useContext(UserContext);
-  const { kunnat, kunnatDispatch } = useContext(KunnatContext);
+  const { state: user, dispatch: userDispatch } = useContext(UserContext);
+  const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
+  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
   }, []);
-
-  const { oppilaitos } = user;
+  const { oppilaitos } = user || {};
   let postinumero = undefined;
   let ppostinumero = undefined;
   let numero = undefined;
@@ -35,13 +36,11 @@ const OmatTiedot = props => {
         ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(
           6
         );
-      if (
-        this.props.kunnat &&
-        this.props.kunnat.fetched &&
-        oppilaitos.organisaatio.kotipaikkaUri
-      )
+      if (kunnat && kunnat.fetched && oppilaitos.organisaatio.kotipaikkaUri)
         kotipaikka = getToimialueByKoodiArvo(
-          oppilaitos.organisaatio.kotipaikkaUri.substr(6)
+          oppilaitos.organisaatio.kotipaikkaUri.substr(6),
+          maakunnat,
+          kunnat
         ).label;
       // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
       if (oppilaitos.organisaatio.yhteystiedot)
@@ -53,7 +52,7 @@ const OmatTiedot = props => {
     }
   }
 
-  if (oppilaitos && oppilaitos.organisaatio)
+  if (oppilaitos && oppilaitos.organisaatio) {
     return (
       <InnerContentContainer>
         <InnerContentWrapper>
@@ -105,7 +104,9 @@ const OmatTiedot = props => {
         </InnerContentWrapper>
       </InnerContentContainer>
     );
-  else return <Loading />;
+  } else {
+    return <Loading />;
+  }
 
   // Käyntiosoite: Hallilantie 24 , 33820  TAMPERE
   // Postiosoite: Ahlmanin koulu Hallilantie 24 , 33820  TAMPERE

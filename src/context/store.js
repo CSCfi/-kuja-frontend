@@ -1,19 +1,25 @@
 import React from "react";
 import { JarjestajatProvider } from "./jarjestajatContext";
-import { MuutospyynnotProvider } from "./muutospyynnotContext";
 import { KunnatProvider } from "./kunnatContext";
-import { LuvatProvider } from './luvatContext';
+import { MaakunnatProvider } from "./maakunnatContext";
+import { MuutospyynnotProvider } from "./muutospyynnotContext";
+import { LupahistoriaProvider } from "./lupahistoriaContext";
+import { LuvatProvider } from "./luvatContext";
 import { UserProvider } from "./userContext";
 
 const Store = ({ children }) => {
   return (
     <UserProvider>
       <JarjestajatProvider>
-        <KunnatProvider>
-          <LuvatProvider>
-            <MuutospyynnotProvider>{children}</MuutospyynnotProvider>
-          </LuvatProvider>
-        </KunnatProvider>
+        <MaakunnatProvider>
+          <KunnatProvider>
+            <LuvatProvider>
+              <LupahistoriaProvider>
+                <MuutospyynnotProvider>{children}</MuutospyynnotProvider>
+              </LupahistoriaProvider>
+            </LuvatProvider>
+          </KunnatProvider>
+        </MaakunnatProvider>
       </JarjestajatProvider>
     </UserProvider>
   );
