@@ -43,6 +43,7 @@ import {
   getJarjestajaData,
   loadFormData
 } from "services/muutospyynnot/muutospyyntoUtil";
+import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 
 Modal.setAppElement("#root");
 
@@ -127,9 +128,7 @@ const MuutospyyntoWizard = props => {
     showHelp: true
   });
 
-  useEffect(() => {
-    
-  }, []);
+  useEffect(() => {}, []);
 
   const nextPage = pageNumber => {
     if (pageNumber !== 4) {
@@ -266,144 +265,146 @@ const MuutospyyntoWizard = props => {
   ) {
     // muutospyynto.fetched is from EDIT FORM
     return (
-      <ContentWrapper>
-        <WizardBackground />
+      <MuutoshakemusProvider>
+        <ContentWrapper>
+          <WizardBackground />
 
-        <WizardWrapper>
-          <WizardTop>
-            <Container className="px-4">
-              <div>{HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}</div>
-              <CloseButton src={close} onClick={openCancelModal} />
-            </Container>
-          </WizardTop>
+          <WizardWrapper>
+            <WizardTop>
+              <Container className="px-4">
+                <div>{HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}</div>
+                <CloseButton src={close} onClick={openCancelModal} />
+              </Container>
+            </WizardTop>
 
-          <WizardHeader>
-            <Container maxWidth="1085px" color={COLORS.BLACK}>
-              <Phase
-                number="1"
-                text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
-                activePage={page}
-                handleClick={number => changePhase(number)}
-              />
-              <Phase
-                number="2"
-                text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
-                activePage={page}
-                disabled={visitedPages.indexOf(2) === -1}
-                handleClick={number => changePhase(number)}
-              />
-              <Phase
-                number="3"
-                text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
-                activePage={page}
-                disabled={visitedPages.indexOf(3) === -1}
-                handleClick={number => changePhase(number)}
-              />
-              <Phase
-                number="4"
-                text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
-                activePage={page}
-                disabled={visitedPages.indexOf(4) === -1}
-                handleClick={number => changePhase(number)}
-              />
-            </Container>
-          </WizardHeader>
+            <WizardHeader>
+              <Container maxWidth="1085px" color={COLORS.BLACK}>
+                <Phase
+                  number="1"
+                  text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
+                  activePage={page}
+                  handleClick={number => changePhase(number)}
+                />
+                <Phase
+                  number="2"
+                  text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
+                  activePage={page}
+                  disabled={visitedPages.indexOf(2) === -1}
+                  handleClick={number => changePhase(number)}
+                />
+                <Phase
+                  number="3"
+                  text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
+                  activePage={page}
+                  disabled={visitedPages.indexOf(3) === -1}
+                  handleClick={number => changePhase(number)}
+                />
+                <Phase
+                  number="4"
+                  text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
+                  activePage={page}
+                  disabled={visitedPages.indexOf(4) === -1}
+                  handleClick={number => changePhase(number)}
+                />
+              </Container>
+            </WizardHeader>
 
-          <ContentContainer
-            maxWidth="1085px"
-            margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
+            <ContentContainer
+              maxWidth="1085px"
+              margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
+            >
+              <WizardContent>
+                {page === 1 && (
+                  <WizardPage
+                    pageNumber={1}
+                    onNext={nextPage}
+                    onSave={save}
+                    render={props => (
+                      <MuutospyyntoWizardMuutokset
+                        onCancel={onCancel}
+                        update={update}
+                        lupa={lupa}
+                        initialValues={initialValues}
+                        {...props}
+                      />
+                    )}
+                  />
+                )}
+                {page === 2 && (
+                  <WizardPage
+                    pageNumber={2}
+                    onPrev={previousPage}
+                    onNext={nextPage}
+                    onSave={save}
+                    render={props => (
+                      <MuutospyyntoWizardPerustelut
+                        onCancel={onCancel}
+                        muutosperustelut={props.muutosperustelut.data}
+                        vankilat={props.vankilat.data}
+                        ELYkeskukset={props.ELYkeskukset.data}
+                        {...props}
+                      />
+                    )}
+                  />
+                )}
+                {page === 3 && (
+                  <WizardPage
+                    pageNumber={3}
+                    onPrev={previousPage}
+                    onNext={nextPage}
+                    onSave={save}
+                    render={props => (
+                      <MuutospyyntoWizardTaloudelliset
+                        onCancel={onCancel}
+                        initialValues={initialValues}
+                        {...props}
+                      />
+                    )}
+                  />
+                )}
+                {page === 4 && (
+                  <WizardPage
+                    pageNumber={4}
+                    onPrev={previousPage}
+                    onSave={save}
+                    render={props => (
+                      <MuutospyyntoWizardYhteenveto
+                        onCancel={onCancel}
+                        preview={preview}
+                        initialValues={initialValues}
+                        createMuutospyynto={create}
+                        {...props}
+                      />
+                    )}
+                  />
+                )}
+              </WizardContent>
+            </ContentContainer>
+          </WizardWrapper>
+
+          <HideFooter />
+
+          <Modal
+            isOpen={state.isCloseModalOpen}
+            onAfterOpen={afterOpenCancelModal}
+            onRequestClose={closeCancelModal}
+            contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
+            style={modalStyles}
           >
-            <WizardContent>
-              {page === 1 && (
-                <WizardPage
-                  pageNumber={1}
-                  onNext={nextPage}
-                  onSave={save}
-                  render={props => (
-                    <MuutospyyntoWizardMuutokset
-                      onCancel={onCancel}
-                      update={update}
-                      lupa={lupa}
-                      initialValues={initialValues}
-                      {...props}
-                    />
-                  )}
-                />
-              )}
-              {page === 2 && (
-                <WizardPage
-                  pageNumber={2}
-                  onPrev={previousPage}
-                  onNext={nextPage}
-                  onSave={save}
-                  render={props => (
-                    <MuutospyyntoWizardPerustelut
-                      onCancel={onCancel}
-                      muutosperustelut={props.muutosperustelut.data}
-                      vankilat={props.vankilat.data}
-                      ELYkeskukset={props.ELYkeskukset.data}
-                      {...props}
-                    />
-                  )}
-                />
-              )}
-              {page === 3 && (
-                <WizardPage
-                  pageNumber={3}
-                  onPrev={previousPage}
-                  onNext={nextPage}
-                  onSave={save}
-                  render={props => (
-                    <MuutospyyntoWizardTaloudelliset
-                      onCancel={onCancel}
-                      initialValues={initialValues}
-                      {...props}
-                    />
-                  )}
-                />
-              )}
-              {page === 4 && (
-                <WizardPage
-                  pageNumber={4}
-                  onPrev={previousPage}
-                  onSave={save}
-                  render={props => (
-                    <MuutospyyntoWizardYhteenveto
-                      onCancel={onCancel}
-                      preview={preview}
-                      initialValues={initialValues}
-                      createMuutospyynto={create}
-                      {...props}
-                    />
-                  )}
-                />
-              )}
-            </WizardContent>
-          </ContentContainer>
-        </WizardWrapper>
-
-        <HideFooter />
-
-        <Modal
-          isOpen={state.isCloseModalOpen}
-          onAfterOpen={afterOpenCancelModal}
-          onRequestClose={closeCancelModal}
-          contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
-          style={modalStyles}
-        >
-          <Content>
-            <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
-          </Content>
-          <div>
-            <ModalButton primary onClick={onCancel}>
-              {HAKEMUS_VIESTI.KYLLA.FI}
-            </ModalButton>
-            <ModalButton onClick={closeCancelModal}>
-              {HAKEMUS_VIESTI.EI.FI}
-            </ModalButton>
-          </div>
-        </Modal>
-      </ContentWrapper>
+            <Content>
+              <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
+            </Content>
+            <div>
+              <ModalButton primary onClick={onCancel}>
+                {HAKEMUS_VIESTI.KYLLA.FI}
+              </ModalButton>
+              <ModalButton onClick={closeCancelModal}>
+                {HAKEMUS_VIESTI.EI.FI}
+              </ModalButton>
+            </div>
+          </Modal>
+        </ContentWrapper>
+      </MuutoshakemusProvider>
     );
   } else if (
     muutosperustelut.isFetching ||

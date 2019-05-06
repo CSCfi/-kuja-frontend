@@ -88,7 +88,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
             authenticated: authenticated
           },
           {
-            path: `${match.url}/hakemukset-ja-paatokset/uusi`,
+            path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
             text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
             authenticated: authenticated
           }

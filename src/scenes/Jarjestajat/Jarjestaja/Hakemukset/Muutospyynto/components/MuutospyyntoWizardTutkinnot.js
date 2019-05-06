@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {
   TUTKINTO_TEKSTIT,
   TUTKINNOT_SECTIONS
@@ -11,17 +11,16 @@ import Loading from "../../../../../../modules/Loading";
 import { Row, Info } from "./MuutospyyntoWizardComponents";
 import Section from "components/Section";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
+import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import {
   addItemToChanges,
   addSubItemToChanges,
   removeItemFromChanges,
   removeSubItemFromChanges
-} from "utils/changes";
+} from "services/muutoshakemus/actions";
 
 const MuutospyyntoWizardTutkinnot = props => {
-  const [state, setState] = useState({
-    changes: {}
-  });
+  const { state, dispatch: mhlDispatch } = useContext(MuutoshakemusContext);
 
   const getChangesByList = (allChanges = [], koulutusdata = []) => {
     const changes = {};
@@ -44,6 +43,12 @@ const MuutospyyntoWizardTutkinnot = props => {
   };
 
   const handleChanges = (item, isSubItemTarget, listId) => {
+    console.info(
+      "Muutokset käsitellään...",
+      state.changes,
+      isSubItemTarget,
+      listId
+    );
     if (isSubItemTarget) {
       /**
        * If user has clicked a sub item
@@ -52,9 +57,7 @@ const MuutospyyntoWizardTutkinnot = props => {
         koodiArvo: item.subItems[0].code
       });
       if (existingChange) {
-        setState(state =>
-          removeSubItemFromChanges(item.subItems[0], state.changes, listId)
-        );
+        removeSubItemFromChanges(item.subItems[0], listId)(mhlDispatch);
       } else {
         // Let's find out the type of operation
         const operationType = item.subItems[0].shouldBeSelected
@@ -68,19 +71,12 @@ const MuutospyyntoWizardTutkinnot = props => {
           });
           // Parent item needs to be selected when at least one sub item is going to be selected
           if (!isItemSelected) {
-            setState(state =>
-              addItemToChanges(item, state.changes, listId, operationType)
-            );
+            addItemToChanges(item, listId, operationType)(mhlDispatch);
           }
         }
         // Let's add the sub item to changes
-        setState(state =>
-          addSubItemToChanges(
-            item.subItems[0],
-            state.changes,
-            listId,
-            operationType
-          )
+        addSubItemToChanges(item.subItems[0], listId, operationType)(
+          mhlDispatch
         );
       }
     } else {
@@ -96,21 +92,15 @@ const MuutospyyntoWizardTutkinnot = props => {
       });
       if (operationType === MUUTOS_TYPES.REMOVAL) {
         // If user is going to unselect the item we need to unselect all the sub items too
-        let changes = { ...state.changes };
         _.forEach(item.subItems, subItem => {
-          changes = removeSubItemFromChanges(subItem, changes, listId);
+          removeSubItemFromChanges(subItem, listId)(mhlDispatch);
         });
-        setState(changes);
       }
       // Let's reset the item's state
       if (existingChange) {
-        setState(state =>
-          removeItemFromChanges(item, state.changes, listId)
-        );
+        removeItemFromChanges(item, listId)(mhlDispatch);
       } else {
-        setState(state =>
-          addItemToChanges(item, state.changes, listId, operationType)
-        );
+        addItemToChanges(item, listId, operationType)(mhlDispatch);
       }
     }
   };
@@ -235,49 +225,45 @@ const MuutospyyntoWizardTutkinnot = props => {
     return d.koodiArvo;
   });
 
-  const changes = getChangesByList(
-    props.tutkintomuutoksetValue,
-    props.koulutukset.koulutusdata
-  );
-  if (state.changes === null) {
-    setState({
-      changes: changes || []
-    });
-  }
+  // const changes = getChangesByList(
+  //   props.tutkintomuutoksetValue,
+  //   props.koulutukset.koulutusdata
+  // );
+  // if (state.changes === null) {
+  //   setState({
+  //     changes: changes || []
+  //   });
+  // }
 
   // if (
   //   muutFetched &&
   //   muuData !== undefined &&
   //   poikkeusData !== undefined
   // ) {
-    return (
-      <Section code={headingNumber} title={heading}>
-        <Row>
-          {_.map(koulutusDataSorted, (koulutusala, i) => {
-            const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo;
-            const { metadata, koulutukset } = koulutusala;
-            const nimi = parseLocalizedField(metadata);
-            return (
-              <TutkintoList
-                key={i}
-                koodiarvo={koodiarvo}
-                areaCode={koodiarvo}
-                nimi={nimi}
-                koulutustyypit={koulutukset}
-                articles={kohteet[1].maaraykset}
-                changes={
-                  state.changes ? state.changes[koodiarvo] : []
-                }
-                onChanges={handleChanges}
-                listId={koodiarvo}
-              />
-            );
-          })}
-        </Row>
+  return (
+    <Section code={headingNumber} title={heading}>
+      <Row>
+        {_.map(koulutusDataSorted, (koulutusala, i) => {
+          const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo;
+          const { metadata, koulutukset } = koulutusala;
+          const nimi = parseLocalizedField(metadata);
+          return (
+            <TutkintoList
+              key={i}
+              koodiarvo={koodiarvo}
+              areaCode={koodiarvo}
+              nimi={nimi}
+              koulutustyypit={koulutukset}
+              articles={kohteet[1].maaraykset}
+              changes={state.changes ? state.changes[koodiarvo] : []}
+              onChanges={handleChanges}
+              listId={koodiarvo}
+            />
+          );
+        })}
+      </Row>
 
-        
-
-        {/* <Row>
+      {/* <Row>
             <FieldArray
               name={FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET}
               kohde={kohteet[1]}
@@ -288,8 +274,8 @@ const MuutospyyntoWizardTutkinnot = props => {
               component={renderKoulutukset}
             />
           </Row> */}
-      </Section>
-    );
+    </Section>
+  );
   // } else if (koulutuksetIsFetching || muutIsFetching) {
   //   return <Loading />;
   // } else if (koulutuksetHasErrored || muutHasErrored) {

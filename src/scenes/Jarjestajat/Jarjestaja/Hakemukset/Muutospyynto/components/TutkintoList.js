@@ -105,7 +105,7 @@ const TutkintoList = props => {
 
   useEffect(() => {
     setState(formState());
-  }, [props]);
+  }, [props.changes]);
 
   return (
     <Wrapper>
