@@ -18,7 +18,7 @@ import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS
 } from "../modules/uusiHakemusFormConstants";
-import { hasFormChanges } from "../modules/muutospyyntoUtil";
+import { hasFormChanges } from "services/muutospyynnot/muutospyyntoUtil";
 
 import Liitteet from "./Liitteet";
 

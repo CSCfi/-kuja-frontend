@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { connect } from "react-redux";
 // import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
 import styled from "styled-components";
 
@@ -10,15 +9,13 @@ import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents";
 import { getOpiskelijavuosiIndex } from "../../../../../../services/koulutukset/koulutusUtil";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import {
-  FIELD_ARRAY_NAMES,
-  FORM_NAME_UUSI_HAKEMUS,
   MUUTOS_TYPES,
   OPISKELIJAVUODET_KATEGORIAT
 } from "../modules/uusiHakemusFormConstants";
 import {
   getKohdeByTunniste,
   getMaaraystyyppiByTunniste
-} from "../modules/muutospyyntoUtil";
+} from "services/muutospyynnot/muutospyyntoUtil";
 import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants";
 
 const Opiskelijavuosi = styled.div`

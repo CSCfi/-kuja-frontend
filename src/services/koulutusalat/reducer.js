@@ -1,27 +1,29 @@
+import { parseKoulutusalat } from "../koulutukset/koulutusParser";
+
 import {
-  FETCH_KOULUTUSTYYPIT_START,
-  FETCH_KOULUTUSTYYPIT_SUCCESS,
-  FETCH_KOULUTUSTYYPIT_FAILURE
+  FETCH_KOULUTUSALAT_START,
+  FETCH_KOULUTUSALAT_SUCCESS,
+  FETCH_KOULUTUSALAT_FAILURE
 } from "./actionTypes";
 
 export default function(state, action) {
   switch (action.type) {
-    case FETCH_KOULUTUSTYYPIT_START:
+    case FETCH_KOULUTUSALAT_START:
       return {
         ...state,
         isFetching: true,
         fetched: false,
         hasErrorer: false
       };
-    case FETCH_KOULUTUSTYYPIT_SUCCESS:
+    case FETCH_KOULUTUSALAT_SUCCESS:
       return {
         ...state,
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        data: action.payload
+        data: parseKoulutusalat(action.payload)
       };
-    case FETCH_KOULUTUSTYYPIT_FAILURE:
+    case FETCH_KOULUTUSALAT_FAILURE:
       return {
         ...state,
         isFetching: false,

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 
-import { fetchMuutosperustelut } from "../../../../../../modules/reducers/muutosperustelut"
+import { fetchMuutosperustelut } from "services/muutosperustelut/actions"
 import { fetchVankilat } from "../../../../../../modules/reducers/vankilat"
-import { fetchELYkeskukset } from "../../../../../../modules/reducers/elykeskukset"
+import { fetchELYkeskukset } from "../../../../../../services/elykeskukset/actions"
 import { fetchLupa } from "../../../modules/lupa"
 import { createMuutospyynto, saveMuutospyynto, fetchMuutospyynto, updateMuutospyynto } from "../modules/muutospyynto"
 import { previewMuutospyynto } from "../modules/muutospyynto"

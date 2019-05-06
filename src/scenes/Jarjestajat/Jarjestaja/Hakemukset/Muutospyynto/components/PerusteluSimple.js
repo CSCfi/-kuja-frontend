@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS } from "../../../../../../modules/styles"
 
-import { getMuutosperusteluByKoodiArvo } from "../modules/muutosperusteluUtil"
+import { getMuutosperusteluByKoodiArvo } from "services/muutosperustelut/muutosperusteluUtil"
 import { Area } from './MuutospyyntoWizardComponents'
 
 const PerusteluWrapper = styled.div`

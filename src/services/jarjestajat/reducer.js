@@ -6,7 +6,7 @@ import {
   FETCH_LUVAT_FAILURE
 } from "./actionTypes";
 
-export default function luvatReducer(state, action) {
+export default function(state, action) {
   switch (action.type) {
     case FETCH_LUVAT_START:
       return {

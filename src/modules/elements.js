@@ -19,7 +19,6 @@ export const RoutesContainer = styled.div`
 `
 
 export const ContentContainer = styled.div`
-  width: 100%;
   max-width: ${props => props.maxWidth ? props.maxWidth : '1030px'};
   margin: ${props => props.margin ? props.margin : '28px auto'};  
   padding: ${props => props.padding ? props.padding : '0 15px'};

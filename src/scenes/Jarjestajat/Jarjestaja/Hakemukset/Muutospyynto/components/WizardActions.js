@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
 import { Button, SubtleButton, WizardBottom, Container } from './MuutospyyntoWizardComponents'
-import { hasFormChanges } from "../modules/muutospyyntoUtil"
 import PropTypes from 'prop-types'
 
 class WizardActions extends Component {

@@ -18,7 +18,7 @@ import {
 import {
   getToimialueByKoodiArvo,
   handleToimialueSelectChange
-} from "../modules/toimialueUtil";
+} from "services/toimialueet/toimialueUtil";
 import { handleSimpleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
 import {
   FIELD_ARRAY_NAMES,

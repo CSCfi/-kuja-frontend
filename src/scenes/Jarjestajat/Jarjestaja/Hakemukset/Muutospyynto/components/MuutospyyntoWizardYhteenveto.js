@@ -13,7 +13,7 @@ import {
 } from "./ModalComponents";
 import MuutosList from "./MuutosList";
 import MuutosListTutkinnot from "./MuutosListTutkinnot";
-import { hasFormChanges } from "../modules/muutospyyntoUtil";
+import { hasFormChanges } from "services/muutospyynnot/muutospyyntoUtil";
 import {
   Button,
   Container,

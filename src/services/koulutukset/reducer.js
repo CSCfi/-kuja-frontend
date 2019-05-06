@@ -1,7 +1,4 @@
-import {
-  parseKoulutuksetAll,
-  parseMuut
-} from "scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/koulutusParser";
+import { parseKoulutuksetAll, parseMuut } from "./koulutusParser";
 
 import {
   FETCH_KOULUTUKSET_ALL_START,
@@ -15,26 +12,7 @@ import {
   FETCH_KOULUTUS_FAILURE
 } from "./actionTypes";
 
-const initialState = {
-  isFetching: false,
-  fetched: false,
-  hasErrored: false,
-  data: {},
-  muut: {
-    isFetching: false,
-    fetched: false,
-    hasErrored: false,
-    muudata: undefined
-  },
-  poikkeukset: {
-    isFetching: false,
-    fetched: false,
-    hasErrored: false,
-    data: []
-  }
-};
-
-export default function(state = initialState, action) {
+export default function(state, action) {
   switch (action.type) {
     case FETCH_KOULUTUKSET_ALL_START:
       return {
@@ -49,7 +27,11 @@ export default function(state = initialState, action) {
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        koulutusdata: parseKoulutuksetAll(action.payload)
+        koulutusdata: parseKoulutuksetAll(
+          action.payload.data,
+          action.payload.koulutusalat,
+          action.payload.koulutustyypit
+        )
       };
     case FETCH_KOULUTUKSET_ALL_FAILURE:
       return {

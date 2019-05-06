@@ -8,7 +8,7 @@ import JulkisetTiedot from "./JulkisetTiedot";
 import OmatTiedot from "./OmatTiedot";
 import JarjestamislupaAsiat from "./Jarjestamislupa-asiat";
 import Jarjestamislupa from "./Jarjestamislupa";
-import HakemuksetJaPaatoksetContainer from "../Hakemukset/containers/HakemuksetJaPaatoksetContainer";
+import HakemuksetJaPaatokset from "../Hakemukset/components/HakemuksetJaPaatokset";
 import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
@@ -151,13 +151,21 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                 <Route
                   path={`${match.url}/jarjestamislupa-asia`}
                   exact
-                  render={() => <JarjestamislupaAsiat lupadata={lupadata} lupahistory={lupahistory} />}
+                  render={() => (
+                    <JarjestamislupaAsiat
+                      lupadata={lupadata}
+                      lupahistory={lupahistory}
+                    />
+                  )}
                 />
                 <Route
                   path={`${match.path}/hakemukset-ja-paatokset`}
                   exact
                   render={props => (
-                    <HakemuksetJaPaatoksetContainer {...props} />
+                    <HakemuksetJaPaatokset
+                      muutospyynnot={muutospyynnot}
+                      {...props}
+                    />
                   )}
                 />
               </ContentContainer>
@@ -184,12 +192,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
       (lupa && lupa.isFetching) ||
       (muutospyynnot && muutospyynnot.isFetching)
     ) {
-      return (
-        <div>
-          Lataillaan...
-          <Loading />
-        </div>
-      );
+      return <Loading />;
     } else if (lupa && lupa.hasErrored) {
       return <h2>Luvan lataamisessa tapahtui virhe</h2>;
     } else {

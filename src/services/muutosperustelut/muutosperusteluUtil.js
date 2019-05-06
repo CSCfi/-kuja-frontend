@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { parseLocalizedField } from "modules/helpers"
-import store from '../../../../../../store'
 
 export function getMuutosperusteluList(muutosperustelut, locale) {
   let array = []
@@ -15,8 +14,6 @@ export function getMuutosperusteluList(muutosperustelut, locale) {
 
 export function handleMuutosperusteluSelectChange(muutokset, fields, muutos, selectedValue) {
   let muutosperusteluValue = null
-
-  console.log(selectedValue);
 
   if (selectedValue !== null) {
     muutosperusteluValue = selectedValue.koodiArvo
@@ -46,11 +43,7 @@ function getMuutosperusteluEditIndex(muutokset, koodiarvo) {
   return i
 }
 
-export function getMuutosperusteluByKoodiArvo(koodiarvo) {
-  const state = store.getState()
-
-  const { muutosperustelut } = state
-
+export function getMuutosperusteluByKoodiArvo(koodiarvo, muutosperustelut) {
   if (muutosperustelut && muutosperustelut.fetched) {
     return _.find(muutosperustelut.muutosperusteluList, (muutosperustelu) => { return muutosperustelu.koodiArvo === koodiarvo })
   } else {

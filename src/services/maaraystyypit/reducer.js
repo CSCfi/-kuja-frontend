@@ -1,19 +1,21 @@
+import _ from "lodash";
+
 import {
-  FETCH_KOULUTUSTYYPIT_START,
-  FETCH_KOULUTUSTYYPIT_SUCCESS,
-  FETCH_KOULUTUSTYYPIT_FAILURE
+  FETCH_MAARAYSTYYPIT_START,
+  FETCH_MAARAYSTYYPIT_SUCCESS,
+  FETCH_MAARAYSTYYPIT_FAILURE
 } from "./actionTypes";
 
 export default function(state, action) {
   switch (action.type) {
-    case FETCH_KOULUTUSTYYPIT_START:
+    case FETCH_MAARAYSTYYPIT_START:
       return {
         ...state,
         isFetching: true,
         fetched: false,
-        hasErrorer: false
+        hasErrored: false
       };
-    case FETCH_KOULUTUSTYYPIT_SUCCESS:
+    case FETCH_MAARAYSTYYPIT_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -21,7 +23,7 @@ export default function(state, action) {
         hasErrored: false,
         data: action.payload
       };
-    case FETCH_KOULUTUSTYYPIT_FAILURE:
+    case FETCH_MAARAYSTYYPIT_FAILURE:
       return {
         ...state,
         isFetching: false,

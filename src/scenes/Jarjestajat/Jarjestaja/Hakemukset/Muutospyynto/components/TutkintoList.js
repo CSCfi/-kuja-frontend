@@ -1,32 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ExpandableRow from "components/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 
-class TutkintoList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = this.formState();
-    this.onChanges = this.onChanges.bind(this)
-  }
-
-  getArticle = articles => {
+const TutkintoList = props => {
+  
+  const getArticle = articles => {
     return _.find(articles, article => {
-      return article.koodi === this.props.areaCode;
+      return article.koodi === props.areaCode;
     });
   };
-
-  onChanges = (item, isSubItemTarget) => {
-    this.props.onChanges(item, isSubItemTarget, this.props.listId)
-  }
-
-  formState = () => {
-    const article = this.getArticle(this.props.articles);
+  
+  const formState = () => {
+    const article = getArticle(props.articles);
     const state = {
       article,
-      categories: _.map(this.props.koulutustyypit, koulutustyyppi => {
+      categories: _.map(props.koulutustyypit, koulutustyyppi => {
         return {
           code: koulutustyyppi.koodiArvo,
           title:
@@ -35,7 +26,7 @@ class TutkintoList extends React.Component {
             }).nimi || "[Koulutustyypin otsikko tähän]",
           items: _.map(koulutustyyppi.koulutukset, koulutus => {
             const isAdded = !!_.find(
-              _.filter(this.props.changes, { koodiarvo: koulutus.koodiArvo }),
+              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
               { type: MUUTOS_TYPES.ADDITION }
             );
             const isInLupa = article
@@ -46,7 +37,7 @@ class TutkintoList extends React.Component {
                 })
               : false;
             const isRemoved = !!_.find(
-              _.filter(this.props.changes, { koodiarvo: koulutus.koodiArvo }),
+              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
               { type: MUUTOS_TYPES.REMOVAL }
             );
             return {
@@ -62,7 +53,7 @@ class TutkintoList extends React.Component {
               subItems: koulutus.osaamisala
                 ? (osaamisala => {
                     const isAdded = !!_.find(
-                      _.filter(this.props.changes, {
+                      _.filter(props.changes, {
                         koodiArvo: osaamisala.koodiArvo
                       }),
                       { type: MUUTOS_TYPES.ADDITION }
@@ -75,7 +66,7 @@ class TutkintoList extends React.Component {
                         })
                       : false;
                     const isRemoved = !!_.find(
-                      _.filter(this.props.changes, {
+                      _.filter(props.changes, {
                         koodiarvo: osaamisala.koodiArvo
                       }),
                       { type: MUUTOS_TYPES.REMOVAL }
@@ -99,32 +90,36 @@ class TutkintoList extends React.Component {
           })
         };
       }),
-      changes: this.props.changes || []
+      changes: props.changes || []
     };
     return state;
   };
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(this.props, prevProps)) {
-      this.setState(this.formState);
-    }
-  }
+  const [state, setState] = useState(formState());
 
-  render() {
-    return (
-      <Wrapper>
-        <ExpandableRow
-          categories={this.state.categories}
-          changes={this.state.changes}
-          code={this.props.koodiarvo}
-          onChanges={this.onChanges}
-          shouldBeExpanded={false}
-          title={this.props.nimi}
-        />
-      </Wrapper>
-    );
-  }
-}
+  const onChanges = (item, isSubItemTarget) => {
+    props.onChanges(item, isSubItemTarget, props.listId);
+  };
+
+
+
+  useEffect(() => {
+    setState(formState());
+  }, [props]);
+
+  return (
+    <Wrapper>
+      <ExpandableRow
+        categories={state.categories}
+        changes={state.changes}
+        code={props.koodiarvo}
+        onChanges={onChanges}
+        shouldBeExpanded={false}
+        title={props.nimi}
+      />
+    </Wrapper>
+  );
+};
 
 TutkintoList.propTypes = {
   areaCode: PropTypes.string,

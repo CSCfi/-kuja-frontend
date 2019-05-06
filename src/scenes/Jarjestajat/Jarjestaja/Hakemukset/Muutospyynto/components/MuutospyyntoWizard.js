@@ -1,6 +1,4 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 
@@ -41,7 +39,10 @@ import {
   HAKEMUS_VIESTI,
   HAKEMUS_OTSIKOT
 } from "../modules/uusiHakemusFormConstants";
-import { getJarjestajaData, loadFormData } from "services/muutospyynnot/muutospyyntoUtil";
+import {
+  getJarjestajaData,
+  loadFormData
+} from "services/muutospyynnot/muutospyyntoUtil";
 
 Modal.setAppElement("#root");
 
@@ -118,103 +119,83 @@ const Phase = ({ number, text, activePage, disabled, handleClick }) => {
   );
 };
 
-class MuutospyyntoWizard extends Component {
-  constructor(props) {
-    super(props);
-    this.nextPage = this.nextPage.bind(this);
-    this.previousPage = this.previousPage.bind(this);
-    this.onCancel = this.onCancel.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.changePhase = this.changePhase.bind(this);
-    this.preview = this.preview.bind(this);
-    this.save = this.save.bind(this);
-    this.update = this.update.bind(this);
-    this.openCancelModal = this.openCancelModal.bind(this);
-    this.afterOpenCancelModal = this.afterOpenCancelModal.bind(this);
-    this.closeCancelModal = this.closeCancelModal.bind(this);
-    this.state = {
-      page: 1,
-      visitedPages: [1],
-      isCloseModalOpen: false,
-      showHelp: true
-    };
-  }
+const MuutospyyntoWizard = props => {
+  const [state, setState] = useState({
+    page: 1,
+    visitedPages: [1],
+    isCloseModalOpen: false,
+    showHelp: true
+  });
 
-  componentWillMount() {
-    this.props.fetchMuutosperustelut();
-    this.props.fetchVankilat();
-    this.props.fetchELYkeskukset();
-    const { ytunnus, uuid } = this.props.match.params;
-    this.props.fetchLupa(ytunnus, "?with=all");
-    this.props.fetchPaatoskierrokset();
-    this.props.fetchMaaraystyypit();
-    this.props.fetchKohteet();
-    this.props.fetchMuutospyynto(uuid); // from EDIT form
-  }
+  useEffect(() => {
+    
+  }, []);
 
-  nextPage(pageNumber) {
+  const nextPage = pageNumber => {
     if (pageNumber !== 4) {
-      this.props.history.push(String(pageNumber + 1));
+      props.history.push(String(pageNumber + 1));
     }
-  }
+  };
 
-  previousPage(pageNumber) {
+  const previousPage = pageNumber => {
     if (pageNumber !== 1) {
-      this.props.history.push(String(pageNumber - 1));
+      props.history.push(String(pageNumber - 1));
     }
-  }
+  };
 
-  onCancel(event) {
+  const onCancel = event => {
     if (event) {
       event.preventDefault();
     }
-    const url = `/jarjestajat/${this.props.match.params.ytunnus}`;
-    this.props.history.push(url);
-  }
+    const url = `/jarjestajat/${props.match.params.ytunnus}`;
+    props.history.push(url);
+  };
 
-  onSubmit(data) {
-    this.props.createMuutospyynto(data); // from EDIT form
-  }
+  const onSubmit = data => {
+    // props.createMuutospyynto(data); // from EDIT form
+  };
 
-  save(data) {
-    if (this.props.match.params.uuid) {
-      this.props.saveMuutospyynto(data);
+  const save = data => {
+    if (props.match.params.uuid) {
+      // props.saveMuutospyynto(data);
+      // saveMuutospyynto(data);
     } else {
-      const url = `/jarjestajat/${this.props.match.params.ytunnus}`;
-      this.props.saveMuutospyynto(data).then(() => {
+      const url = `/jarjestajat/${props.match.params.ytunnus}`;
+      props.saveMuutospyynto(data).then(() => {
         let uuid = undefined;
 
-        if (this.props.muutospyynto.save.data.data)
-          uuid = this.props.muutospyynto.save.data.data.uuid;
+        if (props.muutospyynto.save.data.data)
+          uuid = props.muutospyynto.save.data.data.uuid;
         let newurl = url + "/hakemukset-ja-paatokset/" + uuid;
-        this.props.history.push(newurl);
+        props.history.push(newurl);
       });
     }
-  }
+  };
 
-  update(data) {
-    this.props.updateMuutospyynto(data);
-  }
+  const update = data => {
+    // props.updateMuutospyynto(data);
+    // updateMuutospyynto(data);
+  };
 
-  create = data => {
-    return this.props.saveMuutospyynto(data).then(() => {
+  const create = data => {
+    return props.saveMuutospyynto(data).then(() => {
       let uuid = undefined;
-      if (this.props.muutospyynto.save.data.data) {
-        uuid = this.props.muutospyynto.save.data.data.uuid;
-        const url = `/jarjestajat/${this.props.match.params.ytunnus}`;
-        this.props.createMuutospyynto(uuid).then(() => {
+      if (props.muutospyynto.save.data.data) {
+        uuid = props.muutospyynto.save.data.data.uuid;
+        const url = `/jarjestajat/${props.match.params.ytunnus}`;
+        props.createMuutospyynto(uuid).then(() => {
           let newurl = url + "/hakemukset-ja-paatokset/";
-          this.props.history.push(newurl);
+          props.history.push(newurl);
         });
       }
     });
   };
 
-  preview(event, data) {
+  const preview = (event, data) => {
     event.preventDefault();
-    this.props.previewMuutospyynto(data).then(() => {
+    props.previewMuutospyynto(data).then(() => {
       var binaryData = [];
-      binaryData.push(this.props.muutospyynto.pdf.data);
+      binaryData.push(props.muutospyynto.pdf.data);
       const data = window.URL.createObjectURL(
         new Blob(binaryData, { type: "application/pdf" })
       );
@@ -226,277 +207,260 @@ class MuutospyyntoWizard extends Component {
       // For Firefox it is necessary to delay revoking the ObjectURL
       setTimeout(window.URL.revokeObjectURL(data), 100);
     });
-  }
-
-  changePhase(number) {
-    this.setState({ page: number });
-  }
-
-  openCancelModal(e) {
-    e.preventDefault();
-    this.setState({ isCloseModalOpen: true });
-  }
-
-  afterOpenCancelModal() {}
-
-  closeCancelModal() {
-    this.setState({ isCloseModalOpen: false });
-  }
-
-  render() {
-    const {
-      muutosperustelut,
-      vankilat,
-      ELYkeskukset,
-      lupa,
-      paatoskierrokset,
-      muutospyynto,
-      initialValues
-    } = this.props;
-    const { visitedPages } = this.state;
-    const page = parseInt(this.props.match.params.page, 10);
-
-    if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIESTI.KIRJAUTUMINEN.FI}</h3>
-        </MessageWrapper>
-      );
-    }
-
-    // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-    const { jarjestajaOid } = this.props.lupa.data;
-    if (sessionStorage.getItem("oid") !== jarjestajaOid) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.OIKEUS.FI}</h3>
-        </MessageWrapper>
-      );
-    }
-
-    if (
-      muutosperustelut.fetched &&
-      vankilat.fetched &&
-      ELYkeskukset.fetched &&
-      lupa.fetched &&
-      paatoskierrokset.fetched &&
-      muutospyynto.fetched
-    ) {
-      // muutospyynto.fetched is from EDIT FORM
-      return (
-        <ContentWrapper>
-          <WizardBackground />
-
-          <WizardWrapper>
-            <WizardTop>
-              <Container padding="0 20px">
-                <div>{HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}</div>
-                <CloseButton src={close} onClick={this.openCancelModal} />
-              </Container>
-            </WizardTop>
-
-            <WizardHeader>
-              <Container maxWidth="1085px" color={COLORS.BLACK}>
-                <Phase
-                  number="1"
-                  text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
-                  activePage={page}
-                  handleClick={number => this.changePhase(number)}
-                />
-                <Phase
-                  number="2"
-                  text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(2) === -1}
-                  handleClick={number => this.changePhase(number)}
-                />
-                <Phase
-                  number="3"
-                  text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(3) === -1}
-                  handleClick={number => this.changePhase(number)}
-                />
-                <Phase
-                  number="4"
-                  text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(4) === -1}
-                  handleClick={number => this.changePhase(number)}
-                />
-              </Container>
-            </WizardHeader>
-
-            <ContentContainer
-              maxWidth="1085px"
-              margin={this.state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
-            >
-              <WizardContent>
-                {page === 1 && (
-                  <WizardPage
-                    pageNumber={1}
-                    onNext={this.nextPage}
-                    onSave={this.save}
-                    render={props => (
-                      <MuutospyyntoWizardMuutokset
-                        onCancel={this.onCancel}
-                        update={this.update}
-                        lupa={lupa}
-                        initialValues={initialValues}
-                        fetchKoulutusalat={this.props.fetchKoulutusalat}
-                        fetchKoulutustyypit={this.props.fetchKoulutustyypit}
-                        fetchKoulutuksetAll={this.props.fetchKoulutuksetAll}
-                        fetchKoulutuksetMuut={this.props.fetchKoulutuksetMuut}
-                        fetchKoulutus={this.props.fetchKoulutus}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-                {page === 2 && (
-                  <WizardPage
-                    pageNumber={2}
-                    onPrev={this.previousPage}
-                    onNext={this.nextPage}
-                    onSave={this.save}
-                    render={props => (
-                      <MuutospyyntoWizardPerustelut
-                        onCancel={this.onCancel}
-                        muutosperustelut={this.props.muutosperustelut.data}
-                        vankilat={this.props.vankilat.data}
-                        ELYkeskukset={this.props.ELYkeskukset.data}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-                {page === 3 && (
-                  <WizardPage
-                    pageNumber={3}
-                    onPrev={this.previousPage}
-                    onNext={this.nextPage}
-                    onSave={this.save}
-                    render={props => (
-                      <MuutospyyntoWizardTaloudelliset
-                        onCancel={this.onCancel}
-                        initialValues={initialValues}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-                {page === 4 && (
-                  <WizardPage
-                    pageNumber={4}
-                    onPrev={this.previousPage}
-                    onSave={this.save}
-                    render={props => (
-                      <MuutospyyntoWizardYhteenveto
-                        onCancel={this.onCancel}
-                        preview={this.preview}
-                        initialValues={initialValues}
-                        createMuutospyynto={this.create}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-              </WizardContent>
-            </ContentContainer>
-          </WizardWrapper>
-
-          <HideFooter />
-
-          <Modal
-            isOpen={this.state.isCloseModalOpen}
-            onAfterOpen={this.afterOpenCancelModal}
-            onRequestClose={this.closeCancelModal}
-            contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
-            style={modalStyles}
-          >
-            <Content>
-              <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
-            </Content>
-            <div>
-              <ModalButton primary onClick={this.onCancel}>
-                {HAKEMUS_VIESTI.KYLLA.FI}
-              </ModalButton>
-              <ModalButton onClick={this.closeCancelModal}>
-                {HAKEMUS_VIESTI.EI.FI}
-              </ModalButton>
-            </div>
-          </Modal>
-        </ContentWrapper>
-      );
-    } else if (
-      muutosperustelut.isFetching ||
-      vankilat.isFetching ||
-      ELYkeskukset.isFetching ||
-      lupa.isFetching ||
-      paatoskierrokset.isFetching ||
-      muutospyynto.isFetching
-    ) {
-      // muutospyynto.isFetching is from EDIT form
-      return <Loading />;
-    } else if (muutosperustelut.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.PERUSTELU.FI}
-        </MessageWrapper>
-      );
-    } else if (vankilat.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.VANKILA.FI}
-        </MessageWrapper>
-      );
-    } else if (ELYkeskukset.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.ELY.FI}
-        </MessageWrapper>
-      );
-    } else if (paatoskierrokset.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.PAATOSKIERROS.FI}
-        </MessageWrapper>
-      );
-    } else if (muutospyynto.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.MUUTOSPYYNTO.FI}
-        </MessageWrapper>
-      );
-    } else if (lupa.hasErrored) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
-          {HAKEMUS_VIRHE.LUVANLATAUS.FI}
-        </MessageWrapper>
-      );
-    } else {
-      return null;
-    }
-  }
-}
-
-export default connect(state => {
-  const { data } = state.muutospyynto;
-
-  let formVals = undefined;
-  if (state.form && state.form.uusiHakemus && state.form.uusiHakemus.values) {
-    formVals = state.form.uusiHakemus.values;
-  }
-
-  let init = loadFormData(state, data, formVals);
-  return {
-    formValues: formVals,
-    initialValues: init
   };
-})(MuutospyyntoWizard);
+
+  const changePhase = number => {
+    setState({ page: number });
+  };
+
+  const openCancelModal = e => {
+    e.preventDefault();
+    setState({ isCloseModalOpen: true });
+  };
+
+  const afterOpenCancelModal = () => {};
+
+  const closeCancelModal = () => {
+    setState({ isCloseModalOpen: false });
+  };
+
+  const {
+    muutosperustelut,
+    vankilat,
+    ELYkeskukset,
+    lupa,
+    paatoskierrokset,
+    muutospyynto,
+    initialValues
+  } = props;
+  const { visitedPages } = state;
+  const page = parseInt(props.match.params.page, 10);
+
+  if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIESTI.KIRJAUTUMINEN.FI}</h3>
+      </MessageWrapper>
+    );
+  }
+
+  // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
+  console.info(props.lupa);
+  const jarjestajaOid =
+    props.lupa && props.lupa.data ? props.lupa.data.jarjestajaOid : null;
+  if (sessionStorage.getItem("oid") !== jarjestajaOid) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.OIKEUS.FI}</h3>
+      </MessageWrapper>
+    );
+  }
+
+  if (
+    muutosperustelut.fetched &&
+    vankilat.fetched &&
+    ELYkeskukset.fetched &&
+    lupa.fetched &&
+    paatoskierrokset.fetched &&
+    (!muutospyynto || muutospyynto.fetched)
+  ) {
+    // muutospyynto.fetched is from EDIT FORM
+    return (
+      <ContentWrapper>
+        <WizardBackground />
+
+        <WizardWrapper>
+          <WizardTop>
+            <Container className="px-4">
+              <div>{HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}</div>
+              <CloseButton src={close} onClick={openCancelModal} />
+            </Container>
+          </WizardTop>
+
+          <WizardHeader>
+            <Container maxWidth="1085px" color={COLORS.BLACK}>
+              <Phase
+                number="1"
+                text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
+                activePage={page}
+                handleClick={number => changePhase(number)}
+              />
+              <Phase
+                number="2"
+                text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
+                activePage={page}
+                disabled={visitedPages.indexOf(2) === -1}
+                handleClick={number => changePhase(number)}
+              />
+              <Phase
+                number="3"
+                text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
+                activePage={page}
+                disabled={visitedPages.indexOf(3) === -1}
+                handleClick={number => changePhase(number)}
+              />
+              <Phase
+                number="4"
+                text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
+                activePage={page}
+                disabled={visitedPages.indexOf(4) === -1}
+                handleClick={number => changePhase(number)}
+              />
+            </Container>
+          </WizardHeader>
+
+          <ContentContainer
+            maxWidth="1085px"
+            margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
+          >
+            <WizardContent>
+              {page === 1 && (
+                <WizardPage
+                  pageNumber={1}
+                  onNext={nextPage}
+                  onSave={save}
+                  render={props => (
+                    <MuutospyyntoWizardMuutokset
+                      onCancel={onCancel}
+                      update={update}
+                      lupa={lupa}
+                      initialValues={initialValues}
+                      {...props}
+                    />
+                  )}
+                />
+              )}
+              {page === 2 && (
+                <WizardPage
+                  pageNumber={2}
+                  onPrev={previousPage}
+                  onNext={nextPage}
+                  onSave={save}
+                  render={props => (
+                    <MuutospyyntoWizardPerustelut
+                      onCancel={onCancel}
+                      muutosperustelut={props.muutosperustelut.data}
+                      vankilat={props.vankilat.data}
+                      ELYkeskukset={props.ELYkeskukset.data}
+                      {...props}
+                    />
+                  )}
+                />
+              )}
+              {page === 3 && (
+                <WizardPage
+                  pageNumber={3}
+                  onPrev={previousPage}
+                  onNext={nextPage}
+                  onSave={save}
+                  render={props => (
+                    <MuutospyyntoWizardTaloudelliset
+                      onCancel={onCancel}
+                      initialValues={initialValues}
+                      {...props}
+                    />
+                  )}
+                />
+              )}
+              {page === 4 && (
+                <WizardPage
+                  pageNumber={4}
+                  onPrev={previousPage}
+                  onSave={save}
+                  render={props => (
+                    <MuutospyyntoWizardYhteenveto
+                      onCancel={onCancel}
+                      preview={preview}
+                      initialValues={initialValues}
+                      createMuutospyynto={create}
+                      {...props}
+                    />
+                  )}
+                />
+              )}
+            </WizardContent>
+          </ContentContainer>
+        </WizardWrapper>
+
+        <HideFooter />
+
+        <Modal
+          isOpen={state.isCloseModalOpen}
+          onAfterOpen={afterOpenCancelModal}
+          onRequestClose={closeCancelModal}
+          contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
+          style={modalStyles}
+        >
+          <Content>
+            <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
+          </Content>
+          <div>
+            <ModalButton primary onClick={onCancel}>
+              {HAKEMUS_VIESTI.KYLLA.FI}
+            </ModalButton>
+            <ModalButton onClick={closeCancelModal}>
+              {HAKEMUS_VIESTI.EI.FI}
+            </ModalButton>
+          </div>
+        </Modal>
+      </ContentWrapper>
+    );
+  } else if (
+    muutosperustelut.isFetching ||
+    vankilat.isFetching ||
+    ELYkeskukset.isFetching ||
+    lupa.isFetching ||
+    paatoskierrokset.isFetching ||
+    !muutospyynto ||
+    muutospyynto.isFetching
+  ) {
+    // muutospyynto.isFetching is from EDIT form
+    return <Loading />;
+  } else if (muutosperustelut.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.PERUSTELU.FI}
+      </MessageWrapper>
+    );
+  } else if (vankilat.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.VANKILA.FI}
+      </MessageWrapper>
+    );
+  } else if (ELYkeskukset.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.ELY.FI}
+      </MessageWrapper>
+    );
+  } else if (paatoskierrokset.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.PAATOSKIERROS.FI}
+      </MessageWrapper>
+    );
+  } else if (muutospyynto.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.MUUTOSPYYNTO.FI}
+      </MessageWrapper>
+    );
+  } else if (lupa.hasErrored) {
+    return (
+      <MessageWrapper>
+        <h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>
+        {HAKEMUS_VIRHE.LUVANLATAUS.FI}
+      </MessageWrapper>
+    );
+  } else {
+    return null;
+  }
+};
+
+export default MuutospyyntoWizard;

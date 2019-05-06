@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { API_BASE_URL } from "modules/constants";
-import { GET_MUUTOSPERUSTELU_BY_KOODIARVO } from "../perustelut/actionTypes";
+import { GET_MUUTOSPERUSTELU_BY_KOODIARVO } from "../muutosperustelut/actionTypes";
 import {
   FETCH_MUUTOSPYYNNOT_START,
   FETCH_MUUTOSPYYNNOT_SUCCESS,

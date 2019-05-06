@@ -4,7 +4,7 @@ import styled from "styled-components"
 import Select from 'modules/Select'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants"
-import { handleMuutosperusteluSelectChange } from "../modules/muutosperusteluUtil"
+import { handleMuutosperusteluSelectChange } from "services/muutosperustelut/muutosperusteluUtil"
 
 const PerusteluSelectWrapper = styled.div`
   margin-bottom: 20px;

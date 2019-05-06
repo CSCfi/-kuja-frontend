@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import Paatos from '../components/Paatos'
-import { fetchMuutosperustelut } from "../modules/muutosperustelut"
+import { fetchMuutosperustelut } from "services/muutosperustelut/actions"
 
 const mapStateToProps = (state) => {
     return {

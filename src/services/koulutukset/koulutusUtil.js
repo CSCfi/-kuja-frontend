@@ -14,23 +14,11 @@ export function getKieliByKoodi(koodi, kielet) {
   }
 }
 
-export function getKoulutusAlat(koulutusalat) {
-  if (koulutusalat && koulutusalat.fetched) {
-    return koulutusalat.data
-  }
-}
-
 export function getKoulutusalaByKoodiarvo(koodi, koulutusalat) {
   if (koulutusalat && koulutusalat.data) {
     return _.find(koulutusalat.data, (a) => { return a.koodiArvo === koodi })
   } else {
     return undefined
-  }
-}
-
-export function getKoulutusTyypit(koulutustyypit) {
-  if (koulutustyypit && koulutustyypit.fetched) {
-    return koulutustyypit.data
   }
 }
 

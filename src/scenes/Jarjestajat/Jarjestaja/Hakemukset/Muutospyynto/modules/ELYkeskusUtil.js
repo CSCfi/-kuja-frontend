@@ -1,63 +1,74 @@
-import _ from 'lodash'
-import { parseLocalizedField } from "modules/helpers"
-import store from '../../../../../../store'
+import _ from "lodash";
+import { parseLocalizedField } from "modules/helpers";
 
 export function getELYkeskusList(ELYkeskukset, locale) {
-  let array = []
+  let array = [];
 
   ELYkeskukset.forEach(ELYkeskus => {
-    const { koodiArvo, metadata } = ELYkeskus
-    array.push({ ...ELYkeskus, label: parseLocalizedField(metadata, locale), value: koodiArvo })
-  })
+    const { koodiArvo, metadata } = ELYkeskus;
+    array.push({
+      ...ELYkeskus,
+      label: parseLocalizedField(metadata, locale),
+      value: koodiArvo
+    });
+  });
 
-  return array
+  return array;
 }
 
-export function handleELYkeskusSelectChange(muutokset, fields, muutos, selectedValue) {
-  let ELYkeskusValue = null
+export function handleELYkeskusSelectChange(
+  muutokset,
+  fields,
+  muutos,
+  selectedValue
+) {
+  let ELYkeskusValue = null;
 
   if (selectedValue !== null) {
-    ELYkeskusValue = selectedValue.koodiArvo
+    ELYkeskusValue = selectedValue.koodiArvo;
   }
 
-  const { koodiarvo } = muutos
+  const { koodiarvo } = muutos;
 
-  const i = getELYkeskusEditIndex(muutokset, koodiarvo)
+  const i = getELYkeskusEditIndex(muutokset, koodiarvo);
 
   if (i !== undefined) {
-    let obj = fields.get(i)
-    fields.remove(i)
-    let ELYkeskus = getELYkeskusByKoodiArvo(ELYkeskusValue)
-    obj.meta.perusteluteksti_tyovoima.yhteistyo = _.pickBy(ELYkeskus, (value, key) => {
-    	return key === "koodiArvo" || key === "koodisto" || key === "versio" || key === "metadata"
-    })
-    fields.insert(i, obj)
+    let obj = fields.get(i);
+    fields.remove(i);
+    let ELYkeskus = getELYkeskusByKoodiArvo(ELYkeskusValue);
+    obj.meta.perusteluteksti_tyovoima.yhteistyo = _.pickBy(
+      ELYkeskus,
+      (value, key) => {
+        return (
+          key === "koodiArvo" ||
+          key === "koodisto" ||
+          key === "versio" ||
+          key === "metadata"
+        );
+      }
+    );
+    fields.insert(i, obj);
   }
-
 }
 
 function getELYkeskusEditIndex(muutokset, koodiarvo) {
-  let i = undefined
+  let i = undefined;
 
   _.forEach(muutokset, (muutos, idx) => {
     if (muutos.koodiarvo === koodiarvo) {
-      i = idx
+      i = idx;
     }
-  })
+  });
 
-  return i
+  return i;
 }
 
-export function getELYkeskusByKoodiArvo(koodiarvo) {
-  const state = store.getState()
-
-  const { ELYkeskukset } = state
-
+export function getELYkeskusByKoodiArvo(koodiarvo, ELYkeskukset) {
   if (ELYkeskukset && ELYkeskukset.fetched) {
-    return _.find(ELYkeskukset.ELYkeskusList, (ELYkeskus) => { 
-    	return ELYkeskus.koodiArvo === koodiarvo
-    })
+    return _.find(ELYkeskukset.ELYkeskusList, ELYkeskus => {
+      return ELYkeskus.koodiArvo === koodiarvo;
+    });
   } else {
-    return undefined
+    return undefined;
   }
 }

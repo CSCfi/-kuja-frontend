@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 // import { FieldArray, formValueSelector, reduxForm } from 'redux-form'
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
-import { hasFormChanges } from "../modules/muutospyyntoUtil";
+import { hasFormChanges } from "services/muutospyynnot/muutospyyntoUtil";
 import {
   FIELD_ARRAY_NAMES,
   FORM_NAME_UUSI_HAKEMUS,

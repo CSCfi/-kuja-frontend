@@ -12,7 +12,7 @@ import {
   FETCH_KOULUTUS_FAILURE
 } from "./actionTypes";
 
-export function fetchKoulutuksetAll() {
+export function fetchKoulutuksetAll(koulutusalat, koulutustyypit) {
   return dispatch => {
     dispatch({ type: FETCH_KOULUTUKSET_ALL_START });
 
@@ -21,7 +21,14 @@ export function fetchKoulutuksetAll() {
     request
       .then(response => response.json())
       .then(data => {
-        dispatch({ type: FETCH_KOULUTUKSET_ALL_SUCCESS, payload: data });
+        dispatch({
+          type: FETCH_KOULUTUKSET_ALL_SUCCESS,
+          payload: {
+            data,
+            koulutusalat,
+            koulutustyypit
+          }
+        });
       })
       .catch(err =>
         dispatch({ type: FETCH_KOULUTUKSET_ALL_FAILURE, payload: err })
@@ -64,8 +71,3 @@ export function fetchKoulutus(koodi) {
       .catch(err => dispatch({ type: FETCH_KOULUTUS_FAILURE, payload: err }));
   };
 }
-
-export const actions = {
-  fetchKoulutuksetAll,
-  fetchKoulutus
-};
