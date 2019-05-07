@@ -40,7 +40,7 @@ const LinkItemUpper = styled(NavLink)`
   }
   
   @media ${MEDIA_QUERIES.MOBILE} {
-    font-size: 16px;
+    font-size: 14px;
   }
 `
 

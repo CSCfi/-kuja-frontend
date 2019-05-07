@@ -11,6 +11,7 @@ const LinkItem = styled(NavLink)`
   font-size: 15px;
   font-family: ${FONT_STACK.ARIAL};
   line-height: 26px;
+  white-space: nowrap;
 
   a:visited {
     color: white;

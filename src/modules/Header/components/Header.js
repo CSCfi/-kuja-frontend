@@ -6,7 +6,7 @@ import HeaderBar from 'modules/Header/components/HeaderBar'
 import LinkItemUpper from 'modules/Header/components/LinkItemUpper'
 import LinkItem from 'modules/Header/components/LinkItem'
 import { ROLE_ESITTELIJA } from 'modules/constants'
-import { COLORS, FONT_STACK } from 'modules/styles'
+import { COLORS, FONT_STACK, MEDIA_QUERIES } from 'modules/styles'
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 
 const HeaderTitle = styled.div`
@@ -17,6 +17,10 @@ const HeaderTitle = styled.div`
   padding: 14px 0px;
   margin-left: 30px;
   line-height: 18px;
+  @media ${MEDIA_QUERIES.MOBILE} {
+    width: 0;
+    overflow: hidden;
+  }
 `
 
 const HeaderBarUpper = styled.div`
@@ -26,23 +30,47 @@ const HeaderBarUpper = styled.div`
   width: 100%;
   background: ${COLORS.WHITE};
   max-height: 50px;
-
 `
 
 const HeaderBarLower = styled.div`
   display: flex;
   justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
   margin: 0 auto;
-  padding-left:20px;
   width: 100%;
   background: ${COLORS.OIVA_MENU_BG_COLOR};
   max-height: 50px;
+  overflow: hidden;
+  @media ${MEDIA_QUERIES.MOBILE} {
+    padding-left:32px;
+    flex-flow: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 40px;
+    opacity: 0.99;
+    z-index: 100;
+
+    &:before {
+      content: "Ξ";
+      margin-left: -20px;
+      margin-top: 10px;
+    }
+    &:hover {
+      max-height: initial;
+      height: initial;
+      background: ${COLORS.OIVA_MENU_BG_COLOR};  
+      width: 100%;
+      div {
+        width: initial;
+      }
+    }
+  }
 `
 
 const HeaderUpperRight = styled.div`
   padding: 14px 20px;
   line-height: 18px;
-
 `
 
 class Header extends Component {

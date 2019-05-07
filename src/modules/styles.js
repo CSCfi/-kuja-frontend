@@ -58,7 +58,7 @@ export const APP_WIDTH = 1030
 
 // Media query breakpointit
 export const MEDIA_QUERIES = {
-  MOBILE: 'only screen and (min-width: 360px) and (max-width: 767px)',
+  MOBILE: 'only screen and (max-width: 767px)',
   TABLET: 'only screen and (min-width: 768px) and (max-width: 1023px)',
   TABLET_MIN: 'only screen and (min-width: 768px)',
   DESKTOP_NORMAL: 'only screen and (min-width: 1024px) and (max-width: 1279px)',

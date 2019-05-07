@@ -8,6 +8,7 @@ const HeaderBar = styled.div`
   justify-content: space-between;
   background: ${COLORS.WHITE};
   color: white;
+  width: 100%;
 `
 
 export default HeaderBar
