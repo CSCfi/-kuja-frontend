@@ -6,6 +6,32 @@ import { MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muu
 import { meta_kuljettaja_jatko, meta_kuljettaja_perus, meta_oppisopimus, meta_tyovoima, meta_vaativa, meta_vankila } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/lisaperusteluUtil"
 
 
+export function getDataForKoulutusList(koulutukset, changes = []) {
+  return {
+    items: _.map(koulutukset, (koulutus, i) => {
+      const isAdded = !!_.find(
+        _.filter(changes, { koodiarvo: koulutus.koodiArvo }),
+        { type: MUUTOS_TYPES.ADDITION }
+      );
+      const isRemoved = !!_.find(
+        _.filter(changes, { koodiarvo: koulutus.koodiArvo }),
+        { type: MUUTOS_TYPES.REMOVAL }
+      );
+      return {
+        code: koulutus.koodiArvo,
+        isAdded,
+        isRemoved,
+        shouldBeSelected: isAdded,
+        title:
+          _.find(koulutus.metadata, m => {
+            return m.kieli === "FI";
+          }).nimi || "[Koulutuksen otsikko tähän]"
+      };
+    }),
+    changes
+  };
+};
+
 export function getKieliByKoodi(koodi, kielet) {
   if (kielet && kielet.data) {
     return _.find(kielet.data, (kieli) => { return kieli.koodiArvo === koodi })

@@ -1,55 +1,51 @@
-import React from "react";
-import { Arrow, Heading, Span, SpanMuutos } from "utils/UIComponents";
+import React, { useState } from "react";
+import { Arrow } from "utils/UIComponents";
 import arrow from "static/images/koulutusala-arrow.svg";
 import PropTypes from "prop-types";
 import ExpandableRowContent from "components/ExpandableRowContent";
 import { COLORS } from "modules/styles";
 
-class ExpandableRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shouldBeExpanded: props.shouldBeExpanded
-    };
-    this.toggle = this.toggle.bind(this);
-  }
+const ExpandableRow = props => {
+  const [state, setState] = useState({
+    shouldBeExpanded: props.shouldBeExpanded
+  });
 
-  toggle = () => {
-    this.setState({
-      shouldBeExpanded: !this.state.shouldBeExpanded
+  const toggle = () => {
+    setState({
+      shouldBeExpanded: !state.shouldBeExpanded
     });
   };
 
-  render() {
-    return (
-      <div>
-        <Heading onClick={this.toggle}>
+  return (
+    <div>
+      <div
+        onClick={toggle}
+        className="flex items-center cursor-pointer bg-grey-light hover:bg-grey p-2"
+      >
+        <span className="pl-4 pr-4">
           <Arrow
             src={arrow}
-            alt={this.state.shouldBeExpanded ? "Kutista rivi" : "Laajenna rivi"}
-            rotated={this.state.shouldBeExpanded}
+            alt={state.shouldBeExpanded ? "Kutista rivi" : "Laajenna rivi"}
+            rotated={state.shouldBeExpanded}
           />
-          <Span>{this.props.code}</Span>
-          <Span>{this.props.title}</Span>
-          {this.props.changes.length ? (
-            <SpanMuutos>
-              Muutokset:&nbsp;
-              <Span color={COLORS.OIVA_PURPLE}>
-                {this.props.changes.length}
-              </Span>
-            </SpanMuutos>
-          ) : null}
-        </Heading>
-        {this.state.shouldBeExpanded && (
-          <ExpandableRowContent
-            categories={this.props.categories}
-            onChanges={this.props.onChanges}
-          />
-        )}
+        </span>
+        <div className="flex-1">
+          {props.code && <span className="pr-6">{props.code}</span>}
+          <span>{props.title}</span>
+        </div>
+        {props.changes && props.changes.length ? (
+          <div>
+            Muutokset:&nbsp;
+            <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
+          </div>
+        ) : null}
       </div>
-    );
-  }
-}
+      {state.shouldBeExpanded && (
+        <ExpandableRowContent>{props.children}</ExpandableRowContent>
+      )}
+    </div>
+  );
+};
 
 ExpandableRow.propTypes = {
   categories: PropTypes.array,

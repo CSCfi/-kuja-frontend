@@ -45,7 +45,7 @@ export default function(state, action) {
         ...state,
         muut: {
           isFetching: true,
-          fetched: false,
+          fetched: [],
           hasErrored: false
         }
       };
@@ -54,7 +54,10 @@ export default function(state, action) {
         ...state,
         muut: {
           isFetching: false,
-          fetched: true,
+          fetched: [
+            ...state.muut.fetched,
+            action.koodisto
+          ],
           hasErrored: false,
           muudata: {
             ...state.muut.muudata,
@@ -67,7 +70,7 @@ export default function(state, action) {
         ...state,
         muut: {
           isFetching: false,
-          fetched: false,
+          fetched: [],
           hasErrored: true
         }
       };
@@ -77,7 +80,7 @@ export default function(state, action) {
         poikkeukset: {
           ...state.poikkeukset,
           isFetching: true,
-          fetched: false,
+          fetched: [],
           hasErrored: false
         }
       };
@@ -87,7 +90,10 @@ export default function(state, action) {
         poikkeukset: {
           ...state.poikkeukset,
           isFetching: false,
-          fetched: true,
+          fetched: [
+            ...state.poikkeukset.fetched,
+            action.koodi
+          ],
           hasErrored: false,
           data: [...state.poikkeukset.data, action.payload]
         }
@@ -98,7 +104,7 @@ export default function(state, action) {
         poikkeukset: {
           ...state.poikkeukset,
           isFetching: false,
-          fetched: false,
+          fetched: [],
           hasErrored: true
         }
       };

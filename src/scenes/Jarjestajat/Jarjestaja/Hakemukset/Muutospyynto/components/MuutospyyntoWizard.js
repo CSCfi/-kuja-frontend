@@ -244,7 +244,6 @@ const MuutospyyntoWizard = props => {
   }
 
   // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-  console.info(props.lupa);
   const jarjestajaOid =
     props.lupa && props.lupa.data ? props.lupa.data.jarjestajaOid : null;
   if (sessionStorage.getItem("oid") !== jarjestajaOid) {

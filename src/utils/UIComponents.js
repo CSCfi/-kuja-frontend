@@ -3,20 +3,8 @@ import styled from 'styled-components'
 import { COLORS, MEDIA_QUERIES, TRANSITIONS } from "modules/styles"
 import arrowDown from 'static/images/arrow-down.svg'
 
-export const Container05 = styled.div`
-  padding: 0.5em;
-`
-
-export const Container1 = styled.div`
-  padding: 1em;
-`
-
 export const Container2 = styled.div`
   padding: 2em;
-`
-
-export const ContainerMs1 = styled.span`
-  margin-left: 1em;
 `
 
 export const Area = styled.div`
@@ -118,7 +106,7 @@ export const H3 = styled.h3`
 `
 
 export const Arrow = styled.img`
-  margin-right: 20px;
+  display: block;
   ${props => props.rotated ? `transform: rotate(90deg);` : null}
 `
 

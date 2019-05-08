@@ -4,15 +4,15 @@ import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
+import CategorizedList from "components/CategorizedList";
 
 const TutkintoList = props => {
-  
   const getArticle = articles => {
     return _.find(articles, article => {
       return article.koodi === props.areaCode;
     });
   };
-  
+
   const formState = () => {
     const article = getArticle(props.articles);
     const state = {
@@ -101,22 +101,22 @@ const TutkintoList = props => {
     props.onChanges(item, isSubItemTarget, props.listId);
   };
 
-
-
   useEffect(() => {
     setState(formState());
   }, [props.changes]);
 
   return (
     <Wrapper>
-      <ExpandableRow
-        categories={state.categories}
-        changes={state.changes}
-        code={props.koodiarvo}
-        onChanges={onChanges}
-        shouldBeExpanded={false}
-        title={props.nimi}
-      />
+      <ExpandableRow code={props.koodiarvo} title={props.title} changes={state.changes}>
+        <CategorizedList
+          categories={state.categories}
+          changes={state.changes}
+          code={props.koodiarvo}
+          onChanges={onChanges}
+          shouldBeExpanded={false}
+          title={props.title}
+        />
+      </ExpandableRow>
     </Wrapper>
   );
 };
@@ -127,6 +127,7 @@ TutkintoList.propTypes = {
   changes: PropTypes.array,
   fields: PropTypes.object,
   koulutustyypit: PropTypes.object,
+  title: PropTypes.string,
   onChanges: PropTypes.func,
   listId: PropTypes.string
 };

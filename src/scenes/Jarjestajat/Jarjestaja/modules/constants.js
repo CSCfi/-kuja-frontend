@@ -1,6 +1,6 @@
 export const LUPA_SECTIONS = {
   1: {
-    heading: "Tutkinnot ja koulutukset",
+    heading: "Tutkinnot",
     tunniste: 'tutkinnotjakoulutukset',
     headingNumber: 1
   },

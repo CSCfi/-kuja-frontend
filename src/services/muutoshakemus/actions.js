@@ -6,50 +6,55 @@ import {
   REMOVE_SUB_ITEM_FROM_CHANGES
 } from "./actionTypes";
 
-export const addItemToChanges = (item, listId, operationType) => {
+export const addItemToChanges = (sectionId, item, listId, operationType, removeExistingOnes = false) => {
   return dispatch => {
     dispatch({
       type: ADD_ITEM_TO_CHANGES,
       payload: {
         item,
         listId,
-        operationType
+        operationType,
+        removeExistingOnes,
+        sectionId
       }
     });
   };
 };
 
-export const addSubItemToChanges = (subItem, listId, operationType) => {
+export const addSubItemToChanges = (sectionId, subItem, listId, operationType) => {
   return dispatch => {
     dispatch({
       type: ADD_SUB_ITEM_TO_CHANGES,
       payload: {
         listId,
         operationType,
+        sectionId,
         subItem
       }
     });
   };
 };
 
-export const removeItemFromChanges = (item, listId) => {
+export const removeItemFromChanges = (sectionId, item, listId) => {
   return dispatch => {
     dispatch({
       type: REMOVE_ITEM_FROM_CHANGES,
       payload: {
         item,
-        listId
+        listId,
+        sectionId
       }
     });
   };
 };
 
-export const removeSubItemFromChanges = (subItem, listId) => {
+export const removeSubItemFromChanges = (sectionId, subItem, listId) => {
   return dispatch => {
     dispatch({
       type: REMOVE_SUB_ITEM_FROM_CHANGES,
       payload: {
         listId,
+        sectionId,
         subItem
       }
     });

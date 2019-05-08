@@ -8,13 +8,13 @@ const initialState = {
   data: {},
   muut: {
     isFetching: false,
-    fetched: false,
+    fetched: [],
     hasErrored: false,
-    muudata: undefined
+    muudata: {}
   },
   poikkeukset: {
     isFetching: false,
-    fetched: false,
+    fetched: [],
     hasErrored: false,
     data: []
   }

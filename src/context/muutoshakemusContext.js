@@ -5,9 +5,13 @@ import {
 } from "../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants"
 
 const initialState = {
-  otsikko: 'Test title (temp)',
+  tutkinnot: {
+    changes: {}
+  },
+  koulutukset: {
+    changes: {}
+  }
   // [FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET]: {}
-  changes: {}
 };
 
 const MuutoshakemusContext = React.createContext(initialState);
