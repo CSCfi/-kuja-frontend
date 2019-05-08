@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { COLORS, Leijona } from 'modules/styles'
+import { COLORS, Leijona , MEDIA_QUERIES} from 'modules/styles'
 
 
 const FooterBar = styled.div`
@@ -25,6 +25,9 @@ const FooterBarUpper = styled.div`
 `
 
 const FooterLeft = styled.div`
+  @media ${MEDIA_QUERIES.MOBILE} {
+    display: none
+  }
 `
 
 const FooterRight = styled.div`
