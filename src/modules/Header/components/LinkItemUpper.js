@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom'
 import { COLORS, FONT_STACK, MEDIA_QUERIES } from 'modules/styles'
 
 const LinkItemUpper = styled(NavLink)`
-  padding: 5px 5px;
   text-decoration: none;
   color: ${COLORS.BLACK};
   text-transform: none;
@@ -12,7 +11,6 @@ const LinkItemUpper = styled(NavLink)`
   font-size: 11.5px;
   font-family: ${FONT_STACK.ARIAL};
   line-height: 18px;
-  margin-top:10px;
   margin-bottom:10px;
   white-space: nowrap;
     

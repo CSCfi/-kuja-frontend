@@ -14,7 +14,6 @@ const HeaderTitle = styled.div`
   font-size: 16px;
   color: black;
   text-decoration: none;
-  padding: 14px 0px;
   margin-left: 30px;
   line-height: 18px;
   @media ${MEDIA_QUERIES.MOBILE} {
@@ -31,6 +30,7 @@ const HeaderBarUpper = styled.div`
   max-width: 100%;
   background: ${COLORS.WHITE};
   max-height: 50px;
+  padding: 20px 0 12px 0;
 `
 
 const HeaderBarLower = styled.div`
@@ -76,11 +76,9 @@ const HeaderUpperRight = styled.div`
 `
 
 const LanguageBar = styled.div`
-  padding: 14px 0;
   @media ${MEDIA_QUERIES.MOBILE} {
-    margin-left: auto;
-    padding: 0;
-    padding-right: 20px;
+    margin: auto;
+    margin-right: 20px;
   }
 `
 
