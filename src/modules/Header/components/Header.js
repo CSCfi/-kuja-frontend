@@ -28,6 +28,7 @@ const HeaderBarUpper = styled.div`
   justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
   margin: 0 auto;
   width: 100%;
+  max-width: 100%;
   background: ${COLORS.WHITE};
   max-height: 50px;
 `
@@ -69,8 +70,18 @@ const HeaderBarLower = styled.div`
 `
 
 const HeaderUpperRight = styled.div`
-  padding: 14px 20px;
-  line-height: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  padding-right: 20px;
+`
+
+const LanguageBar = styled.div`
+  padding: 14px 0;
+  @media ${MEDIA_QUERIES.MOBILE} {
+    margin-left: auto;
+    padding: 0;
+    padding-right: 20px;
+  }
 `
 
 class Header extends Component {
@@ -105,8 +116,10 @@ class Header extends Component {
                 {sessionStorage.getItem('role')
                 ? (<LinkItemUpper to="/cas-logout" className="has-separator pull-right">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItemUpper>) : null}
 
-                <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
-                <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
+                <LanguageBar>
+                  <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
+                  <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
+                </LanguageBar>
               </HeaderUpperRight>
 
           </HeaderBarUpper>
