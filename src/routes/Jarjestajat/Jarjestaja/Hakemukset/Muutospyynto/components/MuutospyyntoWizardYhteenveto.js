@@ -388,6 +388,7 @@ MuutospyyntoWizardYhteenveto = connect(state => {
     taloudellisetValue,
     lupa: state.lupa,
     muutosperustelut: state.muutosperustelut,
+    muutosperustelutOpiskelijavuodet: state.muutosperustelutOpiskelijavuodet,
     paatoskierrokset: state.paatoskierrokset,
     muutospyynto: state.muutospyynto
   }

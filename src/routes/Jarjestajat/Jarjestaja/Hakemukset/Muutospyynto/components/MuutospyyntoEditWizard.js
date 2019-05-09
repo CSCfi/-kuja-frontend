@@ -85,6 +85,7 @@ class MuutospyyntoEditWizard extends Component {
 
   componentWillMount() {
     this.props.fetchMuutosperustelut()
+    this.props.fetchMuutosperustelutOpiskelijavuodet()
     this.props.fetchVankilat()
     this.props.fetchELYkeskukset()
     const { ytunnus, uuid } = this.props.match.params
@@ -187,7 +188,7 @@ class MuutospyyntoEditWizard extends Component {
   }
   
   render() {
-    const { muutosperustelut, vankilat, ELYkeskukset, lupa, paatoskierrokset, muutospyynto, initialValues } = this.props
+    const { muutosperustelut, muutosperustelutOpiskelijavuodet, vankilat, ELYkeskukset, lupa, paatoskierrokset, muutospyynto, initialValues } = this.props
     const { page, visitedPages } = this.state
 
     // setTimeout(() => console.log(muutospyynto), 3000)
@@ -206,7 +207,7 @@ class MuutospyyntoEditWizard extends Component {
       )
     }
 
-    if (muutosperustelut.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched && muutospyynto.fetched) {
+    if (muutosperustelut.fetched && muutosperustelutOpiskelijavuodet.fetched && vankilat.fetched && ELYkeskukset.fetched && lupa.fetched && paatoskierrokset.fetched && muutospyynto.fetched) {
       return (
         <div>
           <WizardBackground />
@@ -253,6 +254,7 @@ class MuutospyyntoEditWizard extends Component {
                     onCancel={this.onCancel}
                     save={this.save}
                     muutosperustelut={this.props.muutosperustelut.data}
+                    muutosperustelutOpiskelijavuodet={this.props.muutosperustelutOpiskelijavuodet.data}
                     vankilat={this.props.vankilat.data}
                     ELYkeskukset={this.props.ELYkeskukset.data}
                   />
@@ -309,9 +311,9 @@ class MuutospyyntoEditWizard extends Component {
           </Modal>
         </div>
       )
-    } else if (muutosperustelut.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching || muutospyynto.isFetching) {
+    } else if (muutosperustelut.isFetching || muutosperustelutOpiskelijavuodet.isFetching || vankilat.isFetching || ELYkeskukset.isFetching || lupa.isFetching || paatoskierrokset.isFetching || muutospyynto.isFetching) {
       return <Loading />
-    } else if (muutosperustelut.hasErrored) {
+    } else if (muutosperustelut.hasErrored || muutosperustelutOpiskelijavuodet.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.PERUSTELU.FI}</MessageWrapper>
     } else if (vankilat.hasErrored) {
       return <MessageWrapper><h3>{HAKEMUS_VIRHE.HEADER.FI}</h3>{HAKEMUS_VIRHE.VANKILA.FI}</MessageWrapper>
