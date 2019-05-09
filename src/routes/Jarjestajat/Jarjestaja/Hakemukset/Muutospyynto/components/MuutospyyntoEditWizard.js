@@ -78,7 +78,8 @@ class MuutospyyntoEditWizard extends Component {
     this.state = {
       page: 1,
       visitedPages: [1],
-      isCloseModalOpen: false
+      isCloseModalOpen: false,
+      isErrorModalOpen: false,
     }
   }
 
@@ -125,13 +126,19 @@ class MuutospyyntoEditWizard extends Component {
     // this.onCancel() // TODO: tehdään onDone-funktio
   }
 
-  save(event, data) {
+  save = (event, data) => {
     if (event) {
       event.preventDefault()
     }
 
     console.log('save', data)
-    this.props.saveMuutospyynto(data)
+    let result = this.props.saveMuutospyynto(data).then(() => {
+      if (!this.props.muutospyynto.save || this.props.muutospyynto.save.hasErrored)
+        return (
+          this.setState({ isErrorModalOpen: true })
+        )
+      }
+    )
   }
 
   update(event, data) {
@@ -176,6 +183,10 @@ class MuutospyyntoEditWizard extends Component {
     this.setState({ isCloseModalOpen: false })
   }
 
+  closeErrorModal = () => {
+    this.setState({ isErrorModalOpen: false })
+  }
+  
   render() {
     const { muutosperustelut, muutosperustelutOpiskelijavuodet, vankilat, ELYkeskukset, lupa, paatoskierrokset, muutospyynto, initialValues } = this.props
     const { page, visitedPages } = this.state
@@ -284,6 +295,18 @@ class MuutospyyntoEditWizard extends Component {
             <div>
               <ModalButton primary onClick={this.onCancel}>{HAKEMUS_VIESTI.KYLLA.FI}</ModalButton>
               <ModalButton onClick={this.closeCancelModal}>{HAKEMUS_VIESTI.EI.FI}</ModalButton>
+            </div>
+          </Modal>
+          <Modal
+            isOpen={this.state.isErrorModalOpen}
+            onRequestClose={this.closeErrorlModal}
+            style={modalStyles}
+          >
+            <Content>
+              <ModalText>{HAKEMUS_VIESTI.TALLENNUS_ERROR.FI}</ModalText>
+            </Content>
+            <div>
+              <ModalButton primary onClick={this.closeErrorModal}>{HAKEMUS_VIESTI.OK.FI}</ModalButton>
             </div>
           </Modal>
         </div>

@@ -57,6 +57,7 @@ const HideFooter = styled.div`
   bottom: -100px;
   height: 100px;
 `
+// TODO Ohjetta varten
 const Help = styled.div`
   background-color: #fffff0;
   border: 1px solid #afafa0;
@@ -109,7 +110,7 @@ class MuutospyyntoWizard extends Component {
       page: 1,
       visitedPages: [1],
       isCloseModalOpen: false,
-      isCloseErrorModalOpen: false,
+      isErrorModalOpen: false,
       showHelp: true
     }
   }

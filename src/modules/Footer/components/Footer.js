@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { ROLE_ESITTELIJA, ROLE_KAYTTAJA } from 'modules/constants'
-import { COLORS, FONT_STACK, Leijona } from 'modules/styles'
+import { COLORS, Leijona } from 'modules/styles'
 
 
 const FooterBar = styled.div`
