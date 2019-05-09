@@ -164,7 +164,7 @@ class MuutospyyntoWizard extends Component {
     console.log('save', data)
     const url = `/jarjestajat/${this.props.match.params.ytunnus}`
     this.props.saveMuutospyynto(data).then(() => {
-      if (this.props.muutospyynto,save && this.props.muutospyynto.save.data && this.props.muutospyynto.save.data.data) {
+      if (this.props.muutospyynto.save && this.props.muutospyynto.save.data && this.props.muutospyynto.save.data.data) {
         console.log('load', this.props.muutospyynto.save.data)
         let uuid = this.props.muutospyynto.save.data.data.uuid;
         let newurl = url + "/hakemukset-ja-paatokset/" + uuid

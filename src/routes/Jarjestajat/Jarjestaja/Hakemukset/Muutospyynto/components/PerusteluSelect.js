@@ -18,18 +18,18 @@ class PerusteluSelect extends Component {
       let obj = fields.get(i);
       fields.remove(i);
 
-      if (obj.muutosperustelukoodiarvo.length === 0) {
-        obj.muutosperustelukoodiarvo.push(selectedOption);
+      if (obj.meta.muutosperustelukoodiarvo.length === 0) {
+        obj.meta.muutosperustelukoodiarvo.push(selectedOption);
       } else {
-        let muutosperustelut = obj.muutosperustelukoodiarvo.filter(v => {
+        let muutosperustelut = obj.meta.muutosperustelukoodiarvo.filter(v => {
           return v !== selectedOption;
         });
-        if (muutosperustelut.length === obj.muutosperustelukoodiarvo.length) {
+        if (muutosperustelut.length === obj.meta.muutosperustelukoodiarvo.length) {
           // Lisää uusi perustelu
-          obj.muutosperustelukoodiarvo.push(selectedOption);
+          obj.meta.muutosperustelukoodiarvo.push(selectedOption);
         } else {
           // Poista aiemmin valittu perustelu
-          obj.muutosperustelukoodiarvo = muutosperustelut;
+          obj.meta.muutosperustelukoodiarvo = muutosperustelut;
         }
       }
 
@@ -47,7 +47,7 @@ class PerusteluSelect extends Component {
 
         {muutosperustelut.map(m => {
           const valittu = _.includes(
-            muutos.muutosperustelukoodiarvo,
+            muutos.meta.muutosperustelukoodiarvo,
             m.koodiArvo
           );
 

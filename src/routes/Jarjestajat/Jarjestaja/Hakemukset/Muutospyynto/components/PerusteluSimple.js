@@ -47,20 +47,24 @@ class PerusteluSimple extends Component {
   }
 
   render() {
-    const { perusteluteksti, muutosperustelukoodiarvo, kategoria } = this.props;
+    const { perusteluteksti, meta, kategoria } = this.props;
     let perusteluText = "";
 
-    muutosperustelukoodiarvo.forEach(perustelu => {
-      let perusteluObj = {};
-      if (kategoria === "opiskelijavuosi") {
-        perusteluObj = getMuutosperusteluOpiskelijavuodetByKoodiArvo(perustelu);
-      } else {
-        perusteluObj = getMuutosperusteluByKoodiArvo(perustelu);
-      }
-      if (perusteluObj) {
-        perusteluText = perusteluText + perusteluObj.label + " ";
-      }
-    });
+    if (meta && "muutosperustelukoodiarvo" in meta) {
+      meta.muutosperustelukoodiarvo.forEach(perustelu => {
+        let perusteluObj = {};
+        if (kategoria === "opiskelijavuosi") {
+          perusteluObj = getMuutosperusteluOpiskelijavuodetByKoodiArvo(
+            perustelu
+          );
+        } else {
+          perusteluObj = getMuutosperusteluByKoodiArvo(perustelu);
+        }
+        if (perusteluObj) {
+          perusteluText = perusteluText + perusteluObj.label + " ";
+        }
+      });
+    }
 
     return (
       <PerusteluWrapper>
