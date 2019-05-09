@@ -4,19 +4,15 @@ import Login from "scenes/Login/Login";
 import Logout from "scenes/Logout/Logout";
 import Header from "scenes/Header/Header";
 import Footer from "scenes/Footer/Footer";
-import Jarjestajat from "scenes/Jarjestajat/Jarjestajat";
+import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
 import { APP_WIDTH } from "modules/styles";
 import Home from "scenes/Home/components/Home";
-// import { QueryParamProvider } from "use-query-params";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
-// import { ConnectedRouter } from "connected-react-router";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
 import RequireCasAuth from "scenes/Login/services/RequireCasAuth";
 import DestroyCasAuth from "scenes/Logout/services/DestroyCasAuth";
 import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
-import { BreadcrumbsContainer } from "./modules/elements";
-// import { BreadcrumbsProvider, Breadcrumbs } from "react-breadcrumbs-dynamic";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
 import EsiJaPerusopetus from "scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
 import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
@@ -25,6 +21,9 @@ import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { UserContext } from "./context/userContext";
 import { getRoles } from "services/kayttajat/actions";
+import { JarjestajatProvider } from "./context/jarjestajatContext";
+import { LuvatProvider } from "./context/luvatContext";
+import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
 
 const history = createBrowserHistory();
 
@@ -36,7 +35,7 @@ const App = () => {
   }, []);
 
   return (
-    <Router history={ history }>
+    <Router history={history}>
       <div className="flex flex-col min-h-screen">
         <header>
           <Header
@@ -47,20 +46,20 @@ const App = () => {
           />
         </header>
 
-        <main className="flex-1">
-          <BreadcrumbsContainer>
-            <Breadcrumbs
-              separator={<b> / </b>}
-              item={NavLink}
-              finalItem={"b"}
-              finalProps={{
-                style: {
-                  color: COLORS.BLACK
-                }
-              }}
-            />
-          </BreadcrumbsContainer>
-          <div className="flex flex-1 flex-col">
+        <main className="flex flex-1 flex-col justify-between py-10">
+          <div className="mx-auto">
+            <div className="pb-16">
+              <Breadcrumbs
+                separator={<b> / </b>}
+                item={NavLink}
+                finalItem={"b"}
+                finalProps={{
+                  style: {
+                    color: COLORS.BLACK
+                  }
+                }}
+              />
+            </div>
             <Switch>
               {<Route exact path="/" component={Home} />}
               {<Route path="/logout" component={Logout} />}
@@ -69,7 +68,17 @@ const App = () => {
               {<Route path="/cas-auth" component={RequireCasAuth} />}
               {<Route path="/cas-logout" component={DestroyCasAuth} />}
               {<Route path="/cas-ready" component={CasAuthenticated} />}
-              {<Route exact path="/jarjestajat" component={Jarjestajat} />}
+              {
+                <Route
+                  exact
+                  path="/jarjestajat"
+                  render={() => (
+                    <JarjestajatProvider>
+                      <Jarjestajat />
+                    </JarjestajatProvider>
+                  )}
+                />
+              }
               {<Route exact path="/lukiokoulutus" component={Lukiokoulutus} />}
               {
                 <Route
@@ -88,7 +97,13 @@ const App = () => {
               {
                 <Route
                   path="/jarjestajat/:ytunnus"
-                  component={JarjestajaSwitch}
+                  render={props => (
+                    <LuvatProvider>
+                      <MuutospyynnotProvider>
+                        <JarjestajaSwitch {...props} />
+                      </MuutospyynnotProvider>
+                    </LuvatProvider>
+                  )}
                 />
               }
             </Switch>

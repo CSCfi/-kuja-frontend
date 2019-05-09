@@ -1,167 +1,96 @@
-import _ from "lodash";
-import React, { Component } from "react";
-import { connect } from "react-redux";
-// import { FieldArray, reduxForm, formValueSelector } from 'redux-form'
-import styled from "styled-components";
-
-import { ContentContainer } from "../../../../../../modules/elements";
-import {
-  Kohde,
-  Kohdenumero,
-  Otsikko,
-  Row,
-  Div,
-  Checkbox,
-  CheckboxRowContainer
-} from "./MuutospyyntoWizardComponents";
-import { LUPA_TEKSTIT } from "../../../modules/constants";
-import Loading from "../../../../../../modules/Loading";
-import { parseLocalizedField } from "../../../../../../modules/helpers";
-import { handleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
+import React, { useContext, useEffect, useState } from "react";
+import { MuutoshakemusContext } from "context/muutoshakemusContext";
+import Section from "components/Section";
+import ExpandableRow from "components/ExpandableRow";
+import { getDataForKieletList } from "services/oppilaitoksenopetuskielet/opetuskieletUtil";
+import SelectableItem from "components/SelectableItem";
+import { Wrapper } from "./MuutospyyntoWizardComponents";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
+import { OppilaitoksenOpetuskieletContext } from "../../../../../../context/oppilaitoksenOpetuskieletContext";
+import { fetchOppilaitoksenOpetuskielet } from "services/oppilaitoksenopetuskielet/actions";
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import {
-  FIELD_ARRAY_NAMES,
-  FORM_NAME_UUSI_HAKEMUS,
-  MUUTOS_TYPES
-} from "../modules/uusiHakemusFormConstants";
+  addItemToChanges,
+  removeItemFromChanges
+} from "services/muutoshakemus/actions";
+import _ from "lodash";
 
-class MuutospyyntoWizardKielet extends Component {
-  componentWillMount() {
-    const { oppilaitoksenopetuskielet } = this.props;
+const MuutospyyntoWizardKielet = props => {
+  const sectionId = "opetuskielet";
+  const [state, setState] = useState({});
+  const { state: opetuskielet, dispatch } = useContext(
+    OppilaitoksenOpetuskieletContext
+  );
+  const { state: mhlState, dispatch: mhlDispatch } = useContext(
+    MuutoshakemusContext
+  );
 
-    if (oppilaitoksenopetuskielet && !oppilaitoksenopetuskielet.fetched) {
-      this.props.fetchOppilaitoksenopetuskielet();
-    }
-  }
-
-  render() {
-    const { lupa } = this.props;
-    const { kohteet } = lupa;
-    const kohde = kohteet[2];
-    const { headingNumber, heading } = kohde;
-    const {
-      oppilaitoksenopetuskielet,
-      opetusjatutkintokielimuutoksetValue
-    } = this.props;
-
-    if (oppilaitoksenopetuskielet.fetched) {
-      return (
-        <ContentContainer>
-          <Kohdenumero>{headingNumber}.</Kohdenumero>
-          <Otsikko>{heading}</Otsikko>
-          <Row>
-            {/* <FieldArray
-                name={FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET}
-                kohde={kohde}
-                opetuskielet={oppilaitoksenopetuskielet.data}
-                editValues={opetusjatutkintokielimuutoksetValue}
-                component={this.renderOpetuskieliMuutokset}
-              /> */}
-          </Row>
-        </ContentContainer>
-      );
-    } else if (oppilaitoksenopetuskielet.isFetching) {
-      return <Loading />;
-    } else if (oppilaitoksenopetuskielet.hasErrored) {
-      return <h2>Opetuskieliä ei voitu ladata.</h2>;
-    } else {
-      return null;
-    }
-  }
-
-  renderOpetuskieliMuutokset(props) {
-    const { opetuskielet, fields, editValues, kohde } = props;
-    const { kohdeArvot } = kohde;
-
-    return (
-      <div>
-        <Row>
-          <h4>{MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPETUSKIELET.HEADING.FI}</h4>
-
-          {opetuskielet.map((opetuskieli, i) => {
-            const { koodiArvo, koodisto, metadata } = opetuskieli;
-            const { koodistoUri } = koodisto;
-            const nimi = parseLocalizedField(metadata);
-            const identifier = `input-${koodiArvo}-${i}`;
-
-            let isInLupa = false;
-            let isAdded = false;
-            let isRemoved = false;
-            let isChecked = false;
-            let customClassName = "";
-
-            kohdeArvot.forEach(arvo => {
-              if (arvo.koodiarvo === koodiArvo) {
-                isInLupa = true;
-              }
-              // if (arvo === nimi) {
-              //   isInLupa = true
-              // }
-            });
-
-            if (editValues) {
-              editValues.forEach(val => {
-                if (val.koodiarvo === koodiArvo && val.nimi === nimi) {
-                  isAdded = val.type === MUUTOS_TYPES.ADDITION || null;
-                  isRemoved = val.type === MUUTOS_TYPES.REMOVAL || null;
-                }
-              });
-            }
-
-            customClassName = isInLupa ? "is-in-lupa" : null;
-            customClassName = isAdded ? "is-added" : null;
-            customClassName = isRemoved ? "is-removed" : null;
-
-            if ((isInLupa && !isRemoved) || isAdded) {
-              isChecked = true;
-            }
-
-            return (
-              <CheckboxRowContainer
-                key={identifier}
-                className={customClassName}
-              >
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    id={identifier}
-                    checked={isChecked}
-                    onChange={e => {
-                      handleCheckboxChange(
-                        e,
-                        editValues,
-                        fields,
-                        isInLupa,
-                        opetuskieli
-                      );
-                    }}
-                  />
-                  <label htmlFor={identifier} />
-                </Checkbox>
-                <div>{_.capitalize(nimi)}</div>
-              </CheckboxRowContainer>
-            );
-          })}
-        </Row>
-      </div>
+  useEffect(() => {
+    setState(
+      getDataForKieletList(
+        opetuskielet,
+        props.lupa.kohteet[2],
+        mhlState[sectionId].changes["kielet"]
+      )
     );
-  }
-}
+  }, [opetuskielet, mhlState[sectionId].changes["kielet"]]);
 
-// const selector = formValueSelector(FORM_NAME_UUSI_HAKEMUS)
+  useEffect(() => {
+    fetchOppilaitoksenOpetuskielet()(dispatch);
+  }, []);
 
-// MuutospyyntoWizardKielet = connect(state => {
-// const opetusjatutkintokielimuutoksetValue = selector(state, FIELD_ARRAY_NAMES.OPETUS_JA_TUTKINTOKIELET)
+  const handleChanges = (
+    item,
+    listId = "kielet",
+    removeExistingOnes = false
+  ) => {
+    // Let's find out the type of operation
+    const operationType = item.shouldBeSelected
+      ? MUUTOS_TYPES.REMOVAL
+      : MUUTOS_TYPES.ADDITION;
+    const existingChange = _.find(mhlState[sectionId].changes[listId], {
+      koodiarvo: item.code
+    });
+    // Let's reset the item's state
+    if (existingChange) {
+      removeItemFromChanges(sectionId, item, listId)(mhlDispatch);
+    } else {
+      addItemToChanges(
+        sectionId,
+        item,
+        listId,
+        operationType,
+        removeExistingOnes
+      )(mhlDispatch);
+    }
+  };
 
-// return {
-//   opetusjatutkintokielimuutoksetValue
-// }
-// })(MuutospyyntoWizardKielet)
+  const { lupa } = props;
+  const { kohteet } = lupa;
+  const kohde = kohteet[2];
+  const { headingNumber, heading } = kohde;
+
+  return (
+    <Section code={headingNumber} title={heading}>
+      <Wrapper>
+        <ExpandableRow
+          shouldBeExpanded={true}
+          title={MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPETUSKIELET.HEADING.FI}
+          changes={mhlState[sectionId].changes["kielet"]}
+        >
+          <div className="py-4">
+            {_.map(state.items, (item, i) => {
+              return (
+                <div key={`item-${i}`} className="mx-6 px-1 py-2">
+                  <SelectableItem item={item} onChanges={handleChanges} />
+                </div>
+              );
+            })}
+          </div>
+        </ExpandableRow>
+      </Wrapper>
+    </Section>
+  );
+};
 
 export default MuutospyyntoWizardKielet;
-// export default reduxForm({
-//   form: FORM_NAME_UUSI_HAKEMUS,
-//   destroyOnUnmount: false,
-//   forceUnregisterOnUnmount: true,
-//   // validate,
-// })(MuutospyyntoWizardKielet)

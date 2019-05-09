@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import Section from "components/Section";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import { TUTKINTO_TEKSTIT } from "../../../modules/constants";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
@@ -40,7 +39,7 @@ const MuutospyyntoWizardKoulutukset = () => {
   };
 
   return (
-    <Section title="Koulutukset">
+    <div className="ml-16">
       <p className="pb-4">{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</p>
 
       <ValmentavatKoulutukset
@@ -80,7 +79,7 @@ const MuutospyyntoWizardKoulutukset = () => {
         }
         onChanges={handleChanges}
       />
-    </Section>
+    </div>
   );
 };
 

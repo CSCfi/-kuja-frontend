@@ -19,7 +19,6 @@ const Tyovoimakoulutukset = props => {
 
   useEffect(() => {
     if (_.indexOf(koulutukset.muut.fetched, koodisto) !== -1) {
-      console.info("setting state", props.changes);
       setState(
         getDataForKoulutusList(
           koulutukset.muut.muudata[koodisto],

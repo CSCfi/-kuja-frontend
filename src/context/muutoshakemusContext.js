@@ -10,6 +10,9 @@ const initialState = {
   },
   koulutukset: {
     changes: {}
+  },
+  opetuskielet: {
+    changes: {}
   }
   // [FIELD_ARRAY_NAMES.TUTKINNOT_JA_KOULUTUKSET]: {}
 };

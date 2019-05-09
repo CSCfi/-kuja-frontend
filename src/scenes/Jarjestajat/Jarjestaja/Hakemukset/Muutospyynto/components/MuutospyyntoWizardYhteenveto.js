@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import Modal from "react-modal";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import { bindActionCreators } from "redux";
 // import { reduxForm, formValueSelector, FieldArray, Field, change } from 'redux-form'
 
 import {
@@ -11,8 +8,8 @@ import {
   modalStyles,
   ModalText
 } from "./ModalComponents";
-import MuutosList from "./MuutosList";
-import MuutosListTutkinnot from "./MuutosListTutkinnot";
+// import MuutosList from "./MuutosList";
+// import MuutosListTutkinnot from "./MuutosListTutkinnot";
 import { hasFormChanges } from "services/muutospyynnot/muutospyyntoUtil";
 import {
   Button,
@@ -26,17 +23,17 @@ import {
   WizardBottom
 } from "./MuutospyyntoWizardComponents";
 import OrganisaationTiedot from "./OrganisaationTiedot";
-import TaloudellisetYhteenveto from "./TaloudellisetYhteenveto";
+// import TaloudellisetYhteenveto from "./TaloudellisetYhteenveto";
 
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import { HAKEMUS_OTSIKOT } from "../modules/uusiHakemusFormConstants";
 import {
-  COMPONENT_TYPES,
-  FIELD_ARRAY_NAMES,
+  // COMPONENT_TYPES,
+  // FIELD_ARRAY_NAMES,
   FIELDS,
-  FORM_NAME_UUSI_HAKEMUS
+  // FORM_NAME_UUSI_HAKEMUS
 } from "../modules/uusiHakemusFormConstants";
-import validate from "../modules/validateWizard";
+// import validate from "../modules/validateWizard";
 
 import DatePicker from "modules/DatePicker";
 
@@ -111,13 +108,13 @@ class MuutospyyntoWizardYhteenveto extends Component {
       preview,
       save,
       formValues,
-      lupa,
-      tutkinnotjakoulutuksetValue,
-      opetusjatutkintokieletValue,
-      toimialueValue,
-      opiskelijavuosiValue,
-      muutmuutoksetValue,
-      taloudellisetValue
+      lupa
+      // tutkinnotjakoulutuksetValue,
+      // opetusjatutkintokieletValue,
+      // toimialueValue,
+      // opiskelijavuosiValue,
+      // muutmuutoksetValue,
+      // taloudellisetValue
     } = this.props;
 
     let jarjestaja = undefined;
@@ -125,7 +122,7 @@ class MuutospyyntoWizardYhteenveto extends Component {
       jarjestaja = lupa.data.jarjestaja;
     }
 
-    const { meta } = formValues;
+    // const { meta } = formValues;
 
     return (
       <div>

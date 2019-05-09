@@ -1,16 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "react-modal";
 
 import WizardPage from "./WizardPage";
 
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
-import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
-import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
-import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
-
+// import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
+// import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
+// import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
+import { KoulutuksetProvider } from "context/koulutuksetContext";
+import { KoulutusalatProvider } from "context/koulutusalatContext";
+import { KoulutustyypitProvider } from "context/koulutustyypitContext";
 import Loading from "modules/Loading";
-
 import {
   ContentContainer,
   ContentWrapper,
@@ -34,15 +35,14 @@ import {
   Content
 } from "./ModalComponents";
 import {
-  FORM_NAME_UUSI_HAKEMUS,
   HAKEMUS_VIRHE,
   HAKEMUS_VIESTI,
   HAKEMUS_OTSIKOT
 } from "../modules/uusiHakemusFormConstants";
-import {
-  getJarjestajaData,
-  loadFormData
-} from "services/muutospyynnot/muutospyyntoUtil";
+// import {
+//   getJarjestajaData,
+//   loadFormData
+// } from "services/muutospyynnot/muutospyyntoUtil";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 
 Modal.setAppElement("#root");
@@ -255,12 +255,12 @@ const MuutospyyntoWizard = props => {
   }
 
   if (
-    muutosperustelut.fetched &&
-    vankilat.fetched &&
-    ELYkeskukset.fetched &&
-    lupa.fetched &&
-    paatoskierrokset.fetched &&
-    (!muutospyynto || muutospyynto.fetched)
+    // muutosperustelut.fetched &&
+    // vankilat.fetched &&
+    // ELYkeskukset.fetched &&
+    lupa.fetched
+    // paatoskierrokset.fetched &&
+    // (!muutospyynto || muutospyynto.fetched)
   ) {
     // muutospyynto.fetched is from EDIT FORM
     return (
@@ -319,17 +319,23 @@ const MuutospyyntoWizard = props => {
                     onNext={nextPage}
                     onSave={save}
                     render={props => (
-                      <MuutospyyntoWizardMuutokset
-                        onCancel={onCancel}
-                        update={update}
-                        lupa={lupa}
-                        initialValues={initialValues}
-                        {...props}
-                      />
+                      <KoulutustyypitProvider>
+                        <KoulutusalatProvider>
+                          <KoulutuksetProvider>
+                            <MuutospyyntoWizardMuutokset
+                              onCancel={onCancel}
+                              update={update}
+                              lupa={lupa}
+                              initialValues={initialValues}
+                              {...props}
+                            />
+                          </KoulutuksetProvider>
+                        </KoulutusalatProvider>
+                      </KoulutustyypitProvider>
                     )}
                   />
                 )}
-                {page === 2 && (
+                {/* {page === 2 && (
                   <WizardPage
                     pageNumber={2}
                     onPrev={previousPage}
@@ -376,7 +382,7 @@ const MuutospyyntoWizard = props => {
                       />
                     )}
                   />
-                )}
+                )} */}
               </WizardContent>
             </ContentContainer>
           </WizardWrapper>
@@ -406,13 +412,13 @@ const MuutospyyntoWizard = props => {
       </MuutoshakemusProvider>
     );
   } else if (
-    muutosperustelut.isFetching ||
-    vankilat.isFetching ||
-    ELYkeskukset.isFetching ||
-    lupa.isFetching ||
-    paatoskierrokset.isFetching ||
-    !muutospyynto ||
-    muutospyynto.isFetching
+    // muutosperustelut.isFetching ||
+    // vankilat.isFetching ||
+    // ELYkeskukset.isFetching ||
+    lupa.isFetching
+    // paatoskierrokset.isFetching ||
+    // !muutospyynto ||
+    // muutospyynto.isFetching
   ) {
     // muutospyynto.isFetching is from EDIT form
     return <Loading />;

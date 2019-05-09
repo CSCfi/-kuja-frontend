@@ -5,10 +5,10 @@ const Section = props => {
   return (
     <div className="flex">
       <div className="w-16">
-        {props.code && <h2 className="py-4">{props.code}.</h2>}
+        {props.code && <h2 className="py-8">{props.code}.</h2>}
       </div>
       <div className="w-full">
-        <h2 className="py-4">
+        <h2 className="py-8">
           <span>{props.title}</span>
         </h2>
         <div className="pb-6">{props.children}</div>

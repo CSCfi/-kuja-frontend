@@ -53,7 +53,7 @@ export const MUUTOS_WIZARD_TEKSTIT = {
   },
   MUUTOS_OPETUSKIELET: {
     HEADING: {
-      FI: "OPETUSKIELI",
+      FI: "Opetuskieli",
       SV: "På svenska"
     },
     PERUSTELU: {

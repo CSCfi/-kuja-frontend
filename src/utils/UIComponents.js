@@ -64,7 +64,7 @@ export const WizardContent = styled.div`
 
 export const WizardWrapper = styled.div`
   // position: relative;
-  maring-top: -45px;
+  margin-top: -45px;
   flex: 1;
 `
 

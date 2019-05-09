@@ -20,6 +20,8 @@ import {
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
 import { fetchLupaHistory } from "services/lupahistoria/actions";
 import { LupahistoriaContext } from "context/lupahistoriaContext";
+import { KunnatProvider } from "context/kunnatContext";
+import { MaakunnatProvider } from "context/maakunnatContext";
 import _ from "lodash";
 
 const Separator = styled.div`
@@ -32,6 +34,13 @@ const Separator = styled.div`
     margin: 30px 0;
   }
 `;
+
+// ELYkeskukset={ELYkeskukset}
+// lupa={lupa}
+// muutospyynnot={muutospyynnot}
+// muutosperustelut={muutosperustelut}
+// paatoskierrokset={paatoskierrokset}
+// vankilat={vankilat}
 
 const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
   const { state: lupahistory, dispatch } = useContext(LupahistoriaContext);
@@ -134,7 +143,13 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                 <Route
                   path={`${match.path}/omattiedot`}
                   exact
-                  render={props => <OmatTiedot {...props} />}
+                  render={props => (
+                    <MaakunnatProvider>
+                      <KunnatProvider>
+                        <OmatTiedot {...props} />
+                      </KunnatProvider>
+                    </MaakunnatProvider>
+                  )}
                 />
                 <Route
                   path={`${match.url}/jarjestamislupa`}
@@ -196,7 +211,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
     } else if (lupa && lupa.hasErrored) {
       return <h2>Luvan lataamisessa tapahtui virhe</h2>;
     } else {
-      return <div>Jotain muuta</div>;
+      return <div>Määrittelemätön tila.</div>;
     }
   } else {
     return null;

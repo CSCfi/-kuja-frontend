@@ -23,7 +23,6 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
         "ammatilliseentehtavaanvalmistavakoulutus"
       ) !== -1
     ) {
-      console.info("setting state", props.changes);
       setState(
         getDataForKoulutusList(
           koulutukset.muut.muudata.ammatilliseentehtavaanvalmistavakoulutus,

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import MuutospyyntoWizardTutkinnot from "./MuutospyyntoWizardTutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
-// import MuutospyyntoWizardOpetuskieletContainer from "../containers/MuutospyyntoWizardOpetuskieletContainer";
+import MuutospyyntoWizardKielet from "./MuutospyyntoWizardOpetuskielet";
 // import MuutospyyntoWizardTutkintokieletContainer from "../containers/MuutospyyntoWizardTutkintokieletContainer";
 // import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimialue";
 // import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
@@ -13,7 +13,8 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { fetchKoulutuksetAll } from "services/koulutukset/actions";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
-import _ from "lodash";
+import { OppilaitoksenOpetuskieletProvider } from "context/oppilaitoksenOpetuskieletContext";
+// import _ from "lodash";
 
 const MuutospyyntoWizardMuutokset = props => {
   const [state, setState] = useState({
@@ -62,7 +63,6 @@ const MuutospyyntoWizardMuutokset = props => {
       </p>
 
       <form onSubmit={props.handleSubmit}>
-
         <MuutospyyntoWizardTutkinnot
           lupa={props.lupa}
           koulutukset={koulutukset}
@@ -72,14 +72,16 @@ const MuutospyyntoWizardMuutokset = props => {
 
         <MuutospyyntoWizardKoulutukset
           lupa={props.lupa}
-          // koulutukset={koulutukset}
+          koulutukset={koulutukset}
           koulutusalat={koulutusalat}
           koulutustyypit={koulutustyypit}
         />
 
-        {/* <Kohde>
-          <MuutospyyntoWizardOpetuskieletContainer lupa={lupa} />
+        <OppilaitoksenOpetuskieletProvider>
+          <MuutospyyntoWizardKielet lupa={props.lupa} />
+        </OppilaitoksenOpetuskieletProvider>
 
+        {/* <Kohde>
           <MuutospyyntoWizardTutkintokieletContainer lupa={lupa} />
         </Kohde>
 

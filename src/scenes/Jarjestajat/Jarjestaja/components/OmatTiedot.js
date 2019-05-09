@@ -7,17 +7,19 @@ import {
 } from "../../../../modules/elements";
 import { getToimialueByKoodiArvo } from "services/toimialueet/toimialueUtil";
 import { fetchKunnat } from "../../../../services/kunnat/actions";
+import { fetchMaakunnat } from "../../../../services/maakunnat/actions";
 import { UserContext } from "context/userContext";
 import { KunnatContext } from "context/kunnatContext";
 import { MaakunnatContext } from "context/maakunnatContext";
 
 const OmatTiedot = props => {
-  const { state: user, dispatch: userDispatch } = useContext(UserContext);
+  const { state: user } = useContext(UserContext);
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
+    fetchMaakunnat()(maakunnatDispatch);
   }, []);
   const { oppilaitos } = user || {};
   let postinumero = undefined;

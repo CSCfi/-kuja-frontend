@@ -16,7 +16,7 @@
     "react-breadcrumbs-dynamic": "^1.2.0",
     "react-datepicker": "^1.5.0",
     "react-dom": "^16.8.6",
-    "react-helmet": "^5.2.0",
+    "react-helmet": "^6.0.0-beta",
     "react-icons": "^3.3.0",
     "react-media": "^1.6.1",
     "react-modal": "^3.4.4",

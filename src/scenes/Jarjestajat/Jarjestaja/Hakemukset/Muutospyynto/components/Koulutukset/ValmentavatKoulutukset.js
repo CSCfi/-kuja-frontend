@@ -7,7 +7,6 @@ import ExpandableRow from "components/ExpandableRow";
 import SelectableItem from "components/SelectableItem";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import _ from "lodash";
 
 const ValmentavatKoulutukset = props => {
