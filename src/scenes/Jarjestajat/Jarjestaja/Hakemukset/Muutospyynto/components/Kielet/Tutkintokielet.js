@@ -2,20 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import Section from "components/Section";
 import ExpandableRow from "components/ExpandableRow";
-import { getDataForKieletList } from "services/oppilaitoksenopetuskielet/opetuskieletUtil";
+import { getDataForKieletList } from "services/kielet/opetuskieletUtil";
 import SelectableItem from "components/SelectableItem";
-import { Wrapper } from "./MuutospyyntoWizardComponents";
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
-import { OppilaitoksenOpetuskieletContext } from "../../../../../../context/oppilaitoksenOpetuskieletContext";
-import { fetchOppilaitoksenOpetuskielet } from "services/oppilaitoksenopetuskielet/actions";
-import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
+import { Wrapper } from "../MuutospyyntoWizardComponents";
+import { MUUTOS_WIZARD_TEKSTIT } from "../../modules/constants";
+import { OppilaitoksenOpetuskieletContext } from "context/kieletContext";
+import { fetchOppilaitoksenOpetuskielet } from "services/kielet/actions";
+import { MUUTOS_TYPES } from "../../modules/uusiHakemusFormConstants";
 import {
   addItemToChanges,
   removeItemFromChanges
 } from "services/muutoshakemus/actions";
 import _ from "lodash";
 
-const MuutospyyntoWizardKielet = props => {
+const Tutkintokielet = props => {
   const sectionId = "opetuskielet";
   const [state, setState] = useState({});
   const { state: opetuskielet, dispatch } = useContext(
@@ -93,4 +93,4 @@ const MuutospyyntoWizardKielet = props => {
   );
 };
 
-export default MuutospyyntoWizardKielet;
+export default Tutkintokielet;

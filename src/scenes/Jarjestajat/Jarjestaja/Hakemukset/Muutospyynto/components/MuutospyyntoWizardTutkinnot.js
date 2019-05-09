@@ -1,9 +1,5 @@
 import _ from "lodash";
 import React, { useContext } from "react";
-import TutkintoList from "./TutkintoList";
-import { parseLocalizedField } from "../../../../../../modules/helpers";
-import Loading from "../../../../../../modules/Loading";
-import { Row, Info } from "./MuutospyyntoWizardComponents";
 import Section from "components/Section";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
@@ -13,17 +9,14 @@ import {
   removeItemFromChanges,
   removeSubItemFromChanges
 } from "services/muutoshakemus/actions";
+import Tutkinnot from "./Tutkinnot/Tutkinnot";
 
 const MuutospyyntoWizardTutkinnot = props => {
-  const sectionId = 'tutkinnot';
+  const sectionId = "tutkinnot";
   const { state, dispatch: mhlDispatch } = useContext(MuutoshakemusContext);
   const { lupa } = props;
   const { kohteet } = lupa;
   const { headingNumber, heading } = kohteet[1];
-  const koulutusdata = props.koulutukset.koulutusdata;
-  const koulutusDataSorted = _.sortBy(koulutusdata, d => {
-    return d.koodiArvo;
-  });
 
   const getChangesByList = (allChanges = [], koulutusdata = []) => {
     const changes = {};
@@ -52,7 +45,9 @@ const MuutospyyntoWizardTutkinnot = props => {
         koodiArvo: item.subItems[0].code
       });
       if (existingChange) {
-        removeSubItemFromChanges(sectionId, item.subItems[0], listId)(mhlDispatch);
+        removeSubItemFromChanges(sectionId, item.subItems[0], listId)(
+          mhlDispatch
+        );
       } else {
         // Let's find out the type of operation
         const operationType = item.subItems[0].shouldBeSelected
@@ -66,7 +61,9 @@ const MuutospyyntoWizardTutkinnot = props => {
           });
           // Parent item needs to be selected when at least one sub item is going to be selected
           if (!isItemSelected) {
-            addItemToChanges(sectionId, item, listId, operationType)(mhlDispatch);
+            addItemToChanges(sectionId, item, listId, operationType)(
+              mhlDispatch
+            );
           }
         }
         // Let's add the sub item to changes
@@ -100,62 +97,18 @@ const MuutospyyntoWizardTutkinnot = props => {
 
   return (
     <Section code={headingNumber} title={heading}>
-      {_.map(koulutusDataSorted, (koulutusala, i) => {
-        const koodiarvo = koulutusala.koodiarvo || koulutusala.koodiArvo;
-        const { metadata, koulutukset } = koulutusala;
-        const nimi = parseLocalizedField(metadata);
-        return (
-          <TutkintoList
-            key={i}
-            koodiarvo={koodiarvo}
-            areaCode={koodiarvo}
-            title={nimi}
-            koulutustyypit={koulutukset}
-            articles={kohteet[1].maaraykset}
-            changes={state[sectionId].changes ? state[sectionId].changes[koodiarvo] : []}
-            onChanges={handleChanges}
-            listId={koodiarvo}
-          />
-        );
-      })}
+      <Tutkinnot
+        koulutukset={props.koulutukset}
+        lupa={lupa}
+        changes={
+          state[sectionId].changes || []
+        }
+        kohde={props.lupa.kohteet[2]}
+        listId={"all"}
+        onChanges={handleChanges}
+      />
     </Section>
   );
 };
 
 export default MuutospyyntoWizardTutkinnot;
-
-// const changes = getChangesByList(
-//   props.tutkintomuutoksetValue,
-//   props.koulutukset.koulutusdata
-// );
-// if (state.changes === null) {
-//   setState({
-//     changes: changes || []
-//   });
-// }
-
-// } else if (koulutuksetIsFetching || muutIsFetching) {
-//   return <Loading />;
-// } else if (koulutuksetHasErrored || muutHasErrored) {
-//   return <h2>Virhe ladattaessa tietoja</h2>;
-// } else {
-//   return null;
-// }
-
-// componentDidUpdate(prevProps, prevState) {
-//   if (
-//     props.koulutukset &&
-//     props.koulutukset.koulutusdata &&
-//     props.tutkintomuutoksetValue
-//   ) {
-//     const changes = getChangesByList(
-//       props.tutkintomuutoksetValue,
-//       props.koulutukset.koulutusdata
-//     );
-//     if (state.changes === null) {
-//       setState({
-//         changes: changes || []
-//       });
-//     }
-//   }
-// }

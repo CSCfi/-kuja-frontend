@@ -5,7 +5,6 @@ import { UserProvider } from "./userContext";
 // import { MuutosperustelutProvider } from "./muutosperustelutContext";
 // import { MaaraystyypitProvider } from "./maaraystyypitContext";
 // import { VankilatProvider } from "./vankilatContext";
-// import { OppilaitoksenOpetuskieletProvider } from "./oppilaitoksenopetuskielet";
 
 const Store = ({ children }) => {
   return (

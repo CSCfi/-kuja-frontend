@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import MuutospyyntoWizardTutkinnot from "./MuutospyyntoWizardTutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
-import MuutospyyntoWizardKielet from "./MuutospyyntoWizardOpetuskielet";
+import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
 // import MuutospyyntoWizardTutkintokieletContainer from "../containers/MuutospyyntoWizardTutkintokieletContainer";
 // import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimialue";
 // import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
@@ -13,7 +13,6 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { fetchKoulutuksetAll } from "services/koulutukset/actions";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
-import { OppilaitoksenOpetuskieletProvider } from "context/oppilaitoksenOpetuskieletContext";
 // import _ from "lodash";
 
 const MuutospyyntoWizardMuutokset = props => {
@@ -77,15 +76,11 @@ const MuutospyyntoWizardMuutokset = props => {
           koulutustyypit={koulutustyypit}
         />
 
-        <OppilaitoksenOpetuskieletProvider>
-          <MuutospyyntoWizardKielet lupa={props.lupa} />
-        </OppilaitoksenOpetuskieletProvider>
+        <MuutospyyntoWizardKielet lupa={props.lupa} />
+
+        {/* <MuutospyyntoWizardTutkintokielet lupa={lupa} /> */}
 
         {/* <Kohde>
-          <MuutospyyntoWizardTutkintokieletContainer lupa={lupa} />
-        </Kohde>
-
-        <Kohde>
           <MuutospyyntoWizardToimialue lupa={lupa} />
         </Kohde>
 
