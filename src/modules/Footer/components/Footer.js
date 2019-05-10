@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS, Leijona , MEDIA_QUERIES} from 'modules/styles'
 
-
 const FooterBar = styled.div`
   display: flex;
   flex-direction: row;
@@ -11,13 +10,12 @@ const FooterBar = styled.div`
   color: black;
   border-top: 2px solid #70A489;
   padding: 1rem;
-  padding-bottom: 40px;
-  height:100px;
-  bottom:0;
+  height: auto;
+  bottom: 0;
 `
 
 const FooterBarUpper = styled.div`
-  display:flex;
+  display: flex;
   margin: 0 auto;
   width: 100%;
   background: ${COLORS.WHITE};
@@ -25,13 +23,10 @@ const FooterBarUpper = styled.div`
 `
 
 const FooterLeft = styled.div`
-  @media ${MEDIA_QUERIES.MOBILE} {
-    display: none
-  }
 `
 
 const FooterRight = styled.div`
-  margin-left:30px;
+  margin-left: 30px;
 `
 
 class Footer extends Component {
@@ -41,7 +36,7 @@ class Footer extends Component {
     return (
       <FooterBar>
         <FooterBarUpper maxWidth="1280px">
-          <FooterLeft>
+          <FooterLeft className="hidden sm:inline">
             <Leijona/>
           </FooterLeft>
           <FooterRight>

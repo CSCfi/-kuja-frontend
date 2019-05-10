@@ -11,6 +11,7 @@ import Footer from 'modules/Footer/containers/FooterContainer'
 import Routes from 'routes'
 import { COLORS, APP_WIDTH } from './modules/styles'
 import { AppContainer, BreadcrumbsContainer, RoutesContainer } from './modules/elements'
+import "index.css"
 
 ReactDOM.render(
   <Provider store={store}>

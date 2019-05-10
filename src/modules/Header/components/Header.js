@@ -16,10 +16,6 @@ const HeaderTitle = styled.div`
   text-decoration: none;
   margin-left: 30px;
   line-height: 18px;
-  @media ${MEDIA_QUERIES.MOBILE} {
-    width: 0;
-    overflow: hidden;
-  }
 `
 
 const HeaderBarUpper = styled.div`
@@ -105,7 +101,7 @@ class Header extends Component {
       <div>
         <HeaderBar>
           <HeaderBarUpper maxWidth="1280px" justifyContent="space-between">
-              <HeaderTitle>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
+              <HeaderTitle className="hidden sm:inline">Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
 
               <HeaderUpperRight>
                 {!sessionStorage.getItem('role')
