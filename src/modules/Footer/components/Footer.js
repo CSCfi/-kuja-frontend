@@ -22,13 +22,6 @@ const FooterBarUpper = styled.div`
   font-size:11px;
 `
 
-const FooterLeft = styled.div`
-`
-
-const FooterRight = styled.div`
-  margin-left: 30px;
-`
-
 class Footer extends Component {
 
   render() {
@@ -36,15 +29,14 @@ class Footer extends Component {
     return (
       <FooterBar>
         <FooterBarUpper maxWidth="1280px">
-          <FooterLeft className="hidden sm:inline">
+          <div className="hidden sm:inline">
             <Leijona/>
-          </FooterLeft>
-          <FooterRight>
-            <p>&nbsp;</p>
+          </div>
+          <div className="rightSide m-6 mr-30 leading-loose">
             <p>OPETUS- JA KULTTUURIMINISTERIÖ</p>
             <p>PL 29, 00023 VALTIONEUVOSTO</p>
             <p>PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
-          </FooterRight>
+          </div>
         </FooterBarUpper>
       </FooterBar>
     )

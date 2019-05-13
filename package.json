@@ -32,10 +32,9 @@
     "tar": "^4.4.8"
   },
   "scripts": {
-    "build:css": "postcss src/css/index.css -o src/index.css",
-    "watch:css": "postcss src/css/index.css -o src/index.css -w",
-    "start": "npm run watch:css & react-scripts start",
-    "build": "npm run build:css && react-scripts build",
+    "tailwind:css": "tailwind build src/css/tailwind.src.css -c tailwind.config.js -o src/css/tailwind.css",
+    "start": "npm run tailwind:css && react-scripts start",
+    "build": "npm run tailwind:css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

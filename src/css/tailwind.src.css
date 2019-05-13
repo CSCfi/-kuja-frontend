@@ -35,6 +35,8 @@
   * @import "components/buttons";
   * @import "components/forms";
   */
+
+  @import "../modules/Footer/components/Footer.css";
  
  /**
   * This injects all of Tailwind's utility classes, generated based on your
@@ -60,4 +62,3 @@
   * @import "utilities/background-patterns";
   * @import "utilities/skew-transforms";
   */
- 
