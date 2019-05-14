@@ -3,9 +3,9 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import RadioButton from "components/RadioButton/RadioButton";
+import RadioButtonWithLabel from "01-molecules/RadioButtonWithLabel/RadioButtonWithLabel";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "components/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
 import { MUUT_KEYS } from "../../modules/constants";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -46,11 +46,15 @@ const Tyovoimakoulutukset = props => {
           {_.map(state.items, (item, i) => {
             return (
               <div key={`item-${i}`} className="px-6 py-2">
-                <RadioButton
-                  name={`radio-${koodisto}`}
-                  item={item}
+                <RadioButtonWithLabel
+                  name={koodisto}
+                  isChecked={item.shouldBeSelected}
                   onChanges={handleChanges}
-                />
+                  payload={item}
+                >
+                  <span className="ml-4">{item.code}</span>
+                  <span className="ml-4">{item.title}</span>
+                </RadioButtonWithLabel>
               </div>
             );
           })}

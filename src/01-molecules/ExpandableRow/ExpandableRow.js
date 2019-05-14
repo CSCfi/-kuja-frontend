@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Arrow } from "utils/UIComponents";
-import arrow from "static/images/koulutusala-arrow.svg";
 import PropTypes from "prop-types";
-import ExpandableRowContent from "components/ExpandableRowContent";
-import { COLORS } from "modules/styles";
+import arrow from "static/images/koulutusala-arrow.svg";
+import { Arrow } from "utils/UIComponents";
+import Slot from "../../00-atoms/Slot/Slot";
 
 const ExpandableRow = props => {
   const [state, setState] = useState({
@@ -30,19 +29,11 @@ const ExpandableRow = props => {
           />
         </span>
         <div className="flex-1">
-          {props.code && <span className="pr-6">{props.code}</span>}
-          <span>{props.title}</span>
+          <Slot slot="title">{props.children}</Slot>
         </div>
-        {props.changes && props.changes.length ? (
-          <div>
-            Muutokset:&nbsp;
-            <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
-          </div>
-        ) : null}
+        <Slot slot="info">{props.children}</Slot>
       </div>
-      {state.shouldBeExpanded && (
-        <ExpandableRowContent>{props.children}</ExpandableRowContent>
-      )}
+      {state.shouldBeExpanded && <Slot slot="content">{props.children}</Slot>}
     </div>
   );
 };
@@ -52,8 +43,7 @@ ExpandableRow.propTypes = {
   changes: PropTypes.array,
   code: PropTypes.string,
   onChanges: PropTypes.func,
-  shouldBeExpanded: PropTypes.bool,
-  title: PropTypes.string
+  shouldBeExpanded: PropTypes.bool
 };
 
 export default ExpandableRow;

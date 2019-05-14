@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Span } from "utils/UIComponents";
 import SelectableItem from "../02-organisms/SelectableItem";
 import _ from "lodash";
 
@@ -11,14 +12,17 @@ const CategorizedList = props => {
           <div key={i} className="p-4">
             <div className="p-2">
               <strong>
-                {category.code && <span className="mr-4">{category.code}</span>}
-                <span>{category.title}</span>
+                <Span>{category.code}</Span>
+                <Span>{category.title}</Span>
               </strong>
             </div>
             {_.map(category.items, (item, ii) => {
               return (
                 <div key={`item-${ii}`} className="p-2">
-                  <SelectableItem item={item} onChanges={props.onChanges} />
+                  <SelectableItem
+                    item={item}
+                    onChanges={props.onChanges}
+                  />
                 </div>
               );
             })}

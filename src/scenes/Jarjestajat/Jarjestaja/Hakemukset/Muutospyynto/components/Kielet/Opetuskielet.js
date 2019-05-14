@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import ExpandableRow from "components/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
 import { getDataForOpetuskieletList } from "services/kielet/opetuskieletUtil";
-import SelectableItem from "components/SelectableItem";
+import SelectableItem from "02-organisms/SelectableItem";
 import { MUUTOS_WIZARD_TEKSTIT } from "../../modules/constants";
 import { KieletContext } from "context/kieletContext";
 import { fetchOppilaitoksenOpetuskielet } from "services/kielet/actions";

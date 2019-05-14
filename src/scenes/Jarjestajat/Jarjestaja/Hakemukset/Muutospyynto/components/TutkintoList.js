@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ExpandableRow from "components/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
-import _ from "lodash";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import CategorizedList from "components/CategorizedList";
+import { COLORS } from "modules/styles";
+import _ from "lodash";
 
 const TutkintoList = props => {
   const getArticle = articles => {
@@ -107,15 +108,29 @@ const TutkintoList = props => {
 
   return (
     <Wrapper>
-      <ExpandableRow code={props.koodiarvo} title={props.title} changes={state.changes}>
-        <CategorizedList
-          categories={state.categories}
-          changes={state.changes}
-          code={props.koodiarvo}
-          onChanges={onChanges}
-          shouldBeExpanded={false}
-          title={props.title}
-        />
+      <ExpandableRow code={props.koodiarvo} title={props.title}>
+        <div data-slot="title">
+          {props.code && <span className="pr-6">{props.code}</span>}
+          <span>{props.title}</span>
+        </div>
+        <div data-slot="info">
+          {props.changes && props.changes.length ? (
+            <div>
+              Muutokset:&nbsp;
+              <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
+            </div>
+          ) : null}
+        </div>
+        <div data-slot="content">
+          <CategorizedList
+            categories={state.categories}
+            changes={state.changes}
+            code={props.koodiarvo}
+            onChanges={onChanges}
+            shouldBeExpanded={false}
+            title={props.title}
+          />
+        </div>
       </ExpandableRow>
     </Wrapper>
   );

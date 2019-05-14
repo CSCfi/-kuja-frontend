@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ExpandableRow from "components/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import _ from "lodash";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
-import RadioButton from "components/RadioButton/RadioButton";
+import RadioButton from "00-atoms/RadioButton/RadioButton";
 
 const KoulutusList = props => {
   const formState = () => {
