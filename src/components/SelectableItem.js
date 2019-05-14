@@ -1,10 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Checkbox from "components/Checkbox";
+import Dropdown from "./Dropdown/Dropdown";
 
 const SelectableItem = props => {
   const handleCheckboxChange = () => {
     props.onChanges(props.item);
+  };
+
+  const handleSelectChange = () => {
+    props.onChanges(props.item, true);
   };
 
   const handleSubCheckboxChange = () => {
@@ -19,30 +24,39 @@ const SelectableItem = props => {
     .filter(Boolean)
     .join(" ");
 
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" }
+  ];
+
   return (
     <div>
-      <label className={layoutClasses}>
-        <Checkbox
-          key={`checkbox-item-${props.item.code}`}
-          checked={props.item.shouldBeSelected}
-          onChange={handleCheckboxChange}
-        />
-        <span>
-          <span className="ml-4">
-            {props.item.code}
+      <div className="flex items-center justify-between">
+        <label className={layoutClasses}>
+          <Checkbox
+            key={`checkbox-item-${props.item.code}`}
+            checked={props.item.shouldBeSelected}
+            onChange={handleCheckboxChange}
+          />
+          <span>
+            <span className="ml-4">{props.item.code}</span>
+            <span className="ml-4">{props.item.title}</span>
+            {/* <span className="ml-10">
+              {props.item.isInLupa ? "LUPA" : ""}
+            </span>
+            <span className="ml-10">
+              {props.item.isRemoved ? "POISTETTU" : ""}
+            </span>
+            <span className="ml-10">
+              {props.item.isAdded ? "LISÄTTY" : ""}
+            </span> */}
           </span>
-          <span className="ml-4">{props.item.title}</span>
-          <span className="ml-10">
-            {props.item.isInLupa ? "LUPA" : ""}
-          </span>
-          <span className="ml-10">
-            {props.item.isRemoved ? "POISTETTU" : ""}
-          </span>
-          <span className="ml-10">
-            {props.item.isAdded ? "LISÄTTY" : ""}
-          </span>
-        </span>
-      </label>
+        </label>
+        <div className="w-48">
+            <Dropdown options={options} isDisabled={!props.item.shouldBeSelected} />
+        </div>
+      </div>
       {props.item.subItems && props.item.subItems.length > 0 && (
         <div className="p-4">
           <label>

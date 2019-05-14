@@ -8,7 +8,10 @@ const initialState = {
   koulutukset: {
     changes: {}
   },
-  kielet: {
+  opetuskielet: {
+    changes: {}
+  },
+  tutkintokielet: {
     changes: {}
   }
 };

@@ -5,7 +5,11 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  data: []
+  data: {
+    opetuskielet: {},
+    tutkintokielet: {},
+    kielet: {}
+  }
 };
 
 const KieletContext = React.createContext(initialState);

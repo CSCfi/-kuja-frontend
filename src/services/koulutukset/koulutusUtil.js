@@ -533,14 +533,3 @@ export function handleTutkintokieliSelectChange(editValues, fields, isInLupa, tu
     }
   }
 }
-
-export function getKieliList(kielet, locale) {
-  let kieletExtended = []
-
-  kielet.forEach(kieli => {
-    const { koodiArvo, koodisto, metadata, kohde, maaraystyyppi } = kieli
-    kieletExtended.push({ koodiArvo, koodisto, metadata, kohde, maaraystyyppi, label: parseLocalizedField(metadata, locale), value: koodiArvo })
-  })
-
-  return kieletExtended
-}

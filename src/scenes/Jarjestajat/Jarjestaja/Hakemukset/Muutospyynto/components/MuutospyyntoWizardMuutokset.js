@@ -76,7 +76,7 @@ const MuutospyyntoWizardMuutokset = props => {
           koulutustyypit={koulutustyypit}
         />
 
-        <MuutospyyntoWizardKielet lupa={props.lupa} />
+        <MuutospyyntoWizardKielet lupa={props.lupa} koulutukset={koulutukset} />
 
         {/* <MuutospyyntoWizardTutkintokielet lupa={lupa} /> */}
 

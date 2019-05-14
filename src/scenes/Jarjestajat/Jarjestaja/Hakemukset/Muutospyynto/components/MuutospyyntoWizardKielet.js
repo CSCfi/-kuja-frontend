@@ -9,12 +9,16 @@ import {
   removeItemFromChanges
 } from "services/muutoshakemus/actions";
 import _ from "lodash";
+import { KIELET_SECTIONS } from "../../../modules/constants";
+import Tutkintokielet from "./Kielet/Tutkintokielet";
 
 const MuutospyyntoWizardKielet = props => {
-  const sectionId = "kielet";
-  const { state: mhlState, dispatch: mhlDispatch } = useContext(MuutoshakemusContext);
+  const { state: mhlState, dispatch: mhlDispatch } = useContext(
+    MuutoshakemusContext
+  );
 
-  const handleChanges = (item, listId, removeExistingOnes = false) => {
+  const handleChanges = (item, listId, sectionId) => {
+    console.info(item, listId, sectionId);
     // Let's find out the type of operation
     const operationType = item.shouldBeSelected
       ? MUUTOS_TYPES.REMOVAL
@@ -26,13 +30,9 @@ const MuutospyyntoWizardKielet = props => {
     if (existingChange) {
       removeItemFromChanges(sectionId, item, listId)(mhlDispatch);
     } else {
-      addItemToChanges(
-        sectionId,
-        item,
-        listId,
-        operationType,
-        removeExistingOnes
-      )(mhlDispatch);
+      addItemToChanges(sectionId, item, listId, operationType, false)(
+        mhlDispatch
+      );
     }
   };
 
@@ -45,9 +45,17 @@ const MuutospyyntoWizardKielet = props => {
     <Section code={headingNumber} title={heading}>
       <KieletProvider>
         <Opetuskielet
-          changes={mhlState[sectionId].changes || {}}
+          changes={mhlState.opetuskielet.changes.opetuskieli || []}
           kohde={props.lupa.kohteet[2]}
-          listId={"opetus"}
+          onChanges={handleChanges}
+          listId="opetuskieli"
+        />
+        <h4 className="py-4">{KIELET_SECTIONS.TUTKINTOKIELET}</h4>
+        <Tutkintokielet
+          koulutukset={props.koulutukset}
+          lupa={lupa}
+          changes={mhlState.tutkintokielet.changes || []}
+          kohde={kohteet[1]}
           onChanges={handleChanges}
         />
       </KieletProvider>

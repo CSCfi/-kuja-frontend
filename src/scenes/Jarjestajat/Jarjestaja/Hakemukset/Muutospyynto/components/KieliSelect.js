@@ -1,43 +1,39 @@
-import React, { Component } from "react"
-import Select from 'react-select'
-import styled from 'styled-components'
-import { handleTutkintokieliSelectChange } from "../../../../../../services/koulutukset/koulutusUtil"
+import React, { useState } from "react";
+import Select from "react-select";
+import { handleTutkintokieliSelectChange } from "../../../../../../services/koulutukset/koulutusUtil";
 
-const SelectWrapper = styled.div`
-  flex: 3;
-`
+const KieliSelect = props => {
+  const [state, setState] = useState({
+    selectedOption: props.value
+  });
 
-class KieliSelect extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedOption: props.value
-    }
-  }
+  const handleChange = selectedOption => {
+    setState({ selectedOption });
+    const { editValues, fields, isInLupa, tutkinto } = props;
+    handleTutkintokieliSelectChange(
+      editValues,
+      fields,
+      isInLupa,
+      tutkinto,
+      selectedOption
+    );
+  };
 
-  handleChange(selectedOption) {
-    this.setState({ selectedOption })
-    const { editValues, fields, isInLupa, tutkinto} = this.props
-    handleTutkintokieliSelectChange(editValues, fields, isInLupa, tutkinto, selectedOption)
-  }
+  const { selectedOption } = state;
+  const { identifier, kielet, disabled } = props;
 
-  render() {
-    const { selectedOption } = this.state
-    const { identifier, kielet, disabled } = this.props
+  return (
+    <div className="flex-3">
+      <Select
+        name={`select-${identifier}`}
+        value={selectedOption}
+        onChange={handleChange}
+        options={kielet}
+        disabled={disabled}
+        placeholder="Valitse kieli..."
+      />
+    </div>
+  );
+};
 
-    return (
-      <SelectWrapper>
-        <Select
-          name={`select-${identifier}`}
-          value={selectedOption}
-          onChange={this.handleChange.bind(this)}
-          options={kielet}
-          disabled={disabled}
-          placeholder="Valitse kieli..."
-        />
-      </SelectWrapper>
-    )
-  }
-}
-
-export default KieliSelect
+export default KieliSelect;
