@@ -2,33 +2,14 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS, Leijona } from 'modules/styles'
 
-
 const FooterBar = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   background: ${COLORS.WHITE};
-  color: black;
-  border-top: 2px solid #70A489;
-  padding: 1rem;
-  padding-bottom: 40px;
-  height:100px;
-  bottom:0;
+  color: ${COLORS.BLACK};
+  border-top: 0.1rem solid ${COLORS.OIVA_FOOTER_BORDER};
 `
 
 const FooterBarUpper = styled.div`
-  display:flex;
-  margin: 0 auto;
-  width: 100%;
   background: ${COLORS.WHITE};
-  font-size:11px;
-`
-
-const FooterLeft = styled.div`
-`
-
-const FooterRight = styled.div`
-  margin-left:30px;
 `
 
 class Footer extends Component {
@@ -36,17 +17,16 @@ class Footer extends Component {
   render() {
 
     return (
-      <FooterBar>
-        <FooterBarUpper maxWidth="1280px">
-          <FooterLeft>
+      <FooterBar className="flex justify-between h-auto p-2 pl-8 c-b">
+        <FooterBarUpper className="flex mx-auto w-full text-xs max-w-xl">
+          <div className="hidden sm:inline">
             <Leijona/>
-          </FooterLeft>
-          <FooterRight>
-            <p>&nbsp;</p>
+          </div>
+          <div className="pl-6 pt-6 pr-30 pb-4">
             <p>OPETUS- JA KULTTUURIMINISTERIÖ</p>
             <p>PL 29, 00023 VALTIONEUVOSTO</p>
             <p>PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
-          </FooterRight>
+          </div>
         </FooterBarUpper>
       </FooterBar>
     )

@@ -4,6 +4,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, NavLink } from 'react-router-dom'
 import { BreadcrumbsProvider, Breadcrumbs } from 'react-breadcrumbs-dynamic'
 
+import "./css/tailwind.css";
+
 import 'modules/polyfills'
 import store from 'store'
 import Header from 'modules/Header/containers/HeaderContainer'
