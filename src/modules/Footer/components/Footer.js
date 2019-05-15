@@ -18,7 +18,7 @@ class Footer extends Component {
 
     return (
       <FooterBar className="flex justify-between h-auto p-2 pl-8 c-b">
-        <FooterBarUpper className="flex mx-auto w-full text-xs" maxWidth="1280px">
+        <FooterBarUpper className="flex mx-auto w-full text-xs max-w-xl">
           <div className="hidden sm:inline">
             <Leijona/>
           </div>
