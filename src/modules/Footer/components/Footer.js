@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { COLORS, Leijona , MEDIA_QUERIES} from 'modules/styles'
+import { COLORS, Leijona } from 'modules/styles'
 
 const FooterBar = styled.div`
   background: ${COLORS.WHITE};
-  color: ${COLORS.BLACK};;
-  border-top: 0.1rem solid #70A489;
+  color: ${COLORS.BLACK};
+  border-top: 0.1rem solid ${COLORS.OIVA_FOOTER_BORDER};
 `
 
 const FooterBarUpper = styled.div`
