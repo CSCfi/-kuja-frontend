@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow";
 import SelectableItem from "02-organisms/SelectableItem";
 import { MUUT_KEYS } from "../../modules/constants";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
-import PropTypes from "prop-types";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
+import NumberOfChanges from "00-atoms/NumberOfChanges";
+import PropTypes from "prop-types";
 import _ from "lodash";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
@@ -44,21 +45,23 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
 
   return (
     <Wrapper>
-      <ExpandableRow
-        title={TUTKINNOT_SECTIONS.VALMISTAVAT}
-        changes={props.changes}
-      >
-        <div className="py-4">
-          {_.map(state.items, (item, i) => {
-            return (
-              <div
-                key={`item-${i}`}
-                className="mx-6 px-1 py-2"
-              >
-                <SelectableItem item={item} onChanges={handleChanges} />
-              </div>
-            );
-          })}
+      <ExpandableRow changes={props.changes}>
+        <div data-slot="title">
+          <span>{TUTKINNOT_SECTIONS.VALMISTAVAT}</span>
+        </div>
+        <div data-slot="info">
+          <NumberOfChanges changes={props.changes} />
+        </div>
+        <div data-slot="content">
+          <div className="py-4">
+            {_.map(state.items, (item, i) => {
+              return (
+                <div key={`item-${i}`} className="mx-6 px-1 py-2">
+                  <SelectableItem item={item} onChanges={handleChanges} />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </ExpandableRow>
     </Wrapper>

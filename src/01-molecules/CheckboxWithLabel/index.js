@@ -18,7 +18,7 @@ const CheckboxWithLabel = props => {
         checked={props.isChecked}
         onChange={handleChanges}
       />
-      <span>{props.children}</span>
+      <span className="ml-4">{props.children}</span>
     </label>
   );
 };

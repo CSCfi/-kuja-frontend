@@ -3,10 +3,11 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import RadioButtonWithLabel from "01-molecules/RadioButtonWithLabel/RadioButtonWithLabel";
+import RadioButtonWithLabel from "01-molecules/RadioButtonWithLabel";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow";
 import { MUUT_KEYS } from "../../modules/constants";
+import NumberOfChanges from "00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
@@ -38,26 +39,29 @@ const Tyovoimakoulutukset = props => {
 
   return (
     <Wrapper>
-      <ExpandableRow
-        title={TUTKINNOT_SECTIONS.TYOVOIMAT}
-        changes={props.changes}
-      >
-        <div className="py-4">
-          {_.map(state.items, (item, i) => {
-            return (
-              <div key={`item-${i}`} className="px-6 py-2">
-                <RadioButtonWithLabel
-                  name={koodisto}
-                  isChecked={item.shouldBeSelected}
-                  onChanges={handleChanges}
-                  payload={item}
-                >
-                  <span className="ml-4">{item.code}</span>
-                  <span className="ml-4">{item.title}</span>
-                </RadioButtonWithLabel>
-              </div>
-            );
-          })}
+      <ExpandableRow>
+        <div data-slot="title">{TUTKINNOT_SECTIONS.TYOVOIMAT}</div>
+        <div data-slot="info">
+          <NumberOfChanges changes={props.changes} />
+        </div>
+        <div data-slot="content">
+          <div className="py-4">
+            {_.map(state.items, (item, i) => {
+              return (
+                <div key={`item-${i}`} className="px-6 py-2">
+                  <RadioButtonWithLabel
+                    name={koodisto}
+                    isChecked={item.shouldBeSelected}
+                    onChanges={handleChanges}
+                    payload={item}
+                  >
+                    <span>{item.code}</span>
+                    <span className="ml-4">{item.title}</span>
+                  </RadioButtonWithLabel>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </ExpandableRow>
     </Wrapper>

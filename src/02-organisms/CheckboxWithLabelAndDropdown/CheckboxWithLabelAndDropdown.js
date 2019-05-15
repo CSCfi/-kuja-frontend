@@ -1,6 +1,6 @@
 import React from "./node_modules/react";
 import PropTypes from "./node_modules/prop-types";
-import CheckboxWithLabel from "../../01-molecules/CheckboxWithLabel/CheckboxWithLabel";
+import CheckboxWithLabel from "../../01-molecules/CheckboxWithLabel";
 import Dropdown from "../../00-atoms/Dropdown/Dropdown";
 
 const CheckboxWithLabelAndDropdown = props => {

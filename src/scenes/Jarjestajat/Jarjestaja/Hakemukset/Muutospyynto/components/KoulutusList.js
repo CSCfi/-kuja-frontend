@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ExpandableRow from "01-molecules/ExpandableRow/ExpandableRow";
+import ExpandableRow from "01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import _ from "lodash";

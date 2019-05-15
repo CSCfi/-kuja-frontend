@@ -4,6 +4,9 @@ import arrow from "static/images/koulutusala-arrow.svg";
 import { Arrow } from "utils/UIComponents";
 import Slot from "../../00-atoms/Slot/Slot";
 
+/**
+ * The row can be expanded and shrinked. The div marked with data-slot="content" attribute is visible when the row is expanded.
+ */
 const ExpandableRow = props => {
   const [state, setState] = useState({
     shouldBeExpanded: props.shouldBeExpanded
@@ -38,12 +41,15 @@ const ExpandableRow = props => {
   );
 };
 
+ExpandableRow.defaultProps = {
+  shouldBeExpanded: false
+};
+
 ExpandableRow.propTypes = {
-  categories: PropTypes.array,
-  changes: PropTypes.array,
-  code: PropTypes.string,
-  onChanges: PropTypes.func,
-  shouldBeExpanded: PropTypes.bool
+  /**
+   * Shrinking and expanding works via this property. 
+   */
+  shouldBeExpanded: PropTypes.bool.isRequired
 };
 
 export default ExpandableRow;

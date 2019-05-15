@@ -1,26 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CheckboxWithLabel from "../01-molecules/CheckboxWithLabel/CheckboxWithLabel";
-import Dropdown from "../00-atoms/Dropdown/Dropdown";
+import CheckboxWithLabel from "../01-molecules/CheckboxWithLabel";
+// import Dropdown from "../00-atoms/Dropdown/Dropdown";
 
 const SelectableItem = props => {
   const handleCheckboxChange = () => {
     props.onChanges(props.item);
   };
 
-  const handleSelectChange = () => {
-    props.onChanges(props.item, true);
-  };
+  // const handleSelectChange = () => {
+  //   props.onChanges(props.item, true);
+  // };
 
   const handleSubCheckboxChange = () => {
     props.onChanges(props.item, true);
   };
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" }
-  ];
+  // const options = [
+  //   { value: "chocolate", label: "Chocolate" },
+  //   { value: "strawberry", label: "Strawberry" },
+  //   { value: "vanilla", label: "Vanilla" }
+  // ];
 
   return (
     <div>
@@ -35,7 +35,7 @@ const SelectableItem = props => {
             props.item.isInLupa && "is-in-lupa"
           ]}
         >
-          <span className="ml-4">{props.item.code}</span>
+          <span>{props.item.code}</span>
           <span className="ml-4">{props.item.title}</span>
           {/* <span className="ml-10">
               {props.item.isInLupa ? "LUPA" : ""}
@@ -48,10 +48,10 @@ const SelectableItem = props => {
             </span> */}
         </CheckboxWithLabel>
         <div className="w-48">
-          <Dropdown
+          {/* <Dropdown
             options={options}
             isDisabled={!props.item.shouldBeSelected}
-          />
+          /> */}
         </div>
       </div>
       {props.item.subItems && props.item.subItems.length > 0 && (

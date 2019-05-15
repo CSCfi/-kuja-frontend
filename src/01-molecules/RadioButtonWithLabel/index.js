@@ -2,8 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import RadioButton from "../../00-atoms/RadioButton/RadioButton";
 
-import "./radio-button.css";
-
 const RadioButtonWithLabel = props => {
   const handleChanges = () => {
     props.onChanges(props.payload);
@@ -17,7 +15,7 @@ const RadioButtonWithLabel = props => {
         onChanges={handleChanges}
       />
       <span className="checkmark" />
-      <span className="mr-8 pt-1">{props.children}</span>
+      <span className="ml-4 pt-1">{props.children}</span>
     </label>
   );
 };
