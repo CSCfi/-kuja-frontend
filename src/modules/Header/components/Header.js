@@ -11,11 +11,8 @@ import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 
 const HeaderTitle = styled.div`
   font-family: 'Arial';
-  font-size: 16px;
   color: black;
   text-decoration: none;
-  margin-left: 30px;
-  line-height: 18px;
 `
 
 const HeaderBarUpper = styled.div`
@@ -26,7 +23,7 @@ const HeaderBarUpper = styled.div`
   max-width: 100%;
   background: ${COLORS.WHITE};
   max-height: 50px;
-  padding: 20px 0 12px 0;
+  padding: 16px 20px 12px 30px;
 `
 
 const HeaderBarLower = styled.div`
@@ -38,7 +35,7 @@ const HeaderBarLower = styled.div`
   max-height: 50px;
   overflow: hidden;
   @media ${MEDIA_QUERIES.MOBILE} {
-    padding-left:32px;
+    padding-left: 32px;
     flex-flow: column;
     position: absolute;
     top: 0;
@@ -51,7 +48,7 @@ const HeaderBarLower = styled.div`
     &:before {
       content: "Ξ";
       margin-left: -20px;
-      margin-top: 10px;
+      padding-top: 10px;
     }
     &:hover {
       max-height: initial;
@@ -68,14 +65,6 @@ const HeaderBarLower = styled.div`
 const HeaderUpperRight = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding-right: 20px;
-`
-
-const LanguageBar = styled.div`
-  @media ${MEDIA_QUERIES.MOBILE} {
-    margin: auto;
-    margin-right: 20px;
-  }
 `
 
 class Header extends Component {
@@ -101,19 +90,18 @@ class Header extends Component {
       <div>
         <HeaderBar>
           <HeaderBarUpper maxWidth="1280px" justifyContent="space-between">
-              <HeaderTitle className="hidden sm:inline">Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
+              <HeaderTitle className="hidden md:inline">Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
 
-              <HeaderUpperRight>
+              <HeaderUpperRight className="ml-auto md:ml-2">
                 {!sessionStorage.getItem('role')
-                ? (<LinkItemUpper to="/cas-auth" className="has-separator pull-right">Kirjaudu sisään</LinkItemUpper>) : null}
+                ? (<LinkItemUpper to="/cas-auth" className="hidden md:inline has-separator pull-right">Kirjaudu sisään</LinkItemUpper>) : null}
 
                 {sessionStorage.getItem('role')
-                ? (<LinkItemUpper to="/cas-logout" className="has-separator pull-right">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItemUpper>) : null}
+                ? (<LinkItemUpper to="/cas-logout" className="hidden md:inline has-separator pull-right">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItemUpper>) : null}
 
-                <LanguageBar>
-                  <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
-                  <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
-                </LanguageBar>
+                <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
+                <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
+
               </HeaderUpperRight>
 
           </HeaderBarUpper>
@@ -129,10 +117,16 @@ class Header extends Component {
             <LinkItem to="/tilastot">Tilastot</LinkItem>
 
             { ytunnus &&
-              <LinkItem onClick={this.forceUpdate} ytunnus={ytunnus} to={{pathname: "/jarjestajat/" + ytunnus + "/omattiedot", ytunnus: ytunnus}} exact>Oma organisaatio</LinkItem>
+              <LinkItem className="md:ml-auto" onClick={this.forceUpdate} ytunnus={ytunnus} to={{pathname: "/jarjestajat/" + ytunnus + "/omattiedot", ytunnus: ytunnus}} exact>Oma organisaatio</LinkItem>
             }
 
-            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/asiat" >Asiat</LinkItem>) : null}
+            {!sessionStorage.getItem('role')
+            ? (<LinkItem to="/cas-auth" className="md:hidden has-separator">Kirjaudu sisään</LinkItem>) : null}
+
+            {sessionStorage.getItem('role')
+            ? (<LinkItem to="/cas-logout" className="md:hidden has-separator">Kirjaudu ulos ({sessionStorage.getItem('username')})</LinkItem>) : null}
+
+            { (sessionStorage.getItem('role')===ROLE_ESITTELIJA) ? (<LinkItem to="/asiat">Asiat</LinkItem>) : null}
           </HeaderBarLower>
         </HeaderBar>
       </div>

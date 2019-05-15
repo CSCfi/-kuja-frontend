@@ -4,6 +4,8 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, NavLink } from 'react-router-dom'
 import { BreadcrumbsProvider, Breadcrumbs } from 'react-breadcrumbs-dynamic'
 
+import "./css/tailwind.css";
+
 import 'modules/polyfills'
 import store from 'store'
 import Header from 'modules/Header/containers/HeaderContainer'
@@ -11,7 +13,6 @@ import Footer from 'modules/Footer/containers/FooterContainer'
 import Routes from 'routes'
 import { COLORS, APP_WIDTH } from './modules/styles'
 import { AppContainer, BreadcrumbsContainer, RoutesContainer } from './modules/elements'
-import "./css/tailwind.css";
 
 ReactDOM.render(
   <Provider store={store}>

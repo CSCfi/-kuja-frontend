@@ -7,7 +7,6 @@ const LinkItemUpper = styled(NavLink)`
   text-decoration: none;
   color: ${COLORS.BLACK};
   text-transform: none;
-  margin-left: 0px;
   font-size: 11.5px;
   font-family: ${FONT_STACK.ARIAL};
   line-height: 18px;
@@ -34,9 +33,6 @@ const LinkItemUpper = styled(NavLink)`
   
   &.has-separator {
     border-right: 1px solid ${COLORS.OIVA_MENU_BG_COLOR};
-    @media ${MEDIA_QUERIES.MOBILE} {
-      border-right: 0
-    }
     margin-right:10px;
     padding-right:10px;
   }
