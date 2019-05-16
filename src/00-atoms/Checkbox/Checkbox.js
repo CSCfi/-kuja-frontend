@@ -31,11 +31,10 @@ const StyledCheckbox = styled.div`
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: ${props => (props.checked ? 'salmon' : 'papayawhip')}
+  background: ${props => (props.checked ? COLORS.OIVA_GREEN : 'white')};
   border-radius: 3px;
   transition: all 150ms;
   border-color: ${COLORS.OIVA_GREEN};
-  background: ${COLORS.OIVA_GREEN};
 
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px pink;
