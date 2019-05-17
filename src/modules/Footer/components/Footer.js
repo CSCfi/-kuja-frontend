@@ -5,7 +5,7 @@ import { COLORS, Leijona } from 'modules/styles'
 const FooterBar = styled.div`
   background: ${COLORS.WHITE};
   color: ${COLORS.BLACK};
-  border-top: 0.1rem solid ${COLORS.OIVA_FOOTER_BORDER};
+  border-top: 0.1rem solid ${COLORS.OIVA_MEDIUM_GREEN};
 `
 
 const FooterBarUpper = styled.div`

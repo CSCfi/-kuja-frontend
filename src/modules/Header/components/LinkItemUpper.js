@@ -14,7 +14,7 @@ const LinkItemUpper = styled(NavLink)`
   white-space: nowrap;
     
   a:visited {
-    color: white;
+    color: ${COLORS.WHITE};
   }
 
   &:hover {
@@ -32,7 +32,7 @@ const LinkItemUpper = styled(NavLink)`
   }
   
   &.has-separator {
-    border-right: 1px solid ${COLORS.OIVA_MENU_BG_COLOR};
+    border-right: 1px solid ${COLORS.OIVA_MEDIUM_GREEN};
     margin-right:10px;
     padding-right:10px;
   }

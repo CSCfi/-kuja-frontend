@@ -31,7 +31,7 @@ const HeaderBarLower = styled.div`
   justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
   margin: 0 auto;
   width: 100%;
-  background: ${COLORS.OIVA_MENU_BG_COLOR};
+  background: ${COLORS.OIVA_MEDIUM_GREEN};
   max-height: 50px;
   overflow: hidden;
   @media ${MEDIA_QUERIES.MOBILE} {
@@ -53,7 +53,7 @@ const HeaderBarLower = styled.div`
     &:hover {
       max-height: initial;
       height: initial;
-      background: ${COLORS.OIVA_MENU_BG_COLOR};  
+      background: ${COLORS.OIVA_MEDIUM_GREEN};  
       width: 100%;
       div {
         width: initial;
