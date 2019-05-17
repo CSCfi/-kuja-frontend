@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// import "./radio-button.css";
-
 const RadioButton = props => {
   return (
     <input

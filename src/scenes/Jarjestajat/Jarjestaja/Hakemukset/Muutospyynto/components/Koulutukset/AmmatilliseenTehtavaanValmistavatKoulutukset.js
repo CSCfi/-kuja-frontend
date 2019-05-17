@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "01-molecules/ExpandableRow";
-import SelectableItem from "02-organisms/SelectableItem";
+import ExpandableRow from "components/01-molecules/ExpandableRow";
+import SelectableItem from "components/02-organisms/SelectableItem";
 import { MUUT_KEYS } from "../../modules/constants";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import NumberOfChanges from "00-atoms/NumberOfChanges";
+import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
 import _ from "lodash";
 

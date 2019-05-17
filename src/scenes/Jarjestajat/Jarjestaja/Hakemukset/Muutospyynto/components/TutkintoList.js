@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ExpandableRow from "01-molecules/ExpandableRow";
+import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
-import CategorizedList from "components/CategorizedList";
+import CategorizedList from "components/02-organisms/CategorizedList";
 import { COLORS } from "modules/styles";
 import _ from "lodash";
 

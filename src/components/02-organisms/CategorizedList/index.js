@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SelectableItem from "../02-organisms/SelectableItem";
+import SelectableItem from "../SelectableItem";
 import _ from "lodash";
 
 const CategorizedList = props => {

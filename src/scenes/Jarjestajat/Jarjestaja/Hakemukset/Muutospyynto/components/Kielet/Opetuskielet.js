@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import ExpandableRow from "01-molecules/ExpandableRow";
+import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { getDataForOpetuskieletList } from "services/kielet/opetuskieletUtil";
-import SelectableItem from "02-organisms/SelectableItem";
+import SelectableItem from "components/02-organisms/SelectableItem";
 import { MUUTOS_WIZARD_TEKSTIT } from "../../modules/constants";
 import { KieletContext } from "context/kieletContext";
 import { fetchOppilaitoksenOpetuskielet } from "services/kielet/actions";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import NumberOfChanges from "00-atoms/NumberOfChanges";
+import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
 import _ from "lodash";
 

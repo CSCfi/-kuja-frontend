@@ -2,19 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import RadioButton from "../../00-atoms/RadioButton/RadioButton";
 
+import styles from  "./radio-button.module.css";
+
 const RadioButtonWithLabel = props => {
   const handleChanges = () => {
     props.onChanges(props.payload);
   };
 
   return (
-    <label className="container flex">
+    <label className={`${styles.container} flex`}>
       <RadioButton
         name={`radio-${props.name}`}
         isChecked={props.isChecked}
         onChanges={handleChanges}
       />
-      <span className="checkmark" />
+      <span className={styles.checkmark} />
       <span className="ml-4 pt-1">{props.children}</span>
     </label>
   );

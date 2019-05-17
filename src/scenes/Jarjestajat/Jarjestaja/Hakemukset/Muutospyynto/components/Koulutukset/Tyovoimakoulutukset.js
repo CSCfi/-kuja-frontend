@@ -3,11 +3,11 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import RadioButtonWithLabel from "01-molecules/RadioButtonWithLabel";
+import RadioButtonWithLabel from "components/01-molecules/RadioButtonWithLabel";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "01-molecules/ExpandableRow";
+import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { MUUT_KEYS } from "../../modules/constants";
-import NumberOfChanges from "00-atoms/NumberOfChanges";
+import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
 import _ from "lodash";
 

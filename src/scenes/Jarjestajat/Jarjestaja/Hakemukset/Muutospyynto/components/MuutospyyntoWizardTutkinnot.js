@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useContext } from "react";
-import Section from "components/Section";
+import Section from "components/03-templates/Section";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import {
