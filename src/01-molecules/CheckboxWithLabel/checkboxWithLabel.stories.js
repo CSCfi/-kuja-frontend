@@ -1,8 +1,10 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import CheckboxWithLabel from "./index";
+import { withInfo } from "@storybook/addon-info";
 
 storiesOf("CheckboxWithLabel", module)
+  .addDecorator(withInfo)
   .add("is checked", () => (
     <CheckboxWithLabel
       name="checked-with-label"

@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import Checkbox from "../../00-atoms/Checkbox/Checkbox";
 
+/**
+ * Label and checkbox united.
+ */
 const CheckboxWithLabel = props => {
   const handleChanges = () => {
     props.onChanges(props.payload);
@@ -23,11 +26,23 @@ const CheckboxWithLabel = props => {
   );
 };
 
+CheckboxWithLabel.defaultProps = {
+  isChecked: false,
+  labelClasses: [],
+  payload: {}
+}
+
 CheckboxWithLabel.propTypes = {
   isChecked: PropTypes.bool,
   labelClasses: PropTypes.array,
-  name: PropTypes.string,
-  onChanges: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  /**
+   * Will be called after checking or unchecking the checkbox.
+   */
+  onChanges: PropTypes.func.isRequired,
+  /**
+   * A parameter of the onChanges function.
+   */
   payload: PropTypes.object
 };
 
