@@ -128,8 +128,6 @@ const MuutospyyntoWizard = props => {
     showHelp: true
   });
 
-  useEffect(() => {}, []);
-
   const nextPage = pageNumber => {
     if (pageNumber !== 4) {
       props.history.push(String(pageNumber + 1));
