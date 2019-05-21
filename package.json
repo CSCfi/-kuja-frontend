@@ -33,10 +33,11 @@
   },
   "scripts": {
     "tailwind:css": "tailwind build src/css/tailwind.src.pcss -c tailwind.config.js -o src/css/tailwind.css",
-    "start": "npm-run-all --parallel watch:css start:react",
+    "start": "npm-run-all --parallel watch:css watch:component-css start:react",
     "build": "npm-run-all build:css build:react",
     "build:css": "postcss src/css/tailwind.src.pcss -o src/css/tailwind.css",
     "watch:css": "postcss src/css/tailwind.src.pcss -o src/css/tailwind.css -w",
+    "watch:component-css": "postcss src/modules/**/*.pcss --base src --dir src --ext module.css -w",
     "start:react": "react-scripts start",
     "build:react": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

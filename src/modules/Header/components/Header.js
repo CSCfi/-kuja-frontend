@@ -9,21 +9,12 @@ import { ROLE_ESITTELIJA } from 'modules/constants'
 import { COLORS, FONT_STACK, MEDIA_QUERIES } from 'modules/styles'
 import { getRoles, getOrganisation } from 'routes/Login/modules/user'
 
+import styles from './Header.module.css'
+
 const HeaderTitle = styled.div`
   font-family: 'Arial';
-  color: black;
+  color: ${COLORS.BLACK};
   text-decoration: none;
-`
-
-const HeaderBarUpper = styled.div`
-  display: flex;
-  justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
-  margin: 0 auto;
-  width: 100%;
-  max-width: 100%;
-  background: ${COLORS.WHITE};
-  max-height: 50px;
-  padding: 16px 20px 12px 30px;
 `
 
 const HeaderBarLower = styled.div`
@@ -62,11 +53,6 @@ const HeaderBarLower = styled.div`
   }
 `
 
-const HeaderUpperRight = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-
 class Header extends Component {
 
   componentDidMount() {
@@ -89,10 +75,10 @@ class Header extends Component {
     return (
       <div>
         <HeaderBar>
-          <HeaderBarUpper maxWidth="1280px" justifyContent="space-between">
+          <div className={styles.headerBarUpper} maxWidth="1280px">
               <HeaderTitle className="hidden md:inline">Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
 
-              <HeaderUpperRight className="ml-auto md:ml-2">
+              <div className="flex ml-auto md:ml-2">
                 {!sessionStorage.getItem('role')
                 ? (<LinkItemUpper to="/cas-auth" className="hidden md:inline has-separator pull-right">Kirjaudu sisään</LinkItemUpper>) : null}
 
@@ -101,10 +87,9 @@ class Header extends Component {
 
                 <LinkItemUpper to="/fi" className="has-separator pull-right">Suomeksi</LinkItemUpper>
                 <LinkItemUpper to="/sv" className="pull-right">På svenska</LinkItemUpper>
+              </div>
 
-              </HeaderUpperRight>
-
-          </HeaderBarUpper>
+          </div>
         </HeaderBar>
         <HeaderBar>
           <HeaderBarLower>
