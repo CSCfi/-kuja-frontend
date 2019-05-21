@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { COLORS, Leijona } from 'modules/styles'
 
+import Button from '@material-ui/core/Button'
+
 const FooterBar = styled.div`
   background: ${COLORS.WHITE};
   color: ${COLORS.BLACK};
@@ -28,6 +30,7 @@ class Footer extends Component {
             <p className="my-2">PL 29, 00023 VALTIONEUVOSTO</p>
             <p className="my-0">PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
           </div>
+          <Button variant="raised" color="primary">Jei</Button>
         </FooterBarUpper>
       </FooterBar>
     )
