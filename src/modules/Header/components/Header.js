@@ -75,7 +75,7 @@ class Header extends Component {
     return (
       <div>
         <HeaderBar>
-          <div className={styles.headerBarUpper} maxWidth="1280px">
+          <div className={styles.headerBarUpper} maxwidth="1280px">
               <HeaderTitle className="hidden md:inline">Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</HeaderTitle>
 
               <div className="flex ml-auto md:ml-2">
