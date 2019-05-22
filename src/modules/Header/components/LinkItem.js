@@ -18,7 +18,7 @@ const LinkItem = styled(NavLink)`
   }
 
   &:hover {
-    background-color: ${COLORS.OIVA_MENU_HOVER_COLOR};
+    background-color: ${COLORS.OIVA_HOVER_COLOR};
     color: ${COLORS.WHITE};
   }
 

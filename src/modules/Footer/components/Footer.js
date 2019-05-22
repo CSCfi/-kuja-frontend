@@ -5,7 +5,7 @@ import { COLORS, Leijona } from 'modules/styles'
 const FooterBar = styled.div`
   background: ${COLORS.WHITE};
   color: ${COLORS.BLACK};
-  border-top: 0.1rem solid ${COLORS.OIVA_FOOTER_BORDER};
+  border-top: 0.1rem solid ${COLORS.OIVA_MEDIUM_GREEN};
 `
 
 const FooterBarUpper = styled.div`
@@ -22,10 +22,11 @@ class Footer extends Component {
           <div className="hidden sm:inline">
             <Leijona/>
           </div>
-          <div className="pl-6 pt-6 pr-30 pb-4">
-            <p>OPETUS- JA KULTTUURIMINISTERIÖ</p>
-            <p>PL 29, 00023 VALTIONEUVOSTO</p>
-            <p>PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
+          <div className="pl-6 py-6">
+            {/* TODO: Lokalisointi julkisille näkymille */}
+            <p className="my-2">OPETUS- JA KULTTUURIMINISTERIÖ</p>
+            <p className="my-2">PL 29, 00023 VALTIONEUVOSTO</p>
+            <p className="my-0">PUH. 029 533 0004, <a href="http://www.minedu.fi">WWW.MINEDU.FI</a></p>
           </div>
         </FooterBarUpper>
       </FooterBar>
