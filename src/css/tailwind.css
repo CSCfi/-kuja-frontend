@@ -593,6 +593,23 @@ video {
   height: auto;
 }
 
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+a {
+  color: #3182ce;
+  text-decoration: underline;
+}
+
 .container {
   width: 100%;
 }

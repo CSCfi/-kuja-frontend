@@ -20,7 +20,6 @@ const LinkItemUpper = styled(NavLink)`
   }
 
   &:hover {
-    background-color: ${COLORS.WHITE};
     color: ${COLORS.BLACK};
     text-decoration:underline;
   }

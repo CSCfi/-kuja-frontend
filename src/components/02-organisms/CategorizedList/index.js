@@ -17,7 +17,7 @@ const CategorizedList = props => {
             </div>
             {_.map(category.items, (item, ii) => {
               return (
-                <div key={`item-${ii}`} className="p-2">
+                <div key={`item-${ii}`} className="px-2">
                   <SelectableItem item={item} onChanges={props.onChanges} />
                 </div>
               );

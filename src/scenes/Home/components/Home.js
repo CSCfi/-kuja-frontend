@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { Helmet } from 'react-helmet'
-import Hero from './Hero'
-import InfoBox from './InfoBox'
-import { ContentContainer } from '../../../modules/elements'
+import React, { Component } from "react";
+import { Helmet } from "react-helmet";
+import Link from "@material-ui/core/Link";
+import Card from "@material-ui/core/Card";
+import { ContentContainer } from "../../../modules/elements";
+import { Typography } from "@material-ui/core";
 
 class Home extends Component {
   render() {
@@ -11,18 +12,31 @@ class Home extends Component {
         <Helmet>
           <title>Oiva | Etusivu</title>
         </Helmet>
-        <Hero height="50px" maxWidth="600px">
-          <h2>Oiva - Opetushallinnon ohjaus- ja säätelypalvelu</h2>
-        </Hero>
-        <InfoBox maxWidth="600px">
-          <p>
-            Palvelusta löytyvät kaikki ajantasaiset ammatillisen koulutuksen järjestämisluvat. Palvelu tulee sisältämään hakemusten laatimisen ja päätöksenteon lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia tilastoja. Myöhemmin Oiva laajennetaan koskemaan myös yleissivistävän koulutuksen järjestämisluvat ja ylläpitämisluvat ja lupien hakupalvelut.
-          </p>
-          {/* <Palaute><a href="https://link.webropolsurveys.com/S/F156FEC089139BF4" target="_blank">Palautelomake</a></Palaute> */}
-        </InfoBox>
+        <Typography component="h2" variant="h4" className="p-4">
+          Oiva - Opetushallinnon ohjaus- ja säätelypalvelu
+        </Typography>
+        <Card className="p-4">
+          <Typography component="paragraph">
+            Palvelusta löytyvät kaikki ajantasaiset ammatillisen koulutuksen
+            järjestämisluvat. Palvelu tulee sisältämään hakemusten laatimisen ja
+            päätöksenteon lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia
+            tilastoja. Myöhemmin Oiva laajennetaan koskemaan myös
+            yleissivistävän koulutuksen järjestämisluvat ja ylläpitämisluvat ja
+            lupien hakupalvelut.
+          </Typography>
+          <Typography component="paragraph" variant="body2" className="py-4">
+            <Link
+              href="https://link.webropolsurveys.com/S/F156FEC089139BF4"
+              color="inherit"
+              target="_blank"
+            >
+              Palautelomake
+            </Link>
+          </Typography>
+        </Card>
       </ContentContainer>
-    )
+    );
   }
 }
 
-export default Home
+export default Home;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
-import PropTypes from "prop-types";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import CategorizedList from "components/02-organisms/CategorizedList";
 import { COLORS } from "modules/styles";
@@ -108,19 +108,19 @@ const TutkintoList = props => {
 
   return (
     <Wrapper>
-      <ExpandableRow code={props.koodiarvo} title={props.title}>
+      <ExpandableRow>
         <div data-slot="title">
-          {props.code && <span className="pr-6">{props.code}</span>}
+          {props.koodiarvo && <span className="pr-6">{props.koodiarvo}</span>}
           <span>{props.title}</span>
         </div>
-        <div data-slot="info">
+        <span data-slot="info">
           {props.changes && props.changes.length ? (
             <div>
               Muutokset:&nbsp;
               <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
             </div>
           ) : null}
-        </div>
+        </span>
         <div data-slot="content">
           <CategorizedList
             categories={state.categories}

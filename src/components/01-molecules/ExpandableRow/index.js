@@ -1,42 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import arrow from "static/images/koulutusala-arrow.svg";
-import { Arrow } from "utils/UIComponents";
+import MuiExpansionPanel from "@material-ui/core/ExpansionPanel";
+import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import { withStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Slot from "../../00-atoms/Slot/Slot";
 
+const ExpansionPanel = withStyles({
+  root: {
+    border: "1px solid rgba(0,0,0,.125)",
+    boxShadow: "none",
+    "&:not(:last-child)": {
+      borderBottom: 0
+    },
+    "&:before": {
+      display: "none"
+    }
+  },
+  expanded: {
+    margin: "auto"
+  }
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+  root: {
+    backgroundColor: "rgba(0,0,0,.03)",
+    borderBottom: "1px solid rgba(0,0,0,.125)",
+    marginBottom: -1,
+    minHeight: 56,
+    "&$expanded": {
+      minHeight: 56
+    }
+  },
+  content: {
+    "&$expanded": {
+      margin: "12px 0"
+    }
+  },
+  expanded: {}
+})(props => <MuiExpansionPanelSummary {...props} />);
+
+ExpansionPanelSummary.muiName = "ExpansionPanelSummary";
+
+const ExpansionPanelDetails = withStyles(theme => ({
+  root: {
+    padding: theme.spacing.unit * 2
+  }
+}))(MuiExpansionPanelDetails);
+// className="flex items-center cursor-pointer bg-grey-light hover:bg-grey p-2"
 /**
  * The row can be expanded and shrinked. The div marked with data-slot="content" attribute is visible when the row is expanded.
  */
 const ExpandableRow = props => {
-  const [state, setState] = useState({
-    shouldBeExpanded: props.shouldBeExpanded
-  });
-
-  const toggle = () => {
-    setState({
-      shouldBeExpanded: !state.shouldBeExpanded
-    });
-  };
-
   return (
     <div>
-      <div
-        onClick={toggle}
-        className="flex items-center cursor-pointer bg-grey-light hover:bg-grey p-2"
-      >
-        <span className="pl-4 pr-4">
-          <Arrow
-            src={arrow}
-            alt={state.shouldBeExpanded ? "Kutista rivi" : "Laajenna rivi"}
-            rotated={state.shouldBeExpanded}
-          />
-        </span>
-        <div className="flex-1">
-          <Slot slot="title">{props.children}</Slot>
-        </div>
-        <Slot slot="info">{props.children}</Slot>
-      </div>
-      {state.shouldBeExpanded && <Slot slot="content">{props.children}</Slot>}
+      <ExpansionPanel defaultExpanded={props.shouldBeExpanded}>
+        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+          <div className="flex-1">
+            <Slot slot="title">{props.children}</Slot>
+          </div>
+          <Slot slot="info">{props.children}</Slot>
+        </ExpansionPanelSummary>
+        <ExpansionPanelDetails>
+          <Slot slot="content">{props.children}</Slot>
+        </ExpansionPanelDetails>
+      </ExpansionPanel>
     </div>
   );
 };
@@ -47,7 +76,7 @@ ExpandableRow.defaultProps = {
 
 ExpandableRow.propTypes = {
   /**
-   * Shrinking and expanding works via this property. 
+   * Shrinking and expanding works via this property.
    */
   shouldBeExpanded: PropTypes.bool.isRequired
 };

@@ -1,28 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Checkbox from "../../00-atoms/Checkbox/Checkbox";
+import { makeStyles } from "@material-ui/styles";
+import Checkbox from "@material-ui/core/Checkbox";
+import green from "@material-ui/core/colors/green";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+
+const useStyles = makeStyles({
+  root: {
+    color: green[600],
+    "&$checked": {
+      color: green[500]
+    }
+  },
+  checked: {}
+});
 
 /**
  * Label and checkbox united.
  */
 const CheckboxWithLabel = props => {
+  const [state, setState] = useState({
+    isChecked: props.isChecked
+  });
+  const classes = useStyles();
   const handleChanges = () => {
+    setState({
+      isChecked: !state.isChecked
+    });
     props.onChanges(props.payload);
   };
 
   return (
-    <label
-      className={
-        props.labelClasses ? props.labelClasses.filter(Boolean).join(" ") : ""
-      }
-    >
-      <Checkbox
-        key={`checkbox-${props.name}`}
-        checked={props.isChecked}
-        onChange={handleChanges}
+    <FormGroup row>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={state.isChecked}
+            value="1"
+            onChange={handleChanges}
+            classes={{
+              root: classes.root,
+              checked: classes.checked
+            }}
+          />
+        }
+        label={props.children}
       />
-      <span className="ml-4">{props.children}</span>
-    </label>
+    </FormGroup>
   );
 };
 
@@ -30,7 +55,7 @@ CheckboxWithLabel.defaultProps = {
   isChecked: false,
   labelClasses: [],
   payload: {}
-}
+};
 
 CheckboxWithLabel.propTypes = {
   isChecked: PropTypes.bool,

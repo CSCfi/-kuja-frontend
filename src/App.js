@@ -24,11 +24,16 @@ import { getRoles } from "services/kayttajat/actions";
 import { JarjestajatProvider } from "./context/jarjestajatContext";
 import { LuvatProvider } from "./context/luvatContext";
 import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
+import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
+import Navigation from "./components/02-organisms/Navigation";
+import { MEDIA_QUERIES } from "./modules/styles";
+import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
 
 const history = createBrowserHistory();
 
 const App = () => {
   const { state, dispatch } = useContext(UserContext);
+  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
 
   useEffect(() => {
     getRoles()(dispatch);
@@ -38,12 +43,12 @@ const App = () => {
     <Router history={history}>
       <div className="flex flex-col min-h-screen">
         <header>
-          <Header
+          <ButtonAppBar
             user={state.user}
             oppilaitos={state.oppilaitos}
             dispatch={dispatch}
-            maxWidth={`${APP_WIDTH}`}
           />
+          {breakpointTabletMin && <Navigation />}
         </header>
 
         <main className="flex flex-1 flex-col justify-between py-10">
