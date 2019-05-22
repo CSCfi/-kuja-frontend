@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,8 +11,9 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
 import { MEDIA_QUERIES } from "../../../modules/styles";
+import SideNavigation from "../SideNavigation";
 
-const styles = theme => ({
+const styles = () => ({
   appBar: {
     position: "relative"
   },
@@ -27,6 +28,9 @@ const styles = theme => ({
 
 const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
+  const [state, setState] = useState({
+    isSideNavigationVisible: false
+  });
   const ytunnus =
     oppilaitos && oppilaitos.organisaatio
       ? oppilaitos.organisaatio.ytunnus
@@ -38,9 +42,21 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
     }
   }, [user]);
 
+  const handleMenuButtonClick = () => {
+    setState({
+      isSideNavigationVisible: !state.isSideNavigationVisible
+    });
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
+      <SideNavigation
+        user={user}
+        position="left"
+        shouldBeVisible={state.isSideNavigationVisible}
+        onDrawerToggle={handleMenuButtonClick}
+      />
       <AppBar position="static" color="default" className={classes.appBar}>
         <Toolbar>
           {!breakpointTabletMin && (
@@ -48,6 +64,7 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
               className={classes.menuButton}
               color="inherit"
               aria-label="Menu"
+              onClick={handleMenuButtonClick}
             >
               <MenuIcon />
             </IconButton>
@@ -60,12 +77,12 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
           >
             Oiva - Opetushallinnon ohjaus- ja säätelypalvelu
           </Typography>
-          {!sessionStorage.getItem("role") ? (
+          {breakpointTabletMin && !sessionStorage.getItem("role") ? (
             <LinkItemUpper to="/cas-auth" className="has-separator pull-right">
               Kirjaudu sisään
             </LinkItemUpper>
           ) : null}
-          {user && user.username && (
+          {breakpointTabletMin && user && user.username && (
             <LinkItemUpper
               to="/cas-logout"
               className="has-separator pull-right"
@@ -73,12 +90,16 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
               Kirjaudu ulos ({user.username})
             </LinkItemUpper>
           )}
-          <LinkItemUpper to="/fi" className="has-separator pull-right">
-            Suomeksi
-          </LinkItemUpper>
-          <LinkItemUpper to="/sv" className="pull-right">
-            På svenska
-          </LinkItemUpper>
+          {breakpointTabletMin && (
+            <LinkItemUpper to="/fi" className="has-separator pull-right">
+              Suomeksi
+            </LinkItemUpper>
+          )}
+          {breakpointTabletMin && (
+            <LinkItemUpper to="/sv" className="pull-right">
+              På svenska
+            </LinkItemUpper>
+          )}
         </Toolbar>
       </AppBar>
     </React.Fragment>

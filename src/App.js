@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "scenes/Login/Login";
 import Logout from "scenes/Logout/Logout";
-import Header from "scenes/Header/Header";
 import Footer from "scenes/Footer/Footer";
 import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
@@ -114,9 +113,9 @@ const App = () => {
             </Switch>
           </div>
         </main>
-        <footer>
-          <Footer maxWidth={`${APP_WIDTH}`} />
-        </footer>
+        {/* <footer>
+          <Footer />
+        </footer> */}
       </div>
     </Router>
   );
