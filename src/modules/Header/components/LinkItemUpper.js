@@ -35,6 +35,7 @@ const LinkItemUpper = styled(NavLink)`
     border-right: 1px solid ${COLORS.OIVA_MEDIUM_GREEN};
     margin-right:10px;
     padding-right:10px;
+    height: 100%;
   }
   
   @media ${MEDIA_QUERIES.MOBILE} {
