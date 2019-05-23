@@ -1,42 +1,34 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-
+import { makeStyles } from "@material-ui/styles";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
 import WizardPage from "./WizardPage";
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 import { KoulutuksetProvider } from "context/koulutuksetContext";
 import { KoulutusalatProvider } from "context/koulutusalatContext";
 import { KoulutustyypitProvider } from "context/koulutustyypitContext";
 import Loading from "modules/Loading";
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
 import {
   ContentContainer,
   ContentWrapper,
   MessageWrapper
 } from "modules/elements";
-import {
-  WizardWrapper,
-  WizardContent,
-} from "./MuutospyyntoWizardComponents";
+import { WizardWrapper, WizardContent } from "./MuutospyyntoWizardComponents";
 import { ROLE_KAYTTAJA } from "modules/constants";
-import {
-  modalStyles,
-  ModalButton,
-  ModalText,
-  Content
-} from "./ModalComponents";
 import {
   HAKEMUS_VIRHE,
   HAKEMUS_VIESTI,
   HAKEMUS_OTSIKOT
 } from "../modules/uusiHakemusFormConstants";
-// import {
-//   getJarjestajaData,
-//   loadFormData
-// } from "services/muutospyynnot/muutospyyntoUtil";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
@@ -45,21 +37,25 @@ const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: theme.spacing.unit,
     top: theme.spacing.unit,
-    color: theme.palette.grey[500],
-  },
+    color: theme.palette.grey[500]
+  }
 }))(props => {
   const { children, classes, onClose } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
       <Typography variant="h6">{children}</Typography>
       {onClose ? (
-        <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="Close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -69,15 +65,37 @@ const DialogTitle = withStyles(theme => ({
 
 Modal.setAppElement("#root");
 
-const MuutospyyntoWizard = props => {
-  const [state, setState] = useState({
-    page: 1,
-    visitedPages: [1],
-    isCloseModalOpen: false,
-    showHelp: true
-  });
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "90%"
+  },
+  button: {
+    // marginRight: theme.spacing.unit
+  },
+  instructions: {
+    // marginTop: theme.spacing.unit,
+    // marginBottom: theme.spacing.unit
+  }
+}));
 
-  const nextPage = pageNumber => {
+function getSteps() {
+  return [
+    HAKEMUS_OTSIKOT.MUUTOKSET.FI,
+    HAKEMUS_OTSIKOT.PERUSTELUT.FI,
+    HAKEMUS_OTSIKOT.EDELLYTYKSET.FI,
+    HAKEMUS_OTSIKOT.YHTEENVETO.FI
+  ];
+}
+
+const MuutospyyntoWizard = props => {
+  const classes = useStyles();
+  const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
+  const [state] = useState({
+    isHelpVisible: false
+  });
+  const steps = getSteps();
+
+  const handleNext = pageNumber => {
     if (pageNumber !== 4) {
       props.history.push(String(pageNumber + 1));
     }
@@ -155,16 +173,17 @@ const MuutospyyntoWizard = props => {
     });
   };
 
-  const openCancelModal = e => {
-    e.preventDefault();
-    setState({ isCloseModalOpen: true });
+  const openCancelModal = () => {
+    setIsConfirmDialogVisible(true);
   };
 
-  const afterOpenCancelModal = () => {};
+  function handleCancel() {
+    setIsConfirmDialogVisible(false);
+  }
 
-  const closeCancelModal = () => {
-    setState({ isCloseModalOpen: false });
-  };
+  function handleOk() {
+    props.history.push(`/jarjestajat/${props.match.params.ytunnus}`);
+  }
 
   const {
     muutosperustelut,
@@ -206,74 +225,91 @@ const MuutospyyntoWizard = props => {
   ) {
     // muutospyynto.fetched is from EDIT FORM
     return (
-      <Dialog
-        open={true}
-        onClose={openCancelModal}
-        maxWidth={false}
-        fullWidth={true}
-        aria-labelledby="simple-dialog-title"
-      >
-        <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
-          {HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}
-        </DialogTitle>
-        <DialogContent>
-          <MuutoshakemusProvider>
-            <ContentWrapper>
-              <WizardWrapper>
-                <ContentContainer
-                  maxWidth="1085px"
-                  margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
-                >
-                  <WizardContent>
-                    {page === 1 && (
-                      <WizardPage
-                        pageNumber={1}
-                        onNext={nextPage}
-                        onSave={save}
-                        render={props => (
-                          <KoulutustyypitProvider>
-                            <KoulutusalatProvider>
-                              <KoulutuksetProvider>
-                                <MuutospyyntoWizardMuutokset
-                                  onCancel={onCancel}
-                                  update={update}
-                                  lupa={lupa}
-                                  initialValues={initialValues}
-                                  {...props}
-                                />
-                              </KoulutuksetProvider>
-                            </KoulutusalatProvider>
-                          </KoulutustyypitProvider>
+      <React.Fragment>
+        <Dialog
+          open={true}
+          onClose={openCancelModal}
+          maxWidth={false}
+          fullWidth={true}
+          aria-labelledby="simple-dialog-title"
+        >
+          <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
+            {HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}
+          </DialogTitle>
+          <DialogContent>
+            <MuutoshakemusProvider>
+              <div className={classes.root}>
+                <Stepper activeStep={page - 1}>
+                  {steps.map((label, index) => {
+                    const stepProps = {};
+                    const labelProps = {};
+                    return (
+                      <Step key={label} {...stepProps}>
+                        <StepLabel {...labelProps}>{label}</StepLabel>
+                      </Step>
+                    );
+                  })}
+                </Stepper>
+                <ContentWrapper>
+                  <WizardWrapper>
+                    <ContentContainer
+                      maxWidth="1085px"
+                      margin={
+                        state.isHelpVisible
+                          ? "50px auto 50px 20vw"
+                          : "50px auto"
+                      }
+                    >
+                      <WizardContent>
+                        {page === 1 && (
+                          <WizardPage
+                            pageNumber={1}
+                            onNext={handleNext}
+                            onSave={save}
+                            render={props => (
+                              <KoulutustyypitProvider>
+                                <KoulutusalatProvider>
+                                  <KoulutuksetProvider>
+                                    <MuutospyyntoWizardMuutokset
+                                      onCancel={onCancel}
+                                      update={update}
+                                      lupa={lupa}
+                                      initialValues={initialValues}
+                                      {...props}
+                                    />
+                                  </KoulutuksetProvider>
+                                </KoulutusalatProvider>
+                              </KoulutustyypitProvider>
+                            )}
+                          />
                         )}
-                      />
-                    )}
-                  </WizardContent>
-                </ContentContainer>
-              </WizardWrapper>
-
-              <Modal
-                isOpen={state.isCloseModalOpen}
-                onAfterOpen={afterOpenCancelModal}
-                onRequestClose={closeCancelModal}
-                contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
-                style={modalStyles}
-              >
-                <Content>
-                  <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
-                </Content>
-                <div>
-                  <ModalButton primary onClick={onCancel}>
-                    {HAKEMUS_VIESTI.KYLLA.FI}
-                  </ModalButton>
-                  <ModalButton onClick={closeCancelModal}>
-                    {HAKEMUS_VIESTI.EI.FI}
-                  </ModalButton>
-                </div>
-              </Modal>
-            </ContentWrapper>
-          </MuutoshakemusProvider>
-        </DialogContent>
-      </Dialog>
+                      </WizardContent>
+                    </ContentContainer>
+                  </WizardWrapper>
+                </ContentWrapper>
+              </div>
+            </MuutoshakemusProvider>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={isConfirmDialogVisible}
+          maxWidth={false}
+          fullWidth={true}
+          aria-labelledby="confirm-dialog"
+          maxWidth="sm"
+        >
+          <DialogTitle id="confirm-dialog">Poistutaanko?</DialogTitle>
+          <DialogContent>{HAKEMUS_VIESTI.VARMISTUS.FI}</DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel} color="primary">
+              {HAKEMUS_VIESTI.EI.FI}
+            </Button>
+            <Button onClick={handleOk} color="primary">
+              {HAKEMUS_VIESTI.KYLLA.FI}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
     );
   } else if (
     // muutosperustelut.isFetching ||
