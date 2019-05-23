@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Modal from "react-modal";
 
 import WizardPage from "./WizardPage";
-
+import DialogContent from '@material-ui/core/DialogContent';
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 // import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 // import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
@@ -12,13 +12,16 @@ import { KoulutuksetProvider } from "context/koulutuksetContext";
 import { KoulutusalatProvider } from "context/koulutusalatContext";
 import { KoulutustyypitProvider } from "context/koulutustyypitContext";
 import Loading from "modules/Loading";
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import {
   ContentContainer,
   ContentWrapper,
   MessageWrapper
 } from "modules/elements";
 import {
-  WizardBackground,
   WizardTop,
   WizardWrapper,
   WizardHeader,
@@ -44,6 +47,34 @@ import {
 //   loadFormData
 // } from "services/muutospyynnot/muutospyyntoUtil";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import Dialog from "@material-ui/core/Dialog";
+
+const DialogTitle = withStyles(theme => ({
+  root: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    margin: 0,
+    padding: theme.spacing.unit * 2,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing.unit,
+    top: theme.spacing.unit,
+    color: theme.palette.grey[500],
+  },
+}))(props => {
+  const { children, classes, onClose } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
 
 Modal.setAppElement("#root");
 
@@ -262,78 +293,80 @@ const MuutospyyntoWizard = props => {
   ) {
     // muutospyynto.fetched is from EDIT FORM
     return (
-      <MuutoshakemusProvider>
-        <ContentWrapper>
-          <WizardBackground />
+      <Dialog
+        open={true}
+        onClose={openCancelModal}
+        maxWidth={false}
+        fullWidth={true}
+        aria-labelledby="simple-dialog-title"
+      >
+        <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
+          {HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}
+        </DialogTitle>
+        <DialogContent>
+          <MuutoshakemusProvider>
+            <ContentWrapper>
+              <WizardWrapper>
+                <WizardHeader>
+                  <Container maxWidth="1085px" color={COLORS.BLACK}>
+                    <Phase
+                      number="1"
+                      text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
+                      activePage={page}
+                      handleClick={number => changePhase(number)}
+                    />
+                    <Phase
+                      number="2"
+                      text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
+                      activePage={page}
+                      disabled={visitedPages.indexOf(2) === -1}
+                      handleClick={number => changePhase(number)}
+                    />
+                    <Phase
+                      number="3"
+                      text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
+                      activePage={page}
+                      disabled={visitedPages.indexOf(3) === -1}
+                      handleClick={number => changePhase(number)}
+                    />
+                    <Phase
+                      number="4"
+                      text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
+                      activePage={page}
+                      disabled={visitedPages.indexOf(4) === -1}
+                      handleClick={number => changePhase(number)}
+                    />
+                  </Container>
+                </WizardHeader>
 
-          <WizardWrapper>
-            <WizardTop>
-              <Container className="px-4">
-                <div>{HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}</div>
-                <CloseButton src={close} onClick={openCancelModal} />
-              </Container>
-            </WizardTop>
-
-            <WizardHeader>
-              <Container maxWidth="1085px" color={COLORS.BLACK}>
-                <Phase
-                  number="1"
-                  text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
-                  activePage={page}
-                  handleClick={number => changePhase(number)}
-                />
-                <Phase
-                  number="2"
-                  text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(2) === -1}
-                  handleClick={number => changePhase(number)}
-                />
-                <Phase
-                  number="3"
-                  text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(3) === -1}
-                  handleClick={number => changePhase(number)}
-                />
-                <Phase
-                  number="4"
-                  text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
-                  activePage={page}
-                  disabled={visitedPages.indexOf(4) === -1}
-                  handleClick={number => changePhase(number)}
-                />
-              </Container>
-            </WizardHeader>
-
-            <ContentContainer
-              maxWidth="1085px"
-              margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
-            >
-              <WizardContent>
-                {page === 1 && (
-                  <WizardPage
-                    pageNumber={1}
-                    onNext={nextPage}
-                    onSave={save}
-                    render={props => (
-                      <KoulutustyypitProvider>
-                        <KoulutusalatProvider>
-                          <KoulutuksetProvider>
-                            <MuutospyyntoWizardMuutokset
-                              onCancel={onCancel}
-                              update={update}
-                              lupa={lupa}
-                              initialValues={initialValues}
-                              {...props}
-                            />
-                          </KoulutuksetProvider>
-                        </KoulutusalatProvider>
-                      </KoulutustyypitProvider>
+                <ContentContainer
+                  maxWidth="1085px"
+                  margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
+                >
+                  <WizardContent>
+                    {page === 1 && (
+                      <WizardPage
+                        pageNumber={1}
+                        onNext={nextPage}
+                        onSave={save}
+                        render={props => (
+                          <KoulutustyypitProvider>
+                            <KoulutusalatProvider>
+                              <KoulutuksetProvider>
+                                <MuutospyyntoWizardMuutokset
+                                  onCancel={onCancel}
+                                  update={update}
+                                  lupa={lupa}
+                                  initialValues={initialValues}
+                                  {...props}
+                                />
+                              </KoulutuksetProvider>
+                            </KoulutusalatProvider>
+                          </KoulutustyypitProvider>
+                        )}
+                      />
                     )}
-                  />
-                )}
-                {/* {page === 2 && (
+                    {/* {page === 2 && (
                   <WizardPage
                     pageNumber={2}
                     onPrev={previousPage}
@@ -381,33 +414,33 @@ const MuutospyyntoWizard = props => {
                     )}
                   />
                 )} */}
-              </WizardContent>
-            </ContentContainer>
-          </WizardWrapper>
+                  </WizardContent>
+                </ContentContainer>
+              </WizardWrapper>
 
-          <HideFooter />
-
-          <Modal
-            isOpen={state.isCloseModalOpen}
-            onAfterOpen={afterOpenCancelModal}
-            onRequestClose={closeCancelModal}
-            contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
-            style={modalStyles}
-          >
-            <Content>
-              <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
-            </Content>
-            <div>
-              <ModalButton primary onClick={onCancel}>
-                {HAKEMUS_VIESTI.KYLLA.FI}
-              </ModalButton>
-              <ModalButton onClick={closeCancelModal}>
-                {HAKEMUS_VIESTI.EI.FI}
-              </ModalButton>
-            </div>
-          </Modal>
-        </ContentWrapper>
-      </MuutoshakemusProvider>
+              <Modal
+                isOpen={state.isCloseModalOpen}
+                onAfterOpen={afterOpenCancelModal}
+                onRequestClose={closeCancelModal}
+                contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
+                style={modalStyles}
+              >
+                <Content>
+                  <ModalText>{HAKEMUS_VIESTI.VARMISTUS.FI}</ModalText>
+                </Content>
+                <div>
+                  <ModalButton primary onClick={onCancel}>
+                    {HAKEMUS_VIESTI.KYLLA.FI}
+                  </ModalButton>
+                  <ModalButton onClick={closeCancelModal}>
+                    {HAKEMUS_VIESTI.EI.FI}
+                  </ModalButton>
+                </div>
+              </Modal>
+            </ContentWrapper>
+          </MuutoshakemusProvider>
+        </DialogContent>
+      </Dialog>
     );
   } else if (
     // muutosperustelut.isFetching ||

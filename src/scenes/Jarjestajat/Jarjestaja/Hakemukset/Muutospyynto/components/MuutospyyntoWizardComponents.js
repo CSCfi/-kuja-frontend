@@ -8,7 +8,7 @@ export const Area = styled.div`
 `
 
 export const WizardBackground = styled.div`
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 0, 1);
   position: absolute;
   min-height: 100vh;
   width: 100%;
@@ -19,7 +19,6 @@ export const WizardBackground = styled.div`
 
 export const WizardTop = styled.div`
   background-color: ${COLORS.DARK_GRAY};
-  position: fixed;
   left: 0;
   top: 0;
   height: 50px;
@@ -30,17 +29,17 @@ export const WizardTop = styled.div`
 
 export const WizardBottom = styled.div`
   background-color: ${COLORS.BG_GRAY};
-  position: fixed;
-  width: 100vw;
   left: 0;
   bottom: 0;
   z-index: 2;
   display: flex;
+  width: 100vw;
+  position: fixed;
+  border-top: 1px solid #ddd;
 `
 
 export const WizardHeader = styled.div`
   background-color: ${COLORS.BG_GRAY};
-  position: fixed;
   left: 0;
   top: 50px;
   height: 50px;
@@ -60,7 +59,6 @@ export const WizardContent = styled.div`
 
 export const WizardWrapper = styled.div`
   // position: relative;
-  margin-top: -45px;
   flex: 1;
 `
 
