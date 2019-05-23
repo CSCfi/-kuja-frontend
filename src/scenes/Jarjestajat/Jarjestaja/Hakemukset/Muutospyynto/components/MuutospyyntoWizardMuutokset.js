@@ -52,7 +52,7 @@ const MuutospyyntoWizardMuutokset = props => {
 
   return (
     <div>
-      <p className="pb-4 hidden sm:inline">
+      <p className="py-4 px-16">
         Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen
         järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat
         kohdat vain siltä osin, mihin tutkintojen ja koulutuksen

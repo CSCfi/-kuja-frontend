@@ -17,12 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import {
-  ContentContainer,
-  ContentWrapper,
-  MessageWrapper
-} from "modules/elements";
-import { WizardWrapper, WizardContent } from "./MuutospyyntoWizardComponents";
+import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import {
   HAKEMUS_VIRHE,
@@ -225,11 +220,11 @@ const MuutospyyntoWizard = props => {
   ) {
     // muutospyynto.fetched is from EDIT FORM
     return (
-      <React.Fragment>
+      <MuutoshakemusProvider>
         <Dialog
           open={true}
           onClose={openCancelModal}
-          maxWidth={false}
+          maxWidth={state.isHelpVisible ? "lg" : "md"}
           fullWidth={true}
           aria-labelledby="simple-dialog-title"
         >
@@ -237,58 +232,41 @@ const MuutospyyntoWizard = props => {
             {HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}
           </DialogTitle>
           <DialogContent>
-            <MuutoshakemusProvider>
-              <div className={classes.root}>
-                <Stepper activeStep={page - 1}>
-                  {steps.map((label, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    return (
-                      <Step key={label} {...stepProps}>
-                        <StepLabel {...labelProps}>{label}</StepLabel>
-                      </Step>
-                    );
-                  })}
-                </Stepper>
-                <ContentWrapper>
-                  <WizardWrapper>
-                    <ContentContainer
-                      maxWidth="1085px"
-                      margin={
-                        state.isHelpVisible
-                          ? "50px auto 50px 20vw"
-                          : "50px auto"
-                      }
-                    >
-                      <WizardContent>
-                        {page === 1 && (
-                          <WizardPage
-                            pageNumber={1}
-                            onNext={handleNext}
-                            onSave={save}
-                            render={props => (
-                              <KoulutustyypitProvider>
-                                <KoulutusalatProvider>
-                                  <KoulutuksetProvider>
-                                    <MuutospyyntoWizardMuutokset
-                                      onCancel={onCancel}
-                                      update={update}
-                                      lupa={lupa}
-                                      initialValues={initialValues}
-                                      {...props}
-                                    />
-                                  </KoulutuksetProvider>
-                                </KoulutusalatProvider>
-                              </KoulutustyypitProvider>
-                            )}
+            <div className="px-16 py-4">
+              <Stepper activeStep={page - 1}>
+                {steps.map(label => {
+                  const stepProps = {};
+                  const labelProps = {};
+                  return (
+                    <Step key={label} {...stepProps}>
+                      <StepLabel {...labelProps}>{label}</StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+              {page === 1 && (
+                <WizardPage
+                  pageNumber={1}
+                  onNext={handleNext}
+                  onSave={save}
+                  render={props => (
+                    <KoulutustyypitProvider>
+                      <KoulutusalatProvider>
+                        <KoulutuksetProvider>
+                          <MuutospyyntoWizardMuutokset
+                            onCancel={onCancel}
+                            update={update}
+                            lupa={lupa}
+                            initialValues={initialValues}
+                            {...props}
                           />
-                        )}
-                      </WizardContent>
-                    </ContentContainer>
-                  </WizardWrapper>
-                </ContentWrapper>
-              </div>
-            </MuutoshakemusProvider>
+                        </KoulutuksetProvider>
+                      </KoulutusalatProvider>
+                    </KoulutustyypitProvider>
+                  )}
+                />
+              )}
+            </div>
           </DialogContent>
         </Dialog>
         <Dialog
@@ -309,7 +287,7 @@ const MuutospyyntoWizard = props => {
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </MuutoshakemusProvider>
     );
   } else if (
     // muutosperustelut.isFetching ||
