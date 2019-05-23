@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import Modal from "react-modal";
 
 import WizardPage from "./WizardPage";
 import DialogContent from '@material-ui/core/DialogContent';
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
-// import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
-// import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
-// import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 import { KoulutuksetProvider } from "context/koulutuksetContext";
 import { KoulutusalatProvider } from "context/koulutusalatContext";
 import { KoulutustyypitProvider } from "context/koulutustyypitContext";
@@ -22,14 +18,9 @@ import {
   MessageWrapper
 } from "modules/elements";
 import {
-  WizardTop,
   WizardWrapper,
-  WizardHeader,
   WizardContent,
-  Container
 } from "./MuutospyyntoWizardComponents";
-import { COLORS } from "modules/styles";
-import close from "static/images/close-x.svg";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import {
   modalStyles,
@@ -77,79 +68,6 @@ const DialogTitle = withStyles(theme => ({
 });
 
 Modal.setAppElement("#root");
-
-const CloseButton = styled.img`
-  height: 20px;
-  cursor: pointer;
-`;
-
-const PhaseStyle = styled.div`
-  display: flex;
-  align-items: baseline;
-  cursor: ${props => (props.disabled ? "not-allowed" : "pointer")};
-`;
-
-const Circle = styled.div`
-  background: ${props =>
-    props.active ? COLORS.OIVA_GREEN : COLORS.LIGHT_GRAY};
-  color: ${COLORS.WHITE};
-  height: 27px;
-  width: 27px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 5px;
-`;
-
-const Text = styled.div`
-  color: ${props => (props.active ? COLORS.BLACK : "rgb(96, 96, 96)")};
-`;
-
-const HideFooter = styled.div`
-  background-color: white;
-  width: 100%;
-  position: relative;
-  bottom: -100px;
-  height: 100px;
-`;
-const Help = styled.div`
-  background-color: #fffff0;
-  border: 1px solid #afafa0;
-  width: 20vw;
-  min-width: 300px;
-  position: fixed;
-  top: 120px;
-  min-height: 200px;
-  max-height: 90vh;
-  right: 20px;
-  z-index: 100;
-  opacity: 0.9;
-  cursor: move;
-  padding: 10px 20px;
-  overflow-y: auto;
-  overflow-x: wrap;
-
-  h3 {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-`;
-
-const Phase = ({ number, text, activePage, disabled, handleClick }) => {
-  const isActive = Number(number) === Number(activePage);
-
-  return (
-    <PhaseStyle
-      disabled={disabled}
-      onClick={disabled ? null : () => handleClick(Number(number))}
-    >
-      <Circle active={isActive}>{number}</Circle>
-      <Text active={isActive}>{text}</Text>
-    </PhaseStyle>
-  );
-};
 
 const MuutospyyntoWizard = props => {
   const [state, setState] = useState({
@@ -237,10 +155,6 @@ const MuutospyyntoWizard = props => {
     });
   };
 
-  const changePhase = number => {
-    setState({ page: number });
-  };
-
   const openCancelModal = e => {
     e.preventDefault();
     setState({ isCloseModalOpen: true });
@@ -261,7 +175,6 @@ const MuutospyyntoWizard = props => {
     muutospyynto,
     initialValues
   } = props;
-  const { visitedPages } = state;
   const page = parseInt(props.match.params.page, 10);
 
   if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
@@ -307,38 +220,6 @@ const MuutospyyntoWizard = props => {
           <MuutoshakemusProvider>
             <ContentWrapper>
               <WizardWrapper>
-                <WizardHeader>
-                  <Container maxWidth="1085px" color={COLORS.BLACK}>
-                    <Phase
-                      number="1"
-                      text={HAKEMUS_OTSIKOT.MUUTOKSET.FI}
-                      activePage={page}
-                      handleClick={number => changePhase(number)}
-                    />
-                    <Phase
-                      number="2"
-                      text={HAKEMUS_OTSIKOT.PERUSTELUT.FI}
-                      activePage={page}
-                      disabled={visitedPages.indexOf(2) === -1}
-                      handleClick={number => changePhase(number)}
-                    />
-                    <Phase
-                      number="3"
-                      text={HAKEMUS_OTSIKOT.EDELLYTYKSET.FI}
-                      activePage={page}
-                      disabled={visitedPages.indexOf(3) === -1}
-                      handleClick={number => changePhase(number)}
-                    />
-                    <Phase
-                      number="4"
-                      text={HAKEMUS_OTSIKOT.YHTEENVETO.FI}
-                      activePage={page}
-                      disabled={visitedPages.indexOf(4) === -1}
-                      handleClick={number => changePhase(number)}
-                    />
-                  </Container>
-                </WizardHeader>
-
                 <ContentContainer
                   maxWidth="1085px"
                   margin={state.showHelp ? "50px auto 50px 20vw" : "50px auto"}
@@ -366,54 +247,6 @@ const MuutospyyntoWizard = props => {
                         )}
                       />
                     )}
-                    {/* {page === 2 && (
-                  <WizardPage
-                    pageNumber={2}
-                    onPrev={previousPage}
-                    onNext={nextPage}
-                    onSave={save}
-                    render={props => (
-                      <MuutospyyntoWizardPerustelut
-                        onCancel={onCancel}
-                        muutosperustelut={props.muutosperustelut.data}
-                        vankilat={props.vankilat.data}
-                        ELYkeskukset={props.ELYkeskukset.data}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-                {page === 3 && (
-                  <WizardPage
-                    pageNumber={3}
-                    onPrev={previousPage}
-                    onNext={nextPage}
-                    onSave={save}
-                    render={props => (
-                      <MuutospyyntoWizardTaloudelliset
-                        onCancel={onCancel}
-                        initialValues={initialValues}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
-                {page === 4 && (
-                  <WizardPage
-                    pageNumber={4}
-                    onPrev={previousPage}
-                    onSave={save}
-                    render={props => (
-                      <MuutospyyntoWizardYhteenveto
-                        onCancel={onCancel}
-                        preview={preview}
-                        initialValues={initialValues}
-                        createMuutospyynto={create}
-                        {...props}
-                      />
-                    )}
-                  />
-                )} */}
                   </WizardContent>
                 </ContentContainer>
               </WizardWrapper>
