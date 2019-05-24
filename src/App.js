@@ -51,7 +51,7 @@ const App = () => {
         </header>
 
         <main className="flex flex-1 flex-col justify-between py-10">
-          <div className="mx-auto">
+          <div className="mx-auto min-w-3/4">
             <div className="pb-16">
               <Breadcrumbs
                 separator={<b> / </b>}
