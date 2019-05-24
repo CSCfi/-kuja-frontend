@@ -46,7 +46,6 @@ export function getRoles() {
         dispatch({ type: LOGIN_GET_ROLES_SUCCESS, payload: response.data });
       })
       .catch(err => {
-        console.info(err);
         dispatch({ type: LOGIN_GET_ROLES_FAILURE, payload: err });
       })
   };
