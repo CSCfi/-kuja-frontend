@@ -16,7 +16,7 @@ class Home extends Component {
           Oiva - Opetushallinnon ohjaus- ja säätelypalvelu
         </Typography>
         <Card className="p-4">
-          <Typography component="paragraph">
+          <Typography paragraph={true}>
             Palvelusta löytyvät kaikki ajantasaiset ammatillisen koulutuksen
             järjestämisluvat. Palvelu tulee sisältämään hakemusten laatimisen ja
             päätöksenteon lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia
@@ -24,7 +24,7 @@ class Home extends Component {
             yleissivistävän koulutuksen järjestämisluvat ja ylläpitämisluvat ja
             lupien hakupalvelut.
           </Typography>
-          <Typography component="paragraph" variant="body2" className="py-4">
+          <Typography paragraph={true} variant="body2" className="py-4">
             <Link
               href="https://link.webropolsurveys.com/S/F156FEC089139BF4"
               color="inherit"
