@@ -9,7 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { getOrganization } from "services/kayttajat/actions";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { MEDIA_QUERIES } from "../../../modules/styles";
 import SideNavigation from "../SideNavigation";
 

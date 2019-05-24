@@ -26,7 +26,7 @@ import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
 import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
 import Navigation from "./components/02-organisms/Navigation";
 import { MEDIA_QUERIES } from "./modules/styles";
-import { unstable_useMediaQuery as useMediaQuery } from "@material-ui/core/useMediaQuery";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const history = createBrowserHistory();
 
