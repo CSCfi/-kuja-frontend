@@ -16,7 +16,7 @@ const Jarjestajat = () => {
 
   if (fetched) {
     return (
-      <div className="max-w-2xl">
+      <div>
         <Helmet>
           <title>Oiva | Ammatillinen koulutus</title>
         </Helmet>
