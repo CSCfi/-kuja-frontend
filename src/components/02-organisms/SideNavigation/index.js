@@ -26,12 +26,6 @@ const useStyles = makeStyles({
 
 const SideNavigation = props => {
   const classes = useStyles();
-  
-  const ytunnus =
-    props.oppilaitos && props.oppilaitos.organisaatio
-      ? props.oppilaitos.organisaatio.ytunnus
-      : false;
-
   const pageLinks = [
     { path: "/esi-ja-perusopetus", text: "Esi- ja perusopetus" },
     { path: "/lukiokoulutus", text: "Lukiokoulutus" },
@@ -44,7 +38,7 @@ const SideNavigation = props => {
     pageLinks.push({
       path: "/asiat",
       text: "Asiat"
-    })
+    });
   }
 
   const handleDrawerToggle = () => {
@@ -66,6 +60,27 @@ const SideNavigation = props => {
           />
         </Card>
       )}
+      {props.ytunnus && (
+        <List>
+          <ListItem button key="oma_organisaatio">
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
+            <NavLink
+              className="no-underline"
+              ytunnus={props.ytunnus}
+              to={{
+                pathname: "/jarjestajat/" + props.ytunnus + "/omattiedot",
+                ytunnus: props.ytunnus
+              }}
+              exact
+            >
+              Oma organisaatio
+            </NavLink>
+          </ListItem>
+        </List>
+      )}
+      <Divider />
       <List>
         {pageLinks.map(link => (
           <ListItem button key={link.text}>
@@ -74,25 +89,6 @@ const SideNavigation = props => {
             </NavLink>
           </ListItem>
         ))}
-      </List>
-      <Divider />
-      <List>
-        <ListItem button key="oma_organisaatio">
-          <ListItemIcon>
-            <Home />
-          </ListItemIcon>
-          <NavLink
-            className="no-underline"
-            ytunnus={ytunnus}
-            to={{
-              pathname: "/jarjestajat/" + ytunnus + "/omattiedot",
-              ytunnus: ytunnus
-            }}
-            exact
-          >
-            Oma organisaatio
-          </NavLink>
-        </ListItem>
       </List>
       <Divider />
       <List>

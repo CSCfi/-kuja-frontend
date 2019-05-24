@@ -53,6 +53,8 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
       <CssBaseline />
       <SideNavigation
         user={user}
+        oppilaitos={oppilaitos}
+        ytunnus={ytunnus}
         position="left"
         shouldBeVisible={state.isSideNavigationVisible}
         onDrawerToggle={handleMenuButtonClick}
