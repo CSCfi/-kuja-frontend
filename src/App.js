@@ -26,13 +26,37 @@ import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
 import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
 import Navigation from "./components/02-organisms/Navigation";
 import { MEDIA_QUERIES } from "./modules/styles";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { ROLE_ESITTELIJA } from "./modules/constants";
 
 const history = createBrowserHistory();
 
 const App = () => {
   const { state, dispatch } = useContext(UserContext);
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
+  const ytunnus =
+    state.oppilaitos && state.oppilaitos.organisaatio
+      ? state.oppilaitos.organisaatio.ytunnus
+      : false;
+  const pageLinks = [
+    // { path: "/", text: "Etusivu", isExact: true },
+    {
+      path: "/esi-ja-perusopetus",
+      text: "Esi- ja perusopetus",
+      isExact: false
+    },
+    { path: "/lukiokoulutus", text: "Lukiokoulutus" },
+    { path: "/jarjestajat", text: "Ammatillinen koulutus" },
+    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
+    { path: "/tilastot", text: "Tilastot" }
+  ];
+
+  if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
+    pageLinks.push({
+      path: "/asiat",
+      text: "Asiat"
+    });
+  }
 
   useEffect(() => {
     getRoles()(dispatch);
@@ -43,11 +67,15 @@ const App = () => {
       <div className="flex flex-col min-h-screen">
         <header>
           <ButtonAppBar
+            ytunnus={ytunnus}
             user={state.user}
             oppilaitos={state.oppilaitos}
             dispatch={dispatch}
+            pageLinks={pageLinks}
           />
-          {breakpointTabletMin && <Navigation />}
+          {breakpointTabletMin && (
+            <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
+          )}
         </header>
 
         <main className="flex flex-1 flex-col justify-between py-10">

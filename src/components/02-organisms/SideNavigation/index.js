@@ -12,7 +12,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { NavLink } from "react-router-dom";
 import { Card } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
-import { ROLE_ESITTELIJA } from "../../../modules/constants";
 import * as R from "ramda";
 
 const useStyles = makeStyles({
@@ -26,20 +25,6 @@ const useStyles = makeStyles({
 
 const SideNavigation = props => {
   const classes = useStyles();
-  const pageLinks = [
-    { path: "/esi-ja-perusopetus", text: "Esi- ja perusopetus" },
-    { path: "/lukiokoulutus", text: "Lukiokoulutus" },
-    { path: "/jarjestajat", text: "Ammatillinen koulutus" },
-    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
-    { path: "/tilastot", text: "Tilastot" }
-  ];
-
-  if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
-    pageLinks.push({
-      path: "/asiat",
-      text: "Asiat"
-    });
-  }
 
   const handleDrawerToggle = () => {
     props.onDrawerToggle();
@@ -82,7 +67,7 @@ const SideNavigation = props => {
       )}
       <Divider />
       <List>
-        {pageLinks.map(link => (
+        {props.pageLinks.map(link => (
           <ListItem button key={link.text}>
             <NavLink to={link.path} className="no-underline">
               {link.text}

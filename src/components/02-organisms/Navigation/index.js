@@ -5,15 +5,16 @@ import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import LinkItem from "../../../scenes/Header/components/LinkItem";
-import { COLORS, FONT_STACK } from "modules/styles";
+import { COLORS } from "modules/styles";
 import { ROLE_ESITTELIJA } from "modules/constants";
+
+import styles from "./navigation.module.css";
 
 const HeaderBarLower = styled.div`
   display: flex;
   justify-content: ${props =>
     props.justifyContent ? props.justifyContent : "flex-start"};
   margin: 0 auto;
-  padding-left: 20px;
   width: 100%;
   background: ${COLORS.OIVA_MENU_BG_COLOR};
   max-height: 50px;
@@ -38,13 +39,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navigation = ({ user = {}, oppilaitos, dispatch }) => {
+const Navigation = ({ pageLinks, ytunnus }) => {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const ytunnus =
-    oppilaitos && oppilaitos.organisaatio
-      ? oppilaitos.organisaatio.ytunnus
-      : false;
 
   function handleChange(event, newValue) {
     setValue(newValue);
@@ -53,20 +50,21 @@ const Navigation = ({ user = {}, oppilaitos, dispatch }) => {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <HeaderBarLower>
+        <HeaderBarLower className="text-xs lg:text-base">
           {/* TODO: localization! */}
-          <LinkItem to="/" exact fontFamily={FONT_STACK.OPEN_SANS_REGULAR}>
-            Etusivu
-          </LinkItem>
-          <LinkItem to="/esi-ja-perusopetus">Esi- ja perusopetus</LinkItem>
-          <LinkItem to="/lukiokoulutus">Lukiokoulutus</LinkItem>
-          <LinkItem to="/jarjestajat">Ammatillinen koulutus</LinkItem>
-          <LinkItem to="/vapaa-sivistystyo">Vapaa sivistystyö</LinkItem>
-          <LinkItem to="/tilastot">Tilastot</LinkItem>
-
+          {pageLinks.map(link => (
+            <LinkItem
+              to={link.path}
+              className={`${styles['navigation-item']} px-2 sm:px-4 py-4 no-underline`}
+              key={link.text}
+              exact={link.isExact}
+            >
+              {link.text}
+            </LinkItem>
+          ))}
           {ytunnus && (
             <LinkItem
-              // onClick={this.forceUpdate}
+              className={`${styles['navigation-item']} px-2 sm:px-4 py-4 no-underline`}
               ytunnus={ytunnus}
               to={{
                 pathname: "/jarjestajat/" + ytunnus + "/omattiedot",

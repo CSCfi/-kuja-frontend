@@ -4,14 +4,9 @@ import { NavLink } from 'react-router-dom'
 import { COLORS, FONT_STACK, MEDIA_QUERIES } from 'modules/styles'
 
 const LinkItem = styled(NavLink)`
-  padding: 10px 10px;
   color: white;
   text-transform: none;
-  margin-left: 0px;
-  font-size: 15px;
   font-family: ${FONT_STACK.ARIAL};
-  line-height: 26px;
-  text-decoration: none;
 
   a:visited {
     color: white;

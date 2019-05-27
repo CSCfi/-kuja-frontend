@@ -9,16 +9,14 @@ import { withStyles } from "@material-ui/core/styles";
 import { getOrganization } from "services/kayttajat/actions";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { MEDIA_QUERIES } from "../../../modules/styles";
 import SideNavigation from "../SideNavigation";
+import { NavLink } from "react-router-dom";
 
 const styles = () => ({
   appBar: {
     position: "relative"
-  },
-  toolbarTitle: {
-    flex: 1
   },
   menuButton: {
     marginLeft: -12,
@@ -26,15 +24,18 @@ const styles = () => ({
   }
 });
 
-const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
+const ButtonAppBar = ({
+  classes,
+  ytunnus,
+  user = {},
+  oppilaitos,
+  pageLinks,
+  dispatch
+}) => {
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const [state, setState] = useState({
     isSideNavigationVisible: false
   });
-  const ytunnus =
-    oppilaitos && oppilaitos.organisaatio
-      ? oppilaitos.organisaatio.ytunnus
-      : false;
 
   useEffect(() => {
     if (user && user.oid) {
@@ -58,9 +59,10 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
         position="left"
         shouldBeVisible={state.isSideNavigationVisible}
         onDrawerToggle={handleMenuButtonClick}
+        pageLinks={pageLinks}
       />
       <AppBar position="static" color="default" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar className="flex">
           {!breakpointTabletMin && (
             <IconButton
               className={classes.menuButton}
@@ -71,14 +73,14 @@ const ButtonAppBar = ({ classes, user = {}, oppilaitos, dispatch }) => {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.toolbarTitle}
-          >
-            Oiva - Opetushallinnon ohjaus- ja säätelypalvelu
-          </Typography>
+          <NavLink to="/" exact className="flex-1 no-underline">
+            <Typography variant="h6" color="inherit" noWrap>
+              Oiva
+            </Typography>
+            <Typography variant="subtitle2" color="inherit" noWrap>
+              Opetushallinnon ohjaus- ja säätelypalvelu
+            </Typography>
+          </NavLink>
           {breakpointTabletMin && !sessionStorage.getItem("role") ? (
             <LinkItemUpper to="/cas-auth" className="has-separator pull-right">
               Kirjaudu sisään
