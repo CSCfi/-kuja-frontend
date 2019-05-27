@@ -1,32 +1,11 @@
 import React from 'react'
 import { LUPA_EXCEPTION_PATH } from "../../../../modules/constants"
-import styled from 'styled-components'
-
-import LupaHistory from './LupaHistory'
 import CurrentLupa from './CurrentLupa'
+import Typography from "@material-ui/core/Typography";
 import { LUPA_TEKSTIT } from "../modules/constants"
-import { InnerContentContainer } from "../../../../modules/elements"
 import { LUPA_LISAKOULUTTAJAT } from "../../constants"
 
-const LargeParagraph = styled.p`
-  font-size: 20px;
-  line-height: 24px;
-  margin: 0;
-`
-
-const LupaInfoWrapper = styled.div`
-  margin: 0 0 20px 0;
-  
-  h2 {
-    font-weight: bold;
-  }
-`
-const LupaInnerContentWrapper = styled.div`
-  margin: 40px 50px;
-`
-
 const JulkisetTiedot = (props) => {
-  console.info(props);
   const { lupadata } = props
   const { jarjestaja } = lupadata
   const { diaarinumero, jarjestajaOid } = lupadata
@@ -39,12 +18,12 @@ const JulkisetTiedot = (props) => {
   }
 
   return (
-    <InnerContentContainer>
-      <LupaInnerContentWrapper>
-        <LupaInfoWrapper>
-          <h2>{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</h2>
-          <LargeParagraph>{LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}</LargeParagraph>
-        </LupaInfoWrapper>
+    <div className="bg-white p-16">
+      <div>
+        <div>
+          <Typography>{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</Typography>
+          <Typography paragraph={true} variant="h6">{LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}</Typography>
+        </div>
 
         <CurrentLupa
           diaarinumero={diaarinumero}
@@ -53,13 +32,13 @@ const JulkisetTiedot = (props) => {
           lupaExceptionUrl={lupaException ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}` : null}
         />
 
-        <LargeParagraph>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</LargeParagraph>
+        <p>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</p>
         <br />
 
-        <LupaHistory jarjestajaOid={jarjestajaOid} />
-      </LupaInnerContentWrapper>
+        <p jarjestajaOid={jarjestajaOid} />
+      </div>
 
-    </InnerContentContainer>
+    </div>
   )
 }
 

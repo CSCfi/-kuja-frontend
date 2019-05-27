@@ -7,20 +7,9 @@ import MuuMaarays from "./MuuMaarays";
 import VT from "./VT";
 
 import { KOHTEET } from "../modules/constants";
-import { COLORS, FONT_STACK } from "../../../../modules/styles";
+import { FONT_STACK } from "../../../../modules/styles";
 import { TUTKINTO_TEKSTIT, LUPA_TEKSTIT } from "../modules/constants";
 import Tutkintokieli from "./Tutkintokieli";
-
-const SectionWrapper = styled.div`
-  margin: 0 20px 0 20px;
-  position: relative;
-  border-bottom: 1px solid ${COLORS.BORDER_GRAY};
-  padding: 10px 0 0 0;
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
 
 const Otsikko = styled.div`
   font-size: 16px;
@@ -107,15 +96,13 @@ const LupaSection = props => {
       case KOHTEET.TUTKINNOT: {
         const { maaraykset, muutMaaraykset } = kohde;
 
-        console.log(muutMaaraykset);
-
         // VALMA ja TELMA
         const vt = muutMaaraykset.filter(
           item => item.koodi === "999901" || item.koodi === "999903"
         );
 
         return (
-          <SectionWrapper>
+          <div className="p-8 border-b border-b-gray">
             <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
 
             <span>
@@ -171,7 +158,7 @@ const LupaSection = props => {
                 )}
               </Koulutukset>
             </div>
-          </SectionWrapper>
+          </div>
         );
       }
 
@@ -187,7 +174,7 @@ const LupaSection = props => {
         } = kohde;
 
         return (
-          <SectionWrapper>
+          <div className="p-8 border-b border-b-gray">
             <Span>
               {`${headingNumber}.`}
               <H3>{heading}</H3>
@@ -239,7 +226,7 @@ const LupaSection = props => {
                 <Tutkintokieli key={i} {...obj} />
               ))}
             </Tutkinnot>
-          </SectionWrapper>
+          </div>
         );
       }
 
@@ -248,7 +235,7 @@ const LupaSection = props => {
         const { kohdeKuvaus, maakunnat, kunnat } = kohde;
 
         return (
-          <SectionWrapper>
+          <div className="p-8 border-b border-b-gray">
             <Span>
               {`${headingNumber}.`}
               <H3>{heading}</H3>
@@ -269,7 +256,7 @@ const LupaSection = props => {
                 {LUPA_TEKSTIT.TOIMINTA_ALUE.VALTAKUNNALLINEN.FI}
               </MuutToimialueet>
             ) : null}
-          </SectionWrapper>
+          </div>
         );
       }
 
@@ -277,7 +264,7 @@ const LupaSection = props => {
       case KOHTEET.OPISKELIJAVUODET: {
         const { opiskelijavuodet, rajoitukset, kohdeKuvaus } = kohde;
         return (
-          <SectionWrapper>
+          <div className="p-8 border-b border-b-gray">
             <Span>
               {`${headingNumber}.`}
               <H3>{heading}</H3>
@@ -304,7 +291,7 @@ const LupaSection = props => {
                 </OpiskelijavuosiRajoitukset>
               );
             })}
-          </SectionWrapper>
+          </div>
         );
       }
 
@@ -313,7 +300,7 @@ const LupaSection = props => {
         const { muut, vaativat, vankilat, kokeilut } = kohde;
 
         return (
-          <SectionWrapper>
+          <div className="p-8">
             <Span>
               {`${headingNumber}.`}
               <H3>{heading}</H3>
@@ -376,24 +363,24 @@ const LupaSection = props => {
             muut.length === 0 ? (
               <p>{LUPA_TEKSTIT.MUUT.EI_MAARAYKSIA.FI}</p>
             ) : null}
-          </SectionWrapper>
+          </div>
         );
       }
 
       default: {
         return (
-          <SectionWrapper>
+          <div className="p-8 border-b border-b-gray">
             <Span>{`${headingNumber}.`}</Span>
             <H3>{heading}</H3>
-          </SectionWrapper>
+          </div>
         );
       }
     }
   } else {
     return (
-      <SectionWrapper>
+      <div className="p-8 border-b border-b-gray">
         <H3>Ei kohdetietoja</H3>
-      </SectionWrapper>
+      </div>
     );
   }
 };

@@ -6,25 +6,14 @@ import LupaSection from "./LupaSection";
 
 import { LUPA_SECTIONS, LUPA_TEKSTIT } from "../modules/constants";
 import {
-  InnerContentContainer,
-  InnerContentWrapper
+  InnerContentContainer
 } from "../../../../modules/elements";
 import { COLORS } from "../../../../modules/styles";
 import { LUPA_LISAKOULUTTAJAT } from "../../constants";
 import { LuvatContext } from "context/luvatContext";
 
 const TopSectionWrapper = styled.div`
-  padding: 5px 20px;
-  margin: 0 -30px;
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
-`;
-
-const H2 = styled.h2`
-  margin: 0 30px 24px 30px;
-`;
-
-const LupaDetailsWrapper = styled.div`
-  margin: 45px auto;
 `;
 
 const Row = styled.div`
@@ -48,24 +37,24 @@ const Jarjestamislupa = () => {
   const lupaException = LUPA_LISAKOULUTTAJAT[jarjestajaYtunnus];
 
   return (
-    <InnerContentContainer>
-      <InnerContentWrapper>
+    <InnerContentContainer className="mx-auto mt-8 mb-16">
+      <div>
         {lupaException ? (
-          <TopSectionWrapper>
-            <H2>{LUPA_TEKSTIT.LUPA.OTSIKKO.FI}</H2>
+          <TopSectionWrapper className="p-8">
+            <h2>{LUPA_TEKSTIT.LUPA.OTSIKKO.FI}</h2>
           </TopSectionWrapper>
         ) : (
-          <TopSectionWrapper>
-            <H2>
+          <TopSectionWrapper className="p-8">
+            <h2>
               {LUPA_TEKSTIT.LUPA.OTSIKKO.FI} <Moment format="DD.MM.YYYY" />
-            </H2>
+            </h2>
           </TopSectionWrapper>
         )}
 
         {lupaException ? (
           ""
         ) : (
-          <LupaDetailsWrapper>
+          <div className="p-8">
             {Object.keys(LUPA_SECTIONS).map((k, i) => (
               <LupaSection
                 kohde={kohteet[k]}
@@ -73,9 +62,9 @@ const Jarjestamislupa = () => {
                 key={i}
               />
             ))}
-          </LupaDetailsWrapper>
+          </div>
         )}
-      </InnerContentWrapper>
+      </div>
     </InnerContentContainer>
   );
 };
