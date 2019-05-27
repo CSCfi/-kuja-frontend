@@ -26,11 +26,13 @@ const Jarjestajat = () => {
           Ammatillinen koulutus
         </BreadcrumbsItem>
 
-        <h1>Ammatillisen koulutuksen järjestäjät</h1>
-        <p className="py-4">
-          Voimassa olevat järjestämisluvat ({Object.keys(data).length} kpl)
-        </p>
-        <LuvatList luvat={data} />
+        <div className="mx-auto w-full sm:w-3/4">
+          <h1>Ammatillisen koulutuksen järjestäjät</h1>
+          <p className="py-4">
+            Voimassa olevat järjestämisluvat ({Object.keys(data).length} kpl)
+          </p>
+          <LuvatList luvat={data} />
+        </div>
       </div>
     );
   } else if (isFetching) {

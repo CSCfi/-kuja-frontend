@@ -119,8 +119,8 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
       }
 
       return (
-        <ContentWrapper>
-          <ContentContainer>
+        <div className="flex flex-1 flex-col">
+          <div className="mx-auto px-4 sm:px-0 w-full sm:w-3/4">
             <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
             <BreadcrumbsItem to="/jarjestajat">
               Ammatillinen koulutus
@@ -132,14 +132,10 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
             <Separator />
 
             <ProfileMenu routes={tabNavRoutes} />
-          </ContentContainer>
-
-          <FullWidthWrapper backgroundColor={COLORS.BG_GRAY}>
+          </div>
+          <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
             {authenticated ? (
-              <ContentContainer
-                padding={"40px 15px 80px"}
-                margin={"28px auto 0"}
-              >
+              <div className="mx-auto w-full sm:w-3/4 py-16">
                 <Route
                   path={`${match.path}/omattiedot`}
                   exact
@@ -183,12 +179,9 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                     />
                   )}
                 />
-              </ContentContainer>
+              </div>
             ) : (
-              <ContentContainer
-                padding={"40px 15px 80px"}
-                margin={"28px auto 0"}
-              >
+              <div>
                 <Route
                   path={`${match.url}/jarjestamislupa`}
                   render={() => <Jarjestamislupa />}
@@ -198,10 +191,10 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                   exact
                   render={() => <JulkisetTiedot lupadata={lupadata} />}
                 />
-              </ContentContainer>
+              </div>
             )}
           </FullWidthWrapper>
-        </ContentWrapper>
+        </div>
       );
     } else if (
       (lupa && lupa.isFetching) ||

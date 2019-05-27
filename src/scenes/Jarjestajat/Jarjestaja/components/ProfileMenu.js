@@ -1,61 +1,53 @@
-import _ from 'lodash'
-import React from 'react'
-import styled from 'styled-components'
-import { NavLink } from 'react-router-dom'
-
-import { COLORS } from "../../../../modules/styles"
-
-const MenuBar = styled.div`
-  display: flex;
-  background-color: ${COLORS.DARK_GRAY};
-  width: 100%;
-`
+import _ from "lodash";
+import React from "react";
+import styled from "styled-components";
+import { NavLink } from "react-router-dom";
+import { COLORS } from "../../../../modules/styles";
 
 const MenuItem = styled(NavLink)`
   color: ${COLORS.WHITE};
-  padding: 13px 26px;
   box-sizing: border-box;
   border: 1px solid ${COLORS.DARK_GRAY};
   border-right: 1px solid ${COLORS.BORDER_GRAY};
   position: relative;
   cursor: default;
-  
+  background-color: ${COLORS.DARK_GRAY};
+
   &.active {
     background-color: ${COLORS.WHITE};
     color: ${COLORS.BLACK};
-    border-left: 1px solid transparent;
   }
-  
+
   &:hover {
     background-color: ${COLORS.OIVA_TABLE_HEADER_HOVER_COLOR};
-    border-left: 1px solid transparent;
     cursor: pointer;
   }
   &.active:hover {
     background-color: ${COLORS.WHITE};
     cursor: default;
   }
-  
-  &:first-child {
-    &:hover, &.active {
-      border-left: 1px solid ${COLORS.DARK_GRAY};
-    }
-  }
-  
-  &:last-child {
-    border-right: none;
-  }
-`
+`;
 
-const ProfileMenu = (props) => {
-
-  const { routes } = props
+const ProfileMenu = props => {
+  const { routes } = props;
 
   return (
-    <MenuBar>
-      {_.map(routes, (item, i) => (item.authenticated) ? <MenuItem key={i} to={item.path} exact={item.exact}>{item.text}</MenuItem> : null)}
-    </MenuBar>
-  )
-}
+    <ul class="flex flex-wrap">
+      {_.map(routes, (item, i) =>
+        item.authenticated ? (
+          <li key={i} className={`mr-3 mb-3`}>
+            <MenuItem
+              to={item.path}
+              exact={item.exact}
+              className="inline-block border border-blue-500 rounded py-2 px-4 text-white no-underline"
+            >
+              {item.text}
+            </MenuItem>
+          </li>
+        ) : null
+      )}
+    </ul>
+  );
+};
 
-export default ProfileMenu
+export default ProfileMenu;
