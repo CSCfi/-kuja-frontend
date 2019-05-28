@@ -2,11 +2,13 @@ import React from "react";
 import Moment from "react-moment";
 import styled from "styled-components";
 import Media from "react-media";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
 import { Td, Tr, TdButton } from "../../../../modules/Table";
-import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles";
+import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
+import Cancel from "@material-ui/icons/Cancel";
+import Delete from "@material-ui/icons/Delete";
+import Edit from "@material-ui/icons/Edit";
+import Button from "@material-ui/core/Button";
 
 const LupaText = styled.span`
   margin: 10px;
@@ -19,52 +21,6 @@ const LupaText = styled.span`
 
 const TextPartial = styled.span`
   margin-right: 10px;
-`;
-
-const Button = styled.div`
-  color: ${props => (props.textColor ? props.textColor : COLORS.WHITE)};
-  background-color: ${props =>
-    props.disabled
-      ? COLORS.LIGHT_GRAY
-      : props.bgColor
-      ? props.bgColor
-      : COLORS.OIVA_GREEN};
-  border: 1px solid
-    ${props =>
-      props.disabled
-        ? COLORS.LIGHT_GRAY
-        : props.bgColor
-        ? props.bgColor
-        : COLORS.OIVA_GREEN};
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  width: 42px;
-  line-height: 36px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius: 2px;
-  min-width: 24px;
-  margin: 1px;
-  z-index: 10;
-  &:hover {
-    color: ${props =>
-      props.disabled
-        ? COLORS.WHITE
-        : props.bgColor
-        ? props.bgColor
-        : COLORS.OIVA_GREEN};
-    background-color: ${props =>
-      props.disabled
-        ? COLORS.LIGHT_GRAY
-        : props.textColor
-        ? props.textColor
-        : COLORS.WHITE};
-    ${props => (props.disabled ? "cursor: not-allowed;" : null)}
-  }
-  svg {
-    margin-bottom: -2px;
-  }
 `;
 
 const JarjestamislupaAsiakirjatItem = props => {
@@ -155,27 +111,27 @@ const JarjestamislupaAsiakirjatItem = props => {
               {/* Mok */}
               {diaarinumero.endsWith("7") ? (
                 <Button
-                  title="Täydennä hakemusta"
                   onClick={e => refill(e, diaarinumero)}
+                  title="Täydennä hakemusta"
                 >
-                  <FaEdit />
+                  <Edit />
                 </Button>
               ) : null}
             </TdButton>
             <TdButton>
               {!diaarinumero.endsWith("7") ? (
                 <Button
-                  title={LUPA_TEKSTIT.ASIAT.POISTA_TAYDENNYS.FI}
                   onClick={e => remove(e, diaarinumero)}
+                  title={LUPA_TEKSTIT.ASIAT.POISTA_TAYDENNYS.FI}
                 >
-                  <FaTrash />
+                  <Delete />
                 </Button>
               ) : (
                 <Button
-                  title={LUPA_TEKSTIT.ASIAT.PERUUTA_HAKEMUS.FI}
                   onClick={e => cancel(e, diaarinumero)}
+                  title={LUPA_TEKSTIT.ASIAT.PERUUTA_HAKEMUS.FI}
                 >
-                  <MdCancel />
+                  <Cancel />
                 </Button>
               )}
             </TdButton>

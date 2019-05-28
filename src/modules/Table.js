@@ -153,8 +153,8 @@ export const Td = styled.div`
 export const ThButton = styled(Thn)`
   padding: 0;
   margin: 0;
-  min-width: 42px;
-  max-width: 42px;
+  min-width: 82px;
+  max-width: 82px;
   flex: 0;
 `
 
@@ -162,6 +162,6 @@ export const TdButton = styled(Td)`
   background: white;
   padding: 0;
   margin: 0;
-  width: 42px;
-  max-width: 42px;
+  width: 82px;
+  max-width: 82px;
 `

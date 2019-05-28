@@ -1,91 +1,50 @@
 import React, { useState } from "react";
-import _ from "lodash";
-import Media from "react-media";
-import styled from "styled-components";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Thn,
-  Trn,
-  ThButton
-} from "../../../../modules/Table";
-import { COLORS, MEDIA_QUERIES } from "../../../../modules/styles";
-import { FaPlus, FaArrowLeft } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
-
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
-import Loading from "../../../../modules/Loading";
-import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
-
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
-import { LUPA_EXCEPTIONS } from "../../constants";
+import Button from "@material-ui/core/Button";
+import Add from "@material-ui/icons/Add";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import Cancel from "@material-ui/icons/Cancel";
+import _ from "lodash";
+import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
+import { Typography } from "@material-ui/core";
+import { MEDIA_QUERIES } from "modules/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import Media from "react-media";
 
-const WrapTable = styled.div``;
-const Button = styled.div`
-  color: ${props => (props.textColor ? props.textColor : COLORS.WHITE)};
-  background-color: ${props =>
-    props.disabled
-      ? COLORS.LIGHT_GRAY
-      : props.bgColor
-      ? props.bgColor
-      : COLORS.OIVA_GREEN};
-  border: 1px solid
-    ${props =>
-      props.disabled
-        ? COLORS.LIGHT_GRAY
-        : props.bgColor
-        ? props.bgColor
-        : COLORS.OIVA_GREEN};
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  width: auto;
-  padding: 0 16px;
-  line-height: 36px;
-  vertical-align: middle;
-  text-align: center;
-  border-radius: 2px;
-  min-width: 24px;
-  margin: 0 10px 10px 0;
-  &:hover {
-    color: ${props =>
-      props.disabled
-        ? COLORS.WHITE
-        : props.bgColor
-        ? props.bgColor
-        : COLORS.OIVA_GREEN};
-    background-color: ${props =>
-      props.disabled
-        ? COLORS.LIGHT_GRAY
-        : props.textColor
-        ? props.textColor
-        : COLORS.WHITE};
-    ${props => (props.disabled ? "cursor: not-allowed;" : null)}
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing(3),
+    overflowX: "auto"
+  },
+  table: {
+    minWidth: 650
   }
-  svg {
-    margin-bottom: -2px;
-  }
-`;
+}));
 
-const BackButton = styled(Button)`
-  margin: 0 10px 10px 0;
-`;
-
-const Header = styled.div`
-  width: 100%;
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  h3 {
-    margin: 0 0 10px 0;
-  }
-`;
+const columnTitles = [
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
+];
 
 const JarjestamislupaAsiatList = ({ lupahistory }) => {
-  const { state, setState } = useState({
+  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
+  const classes = useStyles();
+  const [state, setState] = useState({
     opened: 0
   });
+  const { data } = lupahistory || {};
 
   const setOpened = dnro => {
     setState({ opened: dnro });
@@ -102,79 +61,67 @@ const JarjestamislupaAsiatList = ({ lupahistory }) => {
     ));
   };
 
-  const { fetched, isFetching, hasErrored, data } = lupahistory || {};
   if (state && state.opened !== 0) {
     return (
-      <WrapTable>
-        <Header>
-          <BackButton
-            title={LUPA_TEKSTIT.ASIAT.PALAA.FI}
-            onClick={e => setOpened(0)}
-          >
-            <FaArrowLeft />
-          </BackButton>
-          <h3>
-            {LUPA_TEKSTIT.ASIAT.ASIAKIRJAT_OTSIKKO.FI} (OKM/{this.state.opened})
-          </h3>
-        </Header>
-        <JarjestamislupaAsiakirjat lupaHistory={this.props.lupaHistory} />
-      </WrapTable>
-    );
-  } else if (fetched) {
-    return (
-      <WrapTable>
-        <h2>{LUPA_TEKSTIT.ASIAT.OTSIKKO.FI}</h2>
-        <Button>
-          <FaPlus /> {LUPA_TEKSTIT.ASIAT.UUSI_HAKEMUS.FI}
+      <React.Fragment>
+        <Button variant="contained" color="primary" onClick={e => setOpened(0)}>
+          <ArrowBack />
+          <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
         </Button>
-        <Button>
-          <MdCancel /> {LUPA_TEKSTIT.ASIAT.JARJESTAMISLUVAN_PERUUTUS.FI}
-        </Button>
-        <Media
-          query={MEDIA_QUERIES.MOBILE}
-          render={() => (
-            <Table>
-              <Tbody>{renderJarjestamislupaAsiatList(data)}</Tbody>
-            </Table>
-          )}
-        />
-        <Media
-          query={MEDIA_QUERIES.TABLET_MIN}
-          render={() => (
-            <Table>
-              <Thead>
-                <Trn>
-                  <Thn flex="3">
-                    {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI}
-                  </Thn>
-                  <Thn flex="3">
-                    {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI}
-                  </Thn>
-                  <Thn flex="2">
-                    {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}
-                  </Thn>
-                  <Thn flex="2">
-                    {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI}
-                  </Thn>
-                  <Thn flex="2">
-                    {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI}
-                  </Thn>
-                  <ThButton flex="1" />
-                  <ThButton flex="1" />
-                </Trn>
-              </Thead>
-              <Tbody>{renderJarjestamislupaAsiatList(data)}</Tbody>
-            </Table>
-          )}
-        />
-      </WrapTable>
+        <Paper className={classes.root}>
+          <JarjestamislupaAsiakirjat lupaHistory={lupahistory} />
+        </Paper>
+      </React.Fragment>
     );
-  } else if (isFetching) {
-    return <Loading />;
-  } else if (hasErrored) {
-    return <h2>{LUPA_EXCEPTIONS}</h2>;
   } else {
-    return null;
+    return (
+      <div>
+        <div className="flex">
+          <div className="mr-4">
+            <Button variant="contained" color="primary">
+              {breakpointTabletMin && <Add />}
+              <span className="pl-2">{LUPA_TEKSTIT.ASIAT.UUSI_HAKEMUS.FI}</span>
+            </Button>
+          </div>
+          <Button variant="contained" color="secondary">
+            {breakpointTabletMin && <Cancel />}
+            <span className="pl-2">
+              {LUPA_TEKSTIT.ASIAT.JARJESTAMISLUVAN_PERUUTUS.FI}
+            </span>
+          </Button>
+        </div>
+        <Paper className={classes.root}>
+          <Media
+            query={MEDIA_QUERIES.MOBILE}
+            render={() => (
+              <div>
+                <div>{renderJarjestamislupaAsiatList(data)}</div>
+              </div>
+            )}
+          />
+          <Media
+            query={MEDIA_QUERIES.TABLET_MIN}
+            render={() => (
+              <Table className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    {columnTitles.map((title, i) => (
+                      <TableCell key={`title-${i}`}>
+                        <Typography component="span" color="textSecondary">
+                          {title}
+                        </Typography>
+                      </TableCell>
+                    ))}
+                    <TableCell>&nbsp;</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>{renderJarjestamislupaAsiatList(data)}</TableBody>
+              </Table>
+            )}
+          />
+        </Paper>
+      </div>
+    );
   }
 };
 
