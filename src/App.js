@@ -78,9 +78,9 @@ const App = () => {
           )}
         </header>
 
-        <main className="flex flex-1 flex-col justify-between py-10">
-          <div className="mx-auto min-w-3/4">
-            <div className="pb-16">
+        <main className="flex flex-1 flex-col justify-between">
+          <div className="flex-1 flex flex-col">
+            <div className="mx-auto w-3/4 py-10">
               <Breadcrumbs
                 separator={<b> / </b>}
                 item={NavLink}
@@ -141,9 +141,9 @@ const App = () => {
             </Switch>
           </div>
         </main>
-        {/* <footer>
+        <footer>
           <Footer />
-        </footer> */}
+        </footer>
       </div>
     </Router>
   );
