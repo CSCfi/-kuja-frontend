@@ -13,16 +13,13 @@ import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
 import {
-  ContentContainer,
-  FullWidthWrapper,
-  ContentWrapper
+  FullWidthWrapper
 } from "../../../../modules/elements";
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
 import { fetchLupaHistory } from "services/lupahistoria/actions";
 import { LupahistoriaContext } from "context/lupahistoriaContext";
 import { KunnatProvider } from "context/kunnatContext";
 import { MaakunnatProvider } from "context/maakunnatContext";
-import _ from "lodash";
 
 const Separator = styled.div`
   &:after {
@@ -49,7 +46,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
     if (lupa && lupa.data && lupa.data.jarjestajaOid) {
       fetchLupaHistory(lupa.data.jarjestajaOid)(dispatch);
     }
-  }, [lupa, muutospyynnot]);
+  }, [lupa, muutospyynnot, dispatch]);
 
   if (match.params) {
     if (lupa && lupa.fetched && muutospyynnot && muutospyynnot.fetched) {
@@ -119,7 +116,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
       }
 
       return (
-        <div className="flex flex-1 flex-col">
+        <React.Fragment>
           <div className="mx-auto px-4 sm:px-0 w-full sm:w-3/4">
             <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
             <BreadcrumbsItem to="/jarjestajat">
@@ -135,7 +132,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
           </div>
           <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
             {authenticated ? (
-              <div className="mx-auto w-full sm:w-3/4 py-16">
+              <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
                 <Route
                   path={`${match.path}/omattiedot`}
                   exact
@@ -181,7 +178,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                 />
               </div>
             ) : (
-              <div>
+              <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
                 <Route
                   path={`${match.url}/jarjestamislupa`}
                   render={() => <Jarjestamislupa />}
@@ -194,7 +191,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
               </div>
             )}
           </FullWidthWrapper>
-        </div>
+        </React.Fragment>
       );
     } else if (
       (lupa && lupa.isFetching) ||

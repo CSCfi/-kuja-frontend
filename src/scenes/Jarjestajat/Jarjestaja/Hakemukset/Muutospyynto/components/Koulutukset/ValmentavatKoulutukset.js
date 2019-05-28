@@ -28,7 +28,7 @@ const ValmentavatKoulutukset = props => {
   useEffect(() => {
     fetchKoulutus("999901")(koulutuksetDispatch);
     fetchKoulutus("999903")(koulutuksetDispatch);
-  }, []);
+  }, [koulutuksetDispatch]);
 
   const handleChanges = item => {
     props.onChanges(item, koodisto);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/styles";
@@ -41,11 +41,6 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = ({ pageLinks, ytunnus }) => {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
-
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
 
   return (
     <div className={classes.root}>

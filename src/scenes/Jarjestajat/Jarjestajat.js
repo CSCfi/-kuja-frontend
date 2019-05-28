@@ -12,11 +12,11 @@ const Jarjestajat = () => {
 
   useEffect(() => {
     fetchLuvat()(dispatch);
-  }, []);
+  }, [dispatch]);
 
   if (fetched) {
     return (
-      <div>
+      <React.Fragment>
         <Helmet>
           <title>Oiva | Ammatillinen koulutus</title>
         </Helmet>
@@ -26,14 +26,14 @@ const Jarjestajat = () => {
           Ammatillinen koulutus
         </BreadcrumbsItem>
 
-        <div className="mx-auto w-full sm:w-3/4">
+        <div className="mx-auto w-full sm:w-3/4 mb-16">
           <h1>Ammatillisen koulutuksen järjestäjät</h1>
           <p className="py-4">
             Voimassa olevat järjestämisluvat ({Object.keys(data).length} kpl)
           </p>
           <LuvatList luvat={data} />
         </div>
-      </div>
+      </React.Fragment>
     );
   } else if (isFetching) {
     return <Loading />;

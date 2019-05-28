@@ -93,10 +93,10 @@ const JarjestamislupaAsiatList = ({ lupahistory }) => {
 
   const renderJarjestamislupaAsiatList = data => {
     data = _.orderBy(data, ["paatospvm"], ["desc"]);
-    return _.map(data, historyData => (
+    return _.map(data, (historyData, i) => (
       <JarjestamislupaAsiatListItem
         lupaHistoria={historyData}
-        key={historyData.diaarinumero}
+        key={`${historyData.diaarinumero}-${i}`}
         setOpened={setOpened}
       />
     ));

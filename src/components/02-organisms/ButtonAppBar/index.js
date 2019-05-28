@@ -41,7 +41,7 @@ const ButtonAppBar = ({
     if (user && user.oid) {
       getOrganization(user.oid)(dispatch);
     }
-  }, [user]);
+  }, [user, dispatch]);
 
   const handleMenuButtonClick = () => {
     setState({
@@ -73,14 +73,20 @@ const ButtonAppBar = ({
               <MenuIcon />
             </IconButton>
           )}
-          <NavLink to="/" exact className="flex-1 no-underline">
-            <Typography variant="h6" color="inherit" noWrap>
-              Oiva
-            </Typography>
-            <Typography variant="subtitle2" color="inherit" noWrap>
-              Opetushallinnon ohjaus- ja säätelypalvelu
-            </Typography>
-          </NavLink>
+          <div className="flex-1">
+            <NavLink
+              to="/"
+              exact
+              className="inline-block no-underline text-gray-800"
+            >
+              <Typography variant="h6" color="inherit" noWrap>
+                Oiva
+              </Typography>
+              <Typography variant="subtitle2" color="inherit" noWrap>
+                Opetushallinnon ohjaus- ja säätelypalvelu
+              </Typography>
+            </NavLink>
+          </div>
           {breakpointTabletMin && !sessionStorage.getItem("role") ? (
             <LinkItemUpper to="/cas-auth" className="has-separator pull-right">
               Kirjaudu sisään

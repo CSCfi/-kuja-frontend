@@ -1,4 +1,3 @@
-import _ from "lodash";
 import {
   ADD_ITEM_TO_CHANGES,
   ADD_SUB_ITEM_TO_CHANGES,

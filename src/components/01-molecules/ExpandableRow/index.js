@@ -45,7 +45,7 @@ ExpansionPanelSummary.muiName = "ExpansionPanelSummary";
 
 const ExpansionPanelDetails = withStyles(theme => ({
   root: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   }
 }))(MuiExpansionPanelDetails);
 // className="flex items-center cursor-pointer bg-grey-light hover:bg-grey p-2"

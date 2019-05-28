@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
@@ -8,13 +8,14 @@ import { COLORS } from "modules/styles";
 import _ from "lodash";
 
 const TutkintoList = props => {
-  const getArticle = articles => {
+
+  const getArticle = useCallback(articles => {
     return _.find(articles, article => {
       return article.koodi === props.areaCode;
     });
-  };
+  }, [props.areaCode]);
 
-  const formState = () => {
+  const formState = useCallback(() => {
     const article = getArticle(props.articles);
     const state = {
       article,
@@ -94,17 +95,13 @@ const TutkintoList = props => {
       changes: props.changes || []
     };
     return state;
-  };
+  }, [props.changes, getArticle, props.articles, props.koulutustyypit]);
 
-  const [state, setState] = useState(formState());
+  const [state] = useState(formState());
 
   const onChanges = (item, isSubItemTarget) => {
     props.onChanges(item, isSubItemTarget, props.listId);
   };
-
-  useEffect(() => {
-    setState(formState());
-  }, [props.changes]);
 
   return (
     <Wrapper>

@@ -20,7 +20,7 @@ const LupaHistory = props => {
     if (jarjestajaOid) {
       fetchLupaHistory(jarjestajaOid)(dispatch);
     }
-  }, [jarjestajaOid]);
+  }, [jarjestajaOid, dispatch]);
 
   const { fetched, isFetching, hasErrored, data } = lupaHistory;
   

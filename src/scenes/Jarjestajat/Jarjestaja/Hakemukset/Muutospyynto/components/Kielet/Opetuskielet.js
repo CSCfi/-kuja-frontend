@@ -23,11 +23,11 @@ const Opetuskielet = props => {
         props.changes
       )
     );
-  }, [kielet, props.changes]);
+  }, [kielet, props.changes, props.kohde]);
 
   useEffect(() => {
     fetchOppilaitoksenOpetuskielet()(dispatch);
-  }, []);
+  }, [dispatch]);
 
   const handleChanges = item => {
     props.onChanges(item, props.listId, sectionId);

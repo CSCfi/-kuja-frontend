@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { makeStyles } from "@material-ui/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -32,12 +31,12 @@ const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   closeButton: {
     position: "absolute",
-    right: theme.spacing.unit,
-    top: theme.spacing.unit,
+    right: theme.spacing(),
+    top: theme.spacing(),
     color: theme.palette.grey[500]
   }
 }))(props => {
@@ -60,19 +59,6 @@ const DialogTitle = withStyles(theme => ({
 
 Modal.setAppElement("#root");
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: "90%"
-  },
-  button: {
-    // marginRight: theme.spacing.unit
-  },
-  instructions: {
-    // marginTop: theme.spacing.unit,
-    // marginBottom: theme.spacing.unit
-  }
-}));
-
 function getSteps() {
   return [
     HAKEMUS_OTSIKOT.MUUTOKSET.FI,
@@ -83,7 +69,6 @@ function getSteps() {
 }
 
 const MuutospyyntoWizard = props => {
-  const classes = useStyles();
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -96,22 +81,12 @@ const MuutospyyntoWizard = props => {
     }
   };
 
-  const previousPage = pageNumber => {
-    if (pageNumber !== 1) {
-      props.history.push(String(pageNumber - 1));
-    }
-  };
-
   const onCancel = event => {
     if (event) {
       event.preventDefault();
     }
     const url = `/jarjestajat/${props.match.params.ytunnus}`;
     props.history.push(url);
-  };
-
-  const onSubmit = data => {
-    // props.createMuutospyynto(data); // from EDIT form
   };
 
   const save = data => {
@@ -134,38 +109,6 @@ const MuutospyyntoWizard = props => {
   const update = data => {
     // props.updateMuutospyynto(data);
     // updateMuutospyynto(data);
-  };
-
-  const create = data => {
-    return props.saveMuutospyynto(data).then(() => {
-      let uuid = undefined;
-      if (props.muutospyynto.save.data.data) {
-        uuid = props.muutospyynto.save.data.data.uuid;
-        const url = `/jarjestajat/${props.match.params.ytunnus}`;
-        props.createMuutospyynto(uuid).then(() => {
-          let newurl = url + "/hakemukset-ja-paatokset/";
-          props.history.push(newurl);
-        });
-      }
-    });
-  };
-
-  const preview = (event, data) => {
-    event.preventDefault();
-    props.previewMuutospyynto(data).then(() => {
-      var binaryData = [];
-      binaryData.push(props.muutospyynto.pdf.data);
-      const data = window.URL.createObjectURL(
-        new Blob(binaryData, { type: "application/pdf" })
-      );
-      //const data =  window.URL.createObjectURL(response.data)
-      var link = document.createElement("a");
-      link.href = data;
-      link.download = "file.pdf";
-      link.click();
-      // For Firefox it is necessary to delay revoking the ObjectURL
-      setTimeout(window.URL.revokeObjectURL(data), 100);
-    });
   };
 
   const openCancelModal = () => {
@@ -271,7 +214,6 @@ const MuutospyyntoWizard = props => {
         </Dialog>
         <Dialog
           open={isConfirmDialogVisible}
-          maxWidth={false}
           fullWidth={true}
           aria-labelledby="confirm-dialog"
           maxWidth="sm"

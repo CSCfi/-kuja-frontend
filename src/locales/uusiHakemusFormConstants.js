@@ -70,16 +70,8 @@ export const HAKEMUS_VIRHE = {
     FI: 'Vankilalistausta ladattaessa tapahtui virhe.',
     SV: 'På Svenska'
   },
-  VANKILA: {
-    FI: 'Vankilalistausta ladattaessa tapahtui virhe.',
-    SV: 'På Svenska'
-  },
   ELY: {
     FI: 'ELY-keskuslistausta ladattaessa tapahtui virhe.',
-    SV: 'På Svenska'
-  },
-  PAATOSKIERROS: {
-    FI: 'Päätoskierroksia ladattaessa tapahtui virhe.',
     SV: 'På Svenska'
   },
   PAATOSKIERROS: {

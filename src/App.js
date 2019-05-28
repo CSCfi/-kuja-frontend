@@ -5,7 +5,6 @@ import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
 import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
-import { APP_WIDTH } from "modules/styles";
 import Home from "scenes/Home/components/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
@@ -60,7 +59,7 @@ const App = () => {
 
   useEffect(() => {
     getRoles()(dispatch);
-  }, []);
+  }, [dispatch]);
 
   return (
     <Router history={history}>
@@ -78,9 +77,9 @@ const App = () => {
           )}
         </header>
 
-        <main className="flex flex-1 flex-col justify-between py-10">
-          <div className="mx-auto min-w-3/4">
-            <div className="pb-16">
+        <main className="flex flex-1 flex-col justify-between bg-white">
+          <div className="flex-1 flex flex-col">
+            <div className="mx-auto w-full px-4 py-10 sm:w-3/4 sm:px-0">
               <Breadcrumbs
                 separator={<b> / </b>}
                 item={NavLink}
@@ -92,53 +91,61 @@ const App = () => {
                 }}
               />
             </div>
-            <Switch>
-              {<Route exact path="/" component={Home} />}
-              {<Route path="/logout" component={Logout} />}
-              {<Route path="/kirjaudu" component={Login} />}
-              {<Route exact path="/tilastot" component={Tilastot} />}
-              {<Route path="/cas-auth" component={RequireCasAuth} />}
-              {<Route path="/cas-logout" component={DestroyCasAuth} />}
-              {<Route path="/cas-ready" component={CasAuthenticated} />}
-              {
-                <Route
-                  exact
-                  path="/jarjestajat"
-                  render={() => (
-                    <JarjestajatProvider>
-                      <Jarjestajat />
-                    </JarjestajatProvider>
-                  )}
-                />
-              }
-              {<Route exact path="/lukiokoulutus" component={Lukiokoulutus} />}
-              {
-                <Route
-                  exact
-                  path="/vapaa-sivistystyo"
-                  component={VapaaSivistystyo}
-                />
-              }
-              {
-                <Route
-                  exact
-                  path="/esi-ja-perusopetus"
-                  component={EsiJaPerusopetus}
-                />
-              }
-              {
-                <Route
-                  path="/jarjestajat/:ytunnus"
-                  render={props => (
-                    <LuvatProvider>
-                      <MuutospyynnotProvider>
-                        <JarjestajaSwitch {...props} />
-                      </MuutospyynnotProvider>
-                    </LuvatProvider>
-                  )}
-                />
-              }
-            </Switch>
+            <div className="flex-1 flex flex-col">
+              <Switch>
+                {<Route exact path="/" component={Home} />}
+                {<Route path="/logout" component={Logout} />}
+                {<Route path="/kirjaudu" component={Login} />}
+                {<Route exact path="/tilastot" component={Tilastot} />}
+                {<Route path="/cas-auth" component={RequireCasAuth} />}
+                {<Route path="/cas-logout" component={DestroyCasAuth} />}
+                {<Route path="/cas-ready" component={CasAuthenticated} />}
+                {
+                  <Route
+                    exact
+                    path="/jarjestajat"
+                    render={() => (
+                      <JarjestajatProvider>
+                        <Jarjestajat />
+                      </JarjestajatProvider>
+                    )}
+                  />
+                }
+                {
+                  <Route
+                    exact
+                    path="/lukiokoulutus"
+                    component={Lukiokoulutus}
+                  />
+                }
+                {
+                  <Route
+                    exact
+                    path="/vapaa-sivistystyo"
+                    component={VapaaSivistystyo}
+                  />
+                }
+                {
+                  <Route
+                    exact
+                    path="/esi-ja-perusopetus"
+                    component={EsiJaPerusopetus}
+                  />
+                }
+                {
+                  <Route
+                    path="/jarjestajat/:ytunnus"
+                    render={props => (
+                      <LuvatProvider>
+                        <MuutospyynnotProvider>
+                          <JarjestajaSwitch {...props} />
+                        </MuutospyynnotProvider>
+                      </LuvatProvider>
+                    )}
+                  />
+                }
+              </Switch>
+            </div>
           </div>
         </main>
         {/* <footer>

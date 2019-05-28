@@ -27,11 +27,11 @@ const Kuljettajakoulutukset = props => {
         )
       );
     }
-  }, [koulutukset.muut.muudata, props.changes]);
+  }, [koulutukset.muut, props.changes]);
 
   useEffect(() => {
     fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
-  }, []);
+  }, [koulutuksetDispatch]);
 
   const handleChanges = item => {
     props.onChanges(item, koodisto, true);

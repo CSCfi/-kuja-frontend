@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const Section = props => {
   return (
     <div className="flex">
-      <div className="w-16">
+      <div className="w-8 sm:w-16">
         {props.code && <h2 className="py-8">{props.code}.</h2>}
       </div>
       <div className="w-full">

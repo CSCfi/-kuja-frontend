@@ -11,16 +11,19 @@ import { fetchMaakunnat } from "../../../../services/maakunnat/actions";
 import { UserContext } from "context/userContext";
 import { KunnatContext } from "context/kunnatContext";
 import { MaakunnatContext } from "context/maakunnatContext";
+import { Typography } from "@material-ui/core";
 
-const OmatTiedot = props => {
+const OmatTiedot = () => {
   const { state: user } = useContext(UserContext);
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
-  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
+  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
+    MaakunnatContext
+  );
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
     fetchMaakunnat()(maakunnatDispatch);
-  }, []);
+  }, [kunnatDispatch, maakunnatDispatch]);
   const { oppilaitos } = user || {};
   let postinumero = undefined;
   let ppostinumero = undefined;
@@ -50,6 +53,7 @@ const OmatTiedot = props => {
           if (item.www) www = item.www;
           if (item.numero) numero = item.numero;
           if (item.email) email = item.email;
+          return true;
         });
     }
   }
@@ -58,9 +62,13 @@ const OmatTiedot = props => {
     return (
       <InnerContentContainer>
         <InnerContentWrapper>
-          <h2>{LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}</h2>
-          <h3>{LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}</h3>
-          <p>
+          <Typography component="h2" variant="h5" className="pb-4">
+            {LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}
+          </Typography>
+          <Typography component="h3" variant="h6">
+            {LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}
+          </Typography>
+          <p className="pb-4">
             {oppilaitos.organisaatio.kayntiosoite.osoite}
             {postinumero && <span>,&nbsp;</span>}
             {postinumero}
@@ -69,8 +77,10 @@ const OmatTiedot = props => {
             )}
             {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka}
           </p>
-          <h3>{LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}</h3>
-          <p>
+          <Typography component="h3" variant="h6">
+            {LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}
+          </Typography>
+          <p className="pb-4">
             {oppilaitos.organisaatio.postiosoite.osoite &&
               oppilaitos.organisaatio.postiosoite.osoite}
             {ppostinumero && <span>,&nbsp;</span>}
@@ -80,26 +90,54 @@ const OmatTiedot = props => {
             )}
             {oppilaitos.organisaatio.postiosoite.postitoimipaikka}
           </p>
-          <h3>{LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}</h3>
-          {numero && <p>{kotipaikka}</p>}
-          <h3>{LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}</h3>
+          <Typography component="h3" variant="h6">
+            {LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}
+          </Typography>
+          <p className="pb-4">{numero && <span>{kotipaikka}</span>}</p>
+          <Typography component="h3" variant="h6">
+            {LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}
+          </Typography>
           {numero && (
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</b> {numero}
-            </p>
+            <div className="flex border-b">
+              <div className="w-1/2 bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</p>
+              </div>
+              <div className="w-1/2 bg-gray-100 p-2 h-10">
+                <p>
+                  <a title={`Call to number ${numero}`} href={`tel:${numero}`}>
+                    {numero}
+                  </a>
+                </p>
+              </div>
+            </div>
           )}
           {www && (
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}:</b>{" "}
-              <a href={www} target="full">
-                {www}
-              </a>
-            </p>
+            <div className="flex border-b">
+              <div className="w-1/2 bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}:</p>
+              </div>
+              <div className="w-1/2 bg-gray-100 p-2 h-10">
+                <p>
+                  <a title={`Link to ${www}`} href={www}>
+                    {www}
+                  </a>
+                </p>
+              </div>
+            </div>
           )}
           {email && (
-            <p>
-              <b>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</b> {email}
-            </p>
+            <div className="flex border-b">
+              <div className="w-1/2 bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</p>
+              </div>
+              <div className="w-1/2 bg-gray-100 p-2 h-10">
+                <p>
+                  <a title={`Mail to ${email}`} href={`mailto: ${email}`}>
+                    {email}
+                  </a>
+                </p>
+              </div>
+            </div>
           )}
           <br />
           <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
@@ -109,13 +147,6 @@ const OmatTiedot = props => {
   } else {
     return <Loading />;
   }
-
-  // Käyntiosoite: Hallilantie 24 , 33820  TAMPERE
-  // Postiosoite: Ahlmanin koulu Hallilantie 24 , 33820  TAMPERE
-  // Puhelinnumero: 03 3399 2500
-  // Www-osoite: http://www.ahlman.fi
-  // Sähköpostiosoite: ahlman@ahlman.fi
-  // Sivulle myös info: Tiedot tulevat Opetushallituksen Organisaatiotietopalvelusta, joka päivittää ne Yritys- ja yhteisötietojärjestelmästä. Muutokset tietoihin sitä kautta.
 };
 
 export default OmatTiedot;

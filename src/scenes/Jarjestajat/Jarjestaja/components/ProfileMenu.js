@@ -32,7 +32,7 @@ const ProfileMenu = props => {
   const { routes } = props;
 
   return (
-    <ul class="flex flex-wrap">
+    <ul className="flex flex-wrap">
       {_.map(routes, (item, i) =>
         item.authenticated ? (
           <li key={i} className={`mr-3 mb-3`}>

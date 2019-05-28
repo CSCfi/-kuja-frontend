@@ -55,7 +55,7 @@ function getKuntaList(kunnat, locale) {
   let list = [];
 
   _.forEach(kunnat, kunta => {
-    const { koodiArvo, metadata, tila, voimassaLoppuPvm } = kunta;
+    const { koodiArvo, metadata, tila } = kunta;
 
     if (tila === "HYVAKSYTTY" && koodiArvo !== "999") {
       list.push({

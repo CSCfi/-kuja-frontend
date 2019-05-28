@@ -1,12 +1,12 @@
-import _ from "lodash"
-import { getMuutosperusteluObjectById, getTutkintoKoodiByMaaraysId } from "../koulutukset/koulutusUtil"
-import { parseLocalizedField } from "../../modules/helpers"
-import dateformat from "dateformat"
-import { MUUTOS_TILAT, MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants"
-import { KOHTEET } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants"
+import _ from "lodash";
+import dateformat from "dateformat";
+import {
+  MUUTOS_TILAT,
+  MUUTOS_TYPES
+} from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
+import { KOHTEET } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
 
 export function formatMuutospyynto(muutospyynto) {
-
   const {
     diaarinumero,
     jarjestajaOid,
@@ -25,22 +25,22 @@ export function formatMuutospyynto(muutospyynto) {
     taloudelliset = [],
     liitteet = [],
     meta = []
-  } = muutospyynto
+  } = muutospyynto;
 
   let muutokset = [
     ...formatMuutosArray(tutkinnotjakoulutukset),
     ...formatMuutosArray(opetusjatutkintokielet),
     ...formatMuutosArray(toimintaalueet),
     ...formatMuutosArray(opiskelijavuodet),
-    ...formatMuutosArray(muutmuutokset),
-  ]
+    ...formatMuutosArray(muutmuutokset)
+  ];
 
   // Itse liitteitä ei tarvita tallennuksen json:nissa
   muutokset.map(item => {
-    if (item.liitteet && item.liitteet.length > 0) 
-      item.liitteet.map ( liite =>
-        delete(liite.tiedosto)
-      )
+    if (item.liitteet && item.liitteet.length > 0) {
+      item.liitteet.map(liite => delete liite.tiedosto);
+    }
+    return true;
   });
 
   let metadata = { meta, ...hakija };
@@ -63,14 +63,14 @@ export function formatMuutospyynto(muutospyynto) {
     meta: metadata,
     muutokset: muutokset,
     liitteet
-  }
+  };
 }
 
 export function createAttachmentArray(muutokset) {
-  const liitteet = [] ;
-  muutokset.map( item => {
+  const liitteet = [];
+  muutokset.map(item => {
     if (item && item.liitteet && item.liitteet.length > 0) {
-      item.liitteet.map( liite => {
+      item.liitteet.map(liite => {
         let tulosliite = {};
         tulosliite.tiedostoId = liite.tiedostoId;
         tulosliite.tyyppi = liite.tyyppi;
@@ -83,14 +83,15 @@ export function createAttachmentArray(muutokset) {
           liite.tiedosto = null;
         }
         liitteet.push(tulosliite);
-      })
+        return true;
+      });
     }
-  })
+    return true;
+  });
   return liitteet;
 }
 
 export function getAttachments(muutospyynto) {
-
   const {
     tutkinnotjakoulutukset = [],
     opetusjatutkintokielet = [],
@@ -99,7 +100,7 @@ export function getAttachments(muutospyynto) {
     muutmuutokset = [],
     taloudelliset = [],
     liitteet = []
-  } = muutospyynto
+  } = muutospyynto;
   const commonAttachments = {};
   commonAttachments.liitteet = liitteet;
 
@@ -111,7 +112,7 @@ export function getAttachments(muutospyynto) {
     ...formatMuutosArray(muutmuutokset),
     taloudelliset[0],
     commonAttachments
- ]
+  ];
 
   let kaikkiliitteet = createAttachmentArray(muutokset);
 
@@ -120,16 +121,21 @@ export function getAttachments(muutospyynto) {
 
 function formatMuutosArray(muutokset) {
   if (!muutokset) {
-    return []
+    return [];
   }
 
-  return _.map(muutokset, muutos => _.assignIn({}, muutos, {
-    tila:
-      muutos.type === MUUTOS_TYPES.ADDITION ? MUUTOS_TILAT.LISAYS :
-      muutos.type === MUUTOS_TYPES.REMOVAL ? MUUTOS_TILAT.POISTO :
-      muutos.type === MUUTOS_TYPES.CHANGE ? MUUTOS_TILAT.MUUTOS :
-      null
-  }))
+  return _.map(muutokset, muutos =>
+    _.assignIn({}, muutos, {
+      tila:
+        muutos.type === MUUTOS_TYPES.ADDITION
+          ? MUUTOS_TILAT.LISAYS
+          : muutos.type === MUUTOS_TYPES.REMOVAL
+          ? MUUTOS_TILAT.POISTO
+          : muutos.type === MUUTOS_TYPES.CHANGE
+          ? MUUTOS_TILAT.MUUTOS
+          : null
+    })
+  );
 }
 
 function getDefaultPaatoskierros(paatoskierrokset) {
@@ -137,37 +143,37 @@ function getDefaultPaatoskierros(paatoskierrokset) {
     const pkierrosObj = _.find(paatoskierrokset.data, pkierros => {
       if (pkierros.meta && pkierros.meta.nimi && pkierros.meta.nimi.fi) {
         if (pkierros.id === 19) {
-          return pkierros
+          return pkierros;
         }
       }
-    })
+    });
 
     if (pkierrosObj) {
-      return { uuid: pkierrosObj.uuid }
+      return { uuid: pkierrosObj.uuid };
     }
   }
 
-  return undefined
+  return undefined;
 }
 
 export function getJarjestajaData(state) {
-  let username = "oiva-default"
+  let username = "oiva-default";
   if (state.user && state.user.fetched) {
-    username = state.user.user.username
+    username = state.user.user.username;
   } else {
-    username = sessionStorage.getItem('username')
+    username = sessionStorage.getItem("username");
   }
 
-  if (state.lupa && state.lupa.fetched && state.paatoskierrokset && state.paatoskierrokset.fetched) {
-    const { data } = state.lupa
-    const {
-      uuid,
-      diaarinumero,
-      jarjestajaYtunnus,
-      jarjestajaOid
-    } = data
+  if (
+    state.lupa &&
+    state.lupa.fetched &&
+    state.paatoskierrokset &&
+    state.paatoskierrokset.fetched
+  ) {
+    const { data } = state.lupa;
+    const { uuid, diaarinumero, jarjestajaYtunnus, jarjestajaOid } = data;
 
-    const now = dateformat(new Date(), "yyyy-mm-dd")
+    const now = dateformat(new Date(), "yyyy-mm-dd");
 
     return {
       diaarinumero,
@@ -184,70 +190,54 @@ export function getJarjestajaData(state) {
       voimassaloppupvm: null,
       muutokset: [],
       meta: {}
-    }
+    };
   }
 }
 
 export function getBaseJarjestajaData(state) {
-  let username = "oiva-default"
-  if (state.user && state.user.fetched) {
-    username = state.user.user.username
-  } else {
-    username = sessionStorage.getItem('username')
-  }
-
-  if (state.lupa && state.lupa.fetched && state.paatoskierrokset && state.paatoskierrokset.fetched) {
-    const { data } = state.lupa
-    const {
-      uuid,
-      diaarinumero,
-      jarjestajaYtunnus,
-      jarjestajaOid
-    } = data
-
-    const now = dateformat(new Date(), "yyyy-mm-dd")
+  if (
+    state.lupa &&
+    state.lupa.fetched &&
+    state.paatoskierrokset &&
+    state.paatoskierrokset.fetched
+  ) {
+    const { data } = state.lupa;
+    const { diaarinumero, jarjestajaYtunnus, jarjestajaOid } = data;
 
     return {
       diaarinumero,
-      // hakupvm: now, // kun siirretään käsittelyyn
       jarjestajaOid,
       jarjestajaYtunnus,
-      // luoja: username,
-      // luontipvm: now,
-      // lupaUuid: uuid,
       paatoskierrosId: null,
-      // paivityspvm: now,
-      // voimassaalkupvm: null,
-      // voimassaloppupvm: null,
       meta: {}
-    }
+    };
   }
 }
 
 function getHakija(meta) {
   if (!meta) {
-    return
+    return;
   }
 
-  const { nimi, puhelin, email, hyvaksyjat, haettupvm } = meta
+  const { nimi, puhelin, email, hyvaksyjat, haettupvm } = meta;
   return {
     nimi,
     puhelin,
     email,
     hyvaksyjat,
     haettupvm
-  }
+  };
 }
 
 function getTaloudelliset(meta) {
   if (!meta) {
-    return
+    return;
   }
 
-  const { taloudelliset } = meta
+  const { taloudelliset } = meta;
   return {
     taloudelliset
-  }
+  };
 }
 
 export function loadFormData(state, muutosdata, formValues) {
@@ -263,17 +253,17 @@ export function loadFormData(state, muutosdata, formValues) {
     paatoskierros,
     muutokset,
     liitteet
-  } = muutosdata
+  } = muutosdata;
 
-  const taloudelliset = getTaloudelliset(meta)
-  let hakija = getHakija(meta)
+  const taloudelliset = getTaloudelliset(meta);
+  let hakija = getHakija(meta);
   if (formValues) {
     if (formValues.hakija) {
-      hakija = formValues.hakija
+      hakija = formValues.hakija;
     }
   }
 
-  let initialData = getBaseJarjestajaData(state)
+  let initialData = getBaseJarjestajaData(state);
 
   initialData = {
     ...initialData,
@@ -288,85 +278,97 @@ export function loadFormData(state, muutosdata, formValues) {
     paatoskierros,
     taloudelliset,
     liitteet
-  }
+  };
 
   // formatoi muutokset
 
-
   if (state.kohteet && state.kohteet.fetched) {
-    const kohteet = state.kohteet.data
+    const kohteet = state.kohteet.data;
 
     // 1. Tutkinnot ja koulutukset
     const tutkinnotKohde = _.find(kohteet, kohde => {
-      return kohde.tunniste === KOHTEET.TUTKINNOT
-    })
+      return kohde.tunniste === KOHTEET.TUTKINNOT;
+    });
 
     if (tutkinnotKohde) {
-      initialData[KOHTEET.TUTKINNOT] = getMuutosArray(muutokset, tutkinnotKohde.uuid)
+      initialData[KOHTEET.TUTKINNOT] = getMuutosArray(
+        muutokset,
+        tutkinnotKohde.uuid
+      );
     }
   }
 
-  return initialData
+  return initialData;
 }
 
 function getMuutosArray(muutokset, kohdeUuid) {
   if (!muutokset || !kohdeUuid) {
-    return
+    return;
   }
 
   let results = _.filter(muutokset, muutos => {
     if (muutos.kohde) {
-      return muutos.kohde.uuid === kohdeUuid
+      return muutos.kohde.uuid === kohdeUuid;
     }
-  })
+  });
 
   _.forEach(results, muutos => {
     const tyyppi =
-      muutos.tila === MUUTOS_TILAT.LISAYS ? MUUTOS_TYPES.ADDITION :
-      muutos.tila === MUUTOS_TILAT.POISTO ? MUUTOS_TYPES.REMOVAL :
-      muutos.tila === MUUTOS_TILAT.MUUTOS ? MUUTOS_TYPES.CHANGE :
-      null
-    _.extend(muutos, { type: tyyppi })
-  })
+      muutos.tila === MUUTOS_TILAT.LISAYS
+        ? MUUTOS_TYPES.ADDITION
+        : muutos.tila === MUUTOS_TILAT.POISTO
+        ? MUUTOS_TYPES.REMOVAL
+        : muutos.tila === MUUTOS_TILAT.MUUTOS
+        ? MUUTOS_TYPES.CHANGE
+        : null;
+    _.extend(muutos, { type: tyyppi });
+  });
 
-  return results
+  return results;
 }
 
 export function hasFormChanges(formValues) {
   if (formValues) {
-    const { tutkinnotjakoulutukset, opetusjatutkintokielet, toimintaalueet, opiskelijavuodet, muutmuutokset, taloudelliset } = formValues
+    const {
+      tutkinnotjakoulutukset,
+      opetusjatutkintokielet,
+      toimintaalueet,
+      opiskelijavuodet,
+      muutmuutokset,
+      taloudelliset
+    } = formValues;
 
     if (tutkinnotjakoulutukset && tutkinnotjakoulutukset.length > 0) {
-      return true
+      return true;
     } else if (opetusjatutkintokielet && opetusjatutkintokielet.length > 0) {
-      return true
+      return true;
     } else if (toimintaalueet && toimintaalueet.length > 0) {
-      return true
+      return true;
     } else if (opiskelijavuodet && opiskelijavuodet.length > 0) {
-      return true
+      return true;
     } else if (taloudelliset && taloudelliset.length > 0) {
-      return true
+      return true;
     } else if (muutmuutokset && muutmuutokset.length > 0) {
-      return true
+      return true;
     }
   }
 
-  return false
+  return false;
 }
 
-export function getMaaraystyyppiByTunniste(tunniste, maaraystyypit) {
-  if (maaraystyypit && maaraystyypit.fetched) {
-    const maaraystyypit = maaraystyypit.data
+export function getMaaraystyyppiByTunniste(tunniste, _maaraystyypit) {
+  if (_maaraystyypit && _maaraystyypit.fetched) {
+    const maaraystyypit = _maaraystyypit.data;
     return _.find(maaraystyypit, maaraystyyppi => {
-      return maaraystyyppi.tunniste.toLowerCase() === tunniste.toLowerCase()
-    })
+      return maaraystyyppi.tunniste.toLowerCase() === tunniste.toLowerCase();
+    });
   }
 }
 
 export function getKohdeByTunniste(tunniste, kohteet) {
   if (kohteet && kohteet.fetched) {
     return _.find(kohteet.data, kohde => {
-      return kohde.tunniste.toLowerCase() === tunniste.toLowerCase()
-    })
+      return kohde.tunniste.toLowerCase() === tunniste.toLowerCase();
+    });
   }
 }

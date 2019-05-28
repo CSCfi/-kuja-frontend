@@ -16,17 +16,6 @@ const TopSectionWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `;
 
-const Row = styled.div`
-  display: flex;
-  align-items: flex-end;
-  margin: 8px 0;
-
-  a {
-    display: flex;
-    align-items: flex-end;
-  }
-`;
-
 const Jarjestamislupa = () => {
   const { state: lupa } = useContext(LuvatContext);
 
@@ -37,7 +26,7 @@ const Jarjestamislupa = () => {
   const lupaException = LUPA_LISAKOULUTTAJAT[jarjestajaYtunnus];
 
   return (
-    <InnerContentContainer className="mx-auto mt-8 mb-16">
+    <InnerContentContainer className="sm:mt-8">
       <div>
         {lupaException ? (
           <TopSectionWrapper className="p-8">

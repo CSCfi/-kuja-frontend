@@ -31,13 +31,13 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
         )
       );
     }
-  }, [koulutukset.muut.muudata, props.changes]);
+  }, [koulutukset.muut, props.changes]);
 
   useEffect(() => {
     fetchKoulutuksetMuut(MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS)(
       koulutuksetDispatch
     );
-  }, []);
+  }, [koulutuksetDispatch]);
 
   const handleChanges = item => {
     props.onChanges(item, "ammatilliseentehtavaanvalmistavakoulutus");

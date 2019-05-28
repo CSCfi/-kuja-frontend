@@ -11,10 +11,10 @@ const LogoutText = styled.div`
 `;
 
 const Logout = () => {
-  const { state, dispatch } = useContext(UserContext)
+  const { ...context } = useContext(UserContext)
   useEffect(() => {
-    logoutUser()(dispatch);
-  }, []);
+    logoutUser()(context.dispatch);
+  }, [context]);
 
   return (
     <LogoutText>

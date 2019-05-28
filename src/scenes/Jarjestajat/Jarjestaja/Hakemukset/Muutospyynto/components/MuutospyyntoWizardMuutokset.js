@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import MuutospyyntoWizardTutkinnot from "./MuutospyyntoWizardTutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
@@ -13,12 +13,8 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { fetchKoulutuksetAll } from "services/koulutukset/actions";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
-// import _ from "lodash";
 
 const MuutospyyntoWizardMuutokset = props => {
-  const [state, setState] = useState({
-    modalIsOpen: false
-  });
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
@@ -30,17 +26,10 @@ const MuutospyyntoWizardMuutokset = props => {
     dispatch: koulutustyypitDispatch
   } = useContext(KoulutustyypitContext);
 
-  // componentDidUpdate(prevProps) {
-  //   const isFormModified = !_.isEqual(prevProps.formValues, props.formValues);
-  //   if (isFormModified) {
-  //     props.onChildComponentUpdate(props.formValues)
-  //   }
-  // }
-
   useEffect(() => {
     fetchKoulutusalat()(koulutusalatDispatch);
     fetchKoulutustyypit()(koulutustyypitDispatch);
-  }, []);
+  }, [koulutusalatDispatch, koulutustyypitDispatch]);
 
   useEffect(() => {
     if (koulutusalat.fetched && koulutustyypit.fetched) {
@@ -48,7 +37,7 @@ const MuutospyyntoWizardMuutokset = props => {
         koulutuksetDispatch
       );
     }
-  }, [koulutusalat, koulutustyypit]);
+  }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
 
   return (
     <div>

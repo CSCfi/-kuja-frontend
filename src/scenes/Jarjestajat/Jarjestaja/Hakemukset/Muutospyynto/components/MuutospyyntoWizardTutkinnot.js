@@ -18,25 +18,25 @@ const MuutospyyntoWizardTutkinnot = props => {
   const { kohteet } = lupa;
   const { headingNumber, heading } = kohteet[1];
 
-  const getChangesByList = (allChanges = [], koulutusdata = []) => {
-    const changes = {};
-    _.forEach(koulutusdata, koulutusala => {
-      const koulutustyypit = koulutusala.koulutukset;
-      changes[koulutusala.koodiArvo] = _.map(allChanges, change => {
-        return !!_.find(koulutustyypit, koulutustyyppi => {
-          return !!_.find(koulutustyyppi.koulutukset, koulutus => {
-            return (
-              koulutus.koodiArvo === change.koodiarvo ||
-              koulutus.koodiArvo === change.koodiArvo
-            );
-          });
-        })
-          ? change
-          : null;
-      }).filter(Boolean);
-    });
-    return changes;
-  };
+  // const getChangesByList = (allChanges = [], koulutusdata = []) => {
+  //   const changes = {};
+  //   _.forEach(koulutusdata, koulutusala => {
+  //     const koulutustyypit = koulutusala.koulutukset;
+  //     changes[koulutusala.koodiArvo] = _.map(allChanges, change => {
+  //       return !!_.find(koulutustyypit, koulutustyyppi => {
+  //         return !!_.find(koulutustyyppi.koulutukset, koulutus => {
+  //           return (
+  //             koulutus.koodiArvo === change.koodiarvo ||
+  //             koulutus.koodiArvo === change.koodiArvo
+  //           );
+  //         });
+  //       })
+  //         ? change
+  //         : null;
+  //     }).filter(Boolean);
+  //   });
+  //   return changes;
+  // };
 
   const handleChanges = (item, isSubItemTarget, listId) => {
     if (isSubItemTarget) {
