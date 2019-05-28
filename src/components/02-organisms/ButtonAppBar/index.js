@@ -88,7 +88,13 @@ const ButtonAppBar = ({
             </NavLink>
           </div>
           {breakpointTabletMin && !sessionStorage.getItem("role") ? (
-            <LinkItemUpper to="/cas-auth" className="has-separator pull-right">
+            <LinkItemUpper
+              to="/cas-auth"
+              className="has-separator pull-right"
+              activeStyle={{
+                backgroundColor: "transparent"
+              }}
+            >
               Kirjaudu sisään
             </LinkItemUpper>
           ) : null}
@@ -96,17 +102,34 @@ const ButtonAppBar = ({
             <LinkItemUpper
               to="/cas-logout"
               className="has-separator pull-right"
+              activeStyle={{
+                backgroundColor: "transparent"
+              }}
             >
               Kirjaudu ulos ({user.username})
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (
-            <LinkItemUpper to="/fi" className="has-separator pull-right">
+            <LinkItemUpper
+              to="/fi"
+              className="has-separator pull-right"
+              activeStyle={{
+                backgroundColor: "transparent",
+                fontWeight: "bold"
+              }}
+            >
               Suomeksi
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (
-            <LinkItemUpper to="/sv" className="pull-right">
+            <LinkItemUpper
+              to="/sv"
+              className="pull-right"
+              activeStyle={{
+                backgroundColor: "transparent",
+                fontWeight: "bold"
+              }}
+            >
               På svenska
             </LinkItemUpper>
           )}

@@ -28,6 +28,11 @@ import { MEDIA_QUERIES } from "./modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { ROLE_ESITTELIJA } from "./modules/constants";
 import ReactResizeDetector from "react-resize-detector";
+import { loadProgressBar } from "axios-progress-bar";
+
+import "axios-progress-bar/dist/nprogress.css";
+
+loadProgressBar();
 
 const history = createBrowserHistory();
 
