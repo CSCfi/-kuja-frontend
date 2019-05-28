@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "scenes/Login/Login";
 import Logout from "scenes/Logout/Logout";
@@ -27,6 +27,7 @@ import Navigation from "./components/02-organisms/Navigation";
 import { MEDIA_QUERIES } from "./modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { ROLE_ESITTELIJA } from "./modules/constants";
+import ReactResizeDetector from "react-resize-detector";
 
 const history = createBrowserHistory();
 
@@ -37,6 +38,7 @@ const App = () => {
     state.oppilaitos && state.oppilaitos.organisaatio
       ? state.oppilaitos.organisaatio.ytunnus
       : false;
+  const [headerHeight, setHeaderHeight] = useState(0);
   const pageLinks = [
     // { path: "/", text: "Etusivu", isExact: true },
     {
@@ -57,6 +59,10 @@ const App = () => {
     });
   }
 
+  const onHeaderResize = (width, height) => {
+    setHeaderHeight(height);
+  };
+
   useEffect(() => {
     getRoles()(dispatch);
   }, [dispatch]);
@@ -64,7 +70,7 @@ const App = () => {
   return (
     <Router history={history}>
       <div className="flex flex-col min-h-screen">
-        <header>
+        <header className="fixed w-full">
           <ButtonAppBar
             ytunnus={ytunnus}
             user={state.user}
@@ -75,11 +81,14 @@ const App = () => {
           {breakpointTabletMin && (
             <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
           )}
+          <ReactResizeDetector handleHeight onResize={onHeaderResize} />
         </header>
-
-        <main className="flex flex-1 flex-col justify-between bg-white">
-          <div className="flex-1 flex flex-col">
-            <div className="mx-auto w-full px-4 py-10 sm:w-3/4 sm:px-0">
+        <main
+          className="flex flex-1 flex-col justify-between"
+          style={{ marginTop: headerHeight }}
+        >
+          <div className="flex flex-col flex-1">
+            <div className="pb-16 pt-8 mx-auto w-3/4">
               <Breadcrumbs
                 separator={<b> / </b>}
                 item={NavLink}
