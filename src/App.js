@@ -70,7 +70,7 @@ const App = () => {
   return (
     <Router history={history}>
       <div className="flex flex-col min-h-screen">
-        <header className="fixed w-full">
+        <header className="fixed w-full z-50">
           <ButtonAppBar
             ytunnus={ytunnus}
             user={state.user}
@@ -87,7 +87,7 @@ const App = () => {
           className="flex flex-1 flex-col justify-between"
           style={{ marginTop: headerHeight }}
         >
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 bg-white">
             <div className="pb-16 pt-8 mx-auto w-3/4">
               <Breadcrumbs
                 separator={<b> / </b>}
