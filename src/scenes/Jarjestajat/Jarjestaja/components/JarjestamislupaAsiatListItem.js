@@ -77,7 +77,7 @@ const JarjestamislupaAsiaListItem = props => {
       <Media
         query={MEDIA_QUERIES.TABLET_MIN}
         render={() => (
-          <TableRow onClick={e => open(e, diaarinumero)}>
+          <TableRow onClick={e => open(e, diaarinumero)} hover className="cursor-pointer">
             <TableCell size="small">
               <Typography component="span">OKM/{diaarinumero}</Typography>
             </TableCell>

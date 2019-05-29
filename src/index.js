@@ -14,7 +14,6 @@ const theme = createMuiTheme({
       // light: will be calculated from palette.primary.main,
       main: COLORS.OIVA_GREEN,
       // dark: will be calculated from palette.primary.main,
-      contrastText: COLORS.WHITE
     },
     secondary: {
       // light: will be calculated from palette.secondary.main,
@@ -22,9 +21,6 @@ const theme = createMuiTheme({
       // dark: will be calculated from palette.secondary.main,
       // contrastText: will be calculated to contrast with palette.secondary.main
     },
-    text: {
-      secondary: COLORS.WHITE
-    }
     // error: will use the default color
   },
   typography: {

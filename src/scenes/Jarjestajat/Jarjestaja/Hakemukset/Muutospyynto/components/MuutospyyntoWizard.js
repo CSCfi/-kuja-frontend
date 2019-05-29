@@ -167,7 +167,7 @@ const MuutospyyntoWizard = props => {
         <Dialog
           open={true}
           onClose={openCancelModal}
-          maxWidth={state.isHelpVisible ? "lg" : "md"}
+          maxWidth={state.isHelpVisible ? "xl" : "lg"}
           fullWidth={true}
           aria-labelledby="simple-dialog-title"
         >
