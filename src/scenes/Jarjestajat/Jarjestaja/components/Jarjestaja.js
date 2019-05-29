@@ -117,7 +117,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
 
       return (
         <React.Fragment>
-          <div className="mx-auto px-4 sm:px-0 w-full sm:w-3/4">
+          <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
             <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
             <BreadcrumbsItem to="/jarjestajat">
               Ammatillinen koulutus
@@ -132,7 +132,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
           </div>
           <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
             {authenticated ? (
-              <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
+              <div className="mx-auto w-11/12 lg:w-3/4 pb-8 py-8">
                 <Route
                   path={`${match.path}/omattiedot`}
                   exact
