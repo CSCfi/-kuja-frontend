@@ -3,7 +3,7 @@ import { Leijona } from "modules/styles";
 
 const Footer = () => {
   return (
-    <div className="flex justify-center bg-white border-green-light border-t-2 text-xxs p-4">
+    <div className="flex justify-center bg-white border-green-600 border-t-2 text-xxs p-4">
       <div className="flex flex-col sm:flex-row">
         <div>
           <Leijona />

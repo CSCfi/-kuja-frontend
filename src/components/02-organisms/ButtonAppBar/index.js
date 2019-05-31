@@ -18,11 +18,13 @@ import { COLORS } from "../../../modules/styles";
 const styles = () => ({
   appBar: {
     position: "relative",
-    backgroundColor: COLORS.WHITE
+    backgroundColor: COLORS.WHITE,
+    opacity: 0.98,
+    marginLeft: -8
   },
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20
+    marginLeft: -4,
+    marginRight: 4
   }
 });
 
@@ -74,7 +76,7 @@ const ButtonAppBar = ({
               <MenuIcon />
             </IconButton>
           )}
-          <div className="flex-1">
+          <div className="flex-1 mt-1">
             <NavLink
               to="/"
               exact
