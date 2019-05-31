@@ -54,6 +54,7 @@ export const Tr = styled.div`
 
   border-bottom: 1px solid #D5D5D5;
 
+
   a {
     width: 100%;
     display: flex;
