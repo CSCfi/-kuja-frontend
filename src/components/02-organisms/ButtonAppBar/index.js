@@ -13,10 +13,12 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { MEDIA_QUERIES } from "../../../modules/styles";
 import SideNavigation from "../SideNavigation";
 import { NavLink } from "react-router-dom";
+import { COLORS } from "../../../modules/styles";
 
 const styles = () => ({
   appBar: {
-    position: "relative"
+    position: "relative",
+    backgroundColor: COLORS.WHITE
   },
   menuButton: {
     marginLeft: -12,
@@ -61,12 +63,11 @@ const ButtonAppBar = ({
         onDrawerToggle={handleMenuButtonClick}
         pageLinks={pageLinks}
       />
-      <AppBar position="static" color="default" className={classes.appBar}>
+      <AppBar elevation="0" position="static" className={classes.appBar}>
         <Toolbar className="flex">
           {!breakpointTabletMin && (
             <IconButton
               className={classes.menuButton}
-              color="inherit"
               aria-label="Menu"
               onClick={handleMenuButtonClick}
             >
