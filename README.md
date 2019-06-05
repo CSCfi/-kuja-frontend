@@ -49,3 +49,13 @@ Testikattavuutta voi seurata näin:
 ```
 npm run coverage
 ```
+
+### E2E-testit
+E2E-testien käyttöönotto on vielä hieman kesken. Sovelluksen ulkoasun, HTML-elementtien keskinäisten suhteiden ja responsiivisuuden testaamiseen on kaavailtu [http://galenframework.com/](Galen Framework) -ratkaisua.
+
+Testejä voidaan ajaa speksejä vasten näin:
+```
+./node_modules/.bin/galen check "src/specs/homepage.gspec" --url "http://localhost" --size "1024x768" --htmlreport reports
+```
+
+Toiminnallisten testien suorittamiseen on kaavailtu [https://gauge.org/index.html](Gauge/Taiko) -yhdistelmää.
