@@ -34,3 +34,18 @@ npm run start
 Navigoi osoitteeseen [http://localhost](http://localhost).
 
 **Huom!** Jotta sinun on mahdollista saada dataa [Oivan backend](https://github.com/CSCfi/oiva-backend)istä, sinulla tulee olla myös backend-projekti asennettuna koneellesi.
+
+## Testit
+
+### Yksikkötestit
+Yksikkötestien ajamiseen käytämme [Jest](https://jestjs.io/):iä.
+
+Testejä voi ajaa näin:
+```
+npm t -- --watchAll=false
+```
+
+Testikattavuutta voi seurata näin:
+```
+npm run coverage
+```
