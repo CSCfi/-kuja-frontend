@@ -163,7 +163,7 @@ const App = () => {
           </div>
         </main>
         <footer>
-          <Footer />
+          <Footer props={props} />
         </footer>
       </div>
     </Router>
