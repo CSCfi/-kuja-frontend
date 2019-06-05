@@ -36,6 +36,21 @@ Navigoi osoitteeseen [http://localhost](http://localhost).
 **Huom!** Jotta sinun on mahdollista saada dataa [Oivan backend](https://github.com/CSCfi/oiva-backend)istä, sinulla tulee olla myös backend-projekti asennettuna koneellesi.
 
 ## Testit
+
+### Yksikkötestit
+Yksikkötestien ajamiseen käytämme [Jest](https://jestjs.io/):iä.
+
+Testejä voi ajaa näin:
+```
+npm t -- --watchAll=false
+```
+
+Testikattavuutta voi seurata näin:
+```
+npm run coverage
+```
+
+### E2E-testit
 E2E-testien käyttöönotto on vielä hieman kesken. Sovelluksen ulkoasun, HTML-elementtien keskinäisten suhteiden ja responsiivisuuden testaamiseen on kaavailtu [http://galenframework.com/](Galen Framework) -ratkaisua.
 
 Testejä voidaan ajaa speksejä vasten näin:
