@@ -4,7 +4,7 @@ import Store from "context/store";
 import { ThroughProvider } from "react-through";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { COLORS } from './modules/styles'
-import App from "./App";
+import AppWrapper from "./AppWrapper";
 
 import "./css/tailwind.css";
 
@@ -32,7 +32,7 @@ render(
   <Store>
     <ThroughProvider>
       <MuiThemeProvider theme={theme}>
-        <App />
+        <AppWrapper />
       </MuiThemeProvider>
     </ThroughProvider>
   </Store>,
