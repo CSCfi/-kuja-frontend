@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -12,6 +12,12 @@ import CardHeader from "@material-ui/core/CardHeader";
 import { NavLink } from "react-router-dom";
 import { Card } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import { setLocale } from "../../../services/app/actions";
+import { injectIntl } from "react-intl";
+import authMessages from "../../../i18n/definitions/auth";
+import langMessages from "../../../i18n/definitions/languages";
+import { AppContext } from "../../../context/appContext";
+import Button from "@material-ui/core/Button";
 import * as R from "ramda";
 
 const useStyles = makeStyles({
@@ -20,15 +26,27 @@ const useStyles = makeStyles({
   },
   fullList: {
     width: "auto"
+  },
+  languages: {
+    color: "red"
   }
 });
 
 const SideNavigation = props => {
   const classes = useStyles();
+  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const handleDrawerToggle = () => {
     props.onDrawerToggle();
   };
+
+  const handleLocaleChange = locale => {
+    setLocale(locale)(appDispatch);
+  };
+
+  const {
+    intl: { formatMessage }
+  } = props;
 
   const sideList = (
     <div className={classes.list}>
@@ -78,16 +96,16 @@ const SideNavigation = props => {
       <Divider />
       <List>
         {[
-          { path: "/fi", text: "Suomeksi" },
-          { path: "/sv", text: "På svenska" }
-        ].map(link => (
-          <ListItem button key={link.text}>
+          { path: "/fi", key: "inFinnish", text: "Suomeksi", value: "fi" },
+          { path: "/sv", key: "inSwedish", text: "På svenska", value: "sv" }
+        ].map(item => (
+          <ListItem button key={item.key}>
             <ListItemIcon>
               <Language />
             </ListItemIcon>
-            <NavLink to={link.path} className="no-underline">
-              {link.text}
-            </NavLink>
+            <Button onClick={() => handleLocaleChange(item.value)} size="small">
+              {formatMessage(langMessages[item.key])}
+            </Button>
           </ListItem>
         ))}
       </List>
@@ -99,7 +117,7 @@ const SideNavigation = props => {
               <Fingerprint />
             </ListItemIcon>
             <NavLink to="/cas-auth" className="no-underline">
-              Kirjaudu sisään
+              {formatMessage(authMessages.logIn)}
             </NavLink>
           </ListItem>
         </List>
@@ -111,7 +129,7 @@ const SideNavigation = props => {
               <Fingerprint />
             </ListItemIcon>
             <NavLink to="/cas-logout" className="no-underline">
-              Kirjaudu ulos
+              {formatMessage(authMessages.logIn)}
             </NavLink>
           </ListItem>
         </List>
@@ -120,7 +138,7 @@ const SideNavigation = props => {
   );
 
   return (
-    <div>
+    <div data-testid="side-navigation">
       <Drawer open={props.shouldBeVisible} onClose={handleDrawerToggle}>
         <div
           tabIndex={0}
@@ -135,4 +153,4 @@ const SideNavigation = props => {
   );
 };
 
-export default SideNavigation;
+export default injectIntl(SideNavigation);
