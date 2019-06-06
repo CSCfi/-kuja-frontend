@@ -129,7 +129,7 @@ const SideNavigation = props => {
               <Fingerprint />
             </ListItemIcon>
             <NavLink to="/cas-logout" className="no-underline">
-              {formatMessage(authMessages.logIn)}
+              {formatMessage(authMessages.logOut)}
             </NavLink>
           </ListItem>
         </List>
