@@ -1,0 +1,32 @@
+[
+  {
+    "id": "auth.logIn",
+    "defaultMessage": "Kirjaudu sisään",
+    "filepath": "src/components/02-organisms/ButtonAppBar/index.js"
+  },
+  {
+    "id": "auth.logOut",
+    "defaultMessage": "Kirjaudu ulos",
+    "filepath": "src/components/02-organisms/ButtonAppBar/index.js"
+  },
+  {
+    "id": "languages.inFinnish",
+    "defaultMessage": "Suomeksi",
+    "filepath": "src/components/02-organisms/ButtonAppBar/index.js"
+  },
+  {
+    "id": "languages.inSwedish",
+    "defaultMessage": "Ruotsiksi",
+    "filepath": "src/components/02-organisms/ButtonAppBar/index.js"
+  },
+  {
+    "id": "app.title",
+    "defaultMessage": "Opetus- ja kulttuuriministeriö",
+    "filepath": "src/scenes/Footer/Footer.js"
+  },
+  {
+    "id": "app.valtioneuvosto",
+    "defaultMessage": "Valtioneuvosto",
+    "filepath": "src/scenes/Footer/Footer.js"
+  }
+]
