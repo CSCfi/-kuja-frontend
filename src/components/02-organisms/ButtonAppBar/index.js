@@ -16,9 +16,11 @@ import { MEDIA_QUERIES } from "../../../modules/styles";
 import SideNavigation from "../SideNavigation";
 import { NavLink } from "react-router-dom";
 import { COLORS } from "../../../modules/styles";
-import { defineMessages, injectIntl } from "react-intl";
 import { AppContext } from "../../../context/appContext";
 import { setLocale } from "../../../services/app/actions";
+import { injectIntl } from "react-intl";
+import authMessages from "../../../i18n/definitions/auth";
+import langMessages from "../../../i18n/definitions/languages";
 import css from "./button-app-bar.module.css";
 
 const styles = () => ({
@@ -31,25 +33,6 @@ const styles = () => ({
   menuButton: {
     marginLeft: -4,
     marginRight: 4
-  }
-});
-
-const messages = defineMessages({
-  logIn: {
-    id: "auth.logIn",
-    defaultMessage: "Kirjaudu sisään"
-  },
-  logOut: {
-    id: "auth.logOut",
-    defaultMessage: "Kirjaudu ulos"
-  },
-  inFinnish: {
-    id: "languages.inFinnish",
-    defaultMessage: "Suomeksi"
-  },
-  inSwedish: {
-    id: "languages.inSwedish",
-    defaultMessage: "Ruotsiksi"
   }
 });
 
@@ -133,7 +116,7 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              {formatMessage(messages.logIn)}
+              {formatMessage(authMessages.logIn)}
             </LinkItemUpper>
           ) : null}
           {breakpointTabletMin && user && user.username && (
@@ -144,7 +127,7 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              {formatMessage(messages.logOut)} ({user.username})
+              {formatMessage(authMessages.logOut)} ({user.username})
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (
@@ -164,7 +147,7 @@ const ButtonAppBar = ({
                     sizeSmall: css["locale-button"]
                   }}
                 >
-                  {formatMessage(messages.inFinnish)}
+                  {formatMessage(langMessages.inFinnish)}
                 </ToggleButton>
                 <ToggleButton
                   key={2}
@@ -175,7 +158,7 @@ const ButtonAppBar = ({
                     sizeSmall: css["locale-button"]
                   }}
                 >
-                  {formatMessage(messages.inSwedish)}
+                  {formatMessage(langMessages.inSwedish)}
                 </ToggleButton>
               </ToggleButtonGroup>
             </React.Fragment>

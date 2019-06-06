@@ -29,6 +29,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { ROLE_ESITTELIJA } from "./modules/constants";
 import ReactResizeDetector from "react-resize-detector";
 import { loadProgressBar } from "axios-progress-bar";
+import { injectIntl } from "react-intl";
+import commonMessages from "./i18n/definitions/common";
+import educationMessages from "./i18n/definitions/education";
 
 import "axios-progress-bar/dist/nprogress.css";
 
@@ -44,17 +47,20 @@ const App = props => {
       ? state.oppilaitos.organisaatio.ytunnus
       : false;
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {
+    intl: { formatMessage }
+  } = props;
   const pageLinks = [
     // { path: "/", text: "Etusivu", isExact: true },
     {
       path: "/esi-ja-perusopetus",
-      text: "Esi- ja perusopetus",
+      text: formatMessage(educationMessages.preAndBasicEducation),
       isExact: false
     },
-    { path: "/lukiokoulutus", text: "Lukiokoulutus" },
-    { path: "/jarjestajat", text: "Ammatillinen koulutus" },
+    { path: "/lukiokoulutus", text: formatMessage(educationMessages.highSchoolEducation) },
+    { path: "/jarjestajat", text: formatMessage(educationMessages.vocationalEducation) },
     { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
-    { path: "/tilastot", text: "Tilastot" }
+    { path: "/tilastot", text: formatMessage(commonMessages.statistics) }
   ];
 
   if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
@@ -171,4 +177,4 @@ const App = props => {
   );
 };
 
-export default App;
+export default injectIntl(App);
