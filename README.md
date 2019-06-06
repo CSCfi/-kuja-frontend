@@ -58,4 +58,10 @@ Testejä voidaan ajaa speksejä vasten näin:
 ./node_modules/.bin/galen check "src/specs/homepage.gspec" --url "http://localhost" --size "1024x768" --htmlreport reports
 ```
 
-Toiminnallisten testien suorittamiseen on kaavailtu [https://gauge.org/index.html](Gauge/Taiko) -yhdistelmää.
+Toiminnallisten testien suorittamiseen käytämme [https://gauge.org/index.html](Gauge/Taiko) -yhdistelmää.
+
+Toiminnallisia testejä voi ajaa näin:
+```
+npm run e2e
+```
+Yllä oleva komento suorittaa `tests/e2e/specs`-kansion .spec-tiedostoissa määritellyt testit.
