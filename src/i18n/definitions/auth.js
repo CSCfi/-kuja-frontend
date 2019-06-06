@@ -8,5 +8,9 @@ export default defineMessages({
   logOut: {
     id: "auth.logOut",
     defaultMessage: "Kirjaudu ulos"
+  },
+  loggedInInfo: {
+      id: "auth.loggedInInfo",
+      defaultMessage: "Olet kirjautunut sisään"
   }
 });

@@ -59,7 +59,7 @@ const SideNavigation = props => {
               </Avatar>
             }
             title={props.user.username}
-            subheader="Olet kirjautunut sisään"
+            subheader={formatMessage(authMessages.loggedInInfo)}
           />
         </Card>
       )}
