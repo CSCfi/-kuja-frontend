@@ -36,7 +36,7 @@ loadProgressBar();
 
 const history = createBrowserHistory();
 
-const App = () => {
+const App = props => {
   const { state, dispatch } = useContext(UserContext);
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const ytunnus =
@@ -82,6 +82,7 @@ const App = () => {
             oppilaitos={state.oppilaitos}
             dispatch={dispatch}
             pageLinks={pageLinks}
+            props={props}
           />
           {breakpointTabletMin && (
             <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />

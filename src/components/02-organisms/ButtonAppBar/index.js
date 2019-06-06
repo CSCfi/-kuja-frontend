@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import ToggleButton from "@material-ui/lab/ToggleButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import LinkItemUpper from "../../../scenes/Header/components/LinkItemUpper";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -14,6 +16,10 @@ import { MEDIA_QUERIES } from "../../../modules/styles";
 import SideNavigation from "../SideNavigation";
 import { NavLink } from "react-router-dom";
 import { COLORS } from "../../../modules/styles";
+import { defineMessages, injectIntl } from "react-intl";
+import { AppContext } from "../../../context/appContext";
+import { setLocale } from "../../../services/app/actions";
+import css from "./button-app-bar.module.css";
 
 const styles = () => ({
   appBar: {
@@ -28,18 +34,43 @@ const styles = () => ({
   }
 });
 
+const messages = defineMessages({
+  logIn: {
+    id: "auth.logIn",
+    defaultMessage: "Kirjaudu sisään"
+  },
+  logOut: {
+    id: "auth.logOut",
+    defaultMessage: "Kirjaudu ulos"
+  },
+  inFinnish: {
+    id: "languages.inFinnish",
+    defaultMessage: "Suomeksi"
+  },
+  inSwedish: {
+    id: "languages.inSwedish",
+    defaultMessage: "Ruotsiksi"
+  }
+});
+
 const ButtonAppBar = ({
   classes,
   ytunnus,
   user = {},
   oppilaitos,
   pageLinks,
-  dispatch
+  dispatch,
+  ...props
 }) => {
+  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const [state, setState] = useState({
     isSideNavigationVisible: false
   });
+
+  const {
+    intl: { formatMessage }
+  } = props;
 
   useEffect(() => {
     if (user && user.oid) {
@@ -51,6 +82,10 @@ const ButtonAppBar = ({
     setState({
       isSideNavigationVisible: !state.isSideNavigationVisible
     });
+  };
+
+  const handleLocaleChange = (event, locale) => {
+    setLocale(locale)(appDispatch);
   };
 
   return (
@@ -65,7 +100,7 @@ const ButtonAppBar = ({
         onDrawerToggle={handleMenuButtonClick}
         pageLinks={pageLinks}
       />
-      <AppBar elevation="0" position="static" className={classes.appBar}>
+      <AppBar elevation={0} position="static" className={classes.appBar}>
         <Toolbar className="flex">
           {!breakpointTabletMin && (
             <IconButton
@@ -98,7 +133,7 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              Kirjaudu sisään
+              {formatMessage(messages.logIn)}
             </LinkItemUpper>
           ) : null}
           {breakpointTabletMin && user && user.username && (
@@ -109,32 +144,41 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              Kirjaudu ulos ({user.username})
+              {formatMessage(messages.logOut)} ({user.username})
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (
-            <LinkItemUpper
-              to="/fi"
-              className="has-separator pull-right"
-              activeStyle={{
-                backgroundColor: "transparent",
-                fontWeight: "bold"
-              }}
-            >
-              Suomeksi
-            </LinkItemUpper>
-          )}
-          {breakpointTabletMin && (
-            <LinkItemUpper
-              to="/sv"
-              className="pull-right"
-              activeStyle={{
-                backgroundColor: "transparent",
-                fontWeight: "bold"
-              }}
-            >
-              På svenska
-            </LinkItemUpper>
+            <React.Fragment>
+              <ToggleButtonGroup
+                size="small"
+                onChange={handleLocaleChange}
+                value={appState.locale}
+                exclusive
+              >
+                <ToggleButton
+                  key={1}
+                  value="fi"
+                  classes={{
+                    label: css["locale-label"],
+                    selected: css["locale-selected"],
+                    sizeSmall: css["locale-button"]
+                  }}
+                >
+                  {formatMessage(messages.inFinnish)}
+                </ToggleButton>
+                <ToggleButton
+                  key={2}
+                  value="sv"
+                  classes={{
+                    label: css["locale-label"],
+                    selected: css["locale-selected"],
+                    sizeSmall: css["locale-button"]
+                  }}
+                >
+                  {formatMessage(messages.inSwedish)}
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </React.Fragment>
           )}
         </Toolbar>
       </AppBar>
@@ -146,4 +190,4 @@ ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles)(injectIntl(ButtonAppBar));
