@@ -26,7 +26,7 @@ const Jarjestamislupa = () => {
   const lupaException = LUPA_LISAKOULUTTAJAT[jarjestajaYtunnus];
 
   return (
-    <InnerContentContainer className="sm:mt-8">
+    <InnerContentContainer>
       <div>
         {lupaException ? (
           <TopSectionWrapper className="p-8">

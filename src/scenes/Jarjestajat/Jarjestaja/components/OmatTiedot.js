@@ -99,10 +99,10 @@ const OmatTiedot = () => {
           </Typography>
           {numero && (
             <div className="flex border-b">
-              <div className="w-1/2 bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}:</p>
+              <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}</p>
               </div>
-              <div className="w-1/2 bg-gray-100 p-2 h-10">
+              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                 <p>
                   <a title={`Call to number ${numero}`} href={`tel:${numero}`}>
                     {numero}
@@ -113,10 +113,10 @@ const OmatTiedot = () => {
           )}
           {www && (
             <div className="flex border-b">
-              <div className="w-1/2 bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}:</p>
+              <div className="w-1/2 sm:w-auto md:w-1/4  bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</p>
               </div>
-              <div className="w-1/2 bg-gray-100 p-2 h-10">
+              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                 <p>
                   <a title={`Link to ${www}`} href={www}>
                     {www}
@@ -127,10 +127,10 @@ const OmatTiedot = () => {
           )}
           {email && (
             <div className="flex border-b">
-              <div className="w-1/2 bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}:</p>
+              <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
+                <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}</p>
               </div>
-              <div className="w-1/2 bg-gray-100 p-2 h-10">
+              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                 <p>
                   <a title={`Mail to ${email}`} href={`mailto: ${email}`}>
                     {email}

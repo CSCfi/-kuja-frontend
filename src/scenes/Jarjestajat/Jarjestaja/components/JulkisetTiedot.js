@@ -19,31 +19,29 @@ const JulkisetTiedot = props => {
   }
 
   return (
-    <div className="bg-white p-16">
+    <div className="bg-white p-8">
       <div>
-        <div>
-          <Typography>{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</Typography>
-          <Typography paragraph={true} variant="h6">
-            {LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}
-          </Typography>
-        </div>
-
-        <CurrentLupa
-          diaarinumero={diaarinumero}
-          jarjestaja={jarjestajaNimi}
-          voimassaolo={alkupvm}
-          lupaExceptionUrl={
-            lupaException
-              ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}`
-              : null
-          }
-        />
-
-        <p>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</p>
-        <br />
-
-        <LupaHistory jarjestajaOid={jarjestajaOid} />
+        <Typography><h1>{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</h1></Typography>
+        <Typography paragraph={true} variant="h6">
+          {LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}
+        </Typography>
       </div>
+
+      <CurrentLupa
+        diaarinumero={diaarinumero}
+        jarjestaja={jarjestajaNimi}
+        voimassaolo={alkupvm}
+        lupaExceptionUrl={
+          lupaException
+            ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}`
+            : null
+        }
+      />
+
+      <h3>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</h3>
+      <br />
+
+      <LupaHistory jarjestajaOid={jarjestajaOid} />
     </div>
   );
 };
