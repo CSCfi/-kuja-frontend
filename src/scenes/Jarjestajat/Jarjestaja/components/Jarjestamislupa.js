@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import Moment from "react-moment";
-
 import LupaSection from "./LupaSection";
-
+import Typography from "@material-ui/core/Typography";
 import { LUPA_SECTIONS, LUPA_TEKSTIT } from "../modules/constants";
 import {
   InnerContentContainer
@@ -26,17 +25,17 @@ const Jarjestamislupa = () => {
   const lupaException = LUPA_LISAKOULUTTAJAT[jarjestajaYtunnus];
 
   return (
-    <InnerContentContainer className="sm:mt-8">
+    <InnerContentContainer>
       <div>
         {lupaException ? (
           <TopSectionWrapper className="p-8">
-            <h2>{LUPA_TEKSTIT.LUPA.OTSIKKO.FI}</h2>
+            <Typography component="h1" variant="h5">{LUPA_TEKSTIT.LUPA.OTSIKKO.FI}</Typography>
           </TopSectionWrapper>
         ) : (
           <TopSectionWrapper className="p-8">
-            <h2>
+            <Typography component="h1" variant="h5">
               {LUPA_TEKSTIT.LUPA.OTSIKKO.FI} <Moment format="DD.MM.YYYY" />
-            </h2>
+            </Typography>
           </TopSectionWrapper>
         )}
 

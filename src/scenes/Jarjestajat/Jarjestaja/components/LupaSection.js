@@ -88,7 +88,7 @@ const LupaSection = props => {
         );
 
         return (
-          <div className="py-4 sm:p-8 border-b border-b-gray">
+          <div className="border-b border-b-gray">
             <Otsikko>{TUTKINTO_TEKSTIT.otsikkoKaikkiLuvat.FI}</Otsikko>
 
             <Section code={headingNumber} title={heading}>
@@ -154,7 +154,7 @@ const LupaSection = props => {
         } = kohde;
 
         return (
-          <div className="py-4 sm:p-8 border-b border-b-gray">
+          <div className="border-b border-b-gray">
             <Section code={headingNumber} title={heading}>
               <p>{kohdeKuvaus}</p>
               <List>
@@ -213,7 +213,7 @@ const LupaSection = props => {
         const { kohdeKuvaus, maakunnat, kunnat } = kohde;
 
         return (
-          <div className="py-4 sm:p-8 border-b border-b-gray">
+          <div className="border-b border-b-gray">
             <Section code={headingNumber} title={heading}>
               <p>{kohdeKuvaus}</p>
               <List>
@@ -240,7 +240,7 @@ const LupaSection = props => {
       case KOHTEET.OPISKELIJAVUODET: {
         const { opiskelijavuodet, rajoitukset, kohdeKuvaus } = kohde;
         return (
-          <div className="py-4 sm:p-8 border-b border-b-gray">
+          <div className="border-b border-b-gray">
             <Section code={headingNumber} title={heading}>
               {_.map(opiskelijavuodet, (obj, i) => {
                 const { arvo } = obj;
@@ -275,7 +275,7 @@ const LupaSection = props => {
         const { muut, vaativat, vankilat, kokeilut } = kohde;
 
         return (
-          <div className="py-4 sm:p-8">
+          <div>
             <Section code={headingNumber} title={heading}>
               {_.map(muut, (muu, i) => {
                 const { tyyppi, kuvaus } = muu;
@@ -285,6 +285,7 @@ const LupaSection = props => {
                       <Bold>{tyyppi}</Bold>
                     </h4>
                     <p>{kuvaus}</p>
+                    <br/>
                   </div>
                 );
               })}
@@ -342,7 +343,7 @@ const LupaSection = props => {
 
       default: {
         return (
-          <div className="py-4 sm:p-8 border-b border-b-gray">
+          <div className="border-b border-b-gray">
             <Section code={headingNumber} title={heading} />
           </div>
         );
@@ -350,7 +351,7 @@ const LupaSection = props => {
     }
   } else {
     return (
-      <div className="py-4 sm:p-8 border-b border-b-gray">
+      <div className="border-b border-b-gray">
         <H3>Ei kohdetietoja</H3>
       </div>
     );
