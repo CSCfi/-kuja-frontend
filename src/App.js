@@ -29,6 +29,9 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { ROLE_ESITTELIJA } from "./modules/constants";
 import ReactResizeDetector from "react-resize-detector";
 import { loadProgressBar } from "axios-progress-bar";
+import { injectIntl } from "react-intl";
+import commonMessages from "./i18n/definitions/common";
+import educationMessages from "./i18n/definitions/education";
 
 import "axios-progress-bar/dist/nprogress.css";
 
@@ -36,7 +39,7 @@ loadProgressBar();
 
 const history = createBrowserHistory();
 
-const App = () => {
+const App = props => {
   const { state, dispatch } = useContext(UserContext);
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const ytunnus =
@@ -44,17 +47,20 @@ const App = () => {
       ? state.oppilaitos.organisaatio.ytunnus
       : false;
   const [headerHeight, setHeaderHeight] = useState(0);
+  const {
+    intl: { formatMessage }
+  } = props;
   const pageLinks = [
     // { path: "/", text: "Etusivu", isExact: true },
     {
       path: "/esi-ja-perusopetus",
-      text: "Esi- ja perusopetus",
+      text: formatMessage(educationMessages.preAndBasicEducation),
       isExact: false
     },
-    { path: "/lukiokoulutus", text: "Lukiokoulutus" },
-    { path: "/jarjestajat", text: "Ammatillinen koulutus" },
+    { path: "/lukiokoulutus", text: formatMessage(educationMessages.highSchoolEducation) },
+    { path: "/jarjestajat", text: formatMessage(educationMessages.vocationalEducation) },
     { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
-    { path: "/tilastot", text: "Tilastot" }
+    { path: "/tilastot", text: formatMessage(commonMessages.statistics) }
   ];
 
   if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
@@ -82,6 +88,7 @@ const App = () => {
             oppilaitos={state.oppilaitos}
             dispatch={dispatch}
             pageLinks={pageLinks}
+            props={props}
           />
           {breakpointTabletMin && (
             <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
@@ -163,11 +170,11 @@ const App = () => {
           </div>
         </main>
         <footer>
-          <Footer />
+          <Footer props={props} />
         </footer>
       </div>
     </Router>
   );
 };
 
-export default App;
+export default injectIntl(App);

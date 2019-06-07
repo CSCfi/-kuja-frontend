@@ -7,6 +7,8 @@ import Typography from "@material-ui/core/Typography";
 import LinkItem from "../../../scenes/Header/components/LinkItem";
 import { COLORS } from "modules/styles";
 import { ROLE_ESITTELIJA } from "modules/constants";
+import { injectIntl } from "react-intl";
+import userMessages from "../../../i18n/definitions/user";
 
 import styles from "./navigation.module.css";
 
@@ -39,35 +41,42 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Navigation = ({ pageLinks, ytunnus }) => {
+const Navigation = props => {
   const classes = useStyles();
+  const {
+    intl: { formatMessage }
+  } = props;
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-testid="navigation">
       <AppBar position="static">
         <HeaderBarLower className="text-xs lg:text-base">
           {/* TODO: localization! */}
-          {pageLinks.map(link => (
+          {props.pageLinks.map(link => (
             <LinkItem
               to={link.path}
-              className={`${styles['navigation-item']} px-2 sm:px-4 py-4 no-underline`}
+              className={`${
+                styles["navigation-item"]
+              } px-2 sm:px-4 py-4 no-underline`}
               key={link.text}
               exact={link.isExact}
             >
               {link.text}
             </LinkItem>
           ))}
-          {ytunnus && (
+          {props.ytunnus && (
             <LinkItem
-              className={`${styles['navigation-item']} px-2 sm:px-4 py-4 no-underline`}
-              ytunnus={ytunnus}
+              className={`${
+                styles["navigation-item"]
+              } px-2 sm:px-4 py-4 no-underline`}
+              ytunnus={props.ytunnus}
               to={{
-                pathname: "/jarjestajat/" + ytunnus + "/omattiedot",
-                ytunnus: ytunnus
+                pathname: "/jarjestajat/" + props.ytunnus + "/omattiedot",
+                ytunnus: props.ytunnus
               }}
               exact
             >
-              Oma organisaatio
+              {formatMessage(userMessages.ownOrganization)}
             </LinkItem>
           )}
 
@@ -80,4 +89,4 @@ const Navigation = ({ pageLinks, ytunnus }) => {
   );
 };
 
-export default Navigation;
+export default injectIntl(Navigation);

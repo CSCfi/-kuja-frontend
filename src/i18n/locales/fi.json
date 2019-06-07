@@ -1,0 +1,14 @@
+{
+  "app.title": "Opetus- ja kulttuuriministeriö",
+  "app.valtioneuvosto": "Valtioneuvosto",
+  "auth.logIn": "Kirjaudu sisään",
+  "auth.logOut": "Kirjaudu ulos",
+  "auth.loggedInInfo": "Olet kirjautunut sisään",
+  "common.statistics": "Tilastot",
+  "education.highSchoolEducation": "Lukiokoulutus",
+  "education.preAndBasicEducation": "Esi- ja perusopetus",
+  "education.vocationalEducation": "Ammatillinen koulutus",
+  "languages.inFinnish": "Suomeksi",
+  "languages.inSwedish": "Ruotsiksi",
+  "user.ownOrganisation": "Oma organisaatio"
+}

@@ -1,0 +1,14 @@
+{
+  "app.title": "Undervisnings- och kulturministeriet",
+  "app.valtioneuvosto": "Statsrådet",
+  "auth.logIn": "Logga in",
+  "auth.logOut": "Logga ut",
+  "auth.loggedInInfo": "Du är inloggad",
+  "common.statistics": "Statistik",
+  "education.highSchoolEducation": "Gymnasieutbildning",
+  "education.preAndBasicEducation": "För- och grundutbildning",
+  "education.vocationalEducation": "Yrkesutbildning",
+  "languages.inFinnish": "På finska",
+  "languages.inSwedish": "På svenska",
+  "user.ownOrganisation": "Din egen organisation"
+}
