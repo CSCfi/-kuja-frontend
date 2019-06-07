@@ -1,0 +1,7 @@
+.navigation-item {
+  border-right: 1px solid #58826e;
+}
+
+.navigation-item:first-child {
+  border-left: 1px solid #58826e;
+}
