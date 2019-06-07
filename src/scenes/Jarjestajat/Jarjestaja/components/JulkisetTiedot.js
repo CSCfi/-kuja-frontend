@@ -21,7 +21,8 @@ const JulkisetTiedot = props => {
   return (
     <div className="bg-white p-8">
       <div>
-        <Typography><h1>{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</h1></Typography>
+        <Typography component="h1" variant="h5">{LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}</Typography>
+        <br/>
         <Typography paragraph={true} variant="h6">
           {LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}
         </Typography>
