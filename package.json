@@ -71,8 +71,10 @@
     "autoprefixer": "^9.5.1",
     "babel-loader": "8.0.5",
     "chai": "^4.2.0",
+    "chai-enzyme": "^1.0.0-beta.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.2",
+    "enzyme-react-intl": "^2.0.4",
     "galenframework": "^2.4.4",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^6.1.2",
@@ -80,6 +82,7 @@
     "react-intl-cra": "^0.3.4",
     "react-intl-translations-manager": "^5.0.3",
     "sinon": "^7.3.2",
+    "storybook-addon-intl": "^2.4.1",
     "tailwindcss": "^1.0.1"
   },
   "browserslist": [

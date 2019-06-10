@@ -112,10 +112,6 @@ injectGlobal`
     margin: 18px 0 10px;
   }
   
-  p {
-    margin: 11px 0;
-  }
-  
   a {
     color: ${COLORS.OIVA_GREEN};
     text-decoration: none;

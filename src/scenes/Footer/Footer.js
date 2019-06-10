@@ -26,7 +26,7 @@ const Footer = props => {
           <Leijona />
         </div>
         <div className="flex flex-col justify-center sm:ml-10 text-center sm:text-left">
-          <p className="mt-2 pt-1 mb-1">
+          <p className="mt-2 pt-1 mb-1" data-testid="organization">
             {R.toUpper(formatMessage(messages.title))}
           </p>
           <p>PL 29, 00023 VALTIONEUVOSTO</p>
