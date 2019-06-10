@@ -6,16 +6,6 @@ import green from "@material-ui/core/colors/green";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-const useStyles = makeStyles({
-  root: {
-    color: green[600],
-    "&$checked": {
-      color: green[500]
-    }
-  },
-  checked: {}
-});
-
 /**
  * Label and checkbox united.
  */
@@ -23,7 +13,18 @@ const CheckboxWithLabel = props => {
   const [state, setState] = useState({
     isChecked: props.isChecked
   });
-  const classes = useStyles();
+
+  const styles = makeStyles({
+    root: {
+      color: green[600],
+      "&$checked": {
+        color: green[500]
+      }
+    },
+    label: props.labelStyles,
+    checked: {} // This object must be empty for checked color to work.
+  })();
+
   const handleChanges = () => {
     setState({
       isChecked: !state.isChecked
@@ -34,14 +35,17 @@ const CheckboxWithLabel = props => {
   return (
     <FormGroup row>
       <FormControlLabel
+        classes={{
+          label: styles.label
+        }}
         control={
           <Checkbox
             checked={state.isChecked}
             value="1"
             onChange={handleChanges}
             classes={{
-              root: classes.root,
-              checked: classes.checked
+              checked: styles.checked,
+              root: styles.root
             }}
           />
         }
@@ -53,13 +57,11 @@ const CheckboxWithLabel = props => {
 
 CheckboxWithLabel.defaultProps = {
   isChecked: false,
-  labelClasses: [],
   payload: {}
 };
 
 CheckboxWithLabel.propTypes = {
   isChecked: PropTypes.bool,
-  labelClasses: PropTypes.array,
   name: PropTypes.string.isRequired,
   /**
    * Will be called after checking or unchecking the checkbox.
@@ -68,7 +70,8 @@ CheckboxWithLabel.propTypes = {
   /**
    * A parameter of the onChanges function.
    */
-  payload: PropTypes.object
+  payload: PropTypes.object,
+  labelStyles: PropTypes.object
 };
 
 export default CheckboxWithLabel;

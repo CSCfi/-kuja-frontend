@@ -2,70 +2,92 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import CheckboxWithLabel from "./index";
 import { withInfo } from "@storybook/addon-info";
+import { isInLupa, isAdded, isRemoved } from "../../../css/label";
 
 storiesOf("CheckboxWithLabel", module)
   .addDecorator(withInfo)
-  .add("is checked", () => (
-    <CheckboxWithLabel
-      name="checked-with-label"
-      isChecked={true}
-      onChanges={() => {
-        alert("Clicked!");
-      }}
-    >
-      Label text
-    </CheckboxWithLabel>
-  ))
   .add("is unchecked", () => (
     <CheckboxWithLabel name="example" isChecked={false}>
-      Label text
+      Is unchecked
     </CheckboxWithLabel>
   ))
-  .add("is in lupa", () => (
-    <CheckboxWithLabel
-      name="example"
-      isChecked={false}
-      onChanges={() => {
-        alert("Clicked!");
-      }}
-      labelClasses={["is-in-lupa"]}
-    >
-      Label text
-    </CheckboxWithLabel>
-  ))
-  .add("is checked and is in lupa", () => (
+  .add("is checked", () => (
     <CheckboxWithLabel
       name="example"
       isChecked={true}
       onChanges={() => {
-        alert("Clicked!");
+        console.info("Clicked!");
       }}
-      labelClasses={["is-in-lupa"]}
     >
-      Label text
+      Is checked
     </CheckboxWithLabel>
   ))
-  .add("is in lupa and is added", () => (
+  .add("unchecked, in lupa", () => (
     <CheckboxWithLabel
       name="example"
-      isChecked={false}
       onChanges={() => {
-        alert("Clicked!");
+        console.info("Clicked!");
       }}
-      labelClasses={["is-added", "is-in-lupa"]}
+      labelStyles={Object.assign({}, isInLupa)}
     >
-      Label text
+      Is unchecked and in LUPA
     </CheckboxWithLabel>
   ))
-  .add("is checked, is in lupa and is removed", () => (
+  .add("Is checked and in LUPA", () => (
     <CheckboxWithLabel
       name="example"
-      isChecked={false}
+      isChecked={true}
       onChanges={() => {
-        alert("Clicked!");
+        console.info("Clicked!");
       }}
-      labelClasses={["is-removed", "is-in-lupa"]}
+      labelStyles={Object.assign({}, isInLupa)}
     >
-      Label text
+      Is checked and in LUPA
+    </CheckboxWithLabel>
+  ))
+  .add("is unchecked and removed", () => (
+    <CheckboxWithLabel
+      name="example"
+      onChanges={() => {
+        console.info("Clicked!");
+      }}
+      labelStyles={Object.assign({}, isRemoved)}
+    >
+      Is unchecked and removed
+    </CheckboxWithLabel>
+  ))
+  .add("is checked and added", () => (
+    <CheckboxWithLabel
+      name="example"
+      isChecked={true}
+      onChanges={() => {
+        console.info("Clicked!");
+      }}
+      labelStyles={Object.assign({}, isAdded)}
+    >
+      Is checked and added
+    </CheckboxWithLabel>
+  ))
+  .add("is unchecked, removed and in LUPA", () => (
+    <CheckboxWithLabel
+      name="example"
+      onChanges={() => {
+        console.info("Clicked!");
+      }}
+      labelStyles={Object.assign({}, isRemoved, isInLupa)}
+    >
+      Is unchecked, removed and in LUPA
+    </CheckboxWithLabel>
+  ))
+  .add("is checked, added and in LUPA", () => (
+    <CheckboxWithLabel
+      name="example"
+      isChecked={true}
+      onChanges={() => {
+        console.info("Clicked!");
+      }}
+      labelStyles={Object.assign({}, isAdded, isInLupa)}
+    >
+      Is checked, added and in LUPA
     </CheckboxWithLabel>
   ));
