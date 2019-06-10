@@ -40,7 +40,7 @@ const MuutospyyntoWizardTutkinnot = props => {
 
   const handleChanges = (item, isSubItemTarget, listId) => {
     if (isSubItemTarget) {
-      /******************* IF USE HAS CLICKED A SUB ITEM *******************/
+      /******************* IF USER HAS CLICKED A SUB ITEM *******************/
       const existingChange = _.find(state[sectionId].changes[listId], {
         koodiArvo: item.subItems[0].code
       });
@@ -72,7 +72,7 @@ const MuutospyyntoWizardTutkinnot = props => {
         );
       }
     } else {
-      /******************* IF USE HAS CLICKED AN ITEM *******************/
+      /******************* IF USER HAS CLICKED AN ITEM *******************/
       // Let's find out the type of operation
       const operationType = item.shouldBeSelected
         ? MUUTOS_TYPES.REMOVAL

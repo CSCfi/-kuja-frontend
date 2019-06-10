@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -56,8 +55,6 @@ const DialogTitle = withStyles(theme => ({
     </MuiDialogTitle>
   );
 });
-
-Modal.setAppElement("#root");
 
 function getSteps() {
   return [

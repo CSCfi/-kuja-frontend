@@ -39,7 +39,7 @@ const MuutosHeader = styled.div`
   display: flex;
   cursor: pointer;
 
-  &:first-child {
+  &:first-of-type {
     border-top: 1px solid
       ${props => (props.isActive ? COLORS.OIVA_GREEN : COLORS.BORDER_GRAY)};
   }

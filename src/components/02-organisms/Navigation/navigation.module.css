@@ -2,6 +2,6 @@
   border-right: 1px solid #58826e;
 }
 
-.navigation-item:first-child {
+.navigation-item:first-of-type {
   border-left: 1px solid #58826e;
 }

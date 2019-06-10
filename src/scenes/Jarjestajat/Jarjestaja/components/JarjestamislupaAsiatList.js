@@ -107,7 +107,7 @@ const JarjestamislupaAsiatList = ({ lupahistory }) => {
                   <TableRow>
                     {columnTitles.map((title, i) => (
                       <TableCell key={`title-${i}`}>
-                        <span class="text-white">
+                        <span className="text-white">
                           <Typography component="span">
                             {title}
                           </Typography>
