@@ -21,6 +21,40 @@ const CategorizedList = props => {
     setChanges(getChangesByLevel(props.level, props.allChanges));
   }, [props.changes, props.level, props.allChanges]);
 
+  const checkParentPath = (props, operations) => {
+    if (props.parentCategory) {
+      _.map(props.parentCategory.components, (component, i) => {
+        const isComponentCheckedByDefault = component.properties.isChecked;
+        const path = R.init(props.rootPath).concat(["components", i])
+        const changeObj = props.getChangeByPath(path);
+        if (!isComponentCheckedByDefault) {
+          if (!changeObj) {
+            // Let's create a change for checked by default
+            operations.push([
+              "addChange",
+              {
+                path,
+                properties: {
+                  isChecked: true
+                }
+              }
+            ]);
+          }
+        } else {
+          // Let's delete the change object if it sets the component as checked
+          if (changeObj && !changeObj.properties.isChecked) {
+            operations.push(["removeChange", path]);
+          }
+        }
+      });
+      return checkParentPath(
+        props.parentCategoryListProps,
+        operations
+      );
+    }
+    return operations;
+  };
+
   const handleChanges = (payload, c) => {
     let operations = [];
     const component = R.path(payload.path, props.categories);
@@ -77,34 +111,8 @@ const CategorizedList = props => {
         }, props.categories[payload.path[0]].categories || []);
         props.runOperations(operations);
       } else {
-        if (props.parentCategory) {
-          // Let's check the parent component(s)
-          _.map(props.parentCategory.components, (component, i) => {
-            const isComponentCheckedByDefault = component.properties.isChecked;
-            const path = R.init(props.rootPath).concat(["components", i])
-            const changeObj = props.getChangeByPath(path);
-            if (!isComponentCheckedByDefault) {
-              if (!changeObj) {
-                // Let's create a change for checked by default
-                operations.push([
-                  "addChange",
-                  {
-                    path,
-                    properties: {
-                      isChecked: true
-                    }
-                  }
-                ]);
-              }
-            } else {
-              // Let's delete the change object if it sets the component as checked
-              if (changeObj && !changeObj.properties.isChecked) {
-                operations.push(["removeChange", path]);
-              }
-            }
-          });
-          console.info(props, props.level);
-        }
+        // Let's check the parent component(s)
+        operations = checkParentPath(props, operations);
         props.runOperations(operations);
       }
     }
@@ -204,6 +212,7 @@ const CategorizedList = props => {
                 path={props.path.concat[("components", i)]}
                 rootPath={[i, "categories"].concat(props.rootPath)}
                 parentCategory={category}
+                parentCategoryListProps={props}
               />
             )}
           </div>
