@@ -1,16 +1,42 @@
-import CategorizedList from "./index";
+import CategorizedListRoot from "./index";
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
 import { isInLupa, isAdded, isRemoved } from "../../../css/label";
 
-storiesOf("CategorizedList", module)
+storiesOf("CategorizedListRoot", module)
   .addDecorator(withInfo)
   .add("Simple example", () => {
-    const handleChanges = () => {
-      console.info("Simple changes...");
-    };
-    const changes = [];
+    let changes = [
+      {
+        path: [0, "components", 0],
+        properties: {
+          isChecked: true,
+          title: "Erikoisammattitutkinto (muutos)"
+        }
+      },
+      {
+        path: [2, "components", 0],
+        properties: {
+          isChecked: true,
+          title: "Muutos"
+        }
+      },
+      {
+        path: [0, "categories", 0, "components", 0],
+        properties: {
+          isChecked: true,
+          title: "Osaamisala"
+        }
+      },
+      {
+        path: [0, "categories", 1, "categories", 0, "components", 1],
+        properties: {
+          isChecked: true,
+          title: "Osaamisala"
+        }
+      }
+    ];
 
     const categories = [
       {
@@ -71,7 +97,7 @@ storiesOf("CategorizedList", module)
                   name: "example-checkbox",
                   code: "1.3",
                   title: "Sub row",
-                  isChecked: false,
+                  isChecked: true,
                   value: "Testi3"
                 }
               }
@@ -125,7 +151,57 @@ storiesOf("CategorizedList", module)
                   value: "Testi2"
                 }
               }
-            ]
+            ],
+            categories: [
+              {
+                code: "2.2.1",
+                title: "Sub category",
+                components: [
+                  {
+                    name: "CheckboxWithLabel",
+                    properties: {
+                      name: "example-label",
+                      code: "2.2.1",
+                      title: "Sub row",
+                      isChecked: true,
+                      value: "Testi"
+                    }
+                  }
+                ]
+              },
+              {
+                code: "2.2.2",
+                title: "Sub category",
+                components: [
+                  {
+                    name: "CheckboxWithLabel",
+                    properties: {
+                      name: "example-checkbox",
+                      code: "2.2.2",
+                      title: "Sub row",
+                      isChecked: false,
+                      value: "Testi2"
+                    }
+                  }
+                ]
+              },
+              {
+                code: "2.2.3",
+                title: "Sub category",
+                components: [
+                  {
+                    name: "CheckboxWithLabel",
+                    properties: {
+                      name: "example-checkbox",
+                      code: "2.2.3",
+                      title: "Sub row",
+                      isChecked: false,
+                      value: "Testi3"
+                    }
+                  }
+                ]
+              }
+            ],
           },
           {
             code: "2.3",
@@ -143,7 +219,8 @@ storiesOf("CategorizedList", module)
               }
             ]
           }
-        ]
+        ],
+        changes: []
       },
       {
         code: "3",
@@ -163,21 +240,10 @@ storiesOf("CategorizedList", module)
       }
     ];
 
-    return (
-      <CategorizedList
-        categories={categories}
-        changes={changes}
-        id="root"
-        onChanges={handleChanges}
-        shouldBeExpanded={false}
-      />
-    );
+    return <CategorizedListRoot categories={categories} changes={changes} />;
   })
   .add("Complex example", () => {
-    const handleChanges = () => {
-      console.info("Changes...");
-    };
-    const changes = [];
+    let changes = [];
 
     const categories = [
       {
@@ -330,12 +396,5 @@ storiesOf("CategorizedList", module)
       }
     ];
 
-    return (
-      <CategorizedList
-        categories={categories}
-        changes={changes}
-        onChanges={handleChanges}
-        shouldBeExpanded={false}
-      />
-    );
+    return <CategorizedListRoot categories={categories} changes={changes} />;
   });
