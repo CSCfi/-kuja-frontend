@@ -16,24 +16,31 @@ storiesOf("CategorizedListRoot", module)
         }
       },
       {
+        path: [1, "components", 0],
+        properties: {
+          isChecked: true,
+          title: "Koulutukseen panostettu on (muutos)"
+        }
+      },
+      {
         path: [2, "components", 0],
         properties: {
           isChecked: true,
-          title: "Muutos"
+          title: "Alakoulu ja yläkoulu (muutos)"
         }
       },
       {
         path: [0, "categories", 0, "components", 0],
         properties: {
           isChecked: true,
-          title: "Osaamisala"
+          title: "Osaamisala (muutos)"
         }
       },
       {
         path: [0, "categories", 1, "categories", 0, "components", 1],
         properties: {
           isChecked: true,
-          title: "Osaamisala"
+          title: "Osaamisala (muutos)"
         }
       }
     ];

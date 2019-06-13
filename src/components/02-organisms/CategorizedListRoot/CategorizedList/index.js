@@ -21,11 +21,48 @@ const CategorizedList = props => {
     setChanges(getChangesByLevel(props.level, props.allChanges));
   }, [props.changes, props.level, props.allChanges]);
 
+  const checkHierarchyBelow = (categories, rootPath, operations) => {
+    if (categories) {
+      R.addIndex(R.forEach)((category, i) => {
+        R.addIndex(R.forEach)((component, ii) => {
+            const isComponentCheckedByDefault = component.properties.isChecked;
+            const path = rootPath.concat([i, 'components', ii]);
+            const changeObj = props.getChangeByPath(path);
+            if (isComponentCheckedByDefault) {
+              if (!changeObj) {
+                // Let's create a change for checked by default
+                operations.push([
+                  "addChange",
+                  {
+                    path,
+                    properties: {
+                      isChecked: false
+                    }
+                  }
+                ]);
+              }
+            } else {
+              // Let's delete the change object if it sets the component as checked
+              if (changeObj && changeObj.properties.isChecked) {
+                operations.push(["removeChange", path]);
+              }
+            }
+        }, category.components || []);
+        return checkHierarchyBelow(
+          category.categories,
+          rootPath.concat([i, 'categories']),
+          operations
+        );
+      }, categories);
+    }
+    return operations;
+  };
+
   const checkParentPath = (props, operations) => {
     if (props.parentCategory) {
       _.map(props.parentCategory.components, (component, i) => {
         const isComponentCheckedByDefault = component.properties.isChecked;
-        const path = R.init(props.rootPath).concat(["components", i])
+        const path = R.init(props.rootPath).concat(["components", i]);
         const changeObj = props.getChangeByPath(path);
         if (!isComponentCheckedByDefault) {
           if (!changeObj) {
@@ -47,10 +84,7 @@ const CategorizedList = props => {
           }
         }
       });
-      return checkParentPath(
-        props.parentCategoryListProps,
-        operations
-      );
+      return checkParentPath(props.parentCategoryListProps, operations);
     }
     return operations;
   };
@@ -80,35 +114,11 @@ const CategorizedList = props => {
 
       if (!c.isChecked) {
         // Let's uncheck all the child checkboxes
-        R.addIndex(R.forEach)((category, i) => {
-          console.info(category);
-          R.addIndex(R.forEach)((component, ii) => {
-            const isComponentCheckedByDefault = component.properties.isChecked;
-            const path = props.rootPath
-              .concat([payload.path[0], "categories"])
-              .concat([i, "components", ii]);
-            const changeObj = props.getChangeByPath(path);
-            if (isComponentCheckedByDefault) {
-              if (!changeObj) {
-                // Let's create a change for checked by default
-                operations.push([
-                  "addChange",
-                  {
-                    path,
-                    properties: {
-                      isChecked: false
-                    }
-                  }
-                ]);
-              }
-            } else {
-              // Let's delete the change object if it sets the component as checked
-              if (changeObj && changeObj.properties.isChecked) {
-                operations.push(["removeChange", path]);
-              }
-            }
-          }, category.components || []);
-        }, props.categories[payload.path[0]].categories || []);
+        operations = checkHierarchyBelow(
+          props.categories[payload.path[0]].categories,
+          props.rootPath.concat([payload.path[0], "categories"]),
+          operations
+        );
         props.runOperations(operations);
       } else {
         // Let's check the parent component(s)
@@ -121,7 +131,6 @@ const CategorizedList = props => {
   return (
     <div>
       {_.map(props.categories, (category, i) => {
-        console.info("rendering", props.level);
         return (
           <div key={i} className="px-6 select-none">
             {(category.code || category.title) && (
