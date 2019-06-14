@@ -21,15 +21,20 @@ const CategorizedList = props => {
     setChanges(getChangesByLevel(props.level, props.allChanges));
   }, [props.changes, props.level, props.allChanges]);
 
-  const checkHierarchyBelow = (categories, rootPath, operations) => {
+  const uncheckHierarchyBelow = (
+    categories,
+    rootPath,
+    operations,
+    skipPath
+  ) => {
     if (categories) {
       R.addIndex(R.forEach)((category, i) => {
         R.addIndex(R.forEach)((component, ii) => {
           const isComponentCheckedByDefault = component.properties.isChecked;
           const path = rootPath.concat([i, "components", ii]);
           const changeObj = props.getChangeByPath(path);
-          if (isComponentCheckedByDefault) {
-            if (!changeObj) {
+          if (component.name === "RadioButtonWithLabel" || path.length !== skipPath.length) {
+            if (isComponentCheckedByDefault && !changeObj) {
               // Let's create a change for checked by default
               operations.push([
                 "addChange",
@@ -40,18 +45,19 @@ const CategorizedList = props => {
                   }
                 }
               ]);
-            }
-          } else {
-            // Let's delete the change object if it sets the component as checked
-            if (changeObj && changeObj.properties.isChecked) {
-              operations.push(["removeChange", path]);
+            } else {
+              // Let's delete the change object if it sets the component as checked
+              if (changeObj && changeObj.properties.isChecked) {
+                operations.push(["removeChange", path]);
+              }
             }
           }
         }, category.components || []);
-        return checkHierarchyBelow(
+        return uncheckHierarchyBelow(
           category.categories,
           rootPath.concat([i, "categories"]),
-          operations
+          operations,
+          skipPath
         );
       }, categories);
     }
@@ -83,9 +89,53 @@ const CategorizedList = props => {
             operations.push(["removeChange", path]);
           }
         }
+        if (
+          component.name === "RadioButtonWithLabel" ||
+          component.name === "CheckboxWithLabel"
+        ) {
+          operations = uncheckSiblings(
+            props.parentCategoryListProps,
+            operations,
+            path
+          );
+        }
       });
       return checkParentPath(props.parentCategoryListProps, operations);
     }
+    return operations;
+  };
+
+  const uncheckSiblings = (props, operations, skipPath) => {
+    _.forEach(props.categories, (category, i) => {
+      _.forEach(category.components, (component, ii) => {
+        if (component.name === "RadioButtonWithLabel") {
+          const isComponentCheckedByDefault = component.properties.isChecked;
+          const path = props.rootPath.concat([i, "components", ii]);
+          const changeObj = props.getChangeByPath(path);
+          if (!R.equals(path, skipPath)) {
+            if (isComponentCheckedByDefault) {
+              if (!changeObj) {
+                // Let's create a change for checked by default
+                operations.push([
+                  "addChange",
+                  {
+                    path,
+                    properties: {
+                      isChecked: false
+                    }
+                  }
+                ]);
+              }
+            } else {
+              // Let's delete the change object if it sets the component as checked
+              if (changeObj && changeObj.properties.isChecked) {
+                operations.push(["removeChange", path]);
+              }
+            }
+          }
+        }
+      });
+    });
     return operations;
   };
 
@@ -94,38 +144,43 @@ const CategorizedList = props => {
     const component = R.path(payload.path, props.categories);
     const fullPath = (props.rootPath || []).concat(payload.path);
     const allChanges = props.allChanges;
-    if (component.name === "CheckboxWithLabel") {
+    const isChangeAvailable = !!R.find(R.propEq("path", fullPath))(allChanges);
+    if (isChangeAvailable) {
       // If there is a change let's remove it
-      const isChangeAvailable = !!R.find(R.propEq("path", fullPath))(
-        allChanges
-      );
-      if (isChangeAvailable) {
-        operations.push(["removeChange", fullPath]);
-      } else {
-        // No change? Let's add one.
-        operations.push([
-          "addChange",
-          {
-            path: fullPath,
-            properties: c
-          }
-        ]);
-      }
-
+      operations.push(["removeChange", fullPath]);
+    } else {
+      // No change? Let's add one.
+      operations.push([
+        "addChange",
+        {
+          path: fullPath,
+          properties: c
+        }
+      ]);
+    }
+    if (component.name === "CheckboxWithLabel") {
       if (!c.isChecked) {
         // Let's uncheck all the child checkboxes
-        operations = checkHierarchyBelow(
+        operations = uncheckHierarchyBelow(
           props.categories[payload.path[0]].categories,
           props.rootPath.concat([payload.path[0], "categories"]),
-          operations
+          operations,
+          props.rootPath.concat(payload.path)
         );
-        props.runOperations(operations);
       } else {
         // Let's check the parent component(s)
         operations = checkParentPath(props, operations);
-        props.runOperations(operations);
       }
+    } else if (component.name === "RadioButtonWithLabel") {
+      operations = checkParentPath(props, operations);
+      operations = uncheckHierarchyBelow(
+        props.categories,
+        props.rootPath,
+        operations,
+        props.rootPath.concat(payload.path)
+      );
     }
+    props.runOperations(operations);
   };
 
   return (
@@ -133,7 +188,7 @@ const CategorizedList = props => {
       {_.map(props.categories, (category, i) => {
         return (
           <div key={i} className="px-6 select-none">
-            {(category.code || category.title) && (
+            {props.showCategoryTitles && (category.code || category.title) && (
               <div className="p-2">
                 <strong>
                   {category.code && (
@@ -162,12 +217,17 @@ const CategorizedList = props => {
                           onChanges={handleChanges}
                           payload={{
                             id: `checkbox-with-label-${idSuffix}`,
-                            path: props.path.concat([i, "components", ii])
+                            path: [i, "components", ii],
+                            fullPath: props.rootPath.concat([
+                              i,
+                              "components",
+                              ii
+                            ])
                           }}
                           labelStyles={propsObj.labelStyles}
                         >
                           <span>{propsObj.code}</span>
-                          <span className="ml-4">{`${propsObj.title} (level-${
+                          <span className="ml-4">{`${propsObj.title} (path-${
                             props.level
                           })`}</span>
                         </CheckboxWithLabel>
@@ -177,17 +237,28 @@ const CategorizedList = props => {
                       <div className="px-2">
                         <RadioButtonWithLabel
                           id={`radio-button-with-label-${idSuffix}`}
-                          name={properties.name}
-                          isChecked={properties.isChecked}
+                          name={propsObj.name}
+                          isChecked={propsObj.isChecked}
                           onChanges={handleChanges}
                           payload={{
                             id: `radio-button-with-label-${idSuffix}`,
-                            path: props.path.concat([i, "components", ii])
+                            path: [i, "components", ii],
+                            fullPath: props.rootPath.concat([
+                              i,
+                              "components",
+                              ii
+                            ])
                           }}
                           value={properties.value}
                         >
-                          <span>{properties.code}</span>
-                          <span className="ml-4">{properties.title}</span>
+                          <span>{propsObj.code}</span>
+                          <span className="ml-4">{`${
+                            propsObj.title
+                          } (${props.rootPath.concat([
+                            i,
+                            "components",
+                            ii
+                          ])})`}</span>
                         </RadioButtonWithLabel>
                       </div>
                     )}
@@ -196,9 +267,13 @@ const CategorizedList = props => {
                           const isSiblingCheckedByDefault = (
                             (category.components[ii - 1] || {}).properties || {}
                           ).isChecked;
-                          const change = props.getChangeByPath(props.rootPath.concat([i, "components", ii - 1]));
-                          const isDisabled =
-                            (!isSiblingCheckedByDefault && !change) || !change.properties.isChecked;
+                          const change = props.getChangeByPath(
+                            props.rootPath.concat([i, "components", ii - 1])
+                          );
+                          const isDisabled = !(
+                            (isSiblingCheckedByDefault && !change) ||
+                            (change && change.properties.isChecked)
+                          );
                           return (
                             <div className="px-2">
                               <Dropdown
@@ -223,10 +298,10 @@ const CategorizedList = props => {
                 getChangeByPath={props.getChangeByPath}
                 id={`${props.id}-${category.code}`}
                 runOperations={props.runOperations}
-                path={props.path.concat[("components", i)]}
-                rootPath={[i, "categories"].concat(props.rootPath)}
+                rootPath={props.rootPath.concat([i, "categories"])}
                 parentCategory={category}
                 parentCategoryListProps={props}
+                showCategoryTitles={props.showCategoryTitles}
               />
             )}
           </div>
@@ -237,7 +312,6 @@ const CategorizedList = props => {
 };
 
 CategorizedList.defaultProps = {
-  path: [],
   rootPath: []
 };
 
@@ -245,7 +319,8 @@ CategorizedList.propTypes = {
   categories: PropTypes.array,
   onChanges: PropTypes.func,
   parentCategory: PropTypes.object,
-  path: PropTypes.array
+  path: PropTypes.array,
+  showCategoryTitles: PropTypes.bool
 };
 
 export default CategorizedList;
