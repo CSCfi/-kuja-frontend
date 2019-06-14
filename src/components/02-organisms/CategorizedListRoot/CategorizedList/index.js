@@ -33,7 +33,10 @@ const CategorizedList = props => {
           const isComponentCheckedByDefault = component.properties.isChecked;
           const path = rootPath.concat([i, "components", ii]);
           const changeObj = props.getChangeByPath(path);
-          if (component.name === "RadioButtonWithLabel" || path.length !== skipPath.length) {
+          if (
+            component.name === "RadioButtonWithLabel" ||
+            path.length !== skipPath.length
+          ) {
             if (isComponentCheckedByDefault && !changeObj) {
               // Let's create a change for checked by default
               operations.push([
@@ -186,19 +189,25 @@ const CategorizedList = props => {
   return (
     <div>
       {_.map(props.categories, (category, i) => {
+        const isCategoryTitleVisible = props.showCategoryTitles && (category.code || category.title);
         return (
-          <div key={i} className="px-6 select-none">
-            {props.showCategoryTitles && (category.code || category.title) && (
+          <div
+            key={i}
+            className={`${
+              !R.equals(props.rootPath, []) ? "px-10" : (i !== 0 && isCategoryTitleVisible ? "pt-10" : "")
+            } select-none"`}
+          >
+            {isCategoryTitleVisible && (
               <div className="p-2">
-                <strong>
+                <h4>
                   {category.code && (
                     <span className="mr-4">{category.code}</span>
                   )}
                   <span>{category.title}</span>
-                </strong>
+                </h4>
               </div>
             )}
-            <div className="flex items-center justify-between border-b border-solid border-grey-100">
+            <div className="flex items-center justify-between">
               {_.map(category.components, (component, ii) => {
                 const { properties } = component;
                 const idSuffix = `${i}-${ii}`;
@@ -206,10 +215,15 @@ const CategorizedList = props => {
                   [i, "components", ii],
                   props.categories
                 );
+                const title =
+                  propsObj.title +
+                  (props.debug
+                    ? props.rootPath.concat([i, "components", ii])
+                    : "");
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (
-                      <div className="px-2">
+                      <div>
                         <CheckboxWithLabel
                           id={`checkbox-with-label-${idSuffix}`}
                           name={propsObj.name}
@@ -227,9 +241,7 @@ const CategorizedList = props => {
                           labelStyles={propsObj.labelStyles}
                         >
                           <span>{propsObj.code}</span>
-                          <span className="ml-4">{`${propsObj.title} (path-${
-                            props.level
-                          })`}</span>
+                          <span className="ml-4">{title}</span>
                         </CheckboxWithLabel>
                       </div>
                     )}
@@ -252,13 +264,7 @@ const CategorizedList = props => {
                           value={properties.value}
                         >
                           <span>{propsObj.code}</span>
-                          <span className="ml-4">{`${
-                            propsObj.title
-                          } (${props.rootPath.concat([
-                            i,
-                            "components",
-                            ii
-                          ])})`}</span>
+                          <span className="ml-4">{title}</span>
                         </RadioButtonWithLabel>
                       </div>
                     )}
@@ -293,6 +299,7 @@ const CategorizedList = props => {
               <CategorizedList
                 level={props.level + 1}
                 categories={category.categories}
+                debug={props.debug}
                 changes={changes}
                 allChanges={props.allChanges}
                 getChangeByPath={props.getChangeByPath}
@@ -317,6 +324,7 @@ CategorizedList.defaultProps = {
 
 CategorizedList.propTypes = {
   categories: PropTypes.array,
+  debug: PropTypes.bool,
   onChanges: PropTypes.func,
   parentCategory: PropTypes.object,
   path: PropTypes.array,
