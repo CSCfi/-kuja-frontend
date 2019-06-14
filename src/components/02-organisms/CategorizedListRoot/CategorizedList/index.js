@@ -189,16 +189,21 @@ const CategorizedList = props => {
   return (
     <div>
       {_.map(props.categories, (category, i) => {
-        const isCategoryTitleVisible = props.showCategoryTitles && (category.code || category.title);
+        const isCategoryTitleVisible =
+          props.showCategoryTitles && (category.code || category.title);
         return (
           <div
             key={i}
             className={`${
-              !R.equals(props.rootPath, []) ? "px-10" : (i !== 0 && isCategoryTitleVisible ? "pt-10" : "")
+              !R.equals(props.rootPath, [])
+                ? "px-10"
+                : i !== 0 && isCategoryTitleVisible
+                ? "pt-10"
+                : ""
             } select-none"`}
           >
             {isCategoryTitleVisible && (
-              <div className="p-2">
+              <div className="py-2">
                 <h4>
                   {category.code && (
                     <span className="mr-4">{category.code}</span>
@@ -210,10 +215,20 @@ const CategorizedList = props => {
             <div className="flex items-center justify-between">
               {_.map(category.components, (component, ii) => {
                 const { properties } = component;
+                const fullPath = props.rootPath.concat([i, "components", ii]);
                 const idSuffix = `${i}-${ii}`;
                 const propsObj = getPropertiesObject(
                   [i, "components", ii],
                   props.categories
+                );
+                const changeObj = props.getChangeByPath(fullPath);
+                const isAddition = ((changeObj || {}).properties || {}).isChecked;
+                const isRemoved = changeObj && !changeObj.properties.isChecked;
+                const labelStyles = Object.assign(
+                  {},
+                  isAddition ? (propsObj.labelStyles || {}).addition : {},
+                  isRemoved ? (propsObj.labelStyles || {}).removal : {},
+                  ((propsObj.labelStyles || {}).custom || {})
                 );
                 const title =
                   propsObj.title +
@@ -232,13 +247,9 @@ const CategorizedList = props => {
                           payload={{
                             id: `checkbox-with-label-${idSuffix}`,
                             path: [i, "components", ii],
-                            fullPath: props.rootPath.concat([
-                              i,
-                              "components",
-                              ii
-                            ])
+                            fullPath
                           }}
-                          labelStyles={propsObj.labelStyles}
+                          labelStyles={labelStyles}
                         >
                           <span>{propsObj.code}</span>
                           <span className="ml-4">{title}</span>
@@ -246,7 +257,7 @@ const CategorizedList = props => {
                       </div>
                     )}
                     {component.name === "RadioButtonWithLabel" && (
-                      <div className="px-2">
+                      <div>
                         <RadioButtonWithLabel
                           id={`radio-button-with-label-${idSuffix}`}
                           name={propsObj.name}
@@ -255,12 +266,9 @@ const CategorizedList = props => {
                           payload={{
                             id: `radio-button-with-label-${idSuffix}`,
                             path: [i, "components", ii],
-                            fullPath: props.rootPath.concat([
-                              i,
-                              "components",
-                              ii
-                            ])
+                            fullPath
                           }}
+                          labelStyles={labelStyles}
                           value={properties.value}
                         >
                           <span>{propsObj.code}</span>

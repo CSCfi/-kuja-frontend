@@ -1,5 +1,10 @@
 import { isInLupa, isAdded, isRemoved } from "../../../../css/label";
 
+const labelStyles = {
+  addition: isAdded,
+  removal: isRemoved
+};
+
 export const complexStory = {
   changes: [
     {
@@ -49,7 +54,9 @@ export const complexStory = {
             name: "example-checkbox-1",
             code: 1,
             title: "Row item",
-            labelStyles: Object.assign({}, isAdded, isInLupa),
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             isChecked: false
           }
         },
@@ -76,6 +83,7 @@ export const complexStory = {
                 code: 1.1,
                 title: "Sub row",
                 isChecked: false,
+                labelStyles,
                 value: "Testi"
               }
             }
@@ -91,7 +99,9 @@ export const complexStory = {
                     name: "example-checkbox-1.1.1",
                     code: "1.1.1",
                     title: "Leaf node item",
-                    labelStyles: Object.assign({}, isAdded, isInLupa),
+                    labelStyles: Object.assign({}, labelStyles, {
+                      custom: isInLupa
+                    }),
                     isChecked: false
                   }
                 }
@@ -107,7 +117,7 @@ export const complexStory = {
                     name: "example-checkbox-1.1.2",
                     code: "1.1.2",
                     title: "Leaf node item",
-                    labelStyles: Object.assign({}, isAdded, isInLupa),
+                    labelStyles,
                     isChecked: true
                   }
                 },
@@ -140,6 +150,7 @@ export const complexStory = {
                 code: "1.2",
                 title: "Sub row",
                 isChecked: false,
+                labelStyles,
                 value: "Testi2"
               }
             }
@@ -156,6 +167,7 @@ export const complexStory = {
                 code: "1.3",
                 title: "Sub row",
                 isChecked: false,
+                labelStyles,
                 value: "Testi3"
               }
             }
@@ -173,7 +185,7 @@ export const complexStory = {
             name: "example-checkbox-2",
             code: 2,
             title: "Row item",
-            labelStyles: Object.assign({}, isRemoved, isInLupa),
+            labelStyles,
             isChecked: false
           }
         }
@@ -189,7 +201,9 @@ export const complexStory = {
             name: "example-checkbox-3",
             code: 3,
             title: "Row item",
-            labelStyles: Object.assign(isInLupa),
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             isChecked: false
           }
         }

@@ -1,5 +1,10 @@
 import { isInLupa, isAdded, isRemoved } from "../../../../css/label";
 
+const labelStyles = {
+  addition: isAdded,
+  removal: isRemoved
+};
+
 export const simpleStory = {
   changes: [
     {
@@ -12,7 +17,7 @@ export const simpleStory = {
     {
       path: [1, "components", 0],
       properties: {
-        isChecked: true,
+        isChecked: false,
         title: "Koulutukseen panostettu on (muutos)"
       }
     },
@@ -46,11 +51,13 @@ export const simpleStory = {
         {
           name: "CheckboxWithLabel",
           properties: {
+            code: "1",
+            isChecked: false,
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             name: "example-checkbox-1",
-            code: 1,
-            title: "Row item",
-            labelStyles: Object.assign({}, isAdded, isInLupa),
-            isChecked: false
+            title: "Row item"
           }
         }
       ],
@@ -62,10 +69,13 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-checkbox",
-                code: 1.1,
-                title: "Sub row",
+                code: "1.1",
                 isChecked: false,
+                labelStyles: Object.assign({}, labelStyles, {
+                  custom: isInLupa
+                }),
+                name: "example-checkbox",
+                title: "Sub row",
                 value: "Testi"
               }
             }
@@ -78,10 +88,11 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-checkbox",
                 code: "1.2",
-                title: "Sub row",
                 isChecked: false,
+                labelStyles,
+                name: "example-checkbox",
+                title: "Sub row",
                 value: "Testi2"
               }
             }
@@ -94,10 +105,13 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-checkbox",
                 code: "1.3",
-                title: "Sub row",
                 isChecked: true,
+                labelStyles: Object.assign({}, labelStyles, {
+                  custom: isInLupa
+                }),
+                name: "example-checkbox",
+                title: "Sub row",
                 value: "Testi3"
               }
             }
@@ -112,11 +126,11 @@ export const simpleStory = {
         {
           name: "CheckboxWithLabel",
           properties: {
+            code: "2",
+            isChecked: true,
+            labelStyles,
             name: "example-checkbox-2",
-            code: 2,
-            title: "Row item",
-            labelStyles: Object.assign({}, isRemoved, isInLupa),
-            isChecked: false
+            title: "Row item"
           }
         }
       ],
@@ -128,10 +142,11 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-label",
-                code: 2.1,
-                title: "Sub row",
+                code: "2.1",
                 isChecked: true,
+                labelStyles,
+                name: "example-label",
+                title: "Sub row",
                 value: "Testi"
               }
             }
@@ -144,10 +159,11 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-checkbox",
-                code: 2.2,
-                title: "Sub row",
+                code: "2.2",
                 isChecked: false,
+                labelStyles,
+                name: "example-checkbox",
+                title: "Sub row",
                 value: "Testi2"
               }
             }
@@ -160,10 +176,11 @@ export const simpleStory = {
                 {
                   name: "CheckboxWithLabel",
                   properties: {
-                    name: "example-label",
                     code: "2.2.1",
                     title: "Sub row",
                     isChecked: true,
+                    labelStyles,
+                    name: "example-label",
                     value: "Testi"
                   }
                 }
@@ -176,10 +193,11 @@ export const simpleStory = {
                 {
                   name: "CheckboxWithLabel",
                   properties: {
-                    name: "example-checkbox",
                     code: "2.2.2",
-                    title: "Sub row",
                     isChecked: false,
+                    labelStyles,
+                    name: "example-checkbox",
+                    title: "Sub row",
                     value: "Testi2"
                   }
                 }
@@ -192,16 +210,17 @@ export const simpleStory = {
                 {
                   name: "CheckboxWithLabel",
                   properties: {
-                    name: "example-checkbox",
                     code: "2.2.3",
-                    title: "Sub row",
                     isChecked: false,
+                    labelStyles,
+                    name: "example-checkbox",
+                    title: "Sub row",
                     value: "Testi3"
                   }
                 }
               ]
             }
-          ],
+          ]
         },
         {
           code: "2.3",
@@ -210,10 +229,11 @@ export const simpleStory = {
             {
               name: "CheckboxWithLabel",
               properties: {
-                name: "example-checkbox",
-                code: 2.3,
-                title: "Sub row",
+                code: "2.3",
                 isChecked: false,
+                labelStyles,
+                name: "example-checkbox",
+                title: "Sub row",
                 value: "Testi3"
               }
             }
@@ -229,11 +249,13 @@ export const simpleStory = {
         {
           name: "CheckboxWithLabel",
           properties: {
+            code: "3",
+            isChecked: false,
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             name: "example-checkbox-3",
-            code: 3,
-            title: "Row item",
-            labelStyles: Object.assign(isInLupa),
-            isChecked: false
+            title: "Row item"
           }
         }
       ]

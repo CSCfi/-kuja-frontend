@@ -13,6 +13,7 @@ storiesOf("CategorizedListRoot", module)
       <CategorizedListRoot
         categories={simpleStory.categories}
         changes={simpleStory.changes}
+        onUpdate={() => {}}
       />
     );
   })
@@ -21,6 +22,7 @@ storiesOf("CategorizedListRoot", module)
       <CategorizedListRoot
         categories={complexStory.categories}
         changes={complexStory.changes}
+        onUpdate={() => {}}
         showCategoryTitles={true}
       />
     );
@@ -30,6 +32,7 @@ storiesOf("CategorizedListRoot", module)
       <CategorizedListRoot
         categories={radioStory.categories}
         changes={radioStory.changes}
+        onUpdate={() => {}}
         showCategoryTitles={true}
       />
     );

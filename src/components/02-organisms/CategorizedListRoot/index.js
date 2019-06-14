@@ -27,6 +27,7 @@ const CategorizedListRoot = props => {
     });
     setAllChanges(allChangesClone);
     setChanges(getChangesByLevel(0, props.changes));
+    props.onUpdate(allChangesClone);
   };
 
   useEffect(() => {
@@ -55,6 +56,7 @@ CategorizedListRoot.defaultProps = {
 CategorizedListRoot.propTypes = {
   categories: PropTypes.array,
   changes: PropTypes.array,
+  onUpdate: PropTypes.func,
   showCategoryTitles: PropTypes.bool,
   debug: PropTypes.bool
 };
