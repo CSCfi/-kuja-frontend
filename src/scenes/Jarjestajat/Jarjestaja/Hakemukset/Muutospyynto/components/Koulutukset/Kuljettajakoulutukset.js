@@ -3,27 +3,54 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import RadioButtonWithLabel from "components/01-molecules/RadioButtonWithLabel";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { MUUT_KEYS } from "../../modules/constants";
+import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import * as R from "ramda";
 
 const Kuljettajakoulutukset = props => {
   const koodisto = "kuljettajakoulutus";
-  const [state, setState] = useState({});
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
 
+  const getCategories = koulutusData => {
+    const categories = R.map(item => {
+      return {
+        components: [
+          {
+            name: "RadioButtonWithLabel",
+            properties: {
+              name: "RadioButtonWithLabel",
+              code: item.code,
+              title: item.title,
+              isChecked: item.shouldBeChecked,
+              labelStyles: Object.assign(
+                {},
+                item.isAdded ? isAdded : {},
+                item.isInLupa ? isInLupa : {},
+                item.isRemoved ? isRemoved : {}
+              )
+            }
+          }
+        ]
+      };
+    }, koulutusData.items);
+    return categories;
+  };
+
   useEffect(() => {
-    if (_.indexOf(koulutukset.muut.fetched, koodisto) !== -1) {
-      setState(
-        getDataForKoulutusList(
-          koulutukset.muut.muudata[koodisto],
-          props.changes
+    if (R.includes(koodisto, koulutukset.muut.fetched)) {
+      setCategories(
+        getCategories(
+          getDataForKoulutusList(
+            koulutukset.muut.muudata[koodisto],
+            props.changes
+          )
         )
       );
     }
@@ -33,9 +60,8 @@ const Kuljettajakoulutukset = props => {
     fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
   }, [koulutuksetDispatch]);
 
-  const handleChanges = item => {
-    props.onChanges(item, koodisto, true);
-  };
+  const [categories, setCategories] = useState([]);
+  const [changes] = useState([]);
 
   return (
     <Wrapper>
@@ -47,23 +73,11 @@ const Kuljettajakoulutukset = props => {
           <NumberOfChanges changes={props.changes} />
         </div>
         <div data-slot="content">
-          <div className="py-4">
-            {_.map(state.items, (item, i) => {
-              return (
-                <div key={`item-${i}`} className="px-6 py-2">
-                  <RadioButtonWithLabel
-                    name={koodisto}
-                    isChecked={item.shouldBeSelected}
-                    onChanges={handleChanges}
-                    payload={item}
-                  >
-                    <span>{item.code}</span>
-                    <span className="ml-4">{item.title}</span>
-                  </RadioButtonWithLabel>
-                </div>
-              );
-            })}
-          </div>
+          <CategorizedListRoot
+            categories={categories}
+            changes={changes}
+            showCategoryTitles={true}
+          />
         </div>
       </ExpandableRow>
     </Wrapper>
