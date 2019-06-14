@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
 import _ from "lodash";
 import * as R from "ramda";
-import { getChangesByLevel } from './utils';
+import { getChangesByLevel } from "./utils";
 
 const CategorizedListRoot = props => {
   const [changes, setChanges] = useState([]);
@@ -41,14 +41,22 @@ const CategorizedListRoot = props => {
       getChangeByPath={getChangeByPath}
       runOperations={runOperations}
       rootPath={[]}
+      showCategoryTitles={props.showCategoryTitles}
       changes={changes}
     />
   );
 };
 
+CategorizedListRoot.defaultProps = {
+  showCategoryTitles: false,
+  debug: false
+};
+
 CategorizedListRoot.propTypes = {
   categories: PropTypes.array,
-  changes: PropTypes.array
+  changes: PropTypes.array,
+  showCategoryTitles: PropTypes.bool,
+  debug: PropTypes.bool
 };
 
 export default CategorizedListRoot;
