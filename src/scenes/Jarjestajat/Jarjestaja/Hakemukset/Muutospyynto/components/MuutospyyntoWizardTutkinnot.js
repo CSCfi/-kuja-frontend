@@ -39,6 +39,7 @@ const MuutospyyntoWizardTutkinnot = props => {
   // };
 
   const handleChanges = (item, isSubItemTarget, listId) => {
+    console.info(item, listId);
     if (isSubItemTarget) {
       /******************* IF USER HAS CLICKED A SUB ITEM *******************/
       const existingChange = _.find(state[sectionId].changes[listId], {
@@ -104,7 +105,6 @@ const MuutospyyntoWizardTutkinnot = props => {
           state[sectionId].changes || []
         }
         kohde={props.lupa.kohteet[2]}
-        listId={"all"}
         onChanges={handleChanges}
       />
     </Section>
