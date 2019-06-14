@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
 import NumberOfChanges from "components/00-atoms/NumberOfChanges";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../css/label";
 import _ from "lodash";
 
 const TutkintoList = props => {
@@ -17,11 +18,14 @@ const TutkintoList = props => {
     [props.areaCode]
   );
 
-  const formState = useCallback(() => {
-    const article = getArticle(props.articles);
-    const state = {
-      article,
-      categories: _.map(props.koulutustyypit, koulutustyyppi => {
+  const getChanges = useCallback(() => {
+    console.info(props.changes);
+    return [];
+  }, [props.changes]);
+
+  const getCategories = useCallback(
+    article => {
+      return _.map(props.koulutustyypit, koulutustyyppi => {
         return {
           // code: koulutustyyppi.koodiArvo,
           title:
@@ -29,21 +33,23 @@ const TutkintoList = props => {
               return m.kieli === "FI";
             }).nimi || "[Koulutustyypin otsikko tähän]",
           categories: _.map(koulutustyyppi.koulutukset, koulutus => {
-            const isAdded = !!_.find(
-              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-              { type: MUUTOS_TYPES.ADDITION }
-            );
-            const isInLupa = article
-              ? !!_.find(article.koulutusalat, koulutusala => {
-                  return !!_.find(koulutusala.koulutukset, {
-                    koodi: koulutus.koodiArvo
-                  });
-                })
-              : false;
-            const isRemoved = !!_.find(
-              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-              { type: MUUTOS_TYPES.REMOVAL }
-            );
+            const labelClasses = {
+              isAdded: !!_.find(
+                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
+                { type: MUUTOS_TYPES.ADDITION }
+              ),
+              isInLupa: article
+                ? !!_.find(article.koulutusalat, koulutusala => {
+                    return !!_.find(koulutusala.koulutukset, {
+                      koodi: koulutus.koodiArvo
+                    });
+                  })
+                : false,
+              isRemoved: !!_.find(
+                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
+                { type: MUUTOS_TYPES.REMOVAL }
+              )
+            };
             return {
               components: [
                 {
@@ -55,35 +61,44 @@ const TutkintoList = props => {
                       _.find(koulutus.metadata, m => {
                         return m.kieli === "FI";
                       }).nimi || "[Koulutuksen otsikko tähän]",
-                    isAdded,
-                    isInLupa,
-                    isRemoved,
-                    isChecked: (isInLupa && !isRemoved) || isAdded
+                    labelStyles: {
+                      addition: isAdded,
+                      removal: isRemoved,
+                      custom: Object.assign(
+                        {},
+                        labelClasses.isInLupa ? isInLupa : {}
+                      )
+                    },
+                    isChecked:
+                      (labelClasses.isInLupa && !labelClasses.isRemoved) ||
+                      labelClasses.isAdded
                   }
                 }
               ],
               categories: koulutus.osaamisala
                 ? [
                     (osaamisala => {
-                      const isAdded = !!_.find(
-                        _.filter(props.changes, {
-                          koodiArvo: osaamisala.koodiArvo
-                        }),
-                        { type: MUUTOS_TYPES.ADDITION }
-                      );
-                      const isInLupa = article
-                        ? !!_.find(article.koulutusalat, koulutusala => {
-                            return !!_.find(koulutusala.koulutukset, {
-                              koodi: osaamisala.koodiArvo
-                            });
-                          })
-                        : false;
-                      const isRemoved = !!_.find(
-                        _.filter(props.changes, {
-                          koodiarvo: osaamisala.koodiArvo
-                        }),
-                        { type: MUUTOS_TYPES.REMOVAL }
-                      );
+                      const labelClasses = {
+                        isAdded: !!_.find(
+                          _.filter(props.changes, {
+                            koodiArvo: osaamisala.koodiArvo
+                          }),
+                          { type: MUUTOS_TYPES.ADDITION }
+                        ),
+                        isInLupa: article
+                          ? !!_.find(article.koulutusalat, koulutusala => {
+                              return !!_.find(koulutusala.koulutukset, {
+                                koodi: osaamisala.koodiArvo
+                              });
+                            })
+                          : false,
+                        isRemoved: !!_.find(
+                          _.filter(props.changes, {
+                            koodiarvo: osaamisala.koodiArvo
+                          }),
+                          { type: MUUTOS_TYPES.REMOVAL }
+                        )
+                      };
                       return {
                         components: [
                           {
@@ -95,10 +110,16 @@ const TutkintoList = props => {
                                 _.find(osaamisala.metadata, m => {
                                   return m.kieli === "FI";
                                 }).nimi || "[Osaamisalan otsikko tähän]",
-                              isAdded,
-                              isInLupa,
-                              isRemoved,
-                              isChecked: (isInLupa && !isRemoved) || isAdded
+                              labelStyles: Object.assign(
+                                {},
+                                labelClasses.isAdded ? isAdded : {},
+                                labelClasses.isInLupa ? isInLupa : {},
+                                labelClasses.isRemoved ? isRemoved : {}
+                              ),
+                              isChecked:
+                                (labelClasses.isInLupa &&
+                                  !labelClasses.isRemoved) ||
+                                labelClasses.isAdded
                             }
                           }
                         ]
@@ -109,13 +130,18 @@ const TutkintoList = props => {
             };
           })
         };
-      }),
-      changes: props.changes || []
-    };
-    return state;
-  }, [props.changes, getArticle, props.articles, props.koulutustyypit]);
+      });
+    },
+    [props.changes, props.koulutustyypit]
+  );
 
-  const [state] = useState(formState());
+  useEffect(() => {
+    setCategories(getCategories(getArticle(props.articles)));
+    setChanges(getChanges());
+  }, [getArticle, getChanges, getCategories, props.articles]);
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   return (
     <Wrapper>
@@ -125,12 +151,13 @@ const TutkintoList = props => {
           <span>{props.title}</span>
         </div>
         <span data-slot="info">
-          <NumberOfChanges changes={props.changes} />
+          <NumberOfChanges changes={changes} />
         </span>
         <div data-slot="content">
           <CategorizedListRoot
-            categories={state.categories}
-            changes={state.changes}
+            categories={categories}
+            changes={changes}
+            onUpdate={setChanges}
             showCategoryTitles={true}
           />
         </div>

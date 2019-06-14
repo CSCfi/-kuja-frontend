@@ -29,12 +29,11 @@ const Tyovoimakoulutukset = props => {
               code: item.code,
               title: item.title,
               isChecked: item.shouldBeChecked,
-              labelStyles: Object.assign(
-                {},
-                item.isAdded ? isAdded : {},
-                item.isInLupa ? isInLupa : {},
-                item.isRemoved ? isRemoved : {}
-              )
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved,
+                custom: Object({}, item.isInLupa ? isInLupa : {})
+              }
             }
           }
         ]
@@ -61,19 +60,20 @@ const Tyovoimakoulutukset = props => {
   }, [koulutuksetDispatch]);
 
   const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   return (
     <Wrapper>
       <ExpandableRow>
         <div data-slot="title">{TUTKINNOT_SECTIONS.TYOVOIMAT}</div>
         <div data-slot="info">
-          <NumberOfChanges changes={props.changes} />
+          <NumberOfChanges changes={changes} />
         </div>
         <div data-slot="content">
           <CategorizedListRoot
             categories={categories}
             changes={changes}
+            onUpdate={setChanges}
             showCategoryTitles={true}
           />
         </div>
