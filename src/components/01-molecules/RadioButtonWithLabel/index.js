@@ -1,24 +1,46 @@
 import React from "react";
 import PropTypes from "prop-types";
-import RadioButton from "../../00-atoms/RadioButton/RadioButton";
-
-import styles from  "./radio-button.module.css";
+import Radio from "@material-ui/core/Radio";
+import { makeStyles } from "@material-ui/styles";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { withStyles } from "@material-ui/core/styles";
+import { green } from "@material-ui/core/colors";
 
 const RadioButtonWithLabel = props => {
+  const styles = makeStyles({
+    label: props.labelStyles
+  })();
+  const GreenRadio = withStyles({
+    root: {
+      color: green[400],
+      "&$checked": {
+        color: green[600]
+      }
+    },
+    checked: {}
+  })(props => <Radio color="default" {...props} />);
+
   const handleChanges = () => {
-    props.onChanges(props.payload);
+    props.onChanges(props.payload, { isChecked: !props.isChecked });
   };
 
   return (
-    <label className={`${styles.container} flex`}>
-      <RadioButton
-        name={`radio-${props.name}`}
-        isChecked={props.isChecked}
-        onChanges={handleChanges}
+    <FormGroup row>
+      <FormControlLabel
+        classes={{
+          label: styles.label
+        }}
+        control={
+          <GreenRadio
+            checked={props.isChecked}
+            value={props.value}
+            onChange={handleChanges}
+          />
+        }
+        label={props.children}
       />
-      <span className={styles.checkmark} />
-      <span className="ml-4 pt-1">{props.children}</span>
-    </label>
+    </FormGroup>
   );
 };
 
@@ -26,7 +48,9 @@ RadioButtonWithLabel.propTypes = {
   isChecked: PropTypes.bool,
   name: PropTypes.string,
   onChanges: PropTypes.func,
-  payload: PropTypes.object
+  payload: PropTypes.object,
+  labelStyles: PropTypes.object,
+  value: PropTypes.string
 };
 
 export default RadioButtonWithLabel;

@@ -7,7 +7,13 @@ import { isInLupa, isAdded, isRemoved } from "../../../css/label";
 storiesOf("CheckboxWithLabel", module)
   .addDecorator(withInfo)
   .add("is unchecked", () => (
-    <CheckboxWithLabel name="example" isChecked={false}>
+    <CheckboxWithLabel
+      name="example"
+      isChecked={false}
+      onChanges={() => {
+        console.info("Clicked!");
+      }}
+    >
       Is unchecked
     </CheckboxWithLabel>
   ))

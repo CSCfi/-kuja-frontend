@@ -3,31 +3,57 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
-import SelectableItem from "components/02-organisms/SelectableItem";
 import { MUUT_KEYS } from "../../modules/constants";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
+import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import * as R from "ramda";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
-  const [state, setState] = useState({});
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
 
+  const getCategories = koulutusData => {
+    const categories = R.map(item => {
+      return {
+        components: [
+          {
+            name: "CheckboxWithLabel",
+            properties: {
+              name: "CheckboxWithLabel",
+              code: item.code,
+              title: item.title,
+              isChecked: item.shouldBeChecked,
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved,
+                custom: Object({}, item.isInLupa ? isInLupa : {})
+              }
+            }
+          }
+        ]
+      };
+    }, koulutusData.items);
+    return categories;
+  };
+
   useEffect(() => {
     if (
-      _.indexOf(
-        koulutukset.muut.fetched,
-        "ammatilliseentehtavaanvalmistavakoulutus"
-      ) !== -1
+      R.includes(
+        "ammatilliseentehtavaanvalmistavakoulutus",
+        koulutukset.muut.fetched
+      )
     ) {
-      setState(
-        getDataForKoulutusList(
-          koulutukset.muut.muudata.ammatilliseentehtavaanvalmistavakoulutus,
-          props.changes
+      setCategories(
+        getCategories(
+          getDataForKoulutusList(
+            koulutukset.muut.muudata.ammatilliseentehtavaanvalmistavakoulutus,
+            props.changes
+          )
         )
       );
     }
@@ -39,9 +65,8 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
     );
   }, [koulutuksetDispatch]);
 
-  const handleChanges = item => {
-    props.onChanges(item, "ammatilliseentehtavaanvalmistavakoulutus");
-  };
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   return (
     <Wrapper>
@@ -50,18 +75,15 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
           <span>{TUTKINNOT_SECTIONS.VALMISTAVAT}</span>
         </div>
         <div data-slot="info">
-          <NumberOfChanges changes={props.changes} />
+          <NumberOfChanges changes={changes} />
         </div>
         <div data-slot="content">
-          <div className="py-4">
-            {_.map(state.items, (item, i) => {
-              return (
-                <div key={`item-${i}`} className="mx-6 px-1 py-2">
-                  <SelectableItem item={item} onChanges={handleChanges} />
-                </div>
-              );
-            })}
-          </div>
+          <CategorizedListRoot
+            categories={categories}
+            changes={changes}
+            onUpdate={setChanges}
+            showCategoryTitles={true}
+          />
         </div>
       </ExpandableRow>
     </Wrapper>

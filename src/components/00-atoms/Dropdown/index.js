@@ -8,7 +8,8 @@ const selectCustomStyles = {
   control: provided => ({
     ...provided,
     height: "34px",
-    minHeight: "34px"
+    minHeight: "34px",
+    minWidth: "200px"
   }),
   indicatorsContainer: provided => ({
     ...provided,
@@ -20,6 +21,7 @@ const selectCustomStyles = {
 const Dropdown = props => {
   return (
     <Select
+      autosize={false}
       name={props.name}
       value={props.value}
       onChange={props.onChanges}

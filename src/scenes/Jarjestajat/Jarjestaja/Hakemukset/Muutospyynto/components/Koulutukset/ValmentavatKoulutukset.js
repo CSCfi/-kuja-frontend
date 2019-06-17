@@ -4,23 +4,48 @@ import { KoulutuksetContext } from "context/koulutuksetContext";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import { Wrapper } from "../MuutospyyntoWizardComponents";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
-import SelectableItem from "components/02-organisms/SelectableItem";
 import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
 import NumberOfChanges from "components/00-atoms/NumberOfChanges";
+import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import * as R from "ramda";
 
 const ValmentavatKoulutukset = props => {
-  const koodisto = "valmentavat";
-  const [state, setState] = useState({});
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
 
+  const getCategories = koulutusData => {
+    const categories = R.map(item => {
+      return {
+        components: [
+          {
+            name: "CheckboxWithLabel",
+            properties: {
+              name: "CheckboxWithLabel",
+              code: item.code,
+              title: item.title,
+              isChecked: item.shouldBeChecked,
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved,
+                custom: Object({}, item.isInLupa ? isInLupa : {})
+              }
+            }
+          }
+        ]
+      };
+    }, koulutusData.items);
+    return categories;
+  };
+
   useEffect(() => {
     if (koulutukset.poikkeukset.fetched.length === 2) {
-      setState(
-        getDataForKoulutusList(koulutukset.poikkeukset.data, props.changes)
+      setCategories(
+        getCategories(
+          getDataForKoulutusList(koulutukset.poikkeukset.data, props.changes)
+        )
       );
     }
   }, [koulutukset.poikkeukset, props.changes]);
@@ -30,9 +55,8 @@ const ValmentavatKoulutukset = props => {
     fetchKoulutus("999903")(koulutuksetDispatch);
   }, [koulutuksetDispatch]);
 
-  const handleChanges = item => {
-    props.onChanges(item, koodisto);
-  };
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   return (
     <Wrapper>
@@ -41,18 +65,15 @@ const ValmentavatKoulutukset = props => {
           <span>{TUTKINNOT_SECTIONS.POIKKEUKSET}</span>
         </div>
         <div data-slot="info">
-          <NumberOfChanges changes={props.changes} />
+          <NumberOfChanges changes={changes} />
         </div>
         <div data-slot="content">
-          <div className="py-4">
-            {_.map(state.items, (item, i) => {
-              return (
-                <div key={`item-${i}`} className="mx-6 px-1 py-2">
-                  <SelectableItem item={item} onChanges={handleChanges} />
-                </div>
-              );
-            })}
-          </div>
+          <CategorizedListRoot
+            categories={categories}
+            changes={changes}
+            onUpdate={setChanges}
+            showCategoryTitles={true}
+          />
         </div>
       </ExpandableRow>
     </Wrapper>

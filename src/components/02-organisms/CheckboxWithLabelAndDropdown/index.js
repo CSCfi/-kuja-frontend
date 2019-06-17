@@ -1,21 +1,13 @@
-import React from "./node_modules/react";
-import PropTypes from "./node_modules/prop-types";
+import React from "react";
+import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../01-molecules/CheckboxWithLabel";
-import Dropdown from "../../00-atoms/Dropdown/Dropdown";
+import Dropdown from "../../00-atoms/Dropdown";
 
 const CheckboxWithLabelAndDropdown = props => {
   const handleCheckboxChange = () => {
     props.onChanges(props.item);
   };
-
-  const handleSelectChange = () => {
-    props.onChanges(props.item, true);
-  };
-
-  const handleSubCheckboxChange = () => {
-    props.onChanges(props.item, true);
-  };
-
+  
   const options = [
     { value: "chocolate", label: "Chocolate" },
     { value: "strawberry", label: "Strawberry" },
@@ -26,14 +18,10 @@ const CheckboxWithLabelAndDropdown = props => {
     <div>
       <div className="flex items-center justify-between">
         <CheckboxWithLabel
-          name={props.item.code}
+          name={`checkboxWithLabel-${props.item.code}`}
           isChecked={props.item.shouldBeSelected}
           onChanges={handleCheckboxChange}
-          labelClasses={[
-            props.item.isAdded && "is-added",
-            props.item.isRemoved && "is-removed",
-            props.item.isInLupa && "is-in-lupa"
-          ]}
+          labelStyles={props.labelStyles}
         >
           <span className="ml-4">{props.item.code}</span>
           <span className="ml-4">{props.item.title}</span>
@@ -51,7 +39,9 @@ const CheckboxWithLabelAndDropdown = props => {
 
 CheckboxWithLabelAndDropdown.propTypes = {
   item: PropTypes.object,
-  onChanges: PropTypes.func
+  onChanges: PropTypes.func,
+  options: PropTypes.array,
+  labelStyles: PropTypes.object
 };
 
 export default CheckboxWithLabelAndDropdown;

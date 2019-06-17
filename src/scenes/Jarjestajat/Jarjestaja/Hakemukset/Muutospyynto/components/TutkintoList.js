@@ -1,107 +1,147 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ExpandableRow from "components/01-molecules/ExpandableRow";
 import { Wrapper } from "./MuutospyyntoWizardComponents";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
-import CategorizedList from "components/02-organisms/CategorizedList";
-import { COLORS } from "modules/styles";
+import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import NumberOfChanges from "components/00-atoms/NumberOfChanges";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../css/label";
 import _ from "lodash";
 
 const TutkintoList = props => {
+  const getArticle = useCallback(
+    articles => {
+      return _.find(articles, article => {
+        return article.koodi === props.areaCode;
+      });
+    },
+    [props.areaCode]
+  );
 
-  const getArticle = useCallback(articles => {
-    return _.find(articles, article => {
-      return article.koodi === props.areaCode;
-    });
-  }, [props.areaCode]);
+  const getChanges = useCallback(() => {
+    console.info(props.changes);
+    return [];
+  }, [props.changes]);
 
-  const formState = useCallback(() => {
-    const article = getArticle(props.articles);
-    const state = {
-      article,
-      categories: _.map(props.koulutustyypit, koulutustyyppi => {
+  const getCategories = useCallback(
+    article => {
+      return _.map(props.koulutustyypit, koulutustyyppi => {
         return {
-          code: koulutustyyppi.koodiArvo,
+          // code: koulutustyyppi.koodiArvo,
           title:
             _.find(koulutustyyppi.metadata, m => {
               return m.kieli === "FI";
             }).nimi || "[Koulutustyypin otsikko tähän]",
-          items: _.map(koulutustyyppi.koulutukset, koulutus => {
-            const isAdded = !!_.find(
-              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-              { type: MUUTOS_TYPES.ADDITION }
-            );
-            const isInLupa = article
-              ? !!_.find(article.koulutusalat, koulutusala => {
-                  return !!_.find(koulutusala.koulutukset, {
-                    koodi: koulutus.koodiArvo
-                  });
-                })
-              : false;
-            const isRemoved = !!_.find(
-              _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-              { type: MUUTOS_TYPES.REMOVAL }
-            );
+          categories: _.map(koulutustyyppi.koulutukset, koulutus => {
+            const labelClasses = {
+              isAdded: !!_.find(
+                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
+                { type: MUUTOS_TYPES.ADDITION }
+              ),
+              isInLupa: article
+                ? !!_.find(article.koulutusalat, koulutusala => {
+                    return !!_.find(koulutusala.koulutukset, {
+                      koodi: koulutus.koodiArvo
+                    });
+                  })
+                : false,
+              isRemoved: !!_.find(
+                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
+                { type: MUUTOS_TYPES.REMOVAL }
+              )
+            };
             return {
-              code: koulutus.koodiArvo,
-              title:
-                _.find(koulutus.metadata, m => {
-                  return m.kieli === "FI";
-                }).nimi || "[Koulutuksen otsikko tähän]",
-              isAdded,
-              isInLupa,
-              isRemoved,
-              shouldBeSelected: (isInLupa && !isRemoved) || isAdded,
-              subItems: koulutus.osaamisala
-                ? (osaamisala => {
-                    const isAdded = !!_.find(
-                      _.filter(props.changes, {
-                        koodiArvo: osaamisala.koodiArvo
-                      }),
-                      { type: MUUTOS_TYPES.ADDITION }
-                    );
-                    const isInLupa = article
-                      ? !!_.find(article.koulutusalat, koulutusala => {
-                          return !!_.find(koulutusala.koulutukset, {
-                            koodi: osaamisala.koodiArvo
-                          });
-                        })
-                      : false;
-                    const isRemoved = !!_.find(
-                      _.filter(props.changes, {
-                        koodiarvo: osaamisala.koodiArvo
-                      }),
-                      { type: MUUTOS_TYPES.REMOVAL }
-                    );
-                    return [
-                      {
-                        code: osaamisala.koodiArvo,
-                        title:
-                          _.find(osaamisala.metadata, m => {
-                            return m.kieli === "FI";
-                          }).nimi || "[Osaamisalan otsikko tähän]",
-                        isAdded,
-                        isInLupa,
-                        isRemoved,
-                        shouldBeSelected: (isInLupa && !isRemoved) || isAdded
-                      }
-                    ];
-                  })(koulutus.osaamisala)
+              components: [
+                {
+                  name: "CheckboxWithLabel",
+                  properties: {
+                    name: "CheckboxWithLabel",
+                    code: koulutus.koodiArvo,
+                    title:
+                      _.find(koulutus.metadata, m => {
+                        return m.kieli === "FI";
+                      }).nimi || "[Koulutuksen otsikko tähän]",
+                    labelStyles: {
+                      addition: isAdded,
+                      removal: isRemoved,
+                      custom: Object.assign(
+                        {},
+                        labelClasses.isInLupa ? isInLupa : {}
+                      )
+                    },
+                    isChecked:
+                      (labelClasses.isInLupa && !labelClasses.isRemoved) ||
+                      labelClasses.isAdded
+                  }
+                }
+              ],
+              categories: koulutus.osaamisala
+                ? [
+                    (osaamisala => {
+                      const labelClasses = {
+                        isAdded: !!_.find(
+                          _.filter(props.changes, {
+                            koodiArvo: osaamisala.koodiArvo
+                          }),
+                          { type: MUUTOS_TYPES.ADDITION }
+                        ),
+                        isInLupa: article
+                          ? !!_.find(article.koulutusalat, koulutusala => {
+                              return !!_.find(koulutusala.koulutukset, {
+                                koodi: osaamisala.koodiArvo
+                              });
+                            })
+                          : false,
+                        isRemoved: !!_.find(
+                          _.filter(props.changes, {
+                            koodiarvo: osaamisala.koodiArvo
+                          }),
+                          { type: MUUTOS_TYPES.REMOVAL }
+                        )
+                      };
+                      return {
+                        components: [
+                          {
+                            name: "CheckboxWithLabel",
+                            properties: {
+                              name: "CheckboxWithLabel",
+                              code: osaamisala.koodiArvo,
+                              title:
+                                _.find(osaamisala.metadata, m => {
+                                  return m.kieli === "FI";
+                                }).nimi || "[Osaamisalan otsikko tähän]",
+                              labelStyles: Object.assign(
+                                {},
+                                labelClasses.isAdded ? isAdded : {},
+                                labelClasses.isInLupa ? isInLupa : {},
+                                labelClasses.isRemoved ? isRemoved : {}
+                              ),
+                              isChecked:
+                                (labelClasses.isInLupa &&
+                                  !labelClasses.isRemoved) ||
+                                labelClasses.isAdded
+                            }
+                          }
+                        ]
+                      };
+                    })(koulutus.osaamisala)
+                  ]
                 : []
             };
           })
         };
-      }),
-      changes: props.changes || []
-    };
-    return state;
-  }, [props.changes, getArticle, props.articles, props.koulutustyypit]);
+      });
+    },
+    [props.changes, props.koulutustyypit]
+  );
 
-  const [state] = useState(formState());
+  useEffect(() => {
+    setCategories(getCategories(getArticle(props.articles)));
+    setChanges(getChanges());
+  }, [getArticle, getChanges, getCategories, props.articles]);
 
-  const onChanges = (item, isSubItemTarget) => {
-    props.onChanges(item, isSubItemTarget, props.listId);
-  };
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   return (
     <Wrapper>
@@ -111,21 +151,14 @@ const TutkintoList = props => {
           <span>{props.title}</span>
         </div>
         <span data-slot="info">
-          {props.changes && props.changes.length ? (
-            <div>
-              Muutokset:&nbsp;
-              <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
-            </div>
-          ) : null}
+          <NumberOfChanges changes={changes} />
         </span>
         <div data-slot="content">
-          <CategorizedList
-            categories={state.categories}
-            changes={state.changes}
-            code={props.koodiarvo}
-            onChanges={onChanges}
-            shouldBeExpanded={false}
-            title={props.title}
+          <CategorizedListRoot
+            categories={categories}
+            changes={changes}
+            onUpdate={setChanges}
+            showCategoryTitles={true}
           />
         </div>
       </ExpandableRow>

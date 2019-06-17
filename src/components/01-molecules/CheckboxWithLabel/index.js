@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/styles";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -10,10 +10,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
  * Label and checkbox united.
  */
 const CheckboxWithLabel = props => {
-  const [state, setState] = useState({
-    isChecked: props.isChecked
-  });
-
   const styles = makeStyles({
     root: {
       color: green[600],
@@ -26,10 +22,7 @@ const CheckboxWithLabel = props => {
   })();
 
   const handleChanges = () => {
-    setState({
-      isChecked: !state.isChecked
-    });
-    props.onChanges(props.payload);
+    props.onChanges(props.payload, { isChecked: !props.isChecked });
   };
 
   return (
@@ -40,7 +33,7 @@ const CheckboxWithLabel = props => {
         }}
         control={
           <Checkbox
-            checked={state.isChecked}
+            checked={props.isChecked}
             value="1"
             onChange={handleChanges}
             classes={{
