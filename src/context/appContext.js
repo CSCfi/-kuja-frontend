@@ -3,10 +3,16 @@ import reducer from "services/app/reducer";
 import { languages } from "../i18n/supportedLanguages";
 import * as R from "ramda";
 
-const tmpLocale = navigator.language.split("-")[0];
+const sessionLocale = sessionStorage.getItem("locale");
+const navigatorLocale = navigator.language.split("-")[0];
+const currentLocale =
+  sessionLocale ||
+  (navigatorLocale && R.contains(navigatorLocale, languages)
+    ? navigatorLocale
+    : "fi");
 
 const initialState = {
-  locale: R.contains(tmpLocale, languages) ? tmpLocale : "fi"
+  locale: currentLocale
 };
 
 const AppContext = React.createContext(initialState);

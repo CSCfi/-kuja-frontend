@@ -1,4 +1,3 @@
-import { getKieliList } from "./kieliUtil";
 import { sortOpetuskielet } from "./opetuskieletUtil";
 import {
   FETCH_KIELET_START,
@@ -25,7 +24,7 @@ export default function(state, action) {
         fetched: true,
         hasErrored: false,
         data: {
-          kielet: getKieliList(action.payload, "FI"),
+          kielet: action.payload,
           kieletRaw: action.payload
         }
       };

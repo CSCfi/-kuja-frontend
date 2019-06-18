@@ -1,13 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import ExpandableRow from "components/01-molecules/ExpandableRow";
-import { getDataForOpetuskieletList } from "services/kielet/opetuskieletUtil";
-import { MUUTOS_WIZARD_TEKSTIT } from "../../modules/constants";
+import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { KieletContext } from "context/kieletContext";
 import { fetchOppilaitoksenOpetuskielet } from "services/kielet/actions";
-import { Wrapper } from "../MuutospyyntoWizardComponents";
-import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
-import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -42,46 +40,35 @@ const Opetuskielet = props => {
         getDataForOpetuskieletList(
           kielet.data.opetuskielet,
           props.kohde,
-          props.changes
+          props.changes,
+          props.intl.locale
         )
       )
     );
-  }, [kielet, props.changes, props.kohde, getCategories]);
+  }, [kielet, props.changes, props.kohde, getCategories, props.intl.locale]);
 
   useEffect(() => {
     fetchOppilaitoksenOpetuskielet()(dispatch);
   }, [dispatch]);
 
   const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const [changes] = useState([]);
 
   return (
-    <Wrapper>
-      <ExpandableRow shouldBeExpanded={true}>
-        <div data-slot="title">
-          {MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPETUSKIELET.HEADING.FI}
-        </div>
-        <div data-slot="info">
-          <NumberOfChanges changes={changes} />
-        </div>
-        <div data-slot="content">
-          <CategorizedListRoot
-            categories={categories}
-            changes={changes}
-            onUpdate={setChanges}
-            showCategoryTitles={true}
-          />
-        </div>
-      </ExpandableRow>
-    </Wrapper>
+    <ExpandableRowRoot
+      key={`expandable-row-root`}
+      categories={categories}
+      changes={changes}
+      title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
+      isExpanded={true}
+    />
   );
 };
 
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
-  listId: PropTypes.string,
   onChanges: PropTypes.func,
   kohde: PropTypes.object
 };
 
-export default Opetuskielet;
+export default injectIntl(Opetuskielet);

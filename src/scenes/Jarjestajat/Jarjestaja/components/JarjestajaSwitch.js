@@ -3,10 +3,11 @@ import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
 import { MuutospyynnotContext } from "context/muutospyynnotContext";
 import { LuvatContext } from "context/luvatContext";
-import { fetchLupa } from "services/luvat/actions";
+import { fetchLupa } from "../../../../services/luvat/actions";
 import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
 import MuutospyyntoWizard from "../Hakemukset/Muutospyynto/components/MuutospyyntoWizard";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
+import { injectIntl } from "react-intl";
 
 const JarjestajaSwitch = props => {
   const { state: lupa, dispatch: luvatDispatch } = useContext(LuvatContext);
@@ -14,11 +15,14 @@ const JarjestajaSwitch = props => {
     MuutospyynnotContext
   );
   const { ytunnus } = props.match.params;
+  const {
+    intl: { formatMessage }
+  } = props;
 
   useEffect(() => {
-    fetchLupa(ytunnus, "?with=all")(luvatDispatch);
+    fetchLupa(ytunnus, "?with=all", formatMessage)(luvatDispatch);
     fetchMuutospyynnot(ytunnus)(muutospyynnotDispatch);
-  }, [ytunnus, luvatDispatch, muutospyynnotDispatch]);
+  }, [ytunnus, luvatDispatch, muutospyynnotDispatch, formatMessage]);
 
   return (
     <React.Fragment>
@@ -54,4 +58,4 @@ const JarjestajaSwitch = props => {
   );
 };
 
-export default JarjestajaSwitch;
+export default injectIntl(JarjestajaSwitch);

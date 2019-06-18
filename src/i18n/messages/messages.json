@@ -50,6 +50,71 @@
     "filepath": "src/i18n/definitions/user.js"
   },
   {
+    "id": "wizard.info_01",
+    "defaultMessage": "Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.info_02",
+    "defaultMessage": "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.formTitle_new",
+    "defaultMessage": "Uusi hakemus",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.pageTitle_1",
+    "defaultMessage": "Uusi muutoshakemus",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.pageTitle_2",
+    "defaultMessage": "Perustelut",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.pageTitle_3",
+    "defaultMessage": "Taloudelliset edellytykset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.pageTitle_4",
+    "defaultMessage": "Yhteenveto",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.sectionTitle_1",
+    "defaultMessage": "Tutkinnot ja koulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.teachingLanguages",
+    "defaultMessage": "Opetuskielet",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.preparatoryTraining",
+    "defaultMessage": "Valmentavat koulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.driverTraining",
+    "defaultMessage": "Kuljettajakoulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.workforceTraining",
+    "defaultMessage": "Työvoimakoulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.vocationalTraining",
+    "defaultMessage": "Työvoimakoulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"

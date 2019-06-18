@@ -1,36 +1,42 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import { parseLocalizedField } from "../../../../../../../modules/helpers";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
+import { MUUTOS_TYPES } from "../../modules/uusiHakemusFormConstants";
+import Section from "../../../../../../../components/03-templates/Section";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import ExpandableRow from "components/01-molecules/ExpandableRow";
-import { Wrapper } from "./MuutospyyntoWizardComponents";
-import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
-import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
-import NumberOfChanges from "components/00-atoms/NumberOfChanges";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../css/label";
+import * as R from "ramda";
 import _ from "lodash";
 
-const TutkintoList = props => {
-  const getArticle = useCallback(
-    articles => {
-      return _.find(articles, article => {
-        return article.koodi === props.areaCode;
-      });
-    },
-    [props.areaCode]
-  );
+const Tutkinnot = props => {
+  const [koulutusdata, setKoulutusdata] = useState([]);
+  const [locale, setLocale] = useState([]);
 
-  const getChanges = useCallback(() => {
-    console.info(props.changes);
-    return [];
-  }, [props.changes]);
+  useEffect(() => {
+    setKoulutusdata(
+      R.sortBy(R.prop("koodiArvo"), R.values(props.koulutukset.koulutusdata))
+    );
+  }, [props.koulutukset]);
 
-  const getCategories = useCallback(
-    article => {
-      return _.map(props.koulutustyypit, koulutustyyppi => {
+  useEffect(() => {
+    setLocale(R.toUpper(props.intl.locale));
+  }, [props.intl.locale]);
+
+  const getArticle = (areaCode, articles = []) => {
+    return R.find(article => {
+      return article.koodi === areaCode;
+    }, articles);
+  };
+
+  const getCategories = (article, koulutustyypit) => {
+    return R.values(
+      R.map(koulutustyyppi => {
         return {
-          // code: koulutustyyppi.koodiArvo,
+          code: koulutustyyppi.koodiArvo,
           title:
             _.find(koulutustyyppi.metadata, m => {
-              return m.kieli === "FI";
+              return m.kieli === locale;
             }).nimi || "[Koulutustyypin otsikko tähän]",
           categories: _.map(koulutustyyppi.koulutukset, koulutus => {
             const labelClasses = {
@@ -50,6 +56,7 @@ const TutkintoList = props => {
                 { type: MUUTOS_TYPES.REMOVAL }
               )
             };
+
             return {
               components: [
                 {
@@ -59,7 +66,7 @@ const TutkintoList = props => {
                     code: koulutus.koodiArvo,
                     title:
                       _.find(koulutus.metadata, m => {
-                        return m.kieli === "FI";
+                        return m.kieli === locale;
                       }).nimi || "[Koulutuksen otsikko tähän]",
                     labelStyles: {
                       addition: isAdded,
@@ -130,51 +137,39 @@ const TutkintoList = props => {
             };
           })
         };
-      });
-    },
-    [props.changes, props.koulutustyypit]
-  );
-
-  useEffect(() => {
-    setCategories(getCategories(getArticle(props.articles)));
-    setChanges(getChanges());
-  }, [getArticle, getChanges, getCategories, props.articles]);
-
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+      }, koulutustyypit)
+    );
+  };
 
   return (
-    <Wrapper>
-      <ExpandableRow>
-        <div data-slot="title">
-          {props.koodiarvo && <span className="pr-6">{props.koodiarvo}</span>}
-          <span>{props.title}</span>
-        </div>
-        <span data-slot="info">
-          <NumberOfChanges changes={changes} />
-        </span>
-        <div data-slot="content">
-          <CategorizedListRoot
-            categories={categories}
-            changes={changes}
-            onUpdate={setChanges}
-            showCategoryTitles={true}
+    <Section code={props.lupa.kohteet[1].headingNumber} title={props.lupa.kohteet[1].heading}>
+      {R.addIndex(R.map)((koulutusala, i) => {
+        const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
+        const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+        const title = parseLocalizedField(
+          koulutusala.metadata,
+          R.toUpper(props.intl.locale)
+        );
+        return (
+          <ExpandableRowRoot
+            key={`expandable-row-root-${i}`}
+            categories={getCategories(article, koulutusala.koulutukset)}
+            changes={[]}
+            code={areaCode}
+            title={title}
           />
-        </div>
-      </ExpandableRow>
-    </Wrapper>
+        );
+      }, koulutusdata)}
+    </Section>
   );
 };
 
-TutkintoList.propTypes = {
-  areaCode: PropTypes.string,
-  articles: PropTypes.array,
-  changes: PropTypes.array,
-  fields: PropTypes.object,
-  koulutustyypit: PropTypes.object,
-  title: PropTypes.string,
-  onChanges: PropTypes.func,
-  listId: PropTypes.string
+Tutkinnot.propTypes = {
+  koulutukset: PropTypes.object,
+  koulutusalat: PropTypes.object,
+  koulutustyypit: PropTypes.array,
+  lupa: PropTypes.object,
+  onChanges: PropTypes.func
 };
 
-export default TutkintoList;
+export default injectIntl(Tutkinnot);

@@ -1,11 +1,16 @@
-import React from "react";
-import TutkintoList from "../TutkintoList";
+import React, { useContext, useEffect } from "react";
+import TutkintokieliList from "./TutkintokieliList";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
+import { fetchKielet } from "../../../../../../../services/kielet/actions";
+import { KieletContext } from "../../../../../../../context/kieletContext";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
 const Tutkintokielet = props => {
-  const sectionId = "tutkintokielet";
+  const { state: languages, dispatch: languagesDispatch } = useContext(
+    KieletContext
+  );
   const { lupa } = props;
   const { kohteet } = lupa;
   const koulutusdata = props.koulutukset.koulutusdata;
@@ -13,9 +18,9 @@ const Tutkintokielet = props => {
     return d.koodiArvo;
   });
 
-  const handleChanges = (item, isSubItemTarget, listId) => {
-    props.onChanges(item, listId, sectionId);
-  };
+  useEffect(() => {
+    fetchKielet(props.intl.locale)(languagesDispatch);
+  }, [languagesDispatch, props.intl.locale]);
 
   return (
     <React.Fragment>
@@ -24,16 +29,17 @@ const Tutkintokielet = props => {
         const { metadata, koulutukset } = koulutusala;
         const nimi = parseLocalizedField(metadata);
         return (
-          <TutkintoList
+          <TutkintokieliList
             key={i}
             koodiarvo={koodiarvo}
             areaCode={koodiarvo}
             title={nimi}
             koulutustyypit={koulutukset}
+            kielet={languages ? languages.data.kielet : []}
             articles={kohteet[1].maaraykset}
             changes={props.changes ? props.changes[koodiarvo] : []}
-            onChanges={handleChanges}
             listId={koodiarvo}
+            locale={props.intl.locale}
           />
         );
       })}
@@ -47,4 +53,4 @@ Tutkintokielet.propTypes = {
   onChanges: PropTypes.func
 };
 
-export default Tutkintokielet;
+export default injectIntl(Tutkintokielet);

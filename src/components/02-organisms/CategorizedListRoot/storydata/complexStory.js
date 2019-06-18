@@ -36,17 +36,19 @@ export const complexStory = {
       }
     },
     {
-      path: [0, "categories", 1, "categories", 0, "components", 1],
+      path: [0, "categories", 0, "categories", 1, "components", 1],
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        selectedOption: {
+          label: "Strawberry",
+          value: "strawberry"
+        }
       }
     }
   ],
   categories: [
     {
-      code: "01",
-      title: "Category 1",
+      code: "0",
+      title: "Categories",
       components: [
         {
           name: "CheckboxWithLabel",
@@ -73,8 +75,8 @@ export const complexStory = {
       ],
       categories: [
         {
-          code: "01",
-          title: "Sub category",
+          code: "0",
+          title: "Categories",
           components: [
             {
               name: "RadioButtonWithLabel",
@@ -90,8 +92,8 @@ export const complexStory = {
           ],
           categories: [
             {
-              code: "01",
-              title: "Leaf node category",
+              code: "0",
+              title: "Categories",
               components: [
                 {
                   name: "CheckboxWithLabel",
@@ -108,8 +110,8 @@ export const complexStory = {
               ]
             },
             {
-              code: "02",
-              title: "Leaf node category",
+              code: "1",
+              title: "Categories",
               components: [
                 {
                   name: "CheckboxWithLabel",
@@ -131,8 +133,7 @@ export const complexStory = {
                         label: "Strawberry"
                       },
                       { value: "vanilla", label: "Vanilla" }
-                    ],
-                    isChecked: true
+                    ]
                   }
                 }
               ]
@@ -140,8 +141,8 @@ export const complexStory = {
           ]
         },
         {
-          code: "02",
-          title: "Sub category",
+          code: "1",
+          title: "Categories",
           components: [
             {
               name: "RadioButtonWithLabel",
@@ -157,8 +158,8 @@ export const complexStory = {
           ]
         },
         {
-          code: "03",
-          title: "Sub category",
+          code: "2",
+          title: "Categories",
           components: [
             {
               name: "CheckboxWithLabel",
@@ -176,8 +177,8 @@ export const complexStory = {
       ]
     },
     {
-      code: "02",
-      title: "Category",
+      code: "1",
+      title: "Categories",
       components: [
         {
           name: "CheckboxWithLabel",
@@ -192,8 +193,8 @@ export const complexStory = {
       ]
     },
     {
-      code: "03",
-      title: "Category",
+      code: "2",
+      title: "Categories",
       components: [
         {
           name: "CheckboxWithLabel",

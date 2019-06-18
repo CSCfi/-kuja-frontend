@@ -5,7 +5,7 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  data: {},
+  koulutusdata: {},
   muut: {
     isFetching: false,
     fetched: [],

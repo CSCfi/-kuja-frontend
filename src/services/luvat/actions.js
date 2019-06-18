@@ -6,7 +6,7 @@ import {
   FETCH_LUPA_FAILURE
 } from "./actionTypes";
 
-export function fetchLupa(ytunnus, query) {
+export function fetchLupa(ytunnus, query, formatMessage) {
   return dispatch => {
     dispatch({ type: FETCH_LUPA_START });
 
@@ -19,7 +19,10 @@ export function fetchLupa(ytunnus, query) {
     request
       .then(response => response.json())
       .then(data => {
-        dispatch({ type: FETCH_LUPA_SUCCESS, payload: data });
+        dispatch({
+          type: FETCH_LUPA_SUCCESS,
+          payload: { data, formatMessage }
+        });
       })
       .catch(err => dispatch({ type: FETCH_LUPA_FAILURE, payload: err }));
   };

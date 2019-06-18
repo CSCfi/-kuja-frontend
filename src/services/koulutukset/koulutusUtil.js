@@ -6,9 +6,9 @@ import { MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muu
 import { meta_kuljettaja_jatko, meta_kuljettaja_perus, meta_oppisopimus, meta_tyovoima, meta_vaativa, meta_vankila } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/lisaperusteluUtil"
 
 
-export function getDataForKoulutusList(koulutukset, changes = []) {
+export function getDataForKoulutusList(koulutukset, changes = [], locale) {
   return {
-    items: _.map(koulutukset, (koulutus, i) => {
+    items: _.map(koulutukset, koulutus => {
       const isAdded = !!_.find(
         _.filter(changes, { koodiarvo: koulutus.koodiArvo }),
         { type: MUUTOS_TYPES.ADDITION }
@@ -24,7 +24,7 @@ export function getDataForKoulutusList(koulutukset, changes = []) {
         shouldBeSelected: isAdded,
         title:
           _.find(koulutus.metadata, m => {
-            return m.kieli === "FI";
+            return m.kieli === locale;
           }).nimi || "[Koulutuksen otsikko tähän]"
       };
     }),

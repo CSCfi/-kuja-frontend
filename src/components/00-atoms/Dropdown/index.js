@@ -19,12 +19,16 @@ const selectCustomStyles = {
 };
 
 const Dropdown = props => {
+  const handleChanges = (selectedOption) => {
+    props.onChanges(props.payload, { selectedOption });
+  };
+
   return (
     <Select
       autosize={false}
       name={props.name}
       value={props.value}
-      onChange={props.onChanges}
+      onChange={handleChanges}
       options={props.options}
       isDisabled={props.isDisabled}
       placeholder={props.placeholder}

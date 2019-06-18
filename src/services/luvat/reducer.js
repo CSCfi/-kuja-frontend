@@ -21,8 +21,8 @@ export default function(state, action) {
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        data: action.payload,
-        kohteet: parseLupa(action.payload)
+        data: action.payload.data,
+        kohteet: parseLupa(action.payload.data, action.payload.formatMessage)
       };
     case FETCH_LUPA_FAILURE:
       return {

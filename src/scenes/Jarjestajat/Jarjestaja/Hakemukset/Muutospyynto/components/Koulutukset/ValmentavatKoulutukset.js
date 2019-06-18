@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { fetchKoulutus } from "services/koulutukset/actions";
 import { KoulutuksetContext } from "context/koulutuksetContext";
-import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
-import { Wrapper } from "../MuutospyyntoWizardComponents";
-import ExpandableRow from "components/01-molecules/ExpandableRow";
-import { TUTKINNOT_SECTIONS } from "../../../../modules/constants";
-import NumberOfChanges from "components/00-atoms/NumberOfChanges";
-import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
+import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -44,11 +42,15 @@ const ValmentavatKoulutukset = props => {
     if (koulutukset.poikkeukset.fetched.length === 2) {
       setCategories(
         getCategories(
-          getDataForKoulutusList(koulutukset.poikkeukset.data, props.changes)
+          getDataForKoulutusList(
+            koulutukset.poikkeukset.data,
+            props.changes,
+            R.toUpper(props.intl.locale)
+          )
         )
       );
     }
-  }, [koulutukset.poikkeukset, props.changes]);
+  }, [koulutukset.poikkeukset, props.changes, props.intl]);
 
   useEffect(() => {
     fetchKoulutus("999901")(koulutuksetDispatch);
@@ -56,27 +58,15 @@ const ValmentavatKoulutukset = props => {
   }, [koulutuksetDispatch]);
 
   const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const [changes] = useState([]);
 
   return (
-    <Wrapper>
-      <ExpandableRow>
-        <div data-slot="title">
-          <span>{TUTKINNOT_SECTIONS.POIKKEUKSET}</span>
-        </div>
-        <div data-slot="info">
-          <NumberOfChanges changes={changes} />
-        </div>
-        <div data-slot="content">
-          <CategorizedListRoot
-            categories={categories}
-            changes={changes}
-            onUpdate={setChanges}
-            showCategoryTitles={true}
-          />
-        </div>
-      </ExpandableRow>
-    </Wrapper>
+    <ExpandableRowRoot
+      key={`expandable-row-root`}
+      categories={categories}
+      changes={changes}
+      title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+    />
   );
 };
 
@@ -85,4 +75,4 @@ ValmentavatKoulutukset.propTypes = {
   onChanges: PropTypes.func
 };
 
-export default ValmentavatKoulutukset;
+export default injectIntl(ValmentavatKoulutukset);

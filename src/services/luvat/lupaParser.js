@@ -1,3 +1,4 @@
+import wizardMessages from "../../i18n/definitions/wizard";
 import _ from "lodash";
 import {
   KOHTEET,
@@ -8,14 +9,16 @@ import {
 } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
 import { parseLocalizedField } from "../../modules/helpers";
 
-export const parseLupa = lupa => {
+export const parseLupa = (lupa, formatMessage) => {
   if (lupa) {
     let lupaObj = {};
     let tyovoimaMaarays = checkTyovoima(lupa.maaraykset);
 
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
-        const { heading, tunniste, headingNumber } = LUPA_SECTIONS[key];
+        const { tunniste, headingNumber } = LUPA_SECTIONS[key];
+        const heading =
+          formatMessage(wizardMessages.sectionTitle_1) || "[KÄÄNTÄMÄTTÄ]";
         const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste);
 
         lupaObj[key] = parseSectionData(
@@ -27,7 +30,6 @@ export const parseLupa = lupa => {
         );
       }
     }
-
     return lupaObj;
   }
 };
