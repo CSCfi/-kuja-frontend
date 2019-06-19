@@ -10,5 +10,18 @@
   "education.vocationalEducation": "Ammatillinen koulutus",
   "languages.inFinnish": "Suomeksi",
   "languages.inSwedish": "Ruotsiksi",
-  "user.ownOrganisation": "Oma organisaatio"
+  "user.ownOrganisation": "Oma organisaatio",
+  "wizard.driverTraining": "Kuljettajakoulutukset",
+  "wizard.formTitle_new": "Uusi hakemus",
+  "wizard.info_01": "Seuraavat kohdat on jaoteltu ammatillisten tutkintojen ja koulutuksen järjestämisluvan rakenteen mukaisesti. Hakijan tulee täyttää alla olevat kohdat vain siltä osin, mihin tutkintojen ja koulutuksen järjestämislupaan haetaan muutosta. Tarkemmat ohjeistukset sekä pykäläviittaukset ammatillisen koulutuksen lakiin (531/2017) on esitetty kohdittain.",
+  "wizard.info_02": "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta.",
+  "wizard.pageTitle_1": "Uusi muutoshakemus",
+  "wizard.pageTitle_2": "Perustelut",
+  "wizard.pageTitle_3": "Taloudelliset edellytykset",
+  "wizard.pageTitle_4": "Yhteenveto",
+  "wizard.preparatoryTraining": "Valmentavat koulutukset",
+  "wizard.sectionTitle_1": "Tutkinnot ja koulutukset",
+  "wizard.teachingLanguages": "Opetuskielet",
+  "wizard.vocationalTraining": "Työvoimakoulutukset",
+  "wizard.workforceTraining": "Työvoimakoulutukset"
 }

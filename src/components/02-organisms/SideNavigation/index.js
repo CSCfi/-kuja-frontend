@@ -42,6 +42,11 @@ const SideNavigation = props => {
 
   const handleLocaleChange = locale => {
     setLocale(locale)(appDispatch);
+    if (locale) {
+      sessionStorage.setItem("locale", locale);
+    } else {
+      sessionStorage.removeItem("locale");
+    }
   };
 
   const {

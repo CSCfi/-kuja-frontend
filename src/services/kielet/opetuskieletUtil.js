@@ -2,6 +2,7 @@ import _ from "lodash";
 import { parseLocalizedField } from "../../modules/helpers";
 import { MUUTOS_TYPES } from "locales/uusiHakemusFormConstants";
 import { findKieliByKoodi } from "./kieliUtil";
+import * as R from "ramda";
 
 export function sortOpetuskielet(kielet) {
   let array = [];
@@ -9,11 +10,15 @@ export function sortOpetuskielet(kielet) {
   array.push(findKieliByKoodi(kielet, "1")); // Suomi
   array.push(findKieliByKoodi(kielet, "2")); // Ruotsi
   array.push(findKieliByKoodi(kielet, "5")); // Saame
-
   return array;
 }
 
-export function getDataForOpetuskieletList(opetuskielet, kohde, changes = []) {
+export function getDataForOpetuskieletList(
+  opetuskielet,
+  kohde,
+  changes = [],
+  locale
+) {
   return {
     items: _.map(opetuskielet, opetuskieli => {
       const { koodiArvo, metadata } = opetuskieli;
@@ -32,7 +37,7 @@ export function getDataForOpetuskieletList(opetuskielet, kohde, changes = []) {
         isInLupa,
         isRemoved,
         shouldBeSelected: isAdded,
-        title: parseLocalizedField(metadata)
+        title: parseLocalizedField(metadata, R.toUpper(locale))
       };
     }),
     changes

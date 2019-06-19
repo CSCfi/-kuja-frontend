@@ -5,7 +5,7 @@ import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import { withStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Slot from "../../00-atoms/Slot/Slot";
+import Slot from "../../../00-atoms/Slot/Slot";
 
 const ExpansionPanel = withStyles({
   root: {
@@ -78,7 +78,7 @@ ExpandableRow.propTypes = {
   /**
    * Shrinking and expanding works via this property.
    */
-  shouldBeExpanded: PropTypes.bool.isRequired
+  shouldBeExpanded: PropTypes.bool
 };
 
 export default ExpandableRow;

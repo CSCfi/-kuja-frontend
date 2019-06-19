@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../01-molecules/CheckboxWithLabel";
+import { isInLupa, isAdded, isRemoved } from "../../css/label";
 // import Dropdown from "../00-atoms/Dropdown/Dropdown";
 
 const SelectableItem = props => {
@@ -26,14 +27,15 @@ const SelectableItem = props => {
     <div>
       <div className="flex items-center justify-between">
         <CheckboxWithLabel
-          name={props.item.code}
+          name={`checkbox-with-label-${props.item.code}`}
           isChecked={props.item.shouldBeSelected}
           onChanges={handleCheckboxChange}
-          labelClasses={[
-            props.item.isAdded && "is-added",
-            props.item.isRemoved && "is-removed",
-            props.item.isInLupa && "is-in-lupa"
-          ]}
+          labelStyles={Object.assign(
+            {},
+            props.item.isAdded ? isAdded : {},
+            props.item.isRemoved ? isRemoved : {},
+            props.item.isInLupa ? isInLupa : {}
+          )}
         >
           <span>{props.item.code}</span>
           <span className="ml-4">{props.item.title}</span>

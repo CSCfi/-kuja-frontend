@@ -148,11 +148,14 @@ const CategorizedList = props => {
     const fullPath = (props.rootPath || []).concat(payload.path);
     const allChanges = props.allChanges;
     const isChangeAvailable = !!R.find(R.propEq("path", fullPath))(allChanges);
+
     if (isChangeAvailable) {
       // If there is a change let's remove it
       operations.push(["removeChange", fullPath]);
-    } else {
-      // No change? Let's add one.
+    }
+    
+    if (!isChangeAvailable || component.name === "Dropdown") {
+      //Let's write a new change.
       operations.push([
         "addChange",
         {
@@ -161,6 +164,7 @@ const CategorizedList = props => {
         }
       ]);
     }
+
     if (component.name === "CheckboxWithLabel") {
       if (!c.isChecked) {
         // Let's uncheck all the child checkboxes
@@ -222,13 +226,14 @@ const CategorizedList = props => {
                   props.categories
                 );
                 const changeObj = props.getChangeByPath(fullPath);
-                const isAddition = ((changeObj || {}).properties || {}).isChecked;
+                const isAddition = ((changeObj || {}).properties || {})
+                  .isChecked;
                 const isRemoved = changeObj && !changeObj.properties.isChecked;
                 const labelStyles = Object.assign(
                   {},
                   isAddition ? (propsObj.labelStyles || {}).addition : {},
                   isRemoved ? (propsObj.labelStyles || {}).removal : {},
-                  ((propsObj.labelStyles || {}).custom || {})
+                  (propsObj.labelStyles || {}).custom || {}
                 );
                 const title =
                   propsObj.title +
@@ -292,7 +297,14 @@ const CategorizedList = props => {
                             <div className="px-2">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
+                                onChanges={handleChanges}
                                 options={properties.options}
+                                payload={{
+                                  id: `dropdown-${idSuffix}`,
+                                  path: [i, "components", ii],
+                                  fullPath
+                                }}
+                                value={propsObj.selectedOption}
                                 isDisabled={isDisabled}
                               />
                             </div>

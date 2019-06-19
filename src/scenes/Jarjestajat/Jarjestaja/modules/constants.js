@@ -1,3 +1,5 @@
+// import wizardMessages from "../../../../i18n/definitions/wizard";
+
 export const LUPA_SECTIONS = {
   1: {
     heading: "Tutkinnot ja koulutukset",

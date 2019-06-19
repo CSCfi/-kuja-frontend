@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
+import { injectIntl } from "react-intl";
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
-import { TUTKINTO_TEKSTIT } from "../../../modules/constants";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
 import {
   addItemToChanges,
@@ -12,7 +13,7 @@ import AmmatilliseenTehtavaanValmistavatKoulutukset from "./Koulutukset/Ammatill
 import Tyovoimakoulutukset from "./Koulutukset/Tyovoimakoulutukset";
 import Kuljettajakoulutukset from "./Koulutukset/Kuljettajakoulutukset";
 
-const MuutospyyntoWizardKoulutukset = () => {
+const MuutospyyntoWizardKoulutukset = props => {
   const sectionId = "koulutukset";
   const { state, dispatch: mhlDispatch } = useContext(MuutoshakemusContext);
 
@@ -39,8 +40,10 @@ const MuutospyyntoWizardKoulutukset = () => {
   };
 
   return (
-    <div className="ml-16">
-      <p className="pb-4">{TUTKINTO_TEKSTIT.otsikkoTaydentava.FI}</p>
+    <div className="md:pl-16">
+      <p className="pt-4 pb-10">
+        {props.intl.formatMessage(wizardMessages.info_02)}
+      </p>
 
       <ValmentavatKoulutukset
         changes={
@@ -83,4 +86,4 @@ const MuutospyyntoWizardKoulutukset = () => {
   );
 };
 
-export default MuutospyyntoWizardKoulutukset;
+export default injectIntl(MuutospyyntoWizardKoulutukset);

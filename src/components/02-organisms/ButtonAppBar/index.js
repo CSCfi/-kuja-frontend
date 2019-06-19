@@ -69,6 +69,11 @@ const ButtonAppBar = ({
 
   const handleLocaleChange = (event, locale) => {
     setLocale(locale)(appDispatch);
+    if (locale) {
+      sessionStorage.setItem("locale", locale);
+    } else {
+      sessionStorage.removeItem("locale");
+    }
   };
 
   return (

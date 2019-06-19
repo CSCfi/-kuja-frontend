@@ -10,5 +10,18 @@
   "education.vocationalEducation": "Yrkesutbildning",
   "languages.inFinnish": "På finska",
   "languages.inSwedish": "På svenska",
-  "user.ownOrganisation": "Din egen organisation"
+  "user.ownOrganisation": "Din egen organisation",
+  "wizard.driverTraining": "Chaufför utbildning",
+  "wizard.formTitle_new": "Ny ansökan",
+  "wizard.info_01": "[TÄHÄN OHJETEKSTI RUOTSIKSI]",
+  "wizard.info_02": "l anknytning till ovannämnda examina kan utbildningsanordnaren också ordna sådan utbildning som fördjupar eller kompletterar yrkeskompetensen som avses i 8 § 1 punkten i lagen om yrkesutbildning (531/2017).",
+  "wizard.pageTitle_1": "Ny ansökan om ändring",
+  "wizard.pageTitle_2": "Resonemang",
+  "wizard.pageTitle_3": "Finansiella förhållanden",
+  "wizard.pageTitle_4": "Sammanfattning",
+  "wizard.preparatoryTraining": "Förberedande utbildning",
+  "wizard.sectionTitle_1": "Kvalifikationer och träning",
+  "wizard.teachingLanguages": "Undervisningsspråk",
+  "wizard.vocationalTraining": "Yrkesutbildning",
+  "wizard.workforceTraining": "Arbetsträning"
 }

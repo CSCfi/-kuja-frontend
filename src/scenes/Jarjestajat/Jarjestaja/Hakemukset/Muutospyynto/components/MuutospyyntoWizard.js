@@ -17,14 +17,16 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import PropTypes from "prop-types";
 import {
   HAKEMUS_VIRHE,
-  HAKEMUS_VIESTI,
-  HAKEMUS_OTSIKOT
+  HAKEMUS_VIESTI
 } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
+import { injectIntl } from "react-intl";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -56,27 +58,31 @@ const DialogTitle = withStyles(theme => ({
   );
 });
 
-function getSteps() {
-  return [
-    HAKEMUS_OTSIKOT.MUUTOKSET.FI,
-    HAKEMUS_OTSIKOT.PERUSTELUT.FI,
-    HAKEMUS_OTSIKOT.EDELLYTYKSET.FI,
-    HAKEMUS_OTSIKOT.YHTEENVETO.FI
-  ];
-}
-
 const MuutospyyntoWizard = props => {
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
   });
-  const steps = getSteps();
+  const {
+    intl: { formatMessage }
+  } = props;
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
       props.history.push(String(pageNumber + 1));
     }
   };
+
+  const getSteps = () => {
+    return [
+      formatMessage(wizardMessages.pageTitle_1),
+      formatMessage(wizardMessages.pageTitle_2),
+      formatMessage(wizardMessages.pageTitle_3),
+      formatMessage(wizardMessages.pageTitle_4)
+    ];
+  }
+
+  const steps = getSteps();
 
   const onCancel = event => {
     if (event) {
@@ -169,7 +175,7 @@ const MuutospyyntoWizard = props => {
           aria-labelledby="simple-dialog-title"
         >
           <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
-            {HAKEMUS_OTSIKOT.UUSI_MUUTOSHAKEMUS.FI}
+            {formatMessage(wizardMessages.formTitle_new)}
           </DialogTitle>
           <DialogContent>
             <div className="px-16 py-4">
@@ -286,4 +292,8 @@ const MuutospyyntoWizard = props => {
   }
 };
 
-export default MuutospyyntoWizard;
+export default injectIntl(MuutospyyntoWizard);
+
+MuutospyyntoWizard.propTypes = {
+  lupa: PropTypes.object
+};
