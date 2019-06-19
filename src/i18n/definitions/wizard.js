@@ -52,6 +52,6 @@ export default defineMessages({
   },
   vocationalTraining: {
     id: "wizard.vocationalTraining",
-    defaultMessage: "Työvoimakoulutukset"
+    defaultMessage: "Ammatilliseen tehtävään valmistavat koulutukset"
   }
 });

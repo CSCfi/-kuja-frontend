@@ -9,7 +9,7 @@
   "education.preAndBasicEducation": "Esi- ja perusopetus",
   "education.vocationalEducation": "Ammatillinen koulutus",
   "languages.inFinnish": "Suomeksi",
-  "languages.inSwedish": "Ruotsiksi",
+  "languages.inSwedish": "På svenska",
   "user.ownOrganisation": "Oma organisaatio",
   "wizard.driverTraining": "Kuljettajakoulutukset",
   "wizard.formTitle_new": "Uusi hakemus",
@@ -22,6 +22,6 @@
   "wizard.preparatoryTraining": "Valmentavat koulutukset",
   "wizard.sectionTitle_1": "Tutkinnot ja koulutukset",
   "wizard.teachingLanguages": "Opetuskielet",
-  "wizard.vocationalTraining": "Työvoimakoulutukset",
+  "wizard.vocationalTraining": "Ammatilliseen tehtävään valmistavat koulutukset",
   "wizard.workforceTraining": "Työvoimakoulutukset"
 }

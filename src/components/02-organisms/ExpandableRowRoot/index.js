@@ -17,7 +17,7 @@ const ExpandableRowRoot = props => {
         <span data-slot="info">
           <NumberOfChanges changes={changes} />
         </span>
-        <div data-slot="content">
+        <div data-slot="content" className="w-full">
           <CategorizedListRoot
             categories={props.categories}
             changes={changes}

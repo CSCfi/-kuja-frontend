@@ -41,7 +41,7 @@
   },
   {
     "id": "languages.inSwedish",
-    "defaultMessage": "Ruotsiksi",
+    "defaultMessage": "På svenska",
     "filepath": "src/i18n/definitions/languages.js"
   },
   {
@@ -111,7 +111,7 @@
   },
   {
     "id": "wizard.vocationalTraining",
-    "defaultMessage": "Työvoimakoulutukset",
+    "defaultMessage": "Ammatilliseen tehtävään valmistavat koulutukset",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {

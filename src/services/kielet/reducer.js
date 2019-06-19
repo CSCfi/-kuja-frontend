@@ -23,10 +23,7 @@ export default function(state, action) {
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        data: {
-          kielet: action.payload,
-          kieletRaw: action.payload
-        }
+        kielet: action.payload
       };
     case FETCH_KIELET_FAILURE:
       return {
@@ -48,9 +45,7 @@ export default function(state, action) {
         isFetching: false,
         fetched: true,
         hasErrored: false,
-        data: {
-          opetuskielet: sortOpetuskielet(action.payload)
-        }
+        opetuskielet: sortOpetuskielet(action.payload)
       };
     case FETCH_OPPILAITOKSENOPETUSKIELET_FAILURE:
       return {

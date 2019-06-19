@@ -9,6 +9,7 @@ import { fetchKoulutuksetAll } from "../../../../../../services/koulutukset/acti
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import { KieletProvider } from "../../../../../../context/kieletContext";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 
@@ -66,7 +67,14 @@ const MuutospyyntoWizardMuutokset = props => {
           />
         )}
 
-        <MuutospyyntoWizardKielet lupa={props.lupa} koulutukset={koulutukset} />
+        {koulutukset && koulutukset.fetched && (
+          <KieletProvider>
+            <MuutospyyntoWizardKielet
+              lupa={props.lupa}
+              koulutukset={koulutukset}
+            />
+          </KieletProvider>
+        )}
 
         {/* <Kohde>
           <MuutospyyntoWizardToimialue lupa={lupa} />

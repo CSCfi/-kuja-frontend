@@ -67,7 +67,7 @@ const Tyovoimakoulutukset = props => {
   return (
     <Wrapper>
       <ExpandableRow>
-        <div data-slot="title">{props.intl.formatMessage(wizardMessages.vocationalTraining)}</div>
+        <div data-slot="title">{props.intl.formatMessage(wizardMessages.workforceTraining)}</div>
         <div data-slot="info">
           <NumberOfChanges changes={changes} />
         </div>

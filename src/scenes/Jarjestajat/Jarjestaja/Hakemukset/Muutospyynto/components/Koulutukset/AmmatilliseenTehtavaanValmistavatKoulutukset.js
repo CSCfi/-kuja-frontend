@@ -75,7 +75,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
       <ExpandableRow changes={props.changes}>
         <div data-slot="title">
           <span>
-            {props.intl.formatMessage(wizardMessages.workforceTraining)}
+            {props.intl.formatMessage(wizardMessages.vocationalTraining)}
           </span>
         </div>
         <div data-slot="info">

@@ -8,7 +8,6 @@ import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 import { KoulutuksetProvider } from "context/koulutuksetContext";
 import { KoulutusalatProvider } from "context/koulutusalatContext";
 import { KoulutustyypitProvider } from "context/koulutustyypitContext";
-import Loading from "modules/Loading";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
@@ -19,6 +18,7 @@ import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
+import Loading from "../../../../../../modules/Loading";
 import {
   HAKEMUS_VIRHE,
   HAKEMUS_VIESTI
@@ -151,7 +151,7 @@ const MuutospyyntoWizard = props => {
   if (sessionStorage.getItem("oid") !== jarjestajaOid) {
     return (
       <MessageWrapper>
-        <h3>{HAKEMUS_VIRHE.OIKEUS.FI}</h3>
+        <Loading />
       </MessageWrapper>
     );
   }

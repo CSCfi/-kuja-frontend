@@ -38,7 +38,7 @@ const Opetuskielet = props => {
     setCategories(
       getCategories(
         getDataForOpetuskieletList(
-          kielet.data.opetuskielet,
+          kielet.opetuskielet,
           props.kohde,
           props.changes,
           props.intl.locale
