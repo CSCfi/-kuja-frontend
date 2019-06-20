@@ -1,44 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import { MuutoshakemusContext } from "context/muutoshakemusContext";
-import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
-import {
-  addItemToChanges,
-  removeItemFromChanges
-} from "services/muutoshakemus/actions";
-import _ from "lodash";
 import ValmentavatKoulutukset from "./Koulutukset/ValmentavatKoulutukset";
 import AmmatilliseenTehtavaanValmistavatKoulutukset from "./Koulutukset/AmmatilliseenTehtavaanValmistavatKoulutukset";
 import Tyovoimakoulutukset from "./Koulutukset/Tyovoimakoulutukset";
 import Kuljettajakoulutukset from "./Koulutukset/Kuljettajakoulutukset";
+import PropTypes from "prop-types";
 
-const MuutospyyntoWizardKoulutukset = props => {
-  const sectionId = "koulutukset";
-  const { state, dispatch: mhlDispatch } = useContext(MuutoshakemusContext);
-
-  const handleChanges = (item, listId, removeExistingOnes) => {
-    // Let's find out the type of operation
-    const operationType = item.shouldBeSelected
-      ? MUUTOS_TYPES.REMOVAL
-      : MUUTOS_TYPES.ADDITION;
-    const existingChange = _.find(state[sectionId].changes[listId], {
-      koodiarvo: item.code
-    });
-    // Let's reset the item's state
-    if (existingChange) {
-      removeItemFromChanges(sectionId, item, listId)(mhlDispatch);
-    } else {
-      addItemToChanges(
-        sectionId,
-        item,
-        listId,
-        operationType,
-        removeExistingOnes
-      )(mhlDispatch);
-    }
-  };
-
+const MuutospyyntoWizardKoulutukset = React.memo(props => {
   return (
     <div className="md:pl-16">
       <p className="pt-4 pb-10">
@@ -46,44 +15,31 @@ const MuutospyyntoWizardKoulutukset = props => {
       </p>
 
       <ValmentavatKoulutukset
-        changes={
-          state[sectionId].changes
-            ? state[sectionId].changes["valmentavat"]
-            : []
-        }
-        onChanges={handleChanges}
+        koulutukset={props.koulutukset}
+        onUpdate={props.onUpdate}
       />
 
       <AmmatilliseenTehtavaanValmistavatKoulutukset
-        changes={
-          state[sectionId].changes
-            ? state[sectionId].changes[
-                "ammatilliseentehtavaanvalmistavakoulutus"
-              ]
-            : []
-        }
-        onChanges={handleChanges}
+        koulutukset={props.koulutukset}
+        onUpdate={props.onUpdate}
       />
 
       <Tyovoimakoulutukset
-        changes={
-          state[sectionId].changes
-            ? state[sectionId].changes["oivatyovoimakoulutus"]
-            : []
-        }
-        onChanges={handleChanges}
+        koulutukset={props.koulutukset}
+        onUpdate={props.onUpdate}
       />
 
       <Kuljettajakoulutukset
-        changes={
-          state[sectionId].changes
-            ? state[sectionId].changes["kuljettajakoulutus"]
-            : []
-        }
-        onChanges={handleChanges}
+        koulutukset={props.koulutukset}
+        onUpdate={props.onUpdate}
       />
     </div>
   );
+});
+
+MuutospyyntoWizardKoulutukset.propTypes = {
+  koulutukset: PropTypes.object,
+  onUpdate: PropTypes.func
 };
 
 export default injectIntl(MuutospyyntoWizardKoulutukset);

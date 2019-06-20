@@ -1,6 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { fetchKoulutus } from "services/koulutukset/actions";
-import { KoulutuksetContext } from "context/koulutuksetContext";
+import React, { useEffect, useState } from "react";
 import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -9,11 +7,8 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const ValmentavatKoulutukset = props => {
-  const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
-    KoulutuksetContext
-  );
-
+const ValmentavatKoulutukset = React.memo(props => {
+  const sectionId = "valmentavatkoulutukset";
   const getCategories = koulutusData => {
     const categories = R.map(item => {
       return {
@@ -39,23 +34,18 @@ const ValmentavatKoulutukset = props => {
   };
 
   useEffect(() => {
-    if (koulutukset.poikkeukset.fetched.length === 2) {
+    if (props.koulutukset.poikkeukset.fetched.length === 2) {
       setCategories(
         getCategories(
           getDataForKoulutusList(
-            koulutukset.poikkeukset.data,
+            props.koulutukset.poikkeukset.data,
             props.changes,
             R.toUpper(props.intl.locale)
           )
         )
       );
     }
-  }, [koulutukset.poikkeukset, props.changes, props.intl]);
-
-  useEffect(() => {
-    fetchKoulutus("999901")(koulutuksetDispatch);
-    fetchKoulutus("999903")(koulutuksetDispatch);
-  }, [koulutuksetDispatch]);
+  }, [props.koulutukset.poikkeukset, props.changes, props.intl]);
 
   const [categories, setCategories] = useState([]);
   const [changes] = useState([]);
@@ -66,13 +56,16 @@ const ValmentavatKoulutukset = props => {
       categories={categories}
       changes={changes}
       title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+      index={0}
+      onUpdate={props.onUpdate}
+      sectionId={sectionId}
     />
   );
-};
+});
 
 ValmentavatKoulutukset.propTypes = {
-  changes: PropTypes.array,
-  onChanges: PropTypes.func
+  koulutukset: PropTypes.object,
+  changes: PropTypes.array
 };
 
 export default injectIntl(ValmentavatKoulutukset);

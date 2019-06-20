@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Section = props => {
+const Section = React.memo(props => {
   return (
     <div className="flex">
       <div className="w-8 sm:w-16">
@@ -15,7 +15,7 @@ const Section = props => {
       </div>
     </div>
   );
-};
+});
 
 Section.propTypes = {
   code: PropTypes.number,

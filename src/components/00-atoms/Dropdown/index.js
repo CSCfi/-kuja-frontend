@@ -18,7 +18,7 @@ const selectCustomStyles = {
   })
 };
 
-const Dropdown = props => {
+const Dropdown = React.memo(props => {
   const handleChanges = (selectedOption) => {
     props.onChanges(props.payload, { selectedOption });
   };
@@ -36,7 +36,7 @@ const Dropdown = props => {
       styles={selectCustomStyles}
     />
   );
-};
+});
 
 Dropdown.propTypes = {
   name: PropTypes.string,

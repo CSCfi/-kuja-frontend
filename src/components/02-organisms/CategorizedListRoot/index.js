@@ -5,9 +5,9 @@ import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "./utils";
 
-const CategorizedListRoot = props => {
+const CategorizedListRoot = React.memo(props => {
   const [changes, setChanges] = useState([]);
-  const [allChanges, setAllChanges] = useState(R.clone(props.changes));
+  const [allChanges, setAllChanges] = useState(props.changes);
 
   const getChangeByPath = path => {
     return R.find(R.propEq("path", path))(allChanges);
@@ -27,12 +27,19 @@ const CategorizedListRoot = props => {
     });
     setAllChanges(allChangesClone);
     setChanges(getChangesByLevel(0, props.changes));
-    props.onUpdate(allChangesClone);
+    props.onUpdate({
+      sectionId: props.sectionId,
+      index: props.index,
+      changes: allChangesClone
+    });
   };
 
   useEffect(() => {
-    setChanges(getChangesByLevel(0, props.changes));
-  }, [props.changes]);
+    const changesByLevel = getChangesByLevel(0, props.changes);
+    if (!R.equals(changesByLevel, changes)) {
+      setChanges();
+    }
+  }, [props.changes, changes]);
 
   return (
     <CategorizedList
@@ -46,7 +53,7 @@ const CategorizedListRoot = props => {
       changes={changes}
     />
   );
-};
+});
 
 CategorizedListRoot.defaultProps = {
   showCategoryTitles: false,
@@ -56,7 +63,9 @@ CategorizedListRoot.defaultProps = {
 CategorizedListRoot.propTypes = {
   categories: PropTypes.array,
   changes: PropTypes.array,
+  index: PropTypes.number,
   onUpdate: PropTypes.func,
+  sectionId: PropTypes.string,
   showCategoryTitles: PropTypes.bool,
   debug: PropTypes.bool
 };

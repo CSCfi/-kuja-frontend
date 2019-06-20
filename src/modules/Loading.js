@@ -9,7 +9,9 @@ const Loading = () => {
   const text = LOADING_TEXT.FI;
   return (
     <div className="flex items-center mx-auto">
-      <CircularProgress />
+      <span className="mr-6">
+        <CircularProgress />
+      </span>
       <h3 className="ml-4">{text}</h3>
     </div>
   );
