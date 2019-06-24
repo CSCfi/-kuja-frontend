@@ -1,26 +1,29 @@
 import {
-  ADD_ITEM_TO_CHANGES,
+  SET_SECTION_DATA,
   ADD_SUB_ITEM_TO_CHANGES,
   REMOVE_ITEM_FROM_CHANGES,
   REMOVE_SUB_ITEM_FROM_CHANGES
 } from "./actionTypes";
 
-export const addItemToChanges = (sectionId, item, listId, operationType, removeExistingOnes = false) => {
+export const setSectionData = (sectionId, index, changes) => {
   return dispatch => {
     dispatch({
-      type: ADD_ITEM_TO_CHANGES,
+      type: SET_SECTION_DATA,
       payload: {
-        item,
-        listId,
-        operationType,
-        removeExistingOnes,
-        sectionId
+        sectionId,
+        index,
+        changes
       }
     });
   };
 };
 
-export const addSubItemToChanges = (sectionId, subItem, listId, operationType) => {
+export const addSubItemToChanges = (
+  sectionId,
+  subItem,
+  listId,
+  operationType
+) => {
   return dispatch => {
     dispatch({
       type: ADD_SUB_ITEM_TO_CHANGES,

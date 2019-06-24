@@ -7,7 +7,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
 
-const RadioButtonWithLabel = props => {
+const RadioButtonWithLabel = React.memo(props => {
   const styles = makeStyles({
     label: props.labelStyles
   })();
@@ -42,7 +42,7 @@ const RadioButtonWithLabel = props => {
       />
     </FormGroup>
   );
-};
+});
 
 RadioButtonWithLabel.propTypes = {
   isChecked: PropTypes.bool,

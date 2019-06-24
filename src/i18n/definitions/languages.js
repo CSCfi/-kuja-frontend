@@ -7,6 +7,6 @@ export default defineMessages({
   },
   inSwedish: {
     id: "languages.inSwedish",
-    defaultMessage: "Ruotsiksi"
+    defaultMessage: "På svenska"
   }
 });

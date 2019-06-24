@@ -19,7 +19,7 @@ import { ROLE_KAYTTAJA } from "../../../../modules/constants";
 import { fetchLupaHistory } from "services/lupahistoria/actions";
 import { LupahistoriaContext } from "context/lupahistoriaContext";
 import { KunnatProvider } from "context/kunnatContext";
-import { MaakunnatProvider } from "context/maakunnatContext";
+import { MaakunnatProvider } from "../../../../context/maakunnatContext";
 
 const Separator = styled.div`
   &:after {

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import {
-  ADD_ITEM_TO_CHANGES,
+  SET_SECTION_DATA,
   ADD_SUB_ITEM_TO_CHANGES,
   REMOVE_ITEM_FROM_CHANGES,
   REMOVE_SUB_ITEM_FROM_CHANGES
@@ -8,26 +8,14 @@ import {
 
 export default function(state, action) {
   switch (action.type) {
-    case ADD_ITEM_TO_CHANGES:
-      const item = {
-        koodiarvo: action.payload.item.code,
-        type: action.payload.operationType,
-        koodisto: "koulutus"
-      };
+    case SET_SECTION_DATA:
       return {
         ...state,
         [action.payload.sectionId]: {
           ...state[action.payload.sectionId],
           changes: {
             ...state[action.payload.sectionId].changes,
-            [action.payload.listId]: !action.payload.removeExistingOnes
-              ? _.concat(
-                  state[action.payload.sectionId].changes[
-                    action.payload.listId
-                  ] || [],
-                  item
-                )
-              : [item]
+            [action.payload.index]: action.payload.changes
           }
         }
       };

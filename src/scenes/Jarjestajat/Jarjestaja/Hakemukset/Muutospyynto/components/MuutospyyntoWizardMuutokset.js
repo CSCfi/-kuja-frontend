@@ -1,72 +1,41 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-import { fetchKoulutusalat } from "services/koulutusalat/actions";
-import { KoulutusalatContext } from "context/koulutusalatContext";
-import { KoulutuksetContext } from "context/koulutuksetContext";
-import { fetchKoulutuksetAll } from "../../../../../../services/koulutukset/actions";
-import { KoulutustyypitContext } from "context/koulutustyypitContext";
-import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 
-const MuutospyyntoWizardMuutokset = props => {
-  const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
-    KoulutuksetContext
-  );
-  const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
-    KoulutusalatContext
-  );
-  const {
-    state: koulutustyypit,
-    dispatch: koulutustyypitDispatch
-  } = useContext(KoulutustyypitContext);
+const MuutospyyntoWizardMuutokset = React.memo(props => {
   const {
     intl: { formatMessage }
   } = props;
-
-  useEffect(() => {
-    fetchKoulutusalat()(koulutusalatDispatch);
-    fetchKoulutustyypit()(koulutustyypitDispatch);
-  }, [koulutusalatDispatch, koulutustyypitDispatch]);
-
-  useEffect(() => {
-    if (koulutusalat.fetched && koulutustyypit.fetched) {
-      fetchKoulutuksetAll(koulutusalat.data, koulutustyypit.data)(
-        koulutuksetDispatch
-      );
-    }
-  }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
 
   return (
     <div>
       <p className="py-10">{formatMessage(wizardMessages.info_01)}</p>
 
       <form onSubmit={props.handleSubmit}>
-        {koulutukset &&
-          koulutusalat &&
-          koulutustyypit &&
-          Object.keys(koulutukset.koulutusdata).length > 0 && (
-            <Tutkinnot
-              lupa={props.lupa}
-              koulutukset={koulutukset}
-              koulutusalat={koulutusalat}
-              koulutustyypit={koulutustyypit.data}
-            />
-          )}
+        <Tutkinnot
+          changes={props.muutoshakemus.tutkinnot.changes || {}}
+          koulutukset={props.koulutukset}
+          koulutusalat={props.koulutusalat}
+          koulutustyypit={props.koulutustyypit.data}
+          lupa={props.lupa}
+          onUpdate={props.onUpdate}
+        />
 
-        {koulutukset && (
-          <MuutospyyntoWizardKoulutukset
-            lupa={props.lupa}
-            koulutukset={koulutukset}
-            koulutusalat={koulutusalat}
-            koulutustyypit={koulutustyypit}
-          />
-        )}
+        <MuutospyyntoWizardKoulutukset
+          koulutukset={props.koulutukset}
+          onUpdate={props.onUpdate}
+        />
 
-        <MuutospyyntoWizardKielet lupa={props.lupa} koulutukset={koulutukset} />
+        <MuutospyyntoWizardKielet
+          lupa={props.lupa}
+          kielet={props.kielet}
+          koulutukset={props.koulutukset}
+          onUpdate={props.onUpdate}
+        />
 
         {/* <Kohde>
           <MuutospyyntoWizardToimialue lupa={lupa} />
@@ -82,10 +51,15 @@ const MuutospyyntoWizardMuutokset = props => {
       </form>
     </div>
   );
-};
+});
 
 MuutospyyntoWizardMuutokset.propTypes = {
-  lupa: PropTypes.object
+  koulutukset: PropTypes.object,
+  koulutusalat: PropTypes.object,
+  koulutustyypit: PropTypes.object,
+  lupa: PropTypes.object,
+  muutoshakemus: PropTypes.object,
+  onUpdate: PropTypes.func
 };
 
 export default injectIntl(MuutospyyntoWizardMuutokset);

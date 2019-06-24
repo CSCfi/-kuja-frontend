@@ -9,7 +9,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 /**
  * Label and checkbox united.
  */
-const CheckboxWithLabel = props => {
+const CheckboxWithLabel = React.memo(props => {
   const styles = makeStyles({
     root: {
       color: green[600],
@@ -46,7 +46,7 @@ const CheckboxWithLabel = props => {
       />
     </FormGroup>
   );
-};
+});
 
 CheckboxWithLabel.defaultProps = {
   isChecked: false,

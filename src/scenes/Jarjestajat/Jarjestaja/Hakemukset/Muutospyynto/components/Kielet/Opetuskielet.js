@@ -1,17 +1,13 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import { KieletContext } from "context/kieletContext";
-import { fetchOppilaitoksenOpetuskielet } from "services/kielet/actions";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Opetuskielet = props => {
-  const { state: kielet, dispatch } = useContext(KieletContext);
-
   const getCategories = useCallback(({ items }) => {
     return R.map(item => {
       return {
@@ -38,18 +34,14 @@ const Opetuskielet = props => {
     setCategories(
       getCategories(
         getDataForOpetuskieletList(
-          kielet.data.opetuskielet,
+          props.kielet.opetuskielet,
           props.kohde,
           props.changes,
           props.intl.locale
         )
       )
     );
-  }, [kielet, props.changes, props.kohde, getCategories, props.intl.locale]);
-
-  useEffect(() => {
-    fetchOppilaitoksenOpetuskielet()(dispatch);
-  }, [dispatch]);
+  }, [props.kielet.opetuskielet, props.changes, props.kohde, getCategories, props.intl.locale]);
 
   const [categories, setCategories] = useState([]);
   const [changes] = useState([]);
@@ -67,6 +59,7 @@ const Opetuskielet = props => {
 
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
+  kielet: PropTypes.object,
   onChanges: PropTypes.func,
   kohde: PropTypes.object
 };

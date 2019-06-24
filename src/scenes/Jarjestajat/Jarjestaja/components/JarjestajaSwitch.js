@@ -7,6 +7,11 @@ import { fetchLupa } from "../../../../services/luvat/actions";
 import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
 import MuutospyyntoWizard from "../Hakemukset/Muutospyynto/components/MuutospyyntoWizard";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
+import { KoulutuksetProvider } from "context/koulutuksetContext";
+import { KoulutusalatProvider } from "context/koulutusalatContext";
+import { MuutoshakemusProvider } from "../../../../context/muutoshakemusContext";
+import { KoulutustyypitProvider } from "context/koulutustyypitContext";
+import { KieletProvider } from "../../../../context/kieletContext";
 import { injectIntl } from "react-intl";
 
 const JarjestajaSwitch = props => {
@@ -31,7 +36,19 @@ const JarjestajaSwitch = props => {
           exact
           path={`${props.match.path}/hakemukset-ja-paatokset/uusi/:page`}
           render={props => {
-            return <MuutospyyntoWizard lupa={lupa} {...props} />;
+            return (
+              <KoulutustyypitProvider>
+                <KoulutusalatProvider>
+                  <KoulutuksetProvider>
+                    <KieletProvider>
+                      <MuutoshakemusProvider>
+                        <MuutospyyntoWizard lupa={lupa} {...props} />
+                      </MuutoshakemusProvider>
+                    </KieletProvider>
+                  </KoulutuksetProvider>
+                </KoulutusalatProvider>
+              </KoulutustyypitProvider>
+            );
           }}
         />
         <Route

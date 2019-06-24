@@ -1,23 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { KoulutuksetContext } from "context/koulutuksetContext";
+import React, { useEffect, useState } from "react";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
-import { fetchKoulutuksetMuut } from "services/koulutukset/actions";
-import { Wrapper } from "../MuutospyyntoWizardComponents";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import ExpandableRow from "../../../../../../../components/02-organisms/ExpandableRowRoot/ExpandableRow";
-import { MUUT_KEYS } from "../../modules/constants";
-import CategorizedListRoot from "components/02-organisms/CategorizedListRoot";
+import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Kuljettajakoulutukset = props => {
   const koodisto = "kuljettajakoulutus";
-  const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
-    KoulutuksetContext
-  );
 
   const getCategories = koulutusData => {
     const categories = R.map(item => {
@@ -44,51 +35,35 @@ const Kuljettajakoulutukset = props => {
   };
 
   useEffect(() => {
-    if (R.includes(koodisto, koulutukset.muut.fetched)) {
+    if (R.includes(koodisto, props.koulutukset.muut.fetched)) {
       setCategories(
         getCategories(
           getDataForKoulutusList(
-            koulutukset.muut.muudata[koodisto],
+            props.koulutukset.muut.muudata[koodisto],
             props.changes,
             R.toUpper(props.intl.locale)
           )
         )
       );
     }
-  }, [koulutukset.muut, props.changes, props.intl.locale]);
-
-  useEffect(() => {
-    fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
-  }, [koulutuksetDispatch]);
+  }, [props.koulutukset.muut, props.changes, props.intl.locale]);
 
   const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const [changes] = useState([]);
 
   return (
-    <Wrapper>
-      <ExpandableRow>
-        <div data-slot="title">
-          <span>{props.intl.formatMessage(wizardMessages.driverTraining)}</span>
-        </div>
-        <div data-slot="info">
-          <NumberOfChanges changes={changes} />
-        </div>
-        <div data-slot="content">
-          <CategorizedListRoot
-            categories={categories}
-            changes={changes}
-            onUpdate={setChanges}
-            showCategoryTitles={true}
-          />
-        </div>
-      </ExpandableRow>
-    </Wrapper>
+    <ExpandableRowRoot
+      key={`expandable-row-root`}
+      categories={categories}
+      changes={changes}
+      title={props.intl.formatMessage(wizardMessages.driverTraining)}
+    />
   );
 };
 
 Kuljettajakoulutukset.propTypes = {
   changes: PropTypes.array,
-  onChanges: PropTypes.func
+  koulutukset: PropTypes.object
 };
 
 export default injectIntl(Kuljettajakoulutukset);

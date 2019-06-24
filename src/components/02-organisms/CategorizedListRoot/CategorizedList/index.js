@@ -7,7 +7,7 @@ import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
 
-const CategorizedList = props => {
+const CategorizedList = React.memo(props => {
   const [changes, setChanges] = useState([]);
   const getPropertiesObject = (path, categories) => {
     const fullPath = (props.rootPath || []).concat(path);
@@ -18,7 +18,10 @@ const CategorizedList = props => {
   };
 
   useEffect(() => {
-    setChanges(getChangesByLevel(props.level, props.allChanges));
+    const changesByLevel = getChangesByLevel(props.level, props.allChanges);
+    if (changesByLevel) {
+      setChanges(changesByLevel);
+    }
   }, [props.changes, props.level, props.allChanges]);
 
   const uncheckHierarchyBelow = (
@@ -153,7 +156,7 @@ const CategorizedList = props => {
       // If there is a change let's remove it
       operations.push(["removeChange", fullPath]);
     }
-    
+
     if (!isChangeAvailable || component.name === "Dropdown") {
       //Let's write a new change.
       operations.push([
@@ -200,7 +203,7 @@ const CategorizedList = props => {
             key={i}
             className={`${
               !R.equals(props.rootPath, [])
-                ? "px-10"
+                ? "pl-10"
                 : i !== 0 && isCategoryTitleVisible
                 ? "pt-10"
                 : ""
@@ -336,13 +339,14 @@ const CategorizedList = props => {
       })}
     </div>
   );
-};
+});
 
 CategorizedList.defaultProps = {
   rootPath: []
 };
 
 CategorizedList.propTypes = {
+  allChanges: PropTypes.array,
   categories: PropTypes.array,
   debug: PropTypes.bool,
   onChanges: PropTypes.func,

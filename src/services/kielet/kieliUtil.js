@@ -2,7 +2,7 @@ import { parseLocalizedField } from "../../modules/helpers";
 import _ from "lodash";
 import * as R from "ramda";
 
-export function findKieliByKoodi(kielet, koodiarvo, locale) {
+export function findKieliByKoodi(kielet, koodiarvo) {
   return _.find(kielet, kieli => {
     return kieli.koodiArvo === koodiarvo;
   });
