@@ -115,6 +115,16 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.chooseOnlyOne",
+    "defaultMessage": "Voit valita vain yhden seuraavista:",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.chooseAdditional",
+    "defaultMessage": "Lisäksi voit valita seuraavat:",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"
