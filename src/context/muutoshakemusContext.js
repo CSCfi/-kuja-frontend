@@ -24,6 +24,9 @@ const initialState = {
   },
   tutkintokielet: {
     changes: {}
+  },
+  muut: {
+    changes: {}
   }
 };
 

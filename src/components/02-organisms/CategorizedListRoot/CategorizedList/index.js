@@ -259,8 +259,10 @@ const CategorizedList = React.memo(props => {
                           }}
                           labelStyles={labelStyles}
                         >
-                          <span>{propsObj.code}</span>
-                          <span className="ml-4">{title}</span>
+                          <div className="flex">
+                            <span className="leading-none">{propsObj.code}</span>
+                            <p className="ml-4 leading-none">{title}</p>
+                          </div>
                         </CheckboxWithLabel>
                       </div>
                     )}
@@ -278,9 +280,12 @@ const CategorizedList = React.memo(props => {
                           }}
                           labelStyles={labelStyles}
                           value={properties.value}
+                          className="flex-row"
                         >
-                          <span>{propsObj.code}</span>
-                          <span className="ml-4">{title}</span>
+                          <div className="flex">
+                            <span className="leading-none">{propsObj.code}</span>
+                            <p className="ml-4 leading-none">{title}</p>
+                          </div>
                         </RadioButtonWithLabel>
                       </div>
                     )}
