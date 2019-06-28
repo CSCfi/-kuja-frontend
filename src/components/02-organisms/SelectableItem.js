@@ -38,7 +38,7 @@ const SelectableItem = props => {
           )}
         >
           <span>{props.item.code}</span>
-          <span className="ml-4">{props.item.title}</span>
+          <span className="ml-4 leading-none">{props.item.title}</span>
           {/* <span className="ml-10">
               {props.item.isInLupa ? "LUPA" : ""}
             </span>

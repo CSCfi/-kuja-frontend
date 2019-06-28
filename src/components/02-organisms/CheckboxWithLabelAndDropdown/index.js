@@ -23,8 +23,8 @@ const CheckboxWithLabelAndDropdown = props => {
           onChanges={handleCheckboxChange}
           labelStyles={props.labelStyles}
         >
-          <div className="ml-4">{props.item.code}</div>
-          <div className="ml-4">{props.item.title}</div>
+          <span className="ml-4 leading-none">{props.item.code}</span>
+          <span className="ml-4 leading-none">{props.item.title}</span>
         </CheckboxWithLabel>
         <div className="w-48">
           <Dropdown
