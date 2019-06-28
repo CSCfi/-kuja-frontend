@@ -259,8 +259,8 @@ const CategorizedList = React.memo(props => {
                           }}
                           labelStyles={labelStyles}
                         >
-                          <span>{propsObj.code}</span>
-                          <span className="ml-4">{title}</span>
+                          <div>{propsObj.code}</div>
+                          <div className="ml-4">{title}</div>
                         </CheckboxWithLabel>
                       </div>
                     )}
@@ -279,8 +279,8 @@ const CategorizedList = React.memo(props => {
                           labelStyles={labelStyles}
                           value={properties.value}
                         >
-                          <span>{propsObj.code}</span>
-                          <span className="ml-4">{title}</span>
+                          <div>{propsObj.code}</div>
+                          <div className="ml-4">{title}</div>
                         </RadioButtonWithLabel>
                       </div>
                     )}

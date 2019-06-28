@@ -44,7 +44,6 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       key: "laajennettu",
       title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
       code: "01",
-      isExpandedByDefault: true,
       data: [{
         componentName: "CheckboxWithLabel",
         title: "",
@@ -55,6 +54,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       key: "vaativat",
       title: "Vaativan erityisen tuen tehtävä",
       code: "02",
+      isCollapsedByDefault: true,
       data: [{
         componentName: "RadioButtonWithLabel",
         title: props.intl.formatMessage(wizardMessages.chooseOnlyOne),
@@ -124,12 +124,6 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
 
-  const getArticle = (areaCode, articles) => {
-    return R.find(article => {
-      return article.koodiarvo === areaCode;
-    }, articles);
-  };
-
   const getCategories = (data, locale) => {
     return R.map(item => {
       return {
@@ -198,7 +192,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             onUpdate={onUpdate}
             sectionId={sectionId}
             title={ row.title }
-            isExpanded={row.isExpandedByDefault}
+            isExpanded={!row.isCollapsedByDefault}
           />
         )
       }, muutdata)
