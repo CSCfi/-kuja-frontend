@@ -1,8 +1,14 @@
 import { isInLupa, isAdded, isRemoved } from "../../../../css/label";
 
+const labelStyles = {
+  addition: isAdded,
+  removal: isRemoved
+};
+
 export const radioStory = {
   changes: [
     {
+      anchor: "radio.0",
       path: [0, "components", 0],
       properties: {
         isChecked: true,
@@ -10,6 +16,7 @@ export const radioStory = {
       }
     },
     {
+      anchor: "radio.0.0",
       path: [0, "categories", 0, "components", 0],
       properties: {
         isChecked: true,
@@ -19,6 +26,7 @@ export const radioStory = {
   ],
   categories: [
     {
+      anchor: "0",
       code: "0",
       title: "Categories",
       components: [
@@ -28,7 +36,9 @@ export const radioStory = {
             name: "example-radio-1",
             code: 1,
             title: "Row item",
-            labelStyles: Object.assign({}, isAdded, isInLupa),
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             isChecked: false
           }
         },
@@ -45,6 +55,7 @@ export const radioStory = {
       ],
       categories: [
         {
+          anchor: "0",
           code: "0",
           title: "Categories",
           components: [
@@ -54,6 +65,7 @@ export const radioStory = {
                 name: "example-radio",
                 code: 1.1,
                 title: "Sub row",
+                labelStyles: Object.assign({}, labelStyles),
                 isChecked: false,
                 value: "Testi"
               }
@@ -61,6 +73,7 @@ export const radioStory = {
           ],
           categories: [
             {
+              anchor: "0",
               code: "0",
               title: "Categories",
               components: [
@@ -70,13 +83,16 @@ export const radioStory = {
                     name: "example-checkbox-1.1.1",
                     code: "1.1.1",
                     title: "Leaf node item",
-                    labelStyles: Object.assign({}, isAdded, isInLupa),
+                    labelStyles: Object.assign({}, labelStyles, {
+                      custom: isInLupa
+                    }),
                     isChecked: true
                   }
                 }
               ]
             },
             {
+              anchor: "1",
               code: "1",
               title: "Categories",
               components: [
@@ -86,7 +102,9 @@ export const radioStory = {
                     name: "example-checkbox-1.1.2",
                     code: "1.1.2",
                     title: "Leaf node item",
-                    labelStyles: Object.assign({}, isAdded, isInLupa),
+                    labelStyles: Object.assign({}, labelStyles, {
+                      custom: isInLupa
+                    }),
                     isChecked: false
                   }
                 },
@@ -107,6 +125,7 @@ export const radioStory = {
               ],
               categories: [
                 {
+                  anchor: "0",
                   code: "0",
                   title: "Categories",
                   components: [
@@ -116,6 +135,7 @@ export const radioStory = {
                         name: "example-radio",
                         code: "1.1.2.1",
                         title: "Deep row",
+                        labelStyles: Object.assign({}, labelStyles),
                         isChecked: false,
                         value: "1.1.2.1"
                       }
@@ -123,6 +143,7 @@ export const radioStory = {
                   ]
                 },
                 {
+                  anchor: "1",
                   code: "1",
                   title: "Categories",
                   components: [
@@ -132,6 +153,7 @@ export const radioStory = {
                         name: "example-radio",
                         code: "1.1.2.2",
                         title: "Deep row",
+                        labelStyles: Object.assign({}, labelStyles),
                         isChecked: false,
                         value: "1.1.2.2"
                       }
@@ -141,6 +163,7 @@ export const radioStory = {
               ]
             },
             {
+              anchor: "2",
               code: "2",
               title: "Categories",
               components: [
@@ -150,7 +173,9 @@ export const radioStory = {
                     name: "example-checkbox-1.1.3",
                     code: "1.1.3",
                     title: "Leaf node item",
-                    labelStyles: Object.assign({}, isAdded, isInLupa),
+                    labelStyles: Object.assign({}, labelStyles, {
+                      custom: isInLupa
+                    }),
                     isChecked: true
                   }
                 }
@@ -159,6 +184,7 @@ export const radioStory = {
           ]
         },
         {
+          anchor: "1",
           code: "1",
           title: "Categories",
           components: [
@@ -168,6 +194,9 @@ export const radioStory = {
                 name: "example-radio",
                 code: "1.2",
                 title: "Sub row",
+                labelStyles: Object.assign({}, labelStyles, {
+                  custom: isInLupa
+                }),
                 isChecked: false,
                 value: "Testi2"
               }
@@ -175,6 +204,7 @@ export const radioStory = {
           ]
         },
         {
+          anchor: "2",
           code: "2",
           title: "Categories",
           components: [
@@ -184,6 +214,7 @@ export const radioStory = {
                 name: "example-checkbox",
                 code: "1.3",
                 title: "Sub row",
+                labelStyles: Object.assign({}, labelStyles),
                 isChecked: false,
                 value: "Testi3"
               }
@@ -193,6 +224,7 @@ export const radioStory = {
       ]
     },
     {
+      anchor: "1",
       code: "1",
       title: "Categories",
       components: [
@@ -202,13 +234,16 @@ export const radioStory = {
             name: "example-radio-2",
             code: 2,
             title: "Row item",
-            labelStyles: Object.assign({}, isRemoved, isInLupa),
+            labelStyles: Object.assign({}, labelStyles, {
+              custom: isInLupa
+            }),
             isChecked: false
           }
         }
       ]
     },
     {
+      anchor: "2",
       code: "2",
       title: "Categories",
       components: [
@@ -218,9 +253,28 @@ export const radioStory = {
             name: "example-radio-3",
             code: 3,
             title: "Row item",
-            labelStyles: Object.assign(isInLupa),
+            labelStyles: Object.assign({}, labelStyles),
             isChecked: false
           }
+        }
+      ],
+      categories: [
+        {
+          anchor: "0",
+          code: "3.1",
+          title: "Categories",
+          components: [
+            {
+              name: "CheckboxWithLabel",
+              properties: {
+                name: "example-checkbox-3.1",
+                code: "3.1",
+                title: "Sub row",
+                labelStyles: Object.assign({}, labelStyles),
+                isChecked: false
+              }
+            }
+          ]
         }
       ]
     }

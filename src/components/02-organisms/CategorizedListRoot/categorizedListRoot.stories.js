@@ -11,6 +11,7 @@ storiesOf("CategorizedListRoot", module)
   .add("Simple example", () => {
     return (
       <CategorizedListRoot
+        anchor="simple"
         categories={simpleStory.categories}
         changes={simpleStory.changes}
         onUpdate={() => {}}
@@ -20,6 +21,7 @@ storiesOf("CategorizedListRoot", module)
   .add("Complex example", () => {
     return (
       <CategorizedListRoot
+        anchor="complex"
         categories={complexStory.categories}
         changes={complexStory.changes}
         onUpdate={() => {}}
@@ -30,6 +32,7 @@ storiesOf("CategorizedListRoot", module)
   .add("Radio example", () => {
     return (
       <CategorizedListRoot
+        anchor="radio"
         categories={radioStory.categories}
         changes={radioStory.changes}
         onUpdate={() => {}}

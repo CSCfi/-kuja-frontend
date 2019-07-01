@@ -8,6 +8,7 @@ const labelStyles = {
 export const simpleStory = {
   changes: [
     {
+      anchor: "simple.0",
       path: [0, "components", 0],
       properties: {
         isChecked: true,
@@ -15,13 +16,7 @@ export const simpleStory = {
       }
     },
     {
-      path: [1, "components", 0],
-      properties: {
-        isChecked: false,
-        title: "Koulutukseen panostettu on (muutos)"
-      }
-    },
-    {
+      anchor: "simple.2",
       path: [2, "components", 0],
       properties: {
         isChecked: true,
@@ -29,6 +24,7 @@ export const simpleStory = {
       }
     },
     {
+      anchor: "simple.0.0",
       path: [0, "categories", 0, "components", 0],
       properties: {
         isChecked: true,
@@ -36,7 +32,8 @@ export const simpleStory = {
       }
     },
     {
-      path: [0, "categories", 1, "categories", 0, "components", 1],
+      anchor: "simple.1.1.0",
+      path: [1, "categories", 1, "categories", 0, "components", 0],
       properties: {
         isChecked: true,
         title: "Osaamisala (muutos)"
@@ -45,6 +42,7 @@ export const simpleStory = {
   ],
   categories: [
     {
+      anchor: "0",
       code: "1",
       title: "Category",
       components: [
@@ -63,6 +61,7 @@ export const simpleStory = {
       ],
       categories: [
         {
+          anchor: "0",
           code: "1.1",
           title: "Sub category",
           components: [
@@ -82,6 +81,7 @@ export const simpleStory = {
           ]
         },
         {
+          anchor: "1",
           code: "1.2",
           title: "Sub category",
           components: [
@@ -99,6 +99,7 @@ export const simpleStory = {
           ]
         },
         {
+          anchor: "2",
           code: "1.3",
           title: "Sub category",
           components: [
@@ -120,6 +121,7 @@ export const simpleStory = {
       ]
     },
     {
+      anchor: "1",
       code: "2",
       title: "Category",
       components: [
@@ -136,6 +138,7 @@ export const simpleStory = {
       ],
       categories: [
         {
+          anchor: "0",
           code: "2.1",
           title: "Sub category",
           components: [
@@ -153,6 +156,7 @@ export const simpleStory = {
           ]
         },
         {
+          anchor: "1",
           code: "2.2",
           title: "Sub category",
           components: [
@@ -170,6 +174,7 @@ export const simpleStory = {
           ],
           categories: [
             {
+              anchor: "0",
               code: "2.2.1",
               title: "Sub category",
               components: [
@@ -178,7 +183,7 @@ export const simpleStory = {
                   properties: {
                     code: "2.2.1",
                     title: "Sub row",
-                    isChecked: true,
+                    isChecked: false,
                     labelStyles,
                     name: "example-label",
                     value: "Testi"
@@ -187,6 +192,7 @@ export const simpleStory = {
               ]
             },
             {
+              anchor: "1",
               code: "2.2.2",
               title: "Sub category",
               components: [
@@ -204,6 +210,7 @@ export const simpleStory = {
               ]
             },
             {
+              anchor: "2",
               code: "2.2.3",
               title: "Sub category",
               components: [
@@ -223,6 +230,7 @@ export const simpleStory = {
           ]
         },
         {
+          anchor: "2",
           code: "2.3",
           title: "Sub category",
           components: [
@@ -243,6 +251,7 @@ export const simpleStory = {
       changes: []
     },
     {
+      anchor: "2",
       code: "3",
       title: "Category",
       components: [

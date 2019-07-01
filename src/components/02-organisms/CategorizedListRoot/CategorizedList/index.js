@@ -40,7 +40,6 @@ const CategorizedList = React.memo(props => {
         path: payload.fullPath
       }
     };
-
     if (payload.shouldBeChecked) {
       if (component.properties.isChecked) {
         if (changeObj && !changeObj.properties.isChecked) {
@@ -103,7 +102,9 @@ const CategorizedList = React.memo(props => {
   };
 
   const handlePredecessors = (changeProps, payload, operations = []) => {
-    const component = payload.parent.category.components[0];
+    const component = payload.parent
+      ? payload.parent.category.components[0]
+      : payload.component;
     const fullPath = R.concat(R.slice(0, -1, payload.rootPath), [
       "components",
       0
@@ -126,11 +127,51 @@ const CategorizedList = React.memo(props => {
       operations.push(operation);
     }
 
+    if (component.name === "RadioButtonWithLabel") {
+      // Walk through the siblings
+      R.addIndex(R.forEach)((category, i) => {
+        const component = category.components[0];
+        if (component.name === "RadioButtonWithLabel") {
+          const _fullPath = R.concat(payload.parent.rootPath, [
+            i,
+            "components",
+            0
+          ]);
+          // R.concat(payload.rootPath, [i, "components", 0]);
+          if (
+            !R.equals(
+              R.concat(payload.parent.rootPath, [i]),
+              R.init(payload.rootPath)
+            )
+          ) {
+            // All the radio button siblings must be unchecked
+            const nextPayload = {
+              anchor: `${R.join(
+                ".",
+                R.init(payload.parent.anchor.split("."))
+              )}.${payload.parent.siblings[i].anchor}`,
+              categories: category.categories,
+              component,
+              fullPath: _fullPath,
+              parent: payload.parent.parent,
+              rootPath: payload.parent.rootPath,
+              siblings: payload.parent.siblings
+            };
+            const nextChangeProps = {
+              isChecked: false
+            };
+            operations = handleTree(nextPayload, nextChangeProps, operations);
+          }
+        }
+      }, payload.parent.siblings);
+    }
+
     if (payload.parent.parent) {
       return handlePredecessors(
         changeProps,
         {
           anchor: nextAnchor,
+          component,
           parent: payload.parent.parent,
           rootPath: payload.parent.rootPath
         },
@@ -138,7 +179,6 @@ const CategorizedList = React.memo(props => {
       );
     }
 
-    console.info(component, fullPath, nextAnchor, changeProps, payload);
     return operations;
   };
 
@@ -156,19 +196,23 @@ const CategorizedList = React.memo(props => {
       props.allChanges
     );
 
+    let _operations = R.clone(operations);
+
     // Handle the current component
-    let _operations = R.concat(operations, [
-      getOperation(
-        payload.component,
-        changeObj,
-        {
-          anchor: payload.anchor,
-          fullPath: payload.fullPath,
-          shouldBeChecked: changeProps.isChecked
-        },
-        changeProps
-      )
-    ]);
+    const operation = getOperation(
+      payload.component,
+      changeObj,
+      {
+        anchor: payload.anchor,
+        fullPath: payload.fullPath,
+        shouldBeChecked: changeProps.isChecked
+      },
+      changeProps
+    );
+
+    if (operation) {
+      _operations = R.concat(operations, [operation]);
+    }
 
     // Walk through the descendants
     if (!changeProps.isChecked && payload.categories) {
@@ -180,10 +224,12 @@ const CategorizedList = React.memo(props => {
 
     if (changeProps.isChecked) {
       // Walk through the predecessors
-      _operations = R.concat(
-        _operations,
-        handlePredecessors(changeProps, payload, [])
-      );
+      if (payload.parent) {
+        _operations = R.concat(
+          _operations,
+          handlePredecessors(changeProps, payload, [])
+        );
+      }
       if (payload.component.name === "RadioButtonWithLabel") {
         // Walk through the siblings
         R.addIndex(R.forEach)((category, i) => {
@@ -201,7 +247,8 @@ const CategorizedList = React.memo(props => {
                 component,
                 fullPath,
                 parent: payload.parent,
-                rootPath: payload.rootPath
+                rootPath: payload.rootPath,
+                siblings: payload.siblings
               };
               const nextChangeProps = {
                 isChecked: false
@@ -213,7 +260,7 @@ const CategorizedList = React.memo(props => {
               );
             }
           }
-        }, payload.parent.category.categories);
+        }, payload.siblings);
       }
     }
 
@@ -287,7 +334,8 @@ const CategorizedList = React.memo(props => {
                             component,
                             fullPath,
                             parent: props.parent,
-                            rootPath: props.rootPath
+                            rootPath: props.rootPath,
+                            siblings: props.categories
                           }}
                           labelStyles={labelStyles}
                         >
@@ -309,7 +357,8 @@ const CategorizedList = React.memo(props => {
                             component,
                             fullPath,
                             parent: props.parent,
-                            rootPath: props.rootPath
+                            rootPath: props.rootPath,
+                            siblings: props.categories
                           }}
                           labelStyles={labelStyles}
                           value={properties.value}
@@ -371,7 +420,8 @@ const CategorizedList = React.memo(props => {
                   anchor,
                   category,
                   parent: props.parent,
-                  rootPath: props.rootPath
+                  rootPath: props.rootPath,
+                  siblings: props.categories
                 }}
                 parentRootPath={props.rootPath}
                 showCategoryTitles={props.showCategoryTitles}
