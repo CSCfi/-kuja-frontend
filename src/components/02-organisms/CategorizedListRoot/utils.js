@@ -4,7 +4,7 @@ export const getChangesByLevel = (level, changes) => {
   return changes.filter(change => {
     const categoryDepth = R.filter(v => {
       return v === "categories";
-    }, change.path).length;
+    }, change.path || []).length;
     return categoryDepth === level;
   });
 };

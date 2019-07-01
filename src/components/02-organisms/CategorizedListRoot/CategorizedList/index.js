@@ -187,6 +187,33 @@ const CategorizedList = React.memo(props => {
     return props.runOperations(operations);
   };
 
+  const handleDropdown = (payload, changeProps) => {
+    const changeObj = R.find(R.propEq("path", payload.fullPath))(
+      props.allChanges
+    );
+    let operations = [];
+    if (changeObj) {
+      operations.push({
+        type: "modification",
+        payload: {
+          anchor: payload.anchor,
+          path: payload.fullPath,
+          properties: changeProps
+        }
+      });
+    } else {
+      operations.push({
+        type: "addition",
+        payload: {
+          anchor: payload.anchor,
+          path: payload.fullPath,
+          properties: changeProps
+        }
+      });
+    }
+    return props.runOperations(operations);
+  };
+
   /**
    * Main handler
    * Returns array of changes
@@ -385,13 +412,16 @@ const CategorizedList = React.memo(props => {
                             <div className="px-2">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
-                                onChanges={handleChanges}
+                                onChanges={handleDropdown}
                                 options={properties.options}
                                 payload={{
                                   anchor,
-                                  id: `dropdown-${idSuffix}`,
-                                  path: [i, "components", ii],
-                                  fullPath
+                                  categories: category.categories,
+                                  component,
+                                  fullPath,
+                                  parent: props.parent,
+                                  rootPath: props.rootPath,
+                                  siblings: props.categories
                                 }}
                                 value={propsObj.selectedOption}
                                 isDisabled={isDisabled}
