@@ -13,7 +13,13 @@ const initialState = {
   },
   tutkintokielet: {
     changes: {}
-  }
+  },
+  opiskeluvuodet: {
+    changes: {}
+  },
+  muut: {
+    changes: {}
+  },
 };
 
 const FormContext = React.createContext(initialState);

@@ -21,6 +21,7 @@ import { KoulutusalatContext } from "context/koulutusalatContext";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { KieletContext } from "../../../../../../context/kieletContext";
+import { OpiskelijavuodetContext } from "../../../../../../context/opiskelijavuodetContext";
 import { MuutContext } from "../../../../../../context/muutContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import { setSectionData } from "../../../../../../services/muutoshakemus/actions";
@@ -87,6 +88,9 @@ const MuutospyyntoWizard = props => {
   );
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
+  );
+  const { state: opiskelijavuodet, dispatch: opiskelijavuodetDispatch } = useContext(
+    OpiskelijavuodetContext
   );
   const { state: muut, dispatch: muutDispatch } = useContext(
     MuutContext
@@ -270,6 +274,7 @@ const MuutospyyntoWizard = props => {
                       koulutusalat={koulutusalat}
                       koulutustyypit={koulutustyypit}
                       lupa={lupa}
+                      opiskelijavuodet={opiskelijavuodet}
                       muut={muut}
                       muutoshakemus={muutoshakemus || {}}
                       onUpdate={onUpdate}

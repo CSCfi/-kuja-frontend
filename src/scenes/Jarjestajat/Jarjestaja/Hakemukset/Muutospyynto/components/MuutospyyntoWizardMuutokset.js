@@ -2,6 +2,7 @@ import React from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
+import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
@@ -45,8 +46,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         <Kohde>
           <MuutospyyntoWizardOpiskelijavuodet lupa={lupa} />
         </Kohde> */}
-
-        <MuutospyyntoWizardMuut lupa={props.lupa} muut={props.muut} />
+        <MuutospyyntoWizardOpiskelijavuodet
+          lupa={props.lupa}
+          opiskelijavuodet={props.opiskelijavuodet}
+        />
+        <MuutospyyntoWizardMuut
+          lupa={props.lupa}
+          muut={props.muut}
+        />
       </form>
     </div>
   );
