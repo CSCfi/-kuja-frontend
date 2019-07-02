@@ -21,6 +21,7 @@ import { KoulutusalatContext } from "context/koulutusalatContext";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { KieletContext } from "../../../../../../context/kieletContext";
+import { OpiskelijavuodetContext } from "../../../../../../context/opiskelijavuodetContext";
 import { MuutContext } from "../../../../../../context/muutContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import { setSectionData } from "../../../../../../services/muutoshakemus/actions";
@@ -84,6 +85,9 @@ const MuutospyyntoWizard = props => {
   );
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
+  );
+  const { state: opiskelijavuodet, dispatch: opiskelijavuodetDispatch } = useContext(
+    OpiskelijavuodetContext
   );
   const { state: muut, dispatch: muutDispatch } = useContext(
     MuutContext
@@ -221,14 +225,14 @@ const MuutospyyntoWizard = props => {
           open={true}
           onClose={openCancelModal}
           maxWidth={state.isHelpVisible ? "xl" : "lg"}
-          fullWidth={true}
+          fullScreen={true}
           aria-labelledby="simple-dialog-title"
         >
           <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
             {formatMessage(wizardMessages.formTitle_new)}
           </DialogTitle>
           <DialogContent>
-            <div className="px-16 py-4">
+            <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
               <Stepper activeStep={page - 1}>
                 {steps.map(label => {
                   const stepProps = {};
@@ -253,6 +257,7 @@ const MuutospyyntoWizard = props => {
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
+                    opiskelijavuodet={opiskelijavuodet}
                     muut={muut}
                     muutoshakemus={muutoshakemus || {}}
                     onUpdate={onUpdate}
