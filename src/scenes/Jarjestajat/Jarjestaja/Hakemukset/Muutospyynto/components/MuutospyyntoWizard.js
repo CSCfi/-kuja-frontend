@@ -243,14 +243,14 @@ const MuutospyyntoWizard = props => {
           open={true}
           onClose={openCancelModal}
           maxWidth={state.isHelpVisible ? "xl" : "lg"}
-          fullWidth={true}
+          fullScreen={true}
           aria-labelledby="simple-dialog-title"
         >
           <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
             {formatMessage(wizardMessages.formTitle_new)}
           </DialogTitle>
           <DialogContent>
-            <div className="px-16 py-4">
+            <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
               <Stepper activeStep={page - 1}>
                 {steps.map(label => {
                   const stepProps = {};
