@@ -45,10 +45,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const { kohteet } = props.lupa;
-    const { headingNumber, opiskelijavuodet } = kohteet[4];
+    const { opiskelijavuodet } = kohteet[4];
     const { muutCombined } = kohteet[5];
-
-    setHeadingNumber(headingNumber);
 
     setInitialValue(
       parseInt(
