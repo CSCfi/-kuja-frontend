@@ -2,7 +2,7 @@ import React from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-// import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
+import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
@@ -46,7 +46,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           <MuutospyyntoWizardOpiskelijavuodet lupa={lupa} />
         </Kohde> */}
 
-        {/* <MuutospyyntoWizardMuut lupa={props.lupa} muut={props.muut} /> */}
+        <MuutospyyntoWizardMuut lupa={props.lupa} muut={props.muut} />
       </form>
     </div>
   );

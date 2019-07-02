@@ -53,5 +53,13 @@ export default defineMessages({
   vocationalTraining: {
     id: "wizard.vocationalTraining",
     defaultMessage: "Ammatilliseen tehtävään valmistavat koulutukset"
+  },
+  chooseOnlyOne: {
+    id: "wizard.chooseOnlyOne",
+    defaultMessage: "Voit valita vain yhden seuraavista:"
+  },
+  chooseAdditional: {
+    id: "wizard.chooseAdditional",
+    defaultMessage: "Lisäksi voit valita seuraavat:"
   }
 });

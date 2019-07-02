@@ -21,9 +21,11 @@ import { KoulutusalatContext } from "context/koulutusalatContext";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { KieletContext } from "../../../../../../context/kieletContext";
+import { MuutContext } from "../../../../../../context/muutContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import { setSectionData } from "../../../../../../services/muutoshakemus/actions";
 import { fetchKoulutusalat } from "services/koulutusalat/actions";
+import { fetchMuut } from "services/muut/actions";
 import {
   fetchKielet,
   fetchOppilaitoksenOpetuskielet
@@ -83,6 +85,9 @@ const MuutospyyntoWizard = props => {
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
   );
+  const { state: muut, dispatch: muutDispatch } = useContext(
+    MuutContext
+  );
   const {
     state: koulutustyypit,
     dispatch: koulutustyypitDispatch
@@ -108,6 +113,7 @@ const MuutospyyntoWizard = props => {
     fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
     fetchKielet(props.intl.locale)(kieletDispatch);
     fetchOppilaitoksenOpetuskielet()(kieletDispatch);
+    fetchMuut()(muutDispatch);
   }, [
     koulutuksetDispatch,
     koulutusalatDispatch,
@@ -247,7 +253,8 @@ const MuutospyyntoWizard = props => {
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
-                    muutoshakemus={muutoshakemus}
+                    muut={muut}
+                    muutoshakemus={muutoshakemus || {}}
                     onUpdate={onUpdate}
                     tutkinnotState={((muutoshakemus.tutkinnot || {}).state) || []}
                   />
