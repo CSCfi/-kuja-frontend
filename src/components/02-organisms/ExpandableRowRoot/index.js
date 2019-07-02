@@ -1,12 +1,15 @@
 import React from "react";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import ExpandableRow from "./ExpandableRow";
 import CategorizedListRoot from "../CategorizedListRoot";
 import NumberOfChanges from "components/00-atoms/NumberOfChanges";
 import { makeStyles } from "@material-ui/core/styles";
-import DeleteIcon from "@material-ui/icons/Delete";
+import UndoIcon from "@material-ui/icons/Undo";
 import * as R from "ramda";
 import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import commonMessages from "../../../i18n/definitions/common";
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -36,20 +39,23 @@ const ExpandableRowRoot = React.memo(props => {
               <div className="flex items-center">
                 <NumberOfChanges changes={props.changes} />
                 <span className="mx-6">
-                  <IconButton
-                    className={classes.button}
-                    variant="outlined"
-                    size="small"
-                    onClick={() => {
-                      return props.onChangesRemove(
-                        props.sectionId,
-                        props.anchor,
-                        props.index
-                      );
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  <Tooltip title={ props.intl.formatMessage(commonMessages.undo) }>
+                    <IconButton
+                      className={classes.button}
+                      variant="outlined"
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        return props.onChangesRemove(
+                          props.sectionId,
+                          props.anchor,
+                          props.index
+                        );
+                      }}
+                    >
+                      <UndoIcon />
+                    </IconButton>
+                  </Tooltip>
                 </span>
               </div>
             )}
@@ -89,4 +95,4 @@ ExpandableRowRoot.propTypes = {
   title: PropTypes.string
 };
 
-export default ExpandableRowRoot;
+export default injectIntl(ExpandableRowRoot);
