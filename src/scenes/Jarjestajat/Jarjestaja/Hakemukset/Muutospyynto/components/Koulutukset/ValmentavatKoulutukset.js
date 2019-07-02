@@ -9,6 +9,10 @@ import * as R from "ramda";
 
 const ValmentavatKoulutukset = React.memo(props => {
   const sectionId = "valmentavatkoulutukset";
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
+
   const getCategories = koulutusData => {
     const categories = R.map(item => {
       return {
@@ -47,25 +51,31 @@ const ValmentavatKoulutukset = React.memo(props => {
     }
   }, [props.koulutukset.poikkeukset, props.changes, props.intl]);
 
-  const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const onUpdate = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    return onUpdate({ changes: [] });
+  };
 
   return (
     <ExpandableRowRoot
+      anchor={sectionId}
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
       title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
       index={0}
-      onUpdate={props.onUpdate}
+      onChangesRemove={removeChanges}
+      onUpdate={onUpdate}
       sectionId={sectionId}
     />
   );
 });
 
 ValmentavatKoulutukset.propTypes = {
-  koulutukset: PropTypes.object,
-  changes: PropTypes.array
+  koulutukset: PropTypes.object
 };
 
 export default injectIntl(ValmentavatKoulutukset);

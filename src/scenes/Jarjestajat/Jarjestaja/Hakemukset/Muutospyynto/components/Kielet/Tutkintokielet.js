@@ -1,22 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import { MUUTOS_TYPES } from "../../modules/uusiHakemusFormConstants";
 import { findKieliByKoodi } from "../../../../../../../services/kielet/kieliUtil";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 
-const Tutkintokielet = props => {
+const Tutkintokielet = React.memo(props => {
+  const sectionId = "tutkintokielet";
   const [defaultLanguage, setDefaultLanguage] = useState({});
-  const [koulutusdata, setKoulutusdata] = useState([]);
-
-  useEffect(() => {
-    setKoulutusdata(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.koulutukset.koulutusdata))
-    );
-  }, [props.koulutukset]);
+  const [changes, setChanges] = useState({});
+  const [state, setState] = useState([]);
 
   useEffect(() => {
     const language = findKieliByKoodi(props.kielet, "FI");
@@ -26,121 +19,108 @@ const Tutkintokielet = props => {
     });
   }, [props.kielet, props.locale]);
 
-  const getArticle = (areaCode, articles = []) => {
-    return R.find(article => {
-      return article.koodi === areaCode;
-    }, articles);
+  useEffect(() => {
+    if (props.tutkinnotState.length > 0) {
+      const activeOnes = R.addIndex(R.map)((stateItem, i) => {
+        let tmpStateItem = R.clone(stateItem);
+        R.addIndex(R.forEach)((category, ii) => {
+          R.addIndex(R.forEach)((subCategory, iii) => {
+            const change = R.find(
+              R.propEq("path", [ii, "categories", iii, "components", 0]),
+              stateItem.changes
+            );
+            if (
+              (subCategory.components[0].properties.isChecked && !change) ||
+              (change && change.properties.isChecked)
+            ) {
+              tmpStateItem.categories[ii].categories[iii].components.push({
+                name: "Dropdown",
+                properties: {
+                  options: R.map(language => {
+                    return {
+                      label:
+                        R.find(m => {
+                          return m.kieli === props.locale;
+                        }, language.metadata).nimi || "[Kielen nimi tähän]",
+                      value: language.value
+                    };
+                  }, props.kielet),
+                  selectedOption: defaultLanguage
+                }
+              });
+            } else {
+              delete tmpStateItem.categories[ii].categories[iii].components;
+            }
+            delete tmpStateItem.categories[ii].categories[iii].categories;
+          }, category.categories);
+          if (
+            !!!R.filter(
+              R.prop("components"),
+              tmpStateItem.categories[ii].categories
+            ).length
+          ) {
+            tmpStateItem.categories[ii] = false;
+          }
+        }, stateItem.categories);
+        tmpStateItem.categories = tmpStateItem.categories.filter(Boolean);
+        if (!!!R.filter(R.prop("categories"), tmpStateItem.categories).length) {
+          tmpStateItem = {};
+        }
+        return tmpStateItem;
+      }, props.tutkinnotState);
+      setState(activeOnes);
+    }
+  }, [props.tutkinnotState, defaultLanguage, props.kielet, props.locale]);
+
+  const onUpdate = payload => {
+    setChanges(prevState => {
+      const newState = R.clone(prevState);
+      newState[payload.anchor] = payload.changes;
+      return newState;
+    });
   };
 
-  const getCategories = (article, koulutustyypit) => {
-    return R.values(
-      R.map(koulutustyyppi => {
-        return {
-          code: koulutustyyppi.koodiArvo,
-          title:
-            _.find(koulutustyyppi.metadata, m => {
-              return m.kieli === props.locale;
-            }).nimi || "[Koulutustyypin otsikko tähän]",
-          categories: _.map(koulutustyyppi.koulutukset, koulutus => {
-            const labelClasses = {
-              isAdded: !!_.find(
-                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-                { type: MUUTOS_TYPES.ADDITION }
-              ),
-              isInLupa: article
-                ? !!_.find(article.koulutusalat, koulutusala => {
-                    return !!_.find(koulutusala.koulutukset, {
-                      koodi: koulutus.koodiArvo
-                    });
-                  })
-                : false,
-              isRemoved: !!_.find(
-                _.filter(props.changes, { koodiarvo: koulutus.koodiArvo }),
-                { type: MUUTOS_TYPES.REMOVAL }
-              )
-            };
-            return {
-              components: [
-                {
-                  name: "CheckboxWithLabel",
-                  properties: {
-                    name: "CheckboxWithLabel",
-                    code: koulutus.koodiArvo,
-                    title:
-                      _.find(koulutus.metadata, m => {
-                        return m.kieli === props.locale;
-                      }).nimi || "[Koulutuksen otsikko tähän]",
-                    labelStyles: {
-                      addition: isAdded,
-                      removal: isRemoved,
-                      custom: Object.assign(
-                        {},
-                        labelClasses.isInLupa ? isInLupa : {}
-                      )
-                    },
-                    isChecked:
-                      (labelClasses.isInLupa && !labelClasses.isRemoved) ||
-                      labelClasses.isAdded
-                  }
-                },
-                {
-                  name: "Dropdown",
-                  properties: {
-                    options: R.map(language => {
-                      return {
-                        label:
-                          _.find(language.metadata, m => {
-                            return m.kieli === props.locale;
-                          }).nimi || "[Kielen nimi tähän]",
-                        value: language.value
-                      };
-                    }, props.kielet),
-                    selectedOption: defaultLanguage
-                  }
-                }
-              ]
-            };
-          })
-        };
-      }, koulutustyypit)
-    );
+  const removeChanges = (...payload) => {
+    return onUpdate({ anchor: payload[1], changes: [] });
   };
 
   return (
     <React.Fragment>
-      {R.addIndex(R.map)((koulutusala, i) => {
-        const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
-        const article = getArticle(areaCode, props.lupa.kohteet[2].maaraykset);
-        const title = parseLocalizedField(
-          koulutusala.metadata,
-          R.toUpper(props.locale)
-        );
+      {R.addIndex(R.map)((itemState, i) => {
         return (
           <ExpandableRowRoot
+            anchor={itemState.areaCode}
+            categories={itemState.categories}
+            changes={changes[itemState.areaCode]}
+            code={itemState.areaCode}
+            index={i}
             key={`expandable-row-root-${i}`}
-            categories={getCategories(article, koulutusala.koulutukset)}
-            changes={[]}
-            code={areaCode}
-            title={title}
+            onChangesRemove={removeChanges}
+            onUpdate={onUpdate}
+            sectionId={sectionId}
+            title={itemState.title}
           />
         );
-      }, koulutusdata)}
+      }, state)}
     </React.Fragment>
   );
-};
+});
 
 Tutkintokielet.defautlProps = {
+  changes: [],
   locale: "FI"
 };
 
 Tutkintokielet.propTypes = {
+  categories: PropTypes.array,
+  kielet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.array,
-  kielet: PropTypes.array,
   locale: PropTypes.string,
   lupa: PropTypes.object,
-  onChanges: PropTypes.func
+  onUpdate: PropTypes.func,
+  tutkinnotState: PropTypes.array
 };
 
 export default Tutkintokielet;

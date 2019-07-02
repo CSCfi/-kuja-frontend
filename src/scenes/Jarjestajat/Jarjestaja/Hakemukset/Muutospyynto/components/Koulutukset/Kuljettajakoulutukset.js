@@ -8,7 +8,11 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Kuljettajakoulutukset = props => {
+  const sectionId = "kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   const getCategories = koulutusData => {
     const categories = R.map(item => {
@@ -48,14 +52,22 @@ const Kuljettajakoulutukset = props => {
     }
   }, [props.koulutukset.muut, props.changes, props.intl.locale]);
 
-  const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const onUpdate = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    return onUpdate({ changes: [] });
+  };
 
   return (
     <ExpandableRowRoot
+      anchor={sectionId}
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
+      onChangesRemove={removeChanges}
+      onUpdate={onUpdate}
       title={props.intl.formatMessage(wizardMessages.driverTraining)}
     />
   );

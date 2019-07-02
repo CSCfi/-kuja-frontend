@@ -15,6 +15,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       </p>
 
       <ValmentavatKoulutukset
+        changes={props.changes}
         koulutukset={props.koulutukset}
         onUpdate={props.onUpdate}
       />
@@ -38,6 +39,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
 });
 
 MuutospyyntoWizardKoulutukset.propTypes = {
+  changes: PropTypes.object,
   koulutukset: PropTypes.object,
   onUpdate: PropTypes.func
 };

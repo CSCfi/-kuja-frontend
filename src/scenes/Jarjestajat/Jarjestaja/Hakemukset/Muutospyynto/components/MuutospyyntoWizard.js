@@ -37,10 +37,7 @@ import {
   fetchKoulutus
 } from "../../../../../../services/koulutukset/actions";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
-import {
-  HAKEMUS_VIRHE,
-  HAKEMUS_VIESTI
-} from "../modules/uusiHakemusFormConstants";
+import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
@@ -77,9 +74,9 @@ const DialogTitle = withStyles(theme => ({
 });
 
 const MuutospyyntoWizard = props => {
-  const [changes, setChanges] = useState({
-    tutkinnot: {}
-  });
+  // const [changes, setChanges] = useState({
+  //   tutkinnot: {}
+  // });
   const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
     MuutoshakemusContext
   );
@@ -154,14 +151,6 @@ const MuutospyyntoWizard = props => {
 
   const steps = getSteps();
 
-  const onCancel = event => {
-    if (event) {
-      event.preventDefault();
-    }
-    const url = `/jarjestajat/${props.match.params.ytunnus}`;
-    props.history.push(url);
-  };
-
   const save = data => {
     if (props.match.params.uuid) {
       // props.saveMuutospyynto(data);
@@ -181,7 +170,7 @@ const MuutospyyntoWizard = props => {
 
   const onUpdate = useCallback(
     payload => {
-      setSectionData(payload.sectionId, payload.index, payload.changes)(
+      setSectionData(payload.sectionId, payload)(
         muutoshakemusDispatch
       );
     },
@@ -200,14 +189,7 @@ const MuutospyyntoWizard = props => {
     props.history.push(`/jarjestajat/${props.match.params.ytunnus}`);
   }
 
-  const {
-    muutosperustelut,
-    vankilat,
-    ELYkeskukset,
-    lupa,
-    paatoskierrokset,
-    muutospyynto
-  } = props;
+  const { lupa } = props;
   const page = parseInt(props.match.params.page, 10);
 
   if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
@@ -267,20 +249,21 @@ const MuutospyyntoWizard = props => {
                   pageNumber={1}
                   onNext={handleNext}
                   onSave={save}
-                  render={() => (
-                    <MuutospyyntoWizardMuutokset
-                      kielet={kielet}
-                      koulutukset={koulutukset}
-                      koulutusalat={koulutusalat}
-                      koulutustyypit={koulutustyypit}
-                      lupa={lupa}
-                      opiskelijavuodet={opiskelijavuodet}
-                      muut={muut}
-                      muutoshakemus={muutoshakemus || {}}
-                      onUpdate={onUpdate}
-                    />
-                  )}
-                />
+                  muutoshakemus={muutoshakemus}
+                >
+                  <MuutospyyntoWizardMuutokset
+                    kielet={kielet}
+                    koulutukset={koulutukset}
+                    koulutusalat={koulutusalat}
+                    koulutustyypit={koulutustyypit}
+                    lupa={lupa}
+                    opiskelijavuodet={opiskelijavuodet}
+                    muut={muut}
+                    muutoshakemus={muutoshakemus || {}}
+                    onUpdate={onUpdate}
+                    tutkinnotState={((muutoshakemus.tutkinnot || {}).state) || []}
+                  />
+                </WizardPage>
               )}
             </div>
           </DialogContent>
@@ -305,7 +288,7 @@ const MuutospyyntoWizard = props => {
       </MuutoshakemusProvider>
     );
   } else {
-    return <div>Haetaa</div>;
+    return <div>Haetaan</div>;
   }
 };
 

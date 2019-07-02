@@ -19,7 +19,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
       <form onSubmit={props.handleSubmit}>
         <Tutkinnot
-          changes={props.muutoshakemus.tutkinnot.changes || {}}
           koulutukset={props.koulutukset}
           koulutusalat={props.koulutusalat}
           koulutustyypit={props.koulutustyypit.data}
@@ -37,6 +36,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           kielet={props.kielet}
           koulutukset={props.koulutukset}
           onUpdate={props.onUpdate}
+          tutkinnotState={props.tutkinnotState}
         />
 
         {/* <Kohde>
@@ -65,7 +65,8 @@ MuutospyyntoWizardMuutokset.propTypes = {
   koulutustyypit: PropTypes.object,
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
+  tutkinnotState: PropTypes.array
 };
 
 export default injectIntl(MuutospyyntoWizardMuutokset);

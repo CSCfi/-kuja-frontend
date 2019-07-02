@@ -8,11 +8,16 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Tyovoimakoulutukset = React.memo(props => {
+  const sectionId = "tyovoimakoulutukset";
   const koodisto = "oivatyovoimakoulutus";
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   const getCategories = koulutusData => {
     const categories = R.map(item => {
       return {
+        anchor: item.code,
         components: [
           {
             name: "RadioButtonWithLabel",
@@ -48,14 +53,22 @@ const Tyovoimakoulutukset = React.memo(props => {
     }
   }, [props.koulutukset.muut, props.changes, props.intl.locale]);
 
-  const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const onUpdate = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    return onUpdate({ changes: [] });
+  };
 
   return (
     <ExpandableRowRoot
+      anchor={sectionId}
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
+      onUpdate={onUpdate}
+      onChangesRemove={removeChanges}
       title={props.intl.formatMessage(wizardMessages.workforceTraining)}
     />
   );
