@@ -17,6 +17,18 @@ export default defineMessages({
     id: "common.difference",
     defaultMessage: "Muutos"
   },
+  current: {
+    id: "common.current",
+    defaultMessage: "Nykyinen"
+  },
+  applyFor: {
+    id: "common.applyFor",
+    defaultMessage: "Haettava"
+  },
+  difference: {
+    id: "common.difference",
+    defaultMessage: "Muutos"
+  },
   undo: {
     id: "common.undo",
     defaultMessage: "Peruuta muutokset"
