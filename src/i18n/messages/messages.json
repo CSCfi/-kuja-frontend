@@ -20,6 +20,21 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.current",
+    "defaultMessage": "Nykyinen",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.applyFor",
+    "defaultMessage": "Haettava",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.difference",
+    "defaultMessage": "Muutos",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"

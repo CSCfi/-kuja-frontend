@@ -41,11 +41,8 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
         {/* <Kohde>
           <MuutospyyntoWizardToimialue lupa={lupa} />
-        </Kohde>
-
-        <Kohde>
-          <MuutospyyntoWizardOpiskelijavuodet lupa={lupa} />
         </Kohde> */}
+
         <MuutospyyntoWizardOpiskelijavuodet
           lupa={props.lupa}
           opiskelijavuodet={props.opiskelijavuodet}
