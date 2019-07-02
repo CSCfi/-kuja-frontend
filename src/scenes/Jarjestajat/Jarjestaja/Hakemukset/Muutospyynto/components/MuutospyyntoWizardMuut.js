@@ -173,6 +173,10 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     });
   }
 
+  const removeChanges = (...payload) => {
+    return onUpdate({ index: payload[2], changes: [] });
+  };
+
   return (
     <Section
       code={headingNumber}
@@ -193,6 +197,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             sectionId={sectionId}
             title={ row.title }
             isExpanded={!row.isCollapsedByDefault}
+            onChangesRemove={removeChanges}
           />
         )
       }, muutdata)
