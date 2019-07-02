@@ -8,45 +8,51 @@ const labelStyles = {
 export const complexStory = {
   changes: [
     {
+      anchor: "complex.0",
       path: [0, "components", 0],
       properties: {
-        isChecked: true,
-        title: "Erikoisammattitutkinto (muutos)"
+        isChecked: true
       }
     },
     {
+      anchor: "complex.1",
       path: [1, "components", 0],
       properties: {
         isChecked: true,
         title: "Koulutukseen panostettu on (muutos)"
       }
     },
+    // {
+    //   anchor: "complex.2",
+    //   path: [2, "components", 0],
+    //   properties: {
+    //     isChecked: true,
+    //     title: "Alakoulu ja yläkoulu (muutos)"
+    //   }
+    // },
     {
-      path: [2, "components", 0],
-      properties: {
-        isChecked: true,
-        title: "Alakoulu ja yläkoulu (muutos)"
-      }
-    },
-    {
-      path: [0, "categories", 0, "components", 0],
+      anchor: "complex.0.1",
+      path: [0, "categories", 1, "components", 0],
       properties: {
         isChecked: true,
         title: "Osaamisala (muutos)"
       }
-    },
-    {
-      path: [0, "categories", 0, "categories", 1, "components", 1],
-      properties: {
-        selectedOption: {
-          label: "Strawberry",
-          value: "strawberry"
-        }
-      }
     }
+    // ,
+    // {
+    //   anchor: "complex.0.0.1",
+    //   path: [0, "categories", 0, "categories", 1, "components", 1],
+    //   properties: {
+    //     selectedOption: {
+    //       label: "Strawberry",
+    //       value: "strawberry"
+    //     }
+    //   }
+    // }
   ],
   categories: [
     {
+      anchor: "0",
       code: "0",
       title: "Categories",
       components: [
@@ -75,6 +81,7 @@ export const complexStory = {
       ],
       categories: [
         {
+          anchor: "0",
           code: "0",
           title: "Categories",
           components: [
@@ -92,6 +99,7 @@ export const complexStory = {
           ],
           categories: [
             {
+              anchor: "0",
               code: "0",
               title: "Categories",
               components: [
@@ -110,6 +118,7 @@ export const complexStory = {
               ]
             },
             {
+              anchor: "1",
               code: "1",
               title: "Categories",
               components: [
@@ -120,7 +129,7 @@ export const complexStory = {
                     code: "1.1.2",
                     title: "Leaf node item",
                     labelStyles,
-                    isChecked: true
+                    isChecked: false
                   }
                 },
                 {
@@ -141,6 +150,7 @@ export const complexStory = {
           ]
         },
         {
+          anchor: "1",
           code: "1",
           title: "Categories",
           components: [
@@ -155,9 +165,61 @@ export const complexStory = {
                 value: "Testi2"
               }
             }
+          ],
+          categories: [
+            {
+              anchor: "0",
+              code: "0",
+              title: "Categories",
+              components: [
+                {
+                  name: "CheckboxWithLabel",
+                  properties: {
+                    name: "example-checkbox-1.2.1",
+                    code: "1.2.1",
+                    title: "Leaf node item",
+                    labelStyles,
+                    isChecked: false
+                  }
+                },
+                {
+                  name: "Dropdown",
+                  properties: {
+                    options: [
+                      { value: "chocolate", label: "Chocolate" },
+                      {
+                        value: "strawberry",
+                        label: "Strawberry"
+                      },
+                      { value: "vanilla", label: "Vanilla" }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "1",
+              code: "1",
+              title: "Categories",
+              components: [
+                {
+                  name: "CheckboxWithLabel",
+                  properties: {
+                    name: "example-checkbox-1.2.2",
+                    code: "1.2.2",
+                    title: "Leaf node item",
+                    labelStyles: Object.assign({}, labelStyles, {
+                      custom: isInLupa
+                    }),
+                    isChecked: true
+                  }
+                }
+              ]
+            }
           ]
         },
         {
+          anchor: "2",
           code: "2",
           title: "Categories",
           components: [
@@ -177,6 +239,7 @@ export const complexStory = {
       ]
     },
     {
+      anchor: "1",
       code: "1",
       title: "Categories",
       components: [
@@ -193,6 +256,7 @@ export const complexStory = {
       ]
     },
     {
+      anchor: "2",
       code: "2",
       title: "Categories",
       components: [

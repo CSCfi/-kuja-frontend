@@ -8,6 +8,9 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Opetuskielet = props => {
+  const sectionId = "opetuskielet";
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
   const getCategories = useCallback(({ items }) => {
     return R.map(item => {
       return {
@@ -41,26 +44,45 @@ const Opetuskielet = props => {
         )
       )
     );
-  }, [props.kielet.opetuskielet, props.changes, props.kohde, getCategories, props.intl.locale]);
+  }, [
+    props.kielet.opetuskielet,
+    props.changes,
+    props.kohde,
+    getCategories,
+    props.intl.locale
+  ]);
 
-  const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const onUpdate = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    return onUpdate({ changes: [] });
+  };
 
   return (
     <ExpandableRowRoot
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
+      index={0}
+      onChangesRemove={removeChanges}
+      onUpdate={onUpdate}
+      sectionId={sectionId}
       title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
       isExpanded={true}
     />
   );
 };
 
+Opetuskielet.defaultProps = {
+  changes: []
+};
+
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
   kielet: PropTypes.object,
-  onChanges: PropTypes.func,
+  onUpdate: PropTypes.func,
   kohde: PropTypes.object
 };
 

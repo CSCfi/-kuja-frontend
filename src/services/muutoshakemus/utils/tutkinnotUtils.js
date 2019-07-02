@@ -9,12 +9,13 @@ export function getCategories(index, article, koulutustyypit, locale) {
     categories[index] = R.values(
       R.map(koulutustyyppi => {
         return {
+          anchor: koulutustyyppi.koodiArvo,
           code: koulutustyyppi.koodiArvo,
           title:
             _.find(koulutustyyppi.metadata, m => {
               return m.kieli === locale;
             }).nimi || "[Koulutustyypin otsikko tähän]",
-          categories: _.map(koulutustyyppi.koulutukset, koulutus => {
+          categories: R.map(koulutus => {
             const labelClasses = {
               isInLupa: article
                 ? !!_.find(article.koulutusalat, koulutusala => {
@@ -24,8 +25,8 @@ export function getCategories(index, article, koulutustyypit, locale) {
                   })
                 : false
             };
-
             return {
+              anchor: koulutus.koodiArvo,
               components: [
                 {
                   name: "CheckboxWithLabel",
@@ -63,6 +64,7 @@ export function getCategories(index, article, koulutustyypit, locale) {
                           : false
                       };
                       return {
+                        anchor: osaamisala.koodiArvo,
                         components: [
                           {
                             name: "CheckboxWithLabel",
@@ -73,12 +75,10 @@ export function getCategories(index, article, koulutustyypit, locale) {
                                 _.find(osaamisala.metadata, m => {
                                   return m.kieli === "FI";
                                 }).nimi || "[Osaamisalan otsikko tähän]",
-                              labelStyles: Object.assign(
-                                {},
-                                labelClasses.isAdded ? isAdded : {},
-                                labelClasses.isInLupa ? isInLupa : {},
-                                labelClasses.isRemoved ? isRemoved : {}
-                              ),
+                              labelStyles: {
+                                addition: isAdded,
+                                removal: isRemoved
+                              },
                               isChecked:
                                 (labelClasses.isInLupa &&
                                   !labelClasses.isRemoved) ||
@@ -89,9 +89,9 @@ export function getCategories(index, article, koulutustyypit, locale) {
                       };
                     })(koulutus.osaamisala)
                   ]
-                : []
+                : undefined
             };
-          })
+          }, koulutustyyppi.koulutukset)
         };
       }, koulutustyypit)
     );

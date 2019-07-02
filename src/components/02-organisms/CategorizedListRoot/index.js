@@ -1,36 +1,54 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
-import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "./utils";
 
 const CategorizedListRoot = React.memo(props => {
   const [changes, setChanges] = useState([]);
-  const [allChanges, setAllChanges] = useState(props.changes);
+  const [allChanges, setAllChanges] = useState([]);
 
-  const getChangeByPath = path => {
-    return R.find(R.propEq("path", path))(allChanges);
+  useEffect(() => {
+    setAllChanges(props.changes);
+  }, [props.changes]);
+
+  const getChangeByPath = (anchor, path) => {
+    const changeObj = (R.filter(change => {
+      return R.equals(change.path, path) && R.equals(change.anchor, anchor);
+    }, allChanges) || {})[0];
+    return changeObj;
   };
 
   const runOperations = operations => {
     let allChangesClone = R.clone(allChanges);
-    _.forEach(operations, operation => {
-      if (operation[0] === "addChange") {
-        allChangesClone = R.insert(-1, operation[1], allChangesClone);
-      } else if (operation[0] === "removeChange") {
-        allChangesClone = _.filter(
-          allChangesClone,
-          change => !R.equals(change.path, operation[1])
-        );
+    R.forEach(operation => {
+      if (operation.type === "addition") {
+        allChangesClone = R.insert(-1, operation.payload, allChangesClone);
+      } else if (operation.type === "removal") {
+        allChangesClone = R.filter(change => {
+          return (
+            !R.equals(change.path, operation.payload.path) ||
+            !R.equals(change.anchor, operation.payload.anchor)
+          );
+        }, allChangesClone);
+      } else if (operation.type === "modification") {
+        const withoutTargetChange = R.filter(change => {
+          return (
+            !R.equals(change.path, operation.payload.path) ||
+            !R.equals(change.anchor, operation.payload.anchor)
+          );
+        }, allChangesClone);
+        allChangesClone = R.insert(-1, operation.payload, withoutTargetChange);
       }
-    });
+    }, operations);
     setAllChanges(allChangesClone);
     setChanges(getChangesByLevel(0, props.changes));
     props.onUpdate({
-      sectionId: props.sectionId,
+      anchor: props.anchor,
+      categories: props.categories,
+      changes: allChangesClone,
       index: props.index,
-      changes: allChangesClone
+      sectionId: props.sectionId
     });
   };
 
@@ -43,6 +61,7 @@ const CategorizedListRoot = React.memo(props => {
 
   return (
     <CategorizedList
+      anchor={props.anchor}
       level={0}
       categories={props.categories}
       allChanges={allChanges}
@@ -56,11 +75,13 @@ const CategorizedListRoot = React.memo(props => {
 });
 
 CategorizedListRoot.defaultProps = {
+  changes: [],
   showCategoryTitles: false,
   debug: false
 };
 
 CategorizedListRoot.propTypes = {
+  anchor: PropTypes.string,
   categories: PropTypes.array,
   changes: PropTypes.array,
   index: PropTypes.number,

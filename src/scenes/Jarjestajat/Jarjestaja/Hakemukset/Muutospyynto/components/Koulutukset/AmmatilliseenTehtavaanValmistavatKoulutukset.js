@@ -8,9 +8,15 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
+  const sectionId = "ammatilliseentehtavaanvalmistavatkoulutukset";
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
+
   const getCategories = koulutusData => {
     const categories = R.map(item => {
       return {
+        anchor: item.code,
         components: [
           {
             name: "CheckboxWithLabel",
@@ -52,14 +58,22 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
     }
   }, [props.koulutukset.muut, props.changes, props.intl.locale]);
 
-  const [categories, setCategories] = useState([]);
-  const [changes] = useState([]);
+  const onUpdate = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    return onUpdate({ changes: [] });
+  };
 
   return (
     <ExpandableRowRoot
+      anchor={sectionId}
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
+      onChangesRemove={removeChanges}
+      onUpdate={onUpdate}
       title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
     />
   );
