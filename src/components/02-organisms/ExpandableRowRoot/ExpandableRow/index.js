@@ -36,7 +36,8 @@ const ExpansionPanelSummary = withStyles({
   content: {
     "&$expanded": {
       margin: "12px 0"
-    }
+    },
+    alignItems: "center"
   },
   expanded: {}
 })(props => <MuiExpansionPanelSummary {...props} />);

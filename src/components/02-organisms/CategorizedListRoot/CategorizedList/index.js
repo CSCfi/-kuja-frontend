@@ -166,7 +166,7 @@ const CategorizedList = React.memo(props => {
       }, payload.parent.siblings);
     }
 
-    if (payload.parent.parent) {
+    if (payload.parent.parent && payload.parent.parent.category.components) {
       return handlePredecessors(
         changeProps,
         {
@@ -251,7 +251,11 @@ const CategorizedList = React.memo(props => {
 
     if (changeProps.isChecked) {
       // Walk through the predecessors
-      if (payload.parent) {
+      if (
+        payload.parent &&
+        payload.parent.category &&
+        payload.parent.category.components
+      ) {
         _operations = R.concat(
           _operations,
           handlePredecessors(changeProps, payload, [])
@@ -266,10 +270,9 @@ const CategorizedList = React.memo(props => {
             if (!R.equals(fullPath, payload.fullPath)) {
               // All the radio button siblings must be unchecked
               const nextPayload = {
-                anchor: R.join(
-                  ".",
-                  R.concat(R.init(payload.anchor.split(".")), [i])
-                ),
+                anchor: `${R.join(".", R.init(payload.anchor.split(".")))}.${
+                  category.anchor
+                }`,
                 categories: category.categories,
                 component,
                 fullPath,

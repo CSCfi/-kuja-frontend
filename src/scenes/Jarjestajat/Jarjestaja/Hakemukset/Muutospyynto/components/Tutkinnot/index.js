@@ -9,6 +9,8 @@ import * as R from "ramda";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
+  const changes = [];
+  const [state, setState] = useState([]);
   const [koulutusdata, setKoulutusdata] = useState([]);
   const [locale, setLocale] = useState([]);
 
@@ -19,8 +21,30 @@ const Tutkinnot = React.memo(props => {
   }, [props.koulutukset]);
 
   useEffect(() => {
+    const tmpState = [];
+    R.addIndex(R.map)((koulutusala, i) => {
+      const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
+      const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+      const categories = getCategories(
+        i,
+        article,
+        koulutusala.koulutukset,
+        locale
+      );
+      const title = parseLocalizedField(koulutusala.metadata, locale);
+      const changes = [];
+      tmpState.push({ areaCode, article, categories, changes, title });
+    }, koulutusdata);
+    setState(tmpState);
+  }, [koulutusdata, locale, props.lupa.kohteet]);
+
+  useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
+
+  useEffect(() => {
+    props.onUpdate({ sectionId, state });
+  }, [changes]);
 
   const getArticle = (areaCode, articles = []) => {
     return R.find(article => {
@@ -28,40 +52,44 @@ const Tutkinnot = React.memo(props => {
     }, articles);
   };
 
+  const onUpdate = payload => {
+    setState(prevState => {
+      const newState = R.clone(prevState);
+      newState[payload.index].changes = payload.changes;
+      return newState;
+    });
+  };
+
+  const removeChanges = (...payload) => {
+    return onUpdate({ index: payload[2], changes: [] });
+  };
+
   return (
     <Section
       code={props.lupa.kohteet[1].headingNumber}
       title={props.lupa.kohteet[1].heading}
     >
-      {R.addIndex(R.map)((koulutusala, i) => {
-        const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
-        const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
-        const categories = getCategories(
-          i,
-          article,
-          koulutusala.koulutukset,
-          locale
-        );
-        const title = parseLocalizedField(koulutusala.metadata, locale);
+      {R.addIndex(R.map)((stateItem, i) => {
         return (
           <ExpandableRowRoot
+            anchor={stateItem.areaCode}
             key={`expandable-row-root-${i}`}
-            categories={categories}
-            changes={props.changes[i]}
-            code={areaCode}
+            categories={stateItem.categories}
+            changes={stateItem.changes}
+            code={stateItem.areaCode}
             index={i}
-            onUpdate={props.onUpdate}
+            onChangesRemove={removeChanges}
+            onUpdate={onUpdate}
             sectionId={sectionId}
-            title={title}
+            title={stateItem.title}
           />
         );
-      }, koulutusdata)}
+      }, state)}
     </Section>
   );
 });
 
 Tutkinnot.propTypes = {
-  changes: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.array,

@@ -2,6 +2,7 @@ import React from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
+// import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
@@ -17,7 +18,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
       <form onSubmit={props.handleSubmit}>
         <Tutkinnot
-          changes={props.muutoshakemus.tutkinnot.changes || {}}
           koulutukset={props.koulutukset}
           koulutusalat={props.koulutusalat}
           koulutustyypit={props.koulutustyypit.data}
@@ -35,6 +35,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           kielet={props.kielet}
           koulutukset={props.koulutukset}
           onUpdate={props.onUpdate}
+          tutkinnotState={props.tutkinnotState}
         />
 
         {/* <Kohde>
@@ -43,11 +44,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
         <Kohde>
           <MuutospyyntoWizardOpiskelijavuodet lupa={lupa} />
-        </Kohde>
-
-        <Kohde>
-          <MuutospyyntoWizardMuutContainer lupa={lupa} />
         </Kohde> */}
+
+        {/* <MuutospyyntoWizardMuut lupa={props.lupa} muut={props.muut} /> */}
       </form>
     </div>
   );
@@ -59,7 +58,8 @@ MuutospyyntoWizardMuutokset.propTypes = {
   koulutustyypit: PropTypes.object,
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
+  tutkinnotState: PropTypes.array
 };
 
 export default injectIntl(MuutospyyntoWizardMuutokset);

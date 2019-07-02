@@ -1,53 +1,42 @@
-import React, { Component } from 'react'
-import WizardActions from './WizardActions'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from "react";
+import WizardActions from "./WizardActions";
+import PropTypes from "prop-types";
 
-class WizardPage extends Component {
+const WizardPage = props => {
+  const [isSavingEnabled, setIsSavingEnabled] = useState(false);
+  const onSave = () => {
+    setIsSavingEnabled(false);
+    // TODO: Save
+  };
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            isChangeDetected: false,
-            formData: {}
-        }
-    }
+  useEffect(() => {
+    setIsSavingEnabled(true);
+  }, [props.muutoshakemus]);
 
-    onChildComponentUpdate = (formValues) => {
-        this.setState({
-            isChangeDetected: true,
-            formData: formValues
-        })
-    }
+  return (
+    <div>
+      {props.children}
+      <WizardActions
+        pageNumber={props.pageNumber}
+        onPrev={props.onPrev}
+        onNext={props.onNext}
+        onSave={onSave}
+        isSavingEnabled={isSavingEnabled}
+      />
+    </div>
+  );
+};
 
-    onSave = () => {
-        this.props.onSave(this.state.formData)
-    }
-
-    render() {
-        return (
-            <div>
-                {
-                    this.props.render({
-                        onChildComponentUpdate: this.onChildComponentUpdate
-                    })
-                }
-                <WizardActions
-                    pageNumber={ this.props.pageNumber }
-                    onPrev={ this.props.onPrev }
-                    onNext={ this.props.onNext }
-                    onSave={ this.onSave.bind(this) }
-                    isSavingEnabled={ this.state.isChangeDetected }>
-                </WizardActions>
-            </div>
-        )
-    }
-}
+WizardPage.defaultProps = {
+  changes: []
+};
 
 WizardPage.propTypes = {
-    onNext: PropTypes.func,
-    onPrev: PropTypes.func,
-    onSave: PropTypes.func,
-    pageNumber: PropTypes.number
-}
+  muutoshakemus: PropTypes.object,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func,
+  onSave: PropTypes.func,
+  pageNumber: PropTypes.number
+};
 
-export default WizardPage
+export default WizardPage;

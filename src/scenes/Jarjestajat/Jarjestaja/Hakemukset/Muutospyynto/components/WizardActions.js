@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   Button,
   SubtleButton,
@@ -7,54 +7,49 @@ import {
 } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 
-class WizardActions extends Component {
-  onPrevClick = () => {
-    this.props.onPrev(this.props.pageNumber);
+const WizardActions = props => {
+  const onPrevClick = () => {
+    props.onPrev(props.pageNumber);
   };
 
-  onNextClick = () => {
-    this.props.onNext(this.props.pageNumber);
+  const onNextClick = () => {
+    props.onNext(props.pageNumber);
   };
 
-  onSaveClick = () => {
-    this.props.onSave();
+  const onSaveClick = () => {
+    props.onSave();
   };
 
-  render() {
-    return (
-      <WizardBottom>
-        <Container maxWidth="1085px" padding="15px">
-          <Button
-            type="button"
-            className={`previous button-left ${
-              !this.props.onPrev ? "button-hidden" : ""
-            }`}
-            onClick={this.onPrevClick}
-          >
-            Edellinen
-          </Button>
-          <div>
-            <SubtleButton
-              disabled={!this.props.isSavingEnabled}
-              onClick={this.onSaveClick}
-            >
-              Tallenna luonnos
-            </SubtleButton>
-          </div>
-          <Button
-            type="button"
-            className={`next button-right ${
-              !this.props.onNext ? "button-hidden" : ""
-            }`}
-            onClick={this.onNextClick}
-          >
-            Seuraava
-          </Button>
-        </Container>
-      </WizardBottom>
-    );
-  }
-}
+  return (
+    <WizardBottom>
+      <Container maxWidth="1085px" padding="15px">
+        <Button
+          type="button"
+          className={`previous button-left ${
+            !props.onPrev ? "button-hidden" : ""
+          }`}
+          onClick={onPrevClick}
+        >
+          Edellinen
+        </Button>
+        <div>
+          <SubtleButton disabled={!props.isSavingEnabled} onClick={onSaveClick}>
+            Tallenna luonnos
+          </SubtleButton>
+        </div>
+        <Button
+          type="button"
+          className={`next button-right ${
+            !props.onNext ? "button-hidden" : ""
+          }`}
+          onClick={onNextClick}
+        >
+          Seuraava
+        </Button>
+      </Container>
+    </WizardBottom>
+  );
+};
 
 WizardActions.propTypes = {
   onNext: PropTypes.func,
