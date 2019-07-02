@@ -183,9 +183,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       title={heading}
     >
       {R.addIndex(R.map)((row,i) => {
-        console.info(row);
         const categories = getCategories(row.data, locale);
-        console.info(categories);
         return (
           <ExpandableRowRoot
             key={`expandable-row-root-${i}`}
