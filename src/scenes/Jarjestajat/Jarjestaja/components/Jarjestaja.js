@@ -12,9 +12,7 @@ import HakemuksetJaPaatokset from "../Hakemukset/components/HakemuksetJaPaatokse
 import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
-import {
-  FullWidthWrapper
-} from "../../../../modules/elements";
+import { FullWidthWrapper } from "../../../../modules/elements";
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
 import { fetchLupaHistory } from "services/lupahistoria/actions";
 import { LupahistoriaContext } from "context/lupahistoriaContext";
