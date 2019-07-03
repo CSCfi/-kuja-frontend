@@ -9,7 +9,11 @@ const Opiskelijavuodet = props => {
       <div className="pb-4">
         <Typography variant="h6">{props.mainTitle}</Typography>
       </div>
-      <Difference initialValue={props.initialValue} titles={props.titles} />
+      <Difference
+        initialValue={props.initialValue}
+        titles={props.titles}
+        value={props.value}
+      />
     </React.Fragment>
   );
 };
