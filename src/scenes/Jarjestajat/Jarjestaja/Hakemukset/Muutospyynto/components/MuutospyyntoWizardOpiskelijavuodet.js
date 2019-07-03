@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Section from "../../../../../../components/03-templates/Section";
 import Opiskelijavuodet from "../components/Opiskelijavuodet";
@@ -6,6 +5,7 @@ import { injectIntl } from "react-intl";
 import commonMessages from "../../../../../../i18n/definitions/common";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import * as R from "ramda";
 
 const getApplyFor = (categoryName, items) => {
@@ -32,6 +32,8 @@ const isInLupa = (areaCode, items) => {
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   // const sectionId = "opiskelijavuodet";
+  const heading = props.intl.formatMessage(wizardMessages.header_section4);
+  const [headingNumber, setHeadingNumber] = useState(0);
   const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
   const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
   const [applyFor, setApplyFor] = useState(0);
@@ -39,14 +41,14 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
   const [initialValue, setInitialValue] = useState(0);
   const [initialValueVaativa] = useState(0);
-  const [initialValueSisaoppilaitos] = useState(
-    0
-  );
+  const [initialValueSisaoppilaitos] = useState(0);
 
   useEffect(() => {
     const { kohteet } = props.lupa;
-    const { opiskelijavuodet } = kohteet[4];
+    const { headingNumber, opiskelijavuodet } = kohteet[4];
     const { muutCombined } = kohteet[5];
+
+    setHeadingNumber(headingNumber);
 
     setInitialValue(
       parseInt(

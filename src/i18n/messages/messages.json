@@ -160,6 +160,31 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.header_section1",
+    "defaultMessage": "Tutkinnot ja koulutukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.header_section2",
+    "defaultMessage": "Opetus- ja tutkintokieli",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.header_section3",
+    "defaultMessage": "Toiminta-alue",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.header_section4",
+    "defaultMessage": "Opiskelijavuodet ja niitä koskevat rajoitukset",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.header_section5",
+    "defaultMessage": "Muut oikeudet, velvollisuudet, ehdot ja tehtävät",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"

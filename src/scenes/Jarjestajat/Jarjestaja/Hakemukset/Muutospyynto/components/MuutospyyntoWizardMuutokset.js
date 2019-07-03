@@ -18,6 +18,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       <p className="py-10">{formatMessage(wizardMessages.info_01)}</p>
 
       <form onSubmit={props.handleSubmit}>
+        
         <Tutkinnot
           koulutukset={props.koulutukset}
           koulutusalat={props.koulutusalat}
@@ -47,10 +48,12 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           lupa={props.lupa}
           opiskelijavuodet={props.opiskelijavuodet}
         />
+
         <MuutospyyntoWizardMuut
           lupa={props.lupa}
           muut={props.muut}
         />
+
       </form>
     </div>
   );
