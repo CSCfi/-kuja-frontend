@@ -1,5 +1,5 @@
-import Difference from "./index";
 import React from "react";
+import Difference from "./index";
 import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
 import { story1 } from "./storyData/story1";

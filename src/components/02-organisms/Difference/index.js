@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
 const Difference = props => {
-  const [difference, setDifference] = useState(props.initialValue);
+  const [initialValue, setInitialValue] = useState(props.initialValue);
+  const [value, setValue] = useState(props.value);
+
+  useEffect(() => {
+    setInitialValue(props.initialValue);
+    setValue(props.value);
+  }, [props.initialValue, props.value]);
 
   return (
     <React.Fragment>
       <div className="flex">
         <div className="flex-1 flex-col">
           <Typography>{props.titles[0]}</Typography>
-          <div>{props.initialValue}</div>
+          <div>{initialValue}</div>
         </div>
         <div className="flex-1 flex-col">
           <Typography>{props.titles[1]}</Typography>
@@ -20,17 +26,15 @@ const Difference = props => {
               type="number"
               inputProps={{ min: "0" }}
               onChange={e => {
-                return setDifference(
-                  parseInt(e.target.value || "0", 10) - props.initialValue
-                );
+                return setValue(parseInt(e.target.value || "0", 10));
               }}
-              value={props.nextValue}
+              value={value}
             />
           </div>
         </div>
         <div className="flex-1 flex-col">
           <Typography>{props.titles[2]}</Typography>
-          <div>{difference}</div>
+          <div>{value - initialValue}</div>
         </div>
       </div>
     </React.Fragment>
