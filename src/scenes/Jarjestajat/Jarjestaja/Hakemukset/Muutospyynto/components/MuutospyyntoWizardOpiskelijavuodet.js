@@ -4,6 +4,7 @@ import Section from '../../../../../../components/03-templates/Section'
 import { injectIntl } from "react-intl";
 import styled from "styled-components";
 import TextField from '@material-ui/core/TextField';
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 
 import { ContentContainer } from "../../../../../../modules/elements";
 import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents";
@@ -50,7 +51,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo((props) => {
     muutmuutoksetValue
   } = props;
   const { kohteet } = lupa;
-  const { headingNumber, heading, opiskelijavuodet } = kohteet[4];
+  const { headingNumber, opiskelijavuodet } = kohteet[4];
+  const heading = props.intl.formatMessage(wizardMessages.header_section4)
   const { muutCombined } = kohteet[5];
 
   // componentDidUpdate() {

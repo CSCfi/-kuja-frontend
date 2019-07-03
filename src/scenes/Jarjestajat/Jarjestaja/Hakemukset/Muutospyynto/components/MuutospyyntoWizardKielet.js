@@ -6,12 +6,14 @@ import { KIELET_SECTIONS } from "../../../modules/constants";
 import Tutkintokielet from "./Kielet/Tutkintokielet";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardKielet = React.memo(props => {
   const { lupa } = props;
   const { kohteet } = lupa;
   const kohde = kohteet[2];
-  const { headingNumber, heading } = kohde;
+  const { headingNumber } = kohde;
+  const heading = props.intl.formatMessage(wizardMessages.header_section2)
 
   return (
     <Section code={headingNumber} title={heading}>

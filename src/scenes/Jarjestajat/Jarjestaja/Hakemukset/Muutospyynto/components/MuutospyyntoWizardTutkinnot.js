@@ -3,15 +3,16 @@ import React, { useContext } from "react";
 import Section from "components/03-templates/Section";
 import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import PropTypes from "prop-types";
-
 import Tutkinnot from "./Tutkinnot";
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardTutkinnot = props => {
   const sectionId = "tutkinnot";
   const { state } = useContext(MuutoshakemusContext);
   const { lupa } = props;
   const { kohteet } = lupa;
-  const { headingNumber, heading } = kohteet[1];
+  const { headingNumber } = kohteet[1];
+  const heading = props.intl.formatMessage(wizardMessages.header_section1)
 
   return (
     <Section code={headingNumber} title={heading}>
