@@ -1,120 +1,82 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Section from "../../../../../../components/03-templates/Section";
 import Opiskelijavuodet from "../components/Opiskelijavuodet";
 import { injectIntl } from "react-intl";
 import commonMessages from "../../../../../../i18n/definitions/common";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
-import {
-  MUUTOS_TYPES,
-} from "../modules/uusiHakemusFormConstants";
+import { MUUTOS_TYPES } from "../modules/uusiHakemusFormConstants";
+import * as R from "ramda";
+
+const getApplyFor = (categoryName, items) => {
+  return (
+    (
+      R.find(value => {
+        return value.kategoria === categoryName;
+      }, items || []) || {}
+    ).arvo || 0
+  );
+};
+
+const isInChanges = (areaCode, changes = []) => {
+  return R.find(obj => {
+    return obj.koodiarvo === areaCode && obj.type === MUUTOS_TYPES.ADDITION;
+  }, changes || []);
+};
+
+const isInLupa = (areaCode, items) => {
+  return !!R.find(obj => {
+    return obj.koodiarvo === areaCode;
+  }, items);
+};
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   // const sectionId = "opiskelijavuodet";
+  const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
+  const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
+  const [applyFor, setApplyFor] = useState(0);
+  const [applyForVaativa, setApplyForVaativa] = useState(0);
+  const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
+  const [initialValue, setInitialValue] = useState(0);
+  const [initialValueVaativa] = useState(0);
+  const [initialValueSisaoppilaitos] = useState(
+    0
+  );
 
-  const { lupa, opiskelijavuosimuutoksetValue, muutmuutoksetValue } = props;
-  const { kohteet } = lupa;
-  const { headingNumber, heading, opiskelijavuodet } = kohteet[4];
-  const { muutCombined } = kohteet[5];
+  useEffect(() => {
+    const { kohteet } = props.lupa;
+    const { opiskelijavuodet } = kohteet[4];
+    const { muutCombined } = kohteet[5];
 
-  // Vahimmaisopiskelijavuosimäärä
-  const obj = _.find(opiskelijavuodet, obj => {
-    return obj.tyyppi === "Ammatillinen koulutus";
-  });
-  let vahimmaisArvoInitial = 0;
-  if (obj) {
-    vahimmaisArvoInitial = parseInt(obj.arvo, 10);
-  }
+    setInitialValue(
+      parseInt(
+        (
+          R.find(obj => {
+            return obj.tyyppi === "Ammatillinen koulutus";
+          }, opiskelijavuodet || []) || {}
+        ).arvo || "0",
+        10
+      )
+    );
 
-  // Vaativa erityisopetus (2)
+    setApplyFor(getApplyFor("vahimmaisopiskelijavuodet", [])); // [] = opiskelijavuosimuutoksetValue
+    setApplyForVaativa(getApplyFor("vaativa", [])); // [] = opiskelijavuosimuutoksetValue
+    setApplyForSisaoppilaitos(getApplyFor("sisaoppilaitos", [])); // [] = opiskelijavuosimuutoksetValue
 
-  // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
-  const vaativaTukiVoimassa = _.find(muutCombined, obj => {
-    return obj.koodiarvo === "2";
-  });
-  // tarkitetaan onko käyttäjä valinnut lisättäväksi lupaan kohdassa 5
-  const vaativaTukiLisattava = _.find(muutmuutoksetValue, obj => {
-    return obj.koodiarvo === "2";
-  });
-  // oletusarvo
-  let vaativaArvoInitial = undefined;
-  let showVaativa = false;
+    setIsVaativaTukiVisible(
+      !!isInLupa("2", muutCombined) || isInChanges("4", [])
+    );
 
-  if (vaativaTukiVoimassa) {
-    showVaativa = true;
-  }
-
-  if (vaativaTukiLisattava) {
-    vaativaTukiLisattava.type === MUUTOS_TYPES.ADDITION
-      ? (showVaativa = true)
-      : (showVaativa = false);
-  }
-
-  // Sisäoppilaitos (4)
-
-  // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
-  const sisaoppilaitosVoimassa = _.find(muutCombined, obj => {
-    return obj.koodiarvo === "4";
-  });
-
-  // tarkistetaan käyttäjä valinnut lisättäväksi lupaan kohdassa 5:
-  const sisaoppilaitosLisattava = _.find(muutmuutoksetValue, obj => {
-    return obj.koodiarvo === "4";
-  });
-
-  // oletusarvo
-  let sisaoppilaitosArvoInitial = undefined;
-  let showSisaoppilaitos = false;
-
-  if (sisaoppilaitosVoimassa) {
-    showSisaoppilaitos = true;
-  }
-
-  if (sisaoppilaitosLisattava) {
-    sisaoppilaitosLisattava.type === MUUTOS_TYPES.ADDITION
-      ? (showSisaoppilaitos = true)
-      : (showSisaoppilaitos = false);
-  }
-
-  let haettuVahimmaismaaraObj = _.find(opiskelijavuosimuutoksetValue, value => {
-    return value.kategoria === "vahimmaisopiskelijavuodet";
-  });
-  let muutos = 0;
-
-  if (haettuVahimmaismaaraObj) {
-    muutos = haettuVahimmaismaaraObj.arvo - vahimmaisArvoInitial;
-    if (muutos > 0) muutos = "+" + muutos;
-  }
-
-  let haettuVaativaObj = _.find(opiskelijavuosimuutoksetValue, value => {
-    return value.kategoria === "vaativa";
-  });
-  let muutosVaativa = 0;
-
-  if (haettuVaativaObj) {
-    muutosVaativa =
-      Number.parseInt(haettuVaativaObj.arvo, 10) -
-      (vaativaArvoInitial ? vaativaArvoInitial : 0);
-    if (muutosVaativa > 0) muutosVaativa = "+" + muutosVaativa;
-  }
-
-  let haettuSisaoppilaitosObj = _.find(opiskelijavuosimuutoksetValue, value => {
-    return value.kategoria === "sisaoppilaitos";
-  });
-  let muutosSisaoppilaitos = 0;
-
-  if (haettuSisaoppilaitosObj) {
-    muutosSisaoppilaitos =
-      Number.parseInt(haettuSisaoppilaitosObj.arvo, 10) -
-      (sisaoppilaitosArvoInitial ? sisaoppilaitosArvoInitial : 0);
-    if (muutosSisaoppilaitos > 0)
-      muutosSisaoppilaitos = "+" + muutosSisaoppilaitos;
-  }
+    setIsSisaoppilaitosVisible(
+      !!isInLupa("4", muutCombined) || isInChanges("4", [])
+    );
+  }, [props.lupa]);
 
   return (
     <Section code={headingNumber} title={heading}>
       <Opiskelijavuodet
-        initialValue={vahimmaisArvoInitial}
+        initialValue={initialValue}
+        value={applyFor}
         mainTitle={
           MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAHIMMAISMAARA.FI
         }
@@ -125,11 +87,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         ]}
       />
 
-      {showVaativa ? (
+      {isVaativaTukiVisible ? (
         <React.Fragment>
           <Opiskelijavuodet
             isRequired={true}
-            initialValue={vaativaArvoInitial}
+            initialValue={initialValueVaativa}
+            value={applyForVaativa}
             mainTitle={
               MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAATIVA_TUKI.FI
             }
@@ -142,11 +105,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         </React.Fragment>
       ) : null}
 
-      {showSisaoppilaitos ? (
+      {isSisaoppilaitosVisible ? (
         <React.Fragment>
           <Opiskelijavuodet
             isRequired={true}
-            initialValue={vaativaArvoInitial}
+            initialValue={initialValueSisaoppilaitos}
+            value={applyForSisaoppilaitos}
             mainTitle={
               MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.SISAOPPILAITOS.FI
             }
