@@ -170,6 +170,21 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.minimumAmountOfYears",
+    "defaultMessage": "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.limitForSpecialSupport",
+    "defaultMessage": "Vähimmäisopiskelijavuosimäärän rajoitus koskien vaativaa erityistä tukea (65 §)",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.limitForBoardingSchool",
+    "defaultMessage": "Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"

@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import {
   FETCH_MUUT_START,
   FETCH_MUUT_SUCCESS,
