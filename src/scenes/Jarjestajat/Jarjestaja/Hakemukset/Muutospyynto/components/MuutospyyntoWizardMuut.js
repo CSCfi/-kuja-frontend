@@ -17,7 +17,8 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const { lupa, muut, muutmuutoksetValue } = props;
   const { kohteet } = lupa;
   const kohde = kohteet[5];
-  const { headingNumber, heading } = kohde;
+  const { headingNumber } = kohde;
+  const heading = props.intl.formatMessage(wizardMessages.header_section5)
 
   const divideArticles = articles => {
     const dividedArticles = {};

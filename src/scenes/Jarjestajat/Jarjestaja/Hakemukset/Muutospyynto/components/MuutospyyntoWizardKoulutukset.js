@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 
 const MuutospyyntoWizardKoulutukset = React.memo(props => {
   return (
-    <div className="md:pl-16">
+    <div className="md:pl-16 pb-10">
       <p className="pt-4 pb-10">
         {props.intl.formatMessage(wizardMessages.info_02)}
       </p>

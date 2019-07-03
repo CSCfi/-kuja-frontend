@@ -61,5 +61,25 @@ export default defineMessages({
   chooseAdditional: {
     id: "wizard.chooseAdditional",
     defaultMessage: "Lisäksi voit valita seuraavat:"
+  },
+  header_section1: {
+    id: "wizard.header_section1",
+    defaultMessage: "Tutkinnot ja koulutukset"
+  },
+  header_section2: {
+    id: "wizard.header_section2",
+    defaultMessage: "Opetus- ja tutkintokieli"
+  },
+  header_section3: {
+    id: "wizard.header_section3",
+    defaultMessage: "Toiminta-alue"
+  },
+  header_section4: {
+    id: "wizard.header_section4",
+    defaultMessage: "Opiskelijavuodet ja niitä koskevat rajoitukset"
+  },
+  header_section5: {
+    id: "wizard.header_section5",
+    defaultMessage: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
   }
 });
