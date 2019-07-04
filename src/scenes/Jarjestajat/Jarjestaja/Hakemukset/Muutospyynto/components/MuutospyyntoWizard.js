@@ -24,7 +24,12 @@ import { KieletContext } from "../../../../../../context/kieletContext";
 import { OpiskelijavuodetContext } from "../../../../../../context/opiskelijavuodetContext";
 import { MuutContext } from "../../../../../../context/muutContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
-import { setSectionData } from "../../../../../../services/muutoshakemus/actions";
+import { MuutospyynnotContext } from "../../../../../../context/muutospyynnotContext";
+import {
+  saveMuutospyynto,
+  setSectionData
+} from "../../../../../../services/muutoshakemus/actions";
+import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { fetchKoulutusalat } from "services/koulutusalat/actions";
 import { fetchMuut } from "services/muut/actions";
 import {
@@ -37,6 +42,7 @@ import {
   fetchKoulutus
 } from "../../../../../../services/koulutukset/actions";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
+import { fetchMuutospyynto } from "../../../../../../services/muutospyynnot/actions";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -77,6 +83,9 @@ const MuutospyyntoWizard = props => {
   // const [changes, setChanges] = useState({
   //   tutkinnot: {}
   // });
+  const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
+    MuutospyynnotContext
+  );
   const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
     MuutoshakemusContext
   );
@@ -114,13 +123,19 @@ const MuutospyyntoWizard = props => {
     fetchKielet(props.intl.locale)(kieletDispatch);
     fetchOppilaitoksenOpetuskielet()(kieletDispatch);
     fetchMuut()(muutDispatch);
+    const uuid = props.match.params.uuid;
+    if (uuid) {
+      fetchMuutospyynto(uuid)(muutospyynnotDispatch);
+    }
   }, [
     koulutuksetDispatch,
     koulutusalatDispatch,
     koulutustyypitDispatch,
     kieletDispatch,
     muutDispatch,
-    props.intl.locale
+    muutospyynnotDispatch,
+    props.intl.locale,
+    props.match.params.uuid
   ]);
 
   useEffect(() => {
@@ -130,6 +145,17 @@ const MuutospyyntoWizard = props => {
       );
     }
   }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
+
+  useEffect(() => {
+    // TODO: Divide muutokset array of the muutospyynnot object by section and pass data to correct sections
+  }, [muutospyynnot]);
+
+  useEffect(() => {
+    if (muutoshakemus.save && muutoshakemus.save.saved) {
+      // TODO: If props.match.params.uuid is undefined but the document is already saved redirect user to the correct url
+      console.info(muutoshakemus);
+    }
+  }, [muutoshakemus]);
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
@@ -148,20 +174,13 @@ const MuutospyyntoWizard = props => {
 
   const steps = getSteps();
 
-  const save = data => {
+  const save = () => {
     if (props.match.params.uuid) {
-      // props.saveMuutospyynto(data);
-      // saveMuutospyynto(data);
+      // TODO: save existing document
     } else {
-      const url = `/jarjestajat/${props.match.params.ytunnus}`;
-      props.saveMuutospyynto(data).then(() => {
-        let uuid = undefined;
-
-        if (props.muutospyynto.save.data.data)
-          uuid = props.muutospyynto.save.data.data.uuid;
-        let newurl = url + "/hakemukset-ja-paatokset/" + uuid;
-        props.history.push(newurl);
-      });
+      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
+        muutoshakemusDispatch
+      );
     }
   };
 
@@ -244,6 +263,7 @@ const MuutospyyntoWizard = props => {
                   pageNumber={1}
                   onNext={handleNext}
                   onSave={save}
+                  lupa={lupa}
                   muutoshakemus={muutoshakemus}
                 >
                   <MuutospyyntoWizardMuutokset

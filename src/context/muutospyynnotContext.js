@@ -5,7 +5,8 @@ const initialState = {
   isFetching: false,
   fetched: false,
   hasErrored: false,
-  data: {}
+  data: {},
+  muutospyynto: {}
 };
 
 const MuutospyynnotContext = React.createContext(initialState);
