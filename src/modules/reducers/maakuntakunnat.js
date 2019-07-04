@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "../constants"
-import { getMaakuntakunnatList } from "scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/toimialueUtil"
+import { getMaakuntakunnatList } from "../../services/toimialueet/toimialueUtil"
 
 // Constants
 export const FETCH_MAAKUNTAKUNNAT_START = 'FETCH_MAAKUNTAKUNNAT_START'

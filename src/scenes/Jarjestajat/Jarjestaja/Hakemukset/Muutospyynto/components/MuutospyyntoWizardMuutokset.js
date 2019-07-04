@@ -2,6 +2,7 @@ import React from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
+import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -18,7 +19,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       <p className="py-10">{formatMessage(wizardMessages.info_01)}</p>
 
       <form onSubmit={props.handleSubmit}>
-        
+
         <Tutkinnot
           koulutukset={props.koulutukset}
           koulutusalat={props.koulutusalat}
@@ -40,9 +41,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           tutkinnotState={props.tutkinnotState}
         />
 
-        {/* <Kohde>
-          <MuutospyyntoWizardToimialue lupa={lupa} />
-        </Kohde> */}
+        <MuutospyyntoWizardToimialue 
+          lupa={props.lupa}
+        />
 
         <MuutospyyntoWizardOpiskelijavuodet
           lupa={props.lupa}
