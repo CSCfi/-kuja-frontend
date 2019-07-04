@@ -86,12 +86,8 @@ const MuutospyyntoWizard = props => {
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
   );
-  const { state: opiskelijavuodet, dispatch: opiskelijavuodetDispatch } = useContext(
-    OpiskelijavuodetContext
-  );
-  const { state: muut, dispatch: muutDispatch } = useContext(
-    MuutContext
-  );
+  const { state: opiskelijavuodet } = useContext(OpiskelijavuodetContext);
+  const { state: muut, dispatch: muutDispatch } = useContext(MuutContext);
   const {
     state: koulutustyypit,
     dispatch: koulutustyypitDispatch
@@ -123,6 +119,7 @@ const MuutospyyntoWizard = props => {
     koulutusalatDispatch,
     koulutustyypitDispatch,
     kieletDispatch,
+    muutDispatch,
     props.intl.locale
   ]);
 
@@ -170,9 +167,7 @@ const MuutospyyntoWizard = props => {
 
   const onUpdate = useCallback(
     payload => {
-      setSectionData(payload.sectionId, payload)(
-        muutoshakemusDispatch
-      );
+      setSectionData(payload)(muutoshakemusDispatch);
     },
     [muutoshakemusDispatch]
   );
@@ -261,7 +256,7 @@ const MuutospyyntoWizard = props => {
                     muut={muut}
                     muutoshakemus={muutoshakemus || {}}
                     onUpdate={onUpdate}
-                    tutkinnotState={((muutoshakemus.tutkinnot || {}).state) || []}
+                    tutkinnotState={(muutoshakemus.tutkinnot || {}).state || []}
                   />
                 </WizardPage>
               )}

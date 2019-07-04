@@ -47,11 +47,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         <MuutospyyntoWizardOpiskelijavuodet
           lupa={props.lupa}
           opiskelijavuodet={props.opiskelijavuodet}
+          changesOfSection5={(props.muutoshakemus["muut"] || {}).changes}
         />
 
         <MuutospyyntoWizardMuut
           lupa={props.lupa}
           muut={props.muut}
+          onUpdate={props.onUpdate}
         />
 
       </form>

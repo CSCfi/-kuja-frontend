@@ -1,363 +1,149 @@
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import Section from '../../../../../../components/03-templates/Section'
+import Section from "../../../../../../components/03-templates/Section";
+import Opiskelijavuodet from "../components/Opiskelijavuodet";
 import { injectIntl } from "react-intl";
-import styled from "styled-components";
-import TextField from '@material-ui/core/TextField';
+
+import commonMessages from "../../../../../../i18n/definitions/common";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import PropTypes from "prop-types";
+import * as R from "ramda";
 
-import { ContentContainer } from "../../../../../../modules/elements";
-import { Kohdenumero, Otsikko, Row } from "./MuutospyyntoWizardComponents";
-import { getOpiskelijavuosiIndex } from "../../../../../../services/koulutukset/koulutusUtil";
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
-import {
-  MUUTOS_TYPES,
-  OPISKELIJAVUODET_KATEGORIAT
-} from "../modules/uusiHakemusFormConstants";
-import {
-  getKohdeByTunniste,
-  getMaaraystyyppiByTunniste
-} from "services/muutospyynnot/muutospyyntoUtil";
-import { KOHTEET, MAARAYSTYYPIT } from "../../../modules/constants";
-
-const Voimassaoleva = styled.div`
-  flex: 1;
-  margin: auto;
-  margin-right: 10px;
-`;
-const HaettuMuutos = styled.div`
-  flex: 1;
-  margin: auto;
-  margin-right: 10px;
-`;
-const Yhteensa = styled.div`
-  flex: 1;
-  margin: auto;
-  margin-right: 10px;
-`;
-
-const Pakollinen = styled.h4`
-  background-color: #ffc;
-  padding: 3px;
-`;
-
-const MuutospyyntoWizardOpiskelijavuodet = React.memo((props) => {
-
-  const sectionId = "opiskelijavuodet";
-
-  const {
-    lupa,
-    opiskelijavuosimuutoksetValue,
-    muutmuutoksetValue
-  } = props;
-  const { kohteet } = lupa;
-  const { headingNumber, opiskelijavuodet } = kohteet[4];
-  const heading = props.intl.formatMessage(wizardMessages.header_section4)
-  const { muutCombined } = kohteet[5];
-
-  // componentDidUpdate() {
-  //   const fixedHeaderHeight = 100;
-  //   const marginaali = 10;
-  //   const { opiskelijavuosimuutoksetValue, muutmuutoksetValue } = this.props;
-
-  //   const pakollisetVuosikentat = [
-  //     { koodiarvo: "2", ref: this.refs.opiskelijavuodetVaativatuki },
-  //     { koodiarvo: "4", ref: this.refs.opiskelijavuodetSisaoppilaitos }
-  //   ];
-
-  //   pakollisetVuosikentat.some(kentta => {
-  //     // Jos lupaan on lisätty vähimmäisvuodet vaativa tehtävä, kentän arvo on tyhjä
-  //     // eikä kenttä ole näkyvissä, skrollaa kentän luo
-  //     if (
-  //       _.find(muutmuutoksetValue, obj => {
-  //         return (
-  //           obj.koodiarvo === kentta.koodiarvo &&
-  //           obj.type === MUUTOS_TYPES.ADDITION
-  //         );
-  //       }) &&
-  //       (!opiskelijavuosimuutoksetValue ||
-  //         !_.find(opiskelijavuosimuutoksetValue, obj => {
-  //           return obj.koodiarvo === kentta.koodiarvo;
-  //         }) ||
-  //         _.find(opiskelijavuosimuutoksetValue, obj => {
-  //           return obj.koodiarvo === kentta.koodiarvo && !obj.arvo;
-  //         }))
-  //     ) {
-  //       const elementti = ReactDOM.findDOMNode(kentta.ref);
-  //       if (elementti) {
-  //         // Skrollaa elementti ensin sivun yläreunaan ja siirrä sitten alaspäin,
-  //         // jotta elementti ei jää kiinteän headerin taakse
-  //         elementti.scrollIntoView();
-  //         const scrolledY = window.scrollY;
-  //         if (scrolledY) {
-  //           window.scroll(0, scrolledY - fixedHeaderHeight - marginaali);
-  //         }
-  //       }
-  //       // Skrollaa vain yhden kentän luo
-  //       return true;
-  //     }
-  //     return false;
-  //   });
-  // }
-
-  // Vahimmaisopiskelijavuosimäärä
-  const obj = _.find(opiskelijavuodet, obj => {
-    return obj.tyyppi === "Ammatillinen koulutus";
-  });
-  let vahimmaisArvoInitial = 0;
-  if (obj) {
-    vahimmaisArvoInitial = obj.arvo;
-  }
-
-  // Vaativa erityisopetus (2)
-
-  // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
-  const vaativaTukiVoimassa = _.find(muutCombined, obj => {
-    return obj.koodiarvo === "2";
-  });
-  // tarkitetaan onko käyttäjä valinnut lisättäväksi lupaan kohdassa 5
-  const vaativaTukiLisattava = _.find(muutmuutoksetValue, obj => {
-    return obj.koodiarvo === "2";
-  });
-  // oletusarvo
-  let vaativaArvoInitial = undefined;
-  let showVaativa = false;
-
-  if (vaativaTukiVoimassa) {
-    showVaativa = true;
-  }
-
-  if (vaativaTukiLisattava) {
-    vaativaTukiLisattava.type === MUUTOS_TYPES.ADDITION
-      ? (showVaativa = true)
-      : (showVaativa = false);
-  }
-
-  // Sisäoppilaitos (4)
-
-  // tarkistetaan onko voimassaolevassa luvassa tälle määräystä:
-  const sisaoppilaitosVoimassa = _.find(muutCombined, obj => {
-    return obj.koodiarvo === "4";
-  });
-
-  // tarkistetaan käyttäjä valinnut lisättäväksi lupaan kohdassa 5:
-  const sisaoppilaitosLisattava = _.find(muutmuutoksetValue, obj => {
-    return obj.koodiarvo === "4";
-  });
-
-  // oletusarvo
-  let sisaoppilaitosArvoInitial = undefined;
-  let showSisaoppilaitos = false;
-
-  if (sisaoppilaitosVoimassa) {
-    showSisaoppilaitos = true;
-  }
-
-  if (sisaoppilaitosLisattava) {
-    sisaoppilaitosLisattava.type === MUUTOS_TYPES.ADDITION
-      ? (showSisaoppilaitos = true)
-      : (showSisaoppilaitos = false);
-  }
-
-  let haettuVahimmaismaaraObj = _.find(
-    opiskelijavuosimuutoksetValue,
-    value => {
-      return value.kategoria === "vahimmaisopiskelijavuodet";
-    }
+const getApplyFor = (categoryName, items) => {
+  return (
+    (
+      R.find(value => {
+        return value.kategoria === categoryName;
+      }, items || []) || {}
+    ).arvo || 0
   );
-  let muutos = 0;
+};
 
-  if (haettuVahimmaismaaraObj) {
-    muutos = haettuVahimmaismaaraObj.arvo - vahimmaisArvoInitial;
-    if (muutos > 0) muutos = "+" + muutos;
-  }
+const isInLupa = (areaCode, items) => {
+  return !!R.find(obj => {
+    return obj.koodiarvo === areaCode;
+  }, items);
+};
 
-  let haettuVaativaObj = _.find(opiskelijavuosimuutoksetValue, value => {
-    return value.kategoria === "vaativa";
-  });
-  let muutosVaativa = 0;
+const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
+  // const sectionId = "opiskelijavuodet";
+  const heading = props.intl.formatMessage(wizardMessages.header_section4);
+  const [headingNumber, setHeadingNumber] = useState(0);
+  const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
+  const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
+  const [applyFor, setApplyFor] = useState(0);
+  const [applyForVaativa, setApplyForVaativa] = useState(0);
+  const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
+  const [initialValue, setInitialValue] = useState(0);
+  const [initialValueVaativa] = useState(0);
+  const [initialValueSisaoppilaitos] = useState(0);
 
-  if (haettuVaativaObj) {
-    muutosVaativa =
-      Number.parseInt(haettuVaativaObj.arvo, 10) -
-      (vaativaArvoInitial ? vaativaArvoInitial : 0);
-    if (muutosVaativa > 0) muutosVaativa = "+" + muutosVaativa;
-  }
-
-  let haettuSisaoppilaitosObj = _.find(
-    opiskelijavuosimuutoksetValue,
-    value => {
-      return value.kategoria === "sisaoppilaitos";
-    }
-  );
-  let muutosSisaoppilaitos = 0;
-
-  if (haettuSisaoppilaitosObj) {
-    muutosSisaoppilaitos =
-      Number.parseInt(haettuSisaoppilaitosObj.arvo, 10) -
-      (sisaoppilaitosArvoInitial ? sisaoppilaitosArvoInitial : 0);
-    if (muutosSisaoppilaitos > 0)
-      muutosSisaoppilaitos = "+" + muutosSisaoppilaitos;
-  }
-
-    return (
-      <Section
-        code={headingNumber}
-        title={heading}
-      >
-        <Row>
-          <h4>
-            {MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAHIMMAISMAARA.FI}
-          </h4>
-          <div className="flex">
-            <Voimassaoleva>NYKYINEN</Voimassaoleva>
-            <HaettuMuutos>HAETTAVA</HaettuMuutos>
-            <Yhteensa>MUUTOS</Yhteensa>
-          </div>
-          <div className="flex">
-            <Voimassaoleva>{vahimmaisArvoInitial}</Voimassaoleva>
-            <HaettuMuutos>
-              <TextField type="number"/>
-            </HaettuMuutos>
-            <Yhteensa>{muutos}</Yhteensa>
-          </div>
-        </Row>
-
-        {showVaativa ? (
-          <Row>
-            <Pakollinen>
-              {MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.VAATIVA_TUKI.FI}
-            </Pakollinen>
-            <div className="flex">
-              <Voimassaoleva>NYKYINEN</Voimassaoleva>
-              <HaettuMuutos>HAETTAVA</HaettuMuutos>
-              <Yhteensa>MUUTOS</Yhteensa>
-            </div>
-            <div className="flex">
-              <Voimassaoleva>{vaativaArvoInitial}</Voimassaoleva>
-              <HaettuMuutos>
-                <TextField type="number"/> />
-              </HaettuMuutos>
-              <Yhteensa>{muutosVaativa}</Yhteensa>
-            </div>
-          </Row>
-        ) : null}
-
-        {showSisaoppilaitos ? (
-          <Row>
-            <Pakollinen>
-              {MUUTOS_WIZARD_TEKSTIT.MUUTOS_OPISKELIJAVUODET.SISAOPPILAITOS.FI}
-            </Pakollinen>
-            <div className="flex">
-              <Voimassaoleva>NYKYINEN</Voimassaoleva>
-              <HaettuMuutos>HAETTAVA</HaettuMuutos>
-              <Yhteensa>MUUTOS</Yhteensa>
-            </div>
-            <div className="flex">
-              <Voimassaoleva>{sisaoppilaitosArvoInitial}</Voimassaoleva>
-              <HaettuMuutos>
-                <TextField type="number"/>
-              </HaettuMuutos>
-              <Yhteensa>{muutosSisaoppilaitos}</Yhteensa>
-            </div>
-          </Row>
-        ) : null}
-      </Section>
+  useEffect(() => {
+    const relevantChangesOfSection5 = R.concat(
+      (props.changesOfSection5 || {})["02"] || [],
+      (props.changesOfSection5 || {})["03"] || []
     );
-  });
+    const { kohteet } = props.lupa;
+    const { headingNumber, opiskelijavuodet } = kohteet[4];
+    const { muutCombined } = kohteet[5];
 
-//   renderOpiskelijavuodet(props) {
-//     const {
-//       initialValue,
-//       editValues,
-//       fields,
-//       kategoria,
-//       koodiarvo,
-//       koodisto,
-//       tyyppi
-//     } = props;
+    setHeadingNumber(headingNumber);
 
-//     let arvo = initialValue;
+    setInitialValue(
+      parseInt(
+        (
+          R.find(obj => {
+            return obj.tyyppi === "Ammatillinen koulutus";
+          }, opiskelijavuodet || []) || {}
+        ).arvo || "0",
+        10
+      )
+    );
 
-//     if (editValues) {
-//       // aseta uusi arvo
-//       let obj = _.find(editValues, value => {
-//         return value.kategoria === kategoria;
-//       });
-//       if (obj) {
-//         arvo = obj.arvo;
-//       }
-//     }
+    setApplyFor(getApplyFor("vahimmaisopiskelijavuodet", [])); // [] = opiskelijavuosimuutoksetValue
+    setApplyForVaativa(getApplyFor("vaativa", [])); // [] = opiskelijavuosimuutoksetValue
+    setApplyForSisaoppilaitos(getApplyFor("sisaoppilaitos", [])); // [] = opiskelijavuosimuutoksetValue
 
-//     const kohde = getKohdeByTunniste(KOHTEET.OPISKELIJAVUODET);
-//     const tunniste =
-//       kategoria === OPISKELIJAVUODET_KATEGORIAT.VAHIMMAISOPISKELIJAVUODET
-//         ? MAARAYSTYYPIT.OIKEUS
-//         : kategoria === OPISKELIJAVUODET_KATEGORIAT.SISAOPPILAITOS ||
-//           OPISKELIJAVUODET_KATEGORIAT.VAATIVA
-//         ? MAARAYSTYYPIT.RAJOITE
-//         : MAARAYSTYYPIT.OIKEUS;
-//     const maaraystyyppi = getMaaraystyyppiByTunniste(tunniste);
+    setIsVaativaTukiVisible(
+      !!isInLupa("2", muutCombined) ||
+        (
+          (
+            R.find(
+              R.propEq("anchor", "02.vaativat.16"),
+              relevantChangesOfSection5
+            ) || {}
+          ).properties || {}
+        ).isChecked
+    );
 
-//     return (
-//       <input
-//         type="number"
-//         value={arvo}
-//         onChange={e => {
-//           const { value } = e.target;
-//           if (editValues) {
-//             const i = getOpiskelijavuosiIndex(editValues, koodiarvo);
-//             if (i !== undefined) {
-//               if (
-//                 (value === "" && initialValue === undefined) ||
-//                 value === initialValue
-//               ) {
-//                 fields.remove(i);
-//               } else {
-//                 const obj = {
-//                   type: tyyppi,
-//                   kategoria,
-//                   koodiarvo,
-//                   koodisto,
-//                   kohde,
-//                   maaraystyyppi,
-//                   arvo: value,
-//                   meta: { perusteluteksti: null },
-//                   muutosperustelukoodiarvo: null
-//                 };
-//                 fields.remove(i);
-//                 fields.insert(i, obj);
-//               }
-//             } else {
-//               fields.push({
-//                 type: tyyppi,
-//                 kategoria,
-//                 koodiarvo,
-//                 koodisto,
-//                 kohde,
-//                 maaraystyyppi,
-//                 arvo: value,
-//                 meta: { perusteluteksti: null },
-//                 muutosperustelukoodiarvo: null
-//               });
-//             }
-//           } else {
-//             fields.push({
-//               type: tyyppi,
-//               kategoria,
-//               koodiarvo,
-//               koodisto,
-//               kohde,
-//               maaraystyyppi,
-//               arvo: value,
-//               meta: { perusteluteksti: null },
-//               muutosperustelukoodiarvo: null
-//             });
-//           }
-//         }}
-//       />
-//     );
-//   }
-// }
+    setIsSisaoppilaitosVisible(
+      !!isInLupa("4", muutCombined) ||
+        (
+          (
+            R.find(
+              R.propEq("anchor", "03.sisaoppilaitos.4"),
+              relevantChangesOfSection5
+            ) || {}
+          ).properties || {}
+        ).isChecked
+    );
+  }, [props.lupa, props.changesOfSection5]);
+
+  return (
+    <Section code={headingNumber} title={heading}>
+      <Opiskelijavuodet
+        initialValue={initialValue}
+        value={applyFor}
+        mainTitle={
+          props.intl.formatMessage(wizardMessages.minimumAmountOfYears)
+        }
+        titles={[
+          props.intl.formatMessage(commonMessages.current),
+          props.intl.formatMessage(commonMessages.applyFor),
+          props.intl.formatMessage(commonMessages.difference)
+        ]}
+      />
+
+      {isVaativaTukiVisible ? (
+        <div className="pt-8">
+          <Opiskelijavuodet
+            isRequired={true}
+            initialValue={initialValueVaativa}
+            value={applyForVaativa}
+            mainTitle={
+              props.intl.formatMessage(wizardMessages.limitForSpecialSupport)
+            }
+            titles={[
+              props.intl.formatMessage(commonMessages.current),
+              props.intl.formatMessage(commonMessages.applyFor),
+              props.intl.formatMessage(commonMessages.difference)
+            ]}
+          />
+        </div>
+      ) : null}
+
+      {isSisaoppilaitosVisible ? (
+        <div className="pt-8">
+          <Opiskelijavuodet
+            isRequired={true}
+            initialValue={initialValueSisaoppilaitos}
+            value={applyForSisaoppilaitos}
+            mainTitle={
+              props.intl.formatMessage(wizardMessages.limitForBoardingSchool)
+            }
+            titles={[
+              props.intl.formatMessage(commonMessages.current),
+              props.intl.formatMessage(commonMessages.applyFor),
+              props.intl.formatMessage(commonMessages.difference)
+            ]}
+          />
+        </div>
+      ) : null}
+    </Section>
+  );
+});
+
+MuutospyyntoWizardOpiskelijavuodet.propTypes = {
+  changesOfSection5: PropTypes.object
+};
 
 export default injectIntl(MuutospyyntoWizardOpiskelijavuodet);

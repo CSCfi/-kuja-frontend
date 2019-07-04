@@ -13,6 +13,7 @@ const Tutkinnot = React.memo(props => {
   const [state, setState] = useState([]);
   const [koulutusdata, setKoulutusdata] = useState([]);
   const [locale, setLocale] = useState([]);
+  const { onUpdate } = props;
 
   useEffect(() => {
     setKoulutusdata(
@@ -43,8 +44,8 @@ const Tutkinnot = React.memo(props => {
   }, [props.intl.locale]);
 
   useEffect(() => {
-    props.onUpdate({ sectionId, state });
-  }, [changes]);
+    onUpdate({ sectionId, state });
+  }, [changes, onUpdate, state]);
 
   const getArticle = (areaCode, articles = []) => {
     return R.find(article => {
@@ -52,7 +53,7 @@ const Tutkinnot = React.memo(props => {
     }, articles);
   };
 
-  const onUpdate = payload => {
+  const saveChanges = payload => {
     setState(prevState => {
       const newState = R.clone(prevState);
       newState[payload.index].changes = payload.changes;
@@ -61,7 +62,7 @@ const Tutkinnot = React.memo(props => {
   };
 
   const removeChanges = (...payload) => {
-    return onUpdate({ index: payload[2], changes: [] });
+    return saveChanges({ index: payload[2], changes: [] });
   };
 
   return (
@@ -79,7 +80,7 @@ const Tutkinnot = React.memo(props => {
             code={stateItem.areaCode}
             index={i}
             onChangesRemove={removeChanges}
-            onUpdate={onUpdate}
+            onUpdate={saveChanges}
             sectionId={sectionId}
             title={stateItem.title}
           />
