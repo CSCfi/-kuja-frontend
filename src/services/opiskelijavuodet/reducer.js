@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import {
   FETCH_OPISKELIJAVUODET_START,
   FETCH_OPISKELIJAVUODET_SUCCESS,

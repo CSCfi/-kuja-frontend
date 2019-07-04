@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 
 const SideNavigation = props => {
   const classes = useStyles();
-  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+  const { dispatch: appDispatch } = useContext(AppContext);
 
   const handleDrawerToggle = () => {
     props.onDrawerToggle();

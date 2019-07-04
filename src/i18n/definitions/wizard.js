@@ -8,7 +8,8 @@ export default defineMessages({
   },
   info_02: {
     id: "wizard.info_02",
-    defaultMessage: "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
+    defaultMessage:
+      "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
   },
   formTitle_new: {
     id: "wizard.formTitle_new",
@@ -81,5 +82,19 @@ export default defineMessages({
   header_section5: {
     id: "wizard.header_section5",
     defaultMessage: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
+  },
+  minimumAmountOfYears: {
+    id: "wizard.minimumAmountOfYears",
+    defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä"
+  },
+  limitForSpecialSupport: {
+    id: "wizard.limitForSpecialSupport",
+    defaultMessage:
+      "Vähimmäisopiskelijavuosimäärän rajoitus koskien vaativaa erityistä tukea (65 §)"
+  },
+  limitForBoardingSchool: {
+    id: "wizard.limitForBoardingSchool",
+    defaultMessage:
+      "Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)"
   }
 });
