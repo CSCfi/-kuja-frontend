@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Section from "../../../../../../components/03-templates/Section";
 import Opiskelijavuodet from "../components/Opiskelijavuodet";
 import { injectIntl } from "react-intl";
+
 import commonMessages from "../../../../../../i18n/definitions/common";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
