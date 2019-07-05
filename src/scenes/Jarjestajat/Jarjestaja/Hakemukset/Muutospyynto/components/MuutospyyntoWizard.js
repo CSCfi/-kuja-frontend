@@ -17,6 +17,7 @@ import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { MUUT_KEYS } from "../modules/constants";
 import PropTypes from "prop-types";
 import Loading from "../../../../../../modules/Loading";
+import { KohteetContext } from "../../../../../../context/kohteetContext";
 import { KoulutusalatContext } from "context/koulutusalatContext";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
@@ -48,6 +49,7 @@ import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { injectIntl } from "react-intl";
+import { fetchKohteet } from "../../../../../../services/kohteet/actions";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -89,6 +91,9 @@ const MuutospyyntoWizard = props => {
   const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
     MuutoshakemusContext
   );
+  const { state: kohteet, dispatch: kohteetDispatch } = useContext(
+    KohteetContext
+  );
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
@@ -111,6 +116,7 @@ const MuutospyyntoWizard = props => {
   } = props;
 
   useEffect(() => {
+    fetchKohteet()(kohteetDispatch);
     fetchKoulutus("999901")(koulutuksetDispatch);
     fetchKoulutus("999903")(koulutuksetDispatch);
     fetchKoulutusalat()(koulutusalatDispatch);
@@ -128,6 +134,7 @@ const MuutospyyntoWizard = props => {
       fetchMuutospyynto(uuid)(muutospyynnotDispatch);
     }
   }, [
+    kohteetDispatch,
     koulutuksetDispatch,
     koulutusalatDispatch,
     koulutustyypitDispatch,
@@ -225,6 +232,7 @@ const MuutospyyntoWizard = props => {
     );
   }
   if (
+    kohteet.fetched &&
     kielet.fetched &&
     koulutukset.fetched &&
     koulutukset.muut.fetched.length === 3 &&
@@ -268,6 +276,7 @@ const MuutospyyntoWizard = props => {
                 >
                   <MuutospyyntoWizardMuutokset
                     kielet={kielet}
+                    kohteet={kohteet.data}
                     koulutukset={koulutukset}
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}

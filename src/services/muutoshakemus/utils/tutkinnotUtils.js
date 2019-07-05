@@ -4,7 +4,7 @@ import _ from "lodash";
 
 const categories = {};
 
-export function getCategories(index, article, koulutustyypit, locale) {
+export function getCategories(index, article, koulutustyypit, kohde, locale) {
   if (!categories[index]) {
     categories[index] = R.values(
       R.map(koulutustyyppi => {
@@ -29,9 +29,10 @@ export function getCategories(index, article, koulutustyypit, locale) {
             return {
               anchor: koulutus.koodiArvo,
               meta: {
+                kohde,
                 koodisto: koulutus.koodisto,
                 metadata: koulutus.metadata,
-                isInLupa: isInLupaBool
+                isInLupa: isInLupaBool,
               },
               components: [
                 {
@@ -67,6 +68,7 @@ export function getCategories(index, article, koulutustyypit, locale) {
                       return {
                         anchor: osaamisala.koodiArvo,
                         meta: {
+                          kohde,
                           koodisto: osaamisala.koodisto,
                           metadata: osaamisala.metadata,
                           isInLupa: isInLupaBool

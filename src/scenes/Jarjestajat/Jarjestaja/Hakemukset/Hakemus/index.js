@@ -1,5 +1,6 @@
 import React from "react";
 import MuutospyyntoWizard from "../../Hakemukset/Muutospyynto/components/MuutospyyntoWizard";
+import { KohteetProvider } from "../../../../../context/kohteetContext";
 import { KoulutuksetProvider } from "../../../../../context/koulutuksetContext";
 import { KoulutusalatProvider } from "../../../../../context/koulutusalatContext";
 import { MuutoshakemusProvider } from "../../../../../context/muutoshakemusContext";
@@ -11,21 +12,25 @@ import PropTypes from "prop-types";
 
 const Hakemus = props => {
   return (
-    <MuutospyynnotProvider>
-      <KoulutustyypitProvider>
-        <KoulutusalatProvider>
-          <KoulutuksetProvider>
-            <KieletProvider>
-              <MuutProvider>
-                <MuutoshakemusProvider>
-                  <MuutospyyntoWizard lupa={props.lupa} {...props} />
-                </MuutoshakemusProvider>
-              </MuutProvider>
-            </KieletProvider>
-          </KoulutuksetProvider>
-        </KoulutusalatProvider>
-      </KoulutustyypitProvider>
-    </MuutospyynnotProvider>
+    <MaaraystyypitProvider>
+      <MuutospyynnotProvider>
+        <KohteetProvider>
+          <KoulutustyypitProvider>
+            <KoulutusalatProvider>
+              <KoulutuksetProvider>
+                <KieletProvider>
+                  <MuutProvider>
+                    <MuutoshakemusProvider>
+                      <MuutospyyntoWizard lupa={props.lupa} {...props} />
+                    </MuutoshakemusProvider>
+                  </MuutProvider>
+                </KieletProvider>
+              </KoulutuksetProvider>
+            </KoulutusalatProvider>
+          </KoulutustyypitProvider>
+        </KohteetProvider>
+      </MuutospyynnotProvider>
+    </MaaraystyypitProvider>
   );
 };
 

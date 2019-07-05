@@ -10,7 +10,6 @@ const getMetadata = (anchorParts, categories, i = 0) => {
 };
 
 export function createObjectToSave(lupa, muutoshakemus) {
-  console.info(lupa);
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
@@ -47,10 +46,9 @@ export function createObjectToSave(lupa, muutoshakemus) {
               );
             }
           }
-          console.info(stateItem, koulutus);
           return {
             isInLupa: meta.isInLupa,
-            kohde: koulutus.kohde,
+            kohde: koulutus.kohde || meta.kohde,
             koodiarvo: code,
             koodisto: meta.koodisto.koodistoUri,
             kuvaus: finnishInfo.kuvaus,
