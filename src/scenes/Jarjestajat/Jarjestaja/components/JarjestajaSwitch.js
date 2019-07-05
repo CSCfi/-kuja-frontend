@@ -12,6 +12,7 @@ import { KoulutusalatProvider } from "context/koulutusalatContext";
 import { MuutoshakemusProvider } from "../../../../context/muutoshakemusContext";
 import { KoulutustyypitProvider } from "context/koulutustyypitContext";
 import { KunnatProvider } from "../../../../context/kunnatContext";
+import { MaakunnatProvider } from "../../../../context/maakunnatContext";
 import { MuutProvider } from "../../../../context/muutContext";
 import { KieletProvider } from "../../../../context/kieletContext";
 import { injectIntl } from "react-intl";
@@ -44,11 +45,13 @@ const JarjestajaSwitch = props => {
                   <KoulutuksetProvider>
                     <KieletProvider>
                       <KunnatProvider>
-                        <MuutProvider>
-                          <MuutoshakemusProvider>
-                            <MuutospyyntoWizard lupa={lupa} {...props} />
-                          </MuutoshakemusProvider>
-                        </MuutProvider>
+                        <MaakunnatProvider>
+                          <MuutProvider>
+                            <MuutoshakemusProvider>
+                              <MuutospyyntoWizard lupa={lupa} {...props} />
+                            </MuutoshakemusProvider>
+                          </MuutProvider>
+                        </MaakunnatProvider>
                       </KunnatProvider>
                     </KieletProvider>
                   </KoulutuksetProvider>

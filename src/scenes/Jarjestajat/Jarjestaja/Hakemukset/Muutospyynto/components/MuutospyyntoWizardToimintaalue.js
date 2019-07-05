@@ -2,11 +2,16 @@ import _ from "lodash";
 import React, { useEffect, useState, useContext } from "react";
 import Select from "react-select";
 import { injectIntl } from "react-intl";
+
 import { fetchKunnat } from "../../../../../../services/kunnat/actions"
 import { KunnatContext } from "context/kunnatContext";
-import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { fetchMaakunnat } from "../../../../../../services/maakunnat/actions"
+import { MaakunnatContext } from "context/maakunnatContext"
+
 import { fetchMaakuntakunnat } from "../../../../../../modules/reducers/maakuntakunnat"
+
+
+import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import Section from "components/03-templates/Section";
 
 import Loading from "../../../../../../modules/Loading";
@@ -33,12 +38,13 @@ import {
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
+  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
   const [kuntaMaaraykset, setKuntamaaraykset] = useState([]);
   const { headingNumber } = props.lupa.kohteet[3];
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
-    // fetchMaakunnat()(dispatch);
+    fetchMaakunnat()(maakunnatDispatch);
     // fetchMaakuntakunnat()(dispatch);
   }, [kunnatDispatch]);
   // }, [kunnat, maakunnat, maakuntakunnat, dispatch]);
@@ -56,8 +62,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   }, [props.lupa]);
 
   useEffect(() => {
-    console.log(kunnat);
-  }, [kunnat]);
+    console.log(kunnat); 
+    console.log(maakunnat); 
+  }, [kunnat, maakunnat]);
 
   // if (props.kunnat.fetched && props.maakunnat.fetched && props.maakuntakunnat.fetched) {
   return (
@@ -66,23 +73,23 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         <p>Tähän lyhyt ohjeteksti kohteen täyttämisestä</p>
       </Row>
       <Row>
-        <renderToimialueMuutokset
-          name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
+        {/* <RenderToimialueMuutokset
+          name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET} 
           // maakunnat={maakuntaMaaraykset}
-          kunnat={kuntaMaaraykset}
+          // kunnat={kuntaMaaraykset}
         // editValues={toimialuemuutoksetValue}
         // maakuntaList={maakunnat.maakuntaList}
         // kuntaList={kunnat.kuntaList}
         // maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
         // valtakunnallinen={valtakunnallinen}
-        />
+        // />*/}
       </Row>
       <Row>
-        <renderValtakunnallinen
-          name="valtakunnallinen"
-        // editValues={valtakunnallinenmuutoksetValue}
+        {/* <RenderValtakunnallinen
+          name="valtakunnallinen" */}
+        {/* // editValues={valtakunnallinenmuutoksetValue}
         // valtakunnallinen={valtakunnallinen}
-        />
+        // /> */}
       </Row>
     </Section>
   );
@@ -103,7 +110,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   // }
 });
 
-const renderToimialueMuutokset = props => {
+const RenderToimialueMuutokset = props => {
   const { maakunnat, kunnat, maakuntakunnatList, editValues, fields } = props;
   let opts = [];
   let initialValue = [];
@@ -218,7 +225,7 @@ const renderToimialueMuutokset = props => {
   );
 }
 
-const renderValtakunnallinen = props => {
+const RenderValtakunnallinen = props => {
   const { editValues, fields } = props;
   let { valtakunnallinen } = props;
 
