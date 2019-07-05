@@ -1,19 +1,19 @@
 import {
-  FETCH_MAARAYSTYYPIT_START,
-  FETCH_MAARAYSTYYPIT_SUCCESS,
-  FETCH_MAARAYSTYYPIT_FAILURE
+  FETCH_KOHTEET_START,
+  FETCH_KOHTEET_SUCCESS,
+  FETCH_KOHTEET_FAILURE
 } from "./actionTypes";
 
 export default function(state, action) {
   switch (action.type) {
-    case FETCH_MAARAYSTYYPIT_START:
+    case FETCH_KOHTEET_START:
       return {
         ...state,
         isFetching: true,
         fetched: false,
         hasErrored: false
       };
-    case FETCH_MAARAYSTYYPIT_SUCCESS:
+    case FETCH_KOHTEET_SUCCESS:
       return {
         ...state,
         isFetching: false,
@@ -21,7 +21,7 @@ export default function(state, action) {
         hasErrored: false,
         data: action.payload
       };
-    case FETCH_MAARAYSTYYPIT_FAILURE:
+    case FETCH_KOHTEET_FAILURE:
       return {
         ...state,
         isFetching: false,
