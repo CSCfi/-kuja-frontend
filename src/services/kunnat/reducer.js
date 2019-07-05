@@ -5,14 +5,7 @@ import {
   FETCH_KUNNAT_FAILURE
 } from "./actionTypes";
 
-const initialState = {
-  isFetching: false,
-  fetched: false,
-  hasErrored: false,
-  data: []
-};
-
-export default function(state = initialState, action) {
+export default function(state, action) {
   switch (action.type) {
     case FETCH_KUNNAT_START:
       return {
