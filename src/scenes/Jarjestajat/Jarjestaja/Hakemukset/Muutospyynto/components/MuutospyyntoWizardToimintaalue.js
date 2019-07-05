@@ -8,8 +8,8 @@ import { KunnatContext } from "context/kunnatContext";
 import { fetchMaakunnat } from "../../../../../../services/maakunnat/actions"
 import { MaakunnatContext } from "context/maakunnatContext"
 
-import { fetchMaakuntakunnat } from "../../../../../../modules/reducers/maakuntakunnat"
-
+import { fetchMaakuntakunnat } from "../../../../../../services/maakuntakunnat/actions"
+import { MaakuntakunnatContext } from "context/maakuntakunnatContext"
 
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import Section from "components/03-templates/Section";
@@ -39,13 +39,14 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
+  const { state: maakuntaKunnat, dispatch: maakuntakunnatDispatch } = useContext(MaakuntakunnatContext);
   const [kuntaMaaraykset, setKuntamaaraykset] = useState([]);
   const { headingNumber } = props.lupa.kohteet[3];
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
     fetchMaakunnat()(maakunnatDispatch);
-    // fetchMaakuntakunnat()(dispatch);
+    fetchMaakuntakunnat()(maakuntakunnatDispatch);
   }, [kunnatDispatch]);
   // }, [kunnat, maakunnat, maakuntakunnat, dispatch]);
 
