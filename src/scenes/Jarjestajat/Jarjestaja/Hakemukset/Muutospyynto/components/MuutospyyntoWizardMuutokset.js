@@ -11,6 +11,8 @@ import * as R from "ramda";
 
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
+  const [maaraystyypit, setMaaraystyypit] = useState({});
+
   useEffect(() => {
     setKohteet(
       R.mergeAll(
@@ -25,6 +27,20 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     );
   }, [props.kohteet]);
 
+  useEffect(() => {
+    setMaaraystyypit(
+      R.mergeAll(
+        R.flatten(
+          R.map(item => {
+            return {
+              [R.props(["tunniste"], item)]: item
+            };
+          }, props.maaraystyypit)
+        )
+      )
+    );
+  }, [props.maaraystyypit]);
+
   return (
     <div>
       <p className="py-10">
@@ -38,6 +54,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           koulutusalat={props.koulutusalat}
           koulutustyypit={props.koulutustyypit.data}
           lupa={props.lupa}
+          maaraystyyppi={maaraystyypit.OIKEUS || {}}
           onUpdate={props.onUpdate}
         />
 
@@ -80,6 +97,7 @@ MuutospyyntoWizardMuutokset.propTypes = {
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.object,
   lupa: PropTypes.object,
+  maaraystyypit: PropTypes.array,
   muutoshakemus: PropTypes.object,
   onUpdate: PropTypes.func,
   tutkinnotState: PropTypes.array

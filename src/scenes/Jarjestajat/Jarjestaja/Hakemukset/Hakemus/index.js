@@ -5,6 +5,7 @@ import { KoulutuksetProvider } from "../../../../../context/koulutuksetContext";
 import { KoulutusalatProvider } from "../../../../../context/koulutusalatContext";
 import { MuutoshakemusProvider } from "../../../../../context/muutoshakemusContext";
 import { KoulutustyypitProvider } from "../../../../../context/koulutustyypitContext";
+import { MaaraystyypitProvider } from "../../../../../context/maaraystyypitContext";
 import { MuutospyynnotProvider } from "../../../../../context/muutospyynnotContext";
 import { MuutProvider } from "../../../../../context/muutContext";
 import { KieletProvider } from "../../../../../context/kieletContext";

@@ -31,6 +31,7 @@ const Tutkinnot = React.memo(props => {
         article,
         koulutusala.koulutukset,
         props.kohde,
+        props.maaraystyyppi,
         locale
       );
       const title = parseLocalizedField(koulutusala.metadata, locale);
@@ -38,7 +39,7 @@ const Tutkinnot = React.memo(props => {
       tmpState.push({ areaCode, article, categories, changes, title });
     }, koulutusdata);
     setState(tmpState);
-  }, [koulutusdata, locale, props.kohde, props.lupa.kohteet]);
+  }, [koulutusdata, locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
@@ -97,6 +98,7 @@ Tutkinnot.propTypes = {
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.array,
   lupa: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
   onUpdate: PropTypes.func
 };
 

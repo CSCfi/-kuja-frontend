@@ -24,6 +24,7 @@ import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { KieletContext } from "../../../../../../context/kieletContext";
 import { OpiskelijavuodetContext } from "../../../../../../context/opiskelijavuodetContext";
 import { MuutContext } from "../../../../../../context/muutContext";
+import { MaaraystyypitContext } from "../../../../../../context/maaraystyypitContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import { MuutospyynnotContext } from "../../../../../../context/muutospyynnotContext";
 import {
@@ -42,14 +43,15 @@ import {
   fetchKoulutuksetMuut,
   fetchKoulutus
 } from "../../../../../../services/koulutukset/actions";
+import { fetchKohteet } from "../../../../../../services/kohteet/actions";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
 import { fetchMuutospyynto } from "../../../../../../services/muutospyynnot/actions";
+import { fetchMaaraystyypit } from "../../../../../../services/maaraystyypit/actions";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { injectIntl } from "react-intl";
-import { fetchKohteet } from "../../../../../../services/kohteet/actions";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -100,6 +102,9 @@ const MuutospyyntoWizard = props => {
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
   );
+  const { state: maaraystyypit, dispatch: maaraystyypitDispatch } = useContext(
+    MaaraystyypitContext
+  );
   const { state: opiskelijavuodet } = useContext(OpiskelijavuodetContext);
   const { state: muut, dispatch: muutDispatch } = useContext(MuutContext);
   const {
@@ -128,6 +133,7 @@ const MuutospyyntoWizard = props => {
     fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
     fetchKielet(props.intl.locale)(kieletDispatch);
     fetchOppilaitoksenOpetuskielet()(kieletDispatch);
+    fetchMaaraystyypit()(maaraystyypitDispatch);
     fetchMuut()(muutDispatch);
     const uuid = props.match.params.uuid;
     if (uuid) {
@@ -139,6 +145,7 @@ const MuutospyyntoWizard = props => {
     koulutusalatDispatch,
     koulutustyypitDispatch,
     kieletDispatch,
+    maaraystyypitDispatch,
     muutDispatch,
     muutospyynnotDispatch,
     props.intl.locale,
@@ -239,7 +246,8 @@ const MuutospyyntoWizard = props => {
     koulutukset.poikkeukset.fetched.length === 2 &&
     koulutusalat.fetched &&
     koulutustyypit.fetched &&
-    lupa.fetched
+    lupa.fetched &&
+    maaraystyypit.fetched
   ) {
     return (
       <MuutoshakemusProvider>
@@ -281,10 +289,11 @@ const MuutospyyntoWizard = props => {
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
-                    opiskelijavuodet={opiskelijavuodet}
+                    maaraystyypit={maaraystyypit.data}
                     muut={muut}
                     muutoshakemus={muutoshakemus || {}}
                     onUpdate={onUpdate}
+                    opiskelijavuodet={opiskelijavuodet}
                     tutkinnotState={(muutoshakemus.tutkinnot || {}).state || []}
                   />
                 </WizardPage>

@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import {
   FETCH_MAARAYSTYYPIT_START,
   FETCH_MAARAYSTYYPIT_SUCCESS,

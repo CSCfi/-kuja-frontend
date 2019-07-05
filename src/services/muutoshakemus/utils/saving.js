@@ -52,7 +52,7 @@ export function createObjectToSave(lupa, muutoshakemus) {
             koodiarvo: code,
             koodisto: meta.koodisto.koodistoUri,
             kuvaus: finnishInfo.kuvaus,
-            maaraystyyppi: koulutus.maaraystyyppi,
+            maaraystyyppi: koulutus.maaraystyyppi || meta.maaraystyyppi,
             meta: {
               nimi: koulutus.nimi,
               koulutusala: anchorParts[0],
