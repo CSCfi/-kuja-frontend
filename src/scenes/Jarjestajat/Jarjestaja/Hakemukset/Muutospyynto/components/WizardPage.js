@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 
 const WizardPage = props => {
   const [isSavingEnabled, setIsSavingEnabled] = useState(false);
-  const onSave = () => {
+  const { onSave } = props;
+
+  const save = () => {
     setIsSavingEnabled(false);
-    // TODO: Save
+    onSave();
   };
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const WizardPage = props => {
         pageNumber={props.pageNumber}
         onPrev={props.onPrev}
         onNext={props.onNext}
-        onSave={onSave}
+        onSave={save}
         isSavingEnabled={isSavingEnabled}
       />
     </div>
@@ -32,6 +34,7 @@ WizardPage.defaultProps = {
 };
 
 WizardPage.propTypes = {
+  lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onNext: PropTypes.func,
   onPrev: PropTypes.func,

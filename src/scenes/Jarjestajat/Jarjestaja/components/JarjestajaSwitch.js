@@ -5,18 +5,9 @@ import { MuutospyynnotContext } from "context/muutospyynnotContext";
 import { LuvatContext } from "context/luvatContext";
 import { fetchLupa } from "../../../../services/luvat/actions";
 import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
-import MuutospyyntoWizard from "../Hakemukset/Muutospyynto/components/MuutospyyntoWizard";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
-import { KoulutuksetProvider } from "context/koulutuksetContext";
-import { KoulutusalatProvider } from "context/koulutusalatContext";
-import { MuutoshakemusProvider } from "../../../../context/muutoshakemusContext";
-import { KoulutustyypitProvider } from "context/koulutustyypitContext";
-import { KunnatProvider } from "../../../../context/kunnatContext";
-import { MaakunnatProvider } from "../../../../context/maakunnatContext";
-import { MaakuntakunnatProvider } from "../../../../context/maakuntakunnatContext";
-import { MuutProvider } from "../../../../context/muutContext";
-import { KieletProvider } from "../../../../context/kieletContext";
 import { injectIntl } from "react-intl";
+import Hakemus from "../Hakemukset/Hakemus";
 
 const JarjestajaSwitch = props => {
   const { state: lupa, dispatch: luvatDispatch } = useContext(LuvatContext);
@@ -40,34 +31,14 @@ const JarjestajaSwitch = props => {
           exact
           path={`${props.match.path}/hakemukset-ja-paatokset/uusi/:page`}
           render={props => {
-            return (
-              <KoulutustyypitProvider>
-                <KoulutusalatProvider>
-                  <KoulutuksetProvider>
-                    <KieletProvider>
-                      <KunnatProvider>
-                        <MaakunnatProvider>
-                          <MaakuntakunnatProvider>
-                            <MuutProvider>
-                              <MuutoshakemusProvider>
-                                <MuutospyyntoWizard lupa={lupa} {...props} />
-                              </MuutoshakemusProvider>
-                            </MuutProvider>
-                          </MaakuntakunnatProvider>
-                        </MaakunnatProvider>
-                      </KunnatProvider>
-                    </KieletProvider>
-                  </KoulutuksetProvider>
-                </KoulutusalatProvider>
-              </KoulutustyypitProvider>
-            );
+            return <Hakemus lupa={lupa} {...props} />;
           }}
         />
         <Route
           exact
           path={`${props.match.path}/hakemukset-ja-paatokset/:uuid/:page`}
           render={props => {
-            return <MuutospyyntoWizard lupa={lupa} {...props} />;
+            return <Hakemus lupa={lupa} {...props} />;
           }}
         />
         <Route

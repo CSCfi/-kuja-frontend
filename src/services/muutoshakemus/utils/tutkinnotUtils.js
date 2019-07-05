@@ -4,7 +4,7 @@ import _ from "lodash";
 
 const categories = {};
 
-export function getCategories(index, article, koulutustyypit, locale) {
+export function getCategories(index, article, koulutustyypit, kohde, maaraystyyppi, locale) {
   if (!categories[index]) {
     categories[index] = R.values(
       R.map(koulutustyyppi => {
@@ -16,17 +16,25 @@ export function getCategories(index, article, koulutustyypit, locale) {
               return m.kieli === locale;
             }).nimi || "[Koulutustyypin otsikko tähän]",
           categories: R.map(koulutus => {
-            const labelClasses = {
-              isInLupa: article
-                ? !!_.find(article.koulutusalat, koulutusala => {
-                    return !!_.find(koulutusala.koulutukset, {
-                      koodi: koulutus.koodiArvo
-                    });
-                  })
-                : false
-            };
+            const isInLupaBool = article
+              ? !!_.find(article.koulutusalat, koulutusala => {
+                  return !!_.find(koulutusala.koulutukset, {
+                    koodi: koulutus.koodiArvo
+                  });
+                })
+              : false;
+            const isAddedBool = false;
+            const isRemovedBool = false;
+
             return {
               anchor: koulutus.koodiArvo,
+              meta: {
+                kohde,
+                maaraystyyppi,
+                koodisto: koulutus.koodisto,
+                metadata: koulutus.metadata,
+                isInLupa: isInLupaBool,
+              },
               components: [
                 {
                   name: "CheckboxWithLabel",
@@ -40,31 +48,33 @@ export function getCategories(index, article, koulutustyypit, locale) {
                     labelStyles: {
                       addition: isAdded,
                       removal: isRemoved,
-                      custom: Object.assign(
-                        {},
-                        labelClasses.isInLupa ? isInLupa : {}
-                      )
+                      custom: Object.assign({}, isInLupaBool ? isInLupa : {})
                     },
-                    isChecked:
-                      (labelClasses.isInLupa && !labelClasses.isRemoved) ||
-                      labelClasses.isAdded
+                    isChecked: (isInLupaBool && !isRemovedBool) || isAddedBool
                   }
                 }
               ],
               categories: koulutus.osaamisala
                 ? [
                     (osaamisala => {
-                      const labelClasses = {
-                        isInLupa: article
-                          ? !!_.find(article.koulutusalat, koulutusala => {
-                              return !!_.find(koulutusala.koulutukset, {
-                                koodi: osaamisala.koodiArvo
-                              });
-                            })
-                          : false
-                      };
+                      const isInLupaBool = article
+                        ? !!_.find(article.koulutusalat, koulutusala => {
+                            return !!_.find(koulutusala.koulutukset, {
+                              koodi: osaamisala.koodiArvo
+                            });
+                          })
+                        : false;
+                      const isAddedBool = false;
+                      const isRemovedBool = false;
                       return {
                         anchor: osaamisala.koodiArvo,
+                        meta: {
+                          kohde,
+                          maaraystyyppi,
+                          koodisto: osaamisala.koodisto,
+                          metadata: osaamisala.metadata,
+                          isInLupa: isInLupaBool
+                        },
                         components: [
                           {
                             name: "CheckboxWithLabel",
@@ -80,9 +90,7 @@ export function getCategories(index, article, koulutustyypit, locale) {
                                 removal: isRemoved
                               },
                               isChecked:
-                                (labelClasses.isInLupa &&
-                                  !labelClasses.isRemoved) ||
-                                labelClasses.isAdded
+                                (isInLupaBool && !isRemovedBool) || isAddedBool
                             }
                           }
                         ]

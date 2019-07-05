@@ -17,14 +17,21 @@ import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { MUUT_KEYS } from "../modules/constants";
 import PropTypes from "prop-types";
 import Loading from "../../../../../../modules/Loading";
+import { KohteetContext } from "../../../../../../context/kohteetContext";
 import { KoulutusalatContext } from "context/koulutusalatContext";
 import { KoulutuksetContext } from "context/koulutuksetContext";
 import { KoulutustyypitContext } from "context/koulutustyypitContext";
 import { KieletContext } from "../../../../../../context/kieletContext";
 import { OpiskelijavuodetContext } from "../../../../../../context/opiskelijavuodetContext";
 import { MuutContext } from "../../../../../../context/muutContext";
+import { MaaraystyypitContext } from "../../../../../../context/maaraystyypitContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
-import { setSectionData } from "../../../../../../services/muutoshakemus/actions";
+import { MuutospyynnotContext } from "../../../../../../context/muutospyynnotContext";
+import {
+  saveMuutospyynto,
+  setSectionData
+} from "../../../../../../services/muutoshakemus/actions";
+import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { fetchKoulutusalat } from "services/koulutusalat/actions";
 import { fetchMuut } from "services/muut/actions";
 import {
@@ -36,12 +43,18 @@ import {
   fetchKoulutuksetMuut,
   fetchKoulutus
 } from "../../../../../../services/koulutukset/actions";
+import { fetchKohteet } from "../../../../../../services/kohteet/actions";
 import { fetchKoulutustyypit } from "services/koulutustyypit/actions";
+import { fetchMuutospyynto } from "../../../../../../services/muutospyynnot/actions";
+import { fetchMaaraystyypit } from "../../../../../../services/maaraystyypit/actions";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
+import { ToastContainer, toast } from "react-toastify";
 import { injectIntl } from "react-intl";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -74,17 +87,30 @@ const DialogTitle = withStyles(theme => ({
 });
 
 const MuutospyyntoWizard = props => {
-  // const [changes, setChanges] = useState({
-  //   tutkinnot: {}
-  // });
+  const notify = options => {
+    toast(options.title, {
+      type: toast.TYPE.SUCCESS,
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
+  };
+
+  const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
+    MuutospyynnotContext
+  );
   const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
     MuutoshakemusContext
+  );
+  const { state: kohteet, dispatch: kohteetDispatch } = useContext(
+    KohteetContext
   );
   const { state: koulutukset, dispatch: koulutuksetDispatch } = useContext(
     KoulutuksetContext
   );
   const { state: koulutusalat, dispatch: koulutusalatDispatch } = useContext(
     KoulutusalatContext
+  );
+  const { state: maaraystyypit, dispatch: maaraystyypitDispatch } = useContext(
+    MaaraystyypitContext
   );
   const { state: opiskelijavuodet } = useContext(OpiskelijavuodetContext);
   const { state: muut, dispatch: muutDispatch } = useContext(MuutContext);
@@ -102,6 +128,7 @@ const MuutospyyntoWizard = props => {
   } = props;
 
   useEffect(() => {
+    fetchKohteet()(kohteetDispatch);
     fetchKoulutus("999901")(koulutuksetDispatch);
     fetchKoulutus("999903")(koulutuksetDispatch);
     fetchKoulutusalat()(koulutusalatDispatch);
@@ -113,14 +140,23 @@ const MuutospyyntoWizard = props => {
     fetchKoulutuksetMuut(MUUT_KEYS.KULJETTAJAKOULUTUS)(koulutuksetDispatch);
     fetchKielet(props.intl.locale)(kieletDispatch);
     fetchOppilaitoksenOpetuskielet()(kieletDispatch);
+    fetchMaaraystyypit()(maaraystyypitDispatch);
     fetchMuut()(muutDispatch);
+    const uuid = props.match.params.uuid;
+    if (uuid) {
+      fetchMuutospyynto(uuid)(muutospyynnotDispatch);
+    }
   }, [
+    kohteetDispatch,
     koulutuksetDispatch,
     koulutusalatDispatch,
     koulutustyypitDispatch,
     kieletDispatch,
+    maaraystyypitDispatch,
     muutDispatch,
-    props.intl.locale
+    muutospyynnotDispatch,
+    props.intl.locale,
+    props.match.params.uuid
   ]);
 
   useEffect(() => {
@@ -130,6 +166,20 @@ const MuutospyyntoWizard = props => {
       );
     }
   }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
+
+  useEffect(() => {
+    // TODO: Divide muutokset array of the muutospyynnot object by section and pass data to correct sections
+  }, [muutospyynnot]);
+
+  useEffect(() => {
+    if (muutoshakemus.save && muutoshakemus.save.saved) {
+      // TODO: If props.match.params.uuid is undefined but the document is already saved redirect user to the correct url
+      console.info(muutoshakemus);
+      notify({
+        title: `Tallennettu! ID: ${muutoshakemus.save.data.data.uuid} TODO: Show this only after saving.`
+      });
+    }
+  }, [muutoshakemus]);
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
@@ -148,20 +198,13 @@ const MuutospyyntoWizard = props => {
 
   const steps = getSteps();
 
-  const save = data => {
+  const save = () => {
     if (props.match.params.uuid) {
-      // props.saveMuutospyynto(data);
-      // saveMuutospyynto(data);
+      // TODO: save existing document
     } else {
-      const url = `/jarjestajat/${props.match.params.ytunnus}`;
-      props.saveMuutospyynto(data).then(() => {
-        let uuid = undefined;
-
-        if (props.muutospyynto.save.data.data)
-          uuid = props.muutospyynto.save.data.data.uuid;
-        let newurl = url + "/hakemukset-ja-paatokset/" + uuid;
-        props.history.push(newurl);
-      });
+      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
+        muutoshakemusDispatch
+      );
     }
   };
 
@@ -206,13 +249,15 @@ const MuutospyyntoWizard = props => {
     );
   }
   if (
+    kohteet.fetched &&
     kielet.fetched &&
     koulutukset.fetched &&
     koulutukset.muut.fetched.length === 3 &&
     koulutukset.poikkeukset.fetched.length === 2 &&
     koulutusalat.fetched &&
     koulutustyypit.fetched &&
-    lupa.fetched
+    lupa.fetched &&
+    maaraystyypit.fetched
   ) {
     return (
       <MuutoshakemusProvider>
@@ -244,23 +289,27 @@ const MuutospyyntoWizard = props => {
                   pageNumber={1}
                   onNext={handleNext}
                   onSave={save}
+                  lupa={lupa}
                   muutoshakemus={muutoshakemus}
                 >
                   <MuutospyyntoWizardMuutokset
                     kielet={kielet}
+                    kohteet={kohteet.data}
                     koulutukset={koulutukset}
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
-                    opiskelijavuodet={opiskelijavuodet}
+                    maaraystyypit={maaraystyypit.data}
                     muut={muut}
                     muutoshakemus={muutoshakemus || {}}
                     onUpdate={onUpdate}
+                    opiskelijavuodet={opiskelijavuodet}
                     tutkinnotState={(muutoshakemus.tutkinnot || {}).state || []}
                   />
                 </WizardPage>
               )}
             </div>
+            <ToastContainer />
           </DialogContent>
         </Dialog>
         <Dialog
