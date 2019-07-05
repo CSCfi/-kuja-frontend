@@ -51,7 +51,10 @@ import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
+import { ToastContainer, toast } from "react-toastify";
 import { injectIntl } from "react-intl";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -84,9 +87,13 @@ const DialogTitle = withStyles(theme => ({
 });
 
 const MuutospyyntoWizard = props => {
-  // const [changes, setChanges] = useState({
-  //   tutkinnot: {}
-  // });
+  const notify = options => {
+    toast(options.title, {
+      type: toast.TYPE.SUCCESS,
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
+  };
+
   const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
     MuutospyynnotContext
   );
@@ -168,6 +175,9 @@ const MuutospyyntoWizard = props => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       // TODO: If props.match.params.uuid is undefined but the document is already saved redirect user to the correct url
       console.info(muutoshakemus);
+      notify({
+        title: `Tallennettu! ID: ${muutoshakemus.save.data.data.uuid} TODO: Show this only after saving.`
+      });
     }
   }, [muutoshakemus]);
 
@@ -299,6 +309,7 @@ const MuutospyyntoWizard = props => {
                 </WizardPage>
               )}
             </div>
+            <ToastContainer />
           </DialogContent>
         </Dialog>
         <Dialog

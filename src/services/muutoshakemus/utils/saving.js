@@ -43,7 +43,7 @@ export function createObjectToSave(lupa, muutoshakemus) {
               koulutus = R.find(
                 R.propEq("koodi", code),
                 stateItem.article.koulutusalat[anchorParts[1]].koulutukset
-              );
+              ) || {};
             }
           }
           return {
