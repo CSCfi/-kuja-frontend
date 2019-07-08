@@ -84,7 +84,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             // editValues={toimialuemuutoksetValue}
             maakuntaList={maakunnat.data}
             kuntaList={kunnat.data}
-            maakuntakunnatList={maakuntakunnat.data}
+            maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
             valtakunnallinen={valtakunnallinen}
           />
         </Row>
@@ -124,7 +124,7 @@ const RenderToimialueMuutokset = props => {
 
   _.forEach(maakuntakunnatList, maakunta => {
     opts.push(maakunta);
-    _.forEach(maakunta.kunta, kunta => {
+    _.forEach(maakunta.maakuntakunnatList, kunta => {
       opts.push(kunta);
     });
   });

@@ -1,3 +1,4 @@
+import { getMaakuntakunnatList } from "services/toimialueet/toimialueUtil";
 import {
   FETCH_MAAKUNTAKUNNAT_START,
   FETCH_MAAKUNTAKUNNAT_SUCCESS,
@@ -26,7 +27,7 @@ const ACTION_HANDLERS = {
       fetched: true,
       hasErrored: false,
       data: action.payload,
-      // maakuntakunnatList: getMaakuntakunnatList(action.payload, 'FI')
+      maakuntakunnatList: getMaakuntakunnatList(action.payload, 'FI')
     }
   },
   [FETCH_MAAKUNTAKUNNAT_FAILURE] : (state, action) => {
