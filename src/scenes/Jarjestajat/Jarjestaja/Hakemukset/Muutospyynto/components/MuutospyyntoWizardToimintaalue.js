@@ -39,15 +39,18 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(MaakunnatContext);
-  const { state: maakuntaKunnat, dispatch: maakuntakunnatDispatch } = useContext(MaakuntakunnatContext);
+  const { state: maakuntakunnat, dispatch: maakuntakunnatDispatch } = useContext(MaakuntakunnatContext);
   const [kuntaMaaraykset, setKuntamaaraykset] = useState([]);
+  const [maakuntaMaaraykset, setMaakuntaMaaraykset] = useState([]);
+  const [valtakunnallinen, setValtakunnallinen] = useState([]);
+
   const { headingNumber } = props.lupa.kohteet[3];
 
   useEffect(() => {
     fetchKunnat()(kunnatDispatch);
     fetchMaakunnat()(maakunnatDispatch);
     fetchMaakuntakunnat()(maakuntakunnatDispatch);
-  }, [kunnatDispatch]);
+  }, [kunnatDispatch, maakunnatDispatch, maakuntakunnatDispatch]);
   // }, [kunnat, maakunnat, maakuntakunnat, dispatch]);
 
   useEffect(() => {
@@ -57,43 +60,44 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     //   valtakunnallinenmuutoksetValue,
     //   toimialuemuutoksetValue
     // } = props;
-    // const maakuntaMaaraykset = kohteet[3].maakunnat;
-    // const kuntaMaaraykset = kohteet[3].kunnat;
-    // const valtakunnallinen = kohteet[3].valtakunnallinen || false;
+    setMaakuntaMaaraykset(props.lupa.kohteet[3].maakunnat);
+    setValtakunnallinen(props.lupa.kohteet[3].valtakunnallinen || false);
   }, [props.lupa]);
 
   useEffect(() => {
-    console.log(kunnat); 
-    console.log(maakunnat); 
-  }, [kunnat, maakunnat]);
+    console.log(kunnat);
+    console.log(maakunnat);
+    console.log(maakuntakunnat);
+  }, [kunnat, maakunnat, maakuntakunnat]);
 
-  // if (props.kunnat.fetched && props.maakunnat.fetched && props.maakuntakunnat.fetched) {
-  return (
-    <Section code={headingNumber} title={heading}>
-      <Row>
-        <p>Tähän lyhyt ohjeteksti kohteen täyttämisestä</p>
-      </Row>
-      <Row>
-        {/* <RenderToimialueMuutokset
-          name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET} 
-          // maakunnat={maakuntaMaaraykset}
-          // kunnat={kuntaMaaraykset}
-        // editValues={toimialuemuutoksetValue}
-        // maakuntaList={maakunnat.maakuntaList}
-        // kuntaList={kunnat.kuntaList}
-        // maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
-        // valtakunnallinen={valtakunnallinen}
-        // />*/}
-      </Row>
-      <Row>
-        {/* <RenderValtakunnallinen
-          name="valtakunnallinen" */}
-        {/* // editValues={valtakunnallinenmuutoksetValue}
-        // valtakunnallinen={valtakunnallinen}
-        // /> */}
-      </Row>
-    </Section>
-  );
+  if (kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched) {
+    return (
+      <Section code={headingNumber} title={heading}>
+        <Row>
+          <p>Tähän lyhyt ohjeteksti kohteen täyttämisestä</p>
+        </Row>
+        <Row>
+          <RenderToimialueMuutokset
+            name={FIELD_ARRAY_NAMES.TOIMINTA_ALUEET}
+            maakunnat={maakuntaMaaraykset}
+            kunnat={kuntaMaaraykset}
+            // editValues={toimialuemuutoksetValue}
+            maakuntaList={maakunnat.data}
+            kuntaList={kunnat.data}
+            maakuntakunnatList={maakuntakunnat.data}
+            valtakunnallinen={valtakunnallinen}
+          />
+        </Row>
+        <Row>
+          <RenderValtakunnallinen
+          name="valtakunnallinen"
+          // editValues={valtakunnallinenmuutoksetValue}
+          valtakunnallinen={valtakunnallinen}
+        />
+        </Row>
+      </Section>
+    );
+  }
   // } else if (
   //   props.kunnat.hasErrored ||
   //   props.maakunnat.hasErrored ||
@@ -281,19 +285,18 @@ const RenderValtakunnallinen = props => {
   );
 }
 
-export default injectIntl(MuutospyyntoWizardToimintaalue);
-
 const ToimialueSelect = React.memo(props => {
 
   const [value] = useState(props.value);
 
   const handleSelectChange = value => {
-    this.setState({ value });
-    const { editValues, fields, initialValue } = this.props;
-    handleToimialueSelectChange(editValues, fields, initialValue, value);
+    // this.setState({ value });
+    // const { editValues, fields, initialValue } = props;
+    // handleToimialueSelectChange(editValues, fields, initialValue, value);
   }
 
-  const { options } = this.props;
+  let { options } = props;
+  console.log(options)
 
   return (
     <Select
@@ -301,7 +304,7 @@ const ToimialueSelect = React.memo(props => {
       multi
       options={options}
       value={value}
-      onChange={this.handleSelectChange.bind(this)}
+      onChange={handleSelectChange}
     />
   );
 });
@@ -324,3 +327,5 @@ const ToimialueSelect = React.memo(props => {
 //   forceUnregisterOnUnmount: true,
 //   // validate,
 // })(MuutospyyntoWizardToimialue)
+
+export default injectIntl(MuutospyyntoWizardToimintaalue);
