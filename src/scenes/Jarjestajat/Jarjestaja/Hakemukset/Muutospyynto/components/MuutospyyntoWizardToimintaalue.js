@@ -1,6 +1,13 @@
 import _ from "lodash";
 import React, { useEffect, useState, useContext } from "react";
-import Select from "react-select";
+import Select from '@material-ui/core/Select';
+// import Select from 'react-select'; WIP
+import MenuItem from '@material-ui/core/MenuItem';
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
+import ListItemText from '@material-ui/core/ListItemText';
+import CheckboxWithLabel from "../../../../../../components/01-molecules/CheckboxWithLabel";
+
 import { injectIntl } from "react-intl";
 
 import { fetchKunnat } from "../../../../../../services/kunnat/actions"
@@ -21,7 +28,6 @@ import {
   Otsikko,
   Row,
   CheckboxRowContainer,
-  Checkbox,
   Nimi
 } from "./MuutospyyntoWizardComponents";
 import {
@@ -90,10 +96,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         </Row>
         <Row>
           <RenderValtakunnallinen
-          name="valtakunnallinen"
-          // editValues={valtakunnallinenmuutoksetValue}
-          valtakunnallinen={valtakunnallinen}
-        />
+            name="valtakunnallinen"
+            // editValues={valtakunnallinenmuutoksetValue}
+            valtakunnallinen={valtakunnallinen}
+          />
         </Row>
       </Section>
     );
@@ -257,29 +263,25 @@ const RenderValtakunnallinen = props => {
     <div>
       <p>Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen</p>
       <CheckboxRowContainer>
-        <Checkbox>
-          <input
+        <CheckboxWithLabel
             name="valtakunnallinencheckbox"
             id="valtakunnallinencheckbox"
             type="checkbox"
             checked={isChecked}
             onChange={e => {
-              // handleSimpleCheckboxChange(
-              //   e,
-              //   editValues,
-              //   fields,
-              //   isInLupa,
-              //   valtakunnallinen
-              // );
+              handleSimpleCheckboxChange(
+                e,
+                editValues,
+                fields,
+                isInLupa,
+                valtakunnallinen
+              );
             }}
-          />
-          <label htmlFor="valtakunnallinencheckbox" />
-        </Checkbox>
-        <Nimi>
-          Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
-          koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
-          osaamis- ja koulutustarpeeseen.
-          </Nimi>
+          >
+            Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
+            koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
+            osaamis- ja koulutustarpeeseen.
+        </CheckboxWithLabel>
       </CheckboxRowContainer>
     </div>
   );
@@ -289,10 +291,9 @@ const ToimialueSelect = React.memo(props => {
 
   const [value, setValue] = useState(props.value);
 
-  const handleSelectChange = value => {
-    setValue(value);
-    // this.setState({ value });
-    const { editValues, fields, initialValue } = props;
+  const handleSelectChange = selectedvalue => {
+    setValue(selectedvalue.target.value);
+    // const { editValues, fields, initialValue } = props;
     // handleToimialueSelectChange(editValues, fields, initialValue, value);
   }
 
@@ -302,11 +303,28 @@ const ToimialueSelect = React.memo(props => {
   return (
     <Select
       name="toimialue"
-      multi={true}
-      options={options}
+      multiple={true}
+      // isMulti WIP react-select
       value={value}
       onChange={handleSelectChange}
-    />
+      inputProps={{
+        id: 'select-multiple',
+      }}
+    // renderValue={selected => (
+    //   <div>
+    //     {selected.map(value => (
+    //       <Chip key={value} label={value.label}/>
+    //     ))}
+    //   </div>
+    // )}
+    >
+      {options.map(option => (
+        <MenuItem key={option.value} value={option.value}>
+          {/* <Checkbox checked={options.indexOf(option) > -1} /> */}
+          {option.label}
+        </MenuItem>
+      ))}
+    </Select>
   );
 });
 
