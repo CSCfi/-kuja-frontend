@@ -264,13 +264,13 @@ const RenderValtakunnallinen = props => {
             type="checkbox"
             checked={isChecked}
             onChange={e => {
-              handleSimpleCheckboxChange(
-                e,
-                editValues,
-                fields,
-                isInLupa,
-                valtakunnallinen
-              );
+              // handleSimpleCheckboxChange(
+              //   e,
+              //   editValues,
+              //   fields,
+              //   isInLupa,
+              //   valtakunnallinen
+              // );
             }}
           />
           <label htmlFor="valtakunnallinencheckbox" />
@@ -287,11 +287,12 @@ const RenderValtakunnallinen = props => {
 
 const ToimialueSelect = React.memo(props => {
 
-  const [value] = useState(props.value);
+  const [value, setValue] = useState(props.value);
 
   const handleSelectChange = value => {
+    setValue(value);
     // this.setState({ value });
-    // const { editValues, fields, initialValue } = props;
+    const { editValues, fields, initialValue } = props;
     // handleToimialueSelectChange(editValues, fields, initialValue, value);
   }
 
@@ -301,7 +302,7 @@ const ToimialueSelect = React.memo(props => {
   return (
     <Select
       name="toimialue"
-      multi
+      multi={true}
       options={options}
       value={value}
       onChange={handleSelectChange}
