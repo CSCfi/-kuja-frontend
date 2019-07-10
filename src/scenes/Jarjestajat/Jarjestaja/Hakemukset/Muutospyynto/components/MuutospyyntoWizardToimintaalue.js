@@ -1,10 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useState, useContext } from "react";
 import Select from 'react-select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Checkbox from '@material-ui/core/Checkbox';
-import Chip from '@material-ui/core/Chip';
-import ListItemText from '@material-ui/core/ListItemText';
 import CheckboxWithLabel from "../../../../../../components/01-molecules/CheckboxWithLabel";
 
 import { injectIntl } from "react-intl";
@@ -60,11 +56,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   useEffect(() => {
     setKuntamaaraykset(props.lupa.kohteet[3].kunnat);
-    // const {
-    //   lupa,
-    //   valtakunnallinenmuutoksetValue,
-    //   toimialuemuutoksetValue
-    // } = props;
+    const {
+      lupa,
+      valtakunnallinenmuutoksetValue,
+      toimialuemuutoksetValue
+    } = props;
     setMaakuntaMaaraykset(props.lupa.kohteet[3].maakunnat);
     setValtakunnallinen(props.lupa.kohteet[3].valtakunnallinen || false);
   }, [props.lupa]);
@@ -87,6 +83,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             maakunnat={maakuntaMaaraykset}
             kunnat={kuntaMaaraykset}
             // editValues={toimialuemuutoksetValue}
+            editValues={null}
             maakuntaList={maakunnat.data}
             kuntaList={kunnat.data}
             maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
@@ -103,21 +100,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       </Section>
     );
   }
-  // } else if (
-  //   props.kunnat.hasErrored ||
-  //   props.maakunnat.hasErrored ||
-  //   props.maakuntakunnat.hasErrored
-  // ) {
-  //   return <h2>Toiminta-aluetta ladattaessa tapahtui virhe</h2>;
-  // } else if (
-  //   props.kunnat.isFetching ||
-  //   props.maakunnat.isFetching ||
-  //   props.maakuntakunnat.isFetching
-  // ) {
-  //   return <Loading />;
-  // } else {
-  //   return null;
-  // }
+  else {
+    return <Loading />;
+  }
 });
 
 const RenderToimialueMuutokset = props => {
@@ -129,7 +114,7 @@ const RenderToimialueMuutokset = props => {
 
   _.forEach(maakuntakunnatList, maakunta => {
     opts.push(maakunta);
-    _.forEach(maakunta.maakuntakunnatList, kunta => {
+    _.forEach(maakunta.kunta, kunta => {
       opts.push(kunta);
     });
   });
@@ -307,8 +292,6 @@ const ToimialueSelect = React.memo(props => {
   }
 
   let { options } = props;
-  console.log(options)
-  console.log(value)
 
   return (
     <Select
