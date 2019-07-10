@@ -96,5 +96,45 @@ export default defineMessages({
     id: "wizard.limitForBoardingSchool",
     defaultMessage:
       "Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)"
+  },
+  responsibilities: {
+    id: "wizard.responsibilities",
+    defaultMessage:
+      "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen osaamis- ja koulutustarpeeseen."
+  },
+  areasInfo1: {
+    id: "wizard.areasInfo1",
+    defaultMessage:
+      "Tähän lyhyt ohjeteksti kohteen täyttämisestä"
+  },
+  areasInfo2: {
+    id: "wizard.areasInfo2",
+    defaultMessage:
+      "Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen"
+  },
+  areasInfo3: {
+    id: "wizard.areasInfo3",
+    defaultMessage:
+      "Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen"
+  },
+  noArea: {
+    id: "wizard.noArea",
+    defaultMessage:
+      "Toiminta-aluetta ei määritetty"
+  },
+  municipalities: {
+    id: "wizard.municipalities",
+    defaultMessage:
+      "Kunnat"
+  },
+  counties: {
+    id: "wizard.counties",
+    defaultMessage:
+      "Maakunnat"
+  },
+  responsibilities: {
+    id: "wizard.responsibilities",
+    defaultMessage:
+      "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen osaamis- ja koulutustarpeeseen."
   }
 });

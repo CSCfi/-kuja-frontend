@@ -44,7 +44,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const [kuntaMaaraykset, setKuntamaaraykset] = useState([]);
   const [maakuntaMaaraykset, setMaakuntaMaaraykset] = useState([]);
   const [valtakunnallinen, setValtakunnallinen] = useState([]);
-
   const { headingNumber } = props.lupa.kohteet[3];
 
   useEffect(() => {
@@ -75,7 +74,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     return (
       <Section code={headingNumber} title={heading}>
         <Row>
-          <p>Tähän lyhyt ohjeteksti kohteen täyttämisestä</p>
+          <p>{ props.intl.formatMessage(wizardMessages.areasInfo1) }</p>
         </Row>
         <Row>
           <RenderToimialueMuutokset
@@ -88,6 +87,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             kuntaList={kunnat.data}
             maakuntakunnatList={maakuntakunnat.maakuntakunnatList}
             valtakunnallinen={valtakunnallinen}
+            intl={props.intl}
           />
         </Row>
         <Row>
@@ -96,6 +96,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             // editValues={valtakunnallinenmuutoksetValue}
             editValues={null}
             valtakunnallinen={valtakunnallinen}
+            intl={props.intl}
           />
         </Row>
       </Section>
@@ -165,7 +166,7 @@ const RenderToimialueMuutokset = props => {
 
   return (
     <div>
-      <p>Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen</p>
+      <p>{ props.intl.formatMessage(wizardMessages.areasInfo2) }</p>
       <ToimialueSelect
         options={opts}
         value={initialValue}
@@ -175,12 +176,12 @@ const RenderToimialueMuutokset = props => {
       />
 
       {initialValue && initialValue.length === 0 && (
-        <h4>Toiminta-aluetta ei määritetty</h4>
+        <h4>{ props.intl.formatMessage(wizardMessages.noArea) }</h4>
       )}
 
       {valitutMaakunnat.length > 0 && (
         <div>
-          <h4>Maakunnat</h4>
+          <h4>{ props.intl.formatMessage(wizardMessages.counties) }</h4>
           {valitutMaakunnat.map(alue => {
             const { label, type } = alue;
             const customClass =
@@ -200,7 +201,7 @@ const RenderToimialueMuutokset = props => {
 
       {valitutKunnat.length > 0 && (
         <div>
-          <h4>Kunnat</h4>
+          <h4>{ props.intl.formatMessage(wizardMessages.municipalities) }</h4>
           {valitutKunnat.map(alue => {
             const { label, type } = alue;
             const customClass =
@@ -246,7 +247,7 @@ const RenderValtakunnallinen = props => {
 
   return (
     <div>
-      <p className="mb-1">Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen</p>
+      <p className="mb-1">{ props.intl.formatMessage(wizardMessages.areasInfo3) }</p>
       <CheckboxRowContainer>
         <CheckboxWithLabel
           name="valtakunnallinencheckbox"
@@ -263,9 +264,7 @@ const RenderValtakunnallinen = props => {
             );
           }}
         >
-          Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
-          koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
-          osaamis- ja koulutustarpeeseen.
+          { props.intl.formatMessage(wizardMessages.responsibilities) }
         </CheckboxWithLabel>
       </CheckboxRowContainer>
     </div>
