@@ -122,19 +122,19 @@ export function handleToimialueSelectChange(
   const kohde = getKohdeByTunniste(KOHTEET.TOIMIALUE);
   const maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE);
 
-  // if (removals.length > 0) {
-  //   removals.forEach(removal => {
-  //     const toimialue = getToimialueByKoodiArvo(removal);
-  //     fields.push({
-  //       ...toimialue,
-  //       type: MUUTOS_TYPES.REMOVAL,
-  //       meta: { perusteluteksti: null },
-  //       muutosperustelukoodiarvo: null,
-  //       kohde,
-  //       maaraystyyppi
-  //     });
-  //   });
-  // }
+  if (removals.length > 0) {
+    removals.forEach(removal => {
+      const toimialue = getToimialueByKoodiArvo(removal);
+      // fields.push({
+      //   ...toimialue,
+      //   type: MUUTOS_TYPES.REMOVAL,
+      //   meta: { perusteluteksti: null },
+      //   muutosperustelukoodiarvo: null,
+      //   kohde,
+      //   maaraystyyppi
+      // });
+    });
+  }
 
   // käsitellään lisäykset
   values.forEach(value => {

@@ -94,6 +94,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           <RenderValtakunnallinen
             name="valtakunnallinen"
             // editValues={valtakunnallinenmuutoksetValue}
+            editValues={null}
             valtakunnallinen={valtakunnallinen}
           />
         </Row>
@@ -277,8 +278,8 @@ const ToimialueSelect = React.memo(props => {
 
   const handleSelectChange = selectedvalue => {
     setValue(selectedvalue);
-    // const { editValues, fields, initialValue } = props;
-    // handleToimialueSelectChange(editValues, fields, initialValue, value);
+    const { editValues, fields, initialValue } = props;
+    handleToimialueSelectChange(editValues, fields, initialValue, value);
   }
 
   const searchFilter = (option, searchText) => {
