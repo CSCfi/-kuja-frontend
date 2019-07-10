@@ -55,6 +55,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { injectIntl } from "react-intl";
 
 import "react-toastify/dist/ReactToastify.css";
+import { red } from "@material-ui/core/colors";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -88,10 +89,10 @@ const DialogTitle = withStyles(theme => ({
 
 const MuutospyyntoWizard = props => {
   const notify = options => {
-    toast(options.title, {
+    toast.success(options.title, {
       type: toast.TYPE.SUCCESS,
-      position: toast.POSITION.BOTTOM_RIGHT
-    });
+      position: toast.POSITION.BOTTOM_RIGHT,
+    })
   };
 
   const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
@@ -147,17 +148,17 @@ const MuutospyyntoWizard = props => {
       fetchMuutospyynto(uuid)(muutospyynnotDispatch);
     }
   }, [
-    kohteetDispatch,
-    koulutuksetDispatch,
-    koulutusalatDispatch,
-    koulutustyypitDispatch,
-    kieletDispatch,
-    maaraystyypitDispatch,
-    muutDispatch,
-    muutospyynnotDispatch,
-    props.intl.locale,
-    props.match.params.uuid
-  ]);
+      kohteetDispatch,
+      koulutuksetDispatch,
+      koulutusalatDispatch,
+      koulutustyypitDispatch,
+      kieletDispatch,
+      maaraystyypitDispatch,
+      muutDispatch,
+      muutospyynnotDispatch,
+      props.intl.locale,
+      props.match.params.uuid
+    ]);
 
   useEffect(() => {
     if (koulutusalat.fetched && koulutustyypit.fetched) {
@@ -176,8 +177,16 @@ const MuutospyyntoWizard = props => {
       // TODO: If props.match.params.uuid is undefined but the document is already saved redirect user to the correct url
       console.info(muutoshakemus);
       notify({
-        title: `Tallennettu! ID: ${muutoshakemus.save.data.data.uuid} TODO: Show this only after saving.`
+        title: `Muutospyyntö tallennettu!`
       });
+      if (!props.match.params.uuid) {
+        const page = parseInt(props.match.params.page, 10);
+        const url = `/jarjestajat/${props.match.params.ytunnus}`
+        const uuid = muutoshakemus.save.data.data.uuid
+        let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page
+        props.history.replace(newurl);
+      }
+      muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
   }, [muutoshakemus]);
 
@@ -200,7 +209,10 @@ const MuutospyyntoWizard = props => {
 
   const save = () => {
     if (props.match.params.uuid) {
-      // TODO: save existing document
+      // TODO: save existing document?
+      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
+        muutoshakemusDispatch
+      );
     } else {
       saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
         muutoshakemusDispatch
@@ -321,18 +333,22 @@ const MuutospyyntoWizard = props => {
           <DialogTitle id="confirm-dialog">Poistutaanko?</DialogTitle>
           <DialogContent>{HAKEMUS_VIESTI.VARMISTUS.FI}</DialogContent>
           <DialogActions>
-            <Button onClick={handleCancel} color="primary">
-              {HAKEMUS_VIESTI.EI.FI}
-            </Button>
-            <Button onClick={handleOk} color="primary">
+            <Button onClick={handleOk} color="primary" variant="contained">
               {HAKEMUS_VIESTI.KYLLA.FI}
+            </Button>
+            <Button onClick={handleCancel} color="secondary" variant="outlined">
+              {HAKEMUS_VIESTI.EI.FI}
             </Button>
           </DialogActions>
         </Dialog>
       </MuutoshakemusProvider>
     );
   } else {
-    return <div>Haetaan</div>;
+    return (
+      <MessageWrapper>
+        <Loading text="Käsitellään..." />
+      </MessageWrapper>
+    )
   }
 };
 

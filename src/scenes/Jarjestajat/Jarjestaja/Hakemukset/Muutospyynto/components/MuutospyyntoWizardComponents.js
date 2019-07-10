@@ -730,6 +730,7 @@ export const SubtleButton = styled.button`
   font-size: 14px;
   transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
   margin: 0 10px;
+  padding: 0 10px;
   
   &.button-danger {
     color: ${COLORS.WHITE};
