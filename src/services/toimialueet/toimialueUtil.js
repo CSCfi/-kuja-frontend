@@ -125,14 +125,14 @@ export function handleToimialueSelectChange(
   if (removals.length > 0) {
     removals.forEach(removal => {
       const toimialue = getToimialueByKoodiArvo(removal);
-      fields.push({
-        ...toimialue,
-        type: MUUTOS_TYPES.REMOVAL,
-        meta: { perusteluteksti: null },
-        muutosperustelukoodiarvo: null,
-        kohde,
-        maaraystyyppi
-      });
+      // fields.push({
+      //   ...toimialue,
+      //   type: MUUTOS_TYPES.REMOVAL,
+      //   meta: { perusteluteksti: null },
+      //   muutosperustelukoodiarvo: null,
+      //   kohde,
+      //   maaraystyyppi
+      // });
     });
   }
 
@@ -149,25 +149,25 @@ export function handleToimialueSelectChange(
 
         if (!obj) {
           // Arvoa ei löytynyt editvaluesista --> lisatään se
-          fields.push({
-            ...value,
-            type: MUUTOS_TYPES.ADDITION,
-            meta: { perusteluteksti: null },
-            muutosperustelukoodiarvo: null,
-            kohde,
-            maaraystyyppi
-          });
+          // fields.push({
+          //   ...value,
+          //   type: MUUTOS_TYPES.ADDITION,
+          //   meta: { perusteluteksti: null },
+          //   muutosperustelukoodiarvo: null,
+          //   kohde,
+          //   maaraystyyppi
+          // });
         }
       } else {
         // Ei editvaluesia --> luodaan arvo
-        fields.push({
-          ...value,
-          type: MUUTOS_TYPES.ADDITION,
-          meta: { perusteluteksti: null },
-          muutosperustelukoodiarvo: null,
-          kohde,
-          maaraystyyppi
-        });
+        // fields.push({
+        //   ...value,
+        //   type: MUUTOS_TYPES.ADDITION,
+        //   meta: { perusteluteksti: null },
+        //   muutosperustelukoodiarvo: null,
+        //   kohde,
+        //   maaraystyyppi
+        // });
       }
     }
   });

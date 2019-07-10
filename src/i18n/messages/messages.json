@@ -185,6 +185,41 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.responsibilities",
+    "defaultMessage": "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen osaamis- ja koulutustarpeeseen.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.areasInfo1",
+    "defaultMessage": "Tähän lyhyt ohjeteksti kohteen täyttämisestä",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.areasInfo2",
+    "defaultMessage": "Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.areasInfo3",
+    "defaultMessage": "Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.noArea",
+    "defaultMessage": "Toiminta-aluetta ei määritetty",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.municipalities",
+    "defaultMessage": "Kunnat",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.counties",
+    "defaultMessage": "Maakunnat",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"
