@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useState, useContext } from "react";
-import Select from '@material-ui/core/Select';
-// import Select from 'react-select'; WIP
+import Select from 'react-select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Checkbox from '@material-ui/core/Checkbox';
 import Chip from '@material-ui/core/Chip';
@@ -136,10 +135,10 @@ const RenderToimialueMuutokset = props => {
   });
 
   maakunnat.forEach(maakunta => {
-    initialValue.push(maakunta.koodiarvo);
+    initialValue.push( {value: maakunta.koodiarvo, label: maakunta.arvo} );
   });
   kunnat.forEach(kunta => {
-    initialValue.push(kunta.koodiarvo);
+    initialValue.push( {value: kunta.koodiarvo, label: kunta.arvo} );
   });
 
   if (editValues) {
@@ -261,26 +260,26 @@ const RenderValtakunnallinen = props => {
 
   return (
     <div>
-      <p>Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen</p>
+      <p className="mb-1">Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen</p>
       <CheckboxRowContainer>
         <CheckboxWithLabel
-            name="valtakunnallinencheckbox"
-            id="valtakunnallinencheckbox"
-            type="checkbox"
-            checked={isChecked}
-            onChange={e => {
-              handleSimpleCheckboxChange(
-                e,
-                editValues,
-                fields,
-                isInLupa,
-                valtakunnallinen
-              );
-            }}
-          >
-            Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
-            koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
-            osaamis- ja koulutustarpeeseen.
+          name="valtakunnallinencheckbox"
+          id="valtakunnallinencheckbox"
+          type="checkbox"
+          checked={isChecked}
+          onChange={e => {
+            handleSimpleCheckboxChange(
+              e,
+              editValues,
+              fields,
+              isInLupa,
+              valtakunnallinen
+            );
+          }}
+        >
+          Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja
+          koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen
+          osaamis- ja koulutustarpeeseen.
         </CheckboxWithLabel>
       </CheckboxRowContainer>
     </div>
@@ -292,39 +291,42 @@ const ToimialueSelect = React.memo(props => {
   const [value, setValue] = useState(props.value);
 
   const handleSelectChange = selectedvalue => {
-    setValue(selectedvalue.target.value);
+    setValue(selectedvalue);
     // const { editValues, fields, initialValue } = props;
     // handleToimialueSelectChange(editValues, fields, initialValue, value);
   }
 
+  const searchFilter = (option, searchText) => {
+    if (
+      option.data.label.toLowerCase().includes(searchText.toLowerCase())
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   let { options } = props;
   console.log(options)
+  console.log(value)
 
   return (
     <Select
       name="toimialue"
-      multiple={true}
-      // isMulti WIP react-select
+      isMulti
       value={value}
       onChange={handleSelectChange}
       inputProps={{
         id: 'select-multiple',
       }}
-    // renderValue={selected => (
-    //   <div>
-    //     {selected.map(value => (
-    //       <Chip key={value} label={value.label}/>
-    //     ))}
-    //   </div>
-    // )}
-    >
-      {options.map(option => (
-        <MenuItem key={option.value} value={option.value}>
-          {/* <Checkbox checked={options.indexOf(option) > -1} /> */}
-          {option.label}
-        </MenuItem>
-      ))}
-    </Select>
+      options={options}
+      getOptionLabel={option =>
+        `${option.label}`
+      }
+      getOptionValue={option => `${option.value}`}
+      isSearchable={true}
+      searchFilter={searchFilter}
+    />
   );
 });
 
