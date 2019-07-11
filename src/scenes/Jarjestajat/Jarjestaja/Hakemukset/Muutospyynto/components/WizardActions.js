@@ -1,10 +1,10 @@
 import React from "react";
 import {
   WizardBottom,
-  Container
 } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
+import { injectIntl } from "react-intl";
 
 const WizardActions = props => {
   const onPrevClick = () => {
@@ -19,9 +19,13 @@ const WizardActions = props => {
     props.onSave();
   };
 
+  const {
+    intl: { formatMessage }
+  } = props;
+
   return (
     <WizardBottom>
-      <Container maxWidth="1085px" padding="15px">
+      <div className="flex justify-between w-full max-w-5xl p-4 mx-auto">
         <Button
           color="primary"
           className={`previous button-left ${
@@ -49,7 +53,7 @@ const WizardActions = props => {
         >
           Seuraava
         </Button>
-      </Container>
+      </div>
     </WizardBottom>
   );
 };
@@ -62,4 +66,4 @@ WizardActions.propTypes = {
   save: PropTypes.func
 };
 
-export default WizardActions;
+export default injectIntl(WizardActions);

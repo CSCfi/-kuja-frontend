@@ -345,7 +345,7 @@ const MuutospyyntoWizard = props => {
   } else {
     return (
       <MessageWrapper>
-        <Loading text="Käsitellään..." />
+        <Loading />
       </MessageWrapper>
     )
   }

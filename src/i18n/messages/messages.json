@@ -40,6 +40,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.loading",
+    "defaultMessage": "Ladataan",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
@@ -217,6 +222,21 @@
   {
     "id": "wizard.counties",
     "defaultMessage": "Maakunnat",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.previous",
+    "defaultMessage": "Edellinen",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.next",
+    "defaultMessage": "Seuraava",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.saveDraft",
+    "defaultMessage": "Tallenna luonnos",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {

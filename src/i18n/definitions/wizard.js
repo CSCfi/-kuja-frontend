@@ -131,5 +131,20 @@ export default defineMessages({
     id: "wizard.counties",
     defaultMessage:
       "Maakunnat"
+  },
+  previous: {
+    id: "wizard.previous",
+    defaultMessage:
+      "Edellinen"
+  },
+  next: {
+    id: "wizard.next",
+    defaultMessage:
+      "Seuraava"
+  },
+  savedDaft: {
+    id: "wizard.saveDraft",
+    defaultMessage:
+      "Tallenna luonnos"
   }
 });
