@@ -1,15 +1,15 @@
 import _ from "lodash";
 
 import { parseLocalizedField } from "modules/helpers";
-import {
-  getKohdeByTunniste,
-  getMaaraystyyppiByTunniste
-} from "services/muutospyynnot/muutospyyntoUtil";
-import {
-  KOHTEET,
-  MAARAYSTYYPIT
-} from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
-import { MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
+// import {
+//   getKohdeByTunniste,
+//   getMaaraystyyppiByTunniste
+// } from "services/muutospyynnot/muutospyyntoUtil";
+// import {
+//   KOHTEET,
+//   MAARAYSTYYPIT
+// } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
+// import { MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 
 export function getToimialueByKoodiArvo(koodiarvo, maakunnat, kunnat) {
   if (!koodiarvo) {
@@ -119,12 +119,12 @@ export function handleToimialueSelectChange(
 
   // käsitellään poistot
   const removals = getToimialueRemovals(initialValues, values);
-  const kohde = getKohdeByTunniste(KOHTEET.TOIMIALUE);
-  const maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE);
+  // const kohde = getKohdeByTunniste(KOHTEET.TOIMIALUE);
+  // const maaraystyyppi = getMaaraystyyppiByTunniste(MAARAYSTYYPIT.VELVOITE);
 
   if (removals.length > 0) {
     removals.forEach(removal => {
-      const toimialue = getToimialueByKoodiArvo(removal);
+      // const toimialue = getToimialueByKoodiArvo(removal);
       // fields.push({
       //   ...toimialue,
       //   type: MUUTOS_TYPES.REMOVAL,

@@ -1,11 +1,10 @@
 import React from "react";
 import {
-  Button,
-  SubtleButton,
   WizardBottom,
   Container
 } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
 
 const WizardActions = props => {
   const onPrevClick = () => {
@@ -24,24 +23,28 @@ const WizardActions = props => {
     <WizardBottom>
       <Container maxWidth="1085px" padding="15px">
         <Button
-          type="button"
+          color="primary"
           className={`previous button-left ${
-            !props.onPrev ? "button-hidden" : ""
-          }`}
+            !props.onPrev ? "invisible" : ""
+            }`}
           onClick={onPrevClick}
         >
           Edellinen
         </Button>
         <div>
-          <SubtleButton disabled={!props.isSavingEnabled} onClick={onSaveClick}>
+          <Button
+            color="primary"
+            disabled={!props.isSavingEnabled}
+            onClick={onSaveClick}>
             Tallenna luonnos
-          </SubtleButton>
+          </Button>
         </div>
         <Button
-          type="button"
+          color="primary"
+          variant="contained"
           className={`next button-right ${
             !props.onNext ? "button-hidden" : ""
-          }`}
+            }`}
           onClick={onNextClick}
         >
           Seuraava

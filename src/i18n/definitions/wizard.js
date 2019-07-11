@@ -131,10 +131,5 @@ export default defineMessages({
     id: "wizard.counties",
     defaultMessage:
       "Maakunnat"
-  },
-  responsibilities: {
-    id: "wizard.responsibilities",
-    defaultMessage:
-      "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuunottamatta koko Suomen osaamis- ja koulutustarpeeseen."
   }
 });

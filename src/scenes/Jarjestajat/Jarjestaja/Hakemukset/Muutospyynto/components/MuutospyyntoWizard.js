@@ -55,7 +55,6 @@ import { ToastContainer, toast } from "react-toastify";
 import { injectIntl } from "react-intl";
 
 import "react-toastify/dist/ReactToastify.css";
-import { red } from "@material-ui/core/colors";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -188,7 +187,7 @@ const MuutospyyntoWizard = props => {
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
-  }, [muutoshakemus]);
+  }, [muutoshakemus, props.history, props.match.params]);
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
