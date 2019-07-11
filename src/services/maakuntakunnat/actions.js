@@ -1,5 +1,4 @@
 import { API_BASE_URL } from "../../modules/constants"
-import { getMaakuntakunnatList } from "../toimialueet/toimialueUtil"
 
 import {
   FETCH_MAAKUNTAKUNNAT_START,

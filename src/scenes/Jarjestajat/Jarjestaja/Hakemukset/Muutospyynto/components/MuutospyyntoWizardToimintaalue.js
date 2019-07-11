@@ -17,13 +17,12 @@ import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import Section from "components/03-templates/Section";
 
 import Loading from "../../../../../../modules/Loading";
-import { ContentContainer } from "../../../../../../modules/elements";
 import {
-  Kohdenumero,
-  Otsikko,
+  // Kohdenumero,
+  // Otsikko,
   Row,
   CheckboxRowContainer,
-  Nimi
+  // Nimi
 } from "./MuutospyyntoWizardComponents";
 import {
   getToimialueByKoodiArvo,
@@ -32,7 +31,6 @@ import {
 import { handleSimpleCheckboxChange } from "../../../../../../services/koulutukset/koulutusUtil";
 import {
   FIELD_ARRAY_NAMES,
-  FORM_NAME_UUSI_HAKEMUS,
   MUUTOS_TYPES
 } from "../modules/uusiHakemusFormConstants";
 
@@ -55,20 +53,20 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   useEffect(() => {
     setKuntamaaraykset(props.lupa.kohteet[3].kunnat);
-    const {
-      lupa,
-      valtakunnallinenmuutoksetValue,
-      toimialuemuutoksetValue
-    } = props;
+    // const {
+    //   lupa,
+    //   valtakunnallinenmuutoksetValue,
+    //   toimialuemuutoksetValue
+    // } = props;
     setMaakuntaMaaraykset(props.lupa.kohteet[3].maakunnat);
     setValtakunnallinen(props.lupa.kohteet[3].valtakunnallinen || false);
   }, [props.lupa]);
 
-  useEffect(() => {
-    console.log(kunnat);
-    console.log(maakunnat);
-    console.log(maakuntakunnat);
-  }, [kunnat, maakunnat, maakuntakunnat]);
+  // useEffect(() => {
+  //   console.log(kunnat);
+  //   console.log(maakunnat);
+  //   console.log(maakuntakunnat);
+  // }, [kunnat, maakunnat, maakuntakunnat]);
 
   if (kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched) {
     return (

@@ -20,5 +20,9 @@ export default defineMessages({
   undo: {
     id: "common.undo",
     defaultMessage: "Peruuta muutokset"
+  },
+  loading: {
+    id: "common.loading",
+    defaultMessage: "Ladataan"
   }
 });
