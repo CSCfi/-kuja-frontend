@@ -168,12 +168,12 @@ const MuutospyyntoWizard = props => {
   }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
 
   useEffect(() => {
+    console.log(muutospyynnot);
     // TODO: Divide muutokset array of the muutospyynnot object by section and pass data to correct sections
   }, [muutospyynnot]);
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
-      // TODO: If props.match.params.uuid is undefined but the document is already saved redirect user to the correct url
       console.info(muutoshakemus);
       notify({
         title: `Muutospyyntö tallennettu!`
@@ -188,6 +188,12 @@ const MuutospyyntoWizard = props => {
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
   }, [muutoshakemus, props.history, props.match.params]);
+
+  const handlePrev = pageNumber => {
+    if (pageNumber !== 1) {
+      props.history.push(String(pageNumber - 1));
+    }
+  };
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
@@ -209,6 +215,7 @@ const MuutospyyntoWizard = props => {
   const save = () => {
     if (props.match.params.uuid) {
       // TODO: save existing document?
+      console.log(muutoshakemus);
       saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
         muutoshakemusDispatch
       );
@@ -284,7 +291,10 @@ const MuutospyyntoWizard = props => {
           </DialogTitle>
           <DialogContent>
             <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
-              <Stepper activeStep={page - 1}>
+              <Stepper
+                activeStep={page - 1}
+                orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}>
+
                 {steps.map(label => {
                   const stepProps = {};
                   const labelProps = {};
@@ -294,6 +304,7 @@ const MuutospyyntoWizard = props => {
                     </Step>
                   );
                 })}
+
               </Stepper>
               {page === 1 && (
                 <WizardPage
@@ -317,6 +328,41 @@ const MuutospyyntoWizard = props => {
                     opiskelijavuodet={opiskelijavuodet}
                     tutkinnotState={(muutoshakemus.tutkinnot || {}).state || []}
                   />
+                </WizardPage>
+              )}
+              {page === 2 && (
+                <WizardPage
+                  pageNumber={2}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onSave={save}
+                  lupa={lupa}
+                  muutoshakemus={muutoshakemus}
+                >
+
+                </WizardPage>
+              )}
+              {page === 3 && (
+                <WizardPage
+                  pageNumber={3}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onSave={save}
+                  lupa={lupa}
+                  muutoshakemus={muutoshakemus}
+                >
+
+                </WizardPage>
+              )}
+              {page === 4 && (
+                <WizardPage
+                  pageNumber={4}
+                  onPrev={handlePrev}
+                  onSave={save}
+                  lupa={lupa}
+                  muutoshakemus={muutoshakemus}
+                >
+
                 </WizardPage>
               )}
             </div>
