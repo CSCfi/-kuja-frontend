@@ -142,9 +142,19 @@ export default defineMessages({
     defaultMessage:
       "Seuraava"
   },
-  savedDaft: {
+  saveDraft: {
     id: "wizard.saveDraft",
     defaultMessage:
       "Tallenna luonnos"
+  },
+  send: {
+    id: "wizard.send",
+    defaultMessage:
+      "Lähetä hakemus"
+  },
+  preview: {
+    id: "wizard.preview",
+    defaultMessage:
+      "Esikatsele"
   }
 });

@@ -291,7 +291,10 @@ const MuutospyyntoWizard = props => {
           </DialogTitle>
           <DialogContent>
             <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
-              <Stepper activeStep={page - 1}>
+              <Stepper
+                activeStep={page - 1}
+                orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}>
+
                 {steps.map(label => {
                   const stepProps = {};
                   const labelProps = {};
@@ -301,6 +304,7 @@ const MuutospyyntoWizard = props => {
                     </Step>
                   );
                 })}
+
               </Stepper>
               {page === 1 && (
                 <WizardPage
