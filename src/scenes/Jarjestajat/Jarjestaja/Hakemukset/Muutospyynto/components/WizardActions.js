@@ -28,6 +28,7 @@ const WizardActions = props => {
       <div className="flex justify-between w-full max-w-5xl p-4 mx-auto">
         <Button
           color="primary"
+          variant="contained"
           className={`previous button-left ${
             !props.onPrev ? "invisible" : ""
             }`}
@@ -47,7 +48,7 @@ const WizardActions = props => {
           color="primary"
           variant="contained"
           className={`next button-right ${
-            !props.onNext ? "button-hidden" : ""
+            !props.onNext ? "invisible" : ""
             }`}
           onClick={onNextClick}
         >
