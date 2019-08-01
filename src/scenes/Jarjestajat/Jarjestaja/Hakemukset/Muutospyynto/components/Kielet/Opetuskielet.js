@@ -97,8 +97,8 @@ const Opetuskielet = props => {
   // };
 
   const removeChanges = (...payload) => {
-    return onUpdate({ changes: [] });
-    // return saveChanges({ index: payload[2], changes: [] });
+    // return onUpdate({ changes: [] });
+    return saveChanges({ index: payload[2], changes: [] });
   };
 
   useEffect(() => {
@@ -148,8 +148,7 @@ Opetuskielet.propTypes = {
   kielet: PropTypes.object,
   onUpdate: PropTypes.func,
   kohde: PropTypes.object,
-  lupa: PropTypes.object,
-  onUpdate: PropTypes.func
+  lupa: PropTypes.object
 };
 
 export default injectIntl(Opetuskielet);

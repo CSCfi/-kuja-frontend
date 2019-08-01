@@ -1,16 +1,11 @@
 import _ from "lodash";
 import { parseLocalizedField } from "../../modules/helpers";
 import { MUUTOS_TYPES } from "locales/uusiHakemusFormConstants";
-import { findKieliByKoodi } from "./kieliUtil";
+// import { findKieliByKoodi } from "./kieliUtil";
 import * as R from "ramda";
 
 export function sortOpetuskielet(kielet) {
-  let array = [];
-
-  array.push(findKieliByKoodi(kielet, "1")); // Suomi
-  array.push(findKieliByKoodi(kielet, "2")); // Ruotsi
-  array.push(findKieliByKoodi(kielet, "5")); // Saame
-  return array;
+  return kielet.sort((a, b) => {return a.koodiArvo - b.koodiArvo});
 }
 
 export function getDataForOpetuskieletList(

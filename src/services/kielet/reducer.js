@@ -40,7 +40,7 @@ export default function(state, action) {
         hasErrored: false
       };
     case FETCH_OPPILAITOKSENOPETUSKIELET_SUCCESS:
-      return {
+      return { 
         ...state,
         isFetching: false,
         fetched: true,
