@@ -27,7 +27,7 @@ const Opetuskielet = props => {
               name: "CheckboxWithLabel",
               properties: {
                 name: "CheckboxWithLabel",
-                isChecked: item.shouldBeSelected,
+                isChecked: item.shouldBeSelected || item.isInLupa,
                 title: item.title,
                 labelStyles: {
                   addition: isAdded,
