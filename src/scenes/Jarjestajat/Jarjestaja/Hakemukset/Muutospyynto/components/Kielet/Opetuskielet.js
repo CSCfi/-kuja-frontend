@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, setState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -16,30 +16,33 @@ const Opetuskielet = props => {
   const [opetuskielet, setOpetuskieletdata] = useState([]);
   const [state, setState] = useState([]);
   const [locale, setLocale] = useState([]);
-  const { onUpdate } = props;
+  const { onUpdate } = props;
 
-  const getCategories = opetuskielet => {
-    if (opetuskielet.items)
-      return R.map(item => {
-        return {
-          components: [
-            {
-              name: "CheckboxWithLabel",
-              properties: {
+  const getCategories = useCallback(
+    opetuskielet => {
+      if (opetuskielet.items)
+        return R.map(item => {
+          return {
+            components: [
+              {
                 name: "CheckboxWithLabel",
-                isChecked: item.shouldBeSelected || item.isInLupa,
-                title: item.title,
-                labelStyles: {
-                  addition: isAdded,
-                  removal: isRemoved,
-                  custom: Object.assign({}, item.isInLupa ? isInLupa : {})
+                properties: {
+                  name: "CheckboxWithLabel",
+                  isChecked: item.shouldBeSelected,
+                  title: item.title,
+                  labelStyles: {
+                    addition: isAdded,
+                    removal: isRemoved,
+                    custom: Object.assign({}, item.isInLupa ? isInLupa : {})
+                  }
                 }
               }
-            }
-          ]
-        };
-      }, opetuskielet.items);
-  };
+            ]
+          };
+        }, opetuskielet.items)
+    },
+    []
+  );
 
   useEffect(() => {
     setOpetuskieletdata(
@@ -71,7 +74,7 @@ const Opetuskielet = props => {
       tmpState.push({ areaCode, article, categories, changes, title });
     }, opetuskielet);
     setState(tmpState);
-  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi]);
+  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet]);
 
   useEffect(() => {
     setCategories(
@@ -119,9 +122,9 @@ const Opetuskielet = props => {
     setState(prevState => {
       const newState = R.clone(prevState);
       newState.changes = payload.changes;
+      console.log(newState.changes);
       return newState;
     });
-    console.log(state.changes);
   };
 
   return (

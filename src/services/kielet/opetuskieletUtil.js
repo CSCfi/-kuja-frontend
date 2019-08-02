@@ -31,7 +31,7 @@ export function getDataForOpetuskieletList(
         isAdded,
         isInLupa,
         isRemoved,
-        shouldBeSelected: isAdded,
+        shouldBeSelected: isAdded || (!isRemoved && isInLupa),
         title: parseLocalizedField(metadata, R.toUpper(locale))
       };
     }),
