@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
@@ -6,6 +6,12 @@ import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import { fetchKunnat } from "../../../../../../services/kunnat/actions";
+import { fetchMaakunnat } from "../../../../../../services/maakunnat/actions";
+import { fetchMaakuntakunnat } from "../../../../../../services/maakuntakunnat/actions";
+import { KunnatContext } from "context/kunnatContext";
+import { MaakunnatContext } from "context/maakunnatContext";
+import { MaakuntakunnatContext } from "context/maakuntakunnatContext";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
@@ -13,6 +19,20 @@ import * as R from "ramda";
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState({});
+  const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
+  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
+    MaakunnatContext
+  );
+  const {
+    state: maakuntakunnat,
+    dispatch: maakuntakunnatDispatch
+  } = useContext(MaakuntakunnatContext);
+
+  useEffect(() => {
+    fetchKunnat()(kunnatDispatch);
+    fetchMaakunnat()(maakunnatDispatch);
+    fetchMaakuntakunnat()(maakuntakunnatDispatch);
+  }, [kunnatDispatch, maakunnatDispatch, maakuntakunnatDispatch]);
 
   useEffect(() => {
     setKohteet(
@@ -49,7 +69,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       </p>
 
       <form onSubmit={props.handleSubmit}>
-
         <Tutkinnot
           kohde={kohteet.tutkinnotjakoulutukset}
           koulutukset={props.koulutukset}
@@ -73,9 +92,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           tutkinnotState={props.tutkinnotState}
         />
 
-        <MuutospyyntoWizardToimialue 
-          lupa={props.lupa}
-        />
+        {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
+          <MuutospyyntoWizardToimialue
+            kohde={props.lupa.kohteet[3]}
+            kunnat={kunnat}
+            maakunnat={maakunnat}
+            maakuntakunnat={maakuntakunnat}
+          />
+        )}
 
         <MuutospyyntoWizardOpiskelijavuodet
           lupa={props.lupa}
