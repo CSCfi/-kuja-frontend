@@ -14,14 +14,7 @@ export default function getChangesOfOpetusJaTutkintokieli(opetuskieliData) {
                 kuvaus: meta.kuvaus,
                 isInLupa: meta.isInLupa,
                 kohde: meta.kohde.kohdeArvot[0].kohde,
-                // maaraystyyppi: meta.maaraystyyppi,
-                maaraystyyppi: {
-                    tunniste: "VELVOITE",
-                    selite: {
-                        fi: "Velvoite"
-                    },
-                    uuid: "d64967d6-17e0-11e9-98d4-02420a141704"
-                },
+                maaraystyyppi: meta.maaraystyyppi,
                 type: stateItem.properties.isChecked ? "addition" : "removal",
                 meta: {
                     nimi: meta.kuvaus,
