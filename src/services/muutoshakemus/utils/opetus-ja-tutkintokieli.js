@@ -1,12 +1,12 @@
 import * as R from "ramda";
 import { getMetadata } from "./tutkinnotUtils";
 
-export default function getChangesOfOpetusJaTutkintokieli(opetuskieliData, muutoshakemus) {
+export default function getChangesOfOpetusJaTutkintokieli(opetuskieliData) {
     return R.flatten(
         R.map(stateItem => {
             const anchorParts = stateItem.anchor.split(".");
             const code = R.last(anchorParts);
-            const meta = getMetadata(R.tail(anchorParts), muutoshakemus.opetuskielet.state[0].categories);
+            const meta = getMetadata(R.tail(anchorParts), opetuskieliData.state[0].categories);
             return {
                 koodiarvo: code,
                 koodisto: "oppilaitoksenopetuskieli",
