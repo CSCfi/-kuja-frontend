@@ -21,7 +21,7 @@ const Toimialuevalinta = React.memo(props => {
   const optionStyles = {
     control: styles => ({ ...styles, backgroundColor: "white" }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      const color = chroma(data.koodisto === "kunta" ? "#38a169" : "#9ae6b4");
+      const color = chroma(data.koodisto === "kunta" ? "#68d391" : "#c6f6d5");
       return {
         ...styles,
         backgroundColor: isDisabled
@@ -48,7 +48,7 @@ const Toimialuevalinta = React.memo(props => {
       };
     },
     multiValue: (styles, { data }) => {
-      const color = chroma(data.koodisto === "kunta" ? "#38a169" : "#9ae6b4");
+      const color = chroma(data.koodisto === "kunta" ? "#68d391" : "#c6f6d5");
       return {
         ...styles,
         backgroundColor: color.css()

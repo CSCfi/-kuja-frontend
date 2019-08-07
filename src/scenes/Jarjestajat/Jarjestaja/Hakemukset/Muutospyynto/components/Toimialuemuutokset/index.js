@@ -59,7 +59,7 @@ const Toimialuemuutokset = React.memo(props => {
       <div className="flex pb-4">
         {maakunnat && (
           <div className="flex-1 pr-4">
-            <h4 className="pt-4 border-b-2 border-solid border-green-300">
+            <h4 className="pt-4 border-b-2 border-solid border-green-200">
               {props.intl.formatMessage(wizardMessages.counties)}
             </h4>
             {getListOfSelectedValues(maakunnat)}
@@ -68,7 +68,7 @@ const Toimialuemuutokset = React.memo(props => {
 
         {kunnat && (
           <div className="flex-1 pl-4">
-            <h4 className="pt-4 border-b-2 border-solid border-green-600">
+            <h4 className="pt-4 border-b-2 border-solid border-green-400">
               {props.intl.formatMessage(wizardMessages.municipalities)}
             </h4>
             {getListOfSelectedValues(kunnat)}

@@ -94,10 +94,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
         {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
           <MuutospyyntoWizardToimialue
-            kohde={props.lupa.kohteet[3]}
+            lupakohde={props.lupa.kohteet[3]}
+            kohde={kohteet.toimintaalue}
             kunnat={kunnat}
             maakunnat={maakunnat}
             maakuntakunnat={maakuntakunnat}
+            maaraystyyppi={maaraystyypit.VELVOITE || {}}
+            onUpdate={props.onUpdate}
           />
         )}
 
