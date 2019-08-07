@@ -4,6 +4,14 @@ import _ from "lodash";
 
 const categories = {};
 
+export function getMetadata(anchorParts, categories, i = 0) {
+  const category = R.find(R.propEq("anchor", anchorParts[i]), categories);
+  if (anchorParts[i + 1]) {
+    return getMetadata(anchorParts, category.categories, i + 1);
+  }
+  return category.meta;
+};
+
 export function getCategories(index, article, koulutustyypit, kohde, maaraystyyppi, locale) {
   if (!categories[index]) {
     categories[index] = R.values(
