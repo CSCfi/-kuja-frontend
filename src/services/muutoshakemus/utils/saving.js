@@ -1,6 +1,7 @@
 import moment from "moment";
 import * as R from "ramda";
 import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
+import getChangesOfOpetuskielet from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
 
 export function createObjectToSave(lupa, muutoshakemus) {
@@ -26,6 +27,7 @@ export function createObjectToSave(lupa, muutoshakemus) {
     },
     muutokset: R.flatten([
       getChangesOfTutkinnotJaKoulutukset(muutoshakemus.tutkinnot),
+      getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       getChangesOfToimintaalue(muutoshakemus.toimintaalue)
     ]),
     liitteet: []

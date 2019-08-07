@@ -6,32 +6,78 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const Opetuskielet = props => {
   const sectionId = "opetuskielet";
   const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
-  const getCategories = useCallback(({ items }) => {
-    return R.map(item => {
-      return {
-        components: [
-          {
-            name: "CheckboxWithLabel",
-            properties: {
-              name: "CheckboxWithLabel",
-              isChecked: item.shouldBeSelected,
-              title: item.title,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved,
-                custom: Object.assign({}, item.isInLupa ? isInLupa : {})
+  // const [changes, setChanges] = useState([]);
+  const changes = [];
+  const [opetuskielet, setOpetuskieletdata] = useState([]);
+  const [state, setState] = useState([]);
+  const [locale, setLocale] = useState([]);
+  const { onUpdate } = props;
+
+  const getCategories = useCallback(
+    opetuskielet => {
+      if (opetuskielet.items)
+        return R.map(item => {
+          return {
+            anchor: item.code,
+            // code: item.code,
+            meta: {
+              isInLupa: item.isInLupa,
+              kuvaus: item.title,
+              kohde: props.kohde,
+              maaraystyyppi: props.maaraystyyppi,
+              meta: item.meta
+            },
+            components: [
+              {
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  isChecked: item.shouldBeSelected,
+                  title: item.title,
+                  labelStyles: {
+                    addition: isAdded,
+                    removal: isRemoved,
+                    custom: Object.assign({}, item.isInLupa ? isInLupa : {})
+                  }
+                }
               }
-            }
-          }
-        ]
-      };
-    }, items);
-  }, []);
+            ]
+          };
+        }, opetuskielet.items)
+    },
+    [props.kohde, props.maaraystyyppi]
+  );
+
+  useEffect(() => {
+    setOpetuskieletdata(
+      R.sortBy(R.prop("koodiArvo"), R.values(props.kielet.opetuskielet))
+    );
+  }, [props.kielet]);
+
+  useEffect(() => {
+    const tmpState = [];
+    R.addIndex(R.map)((kieli, i) => {
+      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
+      // const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+      const categories = getCategories(
+        getDataForOpetuskieletList(
+          props.kielet.opetuskielet,
+          props.kohde,
+          props.changes,
+          locale
+        )
+      );
+      const title = parseLocalizedField(kieli.metadata, locale);
+      const changes = [];
+      tmpState.push({ areaCode, categories, changes, title });
+    }, opetuskielet);
+    setState(tmpState);
+  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet, props.kielet.opetuskielet]);
 
   useEffect(() => {
     setCategories(
@@ -45,29 +91,54 @@ const Opetuskielet = props => {
       )
     );
   }, [
-    props.kielet.opetuskielet,
-    props.changes,
-    props.kohde,
-    getCategories,
-    props.intl.locale
-  ]);
+      props.kielet.opetuskielet,
+      props.changes,
+      props.kohde,
+      getCategories,
+      props.intl.locale
+    ]);
 
-  const onUpdate = payload => {
-    setChanges(payload.changes);
+  // const onUpdate = payload => {
+  //   setChanges(payload.changes);
+  // };
+
+  const removeChanges = (...payload) => {
+    // return onUpdate({ changes: [] });
+    return saveChanges({ index: payload[2], changes: [] });
   };
 
-  const removeChanges = () => {
-    return onUpdate({ changes: [] });
+  useEffect(() => {
+    setLocale(R.toUpper(props.intl.locale));
+  }, [props.intl.locale]);
+
+  useEffect(() => {
+    onUpdate({ sectionId, state });
+  }, [changes, onUpdate, state]);
+
+  // const getArticle = (areaCode, articles = []) => {
+  //   return R.find(article => {
+  //     return article.koodi === areaCode;
+  //   }, articles);
+  // };
+
+  const saveChanges = payload => {
+    setState(prevState => {
+      const newState = R.clone(prevState);
+      newState.changes = payload.changes;
+      console.log(newState.changes);
+      return newState;
+    });
   };
 
   return (
     <ExpandableRowRoot
+      anchor={"opetuskieli"}
       key={`expandable-row-root`}
       categories={categories}
-      changes={changes}
+      changes={state.changes}
       index={0}
       onChangesRemove={removeChanges}
-      onUpdate={onUpdate}
+      onUpdate={saveChanges}
       sectionId={sectionId}
       title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
       isExpanded={true}
@@ -75,15 +146,16 @@ const Opetuskielet = props => {
   );
 };
 
-Opetuskielet.defaultProps = {
-  changes: []
-};
+// Opetuskielet.defaultProps = {
+//   changes: []
+// };
 
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
   kielet: PropTypes.object,
   onUpdate: PropTypes.func,
-  kohde: PropTypes.object
+  kohde: PropTypes.object,
+  lupa: PropTypes.object
 };
 
 export default injectIntl(Opetuskielet);
