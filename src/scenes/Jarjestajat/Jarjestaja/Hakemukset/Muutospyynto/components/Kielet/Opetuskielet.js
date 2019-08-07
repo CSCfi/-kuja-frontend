@@ -50,7 +50,7 @@ const Opetuskielet = props => {
           };
         }, opetuskielet.items)
     },
-    []
+    [props.kohde, props.maaraystyyppi]
   );
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const Opetuskielet = props => {
       tmpState.push({ areaCode, categories, changes, title });
     }, opetuskielet);
     setState(tmpState);
-  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet]);
+  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet, props.kielet.opetuskielet]);
 
   useEffect(() => {
     setCategories(
