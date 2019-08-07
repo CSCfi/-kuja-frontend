@@ -56,7 +56,14 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         valueOfSelect
       }
     });
-  }, [changesOfValtakunnallinen, initialValueOfSelect, onUpdate, valueOfSelect]);
+  }, [
+    props.kohde,
+    props.maaraystyyppi,
+    changesOfValtakunnallinen,
+    initialValueOfSelect,
+    onUpdate,
+    valueOfSelect
+  ]);
 
   const handleNewValueOfToimialuevalinta = value => {
     console.info(initialValueOfSelect, value);

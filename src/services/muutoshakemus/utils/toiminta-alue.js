@@ -42,7 +42,7 @@ const getItemsToRemove = (initialValueOfSelect, valueOfSelect, kohde, maaraystyy
 
 export default function getChangesOfToimintaalue(toimialuedata) {
   const { initialValueOfSelect, kohde, maaraystyyppi, valueOfSelect } = toimialuedata.state;
-  const itemsToAdd = getItemsToAdd(initialValueOfSelect, valueOfSelect, kohde);
+  const itemsToAdd = getItemsToAdd(initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi);
   const itemsToRemove = getItemsToRemove(
     initialValueOfSelect,
     valueOfSelect,
