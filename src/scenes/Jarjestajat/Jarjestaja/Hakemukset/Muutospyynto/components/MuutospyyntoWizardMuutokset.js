@@ -66,11 +66,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         />
 
         <MuutospyyntoWizardKielet
+          kohde={kohteet.kielet}
           lupa={props.lupa}
           kielet={props.kielet}
           koulutukset={props.koulutukset}
           onUpdate={props.onUpdate}
           tutkinnotState={props.tutkinnotState}
+          maaraystyyppi={maaraystyypit.VELVOITE || {}}
         />
 
         <MuutospyyntoWizardToimialue 

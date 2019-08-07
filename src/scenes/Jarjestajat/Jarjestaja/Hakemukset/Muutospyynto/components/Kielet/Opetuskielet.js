@@ -23,6 +23,15 @@ const Opetuskielet = props => {
       if (opetuskielet.items)
         return R.map(item => {
           return {
+            anchor: item.code,
+            // code: item.code,
+            meta: {
+              isInLupa: item.isInLupa,
+              kuvaus: item.title,
+              kohde: props.kohde,
+              maaraystyyppi: props.maaraystyyppi,
+              meta: item.meta
+            },
             components: [
               {
                 name: "CheckboxWithLabel",
@@ -54,24 +63,18 @@ const Opetuskielet = props => {
     const tmpState = [];
     R.addIndex(R.map)((kieli, i) => {
       const areaCode = kieli.koodiarvo || kieli.koodiArvo;
-      const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+      // const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
       const categories = getCategories(
-        // getDataForOpetuskieletList(
-        //   kieli.opetuskielet,
-        //   props.kohde,
-        //   props.changes,
-        //   locale
-        // )
-        i,
-        article,
-        kieli.opetuskielet,
-        props.kohde,
-        props.changes,
-        locale
+        getDataForOpetuskieletList(
+          props.kielet.opetuskielet,
+          props.kohde,
+          props.changes,
+          locale
+        )
       );
       const title = parseLocalizedField(kieli.metadata, locale);
       const changes = [];
-      tmpState.push({ areaCode, article, categories, changes, title });
+      tmpState.push({ areaCode, categories, changes, title });
     }, opetuskielet);
     setState(tmpState);
   }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet]);
@@ -112,11 +115,11 @@ const Opetuskielet = props => {
     onUpdate({ sectionId, state });
   }, [changes, onUpdate, state]);
 
-  const getArticle = (areaCode, articles = []) => {
-    return R.find(article => {
-      return article.koodi === areaCode;
-    }, articles);
-  };
+  // const getArticle = (areaCode, articles = []) => {
+  //   return R.find(article => {
+  //     return article.koodi === areaCode;
+  //   }, articles);
+  // };
 
   const saveChanges = payload => {
     setState(prevState => {
@@ -129,6 +132,7 @@ const Opetuskielet = props => {
 
   return (
     <ExpandableRowRoot
+      anchor={"opetuskieli"}
       key={`expandable-row-root`}
       categories={categories}
       changes={state.changes}
