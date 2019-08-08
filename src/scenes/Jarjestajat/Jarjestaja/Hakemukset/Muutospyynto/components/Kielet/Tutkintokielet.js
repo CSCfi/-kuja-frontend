@@ -72,16 +72,17 @@ const Tutkintokielet = React.memo(props => {
     }
   }, [props.tutkinnotState, defaultLanguage, props.kielet, props.locale]);
 
-  const onUpdate = payload => {
+  const saveChanges = payload => {
     setChanges(prevState => {
       const newState = R.clone(prevState);
       newState[payload.anchor] = payload.changes;
+      console.log(newState[payload.anchor].categories)
       return newState;
     });
   };
 
   const removeChanges = (...payload) => {
-    return onUpdate({ anchor: payload[1], changes: [] });
+    return saveChanges({ anchor: payload[1], changes: [] });
   };
 
   return (
@@ -96,7 +97,7 @@ const Tutkintokielet = React.memo(props => {
             index={i}
             key={`expandable-row-root-${i}`}
             onChangesRemove={removeChanges}
-            onUpdate={onUpdate}
+            onUpdate={saveChanges}
             sectionId={sectionId}
             title={itemState.title}
           />

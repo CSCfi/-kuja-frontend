@@ -11,7 +11,6 @@ import { parseLocalizedField } from "../../../../../../../modules/helpers";
 const Opetuskielet = props => {
   const sectionId = "opetuskielet";
   const [categories, setCategories] = useState([]);
-  // const [changes, setChanges] = useState([]);
   const changes = [];
   const [opetuskielet, setOpetuskieletdata] = useState([]);
   const [state, setState] = useState([]);
@@ -24,7 +23,6 @@ const Opetuskielet = props => {
         return R.map(item => {
           return {
             anchor: item.code,
-            // code: item.code,
             meta: {
               isInLupa: item.isInLupa,
               kuvaus: item.title,
@@ -63,7 +61,6 @@ const Opetuskielet = props => {
     const tmpState = [];
     R.addIndex(R.map)((kieli, i) => {
       const areaCode = kieli.koodiarvo || kieli.koodiArvo;
-      // const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
       const categories = getCategories(
         getDataForOpetuskieletList(
           props.kielet.opetuskielet,
@@ -98,12 +95,7 @@ const Opetuskielet = props => {
       props.intl.locale
     ]);
 
-  // const onUpdate = payload => {
-  //   setChanges(payload.changes);
-  // };
-
   const removeChanges = (...payload) => {
-    // return onUpdate({ changes: [] });
     return saveChanges({ index: payload[2], changes: [] });
   };
 
@@ -115,17 +107,10 @@ const Opetuskielet = props => {
     onUpdate({ sectionId, state });
   }, [changes, onUpdate, state]);
 
-  // const getArticle = (areaCode, articles = []) => {
-  //   return R.find(article => {
-  //     return article.koodi === areaCode;
-  //   }, articles);
-  // };
-
   const saveChanges = payload => {
     setState(prevState => {
       const newState = R.clone(prevState);
       newState.changes = payload.changes;
-      console.log(newState.changes);
       return newState;
     });
   };
@@ -146,9 +131,9 @@ const Opetuskielet = props => {
   );
 };
 
-// Opetuskielet.defaultProps = {
-//   changes: []
-// };
+Opetuskielet.defaultProps = {
+  changes: []
+};
 
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
