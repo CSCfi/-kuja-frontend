@@ -13,13 +13,13 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const sectionId = "muut";
   const [muutdata, setMuutdata] = useState([]);
   const [changes, setChanges] = useState({});
-  const [locale, setLocale] = useState([]);
+  const [locale, setLocale] = useState("FI");
 
   const { lupa, onUpdate } = props;
   const { kohteet } = lupa;
   const kohde = kohteet[5];
   const { headingNumber } = kohde;
-  const heading = props.intl.formatMessage(wizardMessages.header_section5)
+  const heading = props.intl.formatMessage(wizardMessages.header_section5);
 
   const divideArticles = articles => {
     const dividedArticles = {};
@@ -42,109 +42,114 @@ const MuutospyyntoWizardMuut = React.memo(props => {
 
   useEffect(() => {
     const dividedArticles = divideArticles(props.muut.data);
-    const expandableRows = [
-      {
-        key: "laajennettu",
-        title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
-        code: "01",
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.laajennettu || []
-          }
-        ]
-      },
-      {
-        key: "vaativat",
-        title: "Vaativan erityisen tuen tehtävä",
-        code: "02",
-        isCollapsedByDefault: true,
-        data: [
-          {
-            componentName: "RadioButtonWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseOnlyOne),
-            articles: dividedArticles.vaativa_1 || []
-          },
-          {
-            componentName: "CheckboxWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseAdditional),
-            articles: dividedArticles.vaativa_2 || []
-          }
-        ]
-      },
-      {
-        key: "sisaoppilaitos",
-        title: "Sisäoppilaitosmuotoinen koulutus",
-        code: "03",
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.sisaoppilaitos || []
-          }
-        ]
-      },
-      {
-        key: "vankila",
-        title: "Vankilaopetus",
-        code: "04",
-        articles: dividedArticles.vankila,
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.vankila || []
-          }
-        ]
-      },
-      {
-        key: "urheilu",
-        title: "Urheilijoiden ammatillinen koulutus",
-        code: "05",
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.urheilu || []
-          }
-        ]
-      },
-      {
-        key: "yhteistyo",
-        title: "Yhteistyö",
-        code: "06",
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.yhteistyo || []
-          }
-        ]
-      },
-      {
-        key: "muumaarays",
-        title: "Muu määräys",
-        code: "07",
-        data: [
-          {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.muumaarays || []
-          }
-        ]
-      }
+    const codes = ["01", "02", "03", "04", "05", "06", "07"];
+    const datas = [
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.laajennettu || []
+        }
+      ],
+      [
+        {
+          componentName: "RadioButtonWithLabel",
+          title: props.intl.formatMessage(wizardMessages.chooseOnlyOne),
+          articles: dividedArticles.vaativa_1 || []
+        },
+        {
+          componentName: "CheckboxWithLabel",
+          title: props.intl.formatMessage(wizardMessages.chooseAdditional),
+          articles: dividedArticles.vaativa_2 || []
+        }
+      ],
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.sisaoppilaitos || []
+        }
+      ],
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.vankila || []
+        }
+      ],
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.urheilu || []
+        }
+      ],
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.yhteistyo || []
+        }
+      ],
+      [
+        {
+          componentName: "CheckboxWithLabel",
+          title: "",
+          articles: dividedArticles.muumaarays || []
+        }
+      ]
     ];
+    const keys = [
+      "laajennettu",
+      "vaativat",
+      "sisaoppilaitos",
+      "vankila",
+      "urheilu",
+      "yhteistyo",
+      "muumaarays"
+    ];
+    const titles = [
+      "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
+      "Vaativan erityisen tuen tehtävä",
+      "Sisäoppilaitosmuotoinen koulutus",
+      "Vankilaopetus",
+      "Urheilijoiden ammatillinen koulutus",
+      "Yhteistyö",
+      "Muu määräys"
+    ];
+    const expandableRows = !!locale.length ? R.addIndex(R.map)((code, i) => {
+      return {
+        code,
+        key: keys[i],
+        title: titles[i],
+        categories: getCategories(
+          {
+            key: keys[i],
+            data: datas[i]
+          },
+          locale
+        ),
+        data: datas[i]
+      };
+    }, codes) : [];
+
     setMuutdata(expandableRows);
-  }, [props.intl, props.muut.data]);
+  }, [locale, props.intl, props.muut.data]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({ sectionId, changes });
-  }, [changes, onUpdate]);
+    onUpdate({
+      sectionId,
+      state: {
+        kohde,
+        changes,
+        muutdata
+      }
+    });
+  }, [changes, kohde, muutdata, onUpdate]);
 
   const getCategories = (row, locale) => {
     return R.map(item => {
@@ -156,17 +161,22 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             _.find(article.metadata, m => {
               return m.kieli === locale;
             }).kuvaus || "[Koulutuksen otsikko tähän]";
+          // const isInLupaBool = article
+          //   ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
+          //       return !!_.find(koulutusala.koulutukset, {
+          //         koodi: koulutus.koodiArvo
+          //       });
+          //     })
+          //   : false
+          const isInLupaBool = true;
           const labelClasses = {
-            // isInLupa: article
-            //   ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
-            //       return !!_.find(koulutusala.koulutukset, {
-            //         koodi: koulutus.koodiArvo
-            //       });
-            //     })
-            //   : false
+            isInLupa: isInLupaBool
           };
           return {
             anchor: article.koodiArvo,
+            meta: {
+              isInLupa: isInLupaBool
+            },
             components: [
               {
                 name: item.componentName,
@@ -206,19 +216,17 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   return (
     <Section code={headingNumber} title={heading}>
       {R.addIndex(R.map)((row, i) => {
-        const categories = getCategories(row, locale);
         return (
           <ExpandableRowRoot
             anchor={row.code}
             key={`expandable-row-root-${i}`}
-            categories={categories}
-            changes={changes[row.code] || []}
+            categories={row.categories}
+            changes={changes[row.code]}
             code={row.code}
             index={i}
             onUpdate={saveChanges}
             sectionId={sectionId}
             title={row.title}
-            isExpanded={!row.isCollapsedByDefault}
             onChangesRemove={removeChanges}
           />
         );
@@ -228,6 +236,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
 });
 
 MuutospyyntoWizardMuut.propTypes = {
+  muut: PropTypes.object,
   onUpdate: PropTypes.func
 };
 

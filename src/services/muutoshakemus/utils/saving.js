@@ -4,6 +4,7 @@ import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
+import getChangesOfMuut from "./muut";
 
 export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
   return {
@@ -30,7 +31,8 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       getChangesOfTutkinnotJaKoulutukset(muutoshakemus.tutkinnot),
       getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
-      getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto)
+      getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
+      getChangesOfMuut(muutoshakemus.muut)
     ]),
     liitteet: []
   };
