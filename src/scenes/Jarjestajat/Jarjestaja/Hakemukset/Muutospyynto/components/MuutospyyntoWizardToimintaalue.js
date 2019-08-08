@@ -8,6 +8,35 @@ import Toimialuevalinta from "../components/Toimialuevalinta";
 import Valtakunnallinen from "../components/Valtakunnallinen";
 import * as R from "ramda";
 
+const getInitialItems = (items, list) => {
+  return R.map(item => {
+    return R.find(R.propEq("koodiArvo", item.koodiarvo))(items);
+  }, list);
+};
+
+const filterOutRemovedOnes = (items, list, changes) => {
+  return R.map(item => {
+    let result = false;
+    const itemInChanges = R.find(R.propEq("koodiarvo", item.koodiarvo))(
+      changes
+    );
+    if (!itemInChanges || (itemInChanges && itemInChanges.tila !== "POISTO")) {
+      result = R.find(R.propEq("koodiArvo", item.koodiarvo))(items);
+    }
+    return result;
+  }, list).filter(Boolean);
+};
+
+const getAddedItems = (items, changes) => {
+  return R.map(item => {
+    let result = false;
+    if (item.tila === "LISAYS") {
+      result = R.find(R.propEq("koodiArvo", item.koodiarvo))(items);
+    }
+    return result;
+  }, changes).filter(Boolean);
+};
+
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const sectionId = "toimintaalue";
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
@@ -23,20 +52,31 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.map(R.prop("kunta"), props.maakuntakunnat.maakuntakunnatList)
     );
 
-    const valitutMaakunnat = R.map(maakunta => {
-      return R.find(R.propEq("koodiArvo", maakunta.koodiarvo))(
-        props.maakuntakunnat.maakuntakunnatList
-      );
-    }, props.lupakohde.maakunnat);
+    const initialMaakunnat = getInitialItems(
+      props.maakuntakunnat.maakuntakunnatList,
+      props.lupakohde.maakunnat
+    );
 
-    const valitutKunnat = R.map(kunta => {
-      return R.find(R.propEq("koodiArvo", kunta.koodiarvo))(kunnat);
-    }, props.lupakohde.kunnat);
+    const maakunnatWithoutRemovedOnes = filterOutRemovedOnes(
+      props.maakuntakunnat.maakuntakunnatList,
+      props.lupakohde.maakunnat,
+      props.changes
+    );
 
-    const initialValueOfSelect = R.concat(valitutKunnat, valitutMaakunnat);
+    const addedItems = getAddedItems(
+      R.concat(props.maakuntakunnat.maakuntakunnatList, kunnat),
+      props.changes
+    );
+
+    const kunnatInitial = getInitialItems(
+      props.maakuntakunnat.maakuntakunnatList,
+      props.lupakohde.kunnat
+    );
+
+    const initialValueOfSelect = R.concat(kunnatInitial, initialMaakunnat);
 
     setInitialValueOfSelect(initialValueOfSelect);
-    setValueOfSelect(initialValueOfSelect);
+    setValueOfSelect(R.concat(maakunnatWithoutRemovedOnes, addedItems));
   }, [
     props.lupakohde,
     props.kunnat,
@@ -66,7 +106,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   ]);
 
   const handleNewValueOfToimialuevalinta = value => {
-    console.info(initialValueOfSelect, value);
     setValueOfSelect(value);
   };
 
