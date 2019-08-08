@@ -16,9 +16,15 @@ import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 
+const getChangesOf = (key, changes) => {
+  return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
+};
+
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState({});
+  const [changesOfToimintaalue, setChangesOfToimintaalue] = useState([]);
+
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
     MaakunnatContext
@@ -62,6 +68,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     );
   }, [props.maaraystyypit]);
 
+  useEffect(() => {
+    setChangesOfToimintaalue(getChangesOf("toimintaalue", props.changes));
+  }, [props.changes]);
+
   return (
     <div>
       <p className="py-10">
@@ -96,12 +106,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
         {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
           <MuutospyyntoWizardToimialue
+            changes={changesOfToimintaalue}
             lupakohde={props.lupa.kohteet[3]}
             kohde={kohteet.toimintaalue}
             kunnat={kunnat}
             maakunnat={maakunnat}
             maakuntakunnat={maakuntakunnat}
-            maaraystyyppi={maaraystyypit.VELVOITE || {}}
+            maaraystyyppi={maaraystyypit.VELVOITE}
             onUpdate={props.onUpdate}
           />
         )}
@@ -122,7 +133,12 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardMuutokset.defaultProps = {
+  changes: []
+};
+
 MuutospyyntoWizardMuutokset.propTypes = {
+  changes: PropTypes.array,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
