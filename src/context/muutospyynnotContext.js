@@ -6,7 +6,9 @@ const initialState = {
   fetched: false,
   hasErrored: false,
   data: {},
-  muutospyynto: {}
+  muutospyynto: {
+    muutokset: []
+  }
 };
 
 const MuutospyynnotContext = React.createContext(initialState);

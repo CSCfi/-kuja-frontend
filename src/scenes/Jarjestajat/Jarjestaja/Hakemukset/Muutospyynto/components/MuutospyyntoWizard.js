@@ -90,8 +90,8 @@ const MuutospyyntoWizard = props => {
   const notify = options => {
     toast.success(options.title, {
       type: toast.TYPE.SUCCESS,
-      position: toast.POSITION.BOTTOM_RIGHT,
-    })
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
   };
 
   const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
@@ -147,17 +147,17 @@ const MuutospyyntoWizard = props => {
       fetchMuutospyynto(uuid)(muutospyynnotDispatch);
     }
   }, [
-      kohteetDispatch,
-      koulutuksetDispatch,
-      koulutusalatDispatch,
-      koulutustyypitDispatch,
-      kieletDispatch,
-      maaraystyypitDispatch,
-      muutDispatch,
-      muutospyynnotDispatch,
-      props.intl.locale,
-      props.match.params.uuid
-    ]);
+    kohteetDispatch,
+    koulutuksetDispatch,
+    koulutusalatDispatch,
+    koulutustyypitDispatch,
+    kieletDispatch,
+    maaraystyypitDispatch,
+    muutDispatch,
+    muutospyynnotDispatch,
+    props.intl.locale,
+    props.match.params.uuid
+  ]);
 
   useEffect(() => {
     if (koulutusalat.fetched && koulutustyypit.fetched) {
@@ -168,11 +168,6 @@ const MuutospyyntoWizard = props => {
   }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
 
   useEffect(() => {
-    console.log(muutospyynnot);
-    // TODO: Divide muutokset array of the muutospyynnot object by section and pass data to correct sections
-  }, [muutospyynnot]);
-
-  useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       console.info(muutoshakemus);
       notify({
@@ -180,9 +175,9 @@ const MuutospyyntoWizard = props => {
       });
       if (!props.match.params.uuid) {
         const page = parseInt(props.match.params.page, 10);
-        const url = `/jarjestajat/${props.match.params.ytunnus}`
-        const uuid = muutoshakemus.save.data.data.uuid
-        let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page
+        const url = `/jarjestajat/${props.match.params.ytunnus}`;
+        const uuid = muutoshakemus.save.data.data.uuid;
+        let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
         props.history.replace(newurl);
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
@@ -293,8 +288,10 @@ const MuutospyyntoWizard = props => {
             <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
               <Stepper
                 activeStep={page - 1}
-                orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}>
-
+                orientation={
+                  window.innerWidth >= 768 ? "horizontal" : "vertical"
+                }
+              >
                 {steps.map(label => {
                   const stepProps = {};
                   const labelProps = {};
@@ -304,7 +301,6 @@ const MuutospyyntoWizard = props => {
                     </Step>
                   );
                 })}
-
               </Stepper>
               {page === 1 && (
                 <WizardPage
@@ -322,11 +318,12 @@ const MuutospyyntoWizard = props => {
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
                     maaraystyypit={maaraystyypit.data}
+                    changes={muutospyynnot.muutospyynto.muutokset}
                     muut={muut}
-                    muutoshakemus={muutoshakemus || {}}
+                    muutoshakemus={muutoshakemus}
                     onUpdate={onUpdate}
                     opiskelijavuodet={opiskelijavuodet}
-                    tutkinnotState={(muutoshakemus.tutkinnot || {}).state || []}
+                    tutkinnotState={muutoshakemus.tutkinnot.state}
                   />
                 </WizardPage>
               )}
@@ -338,9 +335,7 @@ const MuutospyyntoWizard = props => {
                   onSave={save}
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
-                >
-
-                </WizardPage>
+                />
               )}
               {page === 3 && (
                 <WizardPage
@@ -350,9 +345,7 @@ const MuutospyyntoWizard = props => {
                   onSave={save}
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
-                >
-
-                </WizardPage>
+                />
               )}
               {page === 4 && (
                 <WizardPage
@@ -361,9 +354,7 @@ const MuutospyyntoWizard = props => {
                   onSave={save}
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
-                >
-
-                </WizardPage>
+                />
               )}
             </div>
             <ToastContainer />
@@ -393,12 +384,12 @@ const MuutospyyntoWizard = props => {
       <MessageWrapper>
         <Loading />
       </MessageWrapper>
-    )
+    );
   }
 };
-
-export default injectIntl(MuutospyyntoWizard);
 
 MuutospyyntoWizard.propTypes = {
   lupa: PropTypes.object
 };
+
+export default injectIntl(MuutospyyntoWizard);

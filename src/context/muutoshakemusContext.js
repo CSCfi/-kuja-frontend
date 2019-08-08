@@ -1,7 +1,11 @@
 import React, { useReducer } from "react";
 import reducer from "../services/muutoshakemus/reducer";
 
-const initialState = {};
+const initialState = {
+  tutkinnot: {
+    state: []
+  }
+};
 
 const MuutoshakemusContext = React.createContext(initialState);
 
