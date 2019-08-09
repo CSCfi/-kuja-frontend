@@ -19,7 +19,7 @@ const getItemsToAdd = (initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi
       maaraystyyppi
     });
   }, toBeAdded);
-};
+}; 
 
 const getItemsToRemove = (initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi) => {
   const toBeRemoved = R.filter(item => {
@@ -49,7 +49,5 @@ export default function getChangesOfToimintaalue(toimialuedata) {
     kohde,
     maaraystyyppi
   );
-
-  console.info(itemsToAdd, itemsToRemove);
   return R.concat(itemsToAdd, itemsToRemove);
 }

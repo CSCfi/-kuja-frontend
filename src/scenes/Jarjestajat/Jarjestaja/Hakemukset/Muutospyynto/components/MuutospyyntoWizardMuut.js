@@ -210,7 +210,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   };
 
   const removeChanges = (...payload) => {
-    return onUpdate({ index: payload[2], changes: [] });
+    return saveChanges({ anchor: payload[1], changes: [] });
   };
 
   return (

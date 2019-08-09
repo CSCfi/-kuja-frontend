@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import Section from "components/03-templates/Section";
-import { MuutoshakemusContext } from "context/muutoshakemusContext";
 import Opetuskielet from "./Kielet/Opetuskielet";
 import PropTypes from "prop-types";
 import { KIELET_SECTIONS } from "../../../modules/constants";
@@ -15,12 +14,11 @@ const MuutospyyntoWizardKielet = React.memo(props => {
   const kohde = kohteet[2];
   const { headingNumber } = kohde;
   const heading = props.intl.formatMessage(wizardMessages.header_section2)
-  const { state } = useContext(MuutoshakemusContext);
 
   return (
     <Section code={headingNumber} title={heading}>
       <Opetuskielet
-        // changes={state.hasOwnProperty("changes") ? state["opetuskielet"].changes : []}
+        changes={props.changes.opetuskielet}
         kielet={props.kielet}
         kohde={props.lupa.kohteet[2]}
         onUpdate={props.onUpdate}
@@ -31,7 +29,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       <h4 className="py-4">{KIELET_SECTIONS.TUTKINTOKIELET}</h4>
 
       <Tutkintokielet
-        changes={state.hasOwnProperty("changes") ? state["tutkintokielet"].changes : []}
+        changes={props.changes.tutkintokielet}
         kielet={props.kielet.kielet}
         koulutukset={props.koulutukset}
         locale={R.toUpper(props.intl.locale)}
@@ -45,7 +43,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
 });
 
 MuutospyyntoWizardKielet.propTypes = {
-  changes: PropTypes.array,
+  changes: PropTypes.object,
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,

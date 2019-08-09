@@ -13,7 +13,7 @@ const Tutkinnot = React.memo(props => {
   const [state, setState] = useState([]);
   const [koulutusdata, setKoulutusdata] = useState([]);
   const [locale, setLocale] = useState([]);
-  const { onUpdate } = props;
+  const { onUpdate } = props;
 
   useEffect(() => {
     setKoulutusdata(
@@ -22,24 +22,36 @@ const Tutkinnot = React.memo(props => {
   }, [props.koulutukset]);
 
   useEffect(() => {
-    const tmpState = [];
-    R.addIndex(R.map)((koulutusala, i) => {
-      const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
-      const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
-      const categories = getCategories(
-        i,
-        article,
-        koulutusala.koulutukset,
-        props.kohde,
-        props.maaraystyyppi,
-        locale
-      );
-      const title = parseLocalizedField(koulutusala.metadata, locale);
-      const changes = [];
-      tmpState.push({ areaCode, article, categories, changes, title });
-    }, koulutusdata);
-    setState(tmpState);
-  }, [koulutusdata, locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
+    const getArticle = (areaCode, articles = []) => {
+      return R.find(article => {
+        return article.koodi === areaCode;
+      }, articles);
+    };
+    const handleKoulutusdata = koulutusdata => {
+      return R.addIndex(R.map)((koulutusala, i) => {
+        const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
+        const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+        const categories = getCategories(
+          i,
+          article,
+          koulutusala.koulutukset,
+          props.kohde,
+          props.maaraystyyppi,
+          locale
+        );
+        const title = parseLocalizedField(koulutusala.metadata, locale);
+        const changes = [];
+        return { areaCode, article, categories, changes, title };
+      }, koulutusdata);
+    };
+    setState(handleKoulutusdata(koulutusdata));
+  }, [
+    koulutusdata,
+    locale,
+    props.kohde,
+    props.lupa.kohteet,
+    props.maaraystyyppi
+  ]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
@@ -49,15 +61,12 @@ const Tutkinnot = React.memo(props => {
     onUpdate({ sectionId, state });
   }, [changes, onUpdate, state]);
 
-  const getArticle = (areaCode, articles = []) => {
-    return R.find(article => {
-      return article.koodi === areaCode;
-    }, articles);
-  };
-
   const saveChanges = payload => {
     setState(prevState => {
       const newState = R.clone(prevState);
+      if (!newState[payload.index]) {
+        newState[payload.index] = {};
+      }
       newState[payload.index].changes = payload.changes;
       return newState;
     });
@@ -91,6 +100,10 @@ const Tutkinnot = React.memo(props => {
     </Section>
   );
 });
+
+Tutkinnot.defaultProps = {
+  maaraystyyppi: {}
+};
 
 Tutkinnot.propTypes = {
   kohde: PropTypes.object,
