@@ -32,6 +32,7 @@ import { loadProgressBar } from "axios-progress-bar";
 import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
+import { ToastContainer } from "react-toastify";
 
 import "axios-progress-bar/dist/nprogress.css";
 
@@ -171,6 +172,7 @@ const App = props => {
         </main>
         <footer>
           <Footer props={props} />
+          <ToastContainer />
         </footer>
       </div>
     </Router>
