@@ -10,6 +10,7 @@ const Tutkintokielet = React.memo(props => {
   const [defaultLanguage, setDefaultLanguage] = useState({});
   const [changes, setChanges] = useState({});
   const [state, setState] = useState([]);
+  const { onUpdate } = props;
 
   useEffect(() => {
     const language = findKieliByKoodi(props.kielet, "FI");
@@ -72,11 +73,18 @@ const Tutkintokielet = React.memo(props => {
     }
   }, [props.tutkinnotState, defaultLanguage, props.kielet, props.locale]);
 
+  useEffect(() => {
+    onUpdate({ sectionId, payload: { changes, state } });
+  }, [changes, onUpdate, state]);
+
   const saveChanges = payload => {
     setChanges(prevState => {
       const newState = R.clone(prevState);
-      newState[payload.anchor] = payload.changes;
-      console.log(newState[payload.anchor].categories)
+      console.log(payload)
+      if (!newState[payload.anchor]) {
+        newState[payload.anchor] = {}
+      }
+      newState[payload.anchor].changes = payload.changes;
       return newState;
     });
   };
@@ -92,7 +100,7 @@ const Tutkintokielet = React.memo(props => {
           <ExpandableRowRoot
             anchor={itemState.areaCode}
             categories={itemState.categories}
-            changes={changes[itemState.areaCode]}
+            changes={itemState.changes}
             code={itemState.areaCode}
             index={i}
             key={`expandable-row-root-${i}`}
