@@ -26,7 +26,7 @@ const getItemsToAdd = (
       maaraystyyppi
     });
   }, toBeAdded);
-};
+}; 
 
 const getItemsToRemove = (
   initialValueOfSelect,
@@ -79,7 +79,5 @@ export default function getChangesOfToimintaalue(
     kohde,
     maaraystyyppi
   );
-
-  console.info(itemsToAdd, itemsToRemove);
   return R.concat(itemsToAdd, itemsToRemove);
 }

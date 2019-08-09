@@ -34,6 +34,7 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
       getChangesOfMuut(muutoshakemus.muut)
     ]),
-    liitteet: []
+    liitteet: [],
+    uuid
   };
 }

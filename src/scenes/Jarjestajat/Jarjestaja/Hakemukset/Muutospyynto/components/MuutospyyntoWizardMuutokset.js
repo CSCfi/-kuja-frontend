@@ -16,14 +16,11 @@ import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 
-const getChangesOf = (key, changes) => {
-  return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
-};
-
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState({});
   const [changesOfToimintaalue, setChangesOfToimintaalue] = useState([]);
+  const [changesOfKielet, setChangesOfKielet] = useState({});
 
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
@@ -69,7 +66,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   }, [props.maaraystyypit]);
 
   useEffect(() => {
+    const getChangesOf = (key, changes) => {
+      return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
+    };
     setChangesOfToimintaalue(getChangesOf("toimintaalue", props.changes));
+    setChangesOfKielet({
+      opetuskielet: getChangesOf("opetuskielet", props.changes),
+      tutkintokielet: getChangesOf("tutkintokielet", props.changes)
+    });
   }, [props.changes]);
 
   return (
@@ -85,7 +89,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           koulutusalat={props.koulutusalat}
           koulutustyypit={props.koulutustyypit.data}
           lupa={props.lupa}
-          maaraystyyppi={maaraystyypit.OIKEUS || {}}
+          maaraystyyppi={maaraystyypit.OIKEUS}
           onUpdate={props.onUpdate}
         />
 
@@ -95,13 +99,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         />
 
         <MuutospyyntoWizardKielet
+          changes={changesOfKielet}
           kohde={kohteet.kielet}
           lupa={props.lupa}
           kielet={props.kielet}
           koulutukset={props.koulutukset}
           onUpdate={props.onUpdate}
           tutkinnotState={props.tutkinnotState}
-          maaraystyyppi={maaraystyypit.VELVOITE || {}}
+          maaraystyyppi={maaraystyypit.VELVOITE}
         />
 
         {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
@@ -120,7 +125,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         <MuutospyyntoWizardOpiskelijavuodet
           lupa={props.lupa}
           opiskelijavuodet={props.opiskelijavuodet}
-          changesOfSection5={(props.muutoshakemus["muut"] || {}).changes}
+          changesOfSection5={props.muutoshakemus["muut"].changes}
         />
 
         <MuutospyyntoWizardMuut

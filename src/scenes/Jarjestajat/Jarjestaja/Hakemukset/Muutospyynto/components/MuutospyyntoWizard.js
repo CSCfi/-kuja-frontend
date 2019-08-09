@@ -51,7 +51,7 @@ import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { injectIntl } from "react-intl";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -87,11 +87,8 @@ const DialogTitle = withStyles(theme => ({
 });
 
 const MuutospyyntoWizard = props => {
-  const notify = options => {
-    toast.success(options.title, {
-      type: toast.TYPE.SUCCESS,
-      position: toast.POSITION.BOTTOM_RIGHT
-    });
+  const notify = (title, options) => {
+    toast.success(title, options);
   };
 
   const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
@@ -119,6 +116,7 @@ const MuutospyyntoWizard = props => {
     dispatch: koulutustyypitDispatch
   } = useContext(KoulutustyypitContext);
   const { state: kielet, dispatch: kieletDispatch } = useContext(KieletContext);
+
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -126,6 +124,18 @@ const MuutospyyntoWizard = props => {
   const {
     intl: { formatMessage }
   } = props;
+  const [steps, setSteps] = useState([]);
+  const [lupa, setLupa] = useState({});
+  const [page, setPage] = useState(1);
+  const [accessRight, setAccessRight] = useState(false);
+
+  useEffect(() => {
+    setLupa(props.lupa);
+    // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
+    if (sessionStorage.getItem("oid") === props.lupa.data.jarjestajaOid) {
+      setAccessRight(true);
+    }
+  }, [props.lupa]);
 
   useEffect(() => {
     fetchKohteet()(kohteetDispatch);
@@ -169,16 +179,31 @@ const MuutospyyntoWizard = props => {
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
-      console.info(muutoshakemus);
-      notify({
-        title: `Muutospyyntö tallennettu!`
-      });
       if (!props.match.params.uuid) {
+        notify(
+          "Muutospyyntö tallennettu! Voit jatkaa pian dokumentin muokkaamista.",
+          {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_RIGHT,
+            type: toast.TYPE.SUCCESS
+          }
+        );
         const page = parseInt(props.match.params.page, 10);
         const url = `/jarjestajat/${props.match.params.ytunnus}`;
         const uuid = muutoshakemus.save.data.data.uuid;
         let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
-        props.history.replace(newurl);
+        setTimeout(() => {
+          props.history.replace(newurl);
+        });
+      } else {
+        notify(
+          "Muutospyyntö tallennettu!",
+          {
+            autoClose: 2000,
+            position: toast.POSITION.BOTTOM_RIGHT,
+            type: toast.TYPE.SUCCESS
+          }
+        );
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
@@ -196,16 +221,14 @@ const MuutospyyntoWizard = props => {
     }
   };
 
-  const getSteps = () => {
-    return [
+  useEffect(() => {
+    setSteps([
       formatMessage(wizardMessages.pageTitle_1),
       formatMessage(wizardMessages.pageTitle_2),
       formatMessage(wizardMessages.pageTitle_3),
       formatMessage(wizardMessages.pageTitle_4)
-    ];
-  };
-
-  const steps = getSteps();
+    ]);
+  }, [formatMessage]);
 
   const save = () => {
     if (props.match.params.uuid) {
@@ -238,8 +261,9 @@ const MuutospyyntoWizard = props => {
     props.history.push(`/jarjestajat/${props.match.params.ytunnus}`);
   }
 
-  const { lupa } = props;
-  const page = parseInt(props.match.params.page, 10);
+  useEffect(() => {
+    setPage(parseInt(props.match.params.page, 10));
+  }, [props.match.params.page]);
 
   if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
     return (
@@ -249,16 +273,6 @@ const MuutospyyntoWizard = props => {
     );
   }
 
-  // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-  const jarjestajaOid =
-    props.lupa && props.lupa.data ? props.lupa.data.jarjestajaOid : null;
-  if (sessionStorage.getItem("oid") !== jarjestajaOid) {
-    return (
-      <MessageWrapper>
-        <Loading />
-      </MessageWrapper>
-    );
-  }
   if (
     kohteet.fetched &&
     kielet.fetched &&
@@ -268,7 +282,8 @@ const MuutospyyntoWizard = props => {
     koulutusalat.fetched &&
     koulutustyypit.fetched &&
     lupa.fetched &&
-    maaraystyypit.fetched
+    maaraystyypit.fetched &&
+    accessRight
   ) {
     return (
       <MuutoshakemusProvider>
@@ -355,7 +370,6 @@ const MuutospyyntoWizard = props => {
                 />
               )}
             </div>
-            <ToastContainer />
           </DialogContent>
         </Dialog>
         <Dialog

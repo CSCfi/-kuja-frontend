@@ -30,7 +30,6 @@ export function saveMuutospyynto(muutospyynto) {
   // attachments.map(item => {
   //   if (item.tiedosto) data.append(item.tiedostoId, item.tiedosto, item.nimi);
   // });
-  console.info(data);
   return dispatch => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START });
 
