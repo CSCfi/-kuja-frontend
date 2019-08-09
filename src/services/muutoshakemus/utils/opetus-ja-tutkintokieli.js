@@ -34,12 +34,9 @@ export const getChangesOfOpetuskielet = opetuskieliData => {
 
 export const getChangesOfTutkintokielet = tutkintokieliData => {
   console.log(tutkintokieliData)
-  // R.flatten(
   const changes =
     R.map(stateItem => {
-      console.log(stateItem)
       const item = R.map(changeObj => {
-        console.log(changeObj)
         const anchorParts = changeObj.anchor.split(".");
         const code = R.last(anchorParts);
         // const meta = getMetadata(R.tail(anchorParts), tutkintokieliData.payload.state[0].categories[0]);
@@ -66,15 +63,6 @@ export const getChangesOfTutkintokielet = tutkintokieliData => {
     }, tutkintokieliData.payload.changes)
   // );
   console.log(changes);
-
-  // let resultItem = {}
-  // R.map(item => {
-  //   R.map(subitem => {
-  //     console.log(subitem)
-  //     resultItem[subitem.koodiarvo] = subitem;
-  //   }, item)
-  // }, changes)
-  // console.log(resultItem);
 
   return R.flatten(R.values(changes));
 }
