@@ -67,16 +67,16 @@ export const getChangesOfTutkintokielet = tutkintokieliData => {
   // );
   console.log(changes);
 
-  let resultItem = {}
-  R.map(item => {
-    R.map(subitem => {
-      console.log(subitem)
-      resultItem[subitem.koodiarvo] = subitem;
-    }, item)
-  }, changes)
-  console.log(resultItem);
+  // let resultItem = {}
+  // R.map(item => {
+  //   R.map(subitem => {
+  //     console.log(subitem)
+  //     resultItem[subitem.koodiarvo] = subitem;
+  //   }, item)
+  // }, changes)
+  // console.log(resultItem);
 
-  return resultItem;
+  return R.flatten(R.values(changes));
 }
 
 // 01:
