@@ -31,7 +31,6 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       <Tutkintokielet
         changes={props.changes.tutkintokielet}
         kielet={props.kielet.kielet}
-        koulutukset={props.koulutukset}
         locale={R.toUpper(props.intl.locale)}
         lupa={lupa}
         kohde={props.lupa.kohteet[1]}
