@@ -30,8 +30,7 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       getChangesOfTutkinnotJaKoulutukset(muutoshakemus.tutkinnot),
       getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
-      getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
-      getChangesOfMuut(muutoshakemus.muut)
+      getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto)
     ]),
     liitteet: []
   };
