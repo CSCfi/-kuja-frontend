@@ -1,9 +1,16 @@
 import * as R from "ramda";
 
-const getItemsToAdd = (initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi) => {
+const getItemsToAdd = (
+  initialValueOfSelect,
+  valueOfSelect,
+  kohde,
+  maaraystyyppi,
+  joTallennetutMuutokset = []
+) => {
   const toBeAdded = R.filter(item => {
-    return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(
-      initialValueOfSelect
+    return (
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(initialValueOfSelect) &&
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(joTallennetutMuutokset)
     );
   }, valueOfSelect);
 
@@ -21,9 +28,18 @@ const getItemsToAdd = (initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi
   }, toBeAdded);
 };
 
-const getItemsToRemove = (initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi) => {
+const getItemsToRemove = (
+  initialValueOfSelect,
+  valueOfSelect,
+  kohde,
+  maaraystyyppi,
+  joTallennetutMuutokset = []
+) => {
   const toBeRemoved = R.filter(item => {
-    return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect);
+    return (
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect) &&
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(joTallennetutMuutokset)
+    );
   }, initialValueOfSelect);
 
   return R.map(item => {
@@ -40,9 +56,23 @@ const getItemsToRemove = (initialValueOfSelect, valueOfSelect, kohde, maaraystyy
   }, toBeRemoved);
 };
 
-export default function getChangesOfToimintaalue(toimialuedata) {
-  const { initialValueOfSelect, kohde, maaraystyyppi, valueOfSelect } = toimialuedata.state;
-  const itemsToAdd = getItemsToAdd(initialValueOfSelect, valueOfSelect, kohde, maaraystyyppi);
+export default function getChangesOfToimintaalue(
+  toimialuedata,
+  muutospyynto = {}
+) {
+  const {
+    initialValueOfSelect,
+    kohde,
+    maaraystyyppi,
+    valueOfSelect
+  } = toimialuedata.state;
+  const itemsToAdd = getItemsToAdd(
+    initialValueOfSelect,
+    valueOfSelect,
+    kohde,
+    maaraystyyppi,
+    muutospyynto.muutokset
+  );
   const itemsToRemove = getItemsToRemove(
     initialValueOfSelect,
     valueOfSelect,

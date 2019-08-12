@@ -22,6 +22,7 @@ export default function(state, action) {
         }
       };
     case SAVE_MUUTOSPYYNTO_SUCCESS:
+      console.info(state, action.payload);
       return {
         ...state,
         save: {

@@ -209,9 +209,7 @@ const MuutospyyntoWizard = props => {
 
   const save = () => {
     if (props.match.params.uuid) {
-      // TODO: save existing document?
-      console.log(muutoshakemus);
-      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
+      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus, props.match.params.uuid, muutospyynnot.muutospyynto))(
         muutoshakemusDispatch
       );
     } else {
