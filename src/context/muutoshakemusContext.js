@@ -2,8 +2,14 @@ import React, { useReducer } from "react";
 import reducer from "../services/muutoshakemus/reducer";
 
 const initialState = {
+  muut: {
+    changes: {}
+  },
   tutkinnot: {
     state: []
+  },
+  tutkintokielet: {
+    changes: []
   }
 };
 

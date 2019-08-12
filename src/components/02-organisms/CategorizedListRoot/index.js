@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
 import * as R from "ramda";
@@ -7,6 +7,7 @@ import { getChangesByLevel } from "./utils";
 const CategorizedListRoot = React.memo(props => {
   const [changes, setChanges] = useState([]);
   const [allChanges, setAllChanges] = useState([]);
+  const { onUpdate } = props;
 
   useEffect(() => {
     setAllChanges(props.changes);
@@ -19,38 +20,52 @@ const CategorizedListRoot = React.memo(props => {
     return changeObj;
   };
 
-  const runOperations = operations => {
-    let allChangesClone = R.clone(allChanges);
-    R.forEach(operation => {
-      if (operation.type === "addition") {
-        allChangesClone = R.insert(-1, operation.payload, allChangesClone);
-      } else if (operation.type === "removal") {
-        allChangesClone = R.filter(change => {
-          return (
-            !R.equals(change.path, operation.payload.path) ||
-            !R.equals(change.anchor, operation.payload.anchor)
+  const runOperations = useMemo(() => {
+    return operations => {
+      let allChangesClone = R.clone(allChanges);
+      R.forEach(operation => {
+        if (operation.type === "addition") {
+          allChangesClone = R.insert(-1, operation.payload, allChangesClone);
+        } else if (operation.type === "removal") {
+          allChangesClone = R.filter(change => {
+            return (
+              !R.equals(change.path, operation.payload.path) ||
+              !R.equals(change.anchor, operation.payload.anchor)
+            );
+          }, allChangesClone);
+        } else if (operation.type === "modification") {
+          const withoutTargetChange = R.filter(change => {
+            return (
+              !R.equals(change.path, operation.payload.path) ||
+              !R.equals(change.anchor, operation.payload.anchor)
+            );
+          }, allChangesClone);
+          allChangesClone = R.insert(
+            -1,
+            operation.payload,
+            withoutTargetChange
           );
-        }, allChangesClone);
-      } else if (operation.type === "modification") {
-        const withoutTargetChange = R.filter(change => {
-          return (
-            !R.equals(change.path, operation.payload.path) ||
-            !R.equals(change.anchor, operation.payload.anchor)
-          );
-        }, allChangesClone);
-        allChangesClone = R.insert(-1, operation.payload, withoutTargetChange);
-      }
-    }, operations);
-    setAllChanges(allChangesClone);
-    setChanges(getChangesByLevel(0, props.changes));
-    props.onUpdate({
-      anchor: props.anchor,
-      categories: props.categories,
-      changes: allChangesClone,
-      index: props.index,
-      sectionId: props.sectionId
-    });
-  };
+        }
+      }, operations);
+      setAllChanges(allChangesClone);
+      setChanges(getChangesByLevel(0, props.changes));
+      onUpdate({
+        anchor: props.anchor,
+        categories: props.categories,
+        changes: allChangesClone,
+        index: props.index,
+        sectionId: props.sectionId
+      });
+    };
+  }, [
+    allChanges,
+    onUpdate,
+    props.anchor,
+    props.categories,
+    props.changes,
+    props.index,
+    props.sectionId
+  ]);
 
   useEffect(() => {
     const changesByLevel = getChangesByLevel(0, props.changes);
