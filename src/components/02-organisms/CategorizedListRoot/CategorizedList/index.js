@@ -465,24 +465,22 @@ const CategorizedList = React.memo(props => {
                             : properties.defaultValue;
                           return (
                             <div className="pt-4 pr-2 w-full">
-                              {value && (
-                                <TextBox
-                                  id={`textbox-${idSuffix}`}
-                                  isDisabled={isDisabled}
-                                  isHidden={isDisabled}
-                                  onChanges={handleDropdownOrTextBox}
-                                  payload={{
-                                    anchor,
-                                    categories: category.categories,
-                                    component,
-                                    fullPath,
-                                    parent: props.parent,
-                                    rootPath: props.rootPath,
-                                    siblings: props.categories
-                                  }}
-                                  value={value}
-                                />
-                              )}
+                              <TextBox
+                                id={`textbox-${idSuffix}`}
+                                isDisabled={isDisabled}
+                                isHidden={isDisabled}
+                                onChanges={handleDropdownOrTextBox}
+                                payload={{
+                                  anchor,
+                                  categories: category.categories,
+                                  component,
+                                  fullPath,
+                                  parent: props.parent,
+                                  rootPath: props.rootPath,
+                                  siblings: props.categories
+                                }}
+                                value={value}
+                              />
                             </div>
                           );
                         })(category)
