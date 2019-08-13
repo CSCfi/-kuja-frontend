@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
+import TextBox from "../../../00-atoms/TextBox";
 import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
@@ -187,7 +188,7 @@ const CategorizedList = React.memo(props => {
     return props.runOperations(operations);
   };
 
-  const handleDropdown = (payload, changeProps) => {
+  const handleDropdownOrTextBox = (payload, changeProps) => {
     const changeObj = R.find(R.propEq("path", payload.fullPath))(
       props.allChanges
     );
@@ -370,7 +371,9 @@ const CategorizedList = React.memo(props => {
                           labelStyles={labelStyles}
                         >
                           <div className="flex">
-                            <span className="leading-none">{propsObj.code}</span>
+                            <span className="leading-none">
+                              {propsObj.code}
+                            </span>
                             <p className="ml-4 leading-none">{title}</p>
                           </div>
                         </CheckboxWithLabel>
@@ -397,7 +400,9 @@ const CategorizedList = React.memo(props => {
                           className="flex-row"
                         >
                           <div className="flex">
-                            <span className="leading-none">{propsObj.code}</span>
+                            <span className="leading-none">
+                              {propsObj.code}
+                            </span>
                             <p className="ml-4 leading-none">{title}</p>
                           </div>
                         </RadioButtonWithLabel>
@@ -420,7 +425,7 @@ const CategorizedList = React.memo(props => {
                             <div className="px-2">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
-                                onChanges={handleDropdown}
+                                onChanges={handleDropdownOrTextBox}
                                 options={properties.options}
                                 payload={{
                                   anchor,
@@ -433,6 +438,48 @@ const CategorizedList = React.memo(props => {
                                 }}
                                 value={propsObj.selectedOption}
                                 isDisabled={isDisabled}
+                              />
+                            </div>
+                          );
+                        })(category)
+                      : null}
+                    {component.name === "TextBox"
+                      ? (category => {
+                          const isSiblingCheckedByDefault = (
+                            (category.components[ii - 1] || {}).properties || {}
+                          ).isChecked;
+                          const change = props.getChangeByPath(
+                            anchor,
+                            props.rootPath.concat([i, "components", ii])
+                          );
+                          const parentChange = props.getChangeByPath(
+                            props.anchor,
+                            R.concat(R.init(props.rootPath), ["components", 0])
+                          );
+                          const isDisabled = !(
+                            (isSiblingCheckedByDefault && !parentChange) ||
+                            (parentChange && parentChange.properties.isChecked)
+                          );
+                          const value = change
+                            ? change.properties.value
+                            : properties.defaultValue;
+                          return (
+                            <div className="pt-4 pr-2 w-full">
+                              <TextBox
+                                id={`textbox-${idSuffix}`}
+                                isDisabled={isDisabled}
+                                isHidden={isDisabled}
+                                onChanges={handleDropdownOrTextBox}
+                                payload={{
+                                  anchor,
+                                  categories: category.categories,
+                                  component,
+                                  fullPath,
+                                  parent: props.parent,
+                                  rootPath: props.rootPath,
+                                  siblings: props.categories
+                                }}
+                                value={value}
                               />
                             </div>
                           );

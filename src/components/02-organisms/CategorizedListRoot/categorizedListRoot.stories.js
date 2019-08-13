@@ -6,11 +6,12 @@ import { checkboxStory } from "./storydata/checkboxStory";
 import { simpleStory } from "./storydata/simpleStory";
 import { complexStory } from "./storydata/complexStory";
 import { radioStory } from "./storydata/radioStory";
+import { simpleTextBoxStory } from "./storydata/simpleTextBoxStory";
+import { textBoxStory } from "./storydata/textBoxStory";
 
 storiesOf("CategorizedListRoot", module)
   .addDecorator(withInfo)
   .add("One checkbox example", () => {
-    console.info(checkboxStory.categories);
     return (
       <CategorizedListRoot
         anchor="checkbox"
@@ -50,6 +51,28 @@ storiesOf("CategorizedListRoot", module)
         changes={radioStory.changes}
         onUpdate={() => {}}
         showCategoryTitles={true}
+      />
+    );
+  })
+  .add("Simple text box example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="textbox"
+        categories={simpleTextBoxStory.categories}
+        changes={simpleTextBoxStory.changes}
+        onUpdate={() => {}}
+        showCategoryTitles={true}
+      />
+    );
+  })
+  .add("Text box example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="textbox"
+        categories={textBoxStory.categories}
+        changes={textBoxStory.changes}
+        onUpdate={() => {}}
+        showCategoryTitles={false}
       />
     );
   });
