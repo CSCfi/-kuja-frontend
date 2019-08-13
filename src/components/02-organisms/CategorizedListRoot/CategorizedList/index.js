@@ -464,7 +464,7 @@ const CategorizedList = React.memo(props => {
                             ? change.properties.value
                             : properties.defaultValue;
                           return (
-                            <div className="pr-2 w-full">
+                            <div className="pt-4 pr-2 w-full">
                               {value && (
                                 <TextBox
                                   id={`textbox-${idSuffix}`}
