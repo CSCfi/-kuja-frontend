@@ -6,7 +6,7 @@ import { getChangesByLevel } from "./utils";
 
 const CategorizedListRoot = React.memo(props => {
   const [changes, setChanges] = useState([]);
-  const [allChanges, setAllChanges] = useState([]);
+  const [allChanges, setAllChanges] = useState(null);
   const { onUpdate } = props;
 
   useEffect(() => {
@@ -75,17 +75,21 @@ const CategorizedListRoot = React.memo(props => {
   }, [props.changes, changes]);
 
   return (
-    <CategorizedList
-      anchor={props.anchor}
-      level={0}
-      categories={props.categories}
-      allChanges={allChanges}
-      getChangeByPath={getChangeByPath}
-      runOperations={runOperations}
-      rootPath={[]}
-      showCategoryTitles={props.showCategoryTitles}
-      changes={changes}
-    />
+    <React.Fragment>
+      {allChanges && (
+        <CategorizedList
+          anchor={props.anchor}
+          level={0}
+          categories={props.categories}
+          allChanges={allChanges}
+          getChangeByPath={getChangeByPath}
+          runOperations={runOperations}
+          rootPath={[]}
+          showCategoryTitles={props.showCategoryTitles}
+          changes={changes}
+        />
+      )}
+    </React.Fragment>
   );
 });
 

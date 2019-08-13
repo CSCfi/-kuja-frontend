@@ -5,31 +5,35 @@ const labelStyles = {
   removal: isRemoved
 };
 
-export const complexStory = {
+export const textBoxStory = {
   changes: [
     {
-      anchor: "complex.0",
+      anchor: "textbox.0",
       path: [0, "components", 0],
       properties: {
         isChecked: true
       }
     },
     {
-      anchor: "complex.1",
+      anchor: "textbox.1",
       path: [1, "components", 0],
       properties: {
         isChecked: true,
         title: "Koulutukseen panostettu on (muutos)"
       }
     },
-
     {
-      anchor: "complex.0.1",
+      anchor: "textbox.0.1",
       path: [0, "categories", 1, "components", 0],
       properties: {
         isChecked: true,
         title: "Osaamisala (muutos)"
       }
+    },
+    {
+      anchor: "textbox.0.2",
+      path: [0, "categories", 2, "components", 0],
+      properties: { value: "Muutettu" }
     }
   ],
   categories: [
@@ -185,15 +189,10 @@ export const complexStory = {
               title: "Categories",
               components: [
                 {
-                  name: "CheckboxWithLabel",
+                  name: "TextBox",
                   properties: {
-                    name: "example-checkbox-1.2.2",
-                    code: "1.2.2",
-                    title: "Leaf node item",
-                    labelStyles: Object.assign({}, labelStyles, {
-                      custom: isInLupa
-                    }),
-                    isChecked: true
+                    defaultValue:
+                      "Text 1"
                   }
                 }
               ]
@@ -206,14 +205,10 @@ export const complexStory = {
           title: "Categories",
           components: [
             {
-              name: "CheckboxWithLabel",
+              name: "TextBox",
               properties: {
-                name: "example-checkbox",
-                code: "1.3",
-                title: "Sub row",
-                isChecked: false,
-                labelStyles,
-                value: "Testi3"
+                defaultValue:
+                  "Text 2"
               }
             }
           ]
