@@ -66,18 +66,36 @@ export default function getChangesOfToimintaalue(
     maaraystyyppi,
     valueOfSelect
   } = toimialuedata.state;
-  const itemsToAdd = getItemsToAdd(
-    initialValueOfSelect,
-    valueOfSelect,
-    kohde,
-    maaraystyyppi,
-    muutospyynto.muutokset
-  );
-  const itemsToRemove = getItemsToRemove(
-    initialValueOfSelect,
-    valueOfSelect,
-    kohde,
-    maaraystyyppi
-  );
-  return R.concat(itemsToAdd, itemsToRemove);
+  if (toimialuedata.state.changesOfValtakunnallinen.isChecked) {
+    return {
+      tila: "LISAYS",
+      type: "addition",
+      meta: {
+        perusteluteksti: null
+      },
+      muutosperustelukoodiarvo: null,
+      kohde,
+      maaraystyyppi,
+      value: "02",
+      tyyppi:" valtakunnallinen",
+      koodisto: "nuts1",
+      koodiarvo: "FI1",
+    };
+  }
+  else {
+    const itemsToAdd = getItemsToAdd(
+      initialValueOfSelect,
+      valueOfSelect,
+      kohde,
+      maaraystyyppi,
+      muutospyynto.muutokset
+    );
+    const itemsToRemove = getItemsToRemove(
+      initialValueOfSelect,
+      valueOfSelect,
+      kohde,
+      maaraystyyppi
+    );
+    return R.concat(itemsToAdd, itemsToRemove);
+  }
 }

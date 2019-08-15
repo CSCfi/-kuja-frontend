@@ -120,7 +120,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       <p className="pb-4">
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
-      <div className="bg-gray-100 p-6">
+      <div className={ 
+        !!changesOfValtakunnallinen.isChecked ?
+           "bg-gray-100 p-6 opacity-50 pointer-events-none" : "bg-gray-100 p-6" 
+        }>
         <Toimialuevalinta
           maakuntakunnatList={props.maakuntakunnat.maakuntakunnatList}
           value={valueOfSelect}
