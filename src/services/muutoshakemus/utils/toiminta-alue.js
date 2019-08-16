@@ -67,9 +67,12 @@ export default function getChangesOfToimintaalue(
     valueOfSelect
   } = toimialuedata.state;
   if (toimialuedata.state.changesOfValtakunnallinen.isChecked) {
+      const tilaVal = "LISAYS" 
+      // { toimialuedata.state ? "POISTO" : "LISAYS" },
+      const typeVal = "addition"
     return {
-      tila: "LISAYS",
-      type: "addition",
+      tila: tilaVal,
+      type: typeVal,
       meta: {
         perusteluteksti: null
       },
