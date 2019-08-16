@@ -8,6 +8,7 @@ import AppWrapper from "./AppWrapper";
 import { AppProvider } from "./context/appContext";
 
 import "./css/tailwind.css";
+import "./css/common.css";
 
 const theme = createMuiTheme({
   palette: {

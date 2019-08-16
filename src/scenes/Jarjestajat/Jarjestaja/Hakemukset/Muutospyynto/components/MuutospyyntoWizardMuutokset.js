@@ -143,7 +143,6 @@ MuutospyyntoWizardMuutokset.defaultProps = {
 };
 
 MuutospyyntoWizardMuutokset.propTypes = {
-  changes: PropTypes.array,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
@@ -151,6 +150,7 @@ MuutospyyntoWizardMuutokset.propTypes = {
   lupa: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muutoshakemus: PropTypes.object,
+  muutospyynto: PropTypes.object,
   onUpdate: PropTypes.func,
   tutkinnotState: PropTypes.array
 };

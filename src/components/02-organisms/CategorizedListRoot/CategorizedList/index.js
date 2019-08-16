@@ -7,6 +7,8 @@ import TextBox from "../../../00-atoms/TextBox";
 import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
+import StatusTextRow from "../../../01-molecules/StatusTextRow";
+import Autocomplete from "../../Autocomplete";
 
 const CategorizedList = React.memo(props => {
   const [changes, setChanges] = useState([]);
@@ -188,7 +190,7 @@ const CategorizedList = React.memo(props => {
     return props.runOperations(operations);
   };
 
-  const handleDropdownOrTextBox = (payload, changeProps) => {
+  const runOperations = (payload, changeProps) => {
     const changeObj = R.find(R.propEq("path", payload.fullPath))(
       props.allChanges
     );
@@ -224,7 +226,7 @@ const CategorizedList = React.memo(props => {
       props.allChanges
     );
 
-    let _operations = R.clone(operations);
+    let _operations = _.cloneDeep(operations);
 
     // Handle the current component
     const operation = getOperation(
@@ -353,11 +355,12 @@ const CategorizedList = React.memo(props => {
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (
-                      <div>
+                      <div className="flex-2">
                         <CheckboxWithLabel
                           id={`checkbox-with-label-${idSuffix}`}
                           name={propsObj.name}
                           isChecked={propsObj.isChecked}
+                          isDisabled={propsObj.isDisabled}
                           onChanges={handleChanges}
                           payload={{
                             anchor,
@@ -380,7 +383,7 @@ const CategorizedList = React.memo(props => {
                       </div>
                     )}
                     {component.name === "RadioButtonWithLabel" && (
-                      <div>
+                      <div className="flex-2">
                         <RadioButtonWithLabel
                           id={`radio-button-with-label-${idSuffix}`}
                           name={propsObj.name}
@@ -410,6 +413,9 @@ const CategorizedList = React.memo(props => {
                     )}
                     {component.name === "Dropdown"
                       ? (category => {
+                          const siblingName = (
+                            category.components[ii - 1] || {}
+                          ).name;
                           const isSiblingCheckedByDefault = (
                             (category.components[ii - 1] || {}).properties || {}
                           ).isChecked;
@@ -417,15 +423,17 @@ const CategorizedList = React.memo(props => {
                             anchor,
                             props.rootPath.concat([i, "components", ii - 1])
                           );
-                          const isDisabled = !(
-                            (isSiblingCheckedByDefault && !change) ||
-                            (change && change.properties.isChecked)
-                          );
+                          const isDisabled =
+                            siblingName === "CheckboxWithLabel" ||
+                            siblingName === "RadioButtonWithLabel"
+                              ? (isSiblingCheckedByDefault && !change) ||
+                                (change && change.properties.isChecked)
+                              : propsObj.isDisabled;
                           return (
                             <div className="px-2">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
-                                onChanges={handleDropdownOrTextBox}
+                                onChanges={runOperations}
                                 options={properties.options}
                                 payload={{
                                   anchor,
@@ -469,7 +477,7 @@ const CategorizedList = React.memo(props => {
                                 id={`textbox-${idSuffix}`}
                                 isDisabled={isDisabled}
                                 isHidden={isDisabled}
-                                onChanges={handleDropdownOrTextBox}
+                                onChanges={runOperations}
                                 payload={{
                                   anchor,
                                   categories: category.categories,
@@ -480,6 +488,58 @@ const CategorizedList = React.memo(props => {
                                   siblings: props.categories
                                 }}
                                 value={value}
+                              />
+                            </div>
+                          );
+                        })(category)
+                      : null}
+                    {component.name === "StatusTextRow" && (
+                      <div className="flex-2">
+                        <StatusTextRow labelStyles={labelStyles}>
+                          <div className="flex">
+                            <span className="leading-none">
+                              {propsObj.code}
+                            </span>
+                            <p className="ml-4 leading-none">{title}</p>
+                          </div>
+                        </StatusTextRow>
+                      </div>
+                    )}
+                    {component.name === "Autocomplete"
+                      ? (category => {
+                          const siblingName = (
+                            category.components[ii - 1] || {}
+                          ).name;
+                          const isSiblingCheckedByDefault = (
+                            (category.components[ii - 1] || {}).properties || {}
+                          ).isChecked;
+                          const change = props.getChangeByPath(
+                            anchor,
+                            props.rootPath.concat([i, "components", ii - 1])
+                          );
+                          const isDisabled =
+                            siblingName === "CheckboxWithLabel" ||
+                            siblingName === "RadioButtonWithLabel"
+                              ? (isSiblingCheckedByDefault && !change) ||
+                                (change && change.properties.isChecked)
+                              : propsObj.isDisabled;
+                          return (
+                            <div className="flex-1 px-2">
+                              <Autocomplete
+                                callback={runOperations}
+                                id={`autocomplete-${idSuffix}`}
+                                options={propsObj.options}
+                                payload={{
+                                  anchor,
+                                  categories: category.categories,
+                                  component,
+                                  fullPath,
+                                  parent: props.parent,
+                                  rootPath: props.rootPath,
+                                  siblings: props.categories
+                                }}
+                                value={propsObj.value}
+                                isDisabled={isDisabled}
                               />
                             </div>
                           );

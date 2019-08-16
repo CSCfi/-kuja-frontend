@@ -6,6 +6,7 @@ import { getCategories } from "../../../../../../../services/muutoshakemus/utils
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import _ from "lodash";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
@@ -63,7 +64,7 @@ const Tutkinnot = React.memo(props => {
 
   const saveChanges = payload => {
     setState(prevState => {
-      const newState = R.clone(prevState);
+      const newState = _.cloneDeep(prevState);
       if (!newState[payload.index]) {
         newState[payload.index] = {};
       }
