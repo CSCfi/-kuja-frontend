@@ -117,10 +117,16 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   return (
     <Section code={props.lupakohde.headingNumber} title={heading}>
-      <p className="pb-4">
+      <p className={ 
+        !!changesOfValtakunnallinen.isChecked ?
+           "hidden" : "pb-4" 
+        }>
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
-      <div className="bg-gray-100 p-6">
+      <div className={ 
+        !!changesOfValtakunnallinen.isChecked ?
+           "hidden pointer-events-none" : "bg-gray-100 p-6"
+        }>
         <Toimialuevalinta
           maakuntakunnatList={props.maakuntakunnat.maakuntakunnatList}
           value={valueOfSelect}
@@ -133,11 +139,16 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           values={valueOfSelect}
         />
       </div>
-      <Valtakunnallinen
-        callback={handleChangeOfValtakunnallinen}
-        changes={changesOfValtakunnallinen}
-        isCheckedInitial={!!props.lupakohde.valtakunnallinen}
-      />
+      <div className={ 
+        !!changesOfValtakunnallinen.isChecked ?
+           "" : "pt-4"
+        }>
+        <Valtakunnallinen
+          callback={handleChangeOfValtakunnallinen}
+          changes={changesOfValtakunnallinen}
+          isCheckedInitial={!!props.lupakohde.valtakunnallinen}
+        />
+      </div>
     </Section>
   );
 });
