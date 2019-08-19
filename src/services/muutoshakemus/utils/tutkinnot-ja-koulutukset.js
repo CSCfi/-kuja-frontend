@@ -27,6 +27,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(tutkinnotJaKoulutukse
           kuvaus: finnishInfo.kuvaus,
           maaraystyyppi: koulutus.maaraystyyppi || meta.maaraystyyppi,
           meta: {
+            changeObj,
             nimi: koulutus.nimi,
             koulutusala: anchorParts[0],
             koulutustyyppi: anchorParts[1],

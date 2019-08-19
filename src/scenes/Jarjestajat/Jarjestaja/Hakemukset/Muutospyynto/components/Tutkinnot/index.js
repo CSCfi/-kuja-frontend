@@ -10,7 +10,6 @@ import _ from "lodash";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
-  const changes = [];
   const [state, setState] = useState([]);
   const [koulutusdata, setKoulutusdata] = useState([]);
   const [locale, setLocale] = useState([]);
@@ -28,7 +27,7 @@ const Tutkinnot = React.memo(props => {
         return article.koodi === areaCode;
       }, articles);
     };
-    const handleKoulutusdata = koulutusdata => {
+    const handleKoulutusdata = (koulutusdata, _changes) => {
       return R.addIndex(R.map)((koulutusala, i) => {
         const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
         const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
@@ -41,14 +40,20 @@ const Tutkinnot = React.memo(props => {
           locale
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
-        const changes = [];
+        const changes = R.map(change => {
+          if (change.meta.koulutusala === areaCode) {
+            return change.meta.changeObj;
+          }
+          return false;
+        }, _changes).filter(Boolean);
         return { areaCode, article, categories, changes, title };
       }, koulutusdata);
     };
-    setState(handleKoulutusdata(koulutusdata));
+    setState(handleKoulutusdata(koulutusdata, props.changes));
   }, [
     koulutusdata,
     locale,
+    props.changes,
     props.kohde,
     props.lupa.kohteet,
     props.maaraystyyppi
@@ -60,7 +65,7 @@ const Tutkinnot = React.memo(props => {
 
   useEffect(() => {
     onUpdate({ sectionId, state });
-  }, [changes, onUpdate, state]);
+  }, [onUpdate, state]);
 
   const saveChanges = payload => {
     setState(prevState => {
@@ -103,10 +108,12 @@ const Tutkinnot = React.memo(props => {
 });
 
 Tutkinnot.defaultProps = {
+  changes: [],
   maaraystyyppi: {}
 };
 
 Tutkinnot.propTypes = {
+  changes: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
