@@ -39,6 +39,7 @@ const getMuutos = (changeObj, stateItem) => {
 
 export default function getChangesOfTutkinnotJaKoulutukset(
   tutkinnot,
+  ammatilliseentehtavaanvalmistavatkoulutukset,
   valmentavatKoulutukset
 ) {
   const tutkinnotMuutokset = R.flatten(
@@ -49,13 +50,18 @@ export default function getChangesOfTutkinnotJaKoulutukset(
     }, tutkinnot.state)
   );
 
-  const valmentavatKoulutuksetMuutokset = R.map(changeObj => {
-    console.info(changeObj, valmentavatKoulutukset.state.categories);
+  const koulutusMuutokset = R.map(changeObj => {
     const anchorParts = changeObj.anchor.split(".");
     const code = R.last(anchorParts);
+    let sourceObject = "";
+    if (R.startsWith("ammatilliseentehtavaanvalmistavatkoulutukset", changeObj.anchor)) {
+      sourceObject = ammatilliseentehtavaanvalmistavatkoulutukset;
+    } else if (R.startsWith("valmentavatkoulutukset", changeObj.anchor)) {
+      sourceObject = valmentavatKoulutukset;
+    }
     const meta = getMetadata(
       R.tail(anchorParts),
-      valmentavatKoulutukset.state.categories
+      sourceObject.state.categories
     );
     const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
     return {
@@ -73,7 +79,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
       type: changeObj.properties.isChecked ? "addition" : "removal"
     };
-  }, valmentavatKoulutukset.state.changes);
+  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.state.changes, valmentavatKoulutukset.state.changes]));
 
-  return R.flatten([tutkinnotMuutokset, valmentavatKoulutuksetMuutokset]);
+  return R.flatten([tutkinnotMuutokset, koulutusMuutokset]);
 }

@@ -31,6 +31,7 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
     muutokset: R.flatten([
       getChangesOfTutkinnotJaKoulutukset(
         muutoshakemus.tutkinnot,
+        muutoshakemus.ammatilliseentehtavaanvalmistavatkoulutukset,
         muutoshakemus.valmentavatkoulutukset
       ),
       getChangesOfOpetuskielet(muutoshakemus.opetuskielet),

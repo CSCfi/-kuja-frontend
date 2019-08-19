@@ -71,7 +71,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
   useEffect(() => {
     const getChangesOf = (key, changes) => {
-      console.info(key, changes);
       return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
     };
     setChangesOfTutkinnotJaKoulutukset(
