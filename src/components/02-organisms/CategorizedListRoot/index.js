@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
 import * as R from "ramda";
+import _ from "lodash";
 import { getChangesByLevel } from "./utils";
 
 const CategorizedListRoot = React.memo(props => {
@@ -22,7 +23,7 @@ const CategorizedListRoot = React.memo(props => {
 
   const runOperations = useMemo(() => {
     return operations => {
-      let allChangesClone = R.clone(allChanges);
+      let allChangesClone = _.cloneDeep(allChanges);
       R.forEach(operation => {
         if (operation.type === "addition") {
           allChangesClone = R.insert(-1, operation.payload, allChangesClone);

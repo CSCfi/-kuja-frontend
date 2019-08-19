@@ -34,6 +34,7 @@ const CheckboxWithLabel = React.memo(props => {
         control={
           <Checkbox
             checked={props.isChecked}
+            disabled={props.isDisabled}
             value="1"
             onChange={handleChanges}
             classes={{
@@ -50,11 +51,13 @@ const CheckboxWithLabel = React.memo(props => {
 
 CheckboxWithLabel.defaultProps = {
   isChecked: false,
+  isDisabled: false,
   payload: {}
 };
 
 CheckboxWithLabel.propTypes = {
   isChecked: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   name: PropTypes.string.isRequired,
   /**
    * Will be called after checking or unchecking the checkbox.

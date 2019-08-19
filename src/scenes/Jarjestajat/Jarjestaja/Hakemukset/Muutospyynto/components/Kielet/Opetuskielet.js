@@ -6,12 +6,12 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import _ from "lodash";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const Opetuskielet = props => {
   const sectionId = "opetuskielet";
   const [categories, setCategories] = useState([]);
-  const changes = [];
   const [opetuskielet, setOpetuskieletdata] = useState([]);
   const [state, setState] = useState([]);
   const [locale, setLocale] = useState([]);
@@ -46,7 +46,7 @@ const Opetuskielet = props => {
               }
             ]
           };
-        }, opetuskielet.items)
+        }, opetuskielet.items);
     },
     [props.kohde, props.maaraystyyppi]
   );
@@ -70,11 +70,19 @@ const Opetuskielet = props => {
         )
       );
       const title = parseLocalizedField(kieli.metadata, locale);
-      const changes = [];
-      tmpState.push({ areaCode, categories, changes, title });
+      tmpState.push({ areaCode, categories, changes: [], title });
     }, opetuskielet);
     setState(tmpState);
-  }, [opetuskielet, locale, props.kohde, props.maaraystyyppi, getCategories, props.changes, props.lupa.kohteet, props.kielet.opetuskielet]);
+  }, [
+    opetuskielet,
+    locale,
+    props.kohde,
+    props.maaraystyyppi,
+    getCategories,
+    props.changes,
+    props.lupa.kohteet,
+    props.kielet.opetuskielet
+  ]);
 
   useEffect(() => {
     setCategories(
@@ -88,12 +96,12 @@ const Opetuskielet = props => {
       )
     );
   }, [
-      props.kielet.opetuskielet,
-      props.changes,
-      props.kohde,
-      getCategories,
-      props.intl.locale
-    ]);
+    props.kielet.opetuskielet,
+    props.changes,
+    props.kohde,
+    getCategories,
+    props.intl.locale
+  ]);
 
   const removeChanges = (...payload) => {
     return saveChanges({ index: payload[2], changes: [] });
@@ -105,11 +113,11 @@ const Opetuskielet = props => {
 
   useEffect(() => {
     onUpdate({ sectionId, state });
-  }, [changes, onUpdate, state]);
+  }, [onUpdate, state]);
 
   const saveChanges = payload => {
     setState(prevState => {
-      const newState = R.clone(prevState);
+      const newState = _.cloneDeep(prevState);
       newState.changes = payload.changes;
       return newState;
     });

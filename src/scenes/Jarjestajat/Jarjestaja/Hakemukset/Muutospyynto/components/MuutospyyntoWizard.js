@@ -331,7 +331,7 @@ const MuutospyyntoWizard = props => {
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
                     maaraystyypit={maaraystyypit.data}
-                    changes={muutospyynnot.muutospyynto.muutokset}
+                    muutospyynto={muutospyynnot.muutospyynto}
                     muut={muut}
                     muutoshakemus={muutoshakemus}
                     onUpdate={onUpdate}

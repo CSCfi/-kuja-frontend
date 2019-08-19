@@ -203,7 +203,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
 
   const saveChanges = payload => {
     setChanges(prevState => {
-      const newState = R.clone(prevState);
+      const newState = _.cloneDeep(prevState);
       newState[payload.anchor] = payload.changes;
       return newState;
     });

@@ -8,6 +8,11 @@ const initialState = {
   tutkinnot: {
     state: []
   },
+  opetuskielet: {
+    state: {
+      changes: []
+    }
+  },
   tutkintokielet: {
     changes: []
   }
