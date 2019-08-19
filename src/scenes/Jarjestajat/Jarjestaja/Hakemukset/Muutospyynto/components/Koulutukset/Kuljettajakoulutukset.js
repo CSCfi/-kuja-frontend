@@ -44,13 +44,12 @@ const Kuljettajakoulutukset = props => {
         getCategories(
           getDataForKoulutusList(
             props.koulutukset.muut.muudata[koodisto],
-            props.changes,
             R.toUpper(props.intl.locale)
           )
         )
       );
     }
-  }, [props.koulutukset.muut, props.changes, props.intl.locale]);
+  }, [props.koulutukset.muut, props.intl.locale]);
 
   const onUpdate = payload => {
     setChanges(payload.changes);

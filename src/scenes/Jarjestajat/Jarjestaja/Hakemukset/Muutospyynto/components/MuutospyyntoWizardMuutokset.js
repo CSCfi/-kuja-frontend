@@ -103,7 +103,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         />
 
         <MuutospyyntoWizardKoulutukset
+          changes={changesOfTutkinnotJaKoulutukset}
+          kohde={kohteet.tutkinnotjakoulutukset}
           koulutukset={props.koulutukset}
+          maaraystyyppi={maaraystyypit.OIKEUS}
           onUpdate={props.onUpdate}
         />
 

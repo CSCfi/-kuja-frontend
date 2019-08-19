@@ -167,13 +167,13 @@ const Tutkintokielet = React.memo(props => {
 });
 
 Tutkintokielet.defautlProps = {
-  changes: {},
+  changes: [],
   locale: "FI",
   unselectedAnchors: {}
 };
 
 Tutkintokielet.propTypes = {
-  changes: PropTypes.object,
+  changes: PropTypes.array,
   categories: PropTypes.array,
   kielet: PropTypes.array,
   koulutukset: PropTypes.object,
