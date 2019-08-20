@@ -82,7 +82,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       getChangesOf("toimintaalue", props.muutospyynto.muutokset)
     );
     setChangesOfKielet({
-      opetuskielet: getChangesOf("opetuskielet", props.muutospyynto.muutokset),
+      opetuskielet: getChangesOf("opetusjatutkintokieli", props.muutospyynto.muutokset),
       tutkintokielet: getChangesOf(
         "tutkintokielet",
         props.muutospyynto.muutokset
@@ -160,6 +160,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 });
 
 MuutospyyntoWizardMuutokset.propTypes = {
+  kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -6,19 +6,35 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
-const Opetuskielet = props => {
+const Opetuskielet = React.memo(props => {
   const sectionId = "opetuskielet";
   const [categories, setCategories] = useState([]);
-  const [opetuskielet, setOpetuskieletdata] = useState([]);
+  const [changes, setChanges] = useState([]);
   const [state, setState] = useState([]);
-  const [locale, setLocale] = useState([]);
+  const [locale, setLocale] = useState("FI");
   const { onUpdate } = props;
 
-  const getCategories = useCallback(
-    opetuskielet => {
+  useEffect(() => {
+    const tmpState = [];
+    R.addIndex(R.map)(kieli => {
+      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
+      const title = parseLocalizedField(kieli.metadata, locale);
+      tmpState.push({ areaCode, title });
+    }, props.opetuskielet);
+    setState(tmpState);
+  }, [
+    props.opetuskielet,
+    locale,
+    props.kohde,
+    props.maaraystyyppi,
+    props.changes,
+    props.lupa.kohteet
+  ]);
+
+  useEffect(() => {
+    const getCategories = opetuskielet => {
       if (opetuskielet.items)
         return R.map(item => {
           return {
@@ -47,60 +63,24 @@ const Opetuskielet = props => {
             ]
           };
         }, opetuskielet.items);
-    },
-    [props.kohde, props.maaraystyyppi]
-  );
+    };
 
-  useEffect(() => {
-    setOpetuskieletdata(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.kielet.opetuskielet))
-    );
-  }, [props.kielet]);
-
-  useEffect(() => {
-    const tmpState = [];
-    R.addIndex(R.map)((kieli, i) => {
-      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
-      const categories = getCategories(
+    setCategories(
+      getCategories(
         getDataForOpetuskieletList(
-          props.kielet.opetuskielet,
+          props.opetuskielet,
           props.kohde,
           props.changes,
           locale
         )
-      );
-      const title = parseLocalizedField(kieli.metadata, locale);
-      tmpState.push({ areaCode, categories, changes: [], title });
-    }, opetuskielet);
-    setState(tmpState);
-  }, [
-    opetuskielet,
-    locale,
-    props.kohde,
-    props.maaraystyyppi,
-    getCategories,
-    props.changes,
-    props.lupa.kohteet,
-    props.kielet.opetuskielet
-  ]);
-
-  useEffect(() => {
-    setCategories(
-      getCategories(
-        getDataForOpetuskieletList(
-          props.kielet.opetuskielet,
-          props.kohde,
-          props.changes,
-          props.intl.locale
-        )
       )
     );
   }, [
-    props.kielet.opetuskielet,
-    props.changes,
+    props.opetuskielet,
     props.kohde,
-    getCategories,
-    props.intl.locale
+    props.changes,
+    locale,
+    props.maaraystyyppi
   ]);
 
   const removeChanges = (...payload) => {
@@ -108,19 +88,26 @@ const Opetuskielet = props => {
   };
 
   useEffect(() => {
+    setChanges(
+      R.map(muutos => {
+        return muutos.meta.changeObj;
+      }, props.changes)
+    );
+  }, [props.changes]);
+
+  useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state });
-  }, [onUpdate, state]);
+    onUpdate({
+      sectionId,
+      payload: { categories, changes, opetuskielet: props.opetuskielet, state }
+    });
+  }, [categories, onUpdate, changes, props.opetuskielet, state]);
 
   const saveChanges = payload => {
-    setState(prevState => {
-      const newState = _.cloneDeep(prevState);
-      newState.changes = payload.changes;
-      return newState;
-    });
+    setChanges(payload.changes);
   };
 
   return (
@@ -128,7 +115,7 @@ const Opetuskielet = props => {
       anchor={"opetuskieli"}
       key={`expandable-row-root`}
       categories={categories}
-      changes={state.changes}
+      changes={changes}
       index={0}
       onChangesRemove={removeChanges}
       onUpdate={saveChanges}
@@ -137,15 +124,16 @@ const Opetuskielet = props => {
       isExpanded={true}
     />
   );
-};
+});
 
 Opetuskielet.defaultProps = {
-  changes: []
+  changes: [],
+  opetuskielet: []
 };
 
 Opetuskielet.propTypes = {
   changes: PropTypes.array,
-  kielet: PropTypes.object,
+  opetuskielet: PropTypes.array,
   onUpdate: PropTypes.func,
   kohde: PropTypes.object,
   lupa: PropTypes.object
