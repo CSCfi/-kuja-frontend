@@ -25,6 +25,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     setChangesOfTutkinnotJaKoulutukset
   ] = useState([]);
   const [changesOfKielet, setChangesOfKielet] = useState({});
+  const [changesOfMuut, setChangesOfMuut] = useState([]);
 
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
@@ -73,13 +74,19 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     const getChangesOf = (key, changes) => {
       return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
     };
+    setChangesOfMuut(getChangesOf("muut", props.muutospyynto.muutokset));
     setChangesOfTutkinnotJaKoulutukset(
       getChangesOf("tutkinnotjakoulutukset", props.muutospyynto.muutokset)
     );
-    setChangesOfToimintaalue(getChangesOf("toimintaalue", props.muutospyynto.muutokset));
+    setChangesOfToimintaalue(
+      getChangesOf("toimintaalue", props.muutospyynto.muutokset)
+    );
     setChangesOfKielet({
       opetuskielet: getChangesOf("opetuskielet", props.muutospyynto.muutokset),
-      tutkintokielet: getChangesOf("tutkintokielet", props.muutospyynto.muutokset)
+      tutkintokielet: getChangesOf(
+        "tutkintokielet",
+        props.muutospyynto.muutokset
+      )
     });
   }, [props.muutospyynto.muutokset]);
 
@@ -140,7 +147,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         />
 
         <MuutospyyntoWizardMuut
-          lupa={props.lupa}
+          changes={changesOfMuut}
+          kohde={kohteet.muut}
+          headingNumber={props.lupa.kohteet[5].headingNumber}
+          maaraystyyppi={maaraystyypit.OIKEUS}
           muut={props.muut}
           onUpdate={props.onUpdate}
         />
@@ -156,6 +166,7 @@ MuutospyyntoWizardMuutokset.propTypes = {
   koulutustyypit: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyypit: PropTypes.array,
+  muut: PropTypes.object,
   muutoshakemus: PropTypes.object,
   muutospyynto: PropTypes.object,
   onUpdate: PropTypes.func,

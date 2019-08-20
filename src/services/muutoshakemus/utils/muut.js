@@ -2,8 +2,8 @@ import * as R from "ramda";
 
 export default function getChangesOfMuut(muutData) {
   const changes = R.map(changesBySection => {
-    return R.map(changeItem => {
-      const anchorArr = R.split(".", changeItem.anchor);
+    return R.map(changeObj => {
+      const anchorArr = R.split(".", changeObj.anchor);
       const section = R.find(R.propEq("code", anchorArr[0]))(
         muutData.state.muutdata
       );
@@ -21,12 +21,13 @@ export default function getChangesOfMuut(muutData) {
         koodiarvo: maarays.koodiArvo,
         koodisto: maarays.koodisto.koodistoUri,
         isInLupa: category.meta.isInLupa,
-        kohde: {
-          tunniste: muutData.state.kohde.tunniste
-        },
-        tila: changeItem.properties.isChecked ? "LISAYS" : "POISTO"
+        kohde: muutData.state.kohde,
+        maaraystyyppi: muutData.state.maaraystyyppi,
+        meta: { changeObj },
+        tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
+        type: changeObj.properties.isChecked ? "addition" : "removal"
       };
     }, changesBySection);
   }, muutData.state.changes);
-  return R.flatten(changes);
+  return R.flatten(R.values(changes));
 }

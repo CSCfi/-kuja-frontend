@@ -33,7 +33,7 @@ import {
 } from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { fetchKoulutusalat } from "services/koulutusalat/actions";
-import { fetchMuut } from "services/muut/actions";
+import { fetchMuut } from "../../../../../../services/muut/actions";
 import {
   fetchKielet,
   fetchOppilaitoksenOpetuskielet

@@ -7,7 +7,6 @@ import getChangesOfToimintaalue from "./toiminta-alue";
 import getChangesOfMuut from "./muut";
 
 export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
-  console.log(muutoshakemus);
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
