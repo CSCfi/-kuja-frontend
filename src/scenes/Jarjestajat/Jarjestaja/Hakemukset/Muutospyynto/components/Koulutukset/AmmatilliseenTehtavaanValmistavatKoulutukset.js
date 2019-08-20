@@ -88,7 +88,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   }, [categories, onUpdate, changes]);
 
   const removeChanges = () => {
-    return onUpdate({ changes: [] });
+    return saveChanges({ changes: [] });
   };
 
   return (

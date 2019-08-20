@@ -84,7 +84,7 @@ const Tyovoimakoulutukset = React.memo(props => {
   }, [props.changes]);
 
   const removeChanges = () => {
-    return onUpdate({ changes: [] });
+    return saveChanges({ changes: [] });
   };
 
   return (
