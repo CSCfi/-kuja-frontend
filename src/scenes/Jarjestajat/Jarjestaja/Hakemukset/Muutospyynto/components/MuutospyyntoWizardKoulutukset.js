@@ -27,7 +27,6 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
   ] = useState([]);
 
   useEffect(() => {
-    console.info(props.changes);
     setKuljettajakoulutuksetMuutokset(
       R.filter(
         muutos =>
