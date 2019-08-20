@@ -9,11 +9,11 @@ import * as R from "ramda";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   const sectionId = "ammatilliseentehtavaanvalmistavatkoulutukset";
-
+  const { onUpdate } = props;
   const [categories, setCategories] = useState([]);
   const [changes, setChanges] = useState([]);
 
-  const getCategories = koulutusData => {
+  const getCategories = (koulutusData, kohde, maaraystyyppi) => {
     const categories = R.map(item => {
       return {
         anchor: item.code,
@@ -32,7 +32,14 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
               }
             }
           }
-        ]
+        ],
+        meta: {
+          kohde,
+          maaraystyyppi,
+          isInLupa: item.isInLupa,
+          koodisto: item.koodisto,
+          metadata: item.metadata
+        }
       };
     }, koulutusData.items);
     return categories;
@@ -50,20 +57,38 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
           getDataForKoulutusList(
             props.koulutukset.muut.muudata
               .ammatilliseentehtavaanvalmistavakoulutus,
-            props.changes,
             R.toUpper(props.intl.locale)
-          )
+          ),
+          props.kohde,
+          props.maaraystyyppi
         )
       );
     }
-  }, [props.koulutukset.muut, props.changes, props.intl.locale]);
+  }, [
+    props.kohde,
+    props.koulutukset.muut,
+    props.intl.locale,
+    props.maaraystyyppi
+  ]);
 
-  const onUpdate = payload => {
+  const saveChanges = payload => {
     setChanges(payload.changes);
   };
 
+  useEffect(() => {
+    setChanges(
+      R.map(muutos => {
+        return muutos.meta.changeObj;
+      }, props.changes)
+    );
+  }, [props.changes]);
+
+  useEffect(() => {
+    onUpdate({ sectionId, state: { categories, changes } });
+  }, [categories, onUpdate, changes]);
+
   const removeChanges = () => {
-    return onUpdate({ changes: [] });
+    return saveChanges({ changes: [] });
   };
 
   return (
@@ -73,14 +98,22 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
       categories={categories}
       changes={changes}
       onChangesRemove={removeChanges}
-      onUpdate={onUpdate}
+      onUpdate={saveChanges}
       title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
     />
   );
 };
 
+AmmatilliseenTehtavaanValmistavatKoulutukset.defaultProps = {
+  changes: []
+};
+
 AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
-  koulutukset: PropTypes.object
+  changes: PropTypes.array,
+  kohde: PropTypes.object,
+  koulutukset: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
+  onUpdate: PropTypes.func.isRequired
 };
 
 export default injectIntl(AmmatilliseenTehtavaanValmistavatKoulutukset);

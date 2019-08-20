@@ -20,6 +20,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState({});
   const [changesOfToimintaalue, setChangesOfToimintaalue] = useState([]);
+  const [
+    changesOfTutkinnotJaKoulutukset,
+    setChangesOfTutkinnotJaKoulutukset
+  ] = useState([]);
   const [changesOfKielet, setChangesOfKielet] = useState({});
 
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
@@ -69,12 +73,15 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     const getChangesOf = (key, changes) => {
       return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
     };
-    setChangesOfToimintaalue(getChangesOf("toimintaalue", props.changes));
+    setChangesOfTutkinnotJaKoulutukset(
+      getChangesOf("tutkinnotjakoulutukset", props.muutospyynto.muutokset)
+    );
+    setChangesOfToimintaalue(getChangesOf("toimintaalue", props.muutospyynto.muutokset));
     setChangesOfKielet({
-      opetuskielet: getChangesOf("opetuskielet", props.changes),
-      tutkintokielet: getChangesOf("tutkintokielet", props.changes)
+      opetuskielet: getChangesOf("opetuskielet", props.muutospyynto.muutokset),
+      tutkintokielet: getChangesOf("tutkintokielet", props.muutospyynto.muutokset)
     });
-  }, [props.changes]);
+  }, [props.muutospyynto.muutokset]);
 
   return (
     <div>
@@ -84,6 +91,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
       <form onSubmit={props.handleSubmit}>
         <Tutkinnot
+          changes={changesOfTutkinnotJaKoulutukset}
           kohde={kohteet.tutkinnotjakoulutukset}
           koulutukset={props.koulutukset}
           koulutusalat={props.koulutusalat}
@@ -94,7 +102,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         />
 
         <MuutospyyntoWizardKoulutukset
+          changes={changesOfTutkinnotJaKoulutukset}
+          kohde={kohteet.tutkinnotjakoulutukset}
           koulutukset={props.koulutukset}
+          maaraystyyppi={maaraystyypit.OIKEUS}
           onUpdate={props.onUpdate}
         />
 
@@ -137,10 +148,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     </div>
   );
 });
-
-MuutospyyntoWizardMuutokset.defaultProps = {
-  changes: []
-};
 
 MuutospyyntoWizardMuutokset.propTypes = {
   kohteet: PropTypes.array,

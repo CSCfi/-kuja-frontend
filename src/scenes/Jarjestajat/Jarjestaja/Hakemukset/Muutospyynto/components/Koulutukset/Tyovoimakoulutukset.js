@@ -10,11 +10,12 @@ import * as R from "ramda";
 const Tyovoimakoulutukset = React.memo(props => {
   const sectionId = "tyovoimakoulutukset";
   const koodisto = "oivatyovoimakoulutus";
+  const { onUpdate } = props;
 
   const [categories, setCategories] = useState([]);
   const [changes, setChanges] = useState([]);
 
-  const getCategories = koulutusData => {
+  const getCategories = (koulutusData, kohde, maaraystyyppi) => {
     const categories = R.map(item => {
       return {
         anchor: item.code,
@@ -33,7 +34,14 @@ const Tyovoimakoulutukset = React.memo(props => {
               }
             }
           }
-        ]
+        ],
+        meta: {
+          kohde,
+          maaraystyyppi,
+          isInLupa: item.isInLupa,
+          koodisto: item.koodisto,
+          metadata: item.metadata
+        }
       };
     }, koulutusData.items);
     return categories;
@@ -45,20 +53,38 @@ const Tyovoimakoulutukset = React.memo(props => {
         getCategories(
           getDataForKoulutusList(
             props.koulutukset.muut.muudata[koodisto],
-            props.changes,
             R.toUpper(props.intl.locale)
-          )
+          ),
+          props.kohde,
+          props.maaraystyyppi
         )
       );
     }
-  }, [props.koulutukset.muut, props.changes, props.intl.locale]);
+  }, [
+    props.kohde,
+    props.koulutukset.muut,
+    props.intl.locale,
+    props.maaraystyyppi
+  ]);
 
-  const onUpdate = payload => {
+  const saveChanges = payload => {
     setChanges(payload.changes);
   };
 
+  useEffect(() => {
+    onUpdate({ sectionId, state: { categories, changes } });
+  }, [categories, onUpdate, changes]);
+
+  useEffect(() => {
+    setChanges(
+      R.map(muutos => {
+        return muutos.meta.changeObj;
+      }, props.changes)
+    );
+  }, [props.changes]);
+
   const removeChanges = () => {
-    return onUpdate({ changes: [] });
+    return saveChanges({ changes: [] });
   };
 
   return (
@@ -67,16 +93,20 @@ const Tyovoimakoulutukset = React.memo(props => {
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
-      onUpdate={onUpdate}
+      onUpdate={saveChanges}
       onChangesRemove={removeChanges}
       title={props.intl.formatMessage(wizardMessages.workforceTraining)}
     />
   );
 });
 
+Tyovoimakoulutukset.defaultProps = {
+  changes: []
+};
+
 Tyovoimakoulutukset.propTypes = {
-  koulutukset: PropTypes.object,
-  changes: PropTypes.array
+  changes: PropTypes.array,
+  koulutukset: PropTypes.object
 };
 
 export default injectIntl(Tyovoimakoulutukset);
