@@ -10,13 +10,14 @@ import * as R from "ramda";
 const Kuljettajakoulutukset = props => {
   const sectionId = "kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
-
+  const { onUpdate } = props;
   const [categories, setCategories] = useState([]);
   const [changes, setChanges] = useState([]);
 
-  const getCategories = koulutusData => {
+  const getCategories = (koulutusData, kohde, maaraystyyppi) => {
     const categories = R.map(item => {
       return {
+        anchor: item.code,
         components: [
           {
             name: "RadioButtonWithLabel",
@@ -32,7 +33,14 @@ const Kuljettajakoulutukset = props => {
               }
             }
           }
-        ]
+        ],
+        meta: {
+          kohde,
+          maaraystyyppi,
+          isInLupa: item.isInLupa,
+          koodisto: item.koodisto,
+          metadata: item.metadata
+        }
       };
     }, koulutusData.items);
     return categories;
@@ -45,18 +53,37 @@ const Kuljettajakoulutukset = props => {
           getDataForKoulutusList(
             props.koulutukset.muut.muudata[koodisto],
             R.toUpper(props.intl.locale)
-          )
+          ),
+          props.kohde,
+          props.maaraystyyppi
         )
       );
     }
-  }, [props.koulutukset.muut, props.intl.locale]);
+  }, [
+    props.kohde,
+    props.koulutukset.muut,
+    props.intl.locale,
+    props.maaraystyyppi
+  ]);
 
-  const onUpdate = payload => {
+  useEffect(() => {
+    onUpdate({ sectionId, state: { categories, changes } });
+  }, [categories, onUpdate, changes]);
+
+  useEffect(() => {
+    setChanges(
+      R.map(muutos => {
+        return muutos.meta.changeObj;
+      }, props.changes)
+    );
+  }, [props.changes]);
+
+  const saveChanges = payload => {
     setChanges(payload.changes);
   };
 
   const removeChanges = () => {
-    return onUpdate({ changes: [] });
+    return saveChanges({ changes: [] });
   };
 
   return (
@@ -66,7 +93,7 @@ const Kuljettajakoulutukset = props => {
       categories={categories}
       changes={changes}
       onChangesRemove={removeChanges}
-      onUpdate={onUpdate}
+      onUpdate={saveChanges}
       title={props.intl.formatMessage(wizardMessages.driverTraining)}
     />
   );
@@ -74,7 +101,9 @@ const Kuljettajakoulutukset = props => {
 
 Kuljettajakoulutukset.propTypes = {
   changes: PropTypes.array,
-  koulutukset: PropTypes.object
+  kohde: PropTypes.object,
+  koulutukset: PropTypes.object,
+  maaraystyyppi: PropTypes.object
 };
 
 export default injectIntl(Kuljettajakoulutukset);

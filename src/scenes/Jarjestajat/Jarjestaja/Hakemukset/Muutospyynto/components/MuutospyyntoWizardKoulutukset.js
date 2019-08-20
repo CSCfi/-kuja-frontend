@@ -14,6 +14,10 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset
   ] = useState([]);
   const [
+    kuljettajakoulutuksetMuutokset,
+    setKuljettajakoulutuksetMuutokset
+  ] = useState([]);
+  const [
     tyovoimakoulutuksetMuutokset,
     setTyovoimakoulutuksetMuutokset
   ] = useState([]);
@@ -24,6 +28,13 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
 
   useEffect(() => {
     console.info(props.changes);
+    setKuljettajakoulutuksetMuutokset(
+      R.filter(
+        muutos =>
+          R.startsWith("kuljettajakoulutukset", muutos.meta.changeObj.anchor),
+        props.changes
+      )
+    );
     setTyovoimakoulutuksetMuutokset(
       R.filter(
         muutos =>
@@ -81,7 +92,10 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       />
 
       <Kuljettajakoulutukset
+        changes={kuljettajakoulutuksetMuutokset}
+        kohde={props.kohde}
         koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
       />
     </div>

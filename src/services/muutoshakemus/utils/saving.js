@@ -32,6 +32,7 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       getChangesOfTutkinnotJaKoulutukset(
         muutoshakemus.tutkinnot,
         muutoshakemus.ammatilliseentehtavaanvalmistavatkoulutukset,
+        muutoshakemus.kuljettajakoulutukset,
         muutoshakemus.tyovoimakoulutukset,
         muutoshakemus.valmentavatkoulutukset
       ),

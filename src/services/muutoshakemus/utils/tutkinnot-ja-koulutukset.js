@@ -40,6 +40,7 @@ const getMuutos = (changeObj, stateItem) => {
 export default function getChangesOfTutkinnotJaKoulutukset(
   tutkinnot,
   ammatilliseentehtavaanvalmistavatkoulutukset,
+  kuljettajakoulutukset,
   tyovoimakoulutukset,
   valmentavatKoulutukset
 ) {
@@ -62,6 +63,8 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       )
     ) {
       sourceObject = ammatilliseentehtavaanvalmistavatkoulutukset;
+    } else if (R.startsWith("kuljettajakoulutukset", changeObj.anchor)) {
+      sourceObject = kuljettajakoulutukset;
     } else if (R.startsWith("tyovoimakoulutukset", changeObj.anchor)) {
       sourceObject = tyovoimakoulutukset;
     } else if (R.startsWith("valmentavatkoulutukset", changeObj.anchor)) {
@@ -87,7 +90,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
       type: changeObj.properties.isChecked ? "addition" : "removal"
     };
-  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.state.changes, tyovoimakoulutukset.state.changes, valmentavatKoulutukset.state.changes]));
+  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.state.changes, kuljettajakoulutukset.state.changes, tyovoimakoulutukset.state.changes, valmentavatKoulutukset.state.changes]));
 
   return R.flatten([tutkinnotMuutokset, koulutusMuutokset]);
 }
