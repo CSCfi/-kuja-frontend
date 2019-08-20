@@ -14,11 +14,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const [muutdata, setMuutdata] = useState([]);
   const [changes, setChanges] = useState({});
   const [locale, setLocale] = useState("FI");
-
-  const { lupa, onUpdate } = props;
-  const { kohteet } = lupa;
-  const kohde = kohteet[5];
-  const { headingNumber } = kohde;
+  const { onUpdate } = props;
   const heading = props.intl.formatMessage(wizardMessages.header_section5);
 
   const divideArticles = articles => {
@@ -41,6 +37,57 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   };
 
   useEffect(() => {
+    const getCategories = (row, locale) => {
+      return R.map(item => {
+        return {
+          anchor: row.key,
+          title: item.title,
+          categories: R.map(article => {
+            const title =
+              _.find(article.metadata, m => {
+                return m.kieli === locale;
+              }).kuvaus || "[Koulutuksen otsikko tähän]";
+            // const isInLupaBool = article
+            //   ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
+            //       return !!_.find(koulutusala.koulutukset, {
+            //         koodi: koulutus.koodiArvo
+            //       });
+            //     })
+            //   : false
+            // TODO: Määritä lupaan kuuluminen datan pohjalta
+            const isInLupaBool = true;
+            const labelClasses = {
+              isInLupa: isInLupaBool
+            };
+            return {
+              anchor: article.koodiArvo,
+              meta: {
+                isInLupa: isInLupaBool
+              },
+              components: [
+                {
+                  name: item.componentName,
+                  properties: {
+                    name: item.componentName,
+                    isChecked: item.shouldBeSelected,
+                    title: title,
+                    labelStyles: {
+                      addition: isAdded,
+                      removal: isRemoved,
+                      custom: Object.assign(
+                        {},
+                        labelClasses.isInLupa ? isInLupa : {}
+                      )
+                    }
+                  }
+                }
+              ]
+            };
+          }, item.articles)
+        };
+      }, row.data);
+    };
+
     const dividedArticles = divideArticles(props.muut.data);
     const codes = ["01", "02", "03", "04", "05", "06", "07"];
     const datas = [
@@ -117,89 +164,31 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       "Yhteistyö",
       "Muu määräys"
     ];
-    const expandableRows = !!locale.length ? R.addIndex(R.map)((code, i) => {
-      return {
-        code,
-        key: keys[i],
-        title: titles[i],
-        categories: getCategories(
-          {
+    const expandableRows = !!locale.length
+      ? R.addIndex(R.map)((code, i) => {
+          return {
+            code,
             key: keys[i],
+            title: titles[i],
+            categories: getCategories(
+              {
+                key: keys[i],
+                data: datas[i]
+              },
+              locale,
+              props.kohde
+            ),
             data: datas[i]
-          },
-          locale
-        ),
-        data: datas[i]
-      };
-    }, codes) : [];
+          };
+        }, codes)
+      : [];
 
     setMuutdata(expandableRows);
-  }, [locale, props.intl, props.muut.data]);
+  }, [props.kohde, locale, props.intl, props.muut.data]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
-
-  useEffect(() => {
-    onUpdate({
-      sectionId,
-      state: {
-        kohde,
-        changes,
-        muutdata
-      }
-    });
-  }, [changes, kohde, muutdata, onUpdate]);
-
-  const getCategories = (row, locale) => {
-    return R.map(item => {
-      return {
-        anchor: row.key,
-        title: item.title,
-        categories: R.map(article => {
-          const title =
-            _.find(article.metadata, m => {
-              return m.kieli === locale;
-            }).kuvaus || "[Koulutuksen otsikko tähän]";
-          // const isInLupaBool = article
-          //   ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
-          //       return !!_.find(koulutusala.koulutukset, {
-          //         koodi: koulutus.koodiArvo
-          //       });
-          //     })
-          //   : false
-          const isInLupaBool = true;
-          const labelClasses = {
-            isInLupa: isInLupaBool
-          };
-          return {
-            anchor: article.koodiArvo,
-            meta: {
-              isInLupa: isInLupaBool
-            },
-            components: [
-              {
-                name: item.componentName,
-                properties: {
-                  name: item.componentName,
-                  isChecked: item.shouldBeSelected,
-                  title: title,
-                  labelStyles: {
-                    addition: isAdded,
-                    removal: isRemoved,
-                    custom: Object.assign(
-                      {},
-                      labelClasses.isInLupa ? isInLupa : {}
-                    )
-                  }
-                }
-              }
-            ]
-          };
-        }, item.articles)
-      };
-    }, row.data);
-  };
 
   const saveChanges = payload => {
     setChanges(prevState => {
@@ -213,29 +202,63 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     return saveChanges({ anchor: payload[1], changes: [] });
   };
 
+  useEffect(() => {
+    const changes = {};
+    R.forEach(muutos => {
+      const areaCode = R.head(R.split(".", muutos.meta.changeObj.anchor));
+      changes[areaCode] = changes[areaCode] || [];
+      changes[areaCode].push(muutos.meta.changeObj);
+    }, props.changes);
+    setChanges(changes);
+  }, [props.changes]);
+
+  useEffect(() => {
+    onUpdate({
+      sectionId,
+      state: {
+        changes,
+        kohde: props.kohde,
+        maaraystyyppi: props.maaraystyyppi,
+        muutdata
+      }
+    });
+  }, [changes, muutdata, props.kohde, props.maaraystyyppi, onUpdate]);
+
   return (
-    <Section code={headingNumber} title={heading}>
-      {R.addIndex(R.map)((row, i) => {
-        return (
-          <ExpandableRowRoot
-            anchor={row.code}
-            key={`expandable-row-root-${i}`}
-            categories={row.categories}
-            changes={changes[row.code]}
-            code={row.code}
-            index={i}
-            onUpdate={saveChanges}
-            sectionId={sectionId}
-            title={row.title}
-            onChangesRemove={removeChanges}
-          />
-        );
-      }, muutdata)}
-    </Section>
+    <React.Fragment>
+      {props.kohde && (
+        <Section code={props.headingNumber} title={heading}>
+          {R.addIndex(R.map)((row, i) => {
+            return (
+              <ExpandableRowRoot
+                anchor={row.code}
+                key={`expandable-row-root-${i}`}
+                categories={row.categories}
+                changes={changes[row.code]}
+                code={row.code}
+                index={i}
+                onUpdate={saveChanges}
+                sectionId={sectionId}
+                title={row.title}
+                onChangesRemove={removeChanges}
+              />
+            );
+          }, muutdata)}
+        </Section>
+      )}
+    </React.Fragment>
   );
 });
 
+MuutospyyntoWizardMuut.defaultProps = {
+  changes: []
+};
+
 MuutospyyntoWizardMuut.propTypes = {
+  changes: PropTypes.array,
+  headingNumber: PropTypes.number,
+  kohde: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
   muut: PropTypes.object,
   onUpdate: PropTypes.func
 };
