@@ -10,15 +10,27 @@ import * as R from "ramda";
 
 const MuutospyyntoWizardKoulutukset = React.memo(props => {
   const [
-    valmentavatKoulutuksetMuutokset,
-    setValmentavatKoulutuksetMuutokset
-  ] = useState([]);
-  const [
     ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset,
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset
   ] = useState([]);
+  const [
+    tyovoimakoulutuksetMuutokset,
+    setTyovoimakoulutuksetMuutokset
+  ] = useState([]);
+  const [
+    valmentavatKoulutuksetMuutokset,
+    setValmentavatKoulutuksetMuutokset
+  ] = useState([]);
 
   useEffect(() => {
+    console.info(props.changes);
+    setTyovoimakoulutuksetMuutokset(
+      R.filter(
+        muutos =>
+          R.startsWith("tyovoimakoulutukset", muutos.meta.changeObj.anchor),
+        props.changes
+      )
+    );
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset(
       R.filter(
         muutos =>
@@ -61,7 +73,10 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       />
 
       <Tyovoimakoulutukset
+        changes={tyovoimakoulutuksetMuutokset}
+        kohde={props.kohde}
         koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
       />
 
