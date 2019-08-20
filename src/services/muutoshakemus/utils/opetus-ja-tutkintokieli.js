@@ -21,6 +21,7 @@ export const getChangesOfOpetuskielet = opetuskieliData => {
         maaraystyyppi: meta.maaraystyyppi,
         type: changeObj.properties.isChecked ? "addition" : "removal",
         meta: {
+          tunniste: "opetuskieli",
           changeObj
         },
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
@@ -30,42 +31,34 @@ export const getChangesOfOpetuskielet = opetuskieliData => {
 };
 
 export const getChangesOfTutkintokielet = tutkintokieliData => {
-  console.log(tutkintokieliData);
-  const changes = R.map(stateItem => {
+  const changes = R.mapObjIndexed((changeObjects, areaCode) => {
     const item = R.map(changeObj => {
       const anchorParts = changeObj.anchor.split(".");
       const code = R.last(anchorParts);
-      // const meta = getMetadata(R.tail(anchorParts), tutkintokieliData.payload.state[0].categories[0]);
+      const item = R.find(R.propEq("areaCode", areaCode))(
+        tutkintokieliData.payload.items
+      );
+      const meta =
+        item && item.categories
+          ? getMetadata(R.tail(anchorParts), item.categories)
+          : {};
       return {
         koodiarvo: code,
-        koodisto: "kieli",
-        // nimi: meta.kuvaus,
-        // kuvaus: meta.kuvaus,
-        // isInLupa: meta.isInLupa,
-        // kohde: meta.kohde.kohdeArvot[0].kohde,
-        // maaraystyyppi: meta.maaraystyyppi,
-        type: changeObj.properties.isChecked ? "addition" : "removal",
+        koodisto: tutkintokieliData.payload.koodistoUri,
+        nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        isInLupa: meta.isInLupa,
+        kohde: meta.kohde,
+        maaraystyyppi: meta.maaraystyyppi,
         meta: {
-          koulutusala: anchorParts[0],
-          koulutustyyppi: anchorParts[1],
-          perusteluteksti: [],
-          muutosperustelukoodiarvo: []
+          tunniste: "tutkintokieli",
+          changeObj
         },
-        tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
+        tila: "LISAYS",
+        type: "addition"
       };
-    }, stateItem.changes);
-    console.log(item);
+    }, changeObjects);
     return item;
   }, tutkintokieliData.payload.changes);
-  // );
-  console.log(changes);
-
   return R.flatten(R.values(changes));
 };
-
-// 01:
-//   changes: Array(1)
-//   0:
-//     anchor: "01.12.417101"
-//     path: (5) [0, "categories", 0, "components", 0]
-//     properties: {isChecked: false}
