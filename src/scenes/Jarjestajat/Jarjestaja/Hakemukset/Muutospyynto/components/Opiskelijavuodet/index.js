@@ -10,7 +10,8 @@ const Opiskelijavuodet = props => {
         <Typography variant="h6">{props.mainTitle}</Typography>
       </div>
       <Difference
-        initialValue={props.initialValue}
+        defaultValue={props.initialValue}
+        onChanges={props.onChanges}
         titles={props.titles}
         value={props.value}
       />
@@ -27,6 +28,7 @@ Difference.defaultProps = {
 Difference.propTypes = {
   mainTitle: PropTypes.string,
   initialValue: PropTypes.number,
+  onChanges: PropTypes.func.isRequired,
   titles: PropTypes.array,
   value: PropTypes.number
 };

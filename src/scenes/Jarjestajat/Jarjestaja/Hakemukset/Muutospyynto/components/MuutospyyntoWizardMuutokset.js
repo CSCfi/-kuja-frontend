@@ -141,7 +141,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         )}
 
         <MuutospyyntoWizardOpiskelijavuodet
+          kohde={kohteet.opiskelijavuodet}
           lupa={props.lupa}
+          maaraystyyppi={maaraystyypit.OIKEUS}
+          onUpdate={props.onUpdate}
           opiskelijavuodet={props.opiskelijavuodet}
           changesOfSection5={props.muutoshakemus["muut"].changes}
         />

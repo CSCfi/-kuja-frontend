@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Section from "../../../../../../components/03-templates/Section";
-import Opiskelijavuodet from "../components/Opiskelijavuodet";
-import { injectIntl } from "react-intl";
-
 import commonMessages from "../../../../../../i18n/definitions/common";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
+import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -25,8 +24,10 @@ const isInLupa = (areaCode, items) => {
 };
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
-  // const sectionId = "opiskelijavuodet";
+  const sectionId = "opiskelijavuodet";
   const heading = props.intl.formatMessage(wizardMessages.header_section4);
+  const { onUpdate } = props;
+
   const [headingNumber, setHeadingNumber] = useState(0);
   const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
   const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
@@ -36,6 +37,9 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValue, setInitialValue] = useState(0);
   const [initialValueVaativa] = useState(0);
   const [initialValueSisaoppilaitos] = useState(0);
+
+  const [categories, setCategories] = useState([]);
+  const [changes, setChanges] = useState([]);
 
   useEffect(() => {
     const relevantChangesOfSection5 = R.concat(
@@ -88,62 +92,124 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     );
   }, [props.lupa, props.changesOfSection5]);
 
+  useEffect(() => {
+    const titles = [
+      props.intl.formatMessage(commonMessages.current),
+      props.intl.formatMessage(commonMessages.applyFor),
+      props.intl.formatMessage(commonMessages.difference)
+    ];
+    const allCategories = [
+      {
+        anchor: "vahimmaisopiskelijavuodet",
+        title: props.intl.formatMessage(wizardMessages.minimumAmountOfYears),
+        components: [
+          {
+            name: "Difference",
+            properties: {
+              initialValue: initialValue,
+              applyForValue: applyFor,
+              name: `${sectionId}-difference-1`,
+              titles
+            }
+          }
+        ]
+      },
+      {
+        anchor: "vaativatuki",
+        title: props.intl.formatMessage(wizardMessages.limitForSpecialSupport),
+        components: [
+          {
+            name: "Difference",
+            properties: {
+              initialValue: initialValueVaativa,
+              applyForValue: applyForVaativa,
+              name: `${sectionId}-difference-2`,
+              titles
+            }
+          }
+        ]
+      },
+      {
+        anchor: "sisaoppilaitos",
+        title: props.intl.formatMessage(wizardMessages.limitForBoardingSchool),
+        components: [
+          {
+            name: "Difference",
+            properties: {
+              initialValue: initialValueSisaoppilaitos,
+              applyForValue: applyForSisaoppilaitos,
+              name: `${sectionId}-difference-3`,
+              titles
+            }
+          }
+        ]
+      }
+    ];
+
+    const activeCategories = R.filter(category => {
+      return (
+        category.anchor === "vahimmaisopiskelijavuodet" ||
+        (category.anchor === "vaativatuki" && isVaativaTukiVisible) ||
+        (category.anchor === "sisaoppilaitos" && isSisaoppilaitosVisible)
+      );
+    }, allCategories);
+    setCategories(activeCategories);
+  }, [
+    applyFor,
+    applyForSisaoppilaitos,
+    applyForVaativa,
+    initialValue,
+    initialValueSisaoppilaitos,
+    initialValueVaativa,
+    isSisaoppilaitosVisible,
+    isVaativaTukiVisible,
+    props.intl
+  ]);
+
+  useEffect(() => {
+    onUpdate({
+      sectionId,
+      state: {
+        categories,
+        changes,
+        kohde: props.kohde,
+        maaraystyyppi: props.maaraystyyppi
+      }
+    });
+  }, [categories, onUpdate, changes, props.kohde, props.maaraystyyppi]);
+
+  const saveChanges = payload => {
+    setChanges(payload.changes);
+  };
+
+  const removeChanges = () => {
+    saveChanges({ changes: [] });
+  };
+
   return (
     <Section code={headingNumber} title={heading}>
-      <Opiskelijavuodet
-        initialValue={initialValue}
-        value={applyFor}
-        mainTitle={
-          props.intl.formatMessage(wizardMessages.minimumAmountOfYears)
-        }
-        titles={[
-          props.intl.formatMessage(commonMessages.current),
-          props.intl.formatMessage(commonMessages.applyFor),
-          props.intl.formatMessage(commonMessages.difference)
-        ]}
+      <ExpandableRowRoot
+        anchor={"opiskelijavuodet"}
+        key={`expandable-row-root`}
+        categories={categories}
+        changes={changes}
+        index={0}
+        onChangesRemove={removeChanges}
+        onUpdate={saveChanges}
+        sectionId={sectionId}
+        title={""}
+        isExpanded={true}
       />
-
-      {isVaativaTukiVisible ? (
-        <div className="pt-8">
-          <Opiskelijavuodet
-            isRequired={true}
-            initialValue={initialValueVaativa}
-            value={applyForVaativa}
-            mainTitle={
-              props.intl.formatMessage(wizardMessages.limitForSpecialSupport)
-            }
-            titles={[
-              props.intl.formatMessage(commonMessages.current),
-              props.intl.formatMessage(commonMessages.applyFor),
-              props.intl.formatMessage(commonMessages.difference)
-            ]}
-          />
-        </div>
-      ) : null}
-
-      {isSisaoppilaitosVisible ? (
-        <div className="pt-8">
-          <Opiskelijavuodet
-            isRequired={true}
-            initialValue={initialValueSisaoppilaitos}
-            value={applyForSisaoppilaitos}
-            mainTitle={
-              props.intl.formatMessage(wizardMessages.limitForBoardingSchool)
-            }
-            titles={[
-              props.intl.formatMessage(commonMessages.current),
-              props.intl.formatMessage(commonMessages.applyFor),
-              props.intl.formatMessage(commonMessages.difference)
-            ]}
-          />
-        </div>
-      ) : null}
     </Section>
   );
 });
 
 MuutospyyntoWizardOpiskelijavuodet.propTypes = {
-  changesOfSection5: PropTypes.object
+  changesOfSection5: PropTypes.object,
+  kohde: PropTypes.object,
+  lupa: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
+  onUpdate: PropTypes.func.isRequired
 };
 
 export default injectIntl(MuutospyyntoWizardOpiskelijavuodet);
