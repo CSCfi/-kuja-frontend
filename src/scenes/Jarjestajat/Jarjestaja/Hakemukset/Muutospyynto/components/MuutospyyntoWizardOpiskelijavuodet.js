@@ -6,15 +6,14 @@ import ExpandableRowRoot from "../../../../../../components/02-organisms/Expanda
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import _ from "lodash";
 
 const getApplyFor = (categoryName, items) => {
   return (
-    (
-      R.find(value => {
-        return value.kategoria === categoryName;
-      }, items || []) || {}
-    ).arvo || 0
-  );
+    R.find(value => {
+      return value.kategoria === categoryName;
+    }, items || []) || {}
+  ).arvo;
 };
 
 const isInLupa = (areaCode, items) => {
@@ -27,8 +26,11 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const sectionId = "opiskelijavuodet";
   const heading = props.intl.formatMessage(wizardMessages.header_section4);
   const { onUpdate } = props;
+  const { kohteet } = props.lupa;
+  const { headingNumber, opiskelijavuodet } = kohteet[4];
+  const { muutCombined } = kohteet[5];
 
-  const [headingNumber, setHeadingNumber] = useState(0);
+  // const [headingNumber, setHeadingNumber] = useState(0);
   const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
   const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
   const [applyFor, setApplyFor] = useState(0);
@@ -37,7 +39,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValue, setInitialValue] = useState(0);
   const [initialValueVaativa] = useState(0);
   const [initialValueSisaoppilaitos] = useState(0);
-
   const [categories, setCategories] = useState([]);
   const [changes, setChanges] = useState([]);
 
@@ -46,24 +47,9 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       (props.changesOfSection5 || {})["02"] || [],
       (props.changesOfSection5 || {})["03"] || []
     );
-    const { kohteet } = props.lupa;
-    const { headingNumber, opiskelijavuodet } = kohteet[4];
-    const { muutCombined } = kohteet[5];
 
-    setHeadingNumber(headingNumber);
+    // setHeadingNumber(headingNumber);
 
-    setInitialValue(
-      parseInt(
-        (
-          R.find(obj => {
-            return obj.tyyppi === "Ammatillinen koulutus";
-          }, opiskelijavuodet || []) || {}
-        ).arvo || "0",
-        10
-      )
-    );
-
-    setApplyFor(getApplyFor("vahimmaisopiskelijavuodet", [])); // [] = opiskelijavuosimuutoksetValue
     setApplyForVaativa(getApplyFor("vaativa", [])); // [] = opiskelijavuosimuutoksetValue
     setApplyForSisaoppilaitos(getApplyFor("sisaoppilaitos", [])); // [] = opiskelijavuosimuutoksetValue
 
@@ -90,7 +76,26 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           ).properties || {}
         ).isChecked
     );
-  }, [props.lupa, props.changesOfSection5]);
+  }, [muutCombined, props.lupa, props.changesOfSection5]);
+
+  useEffect(() => {
+    setInitialValue(
+      parseInt(
+        (
+          R.find(obj => {
+            return obj.tyyppi === "Ammatillinen koulutus";
+          }, opiskelijavuodet || []) || {}
+        ).arvo || "0",
+        10
+      )
+    );
+  }, [opiskelijavuodet]);
+
+  useEffect(() => {
+    const tmpApplyFor = getApplyFor("vahimmaisopiskelijavuodet", []);
+    console.info(tmpApplyFor, initialValue);
+    setApplyFor(tmpApplyFor || initialValue); // [] = opiskelijavuosimuutoksetValue
+  }, [initialValue]);
 
   useEffect(() => {
     const titles = [
@@ -167,9 +172,93 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   ]);
 
   useEffect(() => {
+    /**
+     *  Osio 4 = Opiskelijavuodet, osio 5 = Muut
+     *
+     *  Mikäli osiosta 5 on valittu sisäoppilaitosta koskeva kohta, näytetään sitä vastaavat kentät osiossa 4.
+     *  Vastaavasti, mikäli osiosta 5 on valittu jokin vaativaa tukea ilmentävistä radio button -valinnoista,
+     *  näytetään osiossa 4 valintaa vastaavat kentät.
+     *  Aloitetaan ottamalla  kopio nykyisistä osion 4 muutoksista.
+     */
+    let _changes = _.cloneDeep(changes);
+    // Mikäli jokin alla olevista koodeista on valittuna osiossa 5, näytetään vaativaa tukea koskevat kentät osiossa 4.
+    const vaativatCodes = [2, 16, 17, 18, 19, 20, 21];
+    // muutChanges sisältää 5. osion muutokset, jotka tässä muokataan helpommin läpikäytävään muotoon.
+    const changesFlatten = R.flatten(R.values(props.muutChanges));
+    // 5. osion muutosten joukosta etsitään sisäoppilaitosta koskeva muutos.
+    const sisaoppilaitosChange = R.find(item => {
+      return R.contains("sisaoppilaitos", item.anchor);
+    })(changesFlatten);
+    /**
+     * Mikäli muutos löytyy ja sisäoppilaitosta koskeva kohta osiossa 5 on valittu, tulee sisäoppilaitosta
+     * koskeva tietue näyttää osiossa 4.
+     */
+
+    const shouldSisaoppilaitosBeVisible = !!(
+      sisaoppilaitosChange && sisaoppilaitosChange.properties.isChecked
+    );
+    /**
+     * Mikäli sisäoppilaitosta koskeva tietue tulee poistaa osiosta 4, tulee tässä vaiheessa käydä läpi käyttäjän
+     * osioon 4 tekemät muutokset ja poistaa niiden joukosta sisäoppilaitosta koskevat.
+     */
+    if (!shouldSisaoppilaitosBeVisible) {
+      _changes = R.filter(changeObj => {
+        return R.not(R.contains("sisaoppilaitos", changeObj.anchor));
+      })(_changes);
+    }
+    /**
+     * Tässä vaiheessa _changes sisältää vain ne osion 4 muutokset, jotka eivät liity sisäoppilaitokseen.
+     * Seuraavaksi etsitään ne vaativaa tukea koskevat - osioon 5 tehdyt - muutokset, jotka vaikuttavat
+     * vaativaa tukea käsittelevän tietueen näkyvyyteen osiossa 4.
+     */
+
+    const vaativatChanges = R.filter(item => {
+      const anchorParts = R.split(".", item.anchor);
+      return (
+        R.contains("vaativat", item.anchor) &&
+        R.contains(parseInt(R.last(anchorParts), 10), vaativatCodes)
+      );
+    })(changesFlatten);
+    /**
+     * Mikäli edellä kirjoitetun kaltaisia muutoksia löytyy, niitä löytyy 5. osion radio button -valinnasta
+     * johtuen korkeintaan yksi (1) kappale. Tuloksen perusteella voidaan 4. osion vaativaa tukea koskeva
+     * tietue asettaa joko näytettäväksi tai poistaa käyttäjän ulottumattomiin.
+     * */
+
+    const shouldVaativatBeVisible = !!vaativatChanges.length;
+    /**
+     * Kuten sisäoppilaitoksen tapauksessa, myös vaativan tuen kohdalla tulee edellisestä tuloksesta riippuen
+     * poistaa käyttäjän 4. osioon tekemien muutosten joukosta vaativaa tukea koskevat muutokset.
+     */
+    if (!shouldVaativatBeVisible) {
+      _changes = R.filter(changeObj => {
+        return R.not(R.contains("vaativatuki", changeObj.anchor));
+      })(_changes);
+    }
+    /**
+     * Nyt _changes sisältää vain ne 4. osion muutokset, joita vastaavat tietueet ovat näkyvissä ja käyttäjän
+     * muokattavissa. Seuraavaksi tulee päivittää 4. osion tila vastaamaan uutta tilannetta.
+     * Poistetaan sisäoppilaitosta koskeva tietue osiosta 4.
+     */
+    setIsSisaoppilaitosVisible(shouldSisaoppilaitosBeVisible);
+    // Poistetaan vaativaa tukea koskeva tietue osiosta 4.
+    setIsVaativaTukiVisible(shouldVaativatBeVisible);
+    // Päivitetään muutosten lista, mutta vain, mikäli uusi tilanne eroaa aiemmasta.
+    if (
+      R.compose(
+        R.not,
+        R.equals(changes)
+      )(_changes)
+    ) {
+      setChanges(_changes);
+    }
+    console.info(_changes, props.muutChanges, changesFlatten, vaativatChanges);
+  }, [changes, props.muutChanges]);
+
+  useEffect(() => {
     onUpdate({
       sectionId,
-      state: {
+      payload: {
         categories,
         changes,
         kohde: props.kohde,
@@ -205,7 +294,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 });
 
 MuutospyyntoWizardOpiskelijavuodet.propTypes = {
-  changesOfSection5: PropTypes.object,
+  muutChanges: PropTypes.object,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,

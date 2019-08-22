@@ -8,6 +8,7 @@ import _ from "lodash";
 import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
+import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
 
 const CategorizedList = React.memo(props => {
@@ -545,6 +546,25 @@ const CategorizedList = React.memo(props => {
                           );
                         })(category)
                       : null}
+                    {component.name === "Difference" && (
+                      <div className="flex-2">
+                        <Difference
+                          applyForValue={propsObj.applyForValue}
+                          initialValue={propsObj.initialValue}
+                          onChanges={runOperations}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
+                          titles={propsObj.titles}
+                        />
+                      </div>
+                    )}
                   </React.Fragment>
                 );
               })}

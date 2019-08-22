@@ -139,24 +139,27 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
             onUpdate={props.onUpdate}
           />
         )}
+        {kohteet.opiskelijavuodet && props.muutoshakemus.muut.state && (
+          <MuutospyyntoWizardOpiskelijavuodet
+            kohde={kohteet.opiskelijavuodet}
+            lupa={props.lupa}
+            maaraystyyppi={maaraystyypit.OIKEUS}
+            onUpdate={props.onUpdate}
+            opiskelijavuodet={props.opiskelijavuodet}
+            muutChanges={props.muutoshakemus.muut.state.changes}
+          />
+        )}
 
-        <MuutospyyntoWizardOpiskelijavuodet
-          kohde={kohteet.opiskelijavuodet}
-          lupa={props.lupa}
-          maaraystyyppi={maaraystyypit.OIKEUS}
-          onUpdate={props.onUpdate}
-          opiskelijavuodet={props.opiskelijavuodet}
-          changesOfSection5={props.muutoshakemus["muut"].changes}
-        />
-
-        <MuutospyyntoWizardMuut
-          changes={changesOfMuut}
-          kohde={kohteet.muut}
-          headingNumber={props.lupa.kohteet[5].headingNumber}
-          maaraystyyppi={maaraystyypit.OIKEUS}
-          muut={props.muut}
-          onUpdate={props.onUpdate}
-        />
+        {kohteet.muut && props.muut && maaraystyypit && (
+          <MuutospyyntoWizardMuut
+            changes={changesOfMuut}
+            kohde={kohteet.muut}
+            headingNumber={props.lupa.kohteet[5].headingNumber}
+            maaraystyyppi={maaraystyypit.OIKEUS}
+            muut={props.muut}
+            onUpdate={props.onUpdate}
+          />
+        )}
       </form>
     </div>
   );
