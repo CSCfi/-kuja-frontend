@@ -44,12 +44,12 @@ const CategorizedListRoot = React.memo(
               )
             )(allChangesClone);
           } else if (operation.type === "modification") {
-            const withoutTargetChange = R.filter(change => {
-              return (
-                !R.equals(change.path, operation.payload.path) ||
-                !R.equals(change.anchor, operation.payload.anchor)
-              );
-            }, allChangesClone);
+            const withoutTargetChange = R.filter(
+              R.compose(
+                R.not,
+                R.equals(operation.payload.anchor),
+                R.prop("anchor")
+              ))(allChangesClone);
             allChangesClone = R.insert(
               -1,
               operation.payload,
@@ -73,7 +73,7 @@ const CategorizedListRoot = React.memo(
       <React.Fragment>
         {R.compose(
           R.not,
-          R.isNil,
+          R.equals(null),
           R.head
         )(allChanges) && (
           <CategorizedList

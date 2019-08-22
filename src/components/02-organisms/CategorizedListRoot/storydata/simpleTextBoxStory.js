@@ -14,9 +14,10 @@ export const simpleTextBoxStory = {
       title: "Category",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            code: "A",
+            code: "A.A",
             isChecked: false,
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa
@@ -33,6 +34,7 @@ export const simpleTextBoxStory = {
           title: "Category",
           components: [
             {
+              anchor: "A",
               name: "TextBox",
               properties: {
                 defaultValue: "Default value"

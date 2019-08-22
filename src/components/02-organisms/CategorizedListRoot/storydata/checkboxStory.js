@@ -14,9 +14,10 @@ export const checkboxStory = {
       title: "Category",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            code: "A",
+            code: "A.A",
             isChecked: false,
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa
@@ -33,9 +34,10 @@ export const checkboxStory = {
           title: "Category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "A",
+                code: "A.A.A",
                 isChecked: false,
                 labelStyles: Object.assign({}, labelStyles, {
                   custom: isInLupa

@@ -28,8 +28,7 @@ export const simpleStory = {
     {
       anchor: "simple.B.B.A.A",
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
       }
     }
   ],

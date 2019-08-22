@@ -199,24 +199,23 @@ const CategorizedList = React.memo(props => {
   };
 
   const runOperations = (payload, changeProps) => {
-    const changeObj = R.find(R.propEq("path", payload.fullPath))(
-      props.allChanges
-    );
+    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
     let operations = [];
-    if (changeObj) {
+    if (R.isEmpty(changeObj.properties)) {
       operations.push({
-        type: "modification",
+        type: "addition",
         payload: {
-          anchor: payload.anchor,
+          anchor: fullAnchor,
           path: payload.fullPath,
           properties: changeProps
         }
       });
     } else {
       operations.push({
-        type: "addition",
+        type: "modification",
         payload: {
-          anchor: payload.anchor,
+          anchor: fullAnchor,
           path: payload.fullPath,
           properties: changeProps
         }
@@ -345,7 +344,7 @@ const CategorizedList = React.memo(props => {
                   props.changes
                 );
                 const propsObj = getPropertiesObject(changeObj, component);
-                const isAddition = changeObj.properties.isChecked;
+                const isAddition = !!changeObj.properties.isChecked;
                 const isRemoved =
                   R.has("isChecked")(changeObj.properties) &&
                   !changeObj.properties.isChecked;
@@ -421,22 +420,24 @@ const CategorizedList = React.memo(props => {
                     )}
                     {component.name === "Dropdown"
                       ? (category => {
-                          const siblingName = (
-                            category.components[ii - 1] || {}
-                          ).name;
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
+                          const previousSibling =
+                            category.components[ii - 1] || {};
+                          const isPreviousSiblingCheckedByDefault = !!(
+                            previousSibling.properties || {}
                           ).isChecked;
-                          const change = props.getChangesByAnchor(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii - 1])
+                          const previousSiblingFullAnchor = `${anchor}.${
+                            previousSibling.anchor
+                          }`;
+                          const change = getChangeObjByAnchor(
+                            previousSiblingFullAnchor,
+                            props.changes
                           );
                           const isDisabled =
-                            siblingName === "CheckboxWithLabel" ||
-                            siblingName === "RadioButtonWithLabel"
-                              ? (isSiblingCheckedByDefault && !change) ||
-                                (change && change.properties.isChecked)
-                              : propsObj.isDisabled;
+                            (previousSibling.name === "CheckboxWithLabel" ||
+                              previousSibling.name ===
+                                "RadioButtonWithLabel") && 
+                            !(isPreviousSiblingCheckedByDefault || change.properties.isChecked);
+
                           return (
                             <div className="px-2">
                               <Dropdown
@@ -461,21 +462,19 @@ const CategorizedList = React.memo(props => {
                       : null}
                     {component.name === "TextBox"
                       ? (category => {
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
-                          ).isChecked;
-                          const change = props.getChangesByAnchor(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii])
+                          const change = getChangeObjByAnchor(
+                            fullAnchor,
+                            props.changes
                           );
-                          const parentChange = props.getChangesByAnchor(
-                            props.anchor,
-                            R.concat(R.init(props.rootPath), ["components", 0])
+                          const parentChange = getChangeObjByAnchor(
+                            `${props.parent.anchor}.${
+                              props.parent.category.components[0].anchor
+                            }`,
+                            props.changes
                           );
-                          const isDisabled = !(
-                            (isSiblingCheckedByDefault && !parentChange) ||
-                            (parentChange && parentChange.properties.isChecked)
-                          );
+                          const isDisabled =
+                            R.isEmpty(parentChange.properties) ||
+                            !parentChange.properties.isChecked;
                           const value = change
                             ? change.properties.value
                             : propsObj.defaultValue;

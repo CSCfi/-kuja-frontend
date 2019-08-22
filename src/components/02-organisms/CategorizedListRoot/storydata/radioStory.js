@@ -8,29 +8,26 @@ const labelStyles = {
 export const radioStory = {
   changes: [
     {
-      anchor: "radio.0",
-      path: [0, "components", 0],
+      anchor: "radio.A.A",
       properties: {
-        isChecked: true,
-        title: "Alakoulu ja yläkoulu (muutos)"
+        isChecked: true
       }
     },
     {
-      anchor: "radio.0.0",
-      path: [0, "categories", 0, "components", 0],
+      anchor: "radio.A.A.A",
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
       }
     }
   ],
   categories: [
     {
-      anchor: "0",
+      anchor: "A",
       code: "0",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "RadioButtonWithLabel",
           properties: {
             name: "example-radio-1",
@@ -43,6 +40,7 @@ export const radioStory = {
           }
         },
         {
+          anchor: "B",
           name: "Dropdown",
           properties: {
             options: [
@@ -55,11 +53,12 @@ export const radioStory = {
       ],
       categories: [
         {
-          anchor: "0",
+          anchor: "A",
           code: "0",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
@@ -73,11 +72,12 @@ export const radioStory = {
           ],
           categories: [
             {
-              anchor: "0",
+              anchor: "A",
               code: "0",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.1",
@@ -92,11 +92,12 @@ export const radioStory = {
               ]
             },
             {
-              anchor: "1",
+              anchor: "B",
               code: "1",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "RadioButtonWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.2",
@@ -109,6 +110,7 @@ export const radioStory = {
                   }
                 },
                 {
+                  anchor: "B",
                   name: "Dropdown",
                   properties: {
                     options: [
@@ -125,11 +127,12 @@ export const radioStory = {
               ],
               categories: [
                 {
-                  anchor: "0",
+                  anchor: "A",
                   code: "0",
                   title: "Categories",
                   components: [
                     {
+                      anchor: "A",
                       name: "RadioButtonWithLabel",
                       properties: {
                         name: "example-radio",
@@ -143,11 +146,12 @@ export const radioStory = {
                   ]
                 },
                 {
-                  anchor: "1",
+                  anchor: "B",
                   code: "1",
                   title: "Categories",
                   components: [
                     {
+                      anchor: "A",
                       name: "RadioButtonWithLabel",
                       properties: {
                         name: "example-radio",
@@ -163,11 +167,12 @@ export const radioStory = {
               ]
             },
             {
-              anchor: "2",
+              anchor: "C",
               code: "2",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "RadioButtonWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.3",
@@ -184,11 +189,12 @@ export const radioStory = {
           ]
         },
         {
-          anchor: "1",
+          anchor: "B",
           code: "1",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
@@ -209,6 +215,7 @@ export const radioStory = {
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
                 name: "example-checkbox",
@@ -260,11 +267,12 @@ export const radioStory = {
       ],
       categories: [
         {
-          anchor: "0",
+          anchor: "A",
           code: "3.1",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
                 name: "example-checkbox-3.1",
