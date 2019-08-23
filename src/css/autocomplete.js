@@ -1,5 +1,7 @@
-export const short = 'short';
-export const long = 'long';
+export const heights = {
+    LONG: 'long',
+    SHORT: 'short'
+}
 export const autocompleteShortStyles = {
   dropdownIndicator: base => ({
     ...base,

@@ -2,7 +2,7 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import Autocomplete from "./index";
 import {withInfo} from "@storybook/addon-info";
-import {short} from "../../../css/autocomplete";
+import {heights} from "../../../css/autocomplete";
 
 storiesOf("Autocomplete", module)
   .addDecorator(withInfo)
@@ -24,6 +24,6 @@ storiesOf("Autocomplete", module)
         {label: "B", value: "B"},
         {label: "C", value: "C"}
       ]}
-      height={short}
+      height={heights.SHORT}
     />
   ));
