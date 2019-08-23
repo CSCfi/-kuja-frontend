@@ -1,7 +1,8 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import Autocomplete from "./index";
-import { withInfo } from "@storybook/addon-info";
+import {withInfo} from "@storybook/addon-info";
+import {short} from "../../../css/autocomplete";
 
 storiesOf("Autocomplete", module)
   .addDecorator(withInfo)
@@ -9,9 +10,20 @@ storiesOf("Autocomplete", module)
     <Autocomplete
       name="example"
       options={[
-        { label: "A", value: "A" },
-        { label: "B", value: "B" },
-        { label: "C", value: "C" }
+        {label: "A", value: "A"},
+        {label: "B", value: "B"},
+        {label: "C", value: "C"}
       ]}
+    />
+  ))
+  .add("Short height", () => (
+    <Autocomplete
+      name="example"
+      options={[
+        {label: "A", value: "A"},
+        {label: "B", value: "B"},
+        {label: "C", value: "C"}
+      ]}
+      height={short}
     />
   ));

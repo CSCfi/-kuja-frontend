@@ -3,6 +3,7 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import chroma from "chroma-js";
+import {long, short, autocompleteShortStyles} from "../../../css/autocomplete";
 
 const Autocomplete = React.memo(props => {
   const [options, setOptions] = useState([]);
@@ -17,8 +18,15 @@ const Autocomplete = React.memo(props => {
   };
 
   const optionStyles = {
-    control: styles => ({ ...styles, backgroundColor: "white" }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    ...(props.height === short ? autocompleteShortStyles : null),
+    control: props.height === short ?
+      autocompleteShortStyles.control
+      :
+      (styles) => ({
+        ...styles,
+        backgroundColor: "white",
+      }),
+    option: (styles, {data, isDisabled, isFocused, isSelected}) => {
       const color = chroma("#c3dafe");
       return {
         ...styles,
@@ -124,7 +132,8 @@ Autocomplete.propTypes = {
   callback: PropTypes.func,
   options: PropTypes.array,
   payload: PropTypes.object,
-  value: PropTypes.array
+  value: PropTypes.array,
+  height: PropTypes.string
 };
 
 export default injectIntl(Autocomplete);
