@@ -435,9 +435,11 @@ const CategorizedList = React.memo(props => {
                           const isDisabled =
                             (previousSibling.name === "CheckboxWithLabel" ||
                               previousSibling.name ===
-                                "RadioButtonWithLabel") && 
-                            !(isPreviousSiblingCheckedByDefault || change.properties.isChecked);
-
+                                "RadioButtonWithLabel") &&
+                            !(
+                              isPreviousSiblingCheckedByDefault ||
+                              change.properties.isChecked
+                            );
                           return (
                             <div className="px-2">
                               <Dropdown
@@ -514,22 +516,26 @@ const CategorizedList = React.memo(props => {
                     )}
                     {component.name === "Autocomplete"
                       ? (category => {
-                          const siblingName = (
-                            category.components[ii - 1] || {}
-                          ).name;
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
+                          const previousSibling =
+                            category.components[ii - 1] || {};
+                          const isPreviousSiblingCheckedByDefault = !!(
+                            previousSibling.properties || {}
                           ).isChecked;
-                          const change = props.getChangesByAnchor(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii - 1])
+                          const previousSiblingFullAnchor = `${anchor}.${
+                            previousSibling.anchor
+                          }`;
+                          const change = getChangeObjByAnchor(
+                            previousSiblingFullAnchor,
+                            props.changes
                           );
                           const isDisabled =
-                            siblingName === "CheckboxWithLabel" ||
-                            siblingName === "RadioButtonWithLabel"
-                              ? (isSiblingCheckedByDefault && !change) ||
-                                (change && change.properties.isChecked)
-                              : propsObj.isDisabled;
+                            (previousSibling.name === "CheckboxWithLabel" ||
+                              previousSibling.name ===
+                                "RadioButtonWithLabel") &&
+                            !(
+                              isPreviousSiblingCheckedByDefault ||
+                              change.properties.isChecked
+                            );
                           return (
                             <div className="flex-1 px-2">
                               <Autocomplete
