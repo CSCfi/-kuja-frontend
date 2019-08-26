@@ -263,7 +263,7 @@ const MuutospyyntoWizard = props => {
         ),
         kielet: {
           opetuskielet: getChangesOf("opetuskieli", backendMuutokset, ["meta", "koulutusala"]),
-          tutkintokielet: getChangesOf("tutkintokielet", backendMuutokset)
+          tutkintokielet: getChangesOf("tutkintokieli", backendMuutokset, ["meta", "koulutusala"])
         },
         opiskelijavuodet: getChangesOf("opiskelijavuodet", backendMuutokset),
         toimintaalue: getChangesOf("toimintaalue", backendMuutokset),

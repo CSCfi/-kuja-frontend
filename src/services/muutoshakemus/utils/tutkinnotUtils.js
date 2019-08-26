@@ -45,6 +45,7 @@ export const getCategories = (index, article, koulutustyypit, kohde, maaraystyyp
               },
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "CheckboxWithLabel",
@@ -85,6 +86,7 @@ export const getCategories = (index, article, koulutustyypit, kohde, maaraystyyp
                         },
                         components: [
                           {
+                            anchor: "A",
                             name: "CheckboxWithLabel",
                             properties: {
                               name: "CheckboxWithLabel",

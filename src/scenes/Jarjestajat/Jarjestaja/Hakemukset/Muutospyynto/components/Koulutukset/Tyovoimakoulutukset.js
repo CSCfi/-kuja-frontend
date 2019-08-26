@@ -21,6 +21,7 @@ const Tyovoimakoulutukset = React.memo(props => {
         anchor: item.code,
         components: [
           {
+            anchor: "A",
             name: "RadioButtonWithLabel",
             properties: {
               name: "RadioButtonWithLabel",
@@ -72,16 +73,12 @@ const Tyovoimakoulutukset = React.memo(props => {
   };
 
   useEffect(() => {
-    onUpdate({ sectionId, state: { categories, changes } });
+    onUpdate({ sectionId, categories, changes });
   }, [categories, onUpdate, changes]);
 
   useEffect(() => {
-    setChanges(
-      R.map(muutos => {
-        return muutos.meta.changeObj;
-      }, props.changes)
-    );
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   const removeChanges = () => {
     return saveChanges({ changes: [] });
@@ -100,12 +97,8 @@ const Tyovoimakoulutukset = React.memo(props => {
   );
 });
 
-Tyovoimakoulutukset.defaultProps = {
-  changes: []
-};
-
 Tyovoimakoulutukset.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   koulutukset: PropTypes.object
 };
 

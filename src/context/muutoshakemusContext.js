@@ -19,7 +19,7 @@ const initialState = {
     }
   },
   tutkinnot: {
-    state: []
+    state: {}
   },
   opetuskielet: {
     state: {}

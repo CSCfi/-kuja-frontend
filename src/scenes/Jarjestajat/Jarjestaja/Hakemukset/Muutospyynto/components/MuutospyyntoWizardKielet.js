@@ -80,7 +80,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       <h4 className="py-4">{KIELET_SECTIONS.TUTKINTOKIELET}</h4>
 
       <Tutkintokielet
-        changes={props.changes.tutkintokielet}
+        backendChanges={props.backendChanges.tutkintokielet}
         kielet={props.kielet.kielet}
         kohde={props.lupa.kohteet[1]}
         locale={R.toUpper(props.intl.locale)}
@@ -93,17 +93,13 @@ const MuutospyyntoWizardKielet = React.memo(props => {
   );
 });
 
-MuutospyyntoWizardKielet.defaultProps = {
-  changes: {}
-};
-
 MuutospyyntoWizardKielet.propTypes = {
   backendChanges: PropTypes.object,
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  tutkinnotState: PropTypes.array
+  tutkinnotState: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizardKielet);

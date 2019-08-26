@@ -19,6 +19,7 @@ const ValmentavatKoulutukset = React.memo(props => {
         anchor: item.code,
         components: [
           {
+            anchor: "A",
             name: "CheckboxWithLabel",
             properties: {
               name: "CheckboxWithLabel",
@@ -70,15 +71,11 @@ const ValmentavatKoulutukset = React.memo(props => {
   };
 
   useEffect(() => {
-    setChanges(
-      R.map(muutos => {
-        return muutos.meta.changeObj;
-      }, props.changes)
-    );
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state: { categories, changes } });
+    onUpdate({ sectionId, categories, changes });
   }, [categories, onUpdate, changes]);
 
   const removeChanges = () => {
@@ -100,12 +97,8 @@ const ValmentavatKoulutukset = React.memo(props => {
   );
 });
 
-ValmentavatKoulutukset.defaultProps = {
-  changes: []
-};
-
 ValmentavatKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object
