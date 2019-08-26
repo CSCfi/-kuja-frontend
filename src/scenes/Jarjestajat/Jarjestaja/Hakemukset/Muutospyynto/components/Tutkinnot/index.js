@@ -49,11 +49,11 @@ const Tutkinnot = React.memo(props => {
         return { areaCode, article, categories, changes, title };
       }, koulutusdata);
     };
-    setState(handleKoulutusdata(koulutusdata, props.changes));
+    setState(handleKoulutusdata(koulutusdata, props.backendChanges));
   }, [
     koulutusdata,
     locale,
-    props.changes,
+    props.backendChanges,
     props.kohde,
     props.lupa.kohteet,
     props.maaraystyyppi
@@ -108,12 +108,11 @@ const Tutkinnot = React.memo(props => {
 });
 
 Tutkinnot.defaultProps = {
-  changes: [],
   maaraystyyppi: {}
 };
 
 Tutkinnot.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

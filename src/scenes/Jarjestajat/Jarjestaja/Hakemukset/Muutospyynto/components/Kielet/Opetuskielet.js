@@ -6,7 +6,6 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const Opetuskielet = props => {
@@ -14,6 +13,7 @@ const Opetuskielet = props => {
   const [categories, setCategories] = useState([]);
   const [opetuskielet, setOpetuskieletdata] = useState([]);
   const [state, setState] = useState([]);
+  const [changes, setChanges] = useState([]);
   const [locale, setLocale] = useState([]);
   const { onUpdate } = props;
 
@@ -32,6 +32,7 @@ const Opetuskielet = props => {
             },
             components: [
               {
+                anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
                   name: "CheckboxWithLabel",
@@ -65,12 +66,11 @@ const Opetuskielet = props => {
         getDataForOpetuskieletList(
           props.kielet.opetuskielet,
           props.kohde,
-          props.changes,
           locale
         )
       );
       const title = parseLocalizedField(kieli.metadata, locale);
-      tmpState.push({ areaCode, categories, changes: [], title });
+      tmpState.push({ areaCode, categories, title });
     }, opetuskielet);
     setState(tmpState);
   }, [
@@ -79,7 +79,6 @@ const Opetuskielet = props => {
     props.kohde,
     props.maaraystyyppi,
     getCategories,
-    props.changes,
     props.lupa.kohteet,
     props.kielet.opetuskielet
   ]);
@@ -90,18 +89,20 @@ const Opetuskielet = props => {
         getDataForOpetuskieletList(
           props.kielet.opetuskielet,
           props.kohde,
-          props.changes,
           props.intl.locale
         )
       )
     );
   }, [
     props.kielet.opetuskielet,
-    props.changes,
     props.kohde,
     getCategories,
     props.intl.locale
   ]);
+
+  useEffect(() => {
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   const removeChanges = (...payload) => {
     return saveChanges({ index: payload[2], changes: [] });
@@ -112,15 +113,15 @@ const Opetuskielet = props => {
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state });
-  }, [onUpdate, state]);
+    onUpdate({
+      changes,
+      items: [...state],
+      sectionId
+    });
+  }, [changes, onUpdate, state]);
 
   const saveChanges = payload => {
-    setState(prevState => {
-      const newState = _.cloneDeep(prevState);
-      newState.changes = payload.changes;
-      return newState;
-    });
+    setChanges(payload.changes);
   };
 
   return (
@@ -128,7 +129,7 @@ const Opetuskielet = props => {
       anchor={"opetuskieli"}
       key={`expandable-row-root`}
       categories={categories}
-      changes={state.changes}
+      changes={changes}
       index={0}
       onChangesRemove={removeChanges}
       onUpdate={saveChanges}
@@ -144,7 +145,7 @@ Opetuskielet.defaultProps = {
 };
 
 Opetuskielet.propTypes = {
-  changes: PropTypes.array,
+  backgroundChanges: PropTypes.array,
   kielet: PropTypes.object,
   onUpdate: PropTypes.func,
   kohde: PropTypes.object,

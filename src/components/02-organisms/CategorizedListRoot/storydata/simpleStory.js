@@ -20,6 +20,12 @@ export const simpleStory = {
       }
     },
     {
+      anchor: "simple.B.B.A",
+      properties: {
+        isChecked: true
+      }
+    },
+    {
       anchor: "simple.A.A.A",
       properties: {
         isChecked: true

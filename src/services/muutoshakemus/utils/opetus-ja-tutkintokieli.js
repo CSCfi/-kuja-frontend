@@ -8,12 +8,12 @@ export const getChangesOfOpetuskielet = opetuskieliData => {
     opetuskieliData.state.changes
   ) {
     return R.flatten(
-      R.map(stateItem => {
-        const anchorParts = stateItem.anchor.split(".");
+      R.map(changeObj => {
+        const anchorParts = changeObj.anchor.split(".");
         const code = R.last(anchorParts);
         const meta = getMetadata(
-          R.tail(anchorParts),
-          opetuskieliData.state[0].categories
+          R.view(R.lensIndex(1))(anchorParts),
+          opetuskieliData.state.items[0].categories
         );
         return {
           koodiarvo: code,
@@ -23,15 +23,16 @@ export const getChangesOfOpetuskielet = opetuskieliData => {
           isInLupa: meta.isInLupa,
           kohde: meta.kohde.kohdeArvot[0].kohde,
           maaraystyyppi: meta.maaraystyyppi,
-          type: stateItem.properties.isChecked ? "addition" : "removal",
+          type: changeObj.properties.isChecked ? "addition" : "removal",
           meta: {
+            changeObj,
             nimi: meta.kuvaus,
             koulutusala: anchorParts[0],
             koulutustyyppi: anchorParts[1],
             perusteluteksti: [],
             muutosperustelukoodiarvo: []
           },
-          tila: stateItem.properties.isChecked ? "LISAYS" : "POISTO"
+          tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
         };
       }, opetuskieliData.state.changes)
     );

@@ -69,7 +69,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
   return (
     <Section code={headingNumber} title={heading}>
       <Opetuskielet
-        // changes={props.changes.opetuskielet}
+        backendChanges={props.backendChanges.opetuskielet}
         kielet={props.kielet}
         kohde={props.lupa.kohteet[2]}
         onUpdate={props.onUpdate}
@@ -98,7 +98,7 @@ MuutospyyntoWizardKielet.defaultProps = {
 };
 
 MuutospyyntoWizardKielet.propTypes = {
-  changes: PropTypes.object,
+  backendChanges: PropTypes.object,
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,

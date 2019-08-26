@@ -19,13 +19,6 @@ import * as R from "ramda";
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState({});
-  const [changesOfToimintaalue, setChangesOfToimintaalue] = useState([]);
-  const [
-    changesOfTutkinnotJaKoulutukset,
-    setChangesOfTutkinnotJaKoulutukset
-  ] = useState([]);
-  const [changesOfKielet, setChangesOfKielet] = useState({});
-  const [changesOfMuut, setChangesOfMuut] = useState([]);
 
   const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
   const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
@@ -70,98 +63,86 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     );
   }, [props.maaraystyypit]);
 
-  useEffect(() => {
-    const getChangesOf = (key, changes) => {
-      return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
-    };
-    setChangesOfMuut(getChangesOf("muut", props.muutospyynto.muutokset));
-    setChangesOfTutkinnotJaKoulutukset(
-      getChangesOf("tutkinnotjakoulutukset", props.muutospyynto.muutokset)
-    );
-    setChangesOfToimintaalue(
-      getChangesOf("toimintaalue", props.muutospyynto.muutokset)
-    );
-    setChangesOfKielet({
-      opetuskielet: getChangesOf("opetuskielet", props.muutospyynto.muutokset),
-      tutkintokielet: getChangesOf(
-        "tutkintokielet",
-        props.muutospyynto.muutokset
-      )
-    });
-  }, [props.muutospyynto.muutokset]);
-
   return (
-    <div>
-      <p className="py-10">
-        {props.intl.formatMessage(wizardMessages.info_01)}
-      </p>
+    <React.Fragment>
+      <div>
+        <p className="py-10">
+          {props.intl.formatMessage(wizardMessages.info_01)}
+        </p>
 
-      <form onSubmit={props.handleSubmit}>
-        <Tutkinnot
-          changes={changesOfTutkinnotJaKoulutukset}
-          kohde={kohteet.tutkinnotjakoulutukset}
-          koulutukset={props.koulutukset}
-          koulutusalat={props.koulutusalat}
-          koulutustyypit={props.koulutustyypit.data}
-          lupa={props.lupa}
-          maaraystyyppi={maaraystyypit.OIKEUS}
-          onUpdate={props.onUpdate}
-        />
-
-        <MuutospyyntoWizardKoulutukset
-          changes={changesOfTutkinnotJaKoulutukset}
-          kohde={kohteet.tutkinnotjakoulutukset}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={maaraystyypit.OIKEUS}
-          onUpdate={props.onUpdate}
-        />
-
-        <MuutospyyntoWizardKielet
-          changes={changesOfKielet}
-          kohde={kohteet.kielet}
-          lupa={props.lupa}
-          kielet={props.kielet}
-          koulutukset={props.koulutukset}
-          onUpdate={props.onUpdate}
-          tutkinnotState={props.tutkinnotState}
-          maaraystyyppi={maaraystyypit.VELVOITE}
-        />
-
-        {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
-          <MuutospyyntoWizardToimialue
-            changes={changesOfToimintaalue}
-            lupakohde={props.lupa.kohteet[3]}
-            kohde={kohteet.toimintaalue}
-            kunnat={kunnat}
-            maakunnat={maakunnat}
-            maakuntakunnat={maakuntakunnat}
-            maaraystyyppi={maaraystyypit.VELVOITE}
-            onUpdate={props.onUpdate}
-          />
-        )}
-        {kohteet.opiskelijavuodet && props.muutoshakemus.muut.state && (
-          <MuutospyyntoWizardOpiskelijavuodet
-            kohde={kohteet.opiskelijavuodet}
+        <form onSubmit={props.handleSubmit}>
+          <Tutkinnot
+            backendChanges={props.muutoshakemus.backendChanges.tutkinnotjakoulutukset}
+            kohde={kohteet.tutkinnotjakoulutukset}
+            koulutukset={props.koulutukset}
+            koulutusalat={props.koulutusalat}
+            koulutustyypit={props.koulutustyypit.data}
             lupa={props.lupa}
             maaraystyyppi={maaraystyypit.OIKEUS}
             onUpdate={props.onUpdate}
-            opiskelijavuodet={props.opiskelijavuodet}
-            muutChanges={props.muutoshakemus.muut.state.changes}
           />
-        )}
 
-        {kohteet.muut && props.muut && maaraystyypit && (
-          <MuutospyyntoWizardMuut
-            changes={changesOfMuut}
-            kohde={kohteet.muut}
-            headingNumber={props.lupa.kohteet[5].headingNumber}
+          <MuutospyyntoWizardKoulutukset
+            changes={props.muutoshakemus.backendChanges.tutkinnotjakoulutukset}
+            kohde={kohteet.tutkinnotjakoulutukset}
+            koulutukset={props.koulutukset}
             maaraystyyppi={maaraystyypit.OIKEUS}
-            muut={props.muut}
             onUpdate={props.onUpdate}
           />
-        )}
-      </form>
-    </div>
+
+          <MuutospyyntoWizardKielet
+            backendChanges={props.muutoshakemus.backendChanges.kielet}
+            kohde={kohteet.kielet}
+            lupa={props.lupa}
+            kielet={props.kielet}
+            koulutukset={props.koulutukset}
+            onUpdate={props.onUpdate}
+            tutkinnotState={props.muutoshakemus.tutkinnot.state}
+            maaraystyyppi={maaraystyypit.VELVOITE}
+          />
+
+          {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
+            <MuutospyyntoWizardToimialue
+              backendChanges={props.muutoshakemus.backendChanges.toimintaalue}
+              lupakohde={props.lupa.kohteet[3]}
+              kohde={kohteet.toimintaalue}
+              kunnat={kunnat}
+              maakunnat={maakunnat}
+              maakuntakunnat={maakuntakunnat}
+              maaraystyyppi={maaraystyypit.VELVOITE}
+              onUpdate={props.onUpdate}
+            />
+          )}
+          {kohteet.opiskelijavuodet &&
+            props.muutoshakemus.muut.state &&
+            props.muutoshakemus.muut.state.muutdata &&
+            props.muutoshakemus.muut.state.muutdata.length && (
+              <MuutospyyntoWizardOpiskelijavuodet
+                backendChanges={
+                  props.muutoshakemus.backendChanges.opiskelijavuodet
+                }
+                kohde={kohteet.opiskelijavuodet}
+                lupa={props.lupa}
+                maaraystyyppi={maaraystyypit.OIKEUS}
+                onUpdate={props.onUpdate}
+                opiskelijavuodet={props.opiskelijavuodet}
+                muut={props.muutoshakemus.muut}
+              />
+            )}
+
+          {kohteet.muut && props.muut && maaraystyypit && (
+            <MuutospyyntoWizardMuut
+              backendChanges={props.muutoshakemus.backendChanges.muut}
+              kohde={kohteet.muut}
+              headingNumber={props.lupa.kohteet[5].headingNumber}
+              maaraystyyppi={maaraystyypit.OIKEUS}
+              muut={props.muut}
+              onUpdate={props.onUpdate}
+            />
+          )}
+        </form>
+      </div>
+    </React.Fragment>
   );
 });
 
@@ -174,9 +155,7 @@ MuutospyyntoWizardMuutokset.propTypes = {
   maaraystyypit: PropTypes.array,
   muut: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  muutospyynto: PropTypes.object,
-  onUpdate: PropTypes.func,
-  tutkinnotState: PropTypes.array
+  onUpdate: PropTypes.func
 };
 
 export default injectIntl(MuutospyyntoWizardMuutokset);

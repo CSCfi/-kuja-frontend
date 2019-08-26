@@ -29,6 +29,7 @@ import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusCon
 import { MuutospyynnotContext } from "../../../../../../context/muutospyynnotContext";
 import {
   saveMuutospyynto,
+  setBackendChanges,
   setSectionData
 } from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
@@ -53,6 +54,7 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
 import { injectIntl } from "react-intl";
+import * as R from "ramda";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -196,14 +198,11 @@ const MuutospyyntoWizard = props => {
           props.history.replace(newurl);
         });
       } else {
-        notify(
-          "Muutospyyntö tallennettu!",
-          {
-            autoClose: 2000,
-            position: toast.POSITION.BOTTOM_RIGHT,
-            type: toast.TYPE.SUCCESS
-          }
-        );
+        notify("Muutospyyntö tallennettu!", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          type: toast.TYPE.SUCCESS
+        });
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
@@ -230,17 +229,83 @@ const MuutospyyntoWizard = props => {
     ]);
   }, [formatMessage]);
 
+  useEffect(() => {
+    if (muutospyynnot.fetched) {
+      const backendMuutokset = R.path(
+        ["muutospyynto", "muutokset"],
+        muutospyynnot
+      );
+      const categorize = changes => {
+        const categorizedChanges = {};
+        R.forEach(changeObj => {
+          const areaCode = R.compose(
+            R.view(R.lensIndex(0)),
+            R.split(".")
+          )(changeObj.anchor);
+          if (!categorizedChanges[areaCode]) {
+            categorizedChanges[areaCode] = [];
+          }
+          categorizedChanges[areaCode].push(changeObj);
+        }, changes);
+        return categorizedChanges;
+      };
+      const getChangesOf = (key, changes, path = ["kohde", "tunniste"]) => {
+        let result = R.filter(R.pathEq(path, key))(changes);
+        if (key !== "toimintaalue") {
+          result = R.map(R.path(["meta", "changeObj"]))(result);
+        }
+        return result;
+      };
+      const changes = {
+        tutkinnotjakoulutukset: getChangesOf(
+          "tutkinnotjakoulutukset",
+          backendMuutokset
+        ),
+        kielet: {
+          opetuskielet: getChangesOf("opetuskieli", backendMuutokset, ["meta", "koulutusala"]),
+          tutkintokielet: getChangesOf("tutkintokielet", backendMuutokset)
+        },
+        opiskelijavuodet: getChangesOf("opiskelijavuodet", backendMuutokset),
+        toimintaalue: getChangesOf("toimintaalue", backendMuutokset),
+        muut: categorize(getChangesOf("muut", backendMuutokset)),
+        handled: true
+      };
+      console.info(changes, backendMuutokset);
+      setBackendChanges(changes)(muutoshakemusDispatch);
+    }
+  }, [
+    muutospyynnot,
+    muutospyynnot.muutospyynto.muutokset,
+    muutoshakemusDispatch
+  ]);
+
+  useEffect(() => {
+    console.info(muutoshakemus);
+  }, [muutoshakemus]);
+
   const save = () => {
     if (props.match.params.uuid) {
-      saveMuutospyynto(createObjectToSave(lupa, muutoshakemus, props.match.params.uuid, muutospyynnot.muutospyynto))(
-        muutoshakemusDispatch
-      );
+      saveMuutospyynto(
+        createObjectToSave(
+          lupa,
+          muutoshakemus,
+          props.match.params.uuid,
+          muutospyynnot.muutospyynto
+        )
+      )(muutoshakemusDispatch);
     } else {
       saveMuutospyynto(createObjectToSave(lupa, muutoshakemus))(
         muutoshakemusDispatch
       );
     }
   };
+
+  const setChangesBySection = useCallback(
+    (sectionId, changes) => {
+      setChangesBySection(sectionId, changes)(muutoshakemusDispatch);
+    },
+    [muutoshakemusDispatch]
+  );
 
   const onUpdate = useCallback(
     payload => {
@@ -274,6 +339,8 @@ const MuutospyyntoWizard = props => {
   }
 
   if (
+    (!props.match.params.uuid || muutospyynnot.fetched) &&
+    muutoshakemus.backendChanges.handled &&
     kohteet.fetched &&
     kielet.fetched &&
     koulutukset.fetched &&
@@ -331,12 +398,11 @@ const MuutospyyntoWizard = props => {
                     koulutustyypit={koulutustyypit}
                     lupa={lupa}
                     maaraystyypit={maaraystyypit.data}
-                    muutospyynto={muutospyynnot.muutospyynto}
                     muut={muut}
                     muutoshakemus={muutoshakemus}
                     onUpdate={onUpdate}
+                    setChangesBySection={setChangesBySection}
                     opiskelijavuodet={opiskelijavuodet}
-                    tutkinnotState={muutoshakemus.tutkinnot.state}
                   />
                 </WizardPage>
               )}

@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as R from "ramda";
-import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
+// import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
 // import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
@@ -29,13 +29,13 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       }
     },
     muutokset: R.flatten([
-      getChangesOfTutkinnotJaKoulutukset(
-        muutoshakemus.tutkinnot,
-        muutoshakemus.ammatilliseentehtavaanvalmistavatkoulutukset,
-        muutoshakemus.kuljettajakoulutukset,
-        muutoshakemus.tyovoimakoulutukset,
-        muutoshakemus.valmentavatkoulutukset
-      ),
+      // getChangesOfTutkinnotJaKoulutukset(
+      //   muutoshakemus.tutkinnot,
+      //   muutoshakemus.ammatilliseentehtavaanvalmistavatkoulutukset,
+      //   muutoshakemus.kuljettajakoulutukset,
+      //   muutoshakemus.tyovoimakoulutukset,
+      //   muutoshakemus.valmentavatkoulutukset
+      // ),
       getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       // getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
       getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),

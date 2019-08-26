@@ -4,13 +4,11 @@ const getItemsToAdd = (
   initialValueOfSelect,
   valueOfSelect,
   kohde,
-  maaraystyyppi,
-  joTallennetutMuutokset = []
+  maaraystyyppi
 ) => {
   const toBeAdded = R.filter(item => {
     return (
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(initialValueOfSelect) &&
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(joTallennetutMuutokset)
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(initialValueOfSelect)
     );
   }, valueOfSelect);
 
@@ -32,13 +30,11 @@ const getItemsToRemove = (
   initialValueOfSelect,
   valueOfSelect,
   kohde,
-  maaraystyyppi,
-  joTallennetutMuutokset = []
+  maaraystyyppi
 ) => {
   const toBeRemoved = R.filter(item => {
     return (
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect) &&
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(joTallennetutMuutokset)
+      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect)
     );
   }, initialValueOfSelect);
 
@@ -57,8 +53,7 @@ const getItemsToRemove = (
 };
 
 export default function getChangesOfToimintaalue(
-  toimialuedata,
-  muutospyynto = {}
+  toimialuedata
 ) {
   const {
     initialValueOfSelect,
@@ -90,8 +85,7 @@ export default function getChangesOfToimintaalue(
       initialValueOfSelect,
       valueOfSelect,
       kohde,
-      maaraystyyppi,
-      muutospyynto.muutokset
+      maaraystyyppi
     );
     const itemsToRemove = getItemsToRemove(
       initialValueOfSelect,
