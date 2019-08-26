@@ -3,7 +3,7 @@ import * as R from "ramda";
 import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
-// import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
+import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
 import getChangesOfMuut from "./muut";
 
@@ -37,7 +37,7 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
         muutoshakemus.valmentavatkoulutukset
       ),
       getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
-      // getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
+      getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
       getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
       getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),
       getChangesOfMuut(muutoshakemus.muut)

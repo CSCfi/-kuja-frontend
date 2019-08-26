@@ -111,6 +111,7 @@ const Opetuskielet = React.memo(props => {
       )
     );
   }, [
+    getCategories,
     props.opetuskielet,
     props.kohde,
     props.backendChanges,

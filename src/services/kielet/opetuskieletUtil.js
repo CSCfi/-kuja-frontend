@@ -1,7 +1,5 @@
 import _ from "lodash";
 import { parseLocalizedField } from "../../modules/helpers";
-import { MUUTOS_TYPES } from "locales/uusiHakemusFormConstants";
-// import { findKieliByKoodi } from "./kieliUtil";
 import * as R from "ramda";
 
 export function sortOpetuskielet(kielet) {
@@ -20,6 +18,7 @@ export function getDataForOpetuskieletList(
       return {
         code: opetuskieli.koodiArvo,
         isInLupa,
+        shouldBeSelected: isInLupa,
         title: parseLocalizedField(metadata, R.toUpper(locale))
       };
     })

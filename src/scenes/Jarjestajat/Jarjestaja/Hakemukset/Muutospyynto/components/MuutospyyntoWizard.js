@@ -229,6 +229,9 @@ const MuutospyyntoWizard = props => {
     ]);
   }, [formatMessage]);
 
+  /** 
+   * Let's walk through all the changes from the backend and update the muutoshakemus.
+   */
   useEffect(() => {
     if (muutospyynnot.fetched) {
       const backendMuutokset = R.path(
@@ -251,6 +254,16 @@ const MuutospyyntoWizard = props => {
       };
       const getChangesOf = (key, changes, path = ["kohde", "tunniste"]) => {
         let result = R.filter(R.pathEq(path, key))(changes);
+        if (key === "tutkinnotjakoulutukset") {
+          result = R.filter(
+            R.compose(
+              R.not,
+              R.equals("tutkintokieli"),
+              R.path(["meta", "tunniste"])
+            ),
+            result
+          );
+        }
         if (key !== "toimintaalue") {
           result = R.map(R.path(["meta", "changeObj"]))(result);
         }
@@ -262,15 +275,22 @@ const MuutospyyntoWizard = props => {
           backendMuutokset
         ),
         kielet: {
-          opetuskielet: getChangesOf("opetuskieli", backendMuutokset, ["meta", "koulutusala"]),
-          tutkintokielet: getChangesOf("tutkintokieli", backendMuutokset, ["meta", "koulutusala"])
+          opetuskielet: getChangesOf("opetuskieli", backendMuutokset, [
+            "meta",
+            "koulutusala"
+          ]),
+          tutkintokielet: categorize(
+            getChangesOf("tutkintokieli", backendMuutokset, [
+              "meta",
+              "tunniste"
+            ])
+          )
         },
         opiskelijavuodet: getChangesOf("opiskelijavuodet", backendMuutokset),
         toimintaalue: getChangesOf("toimintaalue", backendMuutokset),
         muut: categorize(getChangesOf("muut", backendMuutokset)),
         handled: true
       };
-      console.info(changes, backendMuutokset);
       setBackendChanges(changes)(muutoshakemusDispatch);
     }
   }, [
@@ -278,10 +298,6 @@ const MuutospyyntoWizard = props => {
     muutospyynnot.muutospyynto.muutokset,
     muutoshakemusDispatch
   ]);
-
-  useEffect(() => {
-    console.info(muutoshakemus);
-  }, [muutoshakemus]);
 
   const save = () => {
     if (props.match.params.uuid) {

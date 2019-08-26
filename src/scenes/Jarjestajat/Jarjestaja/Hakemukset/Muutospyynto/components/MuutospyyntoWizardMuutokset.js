@@ -72,7 +72,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 
         <form onSubmit={props.handleSubmit}>
           <Tutkinnot
-            backendChanges={props.muutoshakemus.backendChanges.tutkinnotjakoulutukset}
+            backendChanges={
+              props.muutoshakemus.backendChanges.tutkinnotjakoulutukset
+            }
             kohde={kohteet.tutkinnotjakoulutukset}
             koulutukset={props.koulutukset}
             koulutusalat={props.koulutusalat}

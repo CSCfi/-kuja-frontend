@@ -91,7 +91,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const tmpApplyFor = getApplyFor("vahimmaisopiskelijavuodet", []);
-    console.info(tmpApplyFor, initialValue);
     setApplyFor(tmpApplyFor || initialValue); // [] = opiskelijavuosimuutoksetValue
   }, [initialValue]);
 
@@ -201,7 +200,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       const vaativatCodes = [2, 16, 17, 18, 19, 20, 21];
       // muutChanges sisältää 5. osion muutokset, jotka tässä muokataan helpommin läpikäytävään muotoon.
       const changesFlatten = R.flatten(R.values(props.muut.state.changes));
-      console.info(_changes, changesFlatten);
       // 5. osion muutosten joukosta etsitään sisäoppilaitosta koskeva muutos.
       const sisaoppilaitosChange = R.find(item => {
         return R.contains("sisaoppilaitos", item.anchor);

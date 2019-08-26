@@ -6,7 +6,7 @@ const initialState = {
     tutkinnotjakoulutukset: [],
     kielet: {
       opetuskielet: [],
-      tutkintokielet: []
+      tutkintokielet: {}
     },
     opiskelijavuodet: [],
     toimintaalue: [],
