@@ -7,6 +7,7 @@ import TextBox from "../../../00-atoms/TextBox";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
+import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
 
@@ -334,7 +335,7 @@ const CategorizedList = React.memo(props => {
                 </h4>
               </div>
             )}
-            <div className="flex items-center justify-between">
+            <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
               {_.map(category.components, (component, ii) => {
                 const fullAnchor = `${anchor}.${component.anchor}`;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
@@ -441,7 +442,7 @@ const CategorizedList = React.memo(props => {
                               change.properties.isChecked
                             );
                           return (
-                            <div className="px-2">
+                            <div className="px-2 mb-1">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
                                 onChanges={runOperations}
@@ -481,7 +482,7 @@ const CategorizedList = React.memo(props => {
                             ? change.properties.value
                             : propsObj.defaultValue;
                           return (
-                            <div className="pt-4 pr-2 w-full">
+                            <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
                               <TextBox
                                 id={`textbox-${idSuffix}`}
                                 isDisabled={isDisabled}
@@ -537,7 +538,7 @@ const CategorizedList = React.memo(props => {
                               change.properties.isChecked
                             );
                           return (
-                            <div className="flex-1 px-2">
+                            <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
                               <Autocomplete
                                 callback={runOperations}
                                 id={`autocomplete-${idSuffix}`}
@@ -553,6 +554,7 @@ const CategorizedList = React.memo(props => {
                                 }}
                                 value={propsObj.value}
                                 isDisabled={isDisabled}
+                                height={heights.SHORT}
                               />
                             </div>
                           );
