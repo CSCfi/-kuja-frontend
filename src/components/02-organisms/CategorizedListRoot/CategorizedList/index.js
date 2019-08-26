@@ -9,6 +9,7 @@ import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Autocomplete from "../../Autocomplete";
+import {heights} from "../../../../css/autocomplete";
 
 const CategorizedList = React.memo(props => {
   const [changes, setChanges] = useState([]);
@@ -540,6 +541,7 @@ const CategorizedList = React.memo(props => {
                                 }}
                                 value={propsObj.value}
                                 isDisabled={isDisabled}
+                                height={heights.SHORT}
                               />
                             </div>
                           );
