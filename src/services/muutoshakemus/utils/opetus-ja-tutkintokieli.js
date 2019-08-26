@@ -66,7 +66,7 @@ export const getChangesOfTutkintokielet = tutkintokieliData => {
     }, stateItem.changes);
     console.log(item);
     return item;
-  }, tutkintokieliData.state.changes);
+  }, tutkintokieliData.payload.changes);
   // );
   console.log(changes);
 

@@ -147,6 +147,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 });
 
 MuutospyyntoWizardMuutokset.propTypes = {
+  kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

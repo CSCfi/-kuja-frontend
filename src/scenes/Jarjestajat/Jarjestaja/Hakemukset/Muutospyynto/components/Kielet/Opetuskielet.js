@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -8,17 +8,33 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
-const Opetuskielet = props => {
+const Opetuskielet = React.memo(props => {
   const sectionId = "opetuskielet";
   const [categories, setCategories] = useState([]);
-  const [opetuskielet, setOpetuskieletdata] = useState([]);
-  const [state, setState] = useState([]);
   const [changes, setChanges] = useState([]);
-  const [locale, setLocale] = useState([]);
+  const [state, setState] = useState([]);
+  const [locale, setLocale] = useState("FI");
   const { onUpdate } = props;
 
-  const getCategories = useCallback(
-    opetuskielet => {
+  useEffect(() => {
+    const tmpState = [];
+    R.addIndex(R.map)(kieli => {
+      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
+      const title = parseLocalizedField(kieli.metadata, locale);
+      tmpState.push({ areaCode, title });
+    }, props.opetuskielet);
+    setState(tmpState);
+  }, [
+    props.opetuskielet,
+    locale,
+    props.kohde,
+    props.maaraystyyppi,
+    props.changes,
+    props.lupa.kohteet
+  ]);
+
+  useEffect(() => {
+    const getCategories = opetuskielet => {
       if (opetuskielet.items)
         return R.map(item => {
           return {
@@ -48,9 +64,7 @@ const Opetuskielet = props => {
             ]
           };
         }, opetuskielet.items);
-    },
-    [props.kohde, props.maaraystyyppi]
-  );
+    };
 
   useEffect(() => {
     setOpetuskieletdata(
@@ -87,7 +101,7 @@ const Opetuskielet = props => {
     setCategories(
       getCategories(
         getDataForOpetuskieletList(
-          props.kielet.opetuskielet,
+          props.opetuskielet,
           props.kohde,
           props.intl.locale
         )
@@ -96,8 +110,9 @@ const Opetuskielet = props => {
   }, [
     props.kielet.opetuskielet,
     props.kohde,
-    getCategories,
-    props.intl.locale
+    props.changes,
+    locale,
+    props.maaraystyyppi
   ]);
 
   useEffect(() => {
@@ -107,6 +122,14 @@ const Opetuskielet = props => {
   const removeChanges = (...payload) => {
     return saveChanges({ index: payload[2], changes: [] });
   };
+
+  useEffect(() => {
+    setChanges(
+      R.map(muutos => {
+        return muutos.meta.changeObj;
+      }, props.changes)
+    );
+  }, [props.changes]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
@@ -138,10 +161,11 @@ const Opetuskielet = props => {
       isExpanded={true}
     />
   );
-};
+});
 
 Opetuskielet.defaultProps = {
-  changes: []
+  changes: [],
+  opetuskielet: []
 };
 
 Opetuskielet.propTypes = {
