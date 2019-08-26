@@ -9,7 +9,7 @@ import * as R from "ramda";
 import { getChangesByLevel } from "../utils";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Autocomplete from "../../Autocomplete";
-import {heights} from "../../../../css/autocomplete";
+import { heights } from "../../../../css/autocomplete";
 
 const CategorizedList = React.memo(props => {
   const [changes, setChanges] = useState([]);
@@ -329,7 +329,7 @@ const CategorizedList = React.memo(props => {
                 </h4>
               </div>
             )}
-            <div className="flex items-center justify-between">
+            <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
               {_.map(category.components, (component, ii) => {
                 const { properties } = component;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
@@ -431,7 +431,7 @@ const CategorizedList = React.memo(props => {
                                 (change && change.properties.isChecked)
                               : propsObj.isDisabled;
                           return (
-                            <div className="px-2">
+                            <div className="px-2 mb-1">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
                                 onChanges={runOperations}
@@ -473,7 +473,7 @@ const CategorizedList = React.memo(props => {
                             ? change.properties.value
                             : properties.defaultValue;
                           return (
-                            <div className="pt-4 pr-2 w-full">
+                            <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
                               <TextBox
                                 id={`textbox-${idSuffix}`}
                                 isDisabled={isDisabled}
@@ -525,7 +525,7 @@ const CategorizedList = React.memo(props => {
                                 (change && change.properties.isChecked)
                               : propsObj.isDisabled;
                           return (
-                            <div className="flex-1 px-2">
+                            <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
                               <Autocomplete
                                 callback={runOperations}
                                 id={`autocomplete-${idSuffix}`}
