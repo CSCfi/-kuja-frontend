@@ -71,8 +71,8 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   }, [props.maaraystyypit]);
 
   useEffect(() => {
-    const getChangesOf = (key, changes) => {
-      return R.filter(R.pathEq(["kohde", "tunniste"], key))(changes);
+    const getChangesOf = (key, changes, path = ["kohde", "tunniste"]) => {
+      return R.filter(R.pathEq(path, key))(changes);
     };
     setChangesOfMuut(getChangesOf("muut", props.muutospyynto.muutokset));
     setChangesOfTutkinnotJaKoulutukset(
@@ -82,10 +82,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       getChangesOf("toimintaalue", props.muutospyynto.muutokset)
     );
     setChangesOfKielet({
-      opetuskielet: getChangesOf("opetuskielet", props.muutospyynto.muutokset),
+      opetuskielet: getChangesOf("opetuskieli", props.muutospyynto.muutokset, [
+        "meta",
+        "tunniste"
+      ]),
       tutkintokielet: getChangesOf(
-        "tutkintokielet",
-        props.muutospyynto.muutokset
+        "tutkintokieli",
+        props.muutospyynto.muutokset,
+        ["meta", "tunniste"]
       )
     });
   }, [props.muutospyynto.muutokset]);
@@ -160,6 +164,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
 });
 
 MuutospyyntoWizardMuutokset.propTypes = {
+  kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

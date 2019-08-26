@@ -68,26 +68,28 @@ const MuutospyyntoWizardKielet = React.memo(props => {
 
   return (
     <Section code={headingNumber} title={heading}>
-      <Opetuskielet
-        // changes={props.changes.opetuskielet}
-        kielet={props.kielet}
-        kohde={props.lupa.kohteet[2]}
-        onUpdate={props.onUpdate}
-        lupa={lupa}
-        maaraystyyppi={props.maaraystyyppi}
-      />
+      {props.kielet.opetuskielet && props.lupa.kohteet && props.maaraystyyppi && (
+        <Opetuskielet
+          changes={props.changes.opetuskielet}
+          opetuskielet={props.kielet.opetuskielet}
+          kohde={props.lupa.kohteet[2]}
+          onUpdate={props.onUpdate}
+          lupa={lupa}
+          maaraystyyppi={props.maaraystyyppi}
+        />
+      )}
 
       <h4 className="py-4">{KIELET_SECTIONS.TUTKINTOKIELET}</h4>
 
       <Tutkintokielet
-        unselectedAnchors={unselectedAnchors}
         changes={props.changes.tutkintokielet}
         kielet={props.kielet.kielet}
+        kohde={props.lupa.kohteet[1]}
         locale={R.toUpper(props.intl.locale)}
         lupa={lupa}
-        kohde={props.lupa.kohteet[1]}
         onUpdate={props.onUpdate}
         tutkinnotState={props.tutkinnotState}
+        unselectedAnchors={unselectedAnchors}
       />
     </Section>
   );

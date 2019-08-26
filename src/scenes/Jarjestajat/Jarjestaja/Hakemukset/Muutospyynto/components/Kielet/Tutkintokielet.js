@@ -22,15 +22,6 @@ const Tutkintokielet = React.memo(props => {
     });
   }, [props.kielet, props.locale]);
 
-  const saveChanges = payload => {
-    setChanges(prevState => {
-      return {
-        ...prevState,
-        [payload.anchor]: payload.changes
-      };
-    });
-  };
-
   useEffect(() => {
     if (props.tutkinnotState.length > 0) {
       const activeOnes = R.map(stateItem => {
@@ -91,13 +82,8 @@ const Tutkintokielet = React.memo(props => {
       }, _.cloneDeep(props.tutkinnotState));
       setItems(activeOnes);
     }
-  }, [
-    props.changes,
-    props.tutkinnotState,
-    defaultLanguage,
-    props.kielet,
-    props.locale
-  ]);
+  }, [props.tutkinnotState, defaultLanguage, props.kielet, props.locale]);
+
   useEffect(() => {
     const _changes = R.mapObjIndexed((changeObjects, key) => {
       return R.filter(changeObj => {
@@ -112,8 +98,27 @@ const Tutkintokielet = React.memo(props => {
   }, [changes, props.unselectedAnchors]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state: { changes, items } });
-  }, [onUpdate, changes, items]);
+    onUpdate({ sectionId, payload: { changes, items, koodistoUri: "kieli" } });
+  }, [changes, items, onUpdate, props.kielet]);
+
+  useEffect(() => {
+    const _changes = {};
+    R.forEach(muutos => {
+      const areaCode = R.head(R.split(".", muutos.meta.changeObj.anchor));
+      _changes[areaCode] = _changes[areaCode] || [];
+      _changes[areaCode].push(muutos.meta.changeObj);
+    }, props.changes || []);
+    setChanges(_changes);
+  }, [props.changes]);
+
+  const saveChanges = payload => {
+    setChanges(prevState => {
+      return {
+        ...prevState,
+        [payload.anchor]: payload.changes
+      };
+    });
+  };
 
   const removeChanges = (...payload) => {
     return saveChanges({ anchor: payload[1], changes: [] });
@@ -168,6 +173,7 @@ const Tutkintokielet = React.memo(props => {
 
 Tutkintokielet.defautlProps = {
   changes: [],
+  kielet: [],
   locale: "FI",
   unselectedAnchors: {}
 };
