@@ -23,20 +23,25 @@ const Tutkintokielet = React.memo(props => {
   }, [props.kielet, props.locale]);
 
   useEffect(() => {
-    if (props.tutkinnotState.length > 0) {
+    if (props.tutkinnotState.items && props.tutkinnotState.items.length > 0) {
       const activeOnes = R.map(stateItem => {
         R.addIndex(R.forEach)((category, ii) => {
           R.addIndex(R.forEach)((subCategory, iii) => {
-            const change = R.find(
-              R.propEq("path", [ii, "categories", iii, "components", 0]),
-              stateItem.changes
-            );
+            const change = R.find(changeObj => {
+              return R.compose(
+                R.equals(subCategory.anchor),
+                R.view(R.lensIndex(2)),
+                R.split("."),
+                R.prop("anchor")
+              )(changeObj);
+            }, stateItem.changes);
             if (
               (subCategory.components[0].properties.isChecked && !change) ||
               (change && change.properties.isChecked)
             ) {
               stateItem.categories[ii].categories[iii].components[0] = {
                 ...subCategory.components[0],
+                anchor: "A",
                 name: "StatusTextRow",
                 properties: {
                   name: "StatusTextRow",
@@ -46,6 +51,7 @@ const Tutkintokielet = React.memo(props => {
                 }
               };
               stateItem.categories[ii].categories[iii].components.push({
+                anchor: "B",
                 name: "Autocomplete",
                 properties: {
                   options: R.map(language => {
@@ -79,10 +85,10 @@ const Tutkintokielet = React.memo(props => {
           stateItem = {};
         }
         return stateItem;
-      }, _.cloneDeep(props.tutkinnotState));
+      }, _.cloneDeep(props.tutkinnotState.items));
       setItems(activeOnes);
     }
-  }, [props.tutkinnotState, defaultLanguage, props.kielet, props.locale]);
+  }, [props.tutkinnotState.items, defaultLanguage, props.kielet, props.locale]);
 
   useEffect(() => {
     const _changes = R.mapObjIndexed((changeObjects, key) => {
@@ -98,18 +104,12 @@ const Tutkintokielet = React.memo(props => {
   }, [changes, props.unselectedAnchors]);
 
   useEffect(() => {
-    onUpdate({ sectionId, payload: { changes, items, koodistoUri: "kieli" } });
+    onUpdate({ sectionId, changes, items, koodistoUri: "kieli" });
   }, [changes, items, onUpdate, props.kielet]);
 
   useEffect(() => {
-    const _changes = {};
-    R.forEach(muutos => {
-      const areaCode = R.head(R.split(".", muutos.meta.changeObj.anchor));
-      _changes[areaCode] = _changes[areaCode] || [];
-      _changes[areaCode].push(muutos.meta.changeObj);
-    }, props.changes || []);
-    setChanges(_changes);
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   const saveChanges = payload => {
     setChanges(prevState => {
@@ -153,18 +153,22 @@ const Tutkintokielet = React.memo(props => {
           }
         }, _changes);
         return (
-          <ExpandableRowRoot
-            anchor={item.areaCode}
-            categories={item.categories}
-            changes={_changes}
-            code={item.areaCode}
-            index={i}
-            key={`expandable-row-root-${i}`}
-            onChangesRemove={removeChanges}
-            onUpdate={saveChanges}
-            sectionId={sectionId}
-            title={item.title}
-          />
+          <React.Fragment key={i}>
+            {item.categories && (
+              <ExpandableRowRoot
+                anchor={item.areaCode}
+                categories={item.categories}
+                changes={_changes}
+                code={item.areaCode}
+                index={i}
+                key={`expandable-row-root-${i}`}
+                onChangesRemove={removeChanges}
+                onUpdate={saveChanges}
+                sectionId={sectionId}
+                title={item.title}
+              />
+            )}
+          </React.Fragment>
         );
       }, items)}
     </React.Fragment>
@@ -172,14 +176,13 @@ const Tutkintokielet = React.memo(props => {
 });
 
 Tutkintokielet.defautlProps = {
-  changes: [],
   kielet: [],
   locale: "FI",
   unselectedAnchors: {}
 };
 
 Tutkintokielet.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.object,
   categories: PropTypes.array,
   kielet: PropTypes.array,
   koulutukset: PropTypes.object,
@@ -188,7 +191,7 @@ Tutkintokielet.propTypes = {
   locale: PropTypes.string,
   lupa: PropTypes.object,
   onUpdate: PropTypes.func,
-  tutkinnotState: PropTypes.array,
+  tutkinnotState: PropTypes.object,
   unselectedAnchors: PropTypes.object
 };
 

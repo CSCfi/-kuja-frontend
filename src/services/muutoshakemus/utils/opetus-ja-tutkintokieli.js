@@ -2,32 +2,41 @@ import * as R from "ramda";
 import { getMetadata } from "./tutkinnotUtils";
 
 export const getChangesOfOpetuskielet = opetuskieliData => {
-  return R.flatten(
-    R.map(changeObj => {
-      const anchorParts = changeObj.anchor.split(".");
-      const code = R.last(anchorParts);
-      const opetuskieli = R.find(R.propEq("koodiArvo", code))(
-        opetuskieliData.payload.opetuskielet
-      );
-      const meta = getMetadata(
-        R.tail(anchorParts),
-        opetuskieliData.payload.categories
-      );
-      return {
-        koodiarvo: code,
-        koodisto: opetuskieli.koodisto.koodistoUri,
-        isInLupa: meta.isInLupa,
-        kohde: meta.kohde.kohdeArvot[0].kohde,
-        maaraystyyppi: meta.maaraystyyppi,
-        type: changeObj.properties.isChecked ? "addition" : "removal",
-        meta: {
-          tunniste: "opetuskieli",
-          changeObj
-        },
-        tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
-      };
-    }, opetuskieliData.payload.changes)
-  );
+  if (
+    opetuskieliData &&
+    opetuskieliData.state &&
+    opetuskieliData.state.changes
+  ) {
+    return R.flatten(
+      R.map(changeObj => {
+        const anchorParts = changeObj.anchor.split(".");
+        const code = R.last(anchorParts);
+        const meta = getMetadata(
+          R.view(R.lensIndex(1))(anchorParts),
+          opetuskieliData.state.items[0].categories
+        );
+        return {
+          koodiarvo: code,
+          koodisto: "oppilaitoksenopetuskieli",
+          nimi: meta.kuvaus,
+          kuvaus: meta.kuvaus,
+          isInLupa: meta.isInLupa,
+          kohde: meta.kohde.kohdeArvot[0].kohde,
+          maaraystyyppi: meta.maaraystyyppi,
+          type: changeObj.properties.isChecked ? "addition" : "removal",
+          meta: {
+            changeObj,
+            nimi: meta.kuvaus,
+            koulutusala: anchorParts[0],
+            koulutustyyppi: anchorParts[1],
+            perusteluteksti: [],
+            muutosperustelukoodiarvo: []
+          },
+          tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
+        };
+      }, opetuskieliData.state.changes)
+    );
+  } else return [];
 };
 
 export const getChangesOfTutkintokielet = tutkintokieliData => {
@@ -36,15 +45,15 @@ export const getChangesOfTutkintokielet = tutkintokieliData => {
       const anchorParts = changeObj.anchor.split(".");
       const code = R.last(anchorParts);
       const item = R.find(R.propEq("areaCode", areaCode))(
-        tutkintokieliData.payload.items
+        tutkintokieliData.state.items
       );
       const meta =
         item && item.categories
-          ? getMetadata(R.tail(anchorParts), item.categories)
+          ? getMetadata(R.slice(1, -1)(anchorParts), item.categories)
           : {};
       return {
         koodiarvo: code,
-        koodisto: tutkintokieliData.payload.koodistoUri,
+        koodisto: tutkintokieliData.state.koodistoUri,
         nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         isInLupa: meta.isInLupa,
@@ -59,6 +68,6 @@ export const getChangesOfTutkintokielet = tutkintokieliData => {
       };
     }, changeObjects);
     return item;
-  }, tutkintokieliData.payload.changes);
+  }, tutkintokieliData.state.changes);
   return R.flatten(R.values(changes));
 };

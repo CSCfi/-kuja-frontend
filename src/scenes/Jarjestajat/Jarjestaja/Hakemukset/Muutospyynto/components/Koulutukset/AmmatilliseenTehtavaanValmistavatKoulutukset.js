@@ -19,6 +19,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
         anchor: item.code,
         components: [
           {
+            anchor: "A",
             name: "CheckboxWithLabel",
             properties: {
               name: "CheckboxWithLabel",
@@ -76,16 +77,12 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   };
 
   useEffect(() => {
-    setChanges(
-      R.map(muutos => {
-        return muutos.meta.changeObj;
-      }, props.changes)
-    );
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state: { categories, changes } });
-  }, [categories, onUpdate, changes]);
+    onUpdate({ sectionId, categories, changes });
+  }, [categories, changes, onUpdate]);
 
   const removeChanges = () => {
     return saveChanges({ changes: [] });
@@ -104,12 +101,8 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   );
 };
 
-AmmatilliseenTehtavaanValmistavatKoulutukset.defaultProps = {
-  changes: []
-};
-
 AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,

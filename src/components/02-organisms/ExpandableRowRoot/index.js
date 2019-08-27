@@ -23,33 +23,51 @@ const compare = (prevProps, nextProps) => {
   return sameCategories && sameChanges;
 };
 
-const ExpandableRowRoot = React.memo(props => {
+const defaultProps = {
+  categories: [],
+  changes: [],
+  isExpanded: false
+}
+
+const ExpandableRowRoot = React.memo(({
+  anchor,
+  categories = defaultProps.categories,
+  changes = defaultProps.changes,
+  code,
+  index,
+  intl,
+  isExpanded = defaultProps.isExpanded,
+  onChangesRemove,
+  onUpdate,
+  sectionId,
+  title
+}) => {
   const classes = useStyles();
 
   return (
     <React.Fragment>
-      {props.categories && (
-        <ExpandableRow shouldBeExpanded={props.isExpanded}>
+      {categories && (
+        <ExpandableRow shouldBeExpanded={isExpanded}>
           <div data-slot="title">
-            {props.code && <span className="pr-6">{props.code}</span>}
-            <span>{props.title}</span>
+            {code && <span className="pr-6">{code}</span>}
+            <span>{title}</span>
           </div>
           <div data-slot="info">
-            {props.changes.length > 0 && (
+            {changes.length > 0 && (
               <div className="flex items-center">
-                <NumberOfChanges changes={props.changes} />
+                <NumberOfChanges changes={changes} />
                 <span className="mx-6">
-                  <Tooltip title={ props.intl.formatMessage(commonMessages.undo) }>
+                  <Tooltip title={ intl.formatMessage(commonMessages.undo) }>
                     <IconButton
                       className={classes.button}
                       variant="outlined"
                       size="small"
                       onClick={(e) => {
                         e.stopPropagation();
-                        return props.onChangesRemove(
-                          props.sectionId,
-                          props.anchor,
-                          props.index
+                        return onChangesRemove(
+                          sectionId,
+                          anchor,
+                          index
                         );
                       }}
                     >
@@ -62,12 +80,12 @@ const ExpandableRowRoot = React.memo(props => {
           </div>
           <div data-slot="content" className="w-full">
             <CategorizedListRoot
-              anchor={props.anchor}
-              categories={props.categories}
-              changes={props.changes}
-              index={props.index}
-              onUpdate={props.onUpdate}
-              sectionId={props.sectionId}
+              anchor={anchor}
+              categories={categories}
+              changes={changes}
+              index={index}
+              onUpdate={onUpdate}
+              sectionId={sectionId}
               showCategoryTitles={true}
             />
           </div>
@@ -76,11 +94,6 @@ const ExpandableRowRoot = React.memo(props => {
     </React.Fragment>
   );
 }, compare);
-
-ExpandableRowRoot.defaultProps = {
-  changes: [],
-  isExpanded: false
-};
 
 ExpandableRowRoot.propTypes = {
   anchor: PropTypes.string,

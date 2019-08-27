@@ -40,20 +40,23 @@ const Tutkinnot = React.memo(props => {
           locale
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
-        const changes = R.map(change => {
-          if (change.meta.koulutusala === areaCode) {
-            return change.meta.changeObj;
-          }
-          return false;
-        }, _changes).filter(Boolean);
+        const changes = R.filter(changeObj => {
+          return R.equals(
+            R.compose(
+              R.view(R.lensIndex(0)),
+              R.split(".")
+            )(changeObj.anchor),
+            areaCode
+          );
+        }, _changes);
         return { areaCode, article, categories, changes, title };
       }, koulutusdata);
     };
-    setState(handleKoulutusdata(koulutusdata, props.changes));
+    setState(handleKoulutusdata(koulutusdata, props.backendChanges));
   }, [
     koulutusdata,
     locale,
-    props.changes,
+    props.backendChanges,
     props.kohde,
     props.lupa.kohteet,
     props.maaraystyyppi
@@ -64,7 +67,7 @@ const Tutkinnot = React.memo(props => {
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state });
+    onUpdate({ sectionId, items: [...state] });
   }, [onUpdate, state]);
 
   const saveChanges = payload => {
@@ -108,12 +111,11 @@ const Tutkinnot = React.memo(props => {
 });
 
 Tutkinnot.defaultProps = {
-  changes: [],
   maaraystyyppi: {}
 };
 
 Tutkinnot.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

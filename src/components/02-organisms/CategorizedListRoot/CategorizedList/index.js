@@ -1,47 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import TextBox from "../../../00-atoms/TextBox";
-import _ from "lodash";
-import * as R from "ramda";
-import { getChangesByLevel } from "../utils";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
+import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
 import { heights } from "../../../../css/autocomplete";
+import * as R from "ramda";
+import _ from "lodash";
+
+/**
+ *
+ * @param {string} anchor
+ * @param {array} changes
+ */
+const getChangeObjByAnchor = (anchor, changes) => {
+  return R.find(R.propEq("anchor", anchor), changes) || { properties: {} };
+};
+
+/**
+ * Tarkastellaan sekä alkuperäistä komponenttia että sille tehtyjä muutoksia.
+ * Yhdistetään propertyt siten, että muutokset yliajavat alkuperäiset arvot.
+ * Mikäli muutoksia ei ole, palautuu komponentin alkuperäinen properties-
+ * objekti.
+ * @param {string} changeObj
+ * @param {object} component
+ */
+const getPropertiesObject = (changeObj, component) => {
+  return Object.assign({}, component.properties, changeObj.properties || {});
+};
 
 const CategorizedList = React.memo(props => {
-  const [changes, setChanges] = useState([]);
-  const getPropertiesObject = (path, categories) => {
-    const fullPath = (props.rootPath || []).concat(path);
-    const c =
-      (_.find(changes || [], change => R.equals(change.path, fullPath)) || {})
-        .properties || {};
-    return Object.assign({}, R.path(path, categories).properties, c);
-  };
-
-  useEffect(() => {
-    const changesByLevel = getChangesByLevel(props.level, props.allChanges);
-    if (changesByLevel) {
-      setChanges(changesByLevel);
-    }
-  }, [props.changes, props.level, props.allChanges]);
-
   const getOperation = (component, changeObj, payload, changeProps) => {
     const addition = {
       type: "addition",
       payload: {
         anchor: payload.anchor,
-        path: payload.fullPath,
         properties: changeProps
       }
     };
     const removal = {
       type: "removal",
       payload: {
-        anchor: payload.anchor,
-        path: payload.fullPath
+        anchor: payload.anchor
       }
     };
     if (payload.shouldBeChecked) {
@@ -50,7 +53,7 @@ const CategorizedList = React.memo(props => {
           return removal;
         }
       } else {
-        if (!changeObj) {
+        if (R.isEmpty(changeObj.properties)) {
           return addition;
         }
       }
@@ -58,7 +61,10 @@ const CategorizedList = React.memo(props => {
       if (component.properties.isChecked) {
         return addition;
       } else {
-        if (changeObj) {
+        if (
+          R.has("isChecked")(changeObj.properties) &&
+          changeObj.properties.isChecked
+        ) {
           return removal;
         }
       }
@@ -69,19 +75,20 @@ const CategorizedList = React.memo(props => {
   const handleDescendants = (changeProps, payload, operations = []) => {
     R.addIndex(R.map)((category, i) => {
       const component = category.components[0];
+      const anchor = R.join(".", [payload.anchor, category.anchor]);
+      const fullAnchor = `${anchor}.${component.anchor}`;
       const fullPath = R.slice(0, -2, payload.fullPath).concat([
         "categories",
         i,
         "components",
         0
       ]);
-      const nextAnchor = R.join(".", [payload.anchor, category.anchor]);
-      const changeObj = R.find(R.propEq("path", fullPath))(props.allChanges);
+      const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
       const operation = getOperation(
         component,
         changeObj,
         {
-          anchor: nextAnchor,
+          anchor: fullAnchor,
           fullPath,
           shouldBeChecked: false
         },
@@ -95,7 +102,7 @@ const CategorizedList = React.memo(props => {
       return handleDescendants(
         changeProps,
         {
-          anchor: nextAnchor,
+          anchor,
           categories: category.categories,
           fullPath
         },
@@ -109,18 +116,19 @@ const CategorizedList = React.memo(props => {
     const component = payload.parent
       ? payload.parent.category.components[0]
       : payload.component;
+    const anchor = R.join(".", R.init(payload.anchor.split(".")));
+    const fullAnchor = `${anchor}.${component.anchor}`;
     const fullPath = R.concat(R.slice(0, -1, payload.rootPath), [
       "components",
       0
     ]);
-    const nextAnchor = R.join(".", R.init(payload.anchor.split(".")));
-    const changeObj = R.find(R.propEq("path", fullPath))(props.allChanges);
+    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
 
     const operation = getOperation(
       component,
       changeObj,
       {
-        anchor: nextAnchor,
+        anchor: fullAnchor,
         fullPath,
         shouldBeChecked: true
       },
@@ -174,7 +182,7 @@ const CategorizedList = React.memo(props => {
       return handlePredecessors(
         changeProps,
         {
-          anchor: nextAnchor,
+          anchor,
           component,
           parent: payload.parent.parent,
           rootPath: payload.parent.rootPath
@@ -192,24 +200,23 @@ const CategorizedList = React.memo(props => {
   };
 
   const runOperations = (payload, changeProps) => {
-    const changeObj = R.find(R.propEq("path", payload.fullPath))(
-      props.allChanges
-    );
+    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
     let operations = [];
-    if (changeObj) {
+    if (R.isEmpty(changeObj.properties)) {
       operations.push({
-        type: "modification",
+        type: "addition",
         payload: {
-          anchor: payload.anchor,
+          anchor: fullAnchor,
           path: payload.fullPath,
           properties: changeProps
         }
       });
     } else {
       operations.push({
-        type: "addition",
+        type: "modification",
         payload: {
-          anchor: payload.anchor,
+          anchor: fullAnchor,
           path: payload.fullPath,
           properties: changeProps
         }
@@ -223,9 +230,8 @@ const CategorizedList = React.memo(props => {
    * Returns array of changes
    */
   const handleTree = (payload, changeProps, operations = []) => {
-    const changeObj = R.find(R.propEq("path", payload.fullPath))(
-      props.allChanges
-    );
+    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
 
     let _operations = _.cloneDeep(operations);
 
@@ -234,7 +240,7 @@ const CategorizedList = React.memo(props => {
       payload.component,
       changeObj,
       {
-        anchor: payload.anchor,
+        anchor: fullAnchor,
         fullPath: payload.fullPath,
         shouldBeChecked: changeProps.isChecked
       },
@@ -331,17 +337,18 @@ const CategorizedList = React.memo(props => {
             )}
             <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
               {_.map(category.components, (component, ii) => {
-                const { properties } = component;
+                const fullAnchor = `${anchor}.${component.anchor}`;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
                 const idSuffix = `${i}-${ii}`;
-                const propsObj = getPropertiesObject(
-                  [i, "components", ii],
-                  props.categories
+                const changeObj = getChangeObjByAnchor(
+                  fullAnchor,
+                  props.changes
                 );
-                const changeObj = props.getChangeByPath(anchor, fullPath);
-                const isAddition = ((changeObj || {}).properties || {})
-                  .isChecked;
-                const isRemoved = changeObj && !changeObj.properties.isChecked;
+                const propsObj = getPropertiesObject(changeObj, component);
+                const isAddition = !!changeObj.properties.isChecked;
+                const isRemoved =
+                  R.has("isChecked")(changeObj.properties) &&
+                  !changeObj.properties.isChecked;
                 const labelStyles = Object.assign(
                   {},
                   isAddition ? (propsObj.labelStyles || {}).addition : {},
@@ -400,7 +407,7 @@ const CategorizedList = React.memo(props => {
                             siblings: props.categories
                           }}
                           labelStyles={labelStyles}
-                          value={properties.value}
+                          value={propsObj.value}
                           className="flex-row"
                         >
                           <div className="flex">
@@ -414,28 +421,32 @@ const CategorizedList = React.memo(props => {
                     )}
                     {component.name === "Dropdown"
                       ? (category => {
-                          const siblingName = (
-                            category.components[ii - 1] || {}
-                          ).name;
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
+                          const previousSibling =
+                            category.components[ii - 1] || {};
+                          const isPreviousSiblingCheckedByDefault = !!(
+                            previousSibling.properties || {}
                           ).isChecked;
-                          const change = props.getChangeByPath(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii - 1])
+                          const previousSiblingFullAnchor = `${anchor}.${
+                            previousSibling.anchor
+                          }`;
+                          const change = getChangeObjByAnchor(
+                            previousSiblingFullAnchor,
+                            props.changes
                           );
                           const isDisabled =
-                            siblingName === "CheckboxWithLabel" ||
-                            siblingName === "RadioButtonWithLabel"
-                              ? (isSiblingCheckedByDefault && !change) ||
-                                (change && change.properties.isChecked)
-                              : propsObj.isDisabled;
+                            (previousSibling.name === "CheckboxWithLabel" ||
+                              previousSibling.name ===
+                                "RadioButtonWithLabel") &&
+                            !(
+                              isPreviousSiblingCheckedByDefault ||
+                              change.properties.isChecked
+                            );
                           return (
                             <div className="px-2 mb-1">
                               <Dropdown
                                 id={`dropdown-${idSuffix}`}
                                 onChanges={runOperations}
-                                options={properties.options}
+                                options={propsObj.options}
                                 payload={{
                                   anchor,
                                   categories: category.categories,
@@ -454,24 +465,22 @@ const CategorizedList = React.memo(props => {
                       : null}
                     {component.name === "TextBox"
                       ? (category => {
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
-                          ).isChecked;
-                          const change = props.getChangeByPath(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii])
+                          const change = getChangeObjByAnchor(
+                            fullAnchor,
+                            props.changes
                           );
-                          const parentChange = props.getChangeByPath(
-                            props.anchor,
-                            R.concat(R.init(props.rootPath), ["components", 0])
+                          const parentChange = getChangeObjByAnchor(
+                            `${props.parent.anchor}.${
+                              props.parent.category.components[0].anchor
+                            }`,
+                            props.changes
                           );
-                          const isDisabled = !(
-                            (isSiblingCheckedByDefault && !parentChange) ||
-                            (parentChange && parentChange.properties.isChecked)
-                          );
+                          const isDisabled =
+                            R.isEmpty(parentChange.properties) ||
+                            !parentChange.properties.isChecked;
                           const value = change
                             ? change.properties.value
-                            : properties.defaultValue;
+                            : propsObj.defaultValue;
                           return (
                             <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
                               <TextBox
@@ -508,22 +517,26 @@ const CategorizedList = React.memo(props => {
                     )}
                     {component.name === "Autocomplete"
                       ? (category => {
-                          const siblingName = (
-                            category.components[ii - 1] || {}
-                          ).name;
-                          const isSiblingCheckedByDefault = (
-                            (category.components[ii - 1] || {}).properties || {}
+                          const previousSibling =
+                            category.components[ii - 1] || {};
+                          const isPreviousSiblingCheckedByDefault = !!(
+                            previousSibling.properties || {}
                           ).isChecked;
-                          const change = props.getChangeByPath(
-                            anchor,
-                            props.rootPath.concat([i, "components", ii - 1])
+                          const previousSiblingFullAnchor = `${anchor}.${
+                            previousSibling.anchor
+                          }`;
+                          const change = getChangeObjByAnchor(
+                            previousSiblingFullAnchor,
+                            props.changes
                           );
                           const isDisabled =
-                            siblingName === "CheckboxWithLabel" ||
-                            siblingName === "RadioButtonWithLabel"
-                              ? (isSiblingCheckedByDefault && !change) ||
-                                (change && change.properties.isChecked)
-                              : propsObj.isDisabled;
+                            (previousSibling.name === "CheckboxWithLabel" ||
+                              previousSibling.name ===
+                                "RadioButtonWithLabel") &&
+                            !(
+                              isPreviousSiblingCheckedByDefault ||
+                              change.properties.isChecked
+                            );
                           return (
                             <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
                               <Autocomplete
@@ -547,6 +560,25 @@ const CategorizedList = React.memo(props => {
                           );
                         })(category)
                       : null}
+                    {component.name === "Difference" && (
+                      <div className="flex-2">
+                        <Difference
+                          applyForValue={propsObj.applyForValue}
+                          initialValue={propsObj.initialValue}
+                          onChanges={runOperations}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
+                          titles={propsObj.titles}
+                        />
+                      </div>
+                    )}
                   </React.Fragment>
                 );
               })}
@@ -554,15 +586,11 @@ const CategorizedList = React.memo(props => {
             {category.categories && (
               <CategorizedList
                 anchor={anchor}
-                level={props.level + 1}
                 categories={category.categories}
+                changes={props.changes}
                 debug={props.debug}
-                changes={changes}
-                allChanges={props.allChanges}
-                getChangeByPath={props.getChangeByPath}
                 id={`${props.id}-${category.code}`}
-                runOperations={props.runOperations}
-                rootPath={props.rootPath.concat([i, "categories"])}
+                level={props.level + 1}
                 parent={{
                   anchor,
                   category,
@@ -571,6 +599,8 @@ const CategorizedList = React.memo(props => {
                   siblings: props.categories
                 }}
                 parentRootPath={props.rootPath}
+                rootPath={props.rootPath.concat([i, "categories"])}
+                runOperations={props.runOperations}
                 showCategoryTitles={props.showCategoryTitles}
               />
             )}
@@ -581,15 +611,10 @@ const CategorizedList = React.memo(props => {
   );
 });
 
-CategorizedList.defaultProps = {
-  anchor: "root",
-  rootPath: []
-};
-
 CategorizedList.propTypes = {
-  allChanges: PropTypes.array,
   anchor: PropTypes.string,
   categories: PropTypes.array,
+  changes: PropTypes.array,
   debug: PropTypes.bool,
   onChanges: PropTypes.func,
   parentCategory: PropTypes.object,

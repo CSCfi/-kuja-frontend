@@ -29,32 +29,29 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
   useEffect(() => {
     setKuljettajakoulutuksetMuutokset(
       R.filter(
-        muutos =>
-          R.startsWith("kuljettajakoulutukset", muutos.meta.changeObj.anchor),
+        changeObj => R.startsWith("kuljettajakoulutukset", changeObj.anchor),
         props.changes
       )
     );
     setTyovoimakoulutuksetMuutokset(
       R.filter(
-        muutos =>
-          R.startsWith("tyovoimakoulutukset", muutos.meta.changeObj.anchor),
+        changeObj => R.startsWith("tyovoimakoulutukset", changeObj.anchor),
         props.changes
       )
     );
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset(
       R.filter(
-        muutos =>
+        changeObj =>
           R.startsWith(
             "ammatilliseentehtavaanvalmistavatkoulutukset",
-            muutos.meta.changeObj.anchor
+            changeObj.anchor
           ),
         props.changes
       )
     );
     setValmentavatKoulutuksetMuutokset(
       R.filter(
-        muutos =>
-          R.startsWith("valmentavatkoulutukset", muutos.meta.changeObj.anchor),
+        changeObj => R.startsWith("valmentavatkoulutukset", changeObj.anchor),
         props.changes
       )
     );
@@ -67,7 +64,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       </p>
 
       <ValmentavatKoulutukset
-        changes={valmentavatKoulutuksetMuutokset}
+        backendChanges={valmentavatKoulutuksetMuutokset}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
@@ -75,7 +72,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       />
 
       <AmmatilliseenTehtavaanValmistavatKoulutukset
-        changes={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
+        backendChanges={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
@@ -83,7 +80,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       />
 
       <Tyovoimakoulutukset
-        changes={tyovoimakoulutuksetMuutokset}
+        backendChanges={tyovoimakoulutuksetMuutokset}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
@@ -91,7 +88,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       />
 
       <Kuljettajakoulutukset
-        changes={kuljettajakoulutuksetMuutokset}
+        backendChanges={kuljettajakoulutuksetMuutokset}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}

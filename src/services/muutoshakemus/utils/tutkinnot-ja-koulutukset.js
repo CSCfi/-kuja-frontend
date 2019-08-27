@@ -5,7 +5,7 @@ const getMuutos = (changeObj, stateItem) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
   const code = R.last(anchorParts);
-  const meta = getMetadata(R.tail(anchorParts), stateItem.categories);
+  const meta = getMetadata(R.slice(1, 3)(anchorParts), stateItem.categories);
   const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
   if (stateItem.article) {
     if (stateItem.article.koulutusalat[anchorParts[1]]) {
@@ -49,7 +49,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       return R.map(changeObj => {
         return getMuutos(changeObj, stateItem);
       }, stateItem.changes);
-    }, tutkinnot.state)
+    }, tutkinnot.state.items)
   );
 
   const koulutusMuutokset = R.map(changeObj => {
@@ -71,7 +71,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       sourceObject = valmentavatKoulutukset;
     }
     const meta = getMetadata(
-      R.tail(anchorParts),
+      R.slice(1, -1)(anchorParts),
       sourceObject.state.categories
     );
     const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);

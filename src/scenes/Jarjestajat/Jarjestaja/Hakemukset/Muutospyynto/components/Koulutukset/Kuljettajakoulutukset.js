@@ -20,6 +20,7 @@ const Kuljettajakoulutukset = props => {
         anchor: item.code,
         components: [
           {
+            anchor: "A",
             name: "RadioButtonWithLabel",
             properties: {
               name: "RadioButtonWithLabel",
@@ -67,16 +68,12 @@ const Kuljettajakoulutukset = props => {
   ]);
 
   useEffect(() => {
-    onUpdate({ sectionId, state: { categories, changes } });
+    onUpdate({ sectionId, categories, changes });
   }, [categories, onUpdate, changes]);
 
   useEffect(() => {
-    setChanges(
-      R.map(muutos => {
-        return muutos.meta.changeObj;
-      }, props.changes)
-    );
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   const saveChanges = payload => {
     setChanges(payload.changes);
@@ -100,7 +97,7 @@ const Kuljettajakoulutukset = props => {
 };
 
 Kuljettajakoulutukset.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object

@@ -8,45 +8,40 @@ const labelStyles = {
 export const textBoxStory = {
   changes: [
     {
-      anchor: "textbox.0",
-      path: [0, "components", 0],
+      anchor: "textbox.A.A",
       properties: {
         isChecked: true
       }
     },
     {
-      anchor: "textbox.1",
-      path: [1, "components", 0],
+      anchor: "textbox.B.A",
       properties: {
-        isChecked: true,
-        title: "Koulutukseen panostettu on (muutos)"
+        isChecked: true
       }
     },
     {
-      anchor: "textbox.0.1",
-      path: [0, "categories", 1, "components", 0],
+      anchor: "textbox.A.B.A",
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
       }
     },
     {
-      anchor: "textbox.0.2",
-      path: [0, "categories", 2, "components", 0],
+      anchor: "textbox.A.C.A",
       properties: { value: "Muutettu" }
     }
   ],
   categories: [
     {
-      anchor: "0",
+      anchor: "A",
       code: "0",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-1",
-            code: 1,
+            code: "A.A",
             title: "Row item",
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa
@@ -55,6 +50,7 @@ export const textBoxStory = {
           }
         },
         {
+          anchor: "B",
           name: "Dropdown",
           properties: {
             options: [
@@ -67,15 +63,16 @@ export const textBoxStory = {
       ],
       categories: [
         {
-          anchor: "0",
+          anchor: "A",
           code: "0",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
-                code: 1.1,
+                code: "A.A.A",
                 title: "Sub row",
                 isChecked: false,
                 labelStyles,
@@ -85,15 +82,16 @@ export const textBoxStory = {
           ],
           categories: [
             {
-              anchor: "0",
+              anchor: "A",
               code: "0",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.1",
-                    code: "1.1.1",
+                    code: "A.A.A.A",
                     title: "Leaf node item",
                     labelStyles: Object.assign({}, labelStyles, {
                       custom: isInLupa
@@ -104,21 +102,23 @@ export const textBoxStory = {
               ]
             },
             {
-              anchor: "1",
+              anchor: "B",
               code: "1",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.2",
-                    code: "1.1.2",
+                    code: "A.A.B.A",
                     title: "Leaf node item",
                     labelStyles,
                     isChecked: false
                   }
                 },
                 {
+                  anchor: "B",
                   name: "Dropdown",
                   properties: {
                     options: [
@@ -136,15 +136,16 @@ export const textBoxStory = {
           ]
         },
         {
-          anchor: "1",
+          anchor: "B",
           code: "1",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
-                code: "1.2",
+                code: "A.B.A",
                 title: "Sub row",
                 isChecked: false,
                 labelStyles,
@@ -154,21 +155,23 @@ export const textBoxStory = {
           ],
           categories: [
             {
-              anchor: "0",
+              anchor: "A",
               code: "0",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.2.1",
-                    code: "1.2.1",
+                    code: "A.B.A.A",
                     title: "Leaf node item",
                     labelStyles,
                     isChecked: false
                   }
                 },
                 {
+                  anchor: "B",
                   name: "Dropdown",
                   properties: {
                     options: [
@@ -184,11 +187,12 @@ export const textBoxStory = {
               ]
             },
             {
-              anchor: "1",
+              anchor: "B",
               code: "1",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "TextBox",
                   properties: {
                     defaultValue:
@@ -200,11 +204,12 @@ export const textBoxStory = {
           ]
         },
         {
-          anchor: "2",
+          anchor: "C",
           code: "2",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "TextBox",
               properties: {
                 defaultValue:
@@ -216,15 +221,16 @@ export const textBoxStory = {
       ]
     },
     {
-      anchor: "1",
+      anchor: "B",
       code: "1",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-2",
-            code: 2,
+            code: "B.A",
             title: "Row item",
             labelStyles,
             isChecked: false
@@ -233,15 +239,16 @@ export const textBoxStory = {
       ]
     },
     {
-      anchor: "2",
+      anchor: "C",
       code: "2",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-3",
-            code: 3,
+            code: "C.A",
             title: "Row item",
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa

@@ -8,37 +8,33 @@ const labelStyles = {
 export const complexStory = {
   changes: [
     {
-      anchor: "complex.0",
-      path: [0, "components", 0],
+      anchor: "complex.A.A",
       properties: {
         isChecked: true
       }
     },
     {
-      anchor: "complex.1",
-      path: [1, "components", 0],
+      anchor: "complex.B.A",
       properties: {
-        isChecked: true,
-        title: "Koulutukseen panostettu on (muutos)"
+        isChecked: true
       }
     },
 
     {
-      anchor: "complex.0.1",
-      path: [0, "categories", 1, "components", 0],
+      anchor: "complex.A.B.A",
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
       }
     }
   ],
   categories: [
     {
-      anchor: "0",
+      anchor: "A",
       code: "0",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-1",
@@ -51,6 +47,7 @@ export const complexStory = {
           }
         },
         {
+          anchor: "B",
           name: "Dropdown",
           properties: {
             options: [
@@ -63,11 +60,12 @@ export const complexStory = {
       ],
       categories: [
         {
-          anchor: "0",
+          anchor: "A",
           code: "0",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
@@ -81,11 +79,12 @@ export const complexStory = {
           ],
           categories: [
             {
-              anchor: "0",
+              anchor: "A",
               code: "0",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.1",
@@ -100,11 +99,12 @@ export const complexStory = {
               ]
             },
             {
-              anchor: "1",
+              anchor: "B",
               code: "1",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.1.2",
@@ -115,6 +115,7 @@ export const complexStory = {
                   }
                 },
                 {
+                  anchor: "B",
                   name: "Dropdown",
                   properties: {
                     options: [
@@ -132,11 +133,12 @@ export const complexStory = {
           ]
         },
         {
-          anchor: "1",
+          anchor: "B",
           code: "1",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
                 name: "example-radio",
@@ -150,11 +152,12 @@ export const complexStory = {
           ],
           categories: [
             {
-              anchor: "0",
+              anchor: "A",
               code: "0",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.2.1",
@@ -165,6 +168,7 @@ export const complexStory = {
                   }
                 },
                 {
+                  anchor: "B",
                   name: "Dropdown",
                   properties: {
                     options: [
@@ -180,11 +184,12 @@ export const complexStory = {
               ]
             },
             {
-              anchor: "1",
+              anchor: "B",
               code: "1",
               title: "Categories",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
                     name: "example-checkbox-1.2.2",
@@ -201,11 +206,12 @@ export const complexStory = {
           ]
         },
         {
-          anchor: "2",
+          anchor: "C",
           code: "2",
           title: "Categories",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
                 name: "example-checkbox",
@@ -221,11 +227,12 @@ export const complexStory = {
       ]
     },
     {
-      anchor: "1",
+      anchor: "B",
       code: "1",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-2",
@@ -238,11 +245,12 @@ export const complexStory = {
       ]
     },
     {
-      anchor: "2",
+      anchor: "C",
       code: "2",
       title: "Categories",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
             name: "example-checkbox-3",

@@ -8,35 +8,33 @@ const labelStyles = {
 export const simpleStory = {
   changes: [
     {
-      anchor: "simple.A",
-      path: [0, "components", 0],
-      properties: {
-        isChecked: true,
-        title: "Erikoisammattitutkinto (muutos)"
-      }
-    },
-    {
-      anchor: "simple.C",
-      path: [2, "components", 0],
-      properties: {
-        isChecked: true,
-        title: "Alakoulu ja yläkoulu (muutos)"
-      }
-    },
-    {
       anchor: "simple.A.A",
-      path: [0, "categories", 0, "components", 0],
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
+      }
+    },
+    {
+      anchor: "simple.C.A",
+      properties: {
+        isChecked: true
       }
     },
     {
       anchor: "simple.B.B.A",
-      path: [1, "categories", 1, "categories", 0, "components", 0],
       properties: {
-        isChecked: true,
-        title: "Osaamisala (muutos)"
+        isChecked: true
+      }
+    },
+    {
+      anchor: "simple.A.A.A",
+      properties: {
+        isChecked: true
+      }
+    },
+    {
+      anchor: "simple.B.B.A.A",
+      properties: {
+        isChecked: true
       }
     }
   ],
@@ -47,9 +45,10 @@ export const simpleStory = {
       title: "Category",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            code: "A",
+            code: "A.A",
             isChecked: false,
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa
@@ -66,9 +65,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "A.A",
+                code: "A.A.A",
                 isChecked: false,
                 labelStyles: Object.assign({}, labelStyles, {
                   custom: isInLupa
@@ -86,9 +86,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "A.B",
+                code: "A.B.A",
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
@@ -104,9 +105,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "A.C",
+                code: "A.C.A",
                 isChecked: true,
                 labelStyles: Object.assign({}, labelStyles, {
                   custom: isInLupa
@@ -126,9 +128,10 @@ export const simpleStory = {
       title: "Category",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            code: "B",
+            code: "B.A",
             isChecked: true,
             labelStyles,
             name: "example-checkbox-2",
@@ -143,9 +146,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "B.A",
+                code: "B.A.A",
                 isChecked: true,
                 labelStyles,
                 name: "example-label",
@@ -161,9 +165,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "B.B",
+                code: "B.B.A",
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
@@ -179,9 +184,10 @@ export const simpleStory = {
               title: "Sub category",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
-                    code: "B.B.A",
+                    code: "B.B.A.A",
                     title: "Sub row",
                     isChecked: false,
                     labelStyles,
@@ -197,9 +203,10 @@ export const simpleStory = {
               title: "Sub category",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
-                    code: "B.B.B",
+                    code: "B.B.B.A",
                     isChecked: false,
                     labelStyles,
                     name: "example-checkbox",
@@ -215,9 +222,10 @@ export const simpleStory = {
               title: "Sub category",
               components: [
                 {
+                  anchor: "A",
                   name: "CheckboxWithLabel",
                   properties: {
-                    code: "B.B.C",
+                    code: "B.B.C.A",
                     isChecked: false,
                     labelStyles,
                     name: "example-checkbox",
@@ -235,9 +243,10 @@ export const simpleStory = {
           title: "Sub category",
           components: [
             {
+              anchor: "A",
               name: "CheckboxWithLabel",
               properties: {
-                code: "B.C",
+                code: "B.C.A",
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
@@ -256,9 +265,10 @@ export const simpleStory = {
       title: "Category",
       components: [
         {
+          anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            code: "C",
+            code: "C.A",
             isChecked: false,
             labelStyles: Object.assign({}, labelStyles, {
               custom: isInLupa

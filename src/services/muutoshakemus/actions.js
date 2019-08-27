@@ -2,11 +2,21 @@ import axios from "axios/index";
 import { API_BASE_URL } from "../../modules/constants";
 
 import {
+  SET_BACKEND_CHANGES,
   SAVE_MUUTOSPYYNTO_START,
   SAVE_MUUTOSPYYNTO_SUCCESS,
   SAVE_MUUTOSPYYNTO_FAILURE,
   SET_SECTION_DATA
 } from "./actionTypes";
+
+export const setBackendChanges = changes => {
+  return dispatch => {
+    dispatch({
+      type: SET_BACKEND_CHANGES,
+      changes
+    });
+  };
+};
 
 export const setSectionData = payload => {
   return dispatch => {

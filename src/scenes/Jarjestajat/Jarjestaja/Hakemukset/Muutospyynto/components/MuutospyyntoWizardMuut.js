@@ -62,10 +62,13 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             return {
               anchor: article.koodiArvo,
               meta: {
-                isInLupa: isInLupaBool
+                isInLupa: isInLupaBool,
+                koodiarvo: article.koodiArvo,
+                koodisto: article.koodisto
               },
               components: [
                 {
+                  anchor: "A",
                   name: item.componentName,
                   properties: {
                     name: item.componentName,
@@ -148,7 +151,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     ];
     const keys = [
       "laajennettu",
-      "vaativat",
+      "vaativatuki",
       "sisaoppilaitos",
       "vankila",
       "urheilu",
@@ -203,24 +206,16 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   };
 
   useEffect(() => {
-    const changes = {};
-    R.forEach(muutos => {
-      const areaCode = R.head(R.split(".", muutos.meta.changeObj.anchor));
-      changes[areaCode] = changes[areaCode] || [];
-      changes[areaCode].push(muutos.meta.changeObj);
-    }, props.changes);
-    setChanges(changes);
-  }, [props.changes]);
+    setChanges(props.backendChanges);
+  }, [props.backendChanges]);
 
   useEffect(() => {
     onUpdate({
       sectionId,
-      state: {
-        changes,
-        kohde: props.kohde,
-        maaraystyyppi: props.maaraystyyppi,
-        muutdata
-      }
+      changes,
+      kohde: props.kohde,
+      maaraystyyppi: props.maaraystyyppi,
+      muutdata
     });
   }, [changes, muutdata, props.kohde, props.maaraystyyppi, onUpdate]);
 
@@ -250,12 +245,8 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   );
 });
 
-MuutospyyntoWizardMuut.defaultProps = {
-  changes: []
-};
-
 MuutospyyntoWizardMuut.propTypes = {
-  changes: PropTypes.array,
+  backendChanges: PropTypes.object,
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
   maaraystyyppi: PropTypes.object,
