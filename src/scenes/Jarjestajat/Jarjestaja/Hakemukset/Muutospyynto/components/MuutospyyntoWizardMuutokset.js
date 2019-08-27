@@ -92,16 +92,18 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
             onUpdate={props.onUpdate}
           />
 
-          <MuutospyyntoWizardKielet
-            backendChanges={props.muutoshakemus.backendChanges.kielet}
-            kohde={kohteet.kielet}
-            lupa={props.lupa}
-            kielet={props.kielet}
-            koulutukset={props.koulutukset}
-            onUpdate={props.onUpdate}
-            tutkinnotState={props.muutoshakemus.tutkinnot.state}
-            maaraystyyppi={maaraystyypit.VELVOITE}
-          />
+          {props.muutoshakemus.tutkinnot.state.items && (
+            <MuutospyyntoWizardKielet
+              backendChanges={props.muutoshakemus.backendChanges.kielet}
+              kohde={kohteet.kielet}
+              lupa={props.lupa}
+              kielet={props.kielet}
+              koulutukset={props.koulutukset}
+              onUpdate={props.onUpdate}
+              tutkinnotState={props.muutoshakemus.tutkinnot.state}
+              maaraystyyppi={maaraystyypit.VELVOITE}
+            />
+          )}
 
           {kunnat.fetched && maakunnat.fetched && maakuntakunnat.fetched && (
             <MuutospyyntoWizardToimialue
