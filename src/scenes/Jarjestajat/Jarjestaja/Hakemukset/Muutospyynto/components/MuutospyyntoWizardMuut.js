@@ -39,7 +39,6 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   useEffect(() => {
     const getCategories = (row, locale) => {
       return R.map(item => {
-        console.log(item.articles);
         return {
           anchor: row.key,
           title: item.title,
