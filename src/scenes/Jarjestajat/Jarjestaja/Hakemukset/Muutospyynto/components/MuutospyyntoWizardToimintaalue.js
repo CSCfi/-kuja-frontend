@@ -133,12 +133,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   return (
     <Section code={props.lupakohde.headingNumber} title={heading}>
-      <p className={!!changesOfValtakunnallinen.isChecked ? "hidden" : "pb-4"}>
+      <p className={!!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"}>
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
       <div
         className={
-          !!changesOfValtakunnallinen.isChecked
+          !!changesOfValtakunnallinen.properties.isChecked
             ? "hidden pointer-events-none"
             : "bg-gray-100 p-6"
         }
@@ -155,7 +155,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           values={valueOfSelect}
         />
       </div>
-      <div className={!!changesOfValtakunnallinen.isChecked ? "" : "pt-4"}>
+      <div className={!!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"}>
         <Valtakunnallinen
           callback={handleChangeOfValtakunnallinen}
           changes={changesOfValtakunnallinen}
