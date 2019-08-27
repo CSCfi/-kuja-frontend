@@ -42,9 +42,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const [initialValueOfSelect, setInitialValueOfSelect] = useState([]);
   const [valueOfSelect, setValueOfSelect] = useState([]);
-  const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState(
-    {}
-  );
+  const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState({
+    properties: {}
+  });
   const { onUpdate } = props;
 
   useEffect(() => {
@@ -103,24 +103,42 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     valueOfSelect
   ]);
 
+  useEffect(() => {
+    const valtakunnallinenChangeObj = R.find(changeObj =>
+      R.compose(
+        R.equals("valtakunnallinen"),
+        R.path(["properties", "name"])
+      )(changeObj)
+    )(props.backendChanges);
+
+    if (valtakunnallinenChangeObj) {
+      setChangesOfValtakunnallinen(valtakunnallinenChangeObj);
+    }
+  }, [props.backendChanges]);
+
   const handleNewValueOfToimialuevalinta = value => {
     setValueOfSelect(value);
   };
 
   const handleChangeOfValtakunnallinen = ({ isChecked }) => {
     setChangesOfValtakunnallinen(
-      Object.assign({}, changesOfValtakunnallinen, { isChecked })
+      Object.assign({}, changesOfValtakunnallinen, {
+        properties: {
+          name: "valtakunnallinen",
+          isChecked
+        }
+      })
     );
   };
 
   return (
     <Section code={props.lupakohde.headingNumber} title={heading}>
-      <p className={!!changesOfValtakunnallinen.isChecked ? "hidden" : "pb-4"}>
+      <p className={!!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"}>
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
       <div
         className={
-          !!changesOfValtakunnallinen.isChecked
+          !!changesOfValtakunnallinen.properties.isChecked
             ? "hidden pointer-events-none"
             : "bg-gray-100 p-6"
         }
@@ -137,7 +155,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           values={valueOfSelect}
         />
       </div>
-      <div className={!!changesOfValtakunnallinen.isChecked ? "" : "pt-4"}>
+      <div className={!!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"}>
         <Valtakunnallinen
           callback={handleChangeOfValtakunnallinen}
           changes={changesOfValtakunnallinen}

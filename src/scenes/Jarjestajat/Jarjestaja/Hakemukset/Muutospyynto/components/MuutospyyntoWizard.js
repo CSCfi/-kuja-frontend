@@ -229,7 +229,7 @@ const MuutospyyntoWizard = props => {
     ]);
   }, [formatMessage]);
 
-  /** 
+  /**
    * Let's walk through all the changes from the backend and update the muutoshakemus.
    */
   useEffect(() => {
@@ -264,10 +264,7 @@ const MuutospyyntoWizard = props => {
             result
           );
         }
-        if (key !== "toimintaalue") {
-          result = R.map(R.path(["meta", "changeObj"]))(result);
-        }
-        return result;
+        return R.map(R.path(["meta", "changeObj"]))(result);
       };
       const changes = {
         tutkinnotjakoulutukset: getChangesOf(
