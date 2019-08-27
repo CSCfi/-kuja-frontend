@@ -61,7 +61,7 @@ export default function getChangesOfToimintaalue(
     maaraystyyppi,
     valueOfSelect
   } = toimialuedata.state;
-  if (toimialuedata.state.changesOfValtakunnallinen.isChecked) {
+  if (toimialuedata.state.changesOfValtakunnallinen.properties.isChecked) {
       const tilaVal = "LISAYS" 
       // { toimialuedata.state ? "POISTO" : "LISAYS" },
       const typeVal = "addition"
@@ -69,6 +69,7 @@ export default function getChangesOfToimintaalue(
       tila: tilaVal,
       type: typeVal,
       meta: {
+        changeObj: toimialuedata.state.changesOfValtakunnallinen,
         perusteluteksti: null
       },
       muutosperustelukoodiarvo: null,

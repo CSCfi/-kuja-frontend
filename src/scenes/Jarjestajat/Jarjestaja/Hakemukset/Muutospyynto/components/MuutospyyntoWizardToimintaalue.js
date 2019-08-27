@@ -42,9 +42,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const [initialValueOfSelect, setInitialValueOfSelect] = useState([]);
   const [valueOfSelect, setValueOfSelect] = useState([]);
-  const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState(
-    {}
-  );
+  const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState({
+    properties: {}
+  });
   const { onUpdate } = props;
 
   useEffect(() => {
@@ -103,13 +103,31 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     valueOfSelect
   ]);
 
+  useEffect(() => {
+    const valtakunnallinenChangeObj = R.find(changeObj =>
+      R.compose(
+        R.equals("valtakunnallinen"),
+        R.path(["properties", "name"])
+      )(changeObj)
+    )(props.backendChanges);
+
+    if (valtakunnallinenChangeObj) {
+      setChangesOfValtakunnallinen(valtakunnallinenChangeObj);
+    }
+  }, [props.backendChanges]);
+
   const handleNewValueOfToimialuevalinta = value => {
     setValueOfSelect(value);
   };
 
   const handleChangeOfValtakunnallinen = ({ isChecked }) => {
     setChangesOfValtakunnallinen(
-      Object.assign({}, changesOfValtakunnallinen, { isChecked })
+      Object.assign({}, changesOfValtakunnallinen, {
+        properties: {
+          name: "valtakunnallinen",
+          isChecked
+        }
+      })
     );
   };
 

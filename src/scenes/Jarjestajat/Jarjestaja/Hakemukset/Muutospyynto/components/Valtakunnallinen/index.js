@@ -14,7 +14,7 @@ const Valtakunnallinen = React.memo(props => {
   };
 
   useEffect(() => {
-    setIsChecked(props.isCheckedInitial || props.changes.isChecked);
+    setIsChecked(props.isCheckedInitial || props.changes.properties.isChecked);
   }, [props.changes, props.data, props.isCheckedInitial]);
 
   return (
