@@ -47,15 +47,11 @@ const MuutospyyntoWizardMuut = React.memo(props => {
               _.find(article.metadata, m => {
                 return m.kieli === locale;
               }).kuvaus || "[Koulutuksen otsikko tähän]";
-            // const isInLupaBool = article
-            //   ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
-            //       return !!_.find(koulutusala.koulutukset, {
-            //         koodi: koulutus.koodiArvo
-            //       });
-            //     })
-            //   : false
-            // TODO: Määritä lupaan kuuluminen datan pohjalta
-            const isInLupaBool = true;
+            const isInLupaBool = article
+              ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
+                  return article.koodiArvo === koulutusala;
+                })
+              : false;
             const labelClasses = {
               isInLupa: isInLupaBool
             };
@@ -72,7 +68,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                   name: item.componentName,
                   properties: {
                     name: item.componentName,
-                    isChecked: item.shouldBeSelected,
+                    isChecked: item.shouldBeSelected || isInLupaBool,
                     title: title,
                     labelStyles: {
                       addition: isAdded,
