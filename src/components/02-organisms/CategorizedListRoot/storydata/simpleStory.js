@@ -54,7 +54,7 @@ export const simpleStory = {
               custom: isInLupa
             }),
             name: "example-checkbox-1",
-            title: "Row item"
+            title: "Tutkinto 1"
           }
         }
       ],
@@ -74,7 +74,7 @@ export const simpleStory = {
                   custom: isInLupa
                 }),
                 name: "example-checkbox",
-                title: "Sub row",
+                title: "Osaamisala 1",
                 value: "Testi"
               }
             }
@@ -93,7 +93,7 @@ export const simpleStory = {
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
-                title: "Sub row",
+                title: "Osaamisala 2",
                 value: "Testi2"
               }
             }
@@ -114,7 +114,7 @@ export const simpleStory = {
                   custom: isInLupa
                 }),
                 name: "example-checkbox",
-                title: "Sub row",
+                title: "Osaamisala 3",
                 value: "Testi3"
               }
             }
@@ -135,7 +135,7 @@ export const simpleStory = {
             isChecked: true,
             labelStyles,
             name: "example-checkbox-2",
-            title: "Row item"
+            title: "Tutkinto 2"
           }
         }
       ],
@@ -153,7 +153,7 @@ export const simpleStory = {
                 isChecked: true,
                 labelStyles,
                 name: "example-label",
-                title: "Sub row",
+                title: "Osaamisala 1",
                 value: "Testi"
               }
             }
@@ -172,7 +172,7 @@ export const simpleStory = {
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
-                title: "Sub row",
+                title: "Osaamisala 2",
                 value: "Testi2"
               }
             }
@@ -188,7 +188,7 @@ export const simpleStory = {
                   name: "CheckboxWithLabel",
                   properties: {
                     code: "B.B.A.A",
-                    title: "Sub row",
+                    title: "Osaamisalan alakohta 1",
                     isChecked: false,
                     labelStyles,
                     name: "example-label",
@@ -210,7 +210,7 @@ export const simpleStory = {
                     isChecked: false,
                     labelStyles,
                     name: "example-checkbox",
-                    title: "Sub row",
+                    title: "Osaamisalan alakohta 2",
                     value: "Testi2"
                   }
                 }
@@ -229,7 +229,7 @@ export const simpleStory = {
                     isChecked: false,
                     labelStyles,
                     name: "example-checkbox",
-                    title: "Sub row",
+                    title: "Osaamisalan alakohta 3",
                     value: "Testi3"
                   }
                 }
@@ -250,7 +250,7 @@ export const simpleStory = {
                 isChecked: false,
                 labelStyles,
                 name: "example-checkbox",
-                title: "Sub row",
+                title: "Osaamisala 3",
                 value: "Testi3"
               }
             }
@@ -274,7 +274,7 @@ export const simpleStory = {
               custom: isInLupa
             }),
             name: "example-checkbox-3",
-            title: "Row item"
+            title: "Tutkinto 3"
           }
         }
       ]
