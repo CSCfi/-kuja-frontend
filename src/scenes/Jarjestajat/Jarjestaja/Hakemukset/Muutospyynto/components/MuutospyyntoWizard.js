@@ -57,6 +57,7 @@ import { injectIntl } from "react-intl";
 import * as R from "ramda";
 
 import "react-toastify/dist/ReactToastify.css";
+import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -264,7 +265,10 @@ const MuutospyyntoWizard = props => {
             result
           );
         }
-        return R.map(R.path(["meta", "changeObj"]))(result);
+        if (key !== "toimintaalue") {
+          result = R.map(R.path(["meta", "changeObj"]))(result);
+        }
+        return result;
       };
       const changes = {
         tutkinnotjakoulutukset: getChangesOf(
@@ -427,7 +431,15 @@ const MuutospyyntoWizard = props => {
                   onSave={save}
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
-                />
+                >
+                  <MuutospyyntoWizardPerustelut
+                    kohteet={kohteet.data}
+                    lupa={lupa}
+                    muut={muut}
+                    onUpdate={onUpdate}
+                    muutoshakemus={muutoshakemus}
+                  />
+                </WizardPage>
               )}
               {page === 3 && (
                 <WizardPage

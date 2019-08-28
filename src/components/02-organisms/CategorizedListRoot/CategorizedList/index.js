@@ -469,15 +469,25 @@ const CategorizedList = React.memo(props => {
                             fullAnchor,
                             props.changes
                           );
-                          const parentChange = getChangeObjByAnchor(
-                            `${props.parent.anchor}.${
-                              props.parent.category.components[0].anchor
-                            }`,
-                            props.changes
-                          );
-                          const isDisabled =
-                            R.isEmpty(parentChange.properties) ||
-                            !parentChange.properties.isChecked;
+                          const parentComponent =
+                            props.parent.category.components[0];
+                          let isDisabled = false;
+                          console.info(props);
+                          if (props.parent.category.components) {
+                            const parentChange = getChangeObjByAnchor(
+                              `${props.parent.anchor}.${
+                                parentComponent.anchor
+                              }`,
+                              props.changes
+                            );
+                            isDisabled =
+                              R.isEmpty(parentChange.properties) ||
+                              (R.includes(parentComponent.name, [
+                                "CheckboxWithLabel",
+                                "RadioButtonWithLabel"
+                              ]) &&
+                                !parentChange.properties.isChecked);
+                          }
                           const value = change
                             ? change.properties.value
                             : propsObj.defaultValue;
