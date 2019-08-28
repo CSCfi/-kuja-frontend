@@ -139,6 +139,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
               backendChanges={props.muutoshakemus.backendChanges.muut}
               kohde={kohteet.muut}
               headingNumber={props.lupa.kohteet[5].headingNumber}
+              maaraykset={props.lupa.data.maaraykset}
               maaraystyyppi={maaraystyypit.OIKEUS}
               muut={props.muut}
               onUpdate={props.onUpdate}
