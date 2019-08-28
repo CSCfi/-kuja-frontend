@@ -68,7 +68,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                   name: item.componentName,
                   properties: {
                     name: item.componentName,
-                    isChecked: item.shouldBeSelected || isInLupaBool,
+                    isChecked: isInLupaBool,
                     title: title,
                     labelStyles: {
                       addition: isAdded,
