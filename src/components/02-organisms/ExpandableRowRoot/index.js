@@ -49,7 +49,7 @@ const ExpandableRowRoot = React.memo(
       <React.Fragment>
         {categories && (
           <ExpandableRow shouldBeExpanded={isExpanded}>
-            <h4 data-slot="title">
+            <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
             </h4>
@@ -75,7 +75,7 @@ const ExpandableRowRoot = React.memo(
                 </div>
               )}
             </div>
-            <div data-slot="content" className="w-full">
+            <div data-slot="content" className="w-full pl-3">
               <CategorizedListRoot
                 anchor={anchor}
                 categories={categories}
