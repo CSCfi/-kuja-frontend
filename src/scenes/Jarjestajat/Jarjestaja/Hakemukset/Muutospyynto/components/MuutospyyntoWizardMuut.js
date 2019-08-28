@@ -27,14 +27,16 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         const { metadata } = article;
         const kasite = parseLocalizedField(metadata, "FI", "kasite");
         const kuvaus = parseLocalizedField(metadata, "FI", "kuvaus");
-        const shouldBeVisible =
-          !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
-            relevantMaaraykset
-          ) &&
-          kuvaus &&
-          kasite;
+        const isInRelevantMaaraykset = !!R.find(
+          R.propEq("koodiarvo", article.koodiArvo)
+        )(relevantMaaraykset);
 
-        if (shouldBeVisible) {
+        if (
+          kuvaus &&
+          kasite &&
+          (isInRelevantMaaraykset ||
+            (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
+        ) {
           dividedArticles[kasite] = dividedArticles[kasite] || [];
           dividedArticles[kasite].push(article);
         }
@@ -111,7 +113,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       {
         code: "02",
         key: "vaativatuki",
-        isInUse: !!dividedArticles["vaativatuki"],
+        isInUse: !!dividedArticles["vaativa_1"] || !!dividedArticles["vaativa_2"],
         title: "Vaativan erityisen tuen tehtävä",
         categoryData: [
           {
