@@ -22,19 +22,12 @@ const MuutospyyntoWizardPerustelut = props => {
   }, [muutosperustelutDispatch]);
 
   useEffect(() => {
-    console.info(props.muutoshakemus);
-  }, [props.muutoshakemus]);
-
-  useEffect(() => {
-    console.info(props.intl.locale, props.kohteet, props.lupa.kohteet);
     const kohteet = R.map(kohde => {
-      console.info(kohde.tunniste);
       return {
         title: R.path(["meta", "otsikko", [props.intl.locale]], kohde),
         code: R.find(R.propEq("tunniste", kohde.tunniste))(props.lupa.kohteet)
       };
     }, props.kohteet);
-    console.info(kohteet);
     setKohteet(kohteet);
   }, [props.intl.locale, props.kohteet, props.lupa.kohteet]);
 
