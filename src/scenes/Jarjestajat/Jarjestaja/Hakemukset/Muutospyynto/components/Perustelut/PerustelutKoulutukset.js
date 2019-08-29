@@ -3,7 +3,7 @@ import { injectIntl } from "react-intl";
 import PerustelutValmentavatKoulutukset from "./PerustelutValmentavatKoulutukset";
 import PerustelutATVKoulutukset from "./PerustelutATVKoulutukset";
 import PerustelutTyovoimakoulutukset from "./PerustelutTyovoimakoulutukset";
-// import Kuljettajakoulutukset from "./Koulutukset/Kuljettajakoulutukset";
+import PerustelutKuljettajakoulutukset from "./PerustelutKuljettajakoulutukset";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -67,13 +67,15 @@ const PerustelutKoulutukset = React.memo(props => {
         />
       )}
 
-      {/* <Kuljettajakoulutukset
-        backendChanges={kuljettajakoulutuksetMuutokset}
-        kohde={props.kohde}
-        koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
-      /> */}
+      {changes.kuljettajakoulutuksetMuutokset && (
+        <PerustelutKuljettajakoulutukset
+          changes={changes.kuljettajakoulutuksetMuutokset}
+          kohde={props.kohde}
+          koulutukset={props.koulutukset}
+          maaraystyyppi={props.maaraystyyppi}
+          onUpdate={props.onUpdate}
+        />
+      )}
     </div>
   );
 });
