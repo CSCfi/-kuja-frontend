@@ -75,7 +75,6 @@ const PerustelutMuut = React.memo(props => {
                   name: item.componentName,
                   properties: {
                     name: item.componentName,
-                    isChecked: isInLupaBool,
                     title: title,
                     labelStyles: {
                       addition: isAdded,

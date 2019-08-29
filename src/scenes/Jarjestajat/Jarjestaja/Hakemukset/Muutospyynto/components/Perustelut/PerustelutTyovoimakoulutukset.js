@@ -32,7 +32,6 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                   name: "StatusTextRow",
                   code: item.code,
                   title: item.title,
-                  isChecked: item.shouldBeChecked,
                   labelStyles: {
                     addition: isAdded,
                     removal: isRemoved,
