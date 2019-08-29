@@ -469,10 +469,11 @@ const CategorizedList = React.memo(props => {
                             fullAnchor,
                             props.changes
                           );
-                          const parentComponent =
-                            props.parent.category.components[0];
+                          let parentComponent = null;
                           let isDisabled = false;
                           if (props.parent.category.components) {
+                            parentComponent =
+                              props.parent.category.components[0];
                             const parentChange = getChangeObjByAnchor(
                               `${props.parent.anchor}.${
                                 parentComponent.anchor
@@ -480,11 +481,12 @@ const CategorizedList = React.memo(props => {
                               props.changes
                             );
                             isDisabled =
-                              R.isEmpty(parentChange.properties) ||
-                              (R.includes(parentComponent.name, [
+                              R.includes(parentComponent.name, [
                                 "CheckboxWithLabel",
                                 "RadioButtonWithLabel"
                               ]) &&
+                              ((!parentComponent.properties.isChecked &&
+                                R.isEmpty(parentChange.properties)) ||
                                 !parentChange.properties.isChecked);
                           }
                           const value = change
@@ -506,6 +508,7 @@ const CategorizedList = React.memo(props => {
                                   rootPath: props.rootPath,
                                   siblings: props.categories
                                 }}
+                                placeholder={propsObj.placeholder}
                                 value={value}
                               />
                             </div>
