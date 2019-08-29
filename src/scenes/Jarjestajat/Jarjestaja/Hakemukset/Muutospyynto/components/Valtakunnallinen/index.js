@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import CheckboxWithLabel from "../../../../../../../components/01-molecules/CheckboxWithLabel";
-import { isInLupa } from "../../../../../../../css/label";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 
 const Valtakunnallinen = React.memo(props => {
   const name = "valtakunnallinen";
@@ -26,7 +26,12 @@ const Valtakunnallinen = React.memo(props => {
         name={`${name}-checkbox`}
         id={`${name}-checkbox`}
         isChecked={isChecked}
-        labelStyles={Object.assign({}, isInLupa, { fontSize: "0.8rem" })}
+        labelStyles={Object.assign(
+          {},
+          !props.isCheckedInitial && isChecked ? isAdded : {},
+          props.isCheckedInitial && !isChecked ? isRemoved : {},
+          props.isCheckedInitial ? isInLupa : {}
+        )}
         onChanges={handleChanges}
       >
         {props.intl.formatMessage(wizardMessages.responsibilities)}
