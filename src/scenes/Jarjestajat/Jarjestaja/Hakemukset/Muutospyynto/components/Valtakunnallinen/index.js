@@ -22,14 +22,22 @@ const Valtakunnallinen = React.memo(props => {
       <p className="pb-4">
         {props.intl.formatMessage(wizardMessages.areasInfo3)}
       </p>
+      {/* 
+        If not in Lupa but checkbox is checked -> added 
+        If in Lupa but checkbox is unchecked -> removed 
+      */}
       <CheckboxWithLabel
         name={`${name}-checkbox`}
         id={`${name}-checkbox`}
         isChecked={isChecked}
         labelStyles={Object.assign(
           {},
-          !props.isCheckedInitial && isChecked ? isAdded : {},
-          props.isCheckedInitial && !isChecked ? isRemoved : {},
+          !props.isCheckedInitial && props.changes.properties.isChecked
+            ? isAdded
+            : {},
+          props.isCheckedInitial && !props.changes.properties.isChecked
+            ? isRemoved
+            : {},
           props.isCheckedInitial ? isInLupa : {}
         )}
         onChanges={handleChanges}
