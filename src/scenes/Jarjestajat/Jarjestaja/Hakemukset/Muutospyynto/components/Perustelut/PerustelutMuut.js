@@ -135,8 +135,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.laajennettu || [],
-            componentName: "StatusTextRow",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -151,13 +150,11 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.vaativa_1 || [],
-            componentName: "StatusTextRow",
-            title: props.intl.formatMessage(wizardMessages.chooseOnlyOne)
+            componentName: "StatusTextRow"
           },
           {
             articles: dividedArticles.vaativa_2 || [],
-            componentName: "StatusTextRow",
-            title: props.intl.formatMessage(wizardMessages.chooseAdditional)
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -169,8 +166,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.sisaoppilaitos || [],
-            componentName: "StatusTextRow",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -182,8 +178,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.vankila || [],
-            componentName: "StatusTextRow",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -195,8 +190,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.urheilu || [],
-            componentName: "StatusTextRow",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -207,9 +201,8 @@ const PerustelutMuut = React.memo(props => {
         title: "Yhteistyö",
         categoryData: [
           {
+            articles: dividedArticles.yhteistyo || [],
             componentName: "StatusTextRow",
-            title: "",
-            articles: dividedArticles.yhteistyo || []
           }
         ]
       },
@@ -221,8 +214,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.muumaarays || [],
-            componentName: "StatusTextRow",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       }
@@ -291,8 +283,9 @@ const PerustelutMuut = React.memo(props => {
               changes={changes[row.code]}
               code={row.code}
               disableReverting={true}
-              hideAmountOfChanges={true}
+              hideAmountOfChanges={false}
               index={i}
+              isExpanded={true}
               onUpdate={saveChanges}
               sectionId={sectionId}
               title={row.title}

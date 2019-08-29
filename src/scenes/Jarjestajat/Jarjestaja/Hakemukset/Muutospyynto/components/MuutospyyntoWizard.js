@@ -50,6 +50,7 @@ import { fetchMuutospyynto } from "../../../../../../services/muutospyynnot/acti
 import { fetchMaaraystyypit } from "../../../../../../services/maaraystyypit/actions";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
+import { MuutosperustelutProvider } from "../../../../../../context/muutosperustelutContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
@@ -432,13 +433,19 @@ const MuutospyyntoWizard = props => {
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
                 >
-                  <MuutospyyntoWizardPerustelut
-                    kohteet={kohteet.data}
-                    lupa={lupa}
-                    muut={muut}
-                    onUpdate={onUpdate}
-                    muutoshakemus={muutoshakemus}
-                  />
+                  <MuutosperustelutProvider>
+                    <MuutospyyntoWizardPerustelut
+                      kohteet={kohteet.data}
+                      koulutukset={koulutukset}
+                      koulutusalat={koulutusalat}
+                      koulutustyypit={koulutustyypit}
+                      lupa={lupa}
+                      maaraystyypit={maaraystyypit.data}
+                      muut={muut}
+                      muutoshakemus={muutoshakemus}
+                      onUpdate={onUpdate}
+                    />
+                  </MuutosperustelutProvider>
                 </WizardPage>
               )}
               {page === 3 && (

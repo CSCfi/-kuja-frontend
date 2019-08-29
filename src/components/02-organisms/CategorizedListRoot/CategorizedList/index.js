@@ -366,7 +366,7 @@ const CategorizedList = React.memo(props => {
                       <div className="flex-2">
                         <CheckboxWithLabel
                           id={`checkbox-with-label-${idSuffix}`}
-                          name={propsObj.name}
+                          name={component.name}
                           isChecked={propsObj.isChecked}
                           isDisabled={propsObj.isDisabled}
                           onChanges={handleChanges}
@@ -472,7 +472,6 @@ const CategorizedList = React.memo(props => {
                           const parentComponent =
                             props.parent.category.components[0];
                           let isDisabled = false;
-                          console.info(props);
                           if (props.parent.category.components) {
                             const parentChange = getChangeObjByAnchor(
                               `${props.parent.anchor}.${
