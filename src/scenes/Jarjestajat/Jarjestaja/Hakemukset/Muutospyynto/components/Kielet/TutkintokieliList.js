@@ -80,9 +80,10 @@ const TutkintokieliList = props => {
                   properties: {
                     options: R.map(language => {
                       return {
-                        label: _.find(language.metadata, m => {
-                          return m.kieli === R.toUpper(props.locale);
-                        }).nimi || "[Kielen nimi tähän]",
+                        label:
+                          _.find(language.metadata, m => {
+                            return m.kieli === R.toUpper(props.locale);
+                          }).nimi || "[Kielen nimi tähän]",
                         value: language.value
                       };
                     }, props.kielet)
@@ -160,10 +161,10 @@ const TutkintokieliList = props => {
   return (
     <Wrapper>
       <ExpandableRow>
-        <div data-slot="title">
+        <h4 data-slot="title">
           {props.koodiarvo && <span className="pr-6">{props.koodiarvo}</span>}
           <span>{props.title}</span>
-        </div>
+        </h4>
         <span data-slot="info">
           <NumberOfChanges changes={changes} />
         </span>
