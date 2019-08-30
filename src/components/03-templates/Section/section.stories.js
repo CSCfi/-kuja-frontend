@@ -6,7 +6,7 @@ import { withInfo } from "@storybook/addon-info";
 storiesOf("Section", module)
   .addDecorator(withInfo)
   .add("Code and title are visible", () => (
-    <Section code="1" title="Title of a section">
+    <Section code={1} title="Title of a section">
       Cupidatat excepteur Lorem cupidatat nulla dolore nulla ex. Voluptate amet
       anim nisi ipsum. Consectetur tempor consequat in quis elit culpa
       reprehenderit aliqua ut deserunt dolor. Reprehenderit cillum elit laborum
