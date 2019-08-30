@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
+import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import TextBox from "../../../00-atoms/TextBox";
@@ -199,6 +200,10 @@ const CategorizedList = React.memo(props => {
     return props.runOperations(operations);
   };
 
+  const handleButtonClick = (payload, changeProps) => {
+    payload.component.onClick(payload, changeProps);
+  }
+
   const runOperations = (payload, changeProps) => {
     const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
     const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
@@ -366,7 +371,7 @@ const CategorizedList = React.memo(props => {
                       <div className="flex-2">
                         <CheckboxWithLabel
                           id={`checkbox-with-label-${idSuffix}`}
-                          name={propsObj.name}
+                          name={component.name}
                           isChecked={propsObj.isChecked}
                           isDisabled={propsObj.isDisabled}
                           onChanges={handleChanges}
@@ -469,15 +474,26 @@ const CategorizedList = React.memo(props => {
                             fullAnchor,
                             props.changes
                           );
-                          const parentChange = getChangeObjByAnchor(
-                            `${props.parent.anchor}.${
-                              props.parent.category.components[0].anchor
-                            }`,
-                            props.changes
-                          );
-                          const isDisabled =
-                            R.isEmpty(parentChange.properties) ||
-                            !parentChange.properties.isChecked;
+                          let parentComponent = null;
+                          let isDisabled = false;
+                          if (props.parent.category.components) {
+                            parentComponent =
+                              props.parent.category.components[0];
+                            const parentChange = getChangeObjByAnchor(
+                              `${props.parent.anchor}.${
+                                parentComponent.anchor
+                              }`,
+                              props.changes
+                            );
+                            isDisabled =
+                              R.includes(parentComponent.name, [
+                                "CheckboxWithLabel",
+                                "RadioButtonWithLabel"
+                              ]) &&
+                              ((!parentComponent.properties.isChecked &&
+                                R.isEmpty(parentChange.properties)) ||
+                                !parentChange.properties.isChecked);
+                          }
                           const value = change
                             ? change.properties.value
                             : propsObj.defaultValue;
@@ -497,6 +513,7 @@ const CategorizedList = React.memo(props => {
                                   rootPath: props.rootPath,
                                   siblings: props.categories
                                 }}
+                                placeholder={propsObj.placeholder}
                                 value={value}
                               />
                             </div>
@@ -576,6 +593,24 @@ const CategorizedList = React.memo(props => {
                             siblings: props.categories
                           }}
                           titles={propsObj.titles}
+                        />
+                      </div>
+                    )}
+                    {component.name === "SimpleButton" && (
+                      <div className={`${component.styleClasses} flex-2`}>
+                        <SimpleButton
+                          text={propsObj.text}
+                          variant={propsObj.variant}
+                          onClick={handleButtonClick}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
                         />
                       </div>
                     )}

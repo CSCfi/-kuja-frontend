@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const StatusTextRow = React.memo(props => {
   return (
-    <div className="text-base" style={props.labelStyles}>
+    <div className="text-base py-4" style={props.labelStyles}>
       {props.children}
     </div>
   );

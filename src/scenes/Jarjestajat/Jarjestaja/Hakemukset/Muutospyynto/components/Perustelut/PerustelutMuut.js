@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import Section from "../../../../../../components/03-templates/Section";
+import Section from "../../../../../../../components/03-templates/Section";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
-import { parseLocalizedField } from "../../../../../../modules/helpers";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../css/label";
-import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import { parseLocalizedField } from "../../../../../../../modules/helpers";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-const MuutospyyntoWizardMuut = React.memo(props => {
+const PerustelutMuut = React.memo(props => {
   const sectionId = "muut";
   const [muutdata, setMuutdata] = useState([]);
   const [changes, setChanges] = useState({});
@@ -18,7 +18,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const heading = props.intl.formatMessage(wizardMessages.header_section5);
 
   useEffect(() => {
-    const divideArticles = articles => {
+    const divideArticles = (articles, relevantCodes) => {
       const dividedArticles = {};
       const relevantMaaraykset = R.filter(
         R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
@@ -30,10 +30,10 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         const isInRelevantMaaraykset = !!R.find(
           R.propEq("koodiarvo", article.koodiArvo)
         )(relevantMaaraykset);
-
         if (
           kuvaus &&
           kasite &&
+          R.includes(article.koodiArvo, relevantCodes) &&
           (isInRelevantMaaraykset ||
             (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
         ) {
@@ -62,7 +62,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             const labelClasses = {
               isInLupa: isInLupaBool
             };
-            return {
+            let structure = {
               anchor: article.koodiArvo,
               meta: {
                 isInLupa: isInLupaBool,
@@ -75,7 +75,6 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                   name: item.componentName,
                   properties: {
                     name: item.componentName,
-                    isChecked: isInLupaBool,
                     title: title,
                     labelStyles: {
                       addition: isAdded,
@@ -89,24 +88,53 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                 }
               ]
             };
+            structure.categories = [
+              {
+                anchor: "perustelut",
+                title: "Perustelut",
+                components: [
+                  {
+                    anchor: "A",
+                    name: "TextBox",
+                    properties: {
+                      defaultValue: "Text 2"
+                    }
+                  }
+                ]
+              }
+            ];
+            return structure;
           }, item.articles)
         };
       }, configObj.categoryData);
     };
 
-    const dividedArticles = divideArticles(props.muut.data);
+    const relevantCodes = R.map(
+      R.compose(
+        R.view(R.lensIndex(2)),
+        R.split(".")
+      )
+    )(
+      R.map(
+        R.prop("anchor"),
+        R.compose(
+          R.flatten,
+          R.values
+        )(props.backendChanges)
+      )
+    );
+    const dividedArticles = divideArticles(props.muut.data, relevantCodes);
 
     const config = [
       {
         code: "01",
         key: "laajennettu",
-        isInUse: !!dividedArticles["laajennettu"],
+        isInUse: !!dividedArticles["laajennettu"] && props.backendChanges["01"],
         title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
         categoryData: [
           {
             articles: dividedArticles.laajennettu || [],
-            componentName: "CheckboxWithLabel",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -114,18 +142,18 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         code: "02",
         key: "vaativatuki",
         isInUse:
-          !!dividedArticles["vaativa_1"] || !!dividedArticles["vaativa_2"],
+          !!dividedArticles["vaativa_1"] ||
+          !!dividedArticles["vaativa_2"] ||
+          props.backendChanges["02"],
         title: "Vaativan erityisen tuen tehtävä",
         categoryData: [
           {
             articles: dividedArticles.vaativa_1 || [],
-            componentName: "RadioButtonWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseOnlyOne)
+            componentName: "StatusTextRow"
           },
           {
             articles: dividedArticles.vaativa_2 || [],
-            componentName: "CheckboxWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseAdditional)
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -137,8 +165,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.sisaoppilaitos || [],
-            componentName: "CheckboxWithLabel",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -150,8 +177,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.vankila || [],
-            componentName: "CheckboxWithLabel",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -163,8 +189,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.urheilu || [],
-            componentName: "CheckboxWithLabel",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -175,9 +200,8 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         title: "Yhteistyö",
         categoryData: [
           {
-            componentName: "CheckboxWithLabel",
-            title: "",
-            articles: dividedArticles.yhteistyo || []
+            articles: dividedArticles.yhteistyo || [],
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -189,8 +213,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.muumaarays || [],
-            componentName: "CheckboxWithLabel",
-            title: ""
+            componentName: "StatusTextRow"
           }
         ]
       }
@@ -209,7 +232,14 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       : [];
 
     setMuutdata(expandableRows);
-  }, [props.kohde, props.maaraykset, locale, props.intl, props.muut.data]);
+  }, [
+    props.kohde,
+    locale,
+    props.intl,
+    props.maaraykset,
+    props.muut.data,
+    props.backendChanges
+  ]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
@@ -236,45 +266,42 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       sectionId,
       changes,
       kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi,
       muutdata
     });
-  }, [changes, muutdata, props.kohde, props.maaraystyyppi, onUpdate]);
+  }, [changes, muutdata, props.kohde, onUpdate]);
 
   return (
     <React.Fragment>
-      {props.kohde && (
-        <Section code={props.headingNumber} title={heading}>
-          {R.addIndex(R.map)((row, i) => {
-            return (
-              <ExpandableRowRoot
-                anchor={row.code}
-                key={`expandable-row-root-${i}`}
-                categories={row.categories}
-                changes={changes[row.code]}
-                code={row.code}
-                index={i}
-                onUpdate={saveChanges}
-                sectionId={sectionId}
-                title={row.title}
-                onChangesRemove={removeChanges}
-              />
-            );
-          }, muutdata)}
-        </Section>
-      )}
+      {R.addIndex(R.map)((row, i) => {
+        return (
+          <ExpandableRowRoot
+            anchor={row.code}
+            key={`expandable-row-root-${i}`}
+            categories={row.categories}
+            changes={changes[row.code]}
+            code={row.code}
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            index={i}
+            isExpanded={true}
+            onUpdate={saveChanges}
+            sectionId={sectionId}
+            title={row.title}
+            onChangesRemove={removeChanges}
+          />
+        );
+      }, muutdata)}
     </React.Fragment>
   );
 });
 
-MuutospyyntoWizardMuut.propTypes = {
+PerustelutMuut.propTypes = {
   backendChanges: PropTypes.object,
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,
-  maaraystyyppi: PropTypes.object,
   muut: PropTypes.object,
   onUpdate: PropTypes.func
 };
 
-export default injectIntl(MuutospyyntoWizardMuut);
+export default injectIntl(PerustelutMuut);
