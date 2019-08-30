@@ -8,7 +8,12 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutKoulutukset = React.memo(props => {
-  const [changes, setChanges] = useState({});
+  const [changes, setChanges] = useState({
+    atvkMuutokset: [],
+    kuljettajakoulutuksetMuutokset: [],
+    tyovoimakoulutuksetMuutokset: [],
+    valmentavatKoulutuksetMuutokset: []
+  });
 
   useEffect(() => {
     setChanges({
@@ -37,7 +42,7 @@ const PerustelutKoulutukset = React.memo(props => {
 
   return (
     <div className="py-16">
-      {changes.valmentavatKoulutuksetMuutokset && (
+      {changes.valmentavatKoulutuksetMuutokset.length ? (
         <PerustelutValmentavatKoulutukset
           changes={changes.valmentavatKoulutuksetMuutokset}
           kohde={props.kohde}
@@ -45,9 +50,9 @@ const PerustelutKoulutukset = React.memo(props => {
           maaraystyyppi={props.maaraystyyppi}
           onUpdate={props.onUpdate}
         />
-      )}
+      ) : null}
 
-      {changes.atvkMuutokset && (
+      {changes.atvkMuutokset.length ? (
         <PerustelutATVKoulutukset
           changes={changes.atvkMuutokset}
           kohde={props.kohde}
@@ -55,9 +60,9 @@ const PerustelutKoulutukset = React.memo(props => {
           maaraystyyppi={props.maaraystyyppi}
           onUpdate={props.onUpdate}
         />
-      )}
+      ) : null}
 
-      {changes.tyovoimakoulutuksetMuutokset && (
+      {changes.tyovoimakoulutuksetMuutokset.length ? (
         <PerustelutTyovoimakoulutukset
           changes={changes.tyovoimakoulutuksetMuutokset}
           kohde={props.kohde}
@@ -65,9 +70,9 @@ const PerustelutKoulutukset = React.memo(props => {
           maaraystyyppi={props.maaraystyyppi}
           onUpdate={props.onUpdate}
         />
-      )}
+      ) : null}
 
-      {changes.kuljettajakoulutuksetMuutokset && (
+      {changes.kuljettajakoulutuksetMuutokset.length ? (
         <PerustelutKuljettajakoulutukset
           changes={changes.kuljettajakoulutuksetMuutokset}
           kohde={props.kohde}
@@ -75,7 +80,7 @@ const PerustelutKoulutukset = React.memo(props => {
           maaraystyyppi={props.maaraystyyppi}
           onUpdate={props.onUpdate}
         />
-      )}
+      ) : null}
     </div>
   );
 });

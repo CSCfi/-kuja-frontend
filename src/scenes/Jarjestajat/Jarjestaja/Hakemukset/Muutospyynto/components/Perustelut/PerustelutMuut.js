@@ -201,7 +201,7 @@ const PerustelutMuut = React.memo(props => {
         categoryData: [
           {
             articles: dividedArticles.yhteistyo || [],
-            componentName: "StatusTextRow",
+            componentName: "StatusTextRow"
           }
         ]
       },
@@ -272,27 +272,25 @@ const PerustelutMuut = React.memo(props => {
 
   return (
     <React.Fragment>
-      <Section code={props.headingNumber} title={heading}>
-        {R.addIndex(R.map)((row, i) => {
-          return (
-            <ExpandableRowRoot
-              anchor={row.code}
-              key={`expandable-row-root-${i}`}
-              categories={row.categories}
-              changes={changes[row.code]}
-              code={row.code}
-              disableReverting={true}
-              hideAmountOfChanges={false}
-              index={i}
-              isExpanded={true}
-              onUpdate={saveChanges}
-              sectionId={sectionId}
-              title={row.title}
-              onChangesRemove={removeChanges}
-            />
-          );
-        }, muutdata)}
-      </Section>
+      {R.addIndex(R.map)((row, i) => {
+        return (
+          <ExpandableRowRoot
+            anchor={row.code}
+            key={`expandable-row-root-${i}`}
+            categories={row.categories}
+            changes={changes[row.code]}
+            code={row.code}
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            index={i}
+            isExpanded={true}
+            onUpdate={saveChanges}
+            sectionId={sectionId}
+            title={row.title}
+            onChangesRemove={removeChanges}
+          />
+        );
+      }, muutdata)}
     </React.Fragment>
   );
 });

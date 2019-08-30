@@ -1,5 +1,9 @@
 import * as R from "ramda";
 
+const handleClickOfAddPeople = payload => {
+  console.info(payload);
+};
+
 export const getKuljettajakoulutusPerustelulomakeByCode = code => {
   const forms = {
     "3": [
@@ -209,7 +213,8 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                 name: "CheckboxWithLabel",
                 properties: {
                   name: "checkbox-kuorma-autonkuljettaja",
-                  title: "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
+                  title:
+                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
                   labelStyles: {},
                   isChecked: false
                 }
@@ -224,9 +229,316 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                 name: "CheckboxWithLabel",
                 properties: {
                   name: "checkbox-linja-autonkuljettaja",
-                  title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
+                  title:
+                    "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
                   labelStyles: {},
                   isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: `paatoiminen-kuljettaja-info`,
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                properties: {
+                  code: "a)",
+                  labelStyles: {},
+                  title:
+                    "Vähintään 1 vuoden kokemus johonkin seuraavista luokista kuuluvan ajoneuvonpäätoimisena kuljettajana:"
+                }
+              }
+            ]
+          },
+          {
+            anchor: "C-luokka",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-c-luokka",
+                  title: "C-luokka",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "CE-luokka",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-ce-luokka",
+                  title: "CE-luokka",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "D-luokka",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-d-luokka",
+                  title: "D-luokka",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: `jokin-tutkinnoista`,
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                properties: {
+                  code: "b)",
+                  labelStyles: {},
+                  title: "Jokin seuraavista tutkinnoista:"
+                }
+              }
+            ]
+          },
+          {
+            anchor: "linja-auto-ammattitutkinto",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-linja-auto-ammattitutkinto",
+                  title: "Linja-auton kuljettajan ammattitutkinto",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "yhdistelmäajoneuvo-ammattitutkinto",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
+                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "puutavara-autokuljetus-ammattitutkinto",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
+                  title: "Puutavaran autonkuljetuksen ammattitutkinto",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "kuljetuspalvelut-logistiikan-perustutkinto",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-kuljetuspalvelut-logistiikan-perustutkinto",
+                  title:
+                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          },
+          {
+            anchor: "kuljetusalan-ammattitutkinto",
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "checkbox-kuljetusalan-ammattitutkinto",
+                  title: "Kuljetusalan ammattitutkinto",
+                  labelStyles: {},
+                  isChecked: false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        anchor: `${code}-6`,
+        components: [
+          {
+            anchor: "opettajien-kelpoisuus-ja-tyokokemus-label",
+            name: "StatusTextRow",
+            properties: {
+              code: 6,
+              labelStyles: {},
+              title: "Opettajien kelpoisuus ja työkokemus"
+            }
+          }
+        ],
+        categories: [
+          {
+            anchor: `opettajien-kelpoisuus-ja-tyokokemus-info`,
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                properties: {
+                  code: "!",
+                  labelStyles: {},
+                  title:
+                    "Valtioneuvoston asetus 434/2018 10 §. Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista."
+                }
+              },
+              {
+                anchor: `lisaa-henkilo-painike`,
+                name: "SimpleButton",
+                onClick: handleClickOfAddPeople,
+                styleClasses: "flex justify-end",
+                properties: {
+                  text: "Lisää henkilö"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        anchor: `${code}-7`,
+        components: [
+          {
+            anchor: "ajoneuvokanta-label",
+            name: "StatusTextRow",
+            properties: {
+              code: 7,
+              labelStyles: {},
+              title: "Ajoneuvokanta"
+            }
+          }
+        ],
+        categories: [
+          {
+            anchor: `opettajien-kelpoisuus-ja-tyokokemus-info`,
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                properties: {
+                  labelStyles: {},
+                  title:
+                    "Selvitys opetuksessa käytettävästä ajoneuvokannasta ja opetusvälineistä ja niiden soveltuvuudesta ammattipätevyyskoulutukseen."
+                }
+              }
+            ],
+            categories: [
+              {
+                anchor: `ajoneuvokanta-kentat`,
+                components: [
+                  {
+                    anchor: "A",
+                    name: "TextBox",
+                    properties: {
+                      labelStyles: {},
+                      placeholder: "Linja-autojen määrä"
+                    }
+                  },
+                  {
+                    anchor: "B",
+                    name: "TextBox",
+                    properties: {
+                      labelStyles: {},
+                      placeholder: "Kuorma-autojen määrä"
+                    }
+                  },
+                  {
+                    anchor: "C",
+                    name: "TextBox",
+                    properties: {
+                      labelStyles: {},
+                      placeholder: "Perävaunujen määrä"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        anchor: `${code}-8`,
+        components: [
+          {
+            anchor: "muut-opetusvalineet-label",
+            name: "StatusTextRow",
+            properties: {
+              code: 8,
+              labelStyles: {},
+              title: "Muut opetusvälineet"
+            }
+          }
+        ],
+        categories: [
+          {
+            anchor: `ajoneuvokanta-kentat`,
+            components: [
+              {
+                anchor: "A",
+                name: "TextBox",
+                properties: {
+                  labelStyles: {},
+                  placeholder:
+                    "Asetuksen mukaiset opetus- ja havaintovälineet (VnAsetus 434/2018, 11 § 1 ja 2 mom.)"
+                }
+              }
+            ]
+          },
+          {
+            components: [
+              {
+                anchor: "muut-opetusvalineet-label",
+                name: "StatusTextRow",
+                properties: {
+                  labelStyles: {},
+                  title: "Muut opetus- ja havaintovälineet"
+                }
+              }
+            ]
+          },
+          {
+            components: [
+              {
+                anchor: "B",
+                name: "TextBox",
+                properties: {
+                  labelStyles: {},
+                  placeholder:
+                    "Muut oppilaitoksen oppimisympäristöissä tapahtuvaan osaamisen hankkimiseen liittyvät välineet"
                 }
               }
             ]

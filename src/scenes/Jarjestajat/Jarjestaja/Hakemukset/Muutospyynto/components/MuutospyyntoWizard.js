@@ -435,6 +435,7 @@ const MuutospyyntoWizard = props => {
                 >
                   <MuutosperustelutProvider>
                     <MuutospyyntoWizardPerustelut
+                      kielet={kielet}
                       kohteet={kohteet.data}
                       koulutukset={koulutukset}
                       koulutusalat={koulutusalat}
