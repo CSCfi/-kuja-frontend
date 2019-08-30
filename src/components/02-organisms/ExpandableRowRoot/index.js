@@ -53,10 +53,10 @@ const ExpandableRowRoot = React.memo(
       <React.Fragment>
         {categories && (
           <ExpandableRow shouldBeExpanded={isExpanded}>
-            <div data-slot="title">
+            <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
-            </div>
+            </h4>
             <div data-slot="info">
               {changes.length > 0 && (
                 <div className="flex items-center">
