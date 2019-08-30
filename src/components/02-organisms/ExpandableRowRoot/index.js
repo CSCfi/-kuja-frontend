@@ -28,7 +28,8 @@ const defaultProps = {
   changes: [],
   disableReverting: false,
   hideAmountOfChanges: false,
-  isExpanded: false
+  isExpanded: false,
+  showCategoryTitles: false
 };
 
 const ExpandableRowRoot = React.memo(
@@ -45,6 +46,7 @@ const ExpandableRowRoot = React.memo(
     onChangesRemove,
     onUpdate,
     sectionId,
+    showCategoryTitles = defaultProps.showCategoryTitles,
     title
   }) => {
     const classes = useStyles();
@@ -91,7 +93,7 @@ const ExpandableRowRoot = React.memo(
                 index={index}
                 onUpdate={onUpdate}
                 sectionId={sectionId}
-                showCategoryTitles={true}
+                showCategoryTitles={showCategoryTitles}
               />
             </div>
           </ExpandableRow>
@@ -114,6 +116,7 @@ ExpandableRowRoot.propTypes = {
   onChangesRemove: PropTypes.func,
   onUpdate: PropTypes.func,
   sectionId: PropTypes.string,
+  showCategoryTitles: PropTypes.bool,
   title: PropTypes.string
 };
 
