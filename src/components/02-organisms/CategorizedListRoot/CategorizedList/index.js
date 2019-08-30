@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
+import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import TextBox from "../../../00-atoms/TextBox";
@@ -198,6 +199,10 @@ const CategorizedList = React.memo(props => {
     const operations = handleTree(payload, changeProps);
     return props.runOperations(operations);
   };
+
+  const handleButtonClick = (payload, changeProps) => {
+    payload.component.onClick(payload, changeProps);
+  }
 
   const runOperations = (payload, changeProps) => {
     const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
@@ -588,6 +593,24 @@ const CategorizedList = React.memo(props => {
                             siblings: props.categories
                           }}
                           titles={propsObj.titles}
+                        />
+                      </div>
+                    )}
+                    {component.name === "SimpleButton" && (
+                      <div className={`${component.styleClasses} flex-2`}>
+                        <SimpleButton
+                          text={propsObj.text}
+                          variant={propsObj.variant}
+                          onClick={handleButtonClick}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
                         />
                       </div>
                     )}
