@@ -152,35 +152,35 @@ export const Input = styled.input`
 const Attachments = React.memo(props => {
   const [fileName, setFileName] = useState("");
   const [attachment, setAttachmentValue] = useState([]);
-  const [fileAdded, setFileAdded] = useState(false);
+  // const [fileAdded, setFileAdded] = useState(false);
   const [fileError, setFileError] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
 
   const openNameModal = () => {
-    this.setState({ nameMissing: false });
-    this.setState({ isNameModalOpen: true });
+    setNameMissing(false);
+    setIsNameModalOpen(true);
   };
 
   const afterOpenNamneModal = () => {};
 
   const closeNameModal = () => {
-    this.setState({ isNameModalOpen: false });
+    setIsNameModalOpen(false);
   };
 
   const { muutokset, fields, koodiarvo, paikka } = props;
 
   let liite = {};
-  let liitteetObj = {};
-  let index = 0;
+  // let liitteetObj = {};
+  // let index = 0;
 
   const addAttachment = () => {
     if (fileName) {
-      this.setState({ nameMissing: false });
-      this.closeNameModal();
+      setNameMissing(false);
+      closeNameModal();
       let items = [...attachment];
       items.nimi = fileName;
-      this.setState({ liite: items });
+      setAttachmentValue(items);
       // if (koodiarvo) {
       //   this.state.liitteetObj.liitteet.push(attachment);
       //   fields.remove(index);
@@ -191,13 +191,13 @@ const Attachments = React.memo(props => {
       //   }
       //   fields.liitteet.push(attachment);
       // }
-      setFileAdded(attachment.nimi);
-    } else this.setState({ nameMissing: true });
+      // setFileAdded(attachment.nimi);
+    } else setNameMissing(true);
   };
 
   const setAttachment = e => {
-    this.setState({ fileError: false });
-    setFileAdded("");
+    setFileError(false);
+    // setFileAdded("");
 
     if (e.target.files.length === 0) return;
 
@@ -246,18 +246,18 @@ const Attachments = React.memo(props => {
       liite.paikka = paikka;
       liite.new = true;
 
-      this.setState({ liite: liite });
-      this.setState({ liitteetObj: liitteetObj });
+      setAttachment(liite);
+      // this.setState({ liitteetObj: liitteetObj });
       setFileName(liite.nimi);
 
-      this.openNameModal();
-    } else return this.setState({ fileError: true });
+      openNameModal();
+    } else return setFileError(true);
   };
 
   const removeAttachment = (e, tiedostoId, uuid) => {
     e.preventDefault();
-    this.setState({ fileError: false });
-    this.setFileAdded("");
+    setFileError(false);
+    // setFileAdded("");
 
     let obj = undefined;
     let i = 0;
@@ -292,8 +292,8 @@ const Attachments = React.memo(props => {
 
   const setAttachmentName = (e, tiedostoId, uuid) => {
     e.preventDefault();
-    this.setState({ fileError: false });
-    this.setFileAdded("");
+    setFileError(false);
+    // setFileAdded("");
     let obj = undefined;
     let i = 0;
 
@@ -329,7 +329,7 @@ const Attachments = React.memo(props => {
   };
 
   const setAttachmentVisibility = (e, tiedostoId, uuid) => {
-    this.setState({ fileError: false });
+    setFileError(false);
     let obj = undefined;
     let i = 0;
     // if (koodiarvo) {
