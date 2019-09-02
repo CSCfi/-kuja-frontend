@@ -181,6 +181,9 @@ const Attachments = React.memo(props => {
       let items = [...attachment];
       items.nimi = fileName;
       setAttachmentValue(items);
+
+      props.onUpdate(props.payload, { attachments: items });
+
       // if (koodiarvo) {
       //   this.state.liitteetObj.liitteet.push(attachment);
       //   fields.remove(index);
@@ -246,7 +249,7 @@ const Attachments = React.memo(props => {
       liite.paikka = paikka;
       liite.new = true;
 
-      setAttachment(liite);
+      setAttachmentValue(liite);
       // this.setState({ liitteetObj: liitteetObj });
       setFileName(liite.nimi);
 
@@ -381,8 +384,9 @@ const Attachments = React.memo(props => {
     //   obj = fields.get(i);
     // } else obj = fields;
 
-    if (obj && obj.liitteet)
-      return obj.liitteet.map(liite => {
+    console.log(props.payload);
+    if (props.payload && props.payload.attachments)
+      return props.payload.attachments.map(liite => {
         if ((!paikka || liite.paikka === paikka) && !liite.removed) {
           return (
             <div key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
@@ -499,7 +503,9 @@ const Attachments = React.memo(props => {
 });
 
 Attachments.propTypes = {
-  fileName: PropTypes.string
+  fileName: PropTypes.string,
+  onUpdate: PropTypes.func,
+  payload: PropTypes.object
 };
 
 export default injectIntl(Attachments);

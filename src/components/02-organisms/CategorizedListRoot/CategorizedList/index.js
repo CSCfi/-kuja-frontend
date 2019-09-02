@@ -7,6 +7,7 @@ import TextBox from "../../../00-atoms/TextBox";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
+import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
@@ -426,9 +427,7 @@ const CategorizedList = React.memo(props => {
                           const isPreviousSiblingCheckedByDefault = !!(
                             previousSibling.properties || {}
                           ).isChecked;
-                          const previousSiblingFullAnchor = `${anchor}.${
-                            previousSibling.anchor
-                          }`;
+                          const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
                           const change = getChangeObjByAnchor(
                             previousSiblingFullAnchor,
                             props.changes
@@ -470,9 +469,7 @@ const CategorizedList = React.memo(props => {
                             props.changes
                           );
                           const parentChange = getChangeObjByAnchor(
-                            `${props.parent.anchor}.${
-                              props.parent.category.components[0].anchor
-                            }`,
+                            `${props.parent.anchor}.${props.parent.category.components[0].anchor}`,
                             props.changes
                           );
                           const isDisabled =
@@ -522,9 +519,7 @@ const CategorizedList = React.memo(props => {
                           const isPreviousSiblingCheckedByDefault = !!(
                             previousSibling.properties || {}
                           ).isChecked;
-                          const previousSiblingFullAnchor = `${anchor}.${
-                            previousSibling.anchor
-                          }`;
+                          const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
                           const change = getChangeObjByAnchor(
                             previousSiblingFullAnchor,
                             props.changes
@@ -576,6 +571,23 @@ const CategorizedList = React.memo(props => {
                             siblings: props.categories
                           }}
                           titles={propsObj.titles}
+                        />
+                      </div>
+                    )}
+                    {component.name === "Attachments" && (
+                      <div className="flex-2">
+                        <Attachments
+                          id={`attachments-${idSuffix}`}
+                          onChanges={runOperations}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
                         />
                       </div>
                     )}
