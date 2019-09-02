@@ -18,7 +18,7 @@ const Valtakunnallinen = React.memo(props => {
   }, [props.changes, props.data, props.isCheckedInitial]);
 
   return (
-    <>
+    <React.Fragment>
       <p className="pb-4">
         {props.intl.formatMessage(wizardMessages.areasInfo3)}
       </p>
@@ -31,7 +31,7 @@ const Valtakunnallinen = React.memo(props => {
       >
         {props.intl.formatMessage(wizardMessages.responsibilities)}
       </CheckboxWithLabel>
-    </>
+    </React.Fragment>
   );
 });
 
