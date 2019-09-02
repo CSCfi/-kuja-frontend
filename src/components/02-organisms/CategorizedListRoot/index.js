@@ -35,7 +35,9 @@ const CategorizedListRoot = React.memo(
         let allChangesClone = _.cloneDeep(allChanges);
         R.forEach(operation => {
           if (operation.type === "addition") {
-            allChangesClone = R.insert(-1, operation.payload, allChangesClone);
+            if (!!!R.find(R.propEq("anchor", operation.payload.anchor))(allChangesClone)) {
+              allChangesClone = R.insert(-1, operation.payload, allChangesClone);
+            }
           } else if (operation.type === "removal") {
             allChangesClone = R.filter(
               R.compose(
@@ -58,7 +60,6 @@ const CategorizedListRoot = React.memo(
           }
         }, operations);
         setAllChanges(allChangesClone);
-        // setChanges(getChangesByLevel(0, changes));
         onUpdate({
           anchor: anchor,
           categories: categories,

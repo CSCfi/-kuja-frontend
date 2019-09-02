@@ -83,6 +83,10 @@ export default defineMessages({
     id: "wizard.header_section5",
     defaultMessage: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
   },
+  other_placeholder: {
+    id: "wizard.other_placeholder",
+    defaultMessage: "Kerro vapaasti, mitä haluat hakea"
+  },
   minimumAmountOfYears: {
     id: "wizard.minimumAmountOfYears",
     defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä"

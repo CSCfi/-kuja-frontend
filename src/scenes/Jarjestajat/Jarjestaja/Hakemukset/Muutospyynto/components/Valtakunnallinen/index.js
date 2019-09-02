@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import CheckboxWithLabel from "../../../../../../../components/01-molecules/CheckboxWithLabel";
-import { isInLupa } from "../../../../../../../css/label";
+import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 
 const Valtakunnallinen = React.memo(props => {
   const name = "valtakunnallinen";
@@ -22,11 +22,24 @@ const Valtakunnallinen = React.memo(props => {
       <p className="pb-4">
         {props.intl.formatMessage(wizardMessages.areasInfo3)}
       </p>
+      {/* 
+        If not in Lupa but checkbox is checked -> added 
+        If in Lupa but checkbox is unchecked -> removed 
+      */}
       <CheckboxWithLabel
         name={`${name}-checkbox`}
         id={`${name}-checkbox`}
         isChecked={isChecked}
-        labelStyles={Object.assign({}, isInLupa, { fontSize: "0.8rem" })}
+        labelStyles={Object.assign(
+          {},
+          !props.isCheckedInitial && props.changes.properties.isChecked
+            ? isAdded
+            : {},
+          props.isCheckedInitial && !props.changes.properties.isChecked
+            ? isRemoved
+            : {},
+          props.isCheckedInitial ? isInLupa : {}
+        )}
         onChanges={handleChanges}
       >
         {props.intl.formatMessage(wizardMessages.responsibilities)}

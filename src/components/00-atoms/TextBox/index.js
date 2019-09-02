@@ -39,7 +39,6 @@ TextBox.defaultProps = {
 
 TextBox.propTypes = {
   ariaLabel: PropTypes.string,
-  defaultValue: PropTypes.string,
   delay: PropTypes.number,
   isDisabled: PropTypes.bool,
   isHidden: PropTypes.bool,

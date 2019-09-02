@@ -47,7 +47,7 @@ const Tutkintokielet = React.memo(props => {
                   name: "StatusTextRow",
                   code: subCategory.components[0].properties.code,
                   title: subCategory.components[0].properties.title,
-                  labelStyles: subCategory.components[0].properties.labelStyles
+                  labelStyles: {}
                 }
               };
               stateItem.categories[ii].categories[iii].components.push({
@@ -93,8 +93,12 @@ const Tutkintokielet = React.memo(props => {
   useEffect(() => {
     const _changes = R.mapObjIndexed((changeObjects, key) => {
       return R.filter(changeObj => {
-        return R.not(
-          R.includes(changeObj.anchor, props.unselectedAnchors[key] || [])
+        const categoryAnchor = R.compose(
+          R.slice(0),
+          R.lastIndexOf(".")
+        )(changeObj.anchor)(changeObj.anchor);
+        return !!!R.find(c => R.includes(categoryAnchor, c))(
+          props.unselectedAnchors[key] || []
         );
       }, changeObjects);
     }, changes);

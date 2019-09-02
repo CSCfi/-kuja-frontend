@@ -61,10 +61,10 @@ const MuutospyyntoWizardKielet = React.memo(props => {
         R.without(stateItemAnchors, additions)
       );
       return stateItem;
-    }, props.tutkinnotState);
-    prevTutkinnotItemsRef.current = props.tutkinnotState;
+    }, props.tutkinnotState.items);
+    prevTutkinnotItemsRef.current = props.tutkinnotState.items;
     setUnselectedAnchors(anchors);
-  }, [props.tutkinnotState]);
+  }, [props.tutkinnotState.items]);
 
   return (
     <Section code={headingNumber} title={heading}>

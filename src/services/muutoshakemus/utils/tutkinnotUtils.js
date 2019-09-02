@@ -12,7 +12,14 @@ export const getMetadata = (anchorParts, categories, i = 0) => {
   return category.meta;
 };
 
-export const getCategories = (index, article, koulutustyypit, kohde, maaraystyyppi, locale) => {
+export const getCategories = (
+  index,
+  article,
+  koulutustyypit,
+  kohde,
+  maaraystyyppi,
+  locale
+) => {
   if (!categories[index]) {
     categories[index] = R.values(
       R.map(koulutustyyppi => {
@@ -41,7 +48,7 @@ export const getCategories = (index, article, koulutustyypit, kohde, maaraystyyp
                 maaraystyyppi,
                 koodisto: koulutus.koodisto,
                 metadata: koulutus.metadata,
-                isInLupa: isInLupaBool,
+                isInLupa: isInLupaBool
               },
               components: [
                 {
@@ -115,4 +122,220 @@ export const getCategories = (index, article, koulutustyypit, kohde, maaraystyyp
     );
   }
   return categories[index];
-}
+};
+
+export const getCategoriesForPerustelut = (
+  index,
+  article,
+  koulutustyypit,
+  kohde,
+  maaraystyyppi,
+  locale,
+  backendChanges,
+  areaCode,
+  muutosperustelut
+) => {
+  const sortedMuutosperustelut = R.sortBy(R.prop("koodiArvo"))(
+    muutosperustelut.muutosperusteluList
+  );
+  const relevantAnchors = R.map(
+    R.prop("anchor"),
+    R.filter(
+      R.compose(
+        R.startsWith(areaCode),
+        R.prop("anchor")
+      )
+    )(backendChanges)
+  );
+  if (!relevantAnchors.length) {
+    return [];
+  }
+  const relevantKoulutustyypit = R.filter(
+    R.compose(
+      R.not,
+      R.isEmpty,
+      R.prop("koulutukset")
+    ),
+    R.mapObjIndexed(koulutustyyppi => {
+      koulutustyyppi.koulutukset = R.filter(koulutus => {
+        const anchorStart = `${areaCode}.${koulutustyyppi.koodiArvo}.${
+          koulutus.koodiArvo
+        }`;
+        return !!R.filter(R.startsWith(anchorStart))(relevantAnchors).length;
+      }, koulutustyyppi.koulutukset);
+      return koulutustyyppi;
+    })(koulutustyypit)
+  );
+
+  if (!categories[index]) {
+    categories[index] = R.values(
+      R.map(koulutustyyppi => {
+        return {
+          anchor: koulutustyyppi.koodiArvo,
+          code: koulutustyyppi.koodiArvo,
+          title:
+            _.find(koulutustyyppi.metadata, m => {
+              return m.kieli === locale;
+            }).nimi || "[Koulutustyypin otsikko tähän]",
+          categories: R.map(koulutus => {
+            const isInLupaBool = article
+              ? !!_.find(article.koulutusalat, koulutusala => {
+                  return !!_.find(koulutusala.koulutukset, {
+                    koodi: koulutus.koodiArvo
+                  });
+                })
+              : false;
+
+            let structure = {
+              anchor: koulutus.koodiArvo,
+              meta: {
+                kohde,
+                maaraystyyppi,
+                koodisto: koulutus.koodisto,
+                metadata: koulutus.metadata,
+                isInLupa: isInLupaBool
+              },
+              components: [
+                {
+                  anchor: "A",
+                  name: "StatusTextRow",
+                  properties: {
+                    code: koulutus.koodiArvo,
+                    title:
+                      _.find(koulutus.metadata, m => {
+                        return m.kieli === locale;
+                      }).nimi || "[Koulutuksen otsikko tähän]",
+                    labelStyles: {
+                      addition: isAdded,
+                      removal: isRemoved,
+                      custom: Object.assign({}, isInLupaBool ? isInLupa : {})
+                    }
+                  }
+                }
+              ]
+            };
+
+            if (sortedMuutosperustelut) {
+              const anchorBase = `${areaCode}.${koulutustyyppi.koodiArvo}.${
+                koulutus.koodiArvo
+              }`;
+              const changeObj = R.find(
+                R.compose(
+                  R.startsWith(anchorBase),
+                  R.prop("anchor")
+                )
+              )(backendChanges);
+              const isAddition = changeObj && changeObj.properties.isChecked;
+              const titleObj = isAddition
+                ? {
+                    anchor: "perustelut",
+                    title: "Muutospyynnön taustalla olevat syyt"
+                  }
+                : {};
+              const checkboxes = isAddition
+                ? R.map(perusteluObj => {
+                    const metadata = R.find(R.propEq("kieli", locale))(
+                      perusteluObj.metadata
+                    );
+                    return {
+                      anchor: perusteluObj.koodiArvo,
+                      components: [
+                        {
+                          anchor: "A",
+                          name: "CheckboxWithLabel",
+                          properties: {
+                            labelStyles: {},
+                            isChecked: false,
+                            title: metadata.nimi
+                          }
+                        }
+                      ]
+                    };
+                  }, sortedMuutosperustelut)
+                : [];
+
+              structure.categories = R.flatten([
+                titleObj,
+                checkboxes,
+                {
+                  anchor: "vapaa-tekstikentta",
+                  title:
+                    "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+                  components: [
+                    {
+                      anchor: "A",
+                      name: "TextBox",
+                      properties: {
+                        defaultValue: "Text 2"
+                      }
+                    }
+                  ]
+                }
+              ]);
+            }
+            if (koulutus.osaamisala) {
+              structure.categories = R.insert(
+                -1,
+                (osaamisala => {
+                  const isInLupaBool = article
+                    ? !!_.find(article.koulutusalat, koulutusala => {
+                        return !!_.find(koulutusala.koulutukset, {
+                          koodi: osaamisala.koodiArvo
+                        });
+                      })
+                    : false;
+                  return {
+                    anchor: osaamisala.koodiArvo,
+                    meta: {
+                      kohde,
+                      maaraystyyppi,
+                      koodisto: osaamisala.koodisto,
+                      metadata: osaamisala.metadata,
+                      isInLupa: isInLupaBool
+                    },
+                    components: [
+                      {
+                        anchor: "A",
+                        name: "StatusTextRow",
+                        properties: {
+                          code: osaamisala.koodiArvo,
+                          title:
+                            _.find(osaamisala.metadata, m => {
+                              return m.kieli === "FI";
+                            }).nimi || "[Osaamisalan otsikko tähän]",
+                          labelStyles: {
+                            addition: isAdded,
+                            removal: isRemoved
+                          }
+                        }
+                      }
+                    ],
+                    categories: [
+                      {
+                        anchor: "vapaa-tekstikentta",
+                        title:
+                          "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+                        components: [
+                          {
+                            anchor: "A",
+                            name: "TextBox",
+                            properties: {
+                              defaultValue: "Text 2"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  };
+                })(koulutus.osaamisala),
+                structure.categories
+              );
+            }
+            return structure;
+          }, koulutustyyppi.koulutukset)
+        };
+      }, relevantKoulutustyypit)
+    );
+  }
+  return categories[index];
+};
