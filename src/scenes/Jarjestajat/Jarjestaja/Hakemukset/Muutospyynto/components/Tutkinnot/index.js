@@ -102,6 +102,7 @@ const Tutkinnot = React.memo(props => {
             onChangesRemove={removeChanges}
             onUpdate={saveChanges}
             sectionId={sectionId}
+            showCategoryTitles={true}
             title={stateItem.title}
           />
         );
