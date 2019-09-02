@@ -7,6 +7,7 @@ import { simpleStory } from "./storydata/simpleStory";
 import { complexStory } from "./storydata/complexStory";
 import { radioStory } from "./storydata/radioStory";
 import { simpleTextBoxStory } from "./storydata/simpleTextBoxStory";
+import { subformStory } from "./storydata/subformStory";
 import { textBoxStory } from "./storydata/textBoxStory";
 
 storiesOf("CategorizedListRoot", module)
@@ -71,6 +72,17 @@ storiesOf("CategorizedListRoot", module)
         anchor="textbox"
         categories={textBoxStory.categories}
         changes={textBoxStory.changes}
+        onUpdate={() => {}}
+        showCategoryTitles={false}
+      />
+    );
+  })
+  .add("Dynamic subform example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="dynamicSubforms"
+        categories={subformStory.categories}
+        changes={subformStory.changes}
         onUpdate={() => {}}
         showCategoryTitles={false}
       />

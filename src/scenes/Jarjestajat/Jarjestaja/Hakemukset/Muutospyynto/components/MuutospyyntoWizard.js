@@ -27,6 +27,7 @@ import { MuutContext } from "../../../../../../context/muutContext";
 import { MaaraystyypitContext } from "../../../../../../context/maaraystyypitContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import { MuutospyynnotContext } from "../../../../../../context/muutospyynnotContext";
+import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import {
   saveMuutospyynto,
   setBackendChanges,
@@ -266,7 +267,9 @@ const MuutospyyntoWizard = props => {
             result
           );
         }
-        const changeObjects = R.map(R.path(["meta", "changeObj"]))(result).filter(Boolean);
+        const changeObjects = R.map(R.path(["meta", "changeObj"]))(
+          result
+        ).filter(Boolean);
         return changeObjects.length ? changeObjects : result;
       };
       const changes = {
@@ -432,18 +435,20 @@ const MuutospyyntoWizard = props => {
                   muutoshakemus={muutoshakemus}
                 >
                   <MuutosperustelutProvider>
-                    <MuutospyyntoWizardPerustelut
-                      kielet={kielet}
-                      kohteet={kohteet.data}
-                      koulutukset={koulutukset}
-                      koulutusalat={koulutusalat}
-                      koulutustyypit={koulutustyypit}
-                      lupa={lupa}
-                      maaraystyypit={maaraystyypit.data}
-                      muut={muut}
-                      muutoshakemus={muutoshakemus}
-                      onUpdate={onUpdate}
-                    />
+                    <LomakkeetProvider>
+                      <MuutospyyntoWizardPerustelut
+                        kielet={kielet}
+                        kohteet={kohteet.data}
+                        koulutukset={koulutukset}
+                        koulutusalat={koulutusalat}
+                        koulutustyypit={koulutustyypit}
+                        lupa={lupa}
+                        maaraystyypit={maaraystyypit.data}
+                        muut={muut}
+                        muutoshakemus={muutoshakemus}
+                        onUpdate={onUpdate}
+                      />
+                    </LomakkeetProvider>
                   </MuutosperustelutProvider>
                 </WizardPage>
               )}
