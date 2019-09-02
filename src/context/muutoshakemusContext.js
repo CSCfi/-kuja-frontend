@@ -13,6 +13,7 @@ const initialState = {
     muut: {},
     handled: true
   },
+  perustelutmuut: {},
   muut: {
     state: {
       changes: {}

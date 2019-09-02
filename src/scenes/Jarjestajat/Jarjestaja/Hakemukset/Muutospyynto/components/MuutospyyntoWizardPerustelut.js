@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import Section from "../../../../../../components/03-templates/Section";
 import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "./Perustelut/PerustelutMuut";
@@ -9,6 +9,7 @@ import { fetchMuutosperustelut } from "../../../../../../services/muutosperustel
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
+import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
 
 const MuutospyyntoWizardPerustelut = props => {
   const [kohteet, setKohteet] = useState(null);
@@ -17,6 +18,14 @@ const MuutospyyntoWizardPerustelut = props => {
     state: muutosperustelut,
     dispatch: muutosperustelutDispatch
   } = useContext(MuutosperustelutContext);
+  const { onUpdate } = props;
+
+  const handleChanges = useCallback(
+    (sectionId, payload) => {
+      onUpdate(Object.assign({}, { sectionId }, { ...payload }));
+    },
+    [onUpdate]
+  );
 
   useEffect(() => {
     fetchMuutosperustelut()(muutosperustelutDispatch);
@@ -33,7 +42,7 @@ const MuutospyyntoWizardPerustelut = props => {
   }, [props.intl.locale, props.kohteet, props.lupa.kohteet]);
 
   useEffect(() => {
-    console.info(props.muutoshakemus.backendChanges);
+    console.info(props.muutoshakemus);
   }, [props.muutoshakemus]);
 
   useEffect(() => {
@@ -101,24 +110,28 @@ const MuutospyyntoWizardPerustelut = props => {
             </Section>
           ) : null}
 
-          <Section code={3} title={kohteet[2].title}>
-
-          </Section>
+          {!!props.muutoshakemus.backendChanges.toimintaalue.length ? (
+            <PerustelutToimintaalue
+              changes={props.muutoshakemus.backendChanges.toimintaalue}
+              handleChanges={handleChanges}
+              headingNumber={3}
+              title={kohteet[2].title}
+            ></PerustelutToimintaalue>
+          ) : null}
 
           <Section code={4} title={kohteet[3].title}></Section>
-          
+
           {!!R.keys(props.muutoshakemus.backendChanges.muut).length ? (
-            <Section code={5} title={kohteet[4].title}>
-              <PerustelutMuut
-                backendChanges={props.muutoshakemus.backendChanges.muut}
-                kohde={kohteet.muut}
-                headingNumber={props.lupa.kohteet[5].headingNumber}
-                maaraykset={props.lupa.data.maaraykset}
-                muut={props.muut}
-                onUpdate={props.onUpdate}
-              />
-            </Section>
-          ): null}
+            <PerustelutMuut
+              backendChanges={props.muutoshakemus.backendChanges.muut}
+              handleChanges={handleChanges}
+              kohde={kohteet.muut}
+              headingNumber={props.lupa.kohteet[5].headingNumber}
+              maaraykset={props.lupa.data.maaraykset}
+              muut={props.muut}
+              title={kohteet[4].title}
+            />
+          ) : null}
         </div>
       )}
     </React.Fragment>

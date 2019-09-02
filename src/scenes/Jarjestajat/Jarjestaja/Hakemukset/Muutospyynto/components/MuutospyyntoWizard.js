@@ -266,10 +266,8 @@ const MuutospyyntoWizard = props => {
             result
           );
         }
-        if (key !== "toimintaalue") {
-          result = R.map(R.path(["meta", "changeObj"]))(result);
-        }
-        return result;
+        const changeObjects = R.map(R.path(["meta", "changeObj"]))(result).filter(Boolean);
+        return changeObjects.length ? changeObjects : result;
       };
       const changes = {
         tutkinnotjakoulutukset: getChangesOf(

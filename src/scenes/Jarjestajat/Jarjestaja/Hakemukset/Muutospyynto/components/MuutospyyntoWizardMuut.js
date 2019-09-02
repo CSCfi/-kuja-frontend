@@ -273,6 +273,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                 index={i}
                 onUpdate={saveChanges}
                 sectionId={sectionId}
+                showCategoryTitles={true}
                 title={row.title}
                 onChangesRemove={removeChanges}
               />
