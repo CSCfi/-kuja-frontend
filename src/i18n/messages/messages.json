@@ -175,6 +175,11 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.other_placeholder",
+    "defaultMessage": "Kerro vapaasti, mitä haluat hakea",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "wizard.minimumAmountOfYears",
     "defaultMessage": "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä",
     "filepath": "src/i18n/definitions/wizard.js"
