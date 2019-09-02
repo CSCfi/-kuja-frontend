@@ -32,7 +32,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         )(relevantMaaraykset);
 
         if (
-          kuvaus &&
+          (kuvaus || article.koodiArvo === "22") &&
           kasite &&
           (isInRelevantMaaraykset ||
             (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
@@ -53,7 +53,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             const title =
               _.find(article.metadata, m => {
                 return m.kieli === locale;
-              }).kuvaus || "[Koulutuksen otsikko tähän]";
+              }).kuvaus || "Muu";
             const isInLupaBool = article
               ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
                   return article.koodiArvo === koulutusala;
@@ -62,7 +62,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             const labelClasses = {
               isInLupa: isInLupaBool
             };
-            return {
+            let result = {
               anchor: article.koodiArvo,
               meta: {
                 isInLupa: isInLupaBool,
@@ -87,9 +87,26 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                     }
                   }
                 }
-              ]
+              ],
             };
-          }, item.articles)
+            if(article.koodiArvo === '22'){
+              result.categories = [
+                {
+                  anchor: "other",
+                  components: [
+                    {
+                      anchor: "A",
+                      name: "TextBox",
+                      properties: {
+                        placeholder: props.intl.formatMessage(wizardMessages.other_placeholder)
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+            return result;
+          }, R.sortBy(R.prop("koodiArvo"), item.articles))
         };
       }, configObj.categoryData);
     };

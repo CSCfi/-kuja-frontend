@@ -17,6 +17,16 @@ export default function getChangesOfMuut(muutData) {
           return R.find(R.propEq("koodiArvo", anchorArr[2]), item.articles);
         })(section.data).filter(Boolean)[0];
       }
+
+      let tila = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
+      let type = changeObj.properties.isChecked ? "addition" : "removal"
+
+      if ((changeObj.properties.isChecked === undefined || changeObj.properties.isChecked === null)
+        && changeObj.properties.value){
+        tila = 'MUUTOS'
+        type = 'modification'
+      }
+
       return {
         koodiarvo: maarays.koodiArvo,
         koodisto: maarays.koodisto.koodistoUri,
@@ -24,8 +34,8 @@ export default function getChangesOfMuut(muutData) {
         kohde: muutData.state.kohde,
         maaraystyyppi: muutData.state.maaraystyyppi,
         meta: { changeObj },
-        tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
-        type: changeObj.properties.isChecked ? "addition" : "removal"
+        tila: tila,
+        type: type
       };
     }, changesBySection);
   }, muutData.state.changes);
