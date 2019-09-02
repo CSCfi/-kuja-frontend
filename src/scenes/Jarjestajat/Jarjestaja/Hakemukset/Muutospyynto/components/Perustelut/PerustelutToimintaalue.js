@@ -97,38 +97,39 @@ const PerustelutToimintaalue = React.memo(
           }, muutokset.POISTO)
         };
       };
-      if (
+
+      const valtakunnallinenChange = !!R.find(
         R.compose(
-          R.not,
-          R.isEmpty
-        )(changes)
-      ) {
-        const categories = getCategories(R.groupBy(R.prop("tila"), changes));
-        setCategories(categories);
+          R.equals("valtakunnallinen"),
+          R.path(["properties", "name"])
+        )
+      )(changes);
+
+      if (!valtakunnallinenChange) {
+        // Let's form the change objects
+        const groupedMuutokset = R.groupBy(R.prop("tila"), changes);
+        const additions = R.map(muutos => {
+          return {
+            anchor: `additions.${muutos.koodiarvo}.label`,
+            properties: {
+              a: 1
+            }
+          };
+        }, groupedMuutokset.LISAYS);
+        const removals = R.map(muutos => {
+          return {
+            anchor: `removals.${muutos.koodiarvo}.label`,
+            properties: {
+              b: 1
+            }
+          };
+        }, groupedMuutokset.POISTO);
+        setGroupedChanges({ additions, removals });
+
+        // Let's create the categories
+        setCategories(getCategories(groupedMuutokset));
       }
     }, [changes, intl]);
-
-    useEffect(() => {
-      const tmpGroupedChanges = R.groupBy(R.prop("tila"), changes);
-      const additions = R.map(muutos => {
-        return {
-          anchor: `additions.${muutos.koodiarvo}.label`,
-          properties: {
-            a: 1
-          }
-        };
-      }, tmpGroupedChanges.LISAYS);
-      const removals = R.map(muutos => {
-        return {
-          anchor: `removals.${muutos.koodiarvo}.label`,
-          properties: {
-            b: 1
-          }
-        };
-      }, tmpGroupedChanges.POISTO);
-      console.info(additions, removals);
-      setGroupedChanges({ additions, removals });
-    }, [changes]);
 
     return (
       <React.Fragment>
