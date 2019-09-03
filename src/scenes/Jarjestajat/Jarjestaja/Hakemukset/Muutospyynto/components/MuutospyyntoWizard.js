@@ -50,6 +50,7 @@ import { fetchMuutospyynto } from "../../../../../../services/muutospyynnot/acti
 import { fetchMaaraystyypit } from "../../../../../../services/maaraystyypit/actions";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
+import { MuutosperustelutProvider } from "../../../../../../context/muutosperustelutContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
@@ -57,6 +58,7 @@ import { injectIntl } from "react-intl";
 import * as R from "ramda";
 
 import "react-toastify/dist/ReactToastify.css";
+import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -264,10 +266,8 @@ const MuutospyyntoWizard = props => {
             result
           );
         }
-        if (key !== "toimintaalue") {
-          result = R.map(R.path(["meta", "changeObj"]))(result);
-        }
-        return result;
+        const changeObjects = R.map(R.path(["meta", "changeObj"]))(result).filter(Boolean);
+        return changeObjects.length ? changeObjects : result;
       };
       const changes = {
         tutkinnotjakoulutukset: getChangesOf(
@@ -430,7 +430,22 @@ const MuutospyyntoWizard = props => {
                   onSave={save}
                   lupa={lupa}
                   muutoshakemus={muutoshakemus}
-                />
+                >
+                  <MuutosperustelutProvider>
+                    <MuutospyyntoWizardPerustelut
+                      kielet={kielet}
+                      kohteet={kohteet.data}
+                      koulutukset={koulutukset}
+                      koulutusalat={koulutusalat}
+                      koulutustyypit={koulutustyypit}
+                      lupa={lupa}
+                      maaraystyypit={maaraystyypit.data}
+                      muut={muut}
+                      muutoshakemus={muutoshakemus}
+                      onUpdate={onUpdate}
+                    />
+                  </MuutosperustelutProvider>
+                </WizardPage>
               )}
               {page === 3 && (
                 <WizardPage

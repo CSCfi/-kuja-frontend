@@ -71,7 +71,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     const kunnatInitial = getInitialItems(
       props.maakuntakunnat.maakuntakunnatList,
       props.lupakohde.kunnat
-    );
+    ).filter(Boolean);
 
     const initialValueOfSelect = R.concat(kunnatInitial, initialMaakunnat);
 

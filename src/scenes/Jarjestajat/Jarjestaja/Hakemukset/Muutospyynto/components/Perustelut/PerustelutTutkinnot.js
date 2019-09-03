@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
-import Section from "../../../../../../../components/03-templates/Section";
-import { getCategories } from "../../../../../../../services/muutoshakemus/utils/tutkinnotUtils";
+import { getCategoriesForPerustelut } from "../../../../../../../services/muutoshakemus/utils/tutkinnotUtils";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import _ from "lodash";
 
-const Tutkinnot = React.memo(props => {
+const PerustelutTutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
   const [state, setState] = useState([]);
   const [koulutusdata, setKoulutusdata] = useState([]);
@@ -27,17 +26,21 @@ const Tutkinnot = React.memo(props => {
         return article.koodi === areaCode;
       }, articles);
     };
+
     const handleKoulutusdata = (koulutusdata, _changes) => {
       return R.addIndex(R.map)((koulutusala, i) => {
         const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
         const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
-        const categories = getCategories(
+        const categories = getCategoriesForPerustelut(
           i,
           article,
           koulutusala.koulutukset,
           props.kohde,
           props.maaraystyyppi,
-          locale
+          locale,
+          props.backendChanges,
+          areaCode,
+          props.muutosperustelut
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
         const changes = R.filter(changeObj => {
@@ -59,7 +62,8 @@ const Tutkinnot = React.memo(props => {
     props.backendChanges,
     props.kohde,
     props.lupa.kohteet,
-    props.maaraystyyppi
+    props.maaraystyyppi,
+    props.muutosperustelut
   ]);
 
   useEffect(() => {
@@ -86,36 +90,35 @@ const Tutkinnot = React.memo(props => {
   };
 
   return (
-    <Section
-      code={props.lupa.kohteet[1].headingNumber}
-      title={props.lupa.kohteet[1].heading}
-    >
+    <React.Fragment>
       {R.addIndex(R.map)((stateItem, i) => {
-        return (
+        return stateItem.categories.length ? (
           <ExpandableRowRoot
             anchor={stateItem.areaCode}
             key={`expandable-row-root-${i}`}
             categories={stateItem.categories}
             changes={stateItem.changes}
             code={stateItem.areaCode}
+            disableReverting={true}
+            hideAmountOfChanges={false}
             index={i}
+            isExpanded={true}
             onChangesRemove={removeChanges}
             onUpdate={saveChanges}
             sectionId={sectionId}
-            showCategoryTitles={true}
             title={stateItem.title}
           />
-        );
+        ) : null;
       }, state)}
-    </Section>
+    </React.Fragment>
   );
 });
 
-Tutkinnot.defaultProps = {
+PerustelutTutkinnot.defaultProps = {
   maaraystyyppi: {}
 };
 
-Tutkinnot.propTypes = {
+PerustelutTutkinnot.propTypes = {
   backendChanges: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
@@ -123,7 +126,8 @@ Tutkinnot.propTypes = {
   koulutustyypit: PropTypes.array,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
+  muutosperustelut: PropTypes.object,
   onUpdate: PropTypes.func
 };
 
-export default injectIntl(Tutkinnot);
+export default injectIntl(PerustelutTutkinnot);

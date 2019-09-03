@@ -26,7 +26,10 @@ const compare = (prevProps, nextProps) => {
 const defaultProps = {
   categories: [],
   changes: [],
-  isExpanded: false
+  disableReverting: false,
+  hideAmountOfChanges: false,
+  isExpanded: false,
+  showCategoryTitles: false
 };
 
 const ExpandableRowRoot = React.memo(
@@ -35,12 +38,15 @@ const ExpandableRowRoot = React.memo(
     categories = defaultProps.categories,
     changes = defaultProps.changes,
     code,
+    disableReverting = defaultProps.disableReverting,
+    hideAmountOfChanges = defaultProps.hideAmountOfChanges,
     index,
     intl,
     isExpanded = defaultProps.isExpanded,
     onChangesRemove,
     onUpdate,
     sectionId,
+    showCategoryTitles = defaultProps.showCategoryTitles,
     title
   }) => {
     const classes = useStyles();
@@ -56,26 +62,30 @@ const ExpandableRowRoot = React.memo(
             <div data-slot="info">
               {changes.length > 0 && (
                 <div className="flex items-center">
-                  <NumberOfChanges changes={changes} />
-                  <span className="mx-6">
-                    <Tooltip title={intl.formatMessage(commonMessages.undo)}>
-                      <IconButton
-                        className={classes.button}
-                        variant="outlined"
-                        size="small"
-                        onClick={e => {
-                          e.stopPropagation();
-                          return onChangesRemove(sectionId, anchor, index);
-                        }}
-                      >
-                        <UndoIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </span>
+                  {!hideAmountOfChanges && (
+                    <NumberOfChanges changes={changes} />
+                  )}
+                  {!disableReverting && (
+                    <span className="mx-6">
+                      <Tooltip title={intl.formatMessage(commonMessages.undo)}>
+                        <IconButton
+                          className={classes.button}
+                          variant="outlined"
+                          size="small"
+                          onClick={e => {
+                            e.stopPropagation();
+                            return onChangesRemove(sectionId, anchor, index);
+                          }}
+                        >
+                          <UndoIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </span>
+                  )}
                 </div>
               )}
             </div>
-            <div data-slot="content" className="w-full pl-3">
+            <div data-slot="content" className="w-full">
               <CategorizedListRoot
                 anchor={anchor}
                 categories={categories}
@@ -83,7 +93,7 @@ const ExpandableRowRoot = React.memo(
                 index={index}
                 onUpdate={onUpdate}
                 sectionId={sectionId}
-                showCategoryTitles={true}
+                showCategoryTitles={showCategoryTitles}
               />
             </div>
           </ExpandableRow>
@@ -99,11 +109,14 @@ ExpandableRowRoot.propTypes = {
   categories: PropTypes.array,
   changes: PropTypes.array,
   code: PropTypes.string,
+  disableReverting: PropTypes.bool,
+  hideAmountOfChanges: PropTypes.bool,
   index: PropTypes.number,
   isExpanded: PropTypes.bool,
   onChangesRemove: PropTypes.func,
   onUpdate: PropTypes.func,
   sectionId: PropTypes.string,
+  showCategoryTitles: PropTypes.bool,
   title: PropTypes.string
 };
 

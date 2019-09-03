@@ -17,7 +17,7 @@ export default function(state, action) {
       return {
         ...state,
         [action.payload.sectionId]: {
-          ...state[action.payload.sectionId],
+          ...state[action.payload.sectionId] || {},
           state: action.payload
         }
       };

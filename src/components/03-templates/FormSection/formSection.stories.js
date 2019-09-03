@@ -1,12 +1,23 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import Section from "./index";
+import FormSection from "./index";
+import { simpleStory } from "../../02-organisms/CategorizedListRoot/storydata/simpleStory";
+import { complexStory } from "../../02-organisms/CategorizedListRoot/storydata/complexStory";
+import ExpandableRowRoot from "../../02-organisms/ExpandableRowRoot";
 import { withInfo } from "@storybook/addon-info";
 
-storiesOf("Section", module)
+const handleChanges = (sectionId, payload) => {
+  console.info("Passing the changes on...", sectionId, payload);
+};
+
+storiesOf("FormSection", module)
   .addDecorator(withInfo)
   .add("Code and title are visible", () => (
-    <Section code={1} title="Title of a section">
+    <FormSection
+      id="tutkinnot-ja-koulutukset"
+      code={1}
+      title="Title of a section"
+    >
       Cupidatat excepteur Lorem cupidatat nulla dolore nulla ex. Voluptate amet
       anim nisi ipsum. Consectetur tempor consequat in quis elit culpa
       reprehenderit aliqua ut deserunt dolor. Reprehenderit cillum elit laborum
@@ -24,10 +35,13 @@ storiesOf("Section", module)
       esse velit. Elit laboris ex excepteur ullamco ea velit eiusmod. Mollit ea
       enim ea quis sit eiusmod amet laborum duis Lorem consequat. Adipisicing
       eiusmod consequat mollit ut eu deserunt pariatur.
-    </Section>
+    </FormSection>
   ))
   .add("Only the title is set", () => (
-    <Section title="Title of a section">
+    <FormSection
+      id="kielet"
+      title="Title of a section"
+    >
       Fugiat adipisicing ullamco nostrud occaecat sunt do sit ex esse. In et
       aliqua nostrud esse incididunt consequat adipisicing. Quis magna id id
       quis est. Ipsum sit eiusmod magna veniam nostrud pariatur velit enim
@@ -40,5 +54,67 @@ storiesOf("Section", module)
       enim id elit. Pariatur aliqua dolor est consectetur mollit ut est. Dolor
       ex reprehenderit tempor excepteur cupidatat culpa ullamco excepteur magna
       reprehenderit Lorem aliquip mollit.
-    </Section>
+    </FormSection>
+  ))
+  .add("Usage with ExpandableRowRoot", () => (
+    <FormSection
+      id="kielet"
+      sectionChanges={{ simple :simpleStory.changes}}
+      code={3}
+      title="Title of a section"
+      runOnChanges={handleChanges}
+      render={props => (
+        <ExpandableRowRoot
+          anchor={"simple"}
+          categories={simpleStory.categories}
+          changes={props.sectionChanges.simple}
+          code="1"
+          disableReverting={true}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          title={"Simple story"}
+          {...props}
+        />
+      )}
+    />
+  ))
+  .add("Usage with multiple ExpandableRowRoots", () => (
+    <FormSection
+      id="muut"
+      sectionChanges={{
+        simple: simpleStory.changes,
+        complex: complexStory.changes
+      }}
+      code={3}
+      title="Title of a section"
+      runOnChanges={handleChanges}
+      render={props => (
+        <React.Fragment>
+          <ExpandableRowRoot
+            anchor={"simple"}
+            categories={simpleStory.categories}
+            changes={props.sectionChanges.simple}
+            code="1"
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            showCategoryTitles={false}
+            isExpanded={true}
+            title={"Simple story"}
+            {...props}
+          />
+          <ExpandableRowRoot
+            anchor={"complex"}
+            categories={complexStory.categories}
+            changes={props.sectionChanges.complex}
+            code="2"
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            isExpanded={true}
+            showCategoryTitles={true}
+            title={"Complex story"}
+            {...props}
+          />
+        </React.Fragment>
+      )}
+    />
   ));
