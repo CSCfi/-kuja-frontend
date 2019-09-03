@@ -168,7 +168,7 @@ const Attachments = React.memo(props => {
     setIsNameModalOpen(false);
   };
 
-  const { muutokset, fields, koodiarvo, paikka } = props;
+  const { changes, value, koodiarvo, payload, paikka } = props;
 
   let liite = {};
   // let liitteetObj = {};
@@ -178,11 +178,16 @@ const Attachments = React.memo(props => {
     if (fileName) {
       setNameMissing(false);
       closeNameModal();
-      let items = [...attachment];
-      items.nimi = fileName;
-      setAttachmentValue(items);
+      let item = attachment;
+      item.nimi = fileName;
+      setAttachmentValue(item);
 
-      props.onUpdate(props.payload, { attachments: items });
+      let items = props.payload.attachments;
+      items.push(item);
+      props.payload.attachments = items;
+      props.onChanges(props.payload, {
+        attachments: items
+      });
 
       // if (koodiarvo) {
       //   this.state.liitteetObj.liitteet.push(attachment);
@@ -246,7 +251,7 @@ const Attachments = React.memo(props => {
       liite.koko = e.target.files[0].size;
       liite.removed = false;
       liite.salainen = false;
-      liite.paikka = paikka;
+      // liite.paikka = paikka;
       liite.new = true;
 
       setAttachmentValue(liite);
@@ -384,7 +389,11 @@ const Attachments = React.memo(props => {
     //   obj = fields.get(i);
     // } else obj = fields;
 
-    console.log(props.payload);
+    obj = props.changes;
+
+    console.log(payload);
+    console.log(value);
+
     if (props.payload && props.payload.attachments)
       return props.payload.attachments.map(liite => {
         if ((!paikka || liite.paikka === paikka) && !liite.removed) {
@@ -504,8 +513,9 @@ const Attachments = React.memo(props => {
 
 Attachments.propTypes = {
   fileName: PropTypes.string,
-  onUpdate: PropTypes.func,
-  payload: PropTypes.object
+  onChanges: PropTypes.func,
+  payload: PropTypes.object,
+  value: PropTypes.object
 };
 
 export default injectIntl(Attachments);
