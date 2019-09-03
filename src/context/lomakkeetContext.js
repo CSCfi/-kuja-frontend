@@ -5,7 +5,8 @@ const initialState = {
   perustelut: {
     tutkinnot: {
       addition: []
-    }
+    },
+    koulutukset: {}
   }
 };
 
