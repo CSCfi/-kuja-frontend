@@ -527,7 +527,7 @@ const CategorizedList = React.memo(props => {
                             <span className="leading-none">
                               {propsObj.code}
                             </span>
-                            <p className="ml-4 leading-none">{title}</p>
+                            <p className={`${!propsObj.withoutMargin && 'ml-4 '}leading-none`}>{title}</p>
                           </div>
                         </StatusTextRow>
                       </div>

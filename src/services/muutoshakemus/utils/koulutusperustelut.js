@@ -8,9 +8,24 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
   const forms = {
     "3": [
       {
-        anchor: code,
-        title: "Lyhyt normilomake"
-      }
+        anchor: `${code}`,
+        title: "",
+        components: [
+          {
+            anchor: "perustele-label",
+            name: "StatusTextRow",
+            properties: {
+              labelStyles: {},
+              withoutMargin: true,
+              title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+            }
+          },
+          {
+            anchor: "A",
+            name: "TextBox",
+          }
+        ],
+      },
     ],
     "4": [
       {
