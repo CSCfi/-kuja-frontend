@@ -342,7 +342,6 @@ const CategorizedList = React.memo(props => {
             )}
             <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
               {_.map(category.components, (component, ii) => {
-                console.log(category.components)
                 const fullAnchor = `${anchor}.${component.anchor}`;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
                 const idSuffix = `${i}-${ii}`;
