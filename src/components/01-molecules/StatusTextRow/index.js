@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import * as R from "ramda";
 
-const StatusTextRow = React.memo(props => {
-  return (
-    <div className="text-base py-4" style={props.labelStyles}>
-      {props.children}
-    </div>
-  );
-});
+const defaultProps = {
+  styleClasses: ["text-base", "py-4"]
+};
 
-StatusTextRow.defaultProps = {};
+const StatusTextRow = React.memo(
+  ({ children, styleClasses = defaultProps.styleClasses }) => {
+    const [classNames, setClassNames] = useState(styleClasses);
+
+    useEffect(() => {
+      console.info(styleClasses);
+      setClassNames(styleClasses);
+    }, [styleClasses]);
+
+    return <div className={R.join(" ", classNames)}>{children}</div>;
+  }
+);
 
 StatusTextRow.propTypes = {
-  labelStyles: PropTypes.object
+  styleClasses: PropTypes.array
 };
 
 export default StatusTextRow;
