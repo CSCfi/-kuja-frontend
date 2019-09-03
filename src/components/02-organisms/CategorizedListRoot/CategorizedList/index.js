@@ -342,6 +342,7 @@ const CategorizedList = React.memo(props => {
             )}
             <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
               {_.map(category.components, (component, ii) => {
+                console.log(category.components)
                 const fullAnchor = `${anchor}.${component.anchor}`;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
                 const idSuffix = `${i}-${ii}`;
@@ -527,7 +528,7 @@ const CategorizedList = React.memo(props => {
                             <span className="leading-none">
                               {propsObj.code}
                             </span>
-                            <p className="ml-4 leading-none">{title}</p>
+                            <p className={`${!propsObj.withoutMargin && 'ml-4 '}leading-none`}>{title}</p>
                           </div>
                         </StatusTextRow>
                       </div>

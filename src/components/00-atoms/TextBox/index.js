@@ -32,7 +32,7 @@ TextBox.defaultProps = {
   isDisabled: false,
   isHidden: false,
   payload: {},
-  placeholder: "Empty",
+  placeholder: "",
   rows: 3,
   rowsMax: 100
 };
