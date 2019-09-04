@@ -149,6 +149,11 @@ export const Input = styled.input`
   }
 `;
 
+const defaultProps = {
+  payload: {},
+  attachments: []
+};
+
 const Attachments = React.memo(props => {
   const [fileName, setFileName] = useState("");
   const [attachment, setAttachmentValue] = useState([]);
@@ -185,7 +190,7 @@ const Attachments = React.memo(props => {
       let items = props.payload.attachments;
       items.push(item);
       props.payload.attachments = items;
-      props.onChanges(props.payload, {
+      props.onUpdate(props.payload, {
         attachments: items
       });
 
@@ -481,6 +486,7 @@ const Attachments = React.memo(props => {
         onRequestClose={closeNameModal}
         contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
         style={modalStyles}
+        appElement={document.getElementById("app")}
       >
         <Content>
           <ModalText>{HAKEMUS_VIESTI.TIEDOSTON_NIMI.FI}</ModalText>
@@ -513,9 +519,9 @@ const Attachments = React.memo(props => {
 
 Attachments.propTypes = {
   fileName: PropTypes.string,
-  onChanges: PropTypes.func,
+  onUpdate: PropTypes.func,
   payload: PropTypes.object,
-  value: PropTypes.object
+  attachments: PropTypes.object
 };
 
 export default injectIntl(Attachments);

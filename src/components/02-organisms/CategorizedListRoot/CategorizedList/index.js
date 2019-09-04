@@ -618,12 +618,12 @@ const CategorizedList = React.memo(props => {
                               isPreviousSiblingCheckedByDefault ||
                               change.properties.isChecked
                             );
-                          let attachments = [];
+                          let attachments = propsObj.attachments || [];
                           return (
                             <div className="flex-2">
                               <Attachments
                                 id={`attachments-${idSuffix}`}
-                                onChanges={runOperations}
+                                onUpdate={runOperations}
                                 payload={{
                                   anchor,
                                   categories: category.categories,

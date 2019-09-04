@@ -83,6 +83,7 @@ storiesOf("CategorizedListRoot", module)
         anchor="attachments"
         categories={attachmentsStory.categories}
         changes={attachmentsStory.changes}
+        attachments={[]}
         onUpdate={() => {}}
         showCategoryTitles={false}
       />
