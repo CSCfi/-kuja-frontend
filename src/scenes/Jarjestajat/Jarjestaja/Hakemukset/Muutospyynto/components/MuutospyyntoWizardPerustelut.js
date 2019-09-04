@@ -5,11 +5,18 @@ import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkinnot from "./Perustelut/PerustelutTutkinnot";
 import { MuutosperustelutContext } from "../../../../../../context/muutosperustelutContext";
+import { LomakkeetContext } from "../../../../../../context/lomakkeetContext";
 import { fetchMuutosperustelut } from "../../../../../../services/muutosperustelut/actions";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
+import { updateFormStructure } from "../../../../../../services/lomakkeet/actions";
+import {
+  getAdditionFormStructure,
+  getOsaamisalaFormStructure
+} from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
+import { getRemovalFormStructure } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 
 const MuutospyyntoWizardPerustelut = props => {
   const [kohteet, setKohteet] = useState(null);
@@ -18,6 +25,9 @@ const MuutospyyntoWizardPerustelut = props => {
     state: muutosperustelut,
     dispatch: muutosperustelutDispatch
   } = useContext(MuutosperustelutContext);
+  const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
+    LomakkeetContext
+  );
   const { onUpdate } = props;
 
   const handleChanges = useCallback(
@@ -30,6 +40,37 @@ const MuutospyyntoWizardPerustelut = props => {
   useEffect(() => {
     fetchMuutosperustelut()(muutosperustelutDispatch);
   }, [muutosperustelutDispatch]);
+
+  useEffect(() => {
+    /**
+     * Let's get the structures of different tutkinto based reasoning forms and update the context.
+     * These will be needed later.
+     */
+    if (muutosperustelut.data.length) {
+      const additionFormStructure = getAdditionFormStructure(
+        R.sortBy(R.prop("koodiArvo"))(muutosperustelut.muutosperusteluList),
+        R.toUpper(props.intl.locale)
+      );
+      updateFormStructure(
+        ["perustelut", "tutkinnot", "addition"],
+        additionFormStructure
+      )(lomakkeetDispatch);
+      const removalFormStructure = getRemovalFormStructure();
+      updateFormStructure(
+        ["perustelut", "tutkinnot", "removal"],
+        removalFormStructure
+      )(lomakkeetDispatch);
+      const osaamisalaFormStructure = getOsaamisalaFormStructure();
+      updateFormStructure(
+        ["perustelut", "tutkinnot", "osaamisala"],
+        osaamisalaFormStructure
+      )(lomakkeetDispatch);
+    }
+  }, [
+    lomakkeetDispatch,
+    muutosperustelut,
+    props.intl.locale
+  ]);
 
   useEffect(() => {
     const kohteet = R.map(kohde => {
@@ -77,18 +118,22 @@ const MuutospyyntoWizardPerustelut = props => {
                 maaraystyyppi={maaraystyypit.OIKEUS}
                 muutosperustelut={muutosperustelut}
                 onUpdate={props.onUpdate}
+                lomakkeet={lomakkeet.perustelut.tutkinnot}
               />
             )}
 
-            <PerustelutKoulutukset
-              changes={
-                props.muutoshakemus.backendChanges.tutkinnotjakoulutukset
-              }
-              kohde={kohteet.tutkinnotjakoulutukset}
-              koulutukset={props.koulutukset}
-              maaraystyyppi={maaraystyypit.OIKEUS}
-              onUpdate={props.onUpdate}
-            />
+            {lomakkeet.perustelut.koulutukset ? (
+              <PerustelutKoulutukset
+                changes={
+                  props.muutoshakemus.backendChanges.tutkinnotjakoulutukset
+                }
+                kohde={kohteet.tutkinnotjakoulutukset}
+                koulutukset={props.koulutukset}
+                maaraystyyppi={maaraystyypit.OIKEUS}
+                onUpdate={props.onUpdate}
+                lomakkeet={lomakkeet.perustelut.koulutukset}
+              />
+            ) : null}
           </Section>
 
           {!!props.muutoshakemus.backendChanges.kielet.opetuskielet.length ||

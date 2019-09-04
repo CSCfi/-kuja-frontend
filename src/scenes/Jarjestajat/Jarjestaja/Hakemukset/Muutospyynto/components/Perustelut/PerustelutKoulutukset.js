@@ -77,6 +77,7 @@ const PerustelutKoulutukset = React.memo(props => {
           changes={changes.kuljettajakoulutuksetMuutokset}
           kohde={props.kohde}
           koulutukset={props.koulutukset}
+          lomakkeet={props.lomakkeet}
           maaraystyyppi={props.maaraystyyppi}
           onUpdate={props.onUpdate}
         />
@@ -93,6 +94,7 @@ PerustelutKoulutukset.propTypes = {
   changes: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
+  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onUpdate: PropTypes.func
 };

@@ -3,6 +3,7 @@ import * as R from "ramda";
 import _ from "lodash";
 
 const categories = {};
+const perusteluCategoriat = {};
 
 export const getMetadata = (anchorParts, categories, i = 0) => {
   const category = R.find(R.propEq("anchor", anchorParts[i]), categories);
@@ -133,11 +134,8 @@ export const getCategoriesForPerustelut = (
   locale,
   backendChanges,
   areaCode,
-  muutosperustelut
+  lomakkeet,
 ) => {
-  const sortedMuutosperustelut = R.sortBy(R.prop("koodiArvo"))(
-    muutosperustelut.muutosperusteluList
-  );
   const relevantAnchors = R.map(
     R.prop("anchor"),
     R.filter(
@@ -158,17 +156,15 @@ export const getCategoriesForPerustelut = (
     ),
     R.mapObjIndexed(koulutustyyppi => {
       koulutustyyppi.koulutukset = R.filter(koulutus => {
-        const anchorStart = `${areaCode}.${koulutustyyppi.koodiArvo}.${
-          koulutus.koodiArvo
-        }`;
+        const anchorStart = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
         return !!R.filter(R.startsWith(anchorStart))(relevantAnchors).length;
       }, koulutustyyppi.koulutukset);
       return koulutustyyppi;
     })(koulutustyypit)
   );
 
-  if (!categories[index]) {
-    categories[index] = R.values(
+  if (!perusteluCategoriat[index]) {
+    perusteluCategoriat[index] = R.values(
       R.map(koulutustyyppi => {
         return {
           anchor: koulutustyyppi.koodiArvo,
@@ -215,64 +211,21 @@ export const getCategoriesForPerustelut = (
               ]
             };
 
-            if (sortedMuutosperustelut) {
-              const anchorBase = `${areaCode}.${koulutustyyppi.koodiArvo}.${
-                koulutus.koodiArvo
-              }`;
-              const changeObj = R.find(
-                R.compose(
-                  R.startsWith(anchorBase),
-                  R.prop("anchor")
-                )
-              )(backendChanges);
-              const isAddition = changeObj && changeObj.properties.isChecked;
-              const titleObj = isAddition
-                ? {
-                    anchor: "perustelut",
-                    title: "Muutospyynnön taustalla olevat syyt"
-                  }
-                : {};
-              const checkboxes = isAddition
-                ? R.map(perusteluObj => {
-                    const metadata = R.find(R.propEq("kieli", locale))(
-                      perusteluObj.metadata
-                    );
-                    return {
-                      anchor: perusteluObj.koodiArvo,
-                      components: [
-                        {
-                          anchor: "A",
-                          name: "CheckboxWithLabel",
-                          properties: {
-                            labelStyles: {},
-                            isChecked: false,
-                            title: metadata.nimi
-                          }
-                        }
-                      ]
-                    };
-                  }, sortedMuutosperustelut)
-                : [];
-
-              structure.categories = R.flatten([
-                titleObj,
-                checkboxes,
-                {
-                  anchor: "vapaa-tekstikentta",
-                  title:
-                    "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        defaultValue: "Text 2"
-                      }
-                    }
-                  ]
-                }
-              ]);
+            const anchorBase = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+            const changeObj = R.find(
+              R.compose(
+                R.startsWith(anchorBase),
+                R.prop("anchor")
+              )
+            )(backendChanges);
+            const isAddition = changeObj && changeObj.properties.isChecked;
+            
+            if (isAddition) {
+              structure.categories = lomakkeet.addition;
+            } else if (isRemoved) {
+              structure.categories = lomakkeet.removal;
             }
+
             if (koulutus.osaamisala) {
               structure.categories = R.insert(
                 -1,
@@ -310,22 +263,7 @@ export const getCategoriesForPerustelut = (
                         }
                       }
                     ],
-                    categories: [
-                      {
-                        anchor: "vapaa-tekstikentta",
-                        title:
-                          "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
-                        components: [
-                          {
-                            anchor: "A",
-                            name: "TextBox",
-                            properties: {
-                              defaultValue: "Text 2"
-                            }
-                          }
-                        ]
-                      }
-                    ]
+                    categories: lomakkeet.osaamisala
                   };
                 })(koulutus.osaamisala),
                 structure.categories
@@ -337,5 +275,5 @@ export const getCategoriesForPerustelut = (
       }, relevantKoulutustyypit)
     );
   }
-  return categories[index];
+  return perusteluCategoriat[index];
 };
