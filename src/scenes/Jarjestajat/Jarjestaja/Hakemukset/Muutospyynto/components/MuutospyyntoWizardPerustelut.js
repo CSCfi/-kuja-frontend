@@ -42,7 +42,7 @@ const MuutospyyntoWizardPerustelut = props => {
   }, [muutosperustelutDispatch]);
 
   useEffect(() => {
-    /** 
+    /**
      * Let's get the structures of different tutkinto based reasoning forms and update the context.
      * These will be needed later.
      */
@@ -66,7 +66,11 @@ const MuutospyyntoWizardPerustelut = props => {
         osaamisalaFormStructure
       )(lomakkeetDispatch);
     }
-  }, [muutosperustelut, lomakkeetDispatch, props.intl.locale]);
+  }, [
+    lomakkeetDispatch,
+    muutosperustelut,
+    props.intl.locale
+  ]);
 
   useEffect(() => {
     const kohteet = R.map(kohde => {
@@ -118,15 +122,18 @@ const MuutospyyntoWizardPerustelut = props => {
               />
             )}
 
-            <PerustelutKoulutukset
-              changes={
-                props.muutoshakemus.backendChanges.tutkinnotjakoulutukset
-              }
-              kohde={kohteet.tutkinnotjakoulutukset}
-              koulutukset={props.koulutukset}
-              maaraystyyppi={maaraystyypit.OIKEUS}
-              onUpdate={props.onUpdate}
-            />
+            {lomakkeet.perustelut.koulutukset ? (
+              <PerustelutKoulutukset
+                changes={
+                  props.muutoshakemus.backendChanges.tutkinnotjakoulutukset
+                }
+                kohde={kohteet.tutkinnotjakoulutukset}
+                koulutukset={props.koulutukset}
+                maaraystyyppi={maaraystyypit.OIKEUS}
+                onUpdate={props.onUpdate}
+                lomakkeet={lomakkeet.perustelut.koulutukset}
+              />
+            ) : null}
           </Section>
 
           {!!props.muutoshakemus.backendChanges.kielet.opetuskielet.length ||
