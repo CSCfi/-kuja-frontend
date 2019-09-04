@@ -7,6 +7,7 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import KuljettajienJatkokoulutuslomake from "../../../../../../../components/04-forms/koulutukset/Kuljettajakoulutukset/Jatkokoulutuslomake";
 import { getKuljettajakoulutusPerustelulomakeByCode } from "../../../../../../../services/muutoshakemus/utils/koulutusperustelut";
 
 const PerustelutKuljettajakoulutukset = props => {
@@ -47,7 +48,7 @@ const PerustelutKuljettajakoulutukset = props => {
               koodisto: item.koodisto,
               metadata: item.metadata
             },
-            categories: getKuljettajakoulutusPerustelulomakeByCode(item.code)
+            categories: props.lomakkeet.kuljettajienJatkokoulutus
           };
         }
         return structure;
@@ -71,6 +72,7 @@ const PerustelutKuljettajakoulutukset = props => {
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,
+    props.lomakkeet.kuljettajienJatkokoulutus,
     props.maaraystyyppi,
     changes
   ]);
@@ -103,7 +105,9 @@ const PerustelutKuljettajakoulutukset = props => {
       onChangesRemove={removeChanges}
       onUpdate={saveChanges}
       title={props.intl.formatMessage(wizardMessages.driverTraining)}
-    />
+    >
+      <KuljettajienJatkokoulutuslomake></KuljettajienJatkokoulutuslomake>
+    </ExpandableRowRoot>
   );
 };
 
@@ -111,6 +115,7 @@ PerustelutKuljettajakoulutukset.propTypes = {
   changes: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
+  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object
 };
 

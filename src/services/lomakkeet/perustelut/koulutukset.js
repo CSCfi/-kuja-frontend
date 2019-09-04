@@ -6,12 +6,11 @@ export const getKuljettajienJatkokoulutuslomake = (
   return [
     {
       anchor: "kuljettajien-jatkokoulutuslomake",
-      styleClasses: ["px-10 bg-gray-100"],
+      styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "tehtavan-tarpeellisuus-label",
+          anchor: "tehtavan-tarpeellisuus-title",
           name: "StatusTextRow",
-          styleClasses: ["text-xl py-4"],
           properties: {
             title: "Jatkokoulutusta antavan koulutuskeskuksen tehtävä"
           }
@@ -20,11 +19,12 @@ export const getKuljettajienJatkokoulutuslomake = (
       categories: [
         {
           anchor: `${code}-1`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "tehtavan-tarpeellisuus-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 1,
                 title: "Tehtävän tarpeellisuus"
@@ -50,12 +50,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-2`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "voimassaolo-label",
               name: "StatusTextRow",
-              styleClasses: ["pb-4"],
+              styleClasses: ["pb-4 text-base"],
               properties: {
                 code: 2,
                 title:
@@ -102,11 +102,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-3`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "suunnitelma-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 3,
                 labelStyles: {},
@@ -133,11 +134,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-4`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "osaaminen-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 4,
                 labelStyles: {},
@@ -163,12 +165,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-5`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "johtaja-label",
               name: "StatusTextRow",
-              styleClasses: ["py-4"],
+              styleClasses: ["py-4 text-base"],
               properties: {
                 code: 5,
                 title: "Opetuksesta vastaavan johtajan kelpoisuus ja työkokemus"
@@ -262,7 +264,7 @@ export const getKuljettajienJatkokoulutuslomake = (
                 {
                   anchor: "A",
                   name: "StatusTextRow",
-                  styleClasses: ["pb-4"],
+                  styleClasses: ["pb-4 text-base"],
                   properties: {
                     code: "a)",
                     title:
@@ -326,7 +328,7 @@ export const getKuljettajienJatkokoulutuslomake = (
                 {
                   anchor: "A",
                   name: "StatusTextRow",
-                  styleClasses: ["pb-4"],
+                  styleClasses: ["pb-4 text-base"],
                   properties: {
                     code: "b)",
                     title: "Jokin seuraavista tutkinnoista:"
@@ -419,11 +421,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-6`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "opettajien-kelpoisuus-ja-tyokokemus-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 6,
                 title: "Opettajien kelpoisuus ja työkokemus"
@@ -467,11 +470,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-7`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "ajoneuvokanta-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 7,
                 labelStyles: {},
@@ -531,11 +535,12 @@ export const getKuljettajienJatkokoulutuslomake = (
         },
         {
           anchor: `${code}-8`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-200"],
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
               anchor: "muut-opetusvalineet-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 8,
                 labelStyles: {},
@@ -598,11 +603,12 @@ export const getKuljettajienJatkokoulutuslomake = (
 export const getAddPeopleForm = code => {
   return {
     anchor: `people-addition-${code}`,
-    styleClasses: ["border border-solid border-green p-8"],
+    styleClasses: ["border-t py-8"],
     components: [
       {
         anchor: "henkilon-nimi-label",
         name: "StatusTextRow",
+        styleClasses: ["text-base"],
         properties: {
           labelStyles: {},
           title: `Henkilö ${code}`
@@ -679,7 +685,7 @@ export const getAddPeopleForm = code => {
           {
             anchor: "A",
             name: "StatusTextRow",
-            styleClasses: ["pb-4"],
+            styleClasses: ["pb-4 text-base"],
             properties: {
               code: "a)",
               title:
@@ -743,7 +749,7 @@ export const getAddPeopleForm = code => {
           {
             anchor: "A",
             name: "StatusTextRow",
-            styleClasses: ["pb-4"],
+            styleClasses: ["pb-4 text-base"],
             properties: {
               code: "b)",
               title: "Jokin seuraavista tutkinnoista:"
