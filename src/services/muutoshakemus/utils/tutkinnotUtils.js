@@ -3,6 +3,7 @@ import * as R from "ramda";
 import _ from "lodash";
 
 const categories = {};
+const perusteluCategoriat = {};
 
 export const getMetadata = (anchorParts, categories, i = 0) => {
   const category = R.find(R.propEq("anchor", anchorParts[i]), categories);
@@ -162,8 +163,8 @@ export const getCategoriesForPerustelut = (
     })(koulutustyypit)
   );
 
-  if (!categories[index]) {
-    categories[index] = R.values(
+  if (!perusteluCategoriat[index]) {
+    perusteluCategoriat[index] = R.values(
       R.map(koulutustyyppi => {
         return {
           anchor: koulutustyyppi.koodiArvo,
@@ -274,5 +275,5 @@ export const getCategoriesForPerustelut = (
       }, relevantKoulutustyypit)
     );
   }
-  return categories[index];
+  return perusteluCategoriat[index];
 };
