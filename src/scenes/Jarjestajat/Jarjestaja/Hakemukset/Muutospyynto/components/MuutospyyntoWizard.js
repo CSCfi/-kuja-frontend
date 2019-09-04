@@ -65,7 +65,8 @@ const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
     margin: 0,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
+    background: "#c7dcc3"
   },
   closeButton: {
     position: "absolute",
@@ -89,6 +90,14 @@ const DialogTitle = withStyles(theme => ({
       ) : null}
     </MuiDialogTitle>
   );
+});
+
+const FormDialog = withStyles(() => ({
+  paper: {
+    background: "#effcec"
+  }
+}))(props => {
+  return <Dialog {...props}>{props.children}</Dialog>;
 });
 
 const MuutospyyntoWizard = props => {
@@ -373,7 +382,7 @@ const MuutospyyntoWizard = props => {
   ) {
     return (
       <MuutoshakemusProvider>
-        <Dialog
+        <FormDialog
           open={true}
           onClose={openCancelModal}
           maxWidth={state.isHelpVisible ? "xl" : "lg"}
@@ -473,7 +482,7 @@ const MuutospyyntoWizard = props => {
               )}
             </div>
           </DialogContent>
-        </Dialog>
+        </FormDialog>
         <Dialog
           open={isConfirmDialogVisible}
           fullWidth={true}
