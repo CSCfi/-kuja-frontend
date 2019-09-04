@@ -6,20 +6,24 @@ const defaultProps = {
   styleClasses: ["text-base", "py-4"]
 };
 
-const StatusTextRow = React.memo(
-  ({ children, styleClasses = defaultProps.styleClasses }) => {
-    const [classNames, setClassNames] = useState(styleClasses);
+const StatusTextRow = React.memo(({ children, labelStyles, styleClasses }) => {
+  const [classNames, setClassNames] = useState(defaultProps.styleClasses);
 
-    useEffect(() => {
-      console.info(styleClasses);
+  useEffect(() => {
+    if (styleClasses && styleClasses.length) {
       setClassNames(styleClasses);
-    }, [styleClasses]);
+    }
+  }, [styleClasses]);
 
-    return <div className={R.join(" ", classNames)}>{children}</div>;
-  }
-);
+  return (
+    <div className={R.join(" ", classNames)} style={labelStyles}>
+      {children}
+    </div>
+  );
+});
 
 StatusTextRow.propTypes = {
+  labelStyles: PropTypes.object,
   styleClasses: PropTypes.array
 };
 

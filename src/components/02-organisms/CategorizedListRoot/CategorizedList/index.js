@@ -486,7 +486,10 @@ const CategorizedList = React.memo(props => {
                             );
                             let parentComponent = null;
                             let isDisabled = false;
-                            if (props.parent.category.components) {
+                            if (
+                              props.parent &&
+                              props.parent.category.components
+                            ) {
                               parentComponent =
                                 props.parent.category.components[0];
                               const parentChange = getChangeObjByAnchor(
@@ -535,7 +538,10 @@ const CategorizedList = React.memo(props => {
                             ) : null;
                             return (
                               <div className="flex-2">
-                                <StatusTextRow styleClasses={styleClasses}>
+                                <StatusTextRow
+                                  labelStyles={labelStyles}
+                                  styleClasses={styleClasses}
+                                >
                                   <div className="flex">
                                     {codeMarkup}
                                     <p>{title}</p>

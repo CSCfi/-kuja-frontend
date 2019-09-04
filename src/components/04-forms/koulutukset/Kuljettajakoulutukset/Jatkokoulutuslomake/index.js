@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   getAddPeopleForm,
   getKuljettajienJatkokoulutuslomake
@@ -6,7 +7,13 @@ import {
 import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import * as R from "ramda";
 
-const KuljettajienJatkokoulutuslomake = () => {
+const defaultProps = {
+  changes: []
+};
+
+const KuljettajienJatkokoulutuslomake = ({
+  changes = defaultProps.changes
+}) => {
   const [lomake, setLomake] = useState(getKuljettajienJatkokoulutuslomake());
   const [peopleForms, setPeopleForms] = useState([]);
 
@@ -21,16 +28,18 @@ const KuljettajienJatkokoulutuslomake = () => {
   }, [peopleForms]);
 
   return (
-    <div className="px-20">
-      <CategorizedListRoot
-        anchor="lomake"
-        categories={lomake}
-        changes={[]}
-        onUpdate={() => {}}
-        showCategoryTitles={true}
-      />
-    </div>
+    <CategorizedListRoot
+      anchor="lomake"
+      categories={lomake}
+      changes={changes}
+      onUpdate={() => {}}
+      showCategoryTitles={true}
+    />
   );
+};
+
+KuljettajienJatkokoulutuslomake.propTypes = {
+  changes: PropTypes.array
 };
 
 export default KuljettajienJatkokoulutuslomake;
