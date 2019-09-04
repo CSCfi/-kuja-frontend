@@ -3,7 +3,7 @@ import * as R from "ramda";
 export const getAdditionFormStructure = (checkboxItems, locale) => {
   const titleObj = {
     anchor: "perustelut",
-    comopnents: [
+    components: [
       {
         name: "StatusTextRow",
         properties: {
@@ -21,7 +21,6 @@ export const getAdditionFormStructure = (checkboxItems, locale) => {
           anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
-            labelStyles: {},
             isChecked: false,
             title: metadata.nimi
           }

@@ -109,12 +109,14 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
       key={`expandable-row-root`}
       categories={categories}
       changes={changes}
-      title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+      disableReverting={true}
+      hideAmountOfChanges={false}
       index={0}
       isExpanded={true}
       onChangesRemove={removeChanges}
       onUpdate={saveChanges}
       sectionId={sectionId}
+      title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
     />
   );
 });
