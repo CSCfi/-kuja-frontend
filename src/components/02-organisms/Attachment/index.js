@@ -88,7 +88,10 @@ const Attachment = React.memo(props => {
           name={props.name}
           type="file"
           defaultValue=""
-          onChange={props.setAttachment}
+          onChange={e => {
+            props.setAttachment(e);
+            e.target.value = null;
+          }}
         />
       </FileInput>
     </React.Fragment>

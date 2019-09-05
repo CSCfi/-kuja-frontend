@@ -30,7 +30,7 @@ const Error = styled.div`
 const Checkbox = styled.div`
   width: 20px;
   position: relative;
-  margin: 6px 10px 0 10px;
+  margin: 12px 10px 0 10px;
 
   label {
     width: 20px;
@@ -109,7 +109,7 @@ const LiiteListItem = styled.div`
     }
   }
   svg {
-    margin: 0 0 -2px 0;
+    margin: auto;
   }
   input {
     min-width: 300px;
@@ -149,14 +149,9 @@ export const Input = styled.input`
   }
 `;
 
-const defaultProps = {
-  payload: {},
-  attachments: []
-};
-
 const Attachments = React.memo(props => {
-  const [fileName, setFileName] = useState("");
-  const [attachment, setAttachmentValue] = useState([]);
+  const [selectedAttachment, setSelectedAttachment] = useState([]);
+  const [attachments, setAttachments] = useState([]);
   // const [fileAdded, setFileAdded] = useState(false);
   const [fileError, setFileError] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
@@ -173,38 +168,26 @@ const Attachments = React.memo(props => {
     setIsNameModalOpen(false);
   };
 
-  const { changes, value, koodiarvo, payload, paikka } = props;
-
-  let liite = {};
-  // let liitteetObj = {};
-  // let index = 0;
+  if (props.payload && props.payload.attachments) {
+    useEffect(() => {
+      setAttachments(props.payload.attachments);
+    }, [props.payload.attachments]);
+  }
 
   const addAttachment = () => {
-    if (fileName) {
+    if (selectedAttachment.nimi) {
       setNameMissing(false);
       closeNameModal();
-      let item = attachment;
-      item.nimi = fileName;
-      setAttachmentValue(item);
-
-      let items = props.payload.attachments;
-      items.push(item);
-      props.payload.attachments = items;
-      props.onUpdate(props.payload, {
-        attachments: items
-      });
-
-      // if (koodiarvo) {
-      //   this.state.liitteetObj.liitteet.push(attachment);
-      //   fields.remove(index);
-      //   fields.insert(index, this.state.liitteetObj);
-      // } else {
-      //   if (!fields.liitteet) {
-      //     fields.liitteet = [];
-      //   }
-      //   fields.liitteet.push(attachment);
-      // }
-      // setFileAdded(attachment.nimi);
+      let item = {};
+      item.nimi = selectedAttachment.nimi;
+      if (props.payload) {
+        let items = props.payload.attachments;
+        items.push(item);
+        props.payload.attachments = items;
+        props.onUpdate(props.payload, {
+          attachments: items
+        });
+      }
     } else setNameMissing(true);
   };
 
@@ -239,15 +222,7 @@ const Attachments = React.memo(props => {
         "gif"
       ].includes(type)
     ) {
-      if (koodiarvo) {
-        // index = getIndex(muutokset, koodiarvo);
-        // liitteetObj = fields.get(index);
-        // if (!liitteetObj) return;
-        // if (!liitteetObj.liitteet) {
-        //   liitteetObj.liitteet = [];
-        // }
-      }
-
+      let liite = {};
       liite.tiedostoId = e.target.files[0].name + "-" + Math.random();
       liite.kieli = "fi";
       liite.tyyppi = type;
@@ -256,12 +231,13 @@ const Attachments = React.memo(props => {
       liite.koko = e.target.files[0].size;
       liite.removed = false;
       liite.salainen = false;
-      // liite.paikka = paikka;
+      liite.paikka = props.placement;
       liite.new = true;
 
-      setAttachmentValue(liite);
-      // this.setState({ liitteetObj: liitteetObj });
-      setFileName(liite.nimi);
+      let att = attachments;
+      att.push(liite);
+      setAttachments(att);
+      setSelectedAttachment(liite);
 
       openNameModal();
     } else return setFileError(true);
@@ -270,109 +246,54 @@ const Attachments = React.memo(props => {
   const removeAttachment = (e, tiedostoId, uuid) => {
     e.preventDefault();
     setFileError(false);
-    // setFileAdded("");
 
-    let obj = undefined;
-    let i = 0;
-    // if (koodiarvo) {
-    //   i = getIndex(muutokset, koodiarvo);
-    //   obj = fields.get(i);
-    //   obj.liitteet.map((liite, index) => {
-    //     if (
-    //       (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //       (uuid && liite.uuid === uuid)
-    //     ) {
-    //       liite.removed = true;
-    //       obj.liitteet[index] = liite;
-    //       fields.remove(i);
-    //       fields.insert(i, obj);
-    //       return true;
-    //     } else return false;
-    //   });
-    // } else {
-    //   fields.liitteet.map((liite, index) => {
-    //     if (
-    //       (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //       (uuid && liite.uuid === uuid)
-    //     ) {
-    //       liite.removed = true;
-    //       fields.liitteet[index] = liite;
-    //       return true;
-    //     } else return false;
-    //   });
-    // }
+    attachments.map((liite, idx) => {
+      if (
+        (tiedostoId && liite.tiedostoId === tiedostoId) ||
+        (uuid && liite.uuid === uuid)
+      ) {
+        let atts = attachments;
+        atts[idx].removed = true;
+        setAttachments(atts);
+        return true;
+      } else return false;
+    });
   };
 
   const setAttachmentName = (e, tiedostoId, uuid) => {
     e.preventDefault();
     setFileError(false);
     // setFileAdded("");
-    let obj = undefined;
-    let i = 0;
 
-    // if (e.target.value)
-    //   if (koodiarvo) {
-    //     i = getIndex(muutokset, koodiarvo);
-    //     obj = fields.get(i);
-    //     obj.liitteet.map((liite, index) => {
-    //       if (
-    //         (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //         (uuid && liite.uuid === uuid)
-    //       ) {
-    //         liite.nimi = e.target.value;
-    //         obj.liitteet[index] = liite;
-    //         fields.remove(i);
-    //         fields.insert(i, obj);
-    //         return true;
-    //       }
-    //       return false;
-    //     });
-    //   } else {
-    //     fields.liitteet.map((liite, index) => {
-    //       if (
-    //         (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //         (uuid && liite.uuid === uuid)
-    //       ) {
-    //         liite.nimi = e.target.value;
-    //         fields.liitteet[index] = liite;
-    //         return true;
-    //       } else return false;
-    //     });
-    //   }
+    attachments.map((liite, idx) => {
+      if (
+        (tiedostoId && liite.tiedostoId === tiedostoId) ||
+        (uuid && liite.uuid === uuid)
+      ) {
+        let atts = attachments;
+        atts[idx].nimi = e.target.value;
+        setAttachments(atts);
+        return true;
+      } else return false;
+    });
   };
 
   const setAttachmentVisibility = (e, tiedostoId, uuid) => {
+    e.preventDefault();
     setFileError(false);
-    let obj = undefined;
-    let i = 0;
-    // if (koodiarvo) {
-    //   i = getIndex(muutokset, koodiarvo);
-    //   obj = fields.get(i);
-    //   obj.liitteet.map((liite, index) => {
-    //     if (
-    //       (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //       (uuid && liite.uuid === uuid)
-    //     ) {
-    //       liite.salainen = e.target.checked;
-    //       obj.liitteet[index] = liite;
-    //       fields.remove(i);
-    //       fields.insert(i, obj);
-    //       return true;
-    //     }
-    //     return false;
-    //   });
-    // } else {
-    //   fields.liitteet.map((liite, index) => {
-    //     if (
-    //       (tiedostoId && liite.tiedostoId === tiedostoId) ||
-    //       (uuid && liite.uuid === uuid)
-    //     ) {
-    //       liite.salainen = e.target.checked;
-    //       fields.liitteet[index] = liite;
-    //       return true;
-    //     } else return false;
-    //   });
-    // }
+    // setFileAdded("");
+
+    attachments.map((liite, idx) => {
+      if (
+        (tiedostoId && liite.tiedostoId === tiedostoId) ||
+        (uuid && liite.uuid === uuid)
+      ) {
+        let atts = attachments;
+        atts[idx].salainen = e.target.checked;
+        setAttachments(atts);
+        return true;
+      } else return false;
+    });
   };
 
   const bytesToSize = bytes => {
@@ -388,22 +309,17 @@ const Attachments = React.memo(props => {
   };
 
   const LiiteList = () => {
-    let obj = undefined;
-    // if (koodiarvo) {
-    //   const i = getIndex(muutokset, koodiarvo);
-    //   obj = fields.get(i);
-    // } else obj = fields;
-
-    obj = props.changes;
-
-    console.log(payload);
-    console.log(value);
-
-    if (props.payload && props.payload.attachments)
-      return props.payload.attachments.map(liite => {
-        if ((!paikka || liite.paikka === paikka) && !liite.removed) {
+    if (attachments)
+      return attachments.map(liite => {
+        if (
+          (liite.tiedostoId || liite.uuid) &&
+          !liite.removed &&
+          (!props.placement || liite.paikka === props.placement)
+        ) {
           return (
-            <div key={liite.tiedostoId ? liite.tiedostoId : liite.uuid}>
+            <div
+              key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
+            >
               <LiiteListItem>
                 {liite.new ? <FaFile /> : <FaRegFile />}
                 <input
@@ -465,7 +381,7 @@ const Attachments = React.memo(props => {
   };
 
   return (
-    <div>
+    <React.Fragment>
       {!props.listHidden && (
         <h4>{props.header ? props.header : HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
       )}
@@ -480,18 +396,21 @@ const Attachments = React.memo(props => {
       {/* { this.state.fileAdded !=="" && 
           <Message>{HAKEMUS_VIESTI.LIITE_LISATTY.FI}: {this.state.fileAdded}</Message> 
         } */}
-      {!props.listHidden && <LiiteList />}
+      {!props.listHidden && (
+        <LiiteList key={props.placement + props.id + Math.random()} />
+      )}
       <Modal
         isOpen={isNameModalOpen}
         onRequestClose={closeNameModal}
         contentLabel={HAKEMUS_VIESTI.VARMISTUS_HEADER.FI}
         style={modalStyles}
-        appElement={document.getElementById("app")}
+        appElement={document.getElementById("root")}
+        afterOpenNamneModal={afterOpenNamneModal}
       >
         <Content>
           <ModalText>{HAKEMUS_VIESTI.TIEDOSTON_NIMI.FI}</ModalText>
           <Input
-            defaultValue={fileName}
+            defaultValue={selectedAttachment.nimi}
             autoFocus
             onFocus={e => {
               var val = e.target.value;
@@ -499,7 +418,11 @@ const Attachments = React.memo(props => {
               e.target.value = val;
             }}
             onBlur={e => {
-              setFileName(e.target.value);
+              setAttachmentName(
+                e,
+                selectedAttachment.tiedostoId,
+                selectedAttachment.uuid
+              );
             }}
           />
           <Error>{nameMissing && HAKEMUS_VIESTI.TIEDOSTO_NIMI_ERROR.FI}</Error>
@@ -513,7 +436,7 @@ const Attachments = React.memo(props => {
           </ModalButton>
         </div>
       </Modal>
-    </div>
+    </React.Fragment>
   );
 });
 
@@ -521,7 +444,10 @@ Attachments.propTypes = {
   fileName: PropTypes.string,
   onUpdate: PropTypes.func,
   payload: PropTypes.object,
-  attachments: PropTypes.object
+  attachments: PropTypes.object,
+  id: PropTypes.string,
+  placement: PropTypes.string,
+  selectedAttachment: PropTypes.object
 };
 
 export default injectIntl(Attachments);

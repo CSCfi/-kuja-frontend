@@ -624,6 +624,7 @@ const CategorizedList = React.memo(props => {
                               <Attachments
                                 id={`attachments-${idSuffix}`}
                                 onUpdate={runOperations}
+                                placement={props.placement}
                                 payload={{
                                   anchor,
                                   categories: category.categories,

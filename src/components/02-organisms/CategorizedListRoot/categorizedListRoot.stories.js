@@ -86,6 +86,7 @@ storiesOf("CategorizedListRoot", module)
         attachments={[]}
         onUpdate={() => {}}
         showCategoryTitles={false}
+        placement="test"
       />
     );
   });
