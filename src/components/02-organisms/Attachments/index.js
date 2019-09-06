@@ -181,9 +181,8 @@ const Attachments = React.memo(props => {
       let item = {};
       item.nimi = selectedAttachment.nimi;
       if (props.payload) {
-        let items = props.payload.attachments;
+        let items = JSON.parse(JSON.stringify(props.payload.attachments));
         items.push(item);
-        props.payload.attachments = items;
         props.onUpdate(props.payload, {
           attachments: items
         });
@@ -234,9 +233,12 @@ const Attachments = React.memo(props => {
       liite.paikka = props.placement;
       liite.new = true;
 
-      let att = attachments;
-      att.push(liite);
-      setAttachments(att);
+      let atts = props.payload.attachments;
+      atts.push(liite);
+      setAttachments(atts);
+      props.onUpdate(props.payload, {
+        attachments: atts
+      });
       setSelectedAttachment(liite);
 
       openNameModal();
@@ -252,9 +254,12 @@ const Attachments = React.memo(props => {
         (tiedostoId && liite.tiedostoId === tiedostoId) ||
         (uuid && liite.uuid === uuid)
       ) {
-        let atts = attachments;
+        let atts = [...props.payload.attachments];
         atts[idx].removed = true;
         setAttachments(atts);
+        props.onUpdate(props.payload, {
+          attachments: atts
+        });
         return true;
       } else return false;
     });
@@ -270,9 +275,12 @@ const Attachments = React.memo(props => {
         (tiedostoId && liite.tiedostoId === tiedostoId) ||
         (uuid && liite.uuid === uuid)
       ) {
-        let atts = attachments;
+        let atts = props.payload.attachments;
         atts[idx].nimi = e.target.value;
         setAttachments(atts);
+        props.onUpdate(props.payload, {
+          attachments: atts
+        });
         return true;
       } else return false;
     });
@@ -288,9 +296,12 @@ const Attachments = React.memo(props => {
         (tiedostoId && liite.tiedostoId === tiedostoId) ||
         (uuid && liite.uuid === uuid)
       ) {
-        let atts = attachments;
+        let atts = [...attachments];
         atts[idx].salainen = e.target.checked;
         setAttachments(atts);
+        props.onUpdate(props.payload, {
+          attachments: atts
+        });
         return true;
       } else return false;
     });

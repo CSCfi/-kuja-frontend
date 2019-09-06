@@ -32,15 +32,16 @@ const FileInput = styled.div`
         : props.bgColor
         ? props.bgColor
         : COLORS.OIVA_GREEN};
-  margin: 10px 0;
-  font-size: 14px;
+  margin: 0.5em 0;
+  height: 3em;
+  font-size: 0.9em;
   transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
-  height: 36px;
-  width: 120px;
+  width: 10em;
   cursor: pointer;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-radius: 0.2em;
   div {
     position: absolute;
     text-align: center;
@@ -72,7 +73,6 @@ const FileInput = styled.div`
     opacity: 0;
     cursor: pointer;
     width: 100%;
-    height: 36px;
   }
 `;
 
@@ -81,7 +81,7 @@ const Attachment = React.memo(props => {
     <React.Fragment>
       <LiiteTopArea>{HAKEMUS_OTSIKOT.LIITE_OHJE.FI}</LiiteTopArea>
       <FileInput>
-        <div className="flex flex-row">
+        <div className="flex flex-row uppercase">
           <FaPlus /> {HAKEMUS_OTSIKOT.LISAA_LIITE.FI}...
         </div>
         <input

@@ -623,7 +623,7 @@ const CategorizedList = React.memo(props => {
                             <div className="flex-2">
                               <Attachments
                                 id={`attachments-${idSuffix}`}
-                                onUpdate={runOperations}
+                                onUpdate={e => (propsObj.attachments = e)} // TODO
                                 placement={props.placement}
                                 payload={{
                                   anchor,
