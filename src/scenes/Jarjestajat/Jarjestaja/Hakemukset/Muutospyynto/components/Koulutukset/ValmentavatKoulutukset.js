@@ -8,9 +8,9 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const ValmentavatKoulutukset = React.memo(props => {
-  const sectionId = "valmentavatkoulutukset";
+  const sectionId = "koulutukset_valmentavatKoulutukset";
   const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(null);
   const [changes, setChanges] = useState([]);
 
   const getCategories = (koulutusData, kohde, maaraystyyppi) => {
@@ -62,7 +62,7 @@ const ValmentavatKoulutukset = React.memo(props => {
   }, [
     props.kohde,
     props.koulutukset.poikkeukset,
-    props.intl,
+    props.intl.locale,
     props.maaraystyyppi
   ]);
 
@@ -71,11 +71,13 @@ const ValmentavatKoulutukset = React.memo(props => {
   };
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
+    if (categories) {
+      onUpdate({ sectionId, state: { categories, changes } });
+    }
   }, [categories, onUpdate, changes]);
 
   const removeChanges = () => {
@@ -98,7 +100,7 @@ const ValmentavatKoulutukset = React.memo(props => {
 });
 
 ValmentavatKoulutukset.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object

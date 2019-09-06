@@ -8,11 +8,11 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Tyovoimakoulutukset = React.memo(props => {
-  const sectionId = "tyovoimakoulutukset";
+  const sectionId = "koulutukset_tyovoimakoulutukset";
   const koodisto = "oivatyovoimakoulutus";
   const { onUpdate } = props;
 
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(null);
   const [changes, setChanges] = useState([]);
 
   const getCategories = (koulutusData, kohde, maaraystyyppi) => {
@@ -73,12 +73,14 @@ const Tyovoimakoulutukset = React.memo(props => {
   };
 
   useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
+    if (categories) {
+      onUpdate({ sectionId, state: { categories, changes } });
+    }
   }, [categories, onUpdate, changes]);
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   const removeChanges = () => {
     return saveChanges({ changes: [] });
@@ -98,7 +100,7 @@ const Tyovoimakoulutukset = React.memo(props => {
 });
 
 Tyovoimakoulutukset.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   koulutukset: PropTypes.object
 };
 

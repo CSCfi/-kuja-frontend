@@ -12,50 +12,50 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
   const [
     ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset,
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset
-  ] = useState([]);
+  ] = useState(null);
   const [
     kuljettajakoulutuksetMuutokset,
     setKuljettajakoulutuksetMuutokset
-  ] = useState([]);
+  ] = useState(null);
   const [
     tyovoimakoulutuksetMuutokset,
     setTyovoimakoulutuksetMuutokset
-  ] = useState([]);
+  ] = useState(null);
   const [
     valmentavatKoulutuksetMuutokset,
     setValmentavatKoulutuksetMuutokset
-  ] = useState([]);
+  ] = useState(null);
 
   useEffect(() => {
     setKuljettajakoulutuksetMuutokset(
       R.filter(
-        changeObj => R.startsWith("kuljettajakoulutukset", changeObj.anchor),
-        props.changes
+        changeObj => R.startsWith("koulutukset_kuljettajakoulutukset", changeObj.anchor),
+        props.changeObjects
       )
     );
     setTyovoimakoulutuksetMuutokset(
       R.filter(
-        changeObj => R.startsWith("tyovoimakoulutukset", changeObj.anchor),
-        props.changes
+        changeObj => R.startsWith("koulutukset_tyovoimakoulutukset", changeObj.anchor),
+        props.changeObjects
       )
     );
     setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset(
       R.filter(
         changeObj =>
           R.startsWith(
-            "ammatilliseentehtavaanvalmistavatkoulutukset",
+            "koulutukset_ammatilliseentehtavaanvalmistavatkoulutukset",
             changeObj.anchor
           ),
-        props.changes
+        props.changeObjects
       )
     );
     setValmentavatKoulutuksetMuutokset(
       R.filter(
-        changeObj => R.startsWith("valmentavatkoulutukset", changeObj.anchor),
-        props.changes
+        changeObj => R.startsWith("koulutukset_valmentavatKoulutukset", changeObj.anchor),
+        props.changeObjects
       )
     );
-  }, [props.changes]);
+  }, [props.changeObjects]);
 
   return (
     <div className="md:pl-16 pb-10">
@@ -63,47 +63,55 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
         {props.intl.formatMessage(wizardMessages.info_02)}
       </p>
 
-      <ValmentavatKoulutukset
-        backendChanges={valmentavatKoulutuksetMuutokset}
-        kohde={props.kohde}
-        koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
-      />
+      {valmentavatKoulutuksetMuutokset && (
+        <ValmentavatKoulutukset
+          changeObjects={valmentavatKoulutuksetMuutokset}
+          kohde={props.kohde}
+          koulutukset={props.koulutukset}
+          maaraystyyppi={props.maaraystyyppi}
+          onUpdate={props.onUpdate}
+        />
+      )}
 
-      <AmmatilliseenTehtavaanValmistavatKoulutukset
-        backendChanges={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
-        kohde={props.kohde}
-        koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
-      />
+      {ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset && (
+        <AmmatilliseenTehtavaanValmistavatKoulutukset
+          changeObjects={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
+          kohde={props.kohde}
+          koulutukset={props.koulutukset}
+          maaraystyyppi={props.maaraystyyppi}
+          onUpdate={props.onUpdate}
+        />
+      )}
 
-      <Tyovoimakoulutukset
-        backendChanges={tyovoimakoulutuksetMuutokset}
-        kohde={props.kohde}
-        koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
-      />
+      {tyovoimakoulutuksetMuutokset && (
+        <Tyovoimakoulutukset
+          changeObjects={tyovoimakoulutuksetMuutokset}
+          kohde={props.kohde}
+          koulutukset={props.koulutukset}
+          maaraystyyppi={props.maaraystyyppi}
+          onUpdate={props.onUpdate}
+        />
+      )}
 
-      <Kuljettajakoulutukset
-        backendChanges={kuljettajakoulutuksetMuutokset}
-        kohde={props.kohde}
-        koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
-      />
+      {kuljettajakoulutuksetMuutokset && (
+        <Kuljettajakoulutukset
+          changeObjects={kuljettajakoulutuksetMuutokset}
+          kohde={props.kohde}
+          koulutukset={props.koulutukset}
+          maaraystyyppi={props.maaraystyyppi}
+          onUpdate={props.onUpdate}
+        />
+      )}
     </div>
   );
 });
 
 MuutospyyntoWizardKoulutukset.defaultProps = {
-  changes: []
+  changeObjects: []
 };
 
 MuutospyyntoWizardKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,

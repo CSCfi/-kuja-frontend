@@ -39,40 +39,42 @@ const getMuutos = (changeObj, stateItem) => {
 
 export default function getChangesOfTutkinnotJaKoulutukset(
   tutkinnot,
-  ammatilliseentehtavaanvalmistavatkoulutukset,
-  kuljettajakoulutukset,
-  tyovoimakoulutukset,
-  valmentavatKoulutukset
+  {
+    ammatilliseentehtavaanvalmistavatkoulutukset,
+    kuljettajakoulutukset,
+    tyovoimakoulutukset,
+    valmentavatKoulutukset
+  }
 ) {
   const tutkinnotMuutokset = R.flatten(
     R.map(stateItem => {
       return R.map(changeObj => {
         return getMuutos(changeObj, stateItem);
       }, stateItem.changes);
-    }, tutkinnot.state.items)
+    }, tutkinnot.items)
   );
 
   const koulutusMuutokset = R.map(changeObj => {
     const anchorParts = changeObj.anchor.split(".");
     const code = R.last(anchorParts);
-    let sourceObject = "";
+    let sourceObject = {};
     if (
       R.startsWith(
-        "ammatilliseentehtavaanvalmistavatkoulutukset",
+        "koulutukset_ammatilliseentehtavaanvalmistavatkoulutukset",
         changeObj.anchor
       )
     ) {
       sourceObject = ammatilliseentehtavaanvalmistavatkoulutukset;
-    } else if (R.startsWith("kuljettajakoulutukset", changeObj.anchor)) {
+    } else if (R.startsWith("koulutukset_kuljettajakoulutukset", changeObj.anchor)) {
       sourceObject = kuljettajakoulutukset;
-    } else if (R.startsWith("tyovoimakoulutukset", changeObj.anchor)) {
+    } else if (R.startsWith("koulutukset_tyovoimakoulutukset", changeObj.anchor)) {
       sourceObject = tyovoimakoulutukset;
-    } else if (R.startsWith("valmentavatkoulutukset", changeObj.anchor)) {
+    } else if (R.startsWith("koulutukset_valmentavatKoulutukset", changeObj.anchor)) {
       sourceObject = valmentavatKoulutukset;
     }
     const meta = getMetadata(
       R.slice(1, -1)(anchorParts),
-      sourceObject.state.categories
+      sourceObject.categories
     );
     const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
     return {
@@ -90,7 +92,7 @@ export default function getChangesOfTutkinnotJaKoulutukset(
       tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
       type: changeObj.properties.isChecked ? "addition" : "removal"
     };
-  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.state.changes, kuljettajakoulutukset.state.changes, tyovoimakoulutukset.state.changes, valmentavatKoulutukset.state.changes]));
+  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.changes, kuljettajakoulutukset.changes, tyovoimakoulutukset.changes, valmentavatKoulutukset.changes]));
 
   return R.flatten([tutkinnotMuutokset, koulutusMuutokset]);
 }

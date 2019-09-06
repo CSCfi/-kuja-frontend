@@ -69,7 +69,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
   return (
     <Section code={headingNumber} title={heading}>
       <Opetuskielet
-        backendChanges={props.backendChanges.opetuskielet}
+        changeObjects={props.changeObjects.opetuskielet}
         opetuskielet={props.kielet.opetuskielet}
         kohde={props.lupa.kohteet[2]}
         onUpdate={props.onUpdate}
@@ -80,7 +80,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       <h4 className="py-4">{KIELET_SECTIONS.TUTKINTOKIELET}</h4>
 
       <Tutkintokielet
-        backendChanges={props.backendChanges.tutkintokielet}
+        changeObjects={props.changeObjects.tutkintokielet}
         kielet={props.kielet.kielet}
         kohde={props.lupa.kohteet[1]}
         locale={R.toUpper(props.intl.locale)}
@@ -93,12 +93,15 @@ const MuutospyyntoWizardKielet = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardKielet.defaultProps = {
+  changeObjects: {}
+};
+
 MuutospyyntoWizardKielet.propTypes = {
-  backendChanges: PropTypes.object,
+  changeObjects: PropTypes.object,
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,
-  muutoshakemus: PropTypes.object,
   tutkinnotState: PropTypes.object
 };
 

@@ -8,10 +8,10 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const Kuljettajakoulutukset = props => {
-  const sectionId = "kuljettajakoulutukset";
+  const sectionId = "koulutukset_kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
   const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(null);
   const [changes, setChanges] = useState([]);
 
   const getCategories = (koulutusData, kohde, maaraystyyppi) => {
@@ -68,12 +68,14 @@ const Kuljettajakoulutukset = props => {
   ]);
 
   useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
+    if (categories) {
+      onUpdate({ sectionId, state: { categories, changes } });
+    }
   }, [categories, onUpdate, changes]);
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   const saveChanges = payload => {
     setChanges(payload.changes);
@@ -97,7 +99,7 @@ const Kuljettajakoulutukset = props => {
 };
 
 Kuljettajakoulutukset.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object

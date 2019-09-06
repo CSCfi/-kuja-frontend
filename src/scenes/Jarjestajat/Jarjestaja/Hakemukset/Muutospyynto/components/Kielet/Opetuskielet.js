@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -6,122 +6,55 @@ import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const Opetuskielet = React.memo(props => {
-  const sectionId = "opetuskielet";
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
-  const [opetuskielet, setOpetuskieletdata] = useState([]);
-  const [state, setState] = useState([]);
+  const sectionId = "kielet_opetuskielet";
+  const [changes, setChanges] = useState();
   const [locale, setLocale] = useState("FI");
   const { onUpdate } = props;
 
-  useEffect(() => {
-    const tmpState = [];
-    R.addIndex(R.map)(kieli => {
-      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
-      const title = parseLocalizedField(kieli.metadata, locale);
-      tmpState.push({ areaCode, title });
-    }, props.opetuskielet);
-    setState(tmpState);
-  }, [
-    props.opetuskielet,
-    locale,
-    props.kohde,
-    props.maaraystyyppi,
-    props.backendChanges,
-    props.lupa.kohteet
-  ]);
-  
-  const getCategories = useCallback(
-    opetuskielet => {
-      if (opetuskielet.items)
-        return R.map(item => {
-          return {
-            anchor: item.code,
-            meta: {
-              isInLupa: item.isInLupa,
-              kuvaus: item.title,
-              kohde: props.kohde,
-              maaraystyyppi: props.maaraystyyppi,
-              meta: item.meta
-            },
-            components: [
-              {
-                anchor: "A",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  isChecked: item.shouldBeSelected,
-                  title: item.title,
-                  labelStyles: {
-                    addition: isAdded,
-                    removal: isRemoved,
-                    custom: Object.assign({}, item.isInLupa ? isInLupa : {})
-                  }
-                }
+  const opetuskieletData = useMemo(() => {
+    return getDataForOpetuskieletList(
+      R.sortBy(R.prop("koodiArvo"), R.values(props.opetuskielet)),
+      props.kohde,
+      locale
+    );
+  }, [locale, props.kohde, props.opetuskielet]);
+
+  const categories = useMemo(() => {
+    return R.map(item => {
+      return {
+        anchor: item.code,
+        meta: {
+          isInLupa: item.isInLupa,
+          kuvaus: item.title,
+          kohde: props.kohde,
+          maaraystyyppi: props.maaraystyyppi,
+          meta: item.meta
+        },
+        components: [
+          {
+            anchor: "A",
+            name: "CheckboxWithLabel",
+            properties: {
+              name: "CheckboxWithLabel",
+              isChecked: item.shouldBeSelected,
+              title: item.title,
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved,
+                custom: Object.assign({}, item.isInLupa ? isInLupa : {})
               }
-            ]
-          };
-        }, opetuskielet.items);
-    },
-    [props.kohde, props.maaraystyyppi]
-  );
+            }
+          }
+        ]
+      };
+    }, opetuskieletData.items);
+  }, [opetuskieletData, props.kohde, props.maaraystyyppi]);
 
   useEffect(() => {
-    setOpetuskieletdata(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.opetuskielet))
-    );
-  }, [props.opetuskielet]);
-
-  useEffect(() => {
-    const tmpState = [];
-    R.addIndex(R.map)((kieli, i) => {
-      const areaCode = kieli.koodiarvo || kieli.koodiArvo;
-      const categories = getCategories(
-        getDataForOpetuskieletList(
-          props.opetuskielet,
-          props.kohde,
-          locale
-        )
-      );
-      const title = parseLocalizedField(kieli.metadata, locale);
-      tmpState.push({ areaCode, categories, title });
-    }, opetuskielet);
-    setState(tmpState);
-  }, [
-    opetuskielet,
-    locale,
-    props.kohde,
-    props.maaraystyyppi,
-    getCategories,
-    props.lupa.kohteet,
-    props.opetuskielet
-  ]);
-
-  useEffect(() => {
-    setCategories(
-      getCategories(
-        getDataForOpetuskieletList(
-          props.opetuskielet,
-          props.kohde,
-          locale
-        )
-      )
-    );
-  }, [
-    getCategories,
-    props.opetuskielet,
-    props.kohde,
-    props.backendChanges,
-    locale,
-    props.maaraystyyppi
-  ]);
-
-  useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   const removeChanges = (...payload) => {
     return saveChanges({ index: payload[2], changes: [] });
@@ -132,35 +65,47 @@ const Opetuskielet = React.memo(props => {
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({
-      changes,
-      items: [...state],
-      sectionId
-    });
-  }, [changes, onUpdate, state]);
+    if (categories && Array.isArray(changes)) {
+      onUpdate({
+        sectionId,
+        state: {
+          categories,
+          changes
+        }
+      });
+    }
+  }, [categories, changes, onUpdate]);
 
   const saveChanges = payload => {
     setChanges(payload.changes);
   };
 
   return (
-    <ExpandableRowRoot
-      anchor={"opetuskieli"}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={changes}
-      index={0}
-      onChangesRemove={removeChanges}
-      onUpdate={saveChanges}
-      sectionId={sectionId}
-      title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
-      isExpanded={true}
-    />
+    <React.Fragment>
+      {Array.isArray(changes) && (
+        <ExpandableRowRoot
+          anchor={"opetuskieli"}
+          key={`expandable-row-root`}
+          categories={categories}
+          changes={changes}
+          index={0}
+          onChangesRemove={removeChanges}
+          onUpdate={saveChanges}
+          sectionId={sectionId}
+          title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
+          isExpanded={true}
+        />
+      )}
+    </React.Fragment>
   );
 });
 
+Opetuskielet.defaultProps = {
+  changeObjects: []
+};
+
 Opetuskielet.propTypes = {
-  backgroundChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   opetuskielet: PropTypes.array,
   onUpdate: PropTypes.func,
   kohde: PropTypes.object,

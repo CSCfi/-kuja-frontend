@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 import Section from "../../../../../../../components/03-templates/Section";
@@ -7,21 +7,26 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import _ from "lodash";
+import {
+  curriedGetAnchorPartsByIndex,
+  getAnchorsStartingWith
+} from "../../../../../../../utils/common";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
-  const [state, setState] = useState([]);
-  const [koulutusdata, setKoulutusdata] = useState([]);
-  const [locale, setLocale] = useState([]);
-  const { onUpdate } = props;
+  const [changes, setChanges] = useState({});
+  const [items, setItems] = useState(null);
+  const { onChangesUpdate, onStateUpdate } = props;
 
-  useEffect(() => {
-    setKoulutusdata(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.koulutukset.koulutusdata))
+  const koulutusdata = useMemo(() => {
+    return R.sortBy(
+      R.prop("koodiArvo"),
+      R.values(props.koulutukset.koulutusdata)
     );
-  }, [props.koulutukset]);
+  }, [props.koulutukset.koulutusdata]);
 
   useEffect(() => {
+    const locale = R.toUpper(props.intl.locale);
     const getArticle = (areaCode, articles = []) => {
       return R.find(article => {
         return article.koodi === areaCode;
@@ -40,90 +45,126 @@ const Tutkinnot = React.memo(props => {
           locale
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
-        const changes = R.filter(changeObj => {
-          return R.equals(
-            R.compose(
-              R.view(R.lensIndex(0)),
-              R.split(".")
-            )(changeObj.anchor),
-            areaCode
-          );
-        }, _changes);
-        return { areaCode, article, categories, changes, title };
+        return { areaCode, article, categories, title };
       }, koulutusdata);
     };
-    setState(handleKoulutusdata(koulutusdata, props.backendChanges));
+    const nextItems = handleKoulutusdata(koulutusdata, props.changeObjects);
+    if (!R.equals(items, nextItems)) {
+      setItems(nextItems);
+    }
   }, [
+    items,
     koulutusdata,
-    locale,
-    props.backendChanges,
+    props.intl.locale,
+    props.locale,
+    props.changeObjects,
     props.kohde,
+    props.koulutukset,
     props.lupa.kohteet,
     props.maaraystyyppi
   ]);
 
   useEffect(() => {
-    setLocale(R.toUpper(props.intl.locale));
-  }, [props.intl.locale]);
+    if (items) {
+      onChangesUpdate({
+        sectionId,
+        changes: R.compose(
+          R.flatten,
+          R.values
+        )(changes)
+      });
+    }
+  }, [changes, onChangesUpdate]);
 
   useEffect(() => {
-    onUpdate({ sectionId, items: [...state] });
-  }, [onUpdate, state]);
+    if (items) {
+      onStateUpdate({
+        sectionId,
+        state: {
+          items
+        }
+      });
+    }
+  }, [items, onStateUpdate]);
 
   const saveChanges = payload => {
-    setState(prevState => {
-      const newState = _.cloneDeep(prevState);
-      if (!newState[payload.index]) {
-        newState[payload.index] = {};
-      }
-      newState[payload.index].changes = payload.changes;
-      return newState;
+    setChanges(prevChanges => {
+      const nextChanges = {
+        ...prevChanges,
+        [payload.anchor]: payload.changes
+      };
+      return nextChanges;
     });
   };
 
   const removeChanges = (...payload) => {
-    return saveChanges({ index: payload[2], changes: [] });
+    return saveChanges({ anchor: payload[1], changes: [] });
   };
 
+  useEffect(() => {
+    const anchorInitials = R.uniq(
+      curriedGetAnchorPartsByIndex(props.changeObjects, 0)
+    );
+    const nextChanges = R.mergeAll(
+      R.map(anchorInitial => {
+        return {
+          [anchorInitial]: getAnchorsStartingWith(
+            anchorInitial,
+            props.changeObjects
+          )
+        };
+      }, anchorInitials)
+    );
+    if (!R.equals(changes, nextChanges)) {
+      setChanges(nextChanges);
+    }
+  }, [props.changeObjects]);
+
   return (
-    <Section
-      code={props.lupa.kohteet[1].headingNumber}
-      title={props.lupa.kohteet[1].heading}
-    >
-      {R.addIndex(R.map)((stateItem, i) => {
-        return (
-          <ExpandableRowRoot
-            anchor={stateItem.areaCode}
-            key={`expandable-row-root-${i}`}
-            categories={stateItem.categories}
-            changes={stateItem.changes}
-            code={stateItem.areaCode}
-            index={i}
-            onChangesRemove={removeChanges}
-            onUpdate={saveChanges}
-            sectionId={sectionId}
-            showCategoryTitles={true}
-            title={stateItem.title}
-          />
-        );
-      }, state)}
-    </Section>
+    <React.Fragment>
+      {items && (
+        <Section
+          code={props.lupa.kohteet[1].headingNumber}
+          title={props.lupa.kohteet[1].heading}
+        >
+          {R.addIndex(R.map)((stateItem, i) => {
+            const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
+            return (
+              <ExpandableRowRoot
+                anchor={anchorInitial}
+                key={`expandable-row-root-${i}`}
+                categories={stateItem.categories}
+                changes={changes[anchorInitial]}
+                code={stateItem.areaCode}
+                onChangesRemove={removeChanges}
+                onUpdate={saveChanges}
+                sectionId={sectionId}
+                showCategoryTitles={true}
+                title={stateItem.title}
+              />
+            );
+          }, items)}
+        </Section>
+      )}
+    </React.Fragment>
   );
 });
 
 Tutkinnot.defaultProps = {
+  changeObjects: [],
   maaraystyyppi: {}
 };
 
 Tutkinnot.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.array,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func
 };
 
 export default injectIntl(Tutkinnot);

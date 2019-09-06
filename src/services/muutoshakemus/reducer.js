@@ -14,10 +14,12 @@ export default function(state, action) {
         backendChanges: action.changes
       };
     case SET_SECTION_DATA:
+      action.payload.sectionId === "tutkinnot" &&
+        console.info(action.payload.sectionId, action);
       return {
         ...state,
         [action.payload.sectionId]: {
-          ...state[action.payload.sectionId] || {},
+          ...(state[action.payload.sectionId] || {}),
           state: action.payload
         }
       };

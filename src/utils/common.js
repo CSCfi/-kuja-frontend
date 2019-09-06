@@ -1,6 +1,6 @@
 import * as R from "ramda";
 
-const getAnchorPart = (anchor, index) => {
+export const getAnchorPart = (anchor, index) => {
   return R.compose(
     R.view(R.lensIndex(index)),
     R.split(".")
@@ -12,3 +12,12 @@ export const curriedGetAnchorPartsByIndex = R.curry((objects, index) => {
     return getAnchorPart(R.prop("anchor", obj), index);
   })(objects);
 });
+
+export const getAnchorsStartingWith = (prefix, objects) => {
+  return R.filter(R.compose(
+    R.startsWith(prefix),
+    R.head,
+    R.split("."),
+    R.prop("anchor")
+  ))(objects);
+};

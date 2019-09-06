@@ -39,8 +39,6 @@ export const getCategories = (
                   });
                 })
               : false;
-            const isAddedBool = false;
-            const isRemovedBool = false;
 
             return {
               anchor: koulutus.koodiArvo,
@@ -67,7 +65,7 @@ export const getCategories = (
                       removal: isRemoved,
                       custom: Object.assign({}, isInLupaBool ? isInLupa : {})
                     },
-                    isChecked: (isInLupaBool && !isRemovedBool) || isAddedBool
+                    isChecked: isInLupaBool
                   }
                 }
               ],
@@ -132,22 +130,11 @@ export const getCategoriesForPerustelut = (
   kohde,
   maaraystyyppi,
   locale,
-  backendChanges,
-  areaCode,
-  lomakkeet,
+  changes,
+  anchorInitial,
+  lomakkeet
 ) => {
-  const relevantAnchors = R.map(
-    R.prop("anchor"),
-    R.filter(
-      R.compose(
-        R.startsWith(areaCode),
-        R.prop("anchor")
-      )
-    )(backendChanges)
-  );
-  if (!relevantAnchors.length) {
-    return [];
-  }
+  const relevantAnchors = R.map(R.prop("anchor"))(changes);
   const relevantKoulutustyypit = R.filter(
     R.compose(
       R.not,
@@ -156,8 +143,8 @@ export const getCategoriesForPerustelut = (
     ),
     R.mapObjIndexed(koulutustyyppi => {
       koulutustyyppi.koulutukset = R.filter(koulutus => {
-        const anchorStart = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
-        return !!R.filter(R.startsWith(anchorStart))(relevantAnchors).length;
+        const anchorStart = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+        return !!R.find(R.startsWith(anchorStart))(relevantAnchors);
       }, koulutustyyppi.koulutukset);
       return koulutustyyppi;
     })(koulutustyypit)
@@ -211,15 +198,15 @@ export const getCategoriesForPerustelut = (
               ]
             };
 
-            const anchorBase = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+            const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
             const changeObj = R.find(
               R.compose(
                 R.startsWith(anchorBase),
                 R.prop("anchor")
               )
-            )(backendChanges);
+            )(changes);
             const isAddition = changeObj && changeObj.properties.isChecked;
-            
+
             if (isAddition) {
               structure.categories = lomakkeet.addition;
             } else if (isRemoved) {

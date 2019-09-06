@@ -11,7 +11,7 @@ import _ from "lodash";
 
 const MuutospyyntoWizardMuut = React.memo(props => {
   const sectionId = "muut";
-  const [muutdata, setMuutdata] = useState([]);
+  const [muutdata, setMuutdata] = useState(null);
   const [changes, setChanges] = useState({});
   const [locale, setLocale] = useState("FI");
   const { onUpdate } = props;
@@ -87,9 +87,9 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                     }
                   }
                 }
-              ],
+              ]
             };
-            if(article.koodiArvo === '22'){
+            if (article.koodiArvo === "22") {
               result.categories = [
                 {
                   anchor: "other",
@@ -98,12 +98,14 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                       anchor: "A",
                       name: "TextBox",
                       properties: {
-                        placeholder: props.intl.formatMessage(wizardMessages.other_placeholder)
+                        placeholder: props.intl.formatMessage(
+                          wizardMessages.other_placeholder
+                        )
                       }
                     }
                   ]
                 }
-              ]
+              ];
             }
             return result;
           }, R.sortBy(R.prop("koodiArvo"), item.articles))
@@ -245,22 +247,26 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   };
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   useEffect(() => {
-    onUpdate({
-      sectionId,
-      changes,
-      kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi,
-      muutdata
-    });
+    if (muutdata) {
+      onUpdate({
+        sectionId,
+        state: {
+          changes,
+          kohde: props.kohde,
+          maaraystyyppi: props.maaraystyyppi,
+          muutdata
+        }
+      });
+    }
   }, [changes, muutdata, props.kohde, props.maaraystyyppi, onUpdate]);
 
   return (
     <React.Fragment>
-      {props.kohde && (
+      {props.kohde && muutdata && (
         <Section code={props.headingNumber} title={heading}>
           {R.addIndex(R.map)((row, i) => {
             return (
@@ -285,8 +291,12 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardMuut.defaultProps = {
+  changeObjects: {}
+};
+
 MuutospyyntoWizardMuut.propTypes = {
-  backendChanges: PropTypes.object,
+  changeObjects: PropTypes.object,
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -10,7 +10,7 @@ import * as R from "ramda";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const PerustelutOpetuskielet = React.memo(props => {
-  const sectionId = "opetuskielet";
+  const sectionId = "perustelutopetuskielet";
   const [categories, setCategories] = useState([]);
   const [changes, setChanges] = useState([]);
   const [opetuskielet, setOpetuskieletdata] = useState([]);
@@ -35,8 +35,8 @@ const PerustelutOpetuskielet = React.memo(props => {
     props.lupa.kohteet
   ]);
 
-  const getCategories = useCallback(
-    opetuskielet => {
+  const getCategories = useMemo(() => {
+    return opetuskielet => {
       if (opetuskielet.items)
         return R.map(item => {
           let structure = null;
@@ -72,7 +72,8 @@ const PerustelutOpetuskielet = React.memo(props => {
               categories: [
                 {
                   anchor: "vapaa-tekstikentta",
-                  title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+                  title:
+                    "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
                   components: [
                     {
                       anchor: "A",
@@ -88,9 +89,8 @@ const PerustelutOpetuskielet = React.memo(props => {
           }
           return structure;
         }, opetuskielet.items).filter(Boolean);
-    },
-    [props.changes, props.kohde, props.maaraystyyppi]
-  );
+    };
+  }, [props.changes, props.kohde, props.maaraystyyppi]);
 
   useEffect(() => {
     setOpetuskieletdata(
@@ -148,11 +148,13 @@ const PerustelutOpetuskielet = React.memo(props => {
   }, [props.intl.locale]);
 
   useEffect(() => {
-    onUpdate({
-      changes,
-      items: [...state],
-      sectionId
-    });
+    if (state.length) {
+      onUpdate({
+        changes,
+        items: [...state],
+        sectionId
+      });
+    }
   }, [changes, onUpdate, state]);
 
   const saveChanges = payload => {

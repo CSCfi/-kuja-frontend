@@ -8,9 +8,9 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
-  const sectionId = "ammatilliseentehtavaanvalmistavatkoulutukset";
+  const sectionId = "koulutukset_ammatilliseentehtavaanvalmistavatkoulutukset";
   const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(null);
   const [changes, setChanges] = useState([]);
 
   const getCategories = (koulutusData, kohde, maaraystyyppi) => {
@@ -77,11 +77,13 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   };
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
+    if (categories) {
+      onUpdate({ sectionId, state: { categories, changes } });
+    }
   }, [categories, changes, onUpdate]);
 
   const removeChanges = () => {
@@ -102,7 +104,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
 };
 
 AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,

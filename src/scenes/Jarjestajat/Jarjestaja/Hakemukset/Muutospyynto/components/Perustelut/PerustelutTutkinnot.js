@@ -6,9 +6,13 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import _ from "lodash";
+import {
+  curriedGetAnchorPartsByIndex,
+  getAnchorsStartingWith
+} from "../../../../../../../utils/common";
 
 const defaultProps = {
-  backendChanges: [],
+  changeObjects: {},
   kohde: {},
   koulutukset: {},
   lomakkeet: {},
@@ -19,24 +23,30 @@ const defaultProps = {
 
 const PerustelutTutkinnot = React.memo(
   ({
-    backendChanges = defaultProps.backendChanges,
+    changeObjects = defaultProps.changeObjects,
     intl,
     kohde = defaultProps.kohde,
     koulutukset = defaultProps.koulutukset,
     lomakkeet = defaultProps.lomakkeet,
     lupa = defaultProps.lupa,
     maaraystyyppi = defaultProps.maaraystyyppi,
-    onUpdate
+    onChangesRemove,
+    onChangesUpdate,
+    onStateUpdate
   }) => {
-    const sectionId = "tutkinnot";
-    const [state, setState] = useState([]);
+    const sectionId = "perustelut_tutkinnot";
+    const [items, setItems] = useState([]);
+    const [tutkinnotChanges, setTutkinnotChanges] = useState({});
+    // const [changes, setChanges] = useState([]);
     const [koulutusdata, setKoulutusdata] = useState([]);
     const [locale, setLocale] = useState([]);
 
     useEffect(() => {
-      setKoulutusdata(
-        R.sortBy(R.prop("koodiArvo"), R.values(koulutukset.koulutusdata))
+      const sortedKoulutusData = R.sortBy(
+        R.prop("koodiArvo"),
+        R.values(koulutukset.koulutusdata)
       );
+      setKoulutusdata(sortedKoulutusData);
     }, [koulutukset]);
 
     useEffect(() => {
@@ -49,93 +59,167 @@ const PerustelutTutkinnot = React.memo(
       const handleKoulutusdata = (koulutusdata, _changes) => {
         return R.addIndex(R.map)((koulutusala, i) => {
           const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
+          const anchorInitial = `tutkinnot_${areaCode}`;
           const article = getArticle(areaCode, lupa.kohteet[1].maaraykset);
-          const categories = getCategoriesForPerustelut(
-            i,
-            article,
-            koulutusala.koulutukset,
-            kohde,
-            maaraystyyppi,
-            locale,
-            backendChanges,
-            areaCode,
-            lomakkeet
-          );
+          const areaChanges = R.prop(anchorInitial, _changes);
+          const categories = areaChanges
+            ? getCategoriesForPerustelut(
+                i,
+                article,
+                koulutusala.koulutukset,
+                kohde,
+                maaraystyyppi,
+                locale,
+                R.prop(anchorInitial, _changes) || [],
+                anchorInitial,
+                lomakkeet
+              )
+            : [];
           const title = parseLocalizedField(koulutusala.metadata, locale);
-          const changes = R.filter(changeObj => {
-            return R.equals(
-              R.compose(
-                R.view(R.lensIndex(0)),
-                R.split(".")
-              )(changeObj.anchor),
-              areaCode
-            );
-          }, _changes);
-          return { areaCode, article, categories, changes, title };
+          return { areaCode, article, categories, title };
         }, koulutusdata);
       };
-      setState(handleKoulutusdata(koulutusdata, backendChanges));
+
+      if (koulutusdata.length) {
+        const nextItems = handleKoulutusdata(koulutusdata, tutkinnotChanges);
+        if (nextItems.length) {
+          setItems(nextItems);
+        } else {
+          console.warn("Next state would be incorrect!", nextItems);
+        }
+      }
     }, [
       koulutusdata,
       locale,
-      backendChanges,
+      tutkinnotChanges,
       kohde,
       lomakkeet,
       lupa.kohteet,
-      maaraystyyppi,
+      maaraystyyppi
     ]);
 
     useEffect(() => {
       setLocale(R.toUpper(intl.locale));
     }, [intl.locale]);
 
+    // useEffect(() => {
+    //   if (items) {
+    //     runOnChanges({
+    //       sectionId,
+    //       changes: R.compose(
+    //         R.flatten,
+    //         R.values
+    //       )(changes)
+    //     });
+    //   }
+    // }, [changes, runOnChanges]);
+
+    // useEffect(() => {
+    //   if (items) {
+    //     onStateUpdate({
+    //       sectionId,
+    //       state: {
+    //         items
+    //       }
+    //     });
+    //   }
+    // }, [items, onStateUpdate]);
+
+    // const saveChanges = payload => {
+    //   setChanges(prevChanges => {
+    //     const nextChanges = {
+    //       ...prevChanges,
+    //       [payload.anchor]: payload.changes
+    //     };
+    //     return nextChanges;
+    //   });
+    // };
+
+    // const removeChanges = (...payload) => {
+    //   return saveChanges({ index: payload[2], changes: [] });
+    // };
+
+    // useEffect(() => {
+    //   if (changeObjects.perustelut) {
+    //     const anchorInitials = R.uniq(
+    //       curriedGetAnchorPartsByIndex(changeObjects.perustelut, 0)
+    //     );
+    //     const nextChanges = R.mergeAll(
+    //       R.map(anchorInitial => {
+    //         return {
+    //           [anchorInitial]: getAnchorsStartingWith(
+    //             anchorInitial,
+    //             changeObjects.perustelut
+    //           )
+    //         };
+    //       }, anchorInitials)
+    //     );
+    //     // if (!R.equals(changes, nextChanges)) {
+    //     setChanges(nextChanges);
+    //     // }
+    //   }
+    // }, [changeObjects.perustelut]);
+
     useEffect(() => {
-      onUpdate({ sectionId, items: [...state] });
-    }, [onUpdate, state]);
-
-    const saveChanges = payload => {
-      setState(prevState => {
-        const newState = _.cloneDeep(prevState);
-        if (!newState[payload.index]) {
-          newState[payload.index] = {};
+      if (changeObjects.tutkinnot) {
+        const anchorInitials = R.uniq(
+          curriedGetAnchorPartsByIndex(changeObjects.tutkinnot, 0)
+        );
+        const nextChanges = R.mergeAll(
+          R.map(anchorInitial => {
+            return {
+              [anchorInitial]: getAnchorsStartingWith(
+                anchorInitial,
+                changeObjects.tutkinnot
+              )
+            };
+          }, anchorInitials)
+        );
+        if (!R.equals(tutkinnotChanges, nextChanges)) {
+          setTutkinnotChanges(nextChanges);
         }
-        newState[payload.index].changes = payload.changes;
-        return newState;
-      });
-    };
-
-    const removeChanges = (...payload) => {
-      return saveChanges({ index: payload[2], changes: [] });
-    };
+      }
+    }, [tutkinnotChanges, changeObjects.tutkinnot]);
 
     return (
       <React.Fragment>
         {R.addIndex(R.map)((stateItem, i) => {
+          const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
+          console.info(
+            changeObjects,
+            R.path(
+              ["perustelut", "tutkinnot", stateItem.areaCode],
+              changeObjects
+            )
+          );
           return stateItem.categories.length ? (
             <ExpandableRowRoot
-              anchor={stateItem.areaCode}
+              anchor={anchorInitial}
               key={`expandable-row-root-${i}`}
               categories={stateItem.categories}
-              changes={stateItem.changes}
+              changes={R.path(
+                ["perustelut", "tutkinnot", stateItem.areaCode],
+                changeObjects
+              )}
               code={stateItem.areaCode}
-              disableReverting={true}
+              disableReverting={false}
               hideAmountOfChanges={false}
               index={i}
               isExpanded={true}
-              onChangesRemove={removeChanges}
-              onUpdate={saveChanges}
+              onChangesRemove={onChangesRemove}
+              onUpdate={onChangesUpdate}
               sectionId={sectionId}
               title={stateItem.title}
             />
           ) : null;
-        }, state)}
+        }, items)}
       </React.Fragment>
     );
   }
 );
 
 PerustelutTutkinnot.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
@@ -144,7 +228,9 @@ PerustelutTutkinnot.propTypes = {
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   muutosperustelut: PropTypes.object,
-  onUpdate: PropTypes.func
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func
 };
 
 export default injectIntl(PerustelutTutkinnot);
