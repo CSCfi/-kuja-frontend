@@ -316,379 +316,398 @@ const CategorizedList = React.memo(props => {
     return _operations;
   };
 
-  return (
-    <div>
-      {_.map(props.categories, (category, i) => {
-        const isCategoryTitleVisible =
-          props.showCategoryTitles && (category.code || category.title);
-        const anchor = `${props.anchor}.${category.anchor}`;
-        return (
-          <div
-            key={i}
-            className={`${
-              !R.equals(props.rootPath, [])
-                ? "pl-10"
-                : i !== 0 && isCategoryTitleVisible
-                ? "pt-10"
-                : ""
-            } select-none"`}
-          >
-            {isCategoryTitleVisible && (
-              <div className="py-2">
-                <h4>
-                  {category.code && (
-                    <span className="mr-4">{category.code}</span>
-                  )}
-                  <span>{category.title}</span>
-                </h4>
-              </div>
-            )}
-            <div className="flex sm:items-center justify-between flex-wrap flex-col sm:flex-row">
-              {_.map(category.components, (component, ii) => {
-                const fullAnchor = `${anchor}.${component.anchor}`;
-                const fullPath = props.rootPath.concat([i, "components", ii]);
-                const idSuffix = `${i}-${ii}`;
-                const changeObj = getChangeObjByAnchor(
-                  fullAnchor,
-                  props.changes
-                );
-                const propsObj = getPropertiesObject(changeObj, component);
-                const isAddition = !!changeObj.properties.isChecked;
-                const isRemoved =
-                  R.has("isChecked")(changeObj.properties) &&
-                  !changeObj.properties.isChecked;
-                const labelStyles = Object.assign(
-                  {},
-                  isAddition ? (propsObj.labelStyles || {}).addition : {},
-                  isRemoved ? (propsObj.labelStyles || {}).removal : {},
-                  (propsObj.labelStyles || {}).custom || {}
-                );
-                const title =
-                  propsObj.title +
-                  (props.debug
-                    ? props.rootPath.concat([i, "components", ii])
-                    : "");
-                return (
-                  <React.Fragment key={`item-${ii}`}>
-                    {component.name === "CheckboxWithLabel" && (
-                      <div className="flex-2">
-                        <CheckboxWithLabel
-                          id={`checkbox-with-label-${idSuffix}`}
-                          name={component.name}
-                          isChecked={propsObj.isChecked}
-                          isDisabled={propsObj.isDisabled}
-                          onChanges={handleChanges}
-                          payload={{
-                            anchor,
-                            categories: category.categories,
-                            component,
-                            fullPath,
-                            parent: props.parent,
-                            rootPath: props.rootPath,
-                            siblings: props.categories
-                          }}
-                          labelStyles={labelStyles}
-                        >
-                          <div className="flex">
-                            <span className="leading-none">
-                              {propsObj.code}
-                            </span>
-                            <p className="ml-4 leading-none">{title}</p>
-                          </div>
-                        </CheckboxWithLabel>
-                      </div>
+  return (() => {
+    return (
+      <div>
+        {_.map(props.categories, (category, i) => {
+          const isCategoryTitleVisible =
+            props.showCategoryTitles && (category.code || category.title);
+          const anchor = `${props.anchor}.${category.anchor}`;
+          const categoryStyles = [
+            "flex",
+            "sm:items-center",
+            "justify-between",
+            "flex-wrap",
+            "flex-col",
+            "sm:flex-row"
+          ].join(" ");
+          const defaultIntendationClasses = !R.equals(props.rootPath, [])
+            ? ["pl-10"]
+            : i !== 0 && isCategoryTitleVisible
+            ? ["pt-10"]
+            : [];
+          const styleClasses = R.join(
+            " ",
+            R.concat(category.styleClasses || defaultIntendationClasses, [
+              "select-none"
+            ])
+          );
+          return (
+            <div key={i} className={styleClasses}>
+              {isCategoryTitleVisible && (
+                <div className="py-2">
+                  <h4>
+                    {category.code && (
+                      <span className="mr-4">{category.code}</span>
                     )}
-                    {component.name === "RadioButtonWithLabel" && (
-                      <div className="flex-2">
-                        <RadioButtonWithLabel
-                          id={`radio-button-with-label-${idSuffix}`}
-                          name={propsObj.name}
-                          isChecked={propsObj.isChecked}
-                          onChanges={handleChanges}
-                          payload={{
-                            anchor,
-                            categories: category.categories,
-                            component,
-                            fullPath,
-                            parent: props.parent,
-                            rootPath: props.rootPath,
-                            siblings: props.categories
-                          }}
-                          labelStyles={labelStyles}
-                          value={propsObj.value}
-                          className="flex-row"
-                        >
-                          <div className="flex">
-                            <span className="leading-none">
-                              {propsObj.code}
-                            </span>
-                            <p className="ml-4 leading-none">{title}</p>
-                          </div>
-                        </RadioButtonWithLabel>
-                      </div>
-                    )}
-                    {component.name === "Dropdown"
-                      ? (category => {
-                          const previousSibling =
-                            category.components[ii - 1] || {};
-                          const isPreviousSiblingCheckedByDefault = !!(
-                            previousSibling.properties || {}
-                          ).isChecked;
-                          const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
-                          const change = getChangeObjByAnchor(
-                            previousSiblingFullAnchor,
-                            props.changes
-                          );
-                          const isDisabled =
-                            (previousSibling.name === "CheckboxWithLabel" ||
-                              previousSibling.name ===
-                                "RadioButtonWithLabel") &&
-                            !(
-                              isPreviousSiblingCheckedByDefault ||
-                              change.properties.isChecked
-                            );
-                          return (
-                            <div className="px-2 mb-1">
-                              <Dropdown
-                                id={`dropdown-${idSuffix}`}
-                                onChanges={runOperations}
-                                options={propsObj.options}
-                                payload={{
-                                  anchor,
-                                  categories: category.categories,
-                                  component,
-                                  fullPath,
-                                  parent: props.parent,
-                                  rootPath: props.rootPath,
-                                  siblings: props.categories
-                                }}
-                                value={propsObj.selectedOption}
-                                isDisabled={isDisabled}
-                              />
+                    <span>{category.title}</span>
+                  </h4>
+                </div>
+              )}
+              <div className={categoryStyles}>
+                {_.map(category.components, (component, ii) => {
+                  const fullAnchor = `${anchor}.${component.anchor}`;
+                  const fullPath = props.rootPath.concat([i, "components", ii]);
+                  const idSuffix = `${i}-${ii}`;
+                  const changeObj = getChangeObjByAnchor(
+                    fullAnchor,
+                    props.changes
+                  );
+                  const propsObj = getPropertiesObject(changeObj, component);
+                  const isAddition = !!changeObj.properties.isChecked;
+                  const isRemoved =
+                    R.has("isChecked")(changeObj.properties) &&
+                    !changeObj.properties.isChecked;
+                  const labelStyles = Object.assign(
+                    {},
+                    isAddition ? (propsObj.labelStyles || {}).addition : {},
+                    isRemoved ? (propsObj.labelStyles || {}).removal : {},
+                    (propsObj.labelStyles || {}).custom || {}
+                  );
+                  const styleClasses = component.styleClasses || [];
+                  const title =
+                    propsObj.title +
+                    (props.debug
+                      ? props.rootPath.concat([i, "components", ii])
+                      : "");
+                  return (
+                    <React.Fragment key={`item-${ii}`}>
+                      {component.name === "CheckboxWithLabel" && (
+                        <div className="flex-2">
+                          <CheckboxWithLabel
+                            id={`checkbox-with-label-${idSuffix}`}
+                            name={component.name}
+                            isChecked={propsObj.isChecked}
+                            isDisabled={propsObj.isDisabled}
+                            onChanges={handleChanges}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                            labelStyles={labelStyles}
+                          >
+                            <div className="flex">
+                              <span className="leading-none">
+                                {propsObj.code}
+                              </span>
+                              <p className="ml-4 leading-none">{title}</p>
                             </div>
-                          );
-                        })(category)
-                      : null}
-                    {component.name === "TextBox"
-                      ? (category => {
-                          const change = getChangeObjByAnchor(
-                            fullAnchor,
-                            props.changes
-                          );
-                          let parentComponent = null;
-                          let isDisabled = false;
-                          if (props.parent.category.components) {
-                            parentComponent =
-                              props.parent.category.components[0];
-                            const parentChange = getChangeObjByAnchor(
-                              `${props.parent.anchor}.${parentComponent.anchor}`,
+                          </CheckboxWithLabel>
+                        </div>
+                      )}
+                      {component.name === "RadioButtonWithLabel" && (
+                        <div className="flex-2">
+                          <RadioButtonWithLabel
+                            id={`radio-button-with-label-${idSuffix}`}
+                            name={propsObj.name}
+                            isChecked={propsObj.isChecked}
+                            onChanges={handleChanges}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                            labelStyles={labelStyles}
+                            value={propsObj.value}
+                            className="flex-row"
+                          >
+                            <div className="flex">
+                              <span className="leading-none">
+                                {propsObj.code}
+                              </span>
+                              <p className="ml-4 leading-none">{title}</p>
+                            </div>
+                          </RadioButtonWithLabel>
+                        </div>
+                      )}
+                      {component.name === "Dropdown"
+                        ? (category => {
+                            const previousSibling =
+                              category.components[ii - 1] || {};
+                            const isPreviousSiblingCheckedByDefault = !!(
+                              previousSibling.properties || {}
+                            ).isChecked;
+                            const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
+                            const change = getChangeObjByAnchor(
+                              previousSiblingFullAnchor,
                               props.changes
                             );
-                            isDisabled =
-                              R.includes(parentComponent.name, [
-                                "CheckboxWithLabel",
-                                "RadioButtonWithLabel"
-                              ]) &&
-                              ((!parentComponent.properties.isChecked &&
-                                R.isEmpty(parentChange.properties)) ||
-                                !parentChange.properties.isChecked);
-                          }
-                          const value = change
-                            ? change.properties.value
-                            : propsObj.defaultValue;
-                          return (
-                            <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
-                              <TextBox
-                                id={`textbox-${idSuffix}`}
-                                isDisabled={isDisabled}
-                                isHidden={isDisabled}
-                                onChanges={runOperations}
-                                payload={{
-                                  anchor,
-                                  categories: category.categories,
-                                  component,
-                                  fullPath,
-                                  parent: props.parent,
-                                  rootPath: props.rootPath,
-                                  siblings: props.categories
-                                }}
-                                placeholder={propsObj.placeholder}
-                                value={value}
-                              />
-                            </div>
-                          );
-                        })(category)
-                      : null}
-                    {component.name === "StatusTextRow" && (
-                      <div className="flex-2">
-                        <StatusTextRow labelStyles={labelStyles}>
-                          <div className="flex">
-                            <span className="leading-none">
-                              {propsObj.code}
-                            </span>
-                            <p
-                              className={`${!propsObj.withoutMargin &&
-                                "ml-4 "}leading-none`}
-                            >
-                              {title}
-                            </p>
-                          </div>
-                        </StatusTextRow>
-                      </div>
-                    )}
-                    {component.name === "Autocomplete"
-                      ? (category => {
-                          const previousSibling =
-                            category.components[ii - 1] || {};
-                          const isPreviousSiblingCheckedByDefault = !!(
-                            previousSibling.properties || {}
-                          ).isChecked;
-                          const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
-                          const change = getChangeObjByAnchor(
-                            previousSiblingFullAnchor,
-                            props.changes
-                          );
-                          const isDisabled =
-                            (previousSibling.name === "CheckboxWithLabel" ||
-                              previousSibling.name ===
-                                "RadioButtonWithLabel") &&
-                            !(
-                              isPreviousSiblingCheckedByDefault ||
-                              change.properties.isChecked
+                            const isDisabled =
+                              (previousSibling.name === "CheckboxWithLabel" ||
+                                previousSibling.name ===
+                                  "RadioButtonWithLabel") &&
+                              !(
+                                isPreviousSiblingCheckedByDefault ||
+                                change.properties.isChecked
+                              );
+                            return (
+                              <div className="px-2 mb-1">
+                                <Dropdown
+                                  id={`dropdown-${idSuffix}`}
+                                  onChanges={runOperations}
+                                  options={propsObj.options}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories
+                                  }}
+                                  value={propsObj.selectedOption}
+                                  isDisabled={isDisabled}
+                                />
+                              </div>
                             );
-                          return (
-                            <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
-                              <Autocomplete
-                                callback={runOperations}
-                                id={`autocomplete-${idSuffix}`}
-                                options={propsObj.options}
-                                payload={{
-                                  anchor,
-                                  categories: category.categories,
-                                  component,
-                                  fullPath,
-                                  parent: props.parent,
-                                  rootPath: props.rootPath,
-                                  siblings: props.categories
-                                }}
-                                value={propsObj.value}
-                                isDisabled={isDisabled}
-                                height={heights.SHORT}
-                              />
-                            </div>
-                          );
-                        })(category)
-                      : null}
-                    {component.name === "Difference" && (
-                      <div className="flex-2">
-                        <Difference
-                          applyForValue={propsObj.applyForValue}
-                          initialValue={propsObj.initialValue}
-                          onChanges={runOperations}
-                          payload={{
-                            anchor,
-                            categories: category.categories,
-                            component,
-                            fullPath,
-                            parent: props.parent,
-                            rootPath: props.rootPath,
-                            siblings: props.categories
-                          }}
-                          titles={propsObj.titles}
-                        />
-                      </div>
-                    )}
-                    {component.name === "Attachments"
-                      ? (category => {
-                          const previousSibling =
-                            category.components[ii - 1] || {};
-                          const isPreviousSiblingCheckedByDefault = !!(
-                            previousSibling.properties || {}
-                          ).isChecked;
-                          const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
-                          const change = getChangeObjByAnchor(
-                            previousSiblingFullAnchor,
-                            props.changes
-                          );
-                          const isDisabled =
-                            (previousSibling.name === "CheckboxWithLabel" ||
-                              previousSibling.name ===
-                                "RadioButtonWithLabel") &&
-                            !(
-                              isPreviousSiblingCheckedByDefault ||
-                              change.properties.isChecked
+                          })(category)
+                        : null}
+                      {component.name === "TextBox"
+                        ? (category => {
+                            const change = getChangeObjByAnchor(
+                              fullAnchor,
+                              props.changes
                             );
-                          let attachments = propsObj.attachments || [];
-                          return (
-                            <div className="flex-2">
-                              <Attachments
-                                id={`attachments-${idSuffix}`}
-                                onUpdate={e => (propsObj.attachments = e)} // TODO
-                                placement={props.placement}
-                                payload={{
-                                  anchor,
-                                  categories: category.categories,
-                                  component,
-                                  fullPath,
-                                  parent: props.parent,
-                                  rootPath: props.rootPath,
-                                  siblings: props.categories,
-                                  attachments: attachments
-                                }}
-                                isDisabled={isDisabled}
-                              />
-                            </div>
-                          );
-                        })(category)
-                      : null}
-                    {component.name === "SimpleButton" && (
-                      <div className={`${component.styleClasses} flex-2`}>
-                        <SimpleButton
-                          text={propsObj.text}
-                          variant={propsObj.variant}
-                          onClick={handleButtonClick}
-                          payload={{
-                            anchor,
-                            categories: category.categories,
-                            component,
-                            fullPath,
-                            parent: props.parent,
-                            rootPath: props.rootPath,
-                            siblings: props.categories
-                          }}
-                        />
-                      </div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                            let parentComponent = null;
+                            let isDisabled = false;
+                            if (
+                              props.parent &&
+                              props.parent.category.components
+                            ) {
+                              parentComponent =
+                                props.parent.category.components[0];
+                              const parentChange = getChangeObjByAnchor(
+                                `${props.parent.anchor}.${parentComponent.anchor}`,
+                                props.changes
+                              );
+                              isDisabled =
+                                R.includes(parentComponent.name, [
+                                  "CheckboxWithLabel",
+                                  "RadioButtonWithLabel"
+                                ]) &&
+                                ((!parentComponent.properties.isChecked &&
+                                  R.isEmpty(parentChange.properties)) ||
+                                  !parentChange.properties.isChecked);
+                            }
+                            const value = change
+                              ? change.properties.value
+                              : propsObj.defaultValue;
+                            return (
+                              <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
+                                <TextBox
+                                  id={`textbox-${idSuffix}`}
+                                  isDisabled={isDisabled}
+                                  isHidden={isDisabled}
+                                  onChanges={runOperations}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories
+                                  }}
+                                  placeholder={propsObj.placeholder}
+                                  value={value}
+                                />
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "Attachments"
+                        ? (category => {
+                            const previousSibling =
+                              category.components[ii - 1] || {};
+                            const isPreviousSiblingCheckedByDefault = !!(
+                              previousSibling.properties || {}
+                            ).isChecked;
+                            const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
+                            const change = getChangeObjByAnchor(
+                              previousSiblingFullAnchor,
+                              props.changes
+                            );
+                            const isDisabled =
+                              (previousSibling.name === "CheckboxWithLabel" ||
+                                previousSibling.name ===
+                                  "RadioButtonWithLabel") &&
+                              !(
+                                isPreviousSiblingCheckedByDefault ||
+                                change.properties.isChecked
+                              );
+                            let attachments = propsObj.attachments || [];
+                            return (
+                              <div className="flex-2">
+                                <Attachments
+                                  id={`attachments-${idSuffix}`}
+                                  onUpdate={e => (propsObj.attachments = e)} // TODO
+                                  placement={props.placement}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories,
+                                    attachments: attachments
+                                  }}
+                                  isDisabled={isDisabled}
+                                />
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "StatusTextRow"
+                        ? (category => {
+                            const codeMarkup = propsObj.code ? (
+                              <span className="pr-4">{propsObj.code}</span>
+                            ) : null;
+                            return (
+                              <div className="flex-2">
+                                <StatusTextRow
+                                  labelStyles={labelStyles}
+                                  styleClasses={styleClasses}
+                                >
+                                  <div className="flex">
+                                    {codeMarkup}
+                                    <p>{title}</p>
+                                  </div>
+                                </StatusTextRow>
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "Autocomplete"
+                        ? (category => {
+                            const previousSibling =
+                              category.components[ii - 1] || {};
+                            const isPreviousSiblingCheckedByDefault = !!(
+                              previousSibling.properties || {}
+                            ).isChecked;
+                            const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
+                            const change = getChangeObjByAnchor(
+                              previousSiblingFullAnchor,
+                              props.changes
+                            );
+                            const isDisabled =
+                              (previousSibling.name === "CheckboxWithLabel" ||
+                                previousSibling.name ===
+                                  "RadioButtonWithLabel") &&
+                              !(
+                                isPreviousSiblingCheckedByDefault ||
+                                change.properties.isChecked
+                              );
+                            return (
+                              <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
+                                <Autocomplete
+                                  callback={runOperations}
+                                  id={`autocomplete-${idSuffix}`}
+                                  options={propsObj.options}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories
+                                  }}
+                                  value={propsObj.value}
+                                  isDisabled={isDisabled}
+                                  height={heights.SHORT}
+                                />
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "Difference" && (
+                        <div className="flex-2">
+                          <Difference
+                            applyForValue={propsObj.applyForValue}
+                            initialValue={propsObj.initialValue}
+                            onChanges={runOperations}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                            titles={propsObj.titles}
+                          />
+                        </div>
+                      )}
+                      {component.name === "SimpleButton" && (
+                        <div className={`${component.styleClasses} flex-2`}>
+                          <SimpleButton
+                            text={propsObj.text}
+                            variant={propsObj.variant}
+                            onClick={handleButtonClick}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                          />
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+              {category.categories && (
+                <CategorizedList
+                  anchor={anchor}
+                  categories={category.categories}
+                  changes={props.changes}
+                  debug={props.debug}
+                  id={`${props.id}-${category.code}`}
+                  level={props.level + 1}
+                  parent={{
+                    anchor,
+                    category,
+                    parent: props.parent,
+                    rootPath: props.rootPath,
+                    siblings: props.categories
+                  }}
+                  parentRootPath={props.rootPath}
+                  rootPath={props.rootPath.concat([i, "categories"])}
+                  runOperations={props.runOperations}
+                  showCategoryTitles={props.showCategoryTitles}
+                />
+              )}
             </div>
-            {category.categories && (
-              <CategorizedList
-                anchor={anchor}
-                categories={category.categories}
-                changes={props.changes}
-                debug={props.debug}
-                id={`${props.id}-${category.code}`}
-                level={props.level + 1}
-                parent={{
-                  anchor,
-                  category,
-                  parent: props.parent,
-                  rootPath: props.rootPath,
-                  siblings: props.categories
-                }}
-                parentRootPath={props.rootPath}
-                rootPath={props.rootPath.concat([i, "categories"])}
-                runOperations={props.runOperations}
-                showCategoryTitles={props.showCategoryTitles}
-              />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
+          );
+        })}
+      </div>
+    );
+  })();
 });
 
 CategorizedList.propTypes = {

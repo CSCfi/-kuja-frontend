@@ -37,6 +37,7 @@ const ExpandableRowRoot = React.memo(
     anchor,
     categories = defaultProps.categories,
     changes = defaultProps.changes,
+    children,
     code,
     disableReverting = defaultProps.disableReverting,
     hideAmountOfChanges = defaultProps.hideAmountOfChanges,
@@ -85,16 +86,23 @@ const ExpandableRowRoot = React.memo(
                 </div>
               )}
             </div>
-            <div data-slot="content" className="w-full">
-              <CategorizedListRoot
-                anchor={anchor}
-                categories={categories}
-                changes={changes}
-                index={index}
-                onUpdate={onUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={showCategoryTitles}
-              />
+            <div
+              data-slot="content"
+              className={`w-full ${!children ? "p-8" : ""}`}
+            >
+              {!children ? (
+                <CategorizedListRoot
+                  anchor={anchor}
+                  categories={categories}
+                  changes={changes}
+                  index={index}
+                  onUpdate={onUpdate}
+                  sectionId={sectionId}
+                  showCategoryTitles={showCategoryTitles}
+                />
+              ) : (
+                children
+              )}
             </div>
           </ExpandableRow>
         )}
