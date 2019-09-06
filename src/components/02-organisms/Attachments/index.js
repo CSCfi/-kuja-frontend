@@ -33,11 +33,11 @@ const Checkbox = styled.div`
   margin: 12px 10px 0 10px;
 
   label {
-    width: 20px;
-    height: 20px;
+    width: 1.3em;
+    height: 1.3em;
     cursor: pointer;
     position: absolute;
-    top: -3px;
+    top: 0;
     left: 0;
     background: white;
     border-radius: 0;
@@ -45,7 +45,6 @@ const Checkbox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-bottom: 2px;
 
     &:hover {
       &:after {
@@ -79,7 +78,7 @@ const Checkbox = styled.div`
   }
 `;
 const LiiteListItem = styled.div`
-  font-size: 14px;
+  font-size: 0.9em;
   display: flex;
   justify-content: stretch;
   align-items: center;
@@ -88,8 +87,8 @@ const LiiteListItem = styled.div`
   button {
     background-color: transparent;
     border: 0;
-    height: 24px;
-    width: 24px;
+    height: 2em;
+    width: 2em;
     cursor: cursor;
     &:hover {
       color: ${props =>
@@ -112,23 +111,23 @@ const LiiteListItem = styled.div`
     margin: auto;
   }
   input {
-    min-width: 300px;
-    height: 24px;
-    font-size: 14px;
+    width: auto;
+    height: 2em;
+    font-size: 0.9em;
     flex: 1;
-    margin: 0 8px 0 4px;
-    padding: 0 8px 0 4px;
+    margin: 0 0.1em 0 0.1em;
+    padding: 0 0.2em 0 0.1em;
   }
   .name {
     flex: 1;
-    margin-left: 8px;
+    margin-left: 0.2em;
   }
   .type {
-    min-width: 40px;
+    min-width: 3em;
     text-align: right;
   }
   .size {
-    min-width: 70px;
+    min-width: 5em;
     text-align: right;
   }
   &:hover {
@@ -136,10 +135,10 @@ const LiiteListItem = styled.div`
   }
 `;
 export const Input = styled.input`
-  font-size: 15px;
-  padding: 8px 16px;
-  width: 320px;
-  margin: 10px 10px 10px 0;
+  font-size: 0.9em;
+  padding: 0.2em 0.4em;
+  width: auto;
+  margin: 0.3em 0.3em 0.3em 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -319,6 +318,7 @@ const Attachments = React.memo(props => {
     else return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
   };
 
+  // Lists all attachments based on placement parameter given
   const LiiteList = () => {
     if (attachments)
       return attachments.map(liite => {
@@ -442,7 +442,7 @@ const Attachments = React.memo(props => {
           <ModalButton primary onClick={addAttachment}>
             {HAKEMUS_VIESTI.OK.FI}
           </ModalButton>
-          <ModalButton onClick={closeNameModal}>
+          <ModalButton onClick={closeNameModal} className="mt-1 sm:mt-0">
             {HAKEMUS_VIESTI.PERUUTA.FI}
           </ModalButton>
         </div>
@@ -458,7 +458,9 @@ Attachments.propTypes = {
   attachments: PropTypes.object,
   id: PropTypes.string,
   placement: PropTypes.string,
-  selectedAttachment: PropTypes.object
+  selectedAttachment: PropTypes.object,
+  showListOnly: PropTypes.bool,
+  listHidden: PropTypes.bool
 };
 
 export default injectIntl(Attachments);

@@ -7,6 +7,7 @@ import { HAKEMUS_OTSIKOT } from "../../../locales/uusiHakemusFormConstants";
 import { FaPlus } from "react-icons/fa";
 
 const LiiteTopArea = styled.div`
+  font-size: 0.9em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -33,7 +34,6 @@ const FileInput = styled.div`
         ? props.bgColor
         : COLORS.OIVA_GREEN};
   margin: 0.5em 0;
-  height: 3em;
   font-size: 0.9em;
   transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
   width: 10em;
@@ -49,7 +49,7 @@ const FileInput = styled.div`
     margin: 0 auto;
     cursor: pointer;
     svg {
-      margin: 2px 10px 0 0;
+      margin: 0.2em 0.2em 0.3em 0;
     }
   }
   &:hover {
