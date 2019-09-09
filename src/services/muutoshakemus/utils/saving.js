@@ -7,7 +7,7 @@ import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
 import getChangesOfMuut from "./muut";
 
-export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
+export function createObjectToSave(lupa, changeObjects, muutoshakemus, uuid, muutospyynto) {
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
@@ -30,8 +30,9 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
     },
     muutokset: R.flatten([
       getChangesOfTutkinnotJaKoulutukset(
+        changeObjects,
         muutoshakemus.tutkinnot,
-        muutoshakemus.koulutukset
+        muutoshakemus.koulutukset,
       )
       // getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       // getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),

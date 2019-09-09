@@ -38,61 +38,57 @@ const getMuutos = (changeObj, stateItem) => {
 };
 
 export default function getChangesOfTutkinnotJaKoulutukset(
+  changeObjects,
   tutkinnot,
-  {
-    ammatilliseentehtavaanvalmistavatkoulutukset,
-    kuljettajakoulutukset,
-    tyovoimakoulutukset,
-    valmentavatKoulutukset
-  }
+  koulutukset
 ) {
   const tutkinnotMuutokset = R.flatten(
-    R.map(stateItem => {
-      return R.map(changeObj => {
-        return getMuutos(changeObj, stateItem);
-      }, stateItem.changes);
-    }, tutkinnot.items)
+    R.values(
+      R.mapObjIndexed((changes, areaCode) => {
+        const stateItem = R.find(R.propEq("areaCode", areaCode))(
+          tutkinnot.items
+        );
+        return R.values(
+          R.map(changeObj => {
+            return getMuutos(changeObj, stateItem);
+          }, changes)
+        );
+      }, changeObjects.tutkinnot)
+    )
   );
 
-  const koulutusMuutokset = R.map(changeObj => {
-    const anchorParts = changeObj.anchor.split(".");
-    const code = R.last(anchorParts);
-    let sourceObject = {};
-    if (
-      R.startsWith(
-        "koulutukset_ammatilliseentehtavaanvalmistavatkoulutukset",
-        changeObj.anchor
-      )
-    ) {
-      sourceObject = ammatilliseentehtavaanvalmistavatkoulutukset;
-    } else if (R.startsWith("koulutukset_kuljettajakoulutukset", changeObj.anchor)) {
-      sourceObject = kuljettajakoulutukset;
-    } else if (R.startsWith("koulutukset_tyovoimakoulutukset", changeObj.anchor)) {
-      sourceObject = tyovoimakoulutukset;
-    } else if (R.startsWith("koulutukset_valmentavatKoulutukset", changeObj.anchor)) {
-      sourceObject = valmentavatKoulutukset;
-    }
-    const meta = getMetadata(
-      R.slice(1, -1)(anchorParts),
-      sourceObject.categories
-    );
-    const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
-    return {
-      isInLupa: meta.isInLupa,
-      kohde: meta.kohde,
-      koodiarvo: code,
-      koodisto: meta.koodisto.koodistoUri,
-      maaraystyyppi: meta.maaraystyyppi,
-      meta: {
-        changeObj,
-        perusteluteksti: null,
-        muutosperustelukoodiarvo: []
-      },
-      nimi: finnishInfo.nimi,
-      tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
-      type: changeObj.properties.isChecked ? "addition" : "removal"
-    };
-  }, R.flatten([ammatilliseentehtavaanvalmistavatkoulutukset.changes, kuljettajakoulutukset.changes, tyovoimakoulutukset.changes, valmentavatKoulutukset.changes]));
+  const koulutuksetMuutokset = R.flatten(
+    R.values(
+      R.mapObjIndexed((changes, name) => {
+        return R.values(
+          R.map(changeObj => {
+            const anchorParts = changeObj.anchor.split(".");
+            const code = R.view(R.lensIndex(1))(anchorParts);
+            const meta = getMetadata(
+              R.slice(1, -1)(anchorParts),
+              koulutukset[name].categories
+            );
+            const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
+            return {
+              isInLupa: meta.isInLupa,
+              kohde: meta.kohde,
+              koodiarvo: code,
+              koodisto: meta.koodisto.koodistoUri,
+              maaraystyyppi: meta.maaraystyyppi,
+              meta: {
+                changeObj,
+                perusteluteksti: null,
+                muutosperustelukoodiarvo: []
+              },
+              nimi: finnishInfo.nimi,
+              tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
+              type: changeObj.properties.isChecked ? "addition" : "removal"
+            };
+          }, changes)
+        );
+      }, changeObjects.koulutukset)
+    )
+  );
 
-  return R.flatten([tutkinnotMuutokset, koulutusMuutokset]);
+  return R.flatten([tutkinnotMuutokset, koulutuksetMuutokset]);
 }

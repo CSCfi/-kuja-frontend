@@ -15,6 +15,7 @@ import { MaakuntakunnatContext } from "context/maakuntakunnatContext";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
+import FormSection from "../../../../../../components/03-templates/FormSection";
 
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
@@ -63,9 +64,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     );
   }, [props.maaraystyypit]);
 
-  // useEffect(() => {
-  //   console.info(props.muutoshakemus);
-  // }, [props.muutoshakemus]);
+  useEffect(() => {
+    console.info("Muutoshakemus: ", props.muutoshakemus);
+  }, [props.muutoshakemus]);
+
+  useEffect(() => {
+    console.info("Muutokset: ", props.changeObjects);
+  }, [props.changeObjects]);
 
   return (
     <React.Fragment>
@@ -77,27 +82,71 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         <form onSubmit={props.handleSubmit}>
           {R.is(Object, maaraystyypit) ? (
             <React.Fragment>
-              <Tutkinnot
-                changeObjects={props.changeObjects.tutkinnot}
-                kohde={kohteet.tutkinnotjakoulutukset}
-                koulutukset={props.koulutukset}
-                koulutusalat={props.koulutusalat}
-                koulutustyypit={props.koulutustyypit.data}
-                lupa={props.lupa}
-                maaraystyyppi={maaraystyypit.OIKEUS}
-                onChangesUpdate={props.onChangesUpdate}
-                onStateUpdate={props.onStateUpdate}
+              <FormSection
+                code={props.lupa.kohteet[1].headingNumber}
+                id="tutkinnot"
+                render={_props => (
+                  <React.Fragment>
+                    <Tutkinnot
+                      changeObjects={R.prop("tutkinnot", props.changeObjects)}
+                      kohde={kohteet.tutkinnotjakoulutukset}
+                      koulutukset={props.koulutukset}
+                      koulutusalat={props.koulutusalat}
+                      koulutustyypit={props.koulutustyypit.data}
+                      lupa={props.lupa}
+                      maaraystyyppi={maaraystyypit.OIKEUS}
+                      stateObject={props.muutoshakemus.tutkinnot}
+                      {..._props}
+                    />
+                    <MuutospyyntoWizardKoulutukset
+                      changeObjects={R.prop("koulutukset", props.changeObjects)}
+                      kohde={kohteet.tutkinnotjakoulutukset}
+                      koulutukset={props.koulutukset}
+                      maaraystyyppi={maaraystyypit.OIKEUS}
+                      stateObjects={props.muutoshakemus.koulutukset}
+                      {..._props}
+                    />
+                  </React.Fragment>
+                )}
+                runOnStateUpdate={props.onStateUpdate}
+                runOnChanges={props.onChangesUpdate}
+                title={props.lupa.kohteet[1].heading}
               />
 
-              {/* <MuutospyyntoWizardKoulutukset
-                changeObjects={props.changeObjects.koulutukset}
-                kohde={kohteet.tutkinnotjakoulutukset}
-                koulutukset={props.koulutukset}
-                maaraystyyppi={maaraystyypit.OIKEUS}
-                onUpdate={props.onUpdate}
-              />
+              {/* <FormSection
+                changeObjects={{
+                  tutkinnot: R.prop("tutkinnot", props.changeObjects) || {},
+                  koulutukset: R.prop("koulutukset", props.changeObjects) || {}
+                }}
+                code={props.lupa.kohteet[1].headingNumber}
+                id="tutkinnot"
+                render={_props => (
+                  <React.Fragment>
+                    <Tutkinnot
+                      changeObjects={props.changeObjects.tutkinnot}
+                      kohde={kohteet.tutkinnotjakoulutukset}
+                      koulutukset={props.koulutukset}
+                      koulutusalat={props.koulutusalat}
+                      koulutustyypit={props.koulutustyypit.data}
+                      lupa={props.lupa}
+                      maaraystyyppi={maaraystyypit.OIKEUS}
+                      {..._props}
+                    />
+                    <MuutospyyntoWizardKoulutukset
+                      changeObjects={props.changeObjects.koulutukset}
+                      kohde={kohteet.tutkinnotjakoulutukset}
+                      koulutukset={props.koulutukset}
+                      maaraystyyppi={maaraystyypit.OIKEUS}
+                      {..._props}
+                    />
+                  </React.Fragment>
+                )}
+                runOnStateUpdate={props.onStateUpdate}
+                runOnChanges={props.onChangesUpdate}
+                title={props.lupa.kohteet[1].heading}
+              /> */}
 
-              {props.muutoshakemus.tutkinnot.items && (
+              {/* {props.muutoshakemus.tutkinnot.items && (
                 <MuutospyyntoWizardKielet
                   changeObjects={props.changeObjects.kielet}
                   kohde={kohteet.kielet}

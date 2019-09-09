@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import ValmentavatKoulutukset from "./Koulutukset/ValmentavatKoulutukset";
@@ -9,113 +9,78 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const MuutospyyntoWizardKoulutukset = React.memo(props => {
-  const [
-    ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset,
-    setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset
-  ] = useState(null);
-  const [
-    kuljettajakoulutuksetMuutokset,
-    setKuljettajakoulutuksetMuutokset
-  ] = useState(null);
-  const [
-    tyovoimakoulutuksetMuutokset,
-    setTyovoimakoulutuksetMuutokset
-  ] = useState(null);
-  const [
-    valmentavatKoulutuksetMuutokset,
-    setValmentavatKoulutuksetMuutokset
-  ] = useState(null);
-
-  useEffect(() => {
-    setKuljettajakoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("koulutukset_kuljettajakoulutukset", changeObj.anchor),
-        props.changeObjects
-      )
-    );
-    setTyovoimakoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("koulutukset_tyovoimakoulutukset", changeObj.anchor),
-        props.changeObjects
-      )
-    );
-    setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset(
-      R.filter(
-        changeObj =>
-          R.startsWith(
-            "koulutukset_ammatilliseentehtavaanvalmistavatkoulutukset",
-            changeObj.anchor
-          ),
-        props.changeObjects
-      )
-    );
-    setValmentavatKoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("koulutukset_valmentavatKoulutukset", changeObj.anchor),
-        props.changeObjects
-      )
-    );
-  }, [props.changeObjects]);
-
   return (
     <div className="md:pl-16 pb-10">
       <p className="pt-4 pb-10">
         {props.intl.formatMessage(wizardMessages.info_02)}
       </p>
 
-      {valmentavatKoulutuksetMuutokset && (
-        <ValmentavatKoulutukset
-          changeObjects={valmentavatKoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      )}
+      <ValmentavatKoulutukset
+        changeObjects={R.prop("valmentavatKoulutukset", props.changeObjects)}
+        kohde={props.kohde}
+        koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.valmentavatKoulutukset}
+      />
 
-      {ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset && (
-        <AmmatilliseenTehtavaanValmistavatKoulutukset
-          changeObjects={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      )}
+      <AmmatilliseenTehtavaanValmistavatKoulutukset
+        changeObjects={R.prop(
+          "ammatilliseenTehtavaanValmistavatKoulutukset",
+          props.changeObjects
+        )}
+        kohde={props.kohde}
+        koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={
+          props.stateObjects.ammatilliseenTehtavaanValmistavatKoulutukset
+        }
+      />
 
-      {tyovoimakoulutuksetMuutokset && (
-        <Tyovoimakoulutukset
-          changeObjects={tyovoimakoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      )}
+      <Tyovoimakoulutukset
+        changeObjects={R.prop("tyovoimakoulutukset", props.changeObjects)}
+        kohde={props.kohde}
+        koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
+        onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.tyovoimakoulutukset}
+      />
 
-      {kuljettajakoulutuksetMuutokset && (
-        <Kuljettajakoulutukset
-          changeObjects={kuljettajakoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      )}
+      <Kuljettajakoulutukset
+        changeObjects={R.prop("kuljettajakoulutukset", props.changeObjects)}
+        kohde={props.kohde}
+        koulutukset={props.koulutukset}
+        maaraystyyppi={props.maaraystyyppi}
+        onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.kuljettajakoulutukset}
+      />
     </div>
   );
 });
 
 MuutospyyntoWizardKoulutukset.defaultProps = {
-  changeObjects: []
+  changeObjects: {},
+  stateObjects: {}
 };
 
 MuutospyyntoWizardKoulutukset.propTypes = {
-  changeObjects: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
+  stateObjects: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizardKoulutukset);

@@ -84,6 +84,7 @@ const MuutospyyntoWizard = props => {
     toimintaalue: {},
     tutkinnot: {},
     perustelut: {
+      koulutukset: {},
       tutkinnot: {}
     }
   });
@@ -97,6 +98,9 @@ const MuutospyyntoWizard = props => {
   const [steps, setSteps] = useState([]);
   const [page, setPage] = useState(1);
   const [changeObjects, setChangeObjects] = useState({
+    koulutukset: {
+      valmentavatKoulutukset: {}
+    },
     perustelut: {
       tutkinnot: {}
     }
@@ -161,6 +165,7 @@ const MuutospyyntoWizard = props => {
   }, [formatMessage]);
 
   useEffect(() => {
+    console.info("Backend changes: ", props.backendChanges);
     setChangeObjects(props.backendChanges);
   }, [props.backendChanges]);
 
@@ -177,15 +182,16 @@ const MuutospyyntoWizard = props => {
       saveMuutospyynto(
         createObjectToSave(
           props.lupa,
+          changeObjects,
           dataBySection,
           props.match.params.uuid,
           props.muutospyynnot.muutospyynto
         )
       )(muutoshakemusDispatch);
     } else {
-      saveMuutospyynto(createObjectToSave(props.lupa, dataBySection))(
-        muutoshakemusDispatch
-      );
+      saveMuutospyynto(
+        createObjectToSave(props.lupa, changeObjects, dataBySection)
+      )(muutoshakemusDispatch);
     }
   };
 
@@ -213,14 +219,15 @@ const MuutospyyntoWizard = props => {
   }, [props.match.params.page]);
 
   const onSectionChangesUpdate = useCallback(
-    (sectionId, changeObjects) => {
-      if (sectionId && changeObjects) {
+    (id, changeObjects) => {
+      if (id && changeObjects) {
         setChangeObjects(prevState => {
-          let nextState = _.cloneDeep(prevState);
-          R.forEachObjIndexed((changes, key) => {
-            nextState = R.assoc(key, changes, nextState);
-          }, changeObjects);
-          console.info(prevState, nextState);
+          const nextState = R.assocPath(
+            R.split("_", id),
+            changeObjects,
+            prevState
+          );
+          console.info("Next changeObjects:", nextState);
           return nextState;
         });
       }
@@ -233,7 +240,7 @@ const MuutospyyntoWizard = props => {
       if (id && state) {
         setDataBySection(prevData => {
           const nextData = R.assocPath(R.split("_", id), state, prevData);
-          console.info(prevData, nextData);
+          console.info("Next state objects: ", nextData);
           return nextData;
         });
       }

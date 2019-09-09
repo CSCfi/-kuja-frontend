@@ -30,7 +30,10 @@ import { fetchMaaraystyypit } from "../../../../../services/maaraystyypit/action
 import { MessageWrapper } from "../../../../../modules/elements";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-import { getAnchorsStartingWith } from "../../../../../utils/common";
+import {
+  getAnchorsStartingWith,
+  getAnchorPart
+} from "../../../../../utils/common";
 
 const HakemusContainer = props => {
   const [accessRight, setAccessRight] = useState(false);
@@ -115,20 +118,6 @@ const HakemusContainer = props => {
         ["muutospyynto", "muutokset"],
         muutospyynnot
       );
-      const categorize = changes => {
-        const categorizedChanges = {};
-        R.forEach(changeObj => {
-          const areaCode = R.compose(
-            R.view(R.lensIndex(0)),
-            R.split(".")
-          )(changeObj.anchor);
-          if (!categorizedChanges[areaCode]) {
-            categorizedChanges[areaCode] = [];
-          }
-          categorizedChanges[areaCode].push(changeObj);
-        }, changes);
-        return categorizedChanges;
-      };
       const getChangesOf = (
         key,
         changes,
@@ -151,32 +140,48 @@ const HakemusContainer = props => {
         if (categoryKey) {
           changeObjects = getAnchorsStartingWith(categoryKey, changeObjects);
         }
-        return changeObjects.length ? changeObjects : result;
+        return changeObjects;
       };
-      const changes = {
-        tutkinnot: getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+
+      const c = R.flatten([
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
         }),
-        koulutukset: getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "koulutukset"
         }),
-        kielet: {
-          opetuskielet: getChangesOf("opetuskieli", backendMuutokset, {
-            path: ["meta", "koulutusala"]
-          }),
-          tutkintokielet: categorize(
-            getChangesOf("tutkintokieli", backendMuutokset, {
-              path: ["meta", "tunniste"]
-            })
-          )
-        },
-        opiskelijavuodet: getChangesOf("opiskelijavuodet", backendMuutokset),
-        toimintaalue: getChangesOf("toimintaalue", backendMuutokset),
-        muut: categorize(getChangesOf("muut", backendMuutokset)),
-        perustelut: {},
-        handled: true
-      };
-      setBackendChanges(changes);
+        getChangesOf("opetuskieli", backendMuutokset, {
+          path: ["meta", "koulutusala"]
+        }),
+        getChangesOf("tutkintokieli", backendMuutokset, {
+          path: ["meta", "tunniste"]
+        }),
+        getChangesOf("opiskelijavuodet", backendMuutokset),
+        getChangesOf("toimintaalue", backendMuutokset),
+        getChangesOf("muut", backendMuutokset)
+      ]);
+
+      let changesBySection = {};
+
+      R.forEach(changeObj => {
+        const anchorInitialSplitted = R.split(
+          "_",
+          getAnchorPart(changeObj.anchor, 0)
+        );
+        const existingChangeObjects =
+          R.path(anchorInitialSplitted, changesBySection) || [];
+        const changeObjects = R.insert(-1, changeObj, existingChangeObjects);
+        changesBySection = R.assocPath(
+          anchorInitialSplitted,
+          changeObjects,
+          changesBySection
+        );
+      }, c);
+
+      changesBySection.handled = true;
+
+      console.info(changesBySection);
+      setBackendChanges(changesBySection);
     }
   }, [muutospyynnot, muutospyynnot.muutospyynto.muutokset]);
 
