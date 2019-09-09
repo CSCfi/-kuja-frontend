@@ -9,6 +9,7 @@ import { radioStory } from "./storydata/radioStory";
 import { simpleTextBoxStory } from "./storydata/simpleTextBoxStory";
 import { subformStory } from "./storydata/subformStory";
 import { textBoxStory } from "./storydata/textBoxStory";
+import { attachmentsStory } from "./storydata/attachmentsStory";
 
 storiesOf("CategorizedListRoot", module)
   .addDecorator(withInfo)
@@ -74,6 +75,19 @@ storiesOf("CategorizedListRoot", module)
         changes={textBoxStory.changes}
         onUpdate={() => {}}
         showCategoryTitles={false}
+      />
+    );
+  })
+  .add("Attachments example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="attachments"
+        categories={attachmentsStory.categories}
+        changes={attachmentsStory.changes}
+        attachments={[]}
+        onUpdate={() => {}}
+        showCategoryTitles={false}
+        placement="test"
       />
     );
   })

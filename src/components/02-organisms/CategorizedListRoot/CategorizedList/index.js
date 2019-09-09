@@ -8,6 +8,7 @@ import TextBox from "../../../00-atoms/TextBox";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
+import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
@@ -214,7 +215,8 @@ const CategorizedList = React.memo(props => {
         payload: {
           anchor: fullAnchor,
           path: payload.fullPath,
-          properties: changeProps
+          properties: changeProps,
+          attachments: payload.attachments
         }
       });
     } else {
@@ -223,7 +225,8 @@ const CategorizedList = React.memo(props => {
         payload: {
           anchor: fullAnchor,
           path: payload.fullPath,
-          properties: changeProps
+          properties: changeProps,
+          attachments: payload.attachments
         }
       });
     }
@@ -526,6 +529,49 @@ const CategorizedList = React.memo(props => {
                                   }}
                                   placeholder={propsObj.placeholder}
                                   value={value}
+                                />
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "Attachments"
+                        ? (category => {
+                            const previousSibling =
+                              category.components[ii - 1] || {};
+                            const isPreviousSiblingCheckedByDefault = !!(
+                              previousSibling.properties || {}
+                            ).isChecked;
+                            const previousSiblingFullAnchor = `${anchor}.${previousSibling.anchor}`;
+                            const change = getChangeObjByAnchor(
+                              previousSiblingFullAnchor,
+                              props.changes
+                            );
+                            const isDisabled =
+                              (previousSibling.name === "CheckboxWithLabel" ||
+                                previousSibling.name ===
+                                  "RadioButtonWithLabel") &&
+                              !(
+                                isPreviousSiblingCheckedByDefault ||
+                                change.properties.isChecked
+                              );
+                            let attachments = propsObj.attachments || [];
+                            return (
+                              <div className="flex-2">
+                                <Attachments
+                                  id={`attachments-${idSuffix}`}
+                                  onUpdate={e => (propsObj.attachments = e)} // TODO
+                                  placement={props.placement}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories,
+                                    attachments: attachments
+                                  }}
+                                  isDisabled={isDisabled}
                                 />
                               </div>
                             );
