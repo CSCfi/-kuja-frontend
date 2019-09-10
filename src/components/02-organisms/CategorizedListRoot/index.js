@@ -27,6 +27,7 @@ const CategorizedListRoot = React.memo(
     const [allChanges, setAllChanges] = useState([null]);
 
     useEffect(() => {
+      console.info(sectionId, changes);
       setAllChanges(changes);
     }, [changes]);
 

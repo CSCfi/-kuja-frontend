@@ -134,9 +134,9 @@ const HakemusContainer = props => {
             result
           );
         }
-        let changeObjects = R.map(R.path(["meta", "changeObj"]))(result).filter(
-          Boolean
-        );
+        let changeObjects = R.flatten(
+          R.map(R.path(["meta", "changeObjects"]))(result)
+        ).filter(Boolean);
         if (categoryKey) {
           changeObjects = getAnchorsStartingWith(categoryKey, changeObjects);
         }
@@ -151,7 +151,7 @@ const HakemusContainer = props => {
           categoryKey: "koulutukset"
         }),
         getChangesOf("opetuskieli", backendMuutokset, {
-          path: ["meta", "koulutusala"]
+          path: ["meta", "key"]
         }),
         getChangesOf("tutkintokieli", backendMuutokset, {
           path: ["meta", "tunniste"]
@@ -178,10 +178,12 @@ const HakemusContainer = props => {
         );
       }, c);
 
-      changesBySection.handled = true;
-
-      console.info(changesBySection);
-      setBackendChanges(changesBySection);
+      console.info(changesBySection, backendMuutokset);
+      setBackendChanges({
+        changeObjects: changesBySection,
+        source: backendMuutokset,
+        handled: true
+      });
     }
   }, [muutospyynnot, muutospyynnot.muutospyynto.muutokset]);
 

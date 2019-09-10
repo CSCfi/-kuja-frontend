@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import PropTypes from "prop-types";
 import _ from "lodash";
@@ -7,28 +7,30 @@ const TextBox = props => {
   const changesOutDelayed = _.debounce(props.onChanges, props.delay);
 
   return (
-    <div>
-      <TextareaAutosize
-        aria-label={props.ariaLabel}
-        defaultValue={props.value}
-        disabled={props.isDisabled}
-        placeholder={props.placeholder}
-        rows={props.rows}
-        rowsMax={props.rowsMax}
-        className={`${
-          props.isHidden ? "hidden" : ""
-        } w-full border border-solid p-2`}
-        onChange={e =>
-          changesOutDelayed(props.payload, { value: e.target.value })
-        }
-      />
-    </div>
+    <React.Fragment>
+      {props.value !== null ? (
+        <TextareaAutosize
+          aria-label={props.ariaLabel}
+          disabled={props.isDisabled}
+          placeholder={props.placeholder}
+          rows={props.rows}
+          rowsMax={props.rowsMax}
+          className={`${
+            props.isHidden ? "hidden" : ""
+          } w-full border border-solid p-2`}
+          onChange={e =>
+            changesOutDelayed(props.payload, { value: e.target.value })
+          }
+          value={props.value}
+        />
+      ) : null}
+    </React.Fragment>
   );
 };
 
 TextBox.defaultProps = {
   ariaLabel: "Text area",
-  delay: 300,
+  delay: 0,
   isDisabled: false,
   isHidden: false,
   payload: {},
@@ -48,7 +50,8 @@ TextBox.propTypes = {
   payload: PropTypes.object,
   placeholder: PropTypes.string,
   rows: PropTypes.number,
-  rowsMax: PropTypes.number
+  rowsMax: PropTypes.number,
+  value: PropTypes.string
 };
 
 export default TextBox;

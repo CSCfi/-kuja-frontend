@@ -97,6 +97,10 @@ const MuutospyyntoWizard = props => {
   const [steps, setSteps] = useState([]);
   const [page, setPage] = useState(1);
   const [changeObjects, setChangeObjects] = useState({
+    kielet: {
+      opetuskielet: [],
+      tutkintokielet: []
+    },
     koulutukset: {
       ammatilliseenTehtavaanValmistavatKoulutukset: {},
       valmentavatKoulutukset: {}
@@ -166,7 +170,7 @@ const MuutospyyntoWizard = props => {
 
   useEffect(() => {
     console.info("Backend changes: ", props.backendChanges);
-    setChangeObjects(props.backendChanges);
+    setChangeObjects(props.backendChanges.changeObjects);
   }, [props.backendChanges]);
 
   // useEffect(() => {
@@ -183,6 +187,7 @@ const MuutospyyntoWizard = props => {
         createObjectToSave(
           props.lupa,
           changeObjects,
+          props.backendChanges.source,
           dataBySection,
           props.match.params.uuid,
           props.muutospyynnot.muutospyynto
@@ -190,7 +195,12 @@ const MuutospyyntoWizard = props => {
       )(muutoshakemusDispatch);
     } else {
       saveMuutospyynto(
-        createObjectToSave(props.lupa, changeObjects, dataBySection)
+        createObjectToSave(
+          props.lupa,
+          changeObjects,
+          props.backendChanges.source,
+          dataBySection
+        )
       )(muutoshakemusDispatch);
     }
   };

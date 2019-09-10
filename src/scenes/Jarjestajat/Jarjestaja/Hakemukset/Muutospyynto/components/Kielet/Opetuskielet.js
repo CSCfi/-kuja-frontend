@@ -9,9 +9,8 @@ import * as R from "ramda";
 
 const Opetuskielet = React.memo(props => {
   const sectionId = "kielet_opetuskielet";
-  const [changes, setChanges] = useState();
   const [locale, setLocale] = useState("FI");
-  const { onUpdate } = props;
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
   const opetuskieletData = useMemo(() => {
     return getDataForOpetuskieletList(
@@ -21,7 +20,7 @@ const Opetuskielet = React.memo(props => {
     );
   }, [locale, props.kohde, props.opetuskielet]);
 
-  const categories = useMemo(() => {
+  const getCategories = useMemo(() => {
     return R.map(item => {
       return {
         anchor: item.code,
@@ -53,63 +52,51 @@ const Opetuskielet = React.memo(props => {
   }, [opetuskieletData, props.kohde, props.maaraystyyppi]);
 
   useEffect(() => {
-    setChanges(props.changeObjects);
-  }, [props.changeObjects]);
-
-  const removeChanges = (...payload) => {
-    return saveChanges({ index: payload[2], changes: [] });
-  };
-
-  useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
 
   useEffect(() => {
-    if (categories && Array.isArray(changes)) {
-      onUpdate({
-        sectionId,
-        state: {
-          categories,
-          changes
-        }
-      });
-    }
-  }, [categories, changes, onUpdate]);
-
-  const saveChanges = payload => {
-    setChanges(payload.changes);
-  };
+    onStateUpdate(
+      {
+        categories: getCategories
+      },
+      sectionId
+    );
+  }, [getCategories]);
 
   return (
     <React.Fragment>
-      {Array.isArray(changes) && (
+      {props.stateObject.categories ? (
         <ExpandableRowRoot
-          anchor={"opetuskieli"}
+          anchor={sectionId}
           key={`expandable-row-root`}
-          categories={categories}
-          changes={changes}
-          index={0}
-          onChangesRemove={removeChanges}
-          onUpdate={saveChanges}
+          categories={props.stateObject.categories}
+          changes={props.changeObjects}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
           sectionId={sectionId}
           title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
           isExpanded={true}
         />
-      )}
+      ) : null}
     </React.Fragment>
   );
 });
 
 Opetuskielet.defaultProps = {
-  changeObjects: []
+  changeObjects: [],
+  stateObject: {}
 };
 
 Opetuskielet.propTypes = {
   changeObjects: PropTypes.array,
   opetuskielet: PropTypes.array,
-  onUpdate: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onChangesRemove: PropTypes.func,
+  onStateUpdate: PropTypes.func,
   kohde: PropTypes.object,
-  lupa: PropTypes.object
+  lupa: PropTypes.object,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(Opetuskielet);

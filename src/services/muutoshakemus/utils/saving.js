@@ -1,13 +1,20 @@
-import moment from "moment";
-import * as R from "ramda";
 import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
 import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
 import getChangesOfMuut from "./muut";
+import moment from "moment";
+import * as R from "ramda";
 
-export function createObjectToSave(lupa, changeObjects, muutoshakemus, uuid, muutospyynto) {
+export function createObjectToSave(
+  lupa,
+  changeObjects,
+  backendMuutokset = [],
+  muutoshakemus,
+  uuid,
+  muutospyynto
+) {
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
@@ -32,9 +39,18 @@ export function createObjectToSave(lupa, changeObjects, muutoshakemus, uuid, muu
       getChangesOfTutkinnotJaKoulutukset(
         changeObjects,
         muutoshakemus.tutkinnot,
-        muutoshakemus.koulutukset,
+        muutoshakemus.koulutukset
+      ),
+      getChangesOfOpetuskielet(
+        R.path(["kielet", "opetuskielet"], muutoshakemus),
+        R.flatten([
+          R.path(["kielet", "opetuskielet"], changeObjects) || [],
+          R.path(["perustelut", "kielet", "opetuskielet"], changeObjects) || []
+        ]),
+        R.filter(R.propEq("koodisto", "oppilaitoksenopetuskieli"))(
+          backendMuutokset
+        )
       )
-      // getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
       // getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
       // getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
       // getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),

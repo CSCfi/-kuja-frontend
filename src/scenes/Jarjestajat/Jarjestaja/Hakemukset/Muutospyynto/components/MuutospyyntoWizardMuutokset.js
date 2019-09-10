@@ -113,38 +113,36 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 title={props.lupa.kohteet[1].heading}
               />
 
-              {/* <FormSection
-                changeObjects={{
-                  tutkinnot: R.prop("tutkinnot", props.changeObjects) || {},
-                  koulutukset: R.prop("koulutukset", props.changeObjects) || {}
-                }}
-                code={props.lupa.kohteet[1].headingNumber}
-                id="tutkinnot"
-                render={_props => (
-                  <React.Fragment>
-                    <Tutkinnot
-                      changeObjects={props.changeObjects.tutkinnot}
-                      kohde={kohteet.tutkinnotjakoulutukset}
-                      koulutukset={props.koulutukset}
-                      koulutusalat={props.koulutusalat}
-                      koulutustyypit={props.koulutustyypit.data}
-                      lupa={props.lupa}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
-                      {..._props}
-                    />
-                    <MuutospyyntoWizardKoulutukset
-                      changeObjects={props.changeObjects.koulutukset}
-                      kohde={kohteet.tutkinnotjakoulutukset}
-                      koulutukset={props.koulutukset}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
-                      {..._props}
-                    />
-                  </React.Fragment>
-                )}
-                runOnStateUpdate={props.onStateUpdate}
-                runOnChanges={props.onChangesUpdate}
-                title={props.lupa.kohteet[1].heading}
-              /> */}
+              {!!R.path(["tutkinnot", "items"], props.muutoshakemus) ? (
+                <FormSection
+                  code={props.lupa.kohteet[2].headingNumber}
+                  id="tutkinnot"
+                  render={_props => (
+                    <React.Fragment>
+                      <MuutospyyntoWizardKielet
+                        changeObjects={{
+                          kielet: R.prop("kielet", props.changeObjects),
+                          tutkinnot: R.prop("tutkinnot", props.changeObjects)
+                        }}
+                        kohde={kohteet.kielet}
+                        lupa={props.lupa}
+                        kielet={props.kielet}
+                        koulutukset={props.koulutukset}
+                        onUpdate={props.onUpdate}
+                        maaraystyyppi={maaraystyypit.VELVOITE}
+                        stateObjects={{
+                          kielet: R.prop("kielet", props.muutoshakemus),
+                          tutkinnot: R.prop("tutkinnot", props.changeObjects)
+                        }}
+                        {..._props}
+                      />
+                    </React.Fragment>
+                  )}
+                  runOnStateUpdate={props.onStateUpdate}
+                  runOnChanges={props.onChangesUpdate}
+                  title={props.intl.formatMessage(wizardMessages.header_section2)}
+                />
+              ) : null}
 
               {/* {props.muutoshakemus.tutkinnot.items && (
                 <MuutospyyntoWizardKielet
@@ -157,9 +155,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   tutkinnotState={props.muutoshakemus.tutkinnot}
                   maaraystyyppi={maaraystyypit.VELVOITE}
                 />
-              )}
+              )} */}
 
-              {kunnat.fetched &&
+              {/* {kunnat.fetched &&
                 maakunnat.fetched &&
                 maakuntakunnat.fetched && (
                   <MuutospyyntoWizardToimialue
