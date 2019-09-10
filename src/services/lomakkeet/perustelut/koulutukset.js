@@ -721,7 +721,7 @@ const johtaja = (code, anchorNumber, orderCode) => {
     ]
   }
 }
-//Selvitys opetuksesta vastaavan johtajan/johtajien kelpoisuudesta ja työkokemuksesta toimipisteittäin
+
 const opettajien = (code, anchorNumber, addPeopleFormCallback, peopleForms, orderCode, helpText) => {
   return {
     anchor: `${code}-${anchorNumber}`,
