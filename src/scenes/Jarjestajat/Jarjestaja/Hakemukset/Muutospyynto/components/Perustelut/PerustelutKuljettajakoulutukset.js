@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -11,15 +11,15 @@ import KuljettajienJatkokoulutuslomake from "../../../../../../../components/04-
 import { getKuljettajakoulutusPerustelulomakeByCode } from "../../../../../../../services/muutoshakemus/utils/koulutusperustelut";
 
 const PerustelutKuljettajakoulutukset = props => {
-  const sectionId = "kuljettajakoulutukset";
+  const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
-  const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
-  useEffect(() => {
-    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(changes);
-    const getCategories = (koulutusData, kohde, maaraystyyppi) => {
+  const getCategories = useMemo(() => {
+    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
+      R.path(["koulutukset", "kuljettajakoulutukset"])(props.changeObjects)
+    );
+    return (koulutusData, kohde, maaraystyyppi) => {
       const categories = R.map(item => {
         let structure = null;
         if (R.includes(item.code, getAnchorPartsByIndex(1))) {
@@ -55,17 +55,22 @@ const PerustelutKuljettajakoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
+  }, [props.changeObjects]);
 
+  useEffect(() => {
     if (R.includes(koodisto, props.koulutukset.muut.fetched)) {
-      setCategories(
-        getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.muut.muudata[koodisto],
-            R.toUpper(props.intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
+      onStateUpdate(
+        {
+          categories: getCategories(
+            getDataForKoulutusList(
+              props.koulutukset.muut.muudata[koodisto],
+              R.toUpper(props.intl.locale)
+            ),
+            props.kohde,
+            props.maaraystyyppi
+          )
+        },
+        sectionId
       );
     }
   }, [
@@ -73,50 +78,48 @@ const PerustelutKuljettajakoulutukset = props => {
     props.koulutukset.muut,
     props.intl.locale,
     props.lomakkeet.kuljettajienJatkokoulutus,
-    props.maaraystyyppi,
-    changes
+    props.maaraystyyppi
   ]);
 
-  useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
-  }, [categories, onUpdate, changes]);
-
-  useEffect(() => {
-    setChanges(props.changes);
-  }, [props.changes]);
-
-  const saveChanges = payload => {
-    setChanges(payload.changes);
-  };
-
-  const removeChanges = () => {
-    return saveChanges({ changes: [] });
-  };
-
   return (
-    <ExpandableRowRoot
-      anchor={sectionId}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={changes}
-      disableReverting={true}
-      hideAmountOfChanges={false}
-      isExpanded={true}
-      onChangesRemove={removeChanges}
-      onUpdate={saveChanges}
-      title={props.intl.formatMessage(wizardMessages.driverTraining)}
-    >
-      <KuljettajienJatkokoulutuslomake></KuljettajienJatkokoulutuslomake>
-    </ExpandableRowRoot>
+    <React.Fragment>
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={
+            props.changeObjects.perustelut.koulutukset.kuljettajakoulutukset
+          }
+          disableReverting={true}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          title={props.intl.formatMessage(wizardMessages.driverTraining)}
+        >
+          <KuljettajienJatkokoulutuslomake></KuljettajienJatkokoulutuslomake>
+        </ExpandableRowRoot>
+      ) : null}
+    </React.Fragment>
   );
 };
 
+PerustelutKuljettajakoulutukset.defaultProps = {
+  changeObjects: {},
+  stateObject: {}
+};
+
 PerustelutKuljettajakoulutukset.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   lomakkeet: PropTypes.object,
-  maaraystyyppi: PropTypes.object
+  maaraystyyppi: PropTypes.object,
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(PerustelutKuljettajakoulutukset);

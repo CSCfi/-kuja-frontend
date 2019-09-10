@@ -87,7 +87,7 @@ const PerustelutValmentavatKoulutukset = React.memo(
     }, [
       props.kohde,
       props.koulutukset.poikkeukset.data,
-      props.intl,
+      props.intl.locale,
       props.maaraystyyppi
     ]);
 
@@ -101,7 +101,6 @@ const PerustelutValmentavatKoulutukset = React.memo(
             changes={props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset}
             disableReverting={false}
             hideAmountOfChanges={false}
-            index={0}
             isExpanded={true}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}

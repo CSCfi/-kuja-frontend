@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
 import { getCategories } from "../../../../../../../services/muutoshakemus/utils/tutkinnotUtils";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
@@ -45,22 +44,14 @@ const Tutkinnot = React.memo(props => {
     };
 
     return handleKoulutusdata;
-  }, [
-    koulutusdata,
-    props.intl.locale,
-    props.locale,
-    props.kohde,
-    props.koulutukset,
-    props.lupa.kohteet,
-    props.maaraystyyppi
-  ]);
+  }, [props.intl.locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
 
   useEffect(() => {
     const items = getItems(koulutusdata, props.changeObjects);
     onStateUpdate({
       items
     });
-  }, [props.changeObjects]);
+  }, [koulutusdata, getItems, props.changeObjects]);
 
   return (
     <React.Fragment>

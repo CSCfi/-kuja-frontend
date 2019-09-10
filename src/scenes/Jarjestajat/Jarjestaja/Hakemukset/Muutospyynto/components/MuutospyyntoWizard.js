@@ -30,7 +30,6 @@ import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-import _ from "lodash";
 
 import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
@@ -99,6 +98,7 @@ const MuutospyyntoWizard = props => {
   const [page, setPage] = useState(1);
   const [changeObjects, setChangeObjects] = useState({
     koulutukset: {
+      ammatilliseenTehtavaanValmistavatKoulutukset: {},
       valmentavatKoulutukset: {}
     },
     perustelut: {

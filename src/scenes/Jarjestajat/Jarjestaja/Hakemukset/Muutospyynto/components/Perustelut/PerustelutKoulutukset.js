@@ -49,6 +49,47 @@ const PerustelutKoulutukset = React.memo(props => {
           ) : null}
 
           {!!R.path(
+            ["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"],
+            props.changeObjects
+          ) ? (
+            <PerustelutATVKoulutukset
+              changeObjects={{
+                koulutukset: {
+                  ammatilliseenTehtavaanValmistavatKoulutukset:
+                    R.path([
+                      "koulutukset",
+                      "ammatilliseenTehtavaanValmistavatKoulutukset"
+                    ])(props.changeObjects) || []
+                },
+                perustelut: {
+                  koulutukset: {
+                    ammatilliseenTehtavaanValmistavatKoulutukset:
+                      R.path([
+                        "perustelut",
+                        "koulutukset",
+                        "ammatilliseenTehtavaanValmistavatKoulutukset"
+                      ])(props.changeObjects) || []
+                  }
+                }
+              }}
+              kohde={props.kohde}
+              koulutukset={props.koulutukset}
+              maaraystyyppi={props.maaraystyyppi}
+              onChangesRemove={props.onChangesRemove}
+              onChangesUpdate={props.onChangesUpdate}
+              stateObject={R.path(
+                [
+                  "perustelut",
+                  "koulutukset",
+                  "ammatilliseenTehtavaanValmistavatKoulutukset"
+                ],
+                props.muutoshakemus
+              )}
+              onStateUpdate={props.onStateUpdate}
+            />
+          ) : null}
+
+          {!!R.path(
             ["koulutukset", "tyovoimakoulutukset"],
             props.changeObjects
           ) ? (
@@ -84,36 +125,42 @@ const PerustelutKoulutukset = React.memo(props => {
             />
           ) : null}
 
-          {/* {changes.atvkMuutokset.length ? (
-        <PerustelutATVKoulutukset
-          changes={changes.atvkMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      ) : null}
-
-      {changes.tyovoimakoulutuksetMuutokset.length ? (
-        <PerustelutTyovoimakoulutukset
-          changes={changes.tyovoimakoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      ) : null}
-
-      {changes.kuljettajakoulutuksetMuutokset.length ? (
-        <PerustelutKuljettajakoulutukset
-          changes={changes.kuljettajakoulutuksetMuutokset}
-          kohde={props.kohde}
-          koulutukset={props.koulutukset}
-          lomakkeet={props.lomakkeet}
-          maaraystyyppi={props.maaraystyyppi}
-          onUpdate={props.onUpdate}
-        />
-      ) : null} */}
+          {!!R.path(
+            ["koulutukset", "kuljettajakoulutukset"],
+            props.changeObjects
+          ) ? (
+            <PerustelutKuljettajakoulutukset
+              changeObjects={{
+                koulutukset: {
+                  kuljettajakoulutukset:
+                    R.path(["koulutukset", "kuljettajakoulutukset"])(
+                      props.changeObjects
+                    ) || []
+                },
+                perustelut: {
+                  koulutukset: {
+                    kuljettajakoulutukset:
+                      R.path([
+                        "perustelut",
+                        "koulutukset",
+                        "kuljettajakoulutukset"
+                      ])(props.changeObjects) || []
+                  }
+                }
+              }}
+              kohde={props.kohde}
+              koulutukset={props.koulutukset}
+              lomakkeet={props.lomakkeet}
+              maaraystyyppi={props.maaraystyyppi}
+              onChangesRemove={props.onChangesRemove}
+              onChangesUpdate={props.onChangesUpdate}
+              stateObject={R.path(
+                ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+                props.muutoshakemus
+              )}
+              onStateUpdate={props.onStateUpdate}
+            />
+          ) : null}
         </div>
       ) : null}
     </React.Fragment>
