@@ -125,19 +125,24 @@ const CategorizedList = React.memo(props => {
     ]);
     const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
 
-    const operation = getOperation(
-      component,
-      changeObj,
-      {
-        anchor: fullAnchor,
-        fullPath,
-        shouldBeChecked: true
-      },
-      changeProps
-    );
+    if (
+      component.name === "CheckboxWithLabel" ||
+      component.name === "RadioButtonWithLabel"
+    ) {
+      const operation = getOperation(
+        component,
+        changeObj,
+        {
+          anchor: fullAnchor,
+          fullPath,
+          shouldBeChecked: true
+        },
+        changeProps
+      );
 
-    if (operation) {
-      operations.push(operation);
+      if (operation) {
+        operations.push(operation);
+      }
     }
 
     if (component.name === "RadioButtonWithLabel") {
@@ -180,6 +185,7 @@ const CategorizedList = React.memo(props => {
     }
 
     if (payload.parent.parent && payload.parent.parent.category.components) {
+      console.info(payload.parent.parent);
       return handlePredecessors(
         changeProps,
         {
