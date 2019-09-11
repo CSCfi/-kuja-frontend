@@ -169,6 +169,17 @@ export const getCategoriesForPerustelut = (
                 })
               : false;
 
+            const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+
+            const changeObj = R.find(
+              R.compose(
+                R.startsWith(anchorBase),
+                R.prop("anchor")
+              )
+            )(changes);
+
+            const isAddition = changeObj && changeObj.properties.isChecked;
+
             let structure = {
               anchor: koulutus.koodiArvo,
               meta: {
@@ -187,25 +198,19 @@ export const getCategoriesForPerustelut = (
                     title:
                       _.find(koulutus.metadata, m => {
                         return m.kieli === locale;
-                      }).nimi || "[Koulutuksen otsikko tähän]",
+                      }).nimi,
                     labelStyles: {
                       addition: isAdded,
                       removal: isRemoved,
                       custom: Object.assign({}, isInLupaBool ? isInLupa : {})
-                    }
+                    },
+                    styleClasses: ["flex"],
+                    statusTextStyleClasses: isAddition ? ["text-green-300 pr-4 w-20"] : ["text-red-300 pr-4 w-20"],
+                    statusText: (isAddition ? " LISÄYS:" : " POISTO:")
                   }
                 }
               ]
             };
-
-            const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
-            const changeObj = R.find(
-              R.compose(
-                R.startsWith(anchorBase),
-                R.prop("anchor")
-              )
-            )(changes);
-            const isAddition = changeObj && changeObj.properties.isChecked;
 
             if (isAddition) {
               structure.categories = lomakkeet.addition;
