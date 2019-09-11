@@ -28,7 +28,7 @@ export const CategorizedListTextBox = ({
     setValue(
       R.path(["properties", "value"], changeObj) || propsObj.defaultValue || ""
     );
-  }, [changeObj]);
+  }, [changeObj, propsObj.defaultValue]);
 
   return (
     <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">

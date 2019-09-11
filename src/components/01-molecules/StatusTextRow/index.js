@@ -6,25 +6,45 @@ const defaultProps = {
   styleClasses: ["text-base", "py-4"]
 };
 
-const StatusTextRow = React.memo(({ children, labelStyles, styleClasses }) => {
-  const [classNames, setClassNames] = useState(defaultProps.styleClasses);
+const StatusTextRow = React.memo(
+  ({
+    children,
+    labelStyles,
+    statusText,
+    statusTextStyleClasses,
+    styleClasses
+  }) => {
+    const [classNames, setClassNames] = useState(defaultProps.styleClasses);
 
-  useEffect(() => {
-    if (styleClasses && styleClasses.length) {
-      setClassNames(styleClasses);
-    }
-  }, [styleClasses]);
+    useEffect(() => {
+      if (styleClasses && styleClasses.length) {
+        setClassNames(styleClasses);
+      }
+    }, [styleClasses]);
 
-  return (
-    <div className={R.join(" ", classNames)} style={labelStyles}>
-      {children}
-    </div>
-  );
-});
+    return (
+      <div className={R.join(" ", classNames)} style={labelStyles}>
+        <div className="flex">
+          {statusText && (
+            <div
+              className={R.join(" ", statusTextStyleClasses)}
+              // style={{ transform: "rotate(-50deg)" }}
+            >
+              {statusText}
+            </div>
+          )}
+          {children}
+        </div>
+      </div>
+    );
+  }
+);
 
 StatusTextRow.propTypes = {
   labelStyles: PropTypes.object,
-  styleClasses: PropTypes.array
+  styleClasses: PropTypes.array,
+  statusText: PropTypes.string,
+  statusTextStyleClasses: PropTypes.array
 };
 
 export default StatusTextRow;

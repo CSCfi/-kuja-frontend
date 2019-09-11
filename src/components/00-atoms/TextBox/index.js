@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import PropTypes from "prop-types";
 import _ from "lodash";

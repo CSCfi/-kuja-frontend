@@ -518,10 +518,16 @@ const CategorizedList = React.memo(props => {
                                 <StatusTextRow
                                   labelStyles={labelStyles}
                                   styleClasses={styleClasses}
+                                  statusText={propsObj.statusText}
+                                  statusTextStyleClasses={
+                                    propsObj.statusTextStyleClasses
+                                  }
                                 >
                                   <div className="flex">
-                                    {codeMarkup}
-                                    <p>{title}</p>
+                                    <div className="flex-1">
+                                      {codeMarkup}
+                                      <span>{title}</span>
+                                    </div>
                                   </div>
                                 </StatusTextRow>
                               </div>
