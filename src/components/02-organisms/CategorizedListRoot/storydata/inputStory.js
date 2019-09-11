@@ -194,8 +194,10 @@ export const inputStory = {
                 {
                   anchor: "A",
                   name: "Input",
+                  width: "300",
                   properties: {
-                    defaultValue: "Text 1"
+                    defaultValue: "Text 1",
+                    label: "Input"
                   }
                 }
               ]
@@ -206,12 +208,14 @@ export const inputStory = {
           anchor: "C",
           code: "2",
           title: "Categories",
+          label: "input",
           components: [
             {
               anchor: "A",
               name: "Input",
               properties: {
-                defaultValue: "Text 2"
+                defaultValue: "Text 2",
+                label: "input 2"
               }
             }
           ]
