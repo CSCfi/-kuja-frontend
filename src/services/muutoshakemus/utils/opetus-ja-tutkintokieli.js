@@ -7,7 +7,7 @@ export const getChangesOfOpetuskielet = (
   changeObjects = [],
   backendMuutokset = []
 ) => {
-  let backendMuutoksetWithChangeObjects = R.map(muutos => {
+  const backendMuutoksetWithChangeObjects = R.map(muutos => {
     const changeObjectsWithCurrentKoodiarvo = R.filter(changeObj => {
       return R.equals(
         R.view(R.lensIndex(1), changeObj.anchor.split(".")),
