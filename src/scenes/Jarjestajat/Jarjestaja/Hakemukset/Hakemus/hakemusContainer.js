@@ -148,7 +148,13 @@ const HakemusContainer = props => {
           categoryKey: "tutkinnot"
         }),
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+          categoryKey: "perustelut_tutkinnot"
+        }),
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "koulutukset"
+        }),
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+          categoryKey: "perustelut_koulutukset"
         }),
         getChangesOf("opetuskieli", backendMuutokset, {
           path: ["meta", "key"]
