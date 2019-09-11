@@ -11,8 +11,10 @@ storiesOf("Input", module)
     };
     return (
       <div>
-        <p>Open developer tool console to see callback values.</p>
+        <p>Normal</p>
         <Input payload={{ testProp: 1 }} onChanges={onChanges} />
+        <p>Error</p>
+        <Input payload={{ testProp: 2 }} onChanges={onChanges} error={true} />
       </div>
     );
   });
