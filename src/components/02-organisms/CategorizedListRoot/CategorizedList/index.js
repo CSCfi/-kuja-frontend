@@ -5,6 +5,7 @@ import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import TextBox from "../../../00-atoms/TextBox";
+import Input from "../../../00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Autocomplete from "../../Autocomplete";
@@ -476,6 +477,65 @@ const CategorizedList = React.memo(props => {
                                   }}
                                   value={propsObj.selectedOption}
                                   isDisabled={isDisabled}
+                                />
+                              </div>
+                            );
+                          })(category)
+                        : null}
+                      {component.name === "Input"
+                        ? (category => {
+                            const change = getChangeObjByAnchor(
+                              fullAnchor,
+                              props.changes
+                            );
+                            let parentComponent = null;
+                            let isDisabled = false;
+                            if (
+                              props.parent &&
+                              props.parent.category.components
+                            ) {
+                              parentComponent =
+                                props.parent.category.components[0];
+                              const parentChange = getChangeObjByAnchor(
+                                `${props.parent.anchor}.${parentComponent.anchor}`,
+                                props.changes
+                              );
+                              isDisabled =
+                                R.includes(parentComponent.name, [
+                                  "CheckboxWithLabel",
+                                  "RadioButtonWithLabel"
+                                ]) &&
+                                ((!parentComponent.properties.isChecked &&
+                                  R.isEmpty(parentChange.properties)) ||
+                                  !parentChange.properties.isChecked);
+                            }
+                            const value = change
+                              ? change.properties.value
+                              : propsObj.defaultValue;
+                            return (
+                              <div className="flex row content-center pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
+                                <label className="my-auto mr-2">
+                                  {propsObj.label}
+                                </label>
+                                <Input
+                                  id={`input-${idSuffix}`}
+                                  isDisabled={isDisabled}
+                                  isHidden={isDisabled}
+                                  onChanges={runOperations}
+                                  payload={{
+                                    anchor,
+                                    categories: category.categories,
+                                    component,
+                                    fullPath,
+                                    parent: props.parent,
+                                    rootPath: props.rootPath,
+                                    siblings: props.categories
+                                  }}
+                                  placeholder={propsObj.placeholder}
+                                  width={propsObj.width}
+                                  error={propsObj.error}
+                                  fullWidth={props.fullWidth}
+                                  value={value}
                                 />
                               </div>
                             );
