@@ -26,7 +26,7 @@ const Tutkinnot = React.memo(props => {
       }, articles);
     };
 
-    const handleKoulutusdata = (koulutusdata, _changes) => {
+    const handleKoulutusdata = koulutusdata => {
       return R.addIndex(R.map)((koulutusala, i) => {
         const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
         const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
@@ -47,11 +47,11 @@ const Tutkinnot = React.memo(props => {
   }, [props.intl.locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
 
   useEffect(() => {
-    const items = getItems(koulutusdata, props.changeObjects);
+    const items = getItems(koulutusdata);
     onStateUpdate({
       items
     });
-  }, [koulutusdata, getItems, props.changeObjects]);
+  }, [koulutusdata, getItems]);
 
   return (
     <React.Fragment>

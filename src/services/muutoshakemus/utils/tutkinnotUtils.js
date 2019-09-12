@@ -195,18 +195,19 @@ export const getCategoriesForPerustelut = (
                   name: "StatusTextRow",
                   properties: {
                     code: koulutus.koodiArvo,
-                    title:
-                      _.find(koulutus.metadata, m => {
-                        return m.kieli === locale;
-                      }).nimi,
+                    title: _.find(koulutus.metadata, m => {
+                      return m.kieli === locale;
+                    }).nimi,
                     labelStyles: {
                       addition: isAdded,
                       removal: isRemoved,
                       custom: Object.assign({}, isInLupaBool ? isInLupa : {})
                     },
                     styleClasses: ["flex"],
-                    statusTextStyleClasses: isAddition ? ["text-green-300 pr-4 w-20"] : ["text-red-300 pr-4 w-20"],
-                    statusText: (isAddition ? " LISÄYS:" : " POISTO:")
+                    statusTextStyleClasses: isAddition
+                      ? ["text-green-600 pr-4 w-20 font-bold"]
+                      : ["text-red-500 pr-4 w-20 font-bold"],
+                    statusText: isAddition ? " LISÄYS:" : " POISTO:"
                   }
                 }
               ]
@@ -264,7 +265,7 @@ export const getCategoriesForPerustelut = (
             return structure;
           }, koulutustyyppi.koulutukset)
         };
-      }, relevantKoulutustyypit)
+      }, _.cloneDeep(relevantKoulutustyypit))
     );
   }
   return perusteluCategoriat[index];

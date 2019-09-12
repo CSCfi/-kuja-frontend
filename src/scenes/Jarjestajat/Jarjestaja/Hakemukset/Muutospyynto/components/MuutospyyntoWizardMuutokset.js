@@ -64,13 +64,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     );
   }, [props.maaraystyypit]);
 
-  useEffect(() => {
-    console.info("Muutoshakemus: ", props.muutoshakemus);
-  }, [props.muutoshakemus]);
+  // useEffect(() => {
+  //   console.info("Muutoshakemus: ", props.muutoshakemus);
+  // }, [props.muutoshakemus]);
 
-  useEffect(() => {
-    console.info("Muutokset: ", props.changeObjects);
-  }, [props.changeObjects]);
+  // useEffect(() => {
+  //   console.info("Muutokset: ", props.changeObjects);
+  // }, [props.changeObjects]);
 
   return (
     <React.Fragment>
@@ -132,7 +132,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                         maaraystyyppi={maaraystyypit.VELVOITE}
                         stateObjects={{
                           kielet: R.prop("kielet", props.muutoshakemus),
-                          tutkinnot: R.prop("tutkinnot", props.changeObjects)
+                          tutkinnot: R.prop("tutkinnot", props.muutoshakemus)
                         }}
                         {..._props}
                       />
@@ -140,7 +140,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   )}
                   runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
-                  title={props.intl.formatMessage(wizardMessages.header_section2)}
+                  title={props.intl.formatMessage(
+                    wizardMessages.header_section2
+                  )}
                 />
               ) : null}
 

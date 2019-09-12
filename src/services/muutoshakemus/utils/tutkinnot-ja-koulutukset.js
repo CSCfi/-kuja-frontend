@@ -128,7 +128,6 @@ export const getChangesToSave = (
             R.split("_")
           )(getAnchorPart(changeObj.anchor, 0))
         ];
-      console.info(changeObj, stateObject, stateData);
       const anchorInit = R.compose(
         R.join("."),
         R.init,
@@ -158,6 +157,47 @@ export const getChangesToSave = (
         nimi: finnishInfo.nimi,
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
         type: changeObj.properties.isChecked ? "addition" : "removal"
+      };
+    }, unhandledChangeObjects).filter(Boolean);
+  } else if (key === "tutkintokielet") {
+    uudetMuutokset = R.map(changeObj => {
+      const anchorParts = changeObj.anchor.split(".");
+      const areaCode = R.compose(
+        R.view(R.lensIndex(2)),
+        R.split("_")
+      )(anchorParts[0]);
+      const item = R.find(R.propEq("areaCode", areaCode))(stateObject.items);
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
+      const perustelut = R.filter(
+        R.compose(
+          R.contains(anchorInit),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
+      const code = getAnchorPart(changeObj.anchor, 1);
+      const meta =
+        item && item.categories
+          ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
+          : {};
+      return {
+        koodiarvo: code,
+        koodisto: stateObject.koodistoUri,
+        nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        isInLupa: meta.isInLupa,
+        kohde: meta.kohde,
+        maaraystyyppi: meta.maaraystyyppi,
+        meta: {
+          tunniste: "tutkintokieli",
+          changeObjects: R.flatten([[changeObj], perustelut])
+        },
+        tila: "LISAYS",
+        type: "addition"
       };
     }, unhandledChangeObjects).filter(Boolean);
   }

@@ -1,6 +1,4 @@
-import {
-  getChangesToSave
-} from "./tutkinnot-ja-koulutukset";
+import { getChangesToSave } from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
 import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
@@ -81,8 +79,26 @@ export function createObjectToSave(
         R.filter(R.propEq("koodisto", "oppilaitoksenopetuskieli"))(
           backendMuutokset
         )
+      ),
+      getChangesToSave(
+        "tutkintokielet",
+        R.path(["kielet", "tutkintokielet"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["kielet", "tutkintokielet"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(
+            R.values(
+              R.path(["perustelut", "kielet", "tutkintokielet"], changeObjects)
+            )
+          )
+        },
+        R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
       )
-      // getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
       // getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
       // getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),
       // getChangesOfMuut(muutoshakemus.muut)
