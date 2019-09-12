@@ -10,6 +10,7 @@ import { simpleTextBoxStory } from "./storydata/simpleTextBoxStory";
 import { subformStory } from "./storydata/subformStory";
 import { textBoxStory } from "./storydata/textBoxStory";
 import { attachmentsStory } from "./storydata/attachmentsStory";
+import { inputStory } from "./storydata/inputStory";
 
 storiesOf("CategorizedListRoot", module)
   .addDecorator(withInfo)
@@ -73,6 +74,17 @@ storiesOf("CategorizedListRoot", module)
         anchor="textbox"
         categories={textBoxStory.categories}
         changes={textBoxStory.changes}
+        onUpdate={() => {}}
+        showCategoryTitles={false}
+      />
+    );
+  })
+  .add("Input example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="input"
+        categories={inputStory.categories}
+        changes={inputStory.changes}
         onUpdate={() => {}}
         showCategoryTitles={false}
       />
