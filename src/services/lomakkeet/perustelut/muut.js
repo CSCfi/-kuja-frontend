@@ -1,8 +1,9 @@
-export const getVankilaopetusPerustelulomake = (
-  addPeopleFormCallback,
-  peopleForms
-) => {
+import { number } from "prop-types";
+
+export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
+  const year = new Date().getFullYear();
+
   return [
     {
       anchor: "vankilaopetus",
@@ -254,53 +255,40 @@ export const getVankilaopetusPerustelulomake = (
           ],
           categories: [
             {
-              anchor: "edellinenvuosi",
+              anchor: "vuodet",
+              styleClasses: ["pl-6 flex sm:row"],
               components: [
                 {
                   anchor: "A",
-                  name: "TextBox"
-                  // properties: {
-                  //   initialValue: initialValue,
-                  //   applyForValue: applyFor,
-                  //   name: `${sectionId}-difference-1`,
-                  //   titles
-                  // }
-                }
-              ]
-            },
-            {
-              anchor: "nykyinenvuosi",
-              // title: props.intl.formatMessage(
-              //   wizardMessages.limitForSpecialSupport
-              // ),
-              components: [
+                  name: "Input",
+                  styleClasses: ["mr-8"],
+                  properties: {
+                    withoutMargin: true,
+                    label: year + 1,
+                    type: "number",
+                    width: "7em"
+                  }
+                },
                 {
-                  anchor: "A",
-                  name: "TextBox"
-                  // properties: {
-                  //   initialValue: initialValueVaativa,
-                  //   applyForValue: applyForVaativa,
-                  //   name: `${sectionId}-difference-2`,
-                  //   titles
-                  // }
-                }
-              ]
-            },
-            {
-              anchor: "seuraavavuosi",
-              // title: props.intl.formatMessage(
-              //   wizardMessages.limitForBoardingSchool
-              // ),
-              components: [
+                  anchor: "B",
+                  name: "Input",
+                  styleClasses: ["mr-8"],
+                  properties: {
+                    withoutMargin: true,
+                    label: year + 2,
+                    type: "number",
+                    width: "7em"
+                  }
+                },
                 {
-                  anchor: "A",
-                  name: "TextBox"
-                  // properties: {
-                  //   initialValue: initialValueSisaoppilaitos,
-                  //   applyForValue: applyForSisaoppilaitos,
-                  //   name: `${sectionId}-difference-3`,
-                  //   titles
-                  // }
+                  anchor: "C",
+                  name: "Input",
+                  properties: {
+                    withoutMargin: true,
+                    label: year + 3,
+                    type: "number",
+                    width: "7em"
+                  }
                 }
               ]
             }
