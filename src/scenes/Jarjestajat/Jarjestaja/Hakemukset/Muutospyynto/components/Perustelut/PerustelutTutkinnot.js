@@ -72,7 +72,7 @@ const PerustelutTutkinnot = React.memo(
             : [];
           const title = parseLocalizedField(koulutusala.metadata, locale);
           return { areaCode, article, categories, title };
-        }, koulutusdata);
+        }, _.cloneDeep(koulutusdata));
       };
     }, [koulutusdata, locale, kohde, lomakkeet, lupa.kohteet, maaraystyyppi]);
 
