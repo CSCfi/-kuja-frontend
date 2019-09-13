@@ -15,6 +15,14 @@ storiesOf("Input", module)
         <Input payload={{ testProp: 1 }} onChanges={onChanges} />
         <p>Error</p>
         <Input payload={{ testProp: 2 }} onChanges={onChanges} error={true} />
+        <p>Wide</p>
+        <Input payload={{ testProp: 2 }} onChanges={onChanges} width={"100%"} />
+        <p>Number</p>
+        <Input
+          payload={{ testProp: 2 }}
+          onChanges={onChanges}
+          type={"number"}
+        />
       </div>
     );
   });

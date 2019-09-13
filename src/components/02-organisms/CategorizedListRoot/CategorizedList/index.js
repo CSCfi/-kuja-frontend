@@ -513,7 +513,9 @@ const CategorizedList = React.memo(props => {
                               ? change.properties.value
                               : propsObj.defaultValue;
                             return (
-                              <div className="flex row content-center pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
+                              <div
+                                className={`${component.styleClasses} flex row content-center pt-2 pr-2 my-2 sm:my-0 sm:mb-1`}
+                              >
                                 <label className="my-auto mr-2">
                                   {propsObj.label}
                                 </label>
@@ -534,8 +536,9 @@ const CategorizedList = React.memo(props => {
                                   placeholder={propsObj.placeholder}
                                   width={propsObj.width}
                                   error={propsObj.error}
-                                  fullWidth={props.fullWidth}
+                                  fullWidth={propsObj.fullWidth}
                                   value={value}
+                                  type={propsObj.type}
                                 />
                               </div>
                             );
