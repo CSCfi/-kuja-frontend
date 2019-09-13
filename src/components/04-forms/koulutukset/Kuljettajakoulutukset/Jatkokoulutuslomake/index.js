@@ -8,11 +8,11 @@ import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import * as R from "ramda";
 
 const defaultProps = {
-  changes: []
+  changeObjects: []
 };
 
 const KuljettajienJatkokoulutuslomake = ({
-  changes = defaultProps.changes
+  changeObjects = defaultProps.changeObjects
 }) => {
   const [lomake, setLomake] = useState(getKuljettajienJatkokoulutuslomake());
   const [peopleForms, setPeopleForms] = useState([]);
@@ -31,7 +31,7 @@ const KuljettajienJatkokoulutuslomake = ({
     <CategorizedListRoot
       anchor="lomake"
       categories={lomake}
-      changes={changes}
+      changes={changeObjects}
       onUpdate={() => {}}
       showCategoryTitles={true}
     />
@@ -39,7 +39,7 @@ const KuljettajienJatkokoulutuslomake = ({
 };
 
 KuljettajienJatkokoulutuslomake.propTypes = {
-  changes: PropTypes.array
+  changeObjects: PropTypes.array
 };
 
 export default KuljettajienJatkokoulutuslomake;

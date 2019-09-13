@@ -1,13 +1,20 @@
-import moment from "moment";
-import * as R from "ramda";
-import getChangesOfTutkinnotJaKoulutukset from "./tutkinnot-ja-koulutukset";
+import { getChangesToSave } from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
-import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
+import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
 import getChangesOfToimintaalue from "./toiminta-alue";
 import getChangesOfMuut from "./muut";
+import moment from "moment";
+import * as R from "ramda";
 
-export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
+export function createObjectToSave(
+  lupa,
+  changeObjects,
+  backendMuutokset = [],
+  muutoshakemus,
+  uuid,
+  muutospyynto
+) {
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
@@ -29,18 +36,93 @@ export function createObjectToSave(lupa, muutoshakemus, uuid, muutospyynto) {
       }
     },
     muutokset: R.flatten([
-      getChangesOfTutkinnotJaKoulutukset(
-        muutoshakemus.tutkinnot,
-        muutoshakemus.ammatilliseentehtavaanvalmistavatkoulutukset,
-        muutoshakemus.kuljettajakoulutukset,
-        muutoshakemus.tyovoimakoulutukset,
-        muutoshakemus.valmentavatkoulutukset
+      getChangesToSave(
+        "tutkinnot",
+        R.path(["tutkinnot"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["tutkinnot"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects)))
+        },
+        R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
+          backendMuutokset
+        )
       ),
-      getChangesOfOpetuskielet(muutoshakemus.opetuskielet),
-      getChangesOfTutkintokielet(muutoshakemus.tutkintokielet),
-      getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
-      getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),
-      getChangesOfMuut(muutoshakemus.muut)
+      getChangesToSave(
+        "koulutukset",
+        R.path(["koulutukset"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["koulutukset"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))
+        },
+        R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
+          backendMuutokset
+        )
+      ),
+      getChangesOfOpetuskielet(
+        R.path(["kielet", "opetuskielet"], muutoshakemus),
+        R.flatten([
+          R.path(["kielet", "opetuskielet"], changeObjects) || [],
+          R.path(["perustelut", "kielet", "opetuskielet"], changeObjects) || []
+        ]),
+        R.filter(R.propEq("koodisto", "oppilaitoksenopetuskieli"))(
+          backendMuutokset
+        )
+      ),
+      getChangesToSave(
+        "tutkintokielet",
+        R.path(["kielet", "tutkintokielet"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["kielet", "tutkintokielet"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(
+            R.values(
+              R.path(["perustelut", "kielet", "tutkintokielet"], changeObjects)
+            )
+          )
+        },
+        R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
+      ),
+      // getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
+      // getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),
+      getChangesToSave(
+        "muut",
+        R.path(["muut"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["muut"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(
+            R.values(
+              R.path(["perustelut", "muut"], changeObjects)
+            )
+          )
+        },
+        R.filter(R.pathEq(["kohde", "tunniste"], "muut"))(
+          backendMuutokset
+        )
+      )
+      // getChangesOfMuut(muutoshakemus.muut)
     ]),
     liitteet: [],
     uuid

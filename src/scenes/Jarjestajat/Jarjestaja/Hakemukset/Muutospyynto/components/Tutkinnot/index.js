@@ -1,33 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../../modules/helpers";
-import Section from "../../../../../../../components/03-templates/Section";
 import { getCategories } from "../../../../../../../services/muutoshakemus/utils/tutkinnotUtils";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 
 const Tutkinnot = React.memo(props => {
   const sectionId = "tutkinnot";
-  const [state, setState] = useState([]);
-  const [koulutusdata, setKoulutusdata] = useState([]);
-  const [locale, setLocale] = useState([]);
-  const { onUpdate } = props;
+  const { onStateUpdate } = props;
 
-  useEffect(() => {
-    setKoulutusdata(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.koulutukset.koulutusdata))
+  const koulutusdata = useMemo(() => {
+    return R.sortBy(
+      R.prop("koodiArvo"),
+      R.values(props.koulutukset.koulutusdata)
     );
-  }, [props.koulutukset]);
+  }, [props.koulutukset.koulutusdata]);
 
-  useEffect(() => {
+  const getItems = useMemo(() => {
+    const locale = R.toUpper(props.intl.locale);
+
     const getArticle = (areaCode, articles = []) => {
       return R.find(article => {
         return article.koodi === areaCode;
       }, articles);
     };
-    const handleKoulutusdata = (koulutusdata, _changes) => {
+
+    const handleKoulutusdata = koulutusdata => {
       return R.addIndex(R.map)((koulutusala, i) => {
         const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
         const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
@@ -40,90 +39,61 @@ const Tutkinnot = React.memo(props => {
           locale
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
-        const changes = R.filter(changeObj => {
-          return R.equals(
-            R.compose(
-              R.view(R.lensIndex(0)),
-              R.split(".")
-            )(changeObj.anchor),
-            areaCode
-          );
-        }, _changes);
-        return { areaCode, article, categories, changes, title };
+        return { areaCode, article, categories, title };
       }, koulutusdata);
     };
-    setState(handleKoulutusdata(koulutusdata, props.backendChanges));
-  }, [
-    koulutusdata,
-    locale,
-    props.backendChanges,
-    props.kohde,
-    props.lupa.kohteet,
-    props.maaraystyyppi
-  ]);
+
+    return handleKoulutusdata;
+  }, [props.intl.locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
 
   useEffect(() => {
-    setLocale(R.toUpper(props.intl.locale));
-  }, [props.intl.locale]);
-
-  useEffect(() => {
-    onUpdate({ sectionId, items: [...state] });
-  }, [onUpdate, state]);
-
-  const saveChanges = payload => {
-    setState(prevState => {
-      const newState = _.cloneDeep(prevState);
-      if (!newState[payload.index]) {
-        newState[payload.index] = {};
-      }
-      newState[payload.index].changes = payload.changes;
-      return newState;
+    const items = getItems(koulutusdata);
+    onStateUpdate({
+      items
     });
-  };
-
-  const removeChanges = (...payload) => {
-    return saveChanges({ index: payload[2], changes: [] });
-  };
+  }, [koulutusdata, getItems]);
 
   return (
-    <Section
-      code={props.lupa.kohteet[1].headingNumber}
-      title={props.lupa.kohteet[1].heading}
-    >
-      {R.addIndex(R.map)((stateItem, i) => {
-        return (
-          <ExpandableRowRoot
-            anchor={stateItem.areaCode}
-            key={`expandable-row-root-${i}`}
-            categories={stateItem.categories}
-            changes={stateItem.changes}
-            code={stateItem.areaCode}
-            index={i}
-            onChangesRemove={removeChanges}
-            onUpdate={saveChanges}
-            sectionId={sectionId}
-            showCategoryTitles={true}
-            title={stateItem.title}
-          />
-        );
-      }, state)}
-    </Section>
+    <React.Fragment>
+      {props.stateObject.items &&
+        R.addIndex(R.map)((stateItem, i) => {
+          const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
+          return (
+            <ExpandableRowRoot
+              anchor={anchorInitial}
+              key={`expandable-row-root-${i}`}
+              categories={stateItem.categories}
+              changes={R.prop(stateItem.areaCode, props.changeObjects)}
+              code={stateItem.areaCode}
+              onChangesRemove={props.onChangesRemove}
+              onUpdate={props.onChangesUpdate}
+              sectionId={sectionId}
+              showCategoryTitles={true}
+              title={stateItem.title}
+            />
+          );
+        }, props.stateObject.items)}
+    </React.Fragment>
   );
 });
 
 Tutkinnot.defaultProps = {
-  maaraystyyppi: {}
+  changeObjects: {},
+  maaraystyyppi: {},
+  stateObject: {}
 };
 
 Tutkinnot.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.array,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(Tutkinnot);

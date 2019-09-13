@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import ValmentavatKoulutukset from "./Koulutukset/ValmentavatKoulutukset";
@@ -9,54 +9,6 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const MuutospyyntoWizardKoulutukset = React.memo(props => {
-  const [
-    ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset,
-    setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset
-  ] = useState([]);
-  const [
-    kuljettajakoulutuksetMuutokset,
-    setKuljettajakoulutuksetMuutokset
-  ] = useState([]);
-  const [
-    tyovoimakoulutuksetMuutokset,
-    setTyovoimakoulutuksetMuutokset
-  ] = useState([]);
-  const [
-    valmentavatKoulutuksetMuutokset,
-    setValmentavatKoulutuksetMuutokset
-  ] = useState([]);
-
-  useEffect(() => {
-    setKuljettajakoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("kuljettajakoulutukset", changeObj.anchor),
-        props.changes
-      )
-    );
-    setTyovoimakoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("tyovoimakoulutukset", changeObj.anchor),
-        props.changes
-      )
-    );
-    setAmmatilliseenTehtavaanValmistavatKoulutuksetMuutokset(
-      R.filter(
-        changeObj =>
-          R.startsWith(
-            "ammatilliseentehtavaanvalmistavatkoulutukset",
-            changeObj.anchor
-          ),
-        props.changes
-      )
-    );
-    setValmentavatKoulutuksetMuutokset(
-      R.filter(
-        changeObj => R.startsWith("valmentavatkoulutukset", changeObj.anchor),
-        props.changes
-      )
-    );
-  }, [props.changes]);
-
   return (
     <div className="md:pl-16 pb-10">
       <p className="pt-4 pb-10">
@@ -64,50 +16,71 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
       </p>
 
       <ValmentavatKoulutukset
-        backendChanges={valmentavatKoulutuksetMuutokset}
+        changeObjects={R.prop("valmentavatKoulutukset", props.changeObjects)}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.valmentavatKoulutukset}
       />
 
       <AmmatilliseenTehtavaanValmistavatKoulutukset
-        backendChanges={ammatilliseenTehtavaanValmistavatKoulutuksetMuutokset}
+        changeObjects={R.prop(
+          "ammatilliseenTehtavaanValmistavatKoulutukset",
+          props.changeObjects
+        )}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
-        onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={
+          props.stateObjects.ammatilliseenTehtavaanValmistavatKoulutukset
+        }
       />
 
       <Tyovoimakoulutukset
-        backendChanges={tyovoimakoulutuksetMuutokset}
+        changeObjects={R.prop("tyovoimakoulutukset", props.changeObjects)}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.tyovoimakoulutukset}
       />
 
       <Kuljettajakoulutukset
-        backendChanges={kuljettajakoulutuksetMuutokset}
+        changeObjects={R.prop("kuljettajakoulutukset", props.changeObjects)}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
         maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
+        onChangesRemove={props.onChangesRemove}
+        onChangesUpdate={props.onChangesUpdate}
+        onStateUpdate={props.onStateUpdate}
+        stateObject={props.stateObjects.kuljettajakoulutukset}
       />
     </div>
   );
 });
 
 MuutospyyntoWizardKoulutukset.defaultProps = {
-  changes: []
+  changeObjects: {},
+  stateObjects: {}
 };
 
 MuutospyyntoWizardKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onUpdate: PropTypes.func,
+  stateObjects: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizardKoulutukset);

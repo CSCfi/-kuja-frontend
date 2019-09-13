@@ -1,5 +1,5 @@
 import React from "react";
-import MuutospyyntoWizard from "../../Hakemukset/Muutospyynto/components/MuutospyyntoWizard";
+import HakemusContainer from "./hakemusContainer";
 import { KohteetProvider } from "../../../../../context/kohteetContext";
 import { KoulutuksetProvider } from "../../../../../context/koulutuksetContext";
 import { KoulutusalatProvider } from "../../../../../context/koulutusalatContext";
@@ -13,6 +13,7 @@ import { MaakunnatProvider } from "../../../../../context/maakunnatContext";
 import { MaakuntakunnatProvider } from "../../../../../context/maakuntakunnatContext";
 import { KieletProvider } from "../../../../../context/kieletContext";
 import PropTypes from "prop-types";
+import { injectIntl } from "react-intl";
 
 const Hakemus = props => {
   return (
@@ -28,7 +29,7 @@ const Hakemus = props => {
                       <MaakuntakunnatProvider>
                         <MuutProvider>
                           <MuutoshakemusProvider>
-                            <MuutospyyntoWizard lupa={props.lupa} {...props} />
+                            <HakemusContainer {...props} />
                           </MuutoshakemusProvider>
                         </MuutProvider>
                       </MaakuntakunnatProvider>
@@ -41,11 +42,11 @@ const Hakemus = props => {
         </KohteetProvider>
       </MuutospyynnotProvider>
     </MaaraystyypitProvider>
-      );
-    };
-    
+  );
+};
+
 Hakemus.propTypes = {
-        lupa: PropTypes.object
-    };
-    
-    export default Hakemus;
+  lupa: PropTypes.object
+};
+
+export default injectIntl(Hakemus);

@@ -4,7 +4,6 @@ import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
 import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
-import TextBox from "../../../00-atoms/TextBox";
 import Input from "../../../00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
@@ -13,6 +12,7 @@ import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
+import CategorizedListTextBox from "./components/CategorizedListTextBox";
 
 /**
  *
@@ -127,19 +127,24 @@ const CategorizedList = React.memo(props => {
     ]);
     const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
 
-    const operation = getOperation(
-      component,
-      changeObj,
-      {
-        anchor: fullAnchor,
-        fullPath,
-        shouldBeChecked: true
-      },
-      changeProps
-    );
+    if (
+      component.name === "CheckboxWithLabel" ||
+      component.name === "RadioButtonWithLabel"
+    ) {
+      const operation = getOperation(
+        component,
+        changeObj,
+        {
+          anchor: fullAnchor,
+          fullPath,
+          shouldBeChecked: true
+        },
+        changeProps
+      );
 
-    if (operation) {
-      operations.push(operation);
+      if (operation) {
+        operations.push(operation);
+      }
     }
 
     if (component.name === "RadioButtonWithLabel") {
@@ -182,6 +187,7 @@ const CategorizedList = React.memo(props => {
     }
 
     if (payload.parent.parent && payload.parent.parent.category.components) {
+      console.info(payload.parent.parent);
       return handlePredecessors(
         changeProps,
         {
@@ -364,6 +370,16 @@ const CategorizedList = React.memo(props => {
                     fullAnchor,
                     props.changes
                   );
+                  const parentComponent =
+                    props.parent && props.parent.category.components
+                      ? props.parent.category.components[0]
+                      : null;
+                  const parentChangeObj = parentComponent
+                    ? getChangeObjByAnchor(
+                        `${props.parent.anchor}.${parentComponent.anchor}`,
+                        props.changes
+                      )
+                    : {};
                   const propsObj = getPropertiesObject(changeObj, component);
                   const isAddition = !!changeObj.properties.isChecked;
                   const isRemoved =
@@ -482,6 +498,26 @@ const CategorizedList = React.memo(props => {
                             );
                           })(category)
                         : null}
+                      {component.name === "TextBox" && (
+                        <CategorizedListTextBox
+                          changeObj={changeObj}
+                          parentComponent={parentComponent}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
+                          _props={props}
+                          onChanges={runOperations}
+                          idSuffix
+                          propsObj={propsObj}
+                          parentChangeObj={parentChangeObj}
+                        ></CategorizedListTextBox>
+                      )}
                       {component.name === "Input"
                         ? (category => {
                             const change = getChangeObjByAnchor(
@@ -541,59 +577,6 @@ const CategorizedList = React.memo(props => {
                             );
                           })(category)
                         : null}
-                      {component.name === "TextBox"
-                        ? (category => {
-                            const change = getChangeObjByAnchor(
-                              fullAnchor,
-                              props.changes
-                            );
-                            let parentComponent = null;
-                            let isDisabled = false;
-                            if (
-                              props.parent &&
-                              props.parent.category.components
-                            ) {
-                              parentComponent =
-                                props.parent.category.components[0];
-                              const parentChange = getChangeObjByAnchor(
-                                `${props.parent.anchor}.${parentComponent.anchor}`,
-                                props.changes
-                              );
-                              isDisabled =
-                                R.includes(parentComponent.name, [
-                                  "CheckboxWithLabel",
-                                  "RadioButtonWithLabel"
-                                ]) &&
-                                ((!parentComponent.properties.isChecked &&
-                                  R.isEmpty(parentChange.properties)) ||
-                                  !parentChange.properties.isChecked);
-                            }
-                            const value = change
-                              ? change.properties.value
-                              : propsObj.defaultValue;
-                            return (
-                              <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
-                                <TextBox
-                                  id={`textbox-${idSuffix}`}
-                                  isDisabled={isDisabled}
-                                  isHidden={isDisabled}
-                                  onChanges={runOperations}
-                                  payload={{
-                                    anchor,
-                                    categories: category.categories,
-                                    component,
-                                    fullPath,
-                                    parent: props.parent,
-                                    rootPath: props.rootPath,
-                                    siblings: props.categories
-                                  }}
-                                  placeholder={propsObj.placeholder}
-                                  value={value}
-                                />
-                              </div>
-                            );
-                          })(category)
-                        : null}
                       {component.name === "Attachments"
                         ? (category => {
                             const previousSibling =
@@ -647,10 +630,16 @@ const CategorizedList = React.memo(props => {
                                 <StatusTextRow
                                   labelStyles={labelStyles}
                                   styleClasses={styleClasses}
+                                  statusText={propsObj.statusText}
+                                  statusTextStyleClasses={
+                                    propsObj.statusTextStyleClasses
+                                  }
                                 >
                                   <div className="flex">
-                                    {codeMarkup}
-                                    <p>{title}</p>
+                                    <div className="flex-1">
+                                      {codeMarkup}
+                                      <span>{title}</span>
+                                    </div>
                                   </div>
                                 </StatusTextRow>
                               </div>

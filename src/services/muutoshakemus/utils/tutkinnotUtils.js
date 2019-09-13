@@ -39,8 +39,6 @@ export const getCategories = (
                   });
                 })
               : false;
-            const isAddedBool = false;
-            const isRemovedBool = false;
 
             return {
               anchor: koulutus.koodiArvo,
@@ -67,7 +65,7 @@ export const getCategories = (
                       removal: isRemoved,
                       custom: Object.assign({}, isInLupaBool ? isInLupa : {})
                     },
-                    isChecked: (isInLupaBool && !isRemovedBool) || isAddedBool
+                    isChecked: isInLupaBool
                   }
                 }
               ],
@@ -132,22 +130,11 @@ export const getCategoriesForPerustelut = (
   kohde,
   maaraystyyppi,
   locale,
-  backendChanges,
-  areaCode,
-  lomakkeet,
+  changes,
+  anchorInitial,
+  lomakkeet
 ) => {
-  const relevantAnchors = R.map(
-    R.prop("anchor"),
-    R.filter(
-      R.compose(
-        R.startsWith(areaCode),
-        R.prop("anchor")
-      )
-    )(backendChanges)
-  );
-  if (!relevantAnchors.length) {
-    return [];
-  }
+  const relevantAnchors = R.map(R.prop("anchor"))(changes);
   const relevantKoulutustyypit = R.filter(
     R.compose(
       R.not,
@@ -156,8 +143,8 @@ export const getCategoriesForPerustelut = (
     ),
     R.mapObjIndexed(koulutustyyppi => {
       koulutustyyppi.koulutukset = R.filter(koulutus => {
-        const anchorStart = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
-        return !!R.filter(R.startsWith(anchorStart))(relevantAnchors).length;
+        const anchorStart = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+        return !!R.find(R.startsWith(anchorStart))(relevantAnchors);
       }, koulutustyyppi.koulutukset);
       return koulutustyyppi;
     })(koulutustyypit)
@@ -182,6 +169,17 @@ export const getCategoriesForPerustelut = (
                 })
               : false;
 
+            const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+
+            const changeObj = R.find(
+              R.compose(
+                R.startsWith(anchorBase),
+                R.prop("anchor")
+              )
+            )(changes);
+
+            const isAddition = changeObj && changeObj.properties.isChecked;
+
             let structure = {
               anchor: koulutus.koodiArvo,
               meta: {
@@ -197,29 +195,24 @@ export const getCategoriesForPerustelut = (
                   name: "StatusTextRow",
                   properties: {
                     code: koulutus.koodiArvo,
-                    title:
-                      _.find(koulutus.metadata, m => {
-                        return m.kieli === locale;
-                      }).nimi || "[Koulutuksen otsikko tähän]",
+                    title: _.find(koulutus.metadata, m => {
+                      return m.kieli === locale;
+                    }).nimi,
                     labelStyles: {
                       addition: isAdded,
                       removal: isRemoved,
                       custom: Object.assign({}, isInLupaBool ? isInLupa : {})
-                    }
+                    },
+                    styleClasses: ["flex"],
+                    statusTextStyleClasses: isAddition
+                      ? ["text-green-600 pr-4 w-20 font-bold"]
+                      : ["text-red-500 pr-4 w-20 font-bold"],
+                    statusText: isAddition ? " LISÄYS:" : " POISTO:"
                   }
                 }
               ]
             };
 
-            const anchorBase = `${areaCode}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
-            const changeObj = R.find(
-              R.compose(
-                R.startsWith(anchorBase),
-                R.prop("anchor")
-              )
-            )(backendChanges);
-            const isAddition = changeObj && changeObj.properties.isChecked;
-            
             if (isAddition) {
               structure.categories = lomakkeet.addition;
             } else if (isRemoved) {
@@ -272,7 +265,7 @@ export const getCategoriesForPerustelut = (
             return structure;
           }, koulutustyyppi.koulutukset)
         };
-      }, relevantKoulutustyypit)
+      }, _.cloneDeep(relevantKoulutustyypit))
     );
   }
   return perusteluCategoriat[index];

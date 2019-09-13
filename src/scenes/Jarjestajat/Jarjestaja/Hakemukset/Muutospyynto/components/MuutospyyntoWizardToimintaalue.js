@@ -41,7 +41,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const sectionId = "toimintaalue";
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const [initialValueOfSelect, setInitialValueOfSelect] = useState([]);
-  const [valueOfSelect, setValueOfSelect] = useState([]);
+  const [valueOfSelect, setValueOfSelect] = useState(null);
   const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState({
     properties: {}
   });
@@ -60,12 +60,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     const maakunnatWithoutRemovedOnes = filterOutRemovedOnes(
       props.maakuntakunnat.maakuntakunnatList,
       props.lupakohde.maakunnat,
-      props.backendChanges
+      props.changeObjects
     );
 
     const addedItems = getAddedItems(
       R.concat(props.maakuntakunnat.maakuntakunnatList, kunnat),
-      props.backendChanges
+      props.changeObjects
     );
 
     const kunnatInitial = getInitialItems(
@@ -82,18 +82,22 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.kunnat,
     props.maakunnat,
     props.maakuntakunnat,
-    props.backendChanges
+    props.changeObjects
   ]);
 
   useEffect(() => {
-    onUpdate({
-      sectionId,
-      changesOfValtakunnallinen,
-      initialValueOfSelect,
-      kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi,
-      valueOfSelect
-    });
+    if (valueOfSelect) {
+      onUpdate({
+        sectionId,
+        state: {
+          changesOfValtakunnallinen,
+          initialValueOfSelect,
+          kohde: props.kohde,
+          maaraystyyppi: props.maaraystyyppi,
+          valueOfSelect
+        }
+      });
+    }
   }, [
     props.kohde,
     props.maaraystyyppi,
@@ -109,12 +113,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         R.equals("valtakunnallinen"),
         R.path(["properties", "name"])
       )(changeObj)
-    )(props.backendChanges);
+    )(props.changeObjects);
 
     if (valtakunnallinenChangeObj) {
       setChangesOfValtakunnallinen(valtakunnallinenChangeObj);
     }
-  }, [props.backendChanges]);
+  }, [props.changeObjects]);
 
   const handleNewValueOfToimialuevalinta = value => {
     setValueOfSelect(value);
@@ -133,7 +137,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   return (
     <Section code={props.lupakohde.headingNumber} title={heading}>
-      <p className={!!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"}>
+      <p
+        className={
+          !!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"
+        }
+      >
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
       <div
@@ -149,13 +157,19 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           callback={handleNewValueOfToimialuevalinta}
         />
 
-        <Toimialuemuutokset
-          name="toimintaalueet"
-          initialValues={initialValueOfSelect}
-          values={valueOfSelect}
-        />
+        {valueOfSelect && (
+          <Toimialuemuutokset
+            name="toimintaalueet"
+            initialValues={initialValueOfSelect}
+            values={valueOfSelect}
+          />
+        )}
       </div>
-      <div className={!!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"}>
+      <div
+        className={
+          !!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"
+        }
+      >
         <Valtakunnallinen
           callback={handleChangeOfValtakunnallinen}
           changes={changesOfValtakunnallinen}
@@ -167,7 +181,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  backendChanges: [],
+  changeObjects: [],
   kohde: {},
   kunnat: {},
   lupakohde: {},
@@ -177,7 +191,7 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   kunnat: PropTypes.object,
   lupakohde: PropTypes.object,

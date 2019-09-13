@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -9,14 +9,18 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutATVKoulutukset = props => {
-  const sectionId = "ammatilliseentehtavaanvalmistavatkoulutukset";
-  const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const sectionId =
+    "perustelut_koulutukset_ammatilliseenTehtavaanValmistavatKoulutukset";
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
-  useEffect(() => {
-    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(changes);
-    const getCategories = (koulutusData, kohde, maaraystyyppi) => {
+  const getCategories = useMemo(() => {
+    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
+      R.path(["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"])(
+        props.changeObjects
+      )
+    );
+
+    return (koulutusData, kohde, maaraystyyppi) => {
       const categories = R.map(item => {
         let structure = null;
         if (R.includes(item.code, getAnchorPartsByIndex(1))) {
@@ -66,71 +70,74 @@ const PerustelutATVKoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
+  }, [props.changeObjects]);
 
+  useEffect(() => {
     if (
       R.includes(
         "ammatilliseentehtavaanvalmistavakoulutus",
         props.koulutukset.muut.fetched
       )
     ) {
-      setCategories(
-        getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.muut.muudata
-              .ammatilliseentehtavaanvalmistavakoulutus,
-            R.toUpper(props.intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
+      onStateUpdate(
+        {
+          categories: getCategories(
+            getDataForKoulutusList(
+              props.koulutukset.muut.muudata
+                .ammatilliseentehtavaanvalmistavakoulutus,
+              R.toUpper(props.intl.locale)
+            ),
+            props.kohde,
+            props.maaraystyyppi
+          )
+        },
+        sectionId
       );
     }
   }, [
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,
-    props.maaraystyyppi,
-    changes
+    props.maaraystyyppi
   ]);
 
-  const saveChanges = payload => {
-    setChanges(payload.changes);
-  };
-
-  useEffect(() => {
-    setChanges(props.changes);
-  }, [props.changes]);
-
-  useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
-  }, [categories, changes, onUpdate]);
-
-  const removeChanges = () => {
-    return saveChanges({ changes: [] });
-  };
-
   return (
-    <ExpandableRowRoot
-      anchor={sectionId}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={changes}
-      disableReverting={true}
-      hideAmountOfChanges={false}
-      isExpanded={true}
-      onChangesRemove={removeChanges}
-      onUpdate={saveChanges}
-      title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
-    />
+    <React.Fragment>
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={
+            props.changeObjects.perustelut.koulutukset
+              .ammatilliseenTehtavaanValmistavatKoulutukset
+          }
+          disableReverting={false}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
+        />
+      ) : null}
+    </React.Fragment>
   );
 };
 
+PerustelutATVKoulutukset.defaultProps = {
+  changeObjects: {},
+  stateObject: {}
+};
+
 PerustelutATVKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func.isRequired
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(PerustelutATVKoulutukset);

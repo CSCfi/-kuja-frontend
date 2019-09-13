@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -8,43 +8,43 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
-  const sectionId = "ammatilliseentehtavaanvalmistavatkoulutukset";
-  const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const sectionId = "koulutukset_ammatilliseenTehtavaanValmistavatKoulutukset";
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
-  const getCategories = (koulutusData, kohde, maaraystyyppi) => {
-    const categories = R.map(item => {
-      return {
-        anchor: item.code,
-        components: [
-          {
-            anchor: "A",
-            name: "CheckboxWithLabel",
-            properties: {
+  const getCategories = useMemo(() => {
+    return (koulutusData, kohde, maaraystyyppi) => {
+      const categories = R.map(item => {
+        return {
+          anchor: item.code,
+          components: [
+            {
+              anchor: "A",
               name: "CheckboxWithLabel",
-              code: item.code,
-              title: item.title,
-              isChecked: item.shouldBeChecked,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved,
-                custom: Object({}, item.isInLupa ? isInLupa : {})
+              properties: {
+                name: "CheckboxWithLabel",
+                code: item.code,
+                title: item.title,
+                isChecked: item.shouldBeChecked,
+                labelStyles: {
+                  addition: isAdded,
+                  removal: isRemoved,
+                  custom: Object({}, item.isInLupa ? isInLupa : {})
+                }
               }
             }
+          ], 
+          meta: {
+            kohde,
+            maaraystyyppi,
+            isInLupa: item.isInLupa,
+            koodisto: item.koodisto,
+            metadata: item.metadata
           }
-        ],
-        meta: {
-          kohde,
-          maaraystyyppi,
-          isInLupa: item.isInLupa,
-          koodisto: item.koodisto,
-          metadata: item.metadata
-        }
-      };
-    }, koulutusData.items);
-    return categories;
-  };
+        };
+      }, koulutusData.items);
+      return categories;
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -53,16 +53,19 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
         props.koulutukset.muut.fetched
       )
     ) {
-      setCategories(
-        getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.muut.muudata
-              .ammatilliseentehtavaanvalmistavakoulutus,
-            R.toUpper(props.intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
+      onStateUpdate(
+        {
+          categories: getCategories(
+            getDataForKoulutusList(
+              props.koulutukset.muut.muudata
+                .ammatilliseentehtavaanvalmistavakoulutus,
+              R.toUpper(props.intl.locale)
+            ),
+            props.kohde,
+            props.maaraystyyppi
+          )
+        },
+        sectionId
       );
     }
   }, [
@@ -72,41 +75,33 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
     props.maaraystyyppi
   ]);
 
-  const saveChanges = payload => {
-    setChanges(payload.changes);
-  };
-
-  useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
-
-  useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
-  }, [categories, changes, onUpdate]);
-
-  const removeChanges = () => {
-    return saveChanges({ changes: [] });
-  };
-
   return (
-    <ExpandableRowRoot
-      anchor={sectionId}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={changes}
-      onChangesRemove={removeChanges}
-      onUpdate={saveChanges}
-      title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
-    />
+    <React.Fragment>
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={props.changeObjects}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
+        />
+      ) : null}
+    </React.Fragment>
   );
 };
 
+AmmatilliseenTehtavaanValmistavatKoulutukset.defaultProps = {
+  stateObject: {}
+};
+
 AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func.isRequired
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(AmmatilliseenTehtavaanValmistavatKoulutukset);

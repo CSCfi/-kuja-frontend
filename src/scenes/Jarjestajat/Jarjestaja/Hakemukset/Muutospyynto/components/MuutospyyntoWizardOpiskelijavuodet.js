@@ -186,7 +186,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   ]);
 
   useEffect(() => {
-    if (props.muut.state.sectionId) {
+    if (props.muut.sectionId) {
       /**
        *  Osio 4 = Opiskelijavuodet, osio 5 = Muut
        *
@@ -199,7 +199,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       // Mikäli jokin alla olevista koodeista on valittuna osiossa 5, näytetään vaativaa tukea koskevat kentät osiossa 4.
       const vaativatCodes = [2, 16, 17, 18, 19, 20, 21];
       // muutChanges sisältää 5. osion muutokset, jotka tässä muokataan helpommin läpikäytävään muotoon.
-      const changesFlatten = R.flatten(R.values(props.muut.state.changes));
+      const changesFlatten = R.flatten(R.values(props.muut.changes));
       // 5. osion muutosten joukosta etsitään sisäoppilaitosta koskeva muutos.
       const sisaoppilaitosChange = R.find(item => {
         return R.contains("sisaoppilaitos", item.anchor);
@@ -288,17 +288,19 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         setChanges(_changes);
       }
     }
-  }, [changes, props.muut.state.changes, props.muut.state.sectionId]);
+  }, [changes, props.muut.changes, props.muut.sectionId]);
 
   useEffect(() => {
     onUpdate({
       sectionId,
-      categories,
-      changes,
-      kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi,
-      muut: props.muut,
-      koodiarvot
+      state: {
+        categories,
+        changes,
+        kohde: props.kohde,
+        maaraystyyppi: props.maaraystyyppi,
+        muut: props.muut,
+        koodiarvot
+      }
     });
   }, [
     categories,
@@ -319,8 +321,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   };
 
   useEffect(() => {
-    setChanges(props.backendChanges);
-  }, [props.backendChanges]);
+    setChanges(props.changeObjects);
+  }, [props.changeObjects]);
 
   return (
     <Section code={headingNumber} title={heading}>
@@ -340,8 +342,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardOpiskelijavuodet.defaultProps = {
+  changeObjects: []
+};
+
 MuutospyyntoWizardOpiskelijavuodet.propTypes = {
-  backendChanges: PropTypes.array,
+  changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
