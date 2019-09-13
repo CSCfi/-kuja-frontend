@@ -33,7 +33,7 @@ const FileInput = styled.div`
         : props.bgColor
         ? props.bgColor
         : COLORS.OIVA_GREEN};
-  margin: 0.6em 0;
+  margin: 0.5em 0;
   font-size: 0.9em;
   transition: ${TRANSITIONS.EASE_IN_OUT_QUICK};
   width: 10em;

@@ -6,8 +6,9 @@ import _ from "lodash";
 const Input = props => {
   const changesOutDelayed = _.debounce(props.onChanges, props.delay);
 
+  console.log(props.type);
   return (
-    <div>
+    <React.Fragment>
       <TextField
         aria-label={props.ariaLabel}
         defaultValue={props.value}
@@ -15,7 +16,7 @@ const Input = props => {
         placeholder={props.placeholder}
         rows={props.rows}
         rowsMax={props.rowsMax}
-        className={`${props.isHidden ? "hidden" : ""} border border-solid p-2`}
+        className={`${props.isHidden ? "hidden" : ""} p-2`}
         onChange={e =>
           changesOutDelayed(props.payload, { value: e.target.value })
         }
@@ -23,8 +24,9 @@ const Input = props => {
         variant="outlined"
         style={{ width: props.width }}
         fullWidth={props.fullWidth}
+        type={props.type}
       />
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -39,7 +41,8 @@ Input.defaultProps = {
   rowsMax: 1,
   error: false,
   width: 100,
-  fullWidth: false
+  fullWidth: false,
+  type: "text"
 };
 
 Input.propTypes = {
@@ -56,7 +59,8 @@ Input.propTypes = {
   rowsMax: PropTypes.number,
   error: PropTypes.bool,
   width: PropTypes.number,
-  fullWidth: PropTypes.bool
+  fullWidth: PropTypes.bool,
+  type: PropTypes.string
 };
 
 export default Input;
