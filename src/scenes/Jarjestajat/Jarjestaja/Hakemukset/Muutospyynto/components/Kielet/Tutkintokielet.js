@@ -248,7 +248,9 @@ const Tutkintokielet = React.memo(props => {
 });
 
 Tutkintokielet.defaultProps = {
-  changeObjects: {},
+  changeObjects: {
+    tutkinnot: []
+  },
   kielet: [],
   locale: "FI",
   unselectedAnchors: {},

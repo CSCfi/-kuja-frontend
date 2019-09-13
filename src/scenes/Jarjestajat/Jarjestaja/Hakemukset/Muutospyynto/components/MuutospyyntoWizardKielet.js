@@ -18,52 +18,54 @@ const MuutospyyntoWizardKielet = React.memo(props => {
     const anchors = {};
     const clonedPrevChanges = _.cloneDeep(prevTutkinnotItemsRef.current);
     console.info("Muutokset: ", props.changeObjects.tutkinnot);
-    R.forEach(stateItem => {
-      const stateItemAnchors = R.map(R.prop("anchor"))(
-        props.changeObjects.tutkinnot[stateItem.areaCode] || []
-      );
-
-      anchors[stateItem.areaCode] = [];
-      /**
-       * Käydään Tutkinnot-osion tila läpi ja otetaan ylös niiden tutkintojen ankkurit, joista käyttäjä on poistanut valinnan.
-       * Näin tehden vastaavat Tutkintokielet-aliosion muutokset osataan poistaa.
-       * Esimerkki ankkurista: 02.1.321604
-       */
-      if (stateItemAnchors.length) {
-        anchors[stateItem.areaCode] = R.map(
-          R.prop("anchor"),
-          R.filter(
-            changeObj => changeObj.properties.isChecked === false,
-            props.changeObjects.tutkinnot[stateItem.areaCode]
-          )
+    if (props.changeObjects.tutkinnot) {
+      R.forEach(stateItem => {
+        const stateItemAnchors = R.map(R.prop("anchor"))(
+          R.path(["tutkinnot", stateItem.areaCode], props.changeObjects)
         );
-      }
-      /**
-       * Lisätään ankkurilistaan ne ankkurit, joita vastaavat lisäykset käyttäjä on Tutkinnot-osiosta juuri poistanut.
-       */
-      //   const changes =
-      //     (
-      //       R.find(R.propEq("areaCode", stateItem.areaCode))(
-      //         clonedPrevChanges || []
-      //       ) || {}
-      //     ).changes || [];
-      //   const additions = R.map(
-      //     R.prop("anchor"),
-      //     R.filter(
-      //       R.compose(
-      //         R.equals(true),
-      //         R.path(["properties", "isChecked"])
-      //       )
-      //     )(changes)
-      //   );
-      //   anchors[stateItem.areaCode] = anchors[stateItem.areaCode].concat(
-      //     R.without(stateItemAnchors, additions)
-      //   );
-      //   return stateItem;
-    }, props.stateObjects.tutkinnot.items);
-    prevTutkinnotItemsRef.current = props.stateObjects.tutkinnot.items;
-    console.info(anchors);
-    setUnselectedAnchors(anchors);
+
+        anchors[stateItem.areaCode] = [];
+        /**
+         * Käydään Tutkinnot-osion tila läpi ja otetaan ylös niiden tutkintojen ankkurit, joista käyttäjä on poistanut valinnan.
+         * Näin tehden vastaavat Tutkintokielet-aliosion muutokset osataan poistaa.
+         * Esimerkki ankkurista: 02.1.321604
+         */
+        if (stateItemAnchors.length) {
+          anchors[stateItem.areaCode] = R.map(
+            R.prop("anchor"),
+            R.filter(
+              changeObj => changeObj.properties.isChecked === false,
+              props.changeObjects.tutkinnot[stateItem.areaCode]
+            )
+          );
+        }
+        /**
+         * Lisätään ankkurilistaan ne ankkurit, joita vastaavat lisäykset käyttäjä on Tutkinnot-osiosta juuri poistanut.
+         */
+        //   const changes =
+        //     (
+        //       R.find(R.propEq("areaCode", stateItem.areaCode))(
+        //         clonedPrevChanges || []
+        //       ) || {}
+        //     ).changes || [];
+        //   const additions = R.map(
+        //     R.prop("anchor"),
+        //     R.filter(
+        //       R.compose(
+        //         R.equals(true),
+        //         R.path(["properties", "isChecked"])
+        //       )
+        //     )(changes)
+        //   );
+        //   anchors[stateItem.areaCode] = anchors[stateItem.areaCode].concat(
+        //     R.without(stateItemAnchors, additions)
+        //   );
+        //   return stateItem;
+      }, props.stateObjects.tutkinnot.items);
+      prevTutkinnotItemsRef.current = props.stateObjects.tutkinnot.items;
+      console.info(anchors);
+      setUnselectedAnchors(anchors);
+    }
   }, [props.changeObjects.tutkinnot, props.stateObjects.tutkinnot.items]);
 
   return (
@@ -101,7 +103,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
           stateObjects={{
             tutkintokielet:
               R.path(["kielet", "tutkintokielet"], props.stateObjects) || {},
-            tutkinnot: R.path(["tutkinnot"], props.stateObjects) || {}
+            tutkinnot: R.path(["tutkinnot"], props.stateObjects)
           }}
           unselectedAnchors={unselectedAnchors}
         />
@@ -111,7 +113,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
 });
 
 MuutospyyntoWizardKielet.defaultProps = {
-  changeObjects: {},
+  changeObjects: { tutkinnot: [] },
   stateObjects: {}
 };
 
