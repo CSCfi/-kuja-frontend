@@ -98,9 +98,30 @@ export function createObjectToSave(
           )
         },
         R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
-      )
+      ),
       // getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
       // getChangesOfOpiskelijavuodet(muutoshakemus.opiskelijavuodet),
+      getChangesToSave(
+        "muut",
+        R.path(["muut"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["muut"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(
+            R.values(
+              R.path(["perustelut", "muut"], changeObjects)
+            )
+          )
+        },
+        R.filter(R.pathEq(["kohde", "tunniste"], "muut"))(
+          backendMuutokset
+        )
+      )
       // getChangesOfMuut(muutoshakemus.muut)
     ]),
     liitteet: [],

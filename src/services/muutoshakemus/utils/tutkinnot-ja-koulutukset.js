@@ -200,48 +200,65 @@ export const getChangesToSave = (
         type: "addition"
       };
     }, unhandledChangeObjects).filter(Boolean);
+  } else if (key === "muut") {
+    uudetMuutokset = R.map(changeObj => {
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
+      const anchorArr = R.split(".", changeObj.anchor);
+      const areaCode = R.compose(
+        R.last,
+        R.split("_"),
+        R.view(R.lensIndex(0))
+      )(anchorArr);
+      const section = R.find(R.propEq("code", areaCode))(
+        stateObject.muutdata
+      );
+      let category = false;
+      let maarays = false;
+      if (section) {
+        category = R.map(item => {
+          return R.find(R.propEq("anchor", anchorArr[2]), item.categories);
+        })(section.categories).filter(Boolean)[0];
+        maarays = R.map(item => {
+          return R.find(R.propEq("koodiArvo", anchorArr[2]), item.articles);
+        })(section.data).filter(Boolean)[0];
+      }
+
+      let tila = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
+      let type = changeObj.properties.isChecked ? "addition" : "removal";
+
+      if (
+        (changeObj.properties.isChecked === undefined ||
+          changeObj.properties.isChecked === null) &&
+        changeObj.properties.value
+      ) {
+        tila = "MUUTOS";
+        type = "modification";
+      }
+
+      const perustelut = R.filter(
+        R.compose(
+          R.contains(anchorInit),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
+
+      return {
+        koodiarvo: maarays.koodiArvo,
+        koodisto: maarays.koodisto.koodistoUri,
+        isInLupa: category.meta.isInLupa,
+        kohde: stateObject.kohde,
+        maaraystyyppi: stateObject.maaraystyyppi,
+        meta: { changeObjects: R.flatten([[changeObj], perustelut])  },
+        tila: tila,
+        type: type
+      };
+    }, unhandledChangeObjects).filter(Boolean);
   }
 
   return R.flatten([paivitetytBackendMuutokset, uudetMuutokset]);
 };
-
-// export const getChangesOfKoulutukset = () => {
-//   const koulutuksetMuutokset = !R.isEmpty(koulutukset)
-//     ? R.flatten(
-//         R.values(
-//           R.mapObjIndexed((changes, name) => {
-//             return R.values(
-//               R.map(changeObj => {
-//                 const anchorParts = changeObj.anchor.split(".");
-//                 const code = R.view(R.lensIndex(1))(anchorParts);
-//                 const meta = getMetadata(
-//                   R.slice(1, -1)(anchorParts),
-//                   koulutukset[name].categories
-//                 );
-//                 const finnishInfo = R.find(
-//                   R.propEq("kieli", "FI"),
-//                   meta.metadata
-//                 );
-//                 return {
-//                   isInLupa: meta.isInLupa,
-//                   kohde: meta.kohde,
-//                   koodiarvo: code,
-//                   koodisto: meta.koodisto.koodistoUri,
-//                   maaraystyyppi: meta.maaraystyyppi,
-//                   meta: {
-//                     changeObj,
-//                     perusteluteksti: null,
-//                     muutosperustelukoodiarvo: []
-//                   },
-//                   nimi: finnishInfo.nimi,
-//                   tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
-//                   type: changeObj.properties.isChecked ? "addition" : "removal"
-//                 };
-//               }, changes)
-//             );
-//           }, changeObjects.koulutukset)
-//         )
-//       )
-//     : [];
-//   return R.flatten([tutkinnotMuutokset, koulutuksetMuutokset]);
-// };

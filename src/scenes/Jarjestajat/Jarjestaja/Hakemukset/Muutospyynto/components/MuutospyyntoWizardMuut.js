@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Section from "../../../../../../components/03-templates/Section";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -12,10 +11,8 @@ import _ from "lodash";
 const MuutospyyntoWizardMuut = React.memo(props => {
   const sectionId = "muut";
   const [muutdata, setMuutdata] = useState(null);
-  const [changes, setChanges] = useState({});
   const [locale, setLocale] = useState("FI");
-  const { onUpdate } = props;
-  const heading = props.intl.formatMessage(wizardMessages.header_section5);
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
   useEffect(() => {
     const divideArticles = articles => {
@@ -234,65 +231,49 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     setLocale(R.toUpper(props.intl.locale));
   }, [props.intl.locale]);
 
-  const saveChanges = payload => {
-    setChanges(prevState => {
-      const newState = _.cloneDeep(prevState);
-      newState[payload.anchor] = payload.changes;
-      return newState;
-    });
-  };
-
-  const removeChanges = (...payload) => {
-    return saveChanges({ anchor: payload[1], changes: [] });
-  };
-
-  useEffect(() => {
-    setChanges(props.changeObjects);
-  }, [props.changeObjects]);
-
   useEffect(() => {
     if (muutdata) {
-      onUpdate({
-        sectionId,
-        state: {
-          changes,
+      onStateUpdate(
+        {
           kohde: props.kohde,
           maaraystyyppi: props.maaraystyyppi,
           muutdata
-        }
-      });
+        },
+        sectionId
+      );
     }
-  }, [changes, muutdata, props.kohde, props.maaraystyyppi, onUpdate]);
+  }, [muutdata, props.kohde, props.maaraystyyppi]);
 
   return (
     <React.Fragment>
       {props.kohde && muutdata && (
-        <Section code={props.headingNumber} title={heading}>
+        <React.Fragment>
           {R.addIndex(R.map)((row, i) => {
             return (
               <ExpandableRowRoot
-                anchor={row.code}
+                anchor={`${sectionId}_${row.code}`}
                 key={`expandable-row-root-${i}`}
                 categories={row.categories}
-                changes={changes[row.code]}
+                changes={R.path(["muut", row.code], props.changeObjects)}
                 code={row.code}
                 index={i}
-                onUpdate={saveChanges}
+                onUpdate={onChangesUpdate}
                 sectionId={sectionId}
                 showCategoryTitles={true}
                 title={row.title}
-                onChangesRemove={removeChanges}
+                onChangesRemove={onChangesRemove}
               />
             );
           }, muutdata)}
-        </Section>
+        </React.Fragment>
       )}
     </React.Fragment>
   );
 });
 
 MuutospyyntoWizardMuut.defaultProps = {
-  changeObjects: {}
+  changeObjects: {},
+  stateObjects: {}
 };
 
 MuutospyyntoWizardMuut.propTypes = {
@@ -302,7 +283,10 @@ MuutospyyntoWizardMuut.propTypes = {
   maaraykset: PropTypes.array,
   maaraystyyppi: PropTypes.object,
   muut: PropTypes.object,
-  onUpdate: PropTypes.func
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  stateObjects: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizardMuut);

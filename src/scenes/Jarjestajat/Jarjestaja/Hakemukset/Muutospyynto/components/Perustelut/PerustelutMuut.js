@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import FormSection from "../../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -9,28 +8,26 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 
 const defaultProps = {
-  backendChanges: [],
-  headingNumber: 0,
+  changeObjects: {},
   kohde: {},
   maaraykset: [],
   muut: {},
-  title: "No title set"
+  stateObject: {}
 };
 
 const PerustelutMuut = React.memo(
   ({
-    backendChanges = defaultProps.backendChanges,
-    handleChanges,
-    headingNumber = defaultProps.headingNumber,
+    changeObjects = defaultProps.changeObjects,
     intl,
     kohde = PropTypes.kohde,
     maaraykset = defaultProps.maaraykset,
     muut = defaultProps.muut,
-    title = defaultProps.title
+    onChangesRemove,
+    onChangesUpdate,
+    onStateUpdate,
+    stateObject = defaultProps.stateObject
   }) => {
-    const sectionId = "muut";
-    const [muutdata, setMuutdata] = useState([]);
-    const [changes, setChanges] = useState({});
+    const sectionId = "perustelut_muut";
     const [locale, setLocale] = useState("FI");
 
     useEffect(() => {
@@ -75,6 +72,15 @@ const PerustelutMuut = React.memo(
                     return article.koodiArvo === koulutusala;
                   })
                 : false;
+              const anchorInit = `muut_${configObj.code}.${configObj.key}.${article.koodiArvo}`;
+              const changeObj = R.find(
+                R.compose(
+                  R.startsWith(anchorInit),
+                  R.prop("anchor")
+                ),
+                changeObjects.muut[configObj.code]
+              );
+              const isAddition = changeObj && changeObj.properties.isChecked;
               const labelClasses = {
                 isInLupa: isInLupaBool
               };
@@ -99,7 +105,12 @@ const PerustelutMuut = React.memo(
                           {},
                           labelClasses.isInLupa ? isInLupa : {}
                         )
-                      }
+                      },
+                      styleClasses: ["flex"],
+                      statusTextStyleClasses: isAddition
+                        ? ["text-green-600 pr-4 w-20 font-bold"]
+                        : ["text-red-500 pr-4 w-20 font-bold"],
+                      statusText: isAddition ? " LISÄYS:" : " POISTO:"
                     }
                   }
                 ]
@@ -113,7 +124,7 @@ const PerustelutMuut = React.memo(
                       anchor: "A",
                       name: "TextBox",
                       properties: {
-                        defaultValue: "Text 2"
+                        placeholder: "Perustele muutokset tähän, kiitos."
                       }
                     }
                   ]
@@ -136,7 +147,7 @@ const PerustelutMuut = React.memo(
           R.compose(
             R.flatten,
             R.values
-          )(backendChanges)
+          )(changeObjects.muut)
         )
       );
       const dividedArticles = divideArticles(muut.data, relevantCodes);
@@ -145,7 +156,8 @@ const PerustelutMuut = React.memo(
         {
           code: "01",
           key: "laajennettu",
-          isInUse: !!dividedArticles["laajennettu"] && backendChanges["01"],
+          isInUse:
+            !!dividedArticles["laajennettu"] && !!changeObjects.muut["01"],
           title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
           categoryData: [
             {
@@ -160,7 +172,7 @@ const PerustelutMuut = React.memo(
           isInUse:
             !!dividedArticles["vaativa_1"] ||
             !!dividedArticles["vaativa_2"] ||
-            backendChanges["02"],
+            !!changeObjects.muut["02"],
           title: "Vaativan erityisen tuen tehtävä",
           categoryData: [
             {
@@ -247,53 +259,37 @@ const PerustelutMuut = React.memo(
           }, R.filter(R.propEq("isInUse", true))(config))
         : [];
 
-      setMuutdata(expandableRows);
-    }, [kohde, locale, intl, maaraykset, muut.data, backendChanges]);
+      onStateUpdate({ items: expandableRows }, sectionId);
+    }, [kohde, locale, intl, maaraykset, muut.data, changeObjects.muut]);
 
     useEffect(() => {
       setLocale(R.toUpper(intl.locale));
     }, [intl.locale]);
 
-    useEffect(() => {
-      setChanges(backendChanges);
-    }, [backendChanges]);
-
     return (
       <React.Fragment>
-        {R.compose(
-          R.not,
-          R.isEmpty
-        )(changes) ? (
-          <FormSection
-            id={sectionId}
-            sectionChanges={changes}
-            code={headingNumber}
-            title={title}
-            runOnChanges={handleChanges}
-            render={props => (
-              <React.Fragment>
-                {R.addIndex(R.map)((row, i) => {
-                  return (
-                    <ExpandableRowRoot
-                      anchor={row.code}
-                      key={`expandable-row-root-${i}`}
-                      categories={row.categories}
-                      changes={props.sectionChanges[row.code]}
-                      code={row.code}
-                      disableReverting={true}
-                      hideAmountOfChanges={false}
-                      showCategoryTitles={true}
-                      index={i}
-                      isExpanded={true}
-                      sectionId={sectionId}
-                      title={row.title}
-                      {...props}
-                    />
-                  );
-                })(muutdata)}
-              </React.Fragment>
-            )}
-          />
+        {stateObject.items ? (
+          <React.Fragment>
+            {R.addIndex(R.map)((row, i) => {
+              return (
+                <ExpandableRowRoot
+                  anchor={`${sectionId}_${row.code}`}
+                  key={`expandable-row-root-${i}`}
+                  categories={row.categories}
+                  changes={R.path(
+                    ["perustelut", row.code],
+                    changeObjects
+                  )}
+                  code={row.code}
+                  isExpanded={true}
+                  onChangesRemove={onChangesRemove}
+                  onUpdate={onChangesUpdate}
+                  sectionId={sectionId}
+                  title={row.title}
+                />
+              );
+            })(stateObject.items)}
+          </React.Fragment>
         ) : null}
       </React.Fragment>
     );
@@ -301,13 +297,17 @@ const PerustelutMuut = React.memo(
 );
 
 PerustelutMuut.propTypes = {
-  backendChanges: PropTypes.object,
+  changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,
   muut: PropTypes.object,
-  title: PropTypes.string
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  title: PropTypes.string,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(PerustelutMuut);
