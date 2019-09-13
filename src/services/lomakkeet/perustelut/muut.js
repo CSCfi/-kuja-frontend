@@ -1,8 +1,5 @@
-import { number } from "prop-types";
-
 export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
-  const year = new Date().getFullYear();
 
   return [
     {
@@ -240,61 +237,70 @@ export const getVankilaopetusPerustelulomake = () => {
         {
           anchor: `${code}-4`,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "opiskelijavuodet-header",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
-              properties: {
-                code: 4,
-                labelStyles: {},
-                title:
-                  "Arvio koulutukseen suunnattavista opiskelijavuosista seuraavana kolmena vuotena"
-              }
-            }
-          ],
-          categories: [
-            {
-              anchor: "vuodet",
-              styleClasses: ["pl-6 flex sm:row"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "Input",
-                  styleClasses: ["mr-8"],
-                  properties: {
-                    withoutMargin: true,
-                    label: year + 1,
-                    type: "number",
-                    width: "7em"
-                  }
-                },
-                {
-                  anchor: "B",
-                  name: "Input",
-                  styleClasses: ["mr-8"],
-                  properties: {
-                    withoutMargin: true,
-                    label: year + 2,
-                    type: "number",
-                    width: "7em"
-                  }
-                },
-                {
-                  anchor: "C",
-                  name: "Input",
-                  properties: {
-                    withoutMargin: true,
-                    label: year + 3,
-                    type: "number",
-                    width: "7em"
-                  }
-                }
-              ]
-            }
-          ]
+          categories: [opiskelijavuodet(code, 1)]
         }
       ]
     }
   ];
+};
+
+const opiskelijavuodet = (code, anchorNumber) => {
+  const year = new Date().getFullYear();
+  return {
+    anchor: `${code}-${anchorNumber}`,
+    styleClasses: [""],
+    components: [
+      {
+        anchor: "opiskelijavuodet-header",
+        name: "StatusTextRow",
+        styleClasses: ["text-base"],
+        properties: {
+          code: code,
+          labelStyles: {},
+          title:
+            "Arvio koulutukseen suunnattavista opiskelijavuosista seuraavana kolmena vuotena"
+        }
+      }
+    ],
+    categories: [
+      {
+        anchor: "vuodet",
+        styleClasses: ["pl-6 flex sm:row"],
+        components: [
+          {
+            anchor: "A",
+            name: "Input",
+            styleClasses: ["mr-8"],
+            properties: {
+              withoutMargin: true,
+              label: year + 1,
+              type: "number",
+              width: "7em"
+            }
+          },
+          {
+            anchor: "B",
+            name: "Input",
+            styleClasses: ["mr-8"],
+            properties: {
+              withoutMargin: true,
+              label: year + 2,
+              type: "number",
+              width: "7em"
+            }
+          },
+          {
+            anchor: "C",
+            name: "Input",
+            properties: {
+              withoutMargin: true,
+              label: year + 3,
+              type: "number",
+              width: "7em"
+            }
+          }
+        ]
+      }
+    ]
+  };
 };

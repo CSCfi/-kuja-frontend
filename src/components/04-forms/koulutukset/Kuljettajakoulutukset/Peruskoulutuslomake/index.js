@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
   getAddPeopleForm,
-  getKuljettajienJatkokoulutuslomake, getKuljettajienPeruskoulutuslomake
+  getKuljettajienPeruskoulutuslomake
 } from "../../../../../services/lomakkeet/perustelut/koulutukset";
 import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import * as R from "ramda";
