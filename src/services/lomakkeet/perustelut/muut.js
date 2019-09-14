@@ -248,125 +248,120 @@ export const getOppisopimusPerusteluLomake = () => {
   const code = 4;
   return [
     {
-      anchor: `${code}-1`,
-      title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä",
+      anchor: "oppisopimus-perustelut-lomake",
+      styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "tehtavan-tarpeellisuus-label",
+          anchor: "tehtavan-tarpeellisuus-title",
           name: "StatusTextRow",
           properties: {
-            code: 1,
-            labelStyles: {},
-            title: "Tehtävän tarpeellisuus"
+            title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä"
           }
         }
       ],
       categories: [
         {
-          anchor: "tehtavan-tarpeellisuus-field",
+          anchor: `${code}-1`,
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
-              anchor: "A",
-              name: "TextBox",
+              anchor: "tehtavan-tarpeellisuus-label",
+              name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
-                placeholder:
-                  "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                code: 1,
+                title: "Tehtävän tarpeellisuus"
               }
             }
-          ]
-        }
-      ]
-    },
-    {
-      anchor: `${code}-2`,
-      title: "",
-      components: [
-        {
-          anchor: "toiminnalliset-edellytykset-label",
-          name: "StatusTextRow",
-          properties: {
-            code: 2,
-            labelStyles: {},
-            title: "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
-          }
-        }
-      ],
-      categories: [
-        {
-          anchor: "henkilostoresurssit-field",
-          components: [
+          ],
+          categories: [
             {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                placeholder:
-                  "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
-              }
+              anchor: "tehtavan-tarpeellisuus-field",
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    placeholder:
+                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                  }
+                }
+              ]
             }
           ]
         },
         {
-          anchor: "osaaminen-field",
+          anchor: `${code}-2`,
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           components: [
             {
-              anchor: "A",
-              name: "TextBox",
+              anchor: "toiminnalliset-edellytykset-label",
+              name: "StatusTextRow",
               properties: {
-                placeholder:
-                  "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta)."
+                code: 2,
+                labelStyles: {},
+                title: "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
               }
+            }
+          ],
+          categories: [
+            {
+              anchor: "henkilostoresurssit-field",
+              title: 'Henkilöstöresurssit',
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    placeholder:
+                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "osaaminen-field",
+              title: 'Osaaminen',
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    placeholder:
+                      "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta)."
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "sidosryhmayhteistyo-field",
+              title: 'Sidosryhmäyhteistyö',
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    placeholder:
+                      "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
+                  }
+                }
+              ]
             }
           ]
         },
         {
-          anchor: "sidosryhmayhteistyo-field",
-          components: [
-            {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                placeholder:
-                  "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
-              }
-            }
-          ]
+          anchor: `${code}-4`,
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          categories: [opiskelijavuodet(4, 4)]
         }
-      ]
-    },
-    {
-      anchor: `${code}-3`,
-      title: "",
-      components: [
-        {
-          anchor: "arvio-label",
-          name: "StatusTextRow",
-          properties: {
-            code: 3,
-            labelStyles: {},
-            title: "Arvio koulutukseen suunnattavista opiskelijavuosista seuraavana kolmena vuotena"
-          }
-        }
-      ],
-      categories: [
-        {
-          anchor: "arvio-opiskelijavuodet-label",
-          name: "StatusTextRow",
-          properties: {
-            labelStyles: {},
-            title: "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
-            withoutMargin: true
-          }
-        },
-        {
-          anchor: "arvio-opiskelijavuodet-input-field",
-          name: "Input",
-          properties: {
-            type: 'number'
-          }
-        },
 
       ]
-    }
+    },
+
   ]
 }
 
