@@ -8,7 +8,6 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import KuljettajienJatkokoulutuslomake from "../../../../../../../components/04-forms/koulutukset/Kuljettajakoulutukset/Jatkokoulutuslomake";
-
 const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
