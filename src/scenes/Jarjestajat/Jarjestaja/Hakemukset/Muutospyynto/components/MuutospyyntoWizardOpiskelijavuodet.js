@@ -27,8 +27,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { opiskelijavuodet } = kohteet[4];
   const { muutCombined } = kohteet[5];
 
-  const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(false);
-  const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(false);
+  const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(true);
+  const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(true);
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
@@ -183,6 +183,9 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     if (props.muut) {
+      let sisaoppilaitosKoodiarvo = null;
+      let vaativatKoodiarvo = null;
+
       // Mikäli jokin alla olevista koodeista on valittuna osiossa 5, näytetään vaativaa tukea koskevat kentät osiossa 4.
       const vaativatCodes = [2, 16, 17, 18, 19, 20, 21];
 
@@ -204,6 +207,25 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         return R.contains("sisaoppilaitos", item.anchor);
       })(flattenChangesOfMuut);
 
+      // Let's pick the koodiarvo up.
+      if (sisaoppilaitosChange) {
+        sisaoppilaitosKoodiarvo = R.compose(
+          R.view(R.lensIndex(2)),
+          R.split(".")
+        )(sisaoppilaitosChange.anchor);
+      } else {
+        sisaoppilaitosKoodiarvo = R.head(
+          R.map(category => {
+            return R.equals(
+              true,
+              R.path(["properties", "isChecked"], category.components[0])
+            )
+              ? category.anchor
+              : null;
+          }, sisaoppilaitosState.categories[0].categories).filter(Boolean)
+        );
+      }
+
       /**
        * Mikäli muutos löytyy ja sisäoppilaitosta koskeva kohta osiossa 5 on valittu, tulee sisäoppilaitosta
        * koskeva tietue näyttää osiossa 4.
@@ -211,6 +233,11 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       const shouldSisaoppilaitosBeVisible =
         (isSisaoppilaitosCheckedByDefault && !sisaoppilaitosChange) ||
         sisaoppilaitosChange.properties.isChecked;
+
+      const vaativatukiState = R.find(
+        R.propEq("key", "vaativatuki"),
+        props.stateObjects.muut.muutdata
+      );
 
       /**
        * Seuraavaksi etsitään ne vaativaa tukea koskevat - osioon 5 tehdyt - muutokset, jotka vaikuttavat
@@ -224,10 +251,24 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         );
       })(flattenChangesOfMuut);
 
-      const vaativatukiState = R.find(
-        R.propEq("key", "vaativatuki"),
-        props.stateObjects.muut.muutdata
-      );
+      // Let's find out the koodiarvo for vaativa tuki.
+      if (vaativatChanges.length) {
+        vaativatKoodiarvo = R.compose(
+          R.view(R.lensIndex(2)),
+          R.split(".")
+        )(vaativatChanges[0].anchor);
+      } else {
+        vaativatKoodiarvo = R.head(
+          R.map(category => {
+            return R.equals(
+              true,
+              R.path(["properties", "isChecked"], category.components[0])
+            )
+              ? category.anchor
+              : null;
+          }, vaativatukiState.categories[0].categories).filter(Boolean)
+        );
+      }
 
       const isVaativatukiCheckedByDefault = R.find(category => {
         return category.components[0].properties.isChecked;
@@ -242,6 +283,15 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
       const shouldVaativatBeVisible =
         isVaativatukiCheckedByDefault || isCheckedByChange;
+
+      // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
+      setKoodiarvot(prevState => {
+        return {
+          ...prevState,
+          sisaoppilaitos: sisaoppilaitosKoodiarvo,
+          vaativatuki: vaativatKoodiarvo
+        };
+      });
 
       setIsSisaoppilaitosVisible(shouldSisaoppilaitosBeVisible);
       setIsVaativaTukiVisible(shouldVaativatBeVisible);
@@ -263,7 +313,10 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           props.changeObjects.opiskelijavuodet
         )
       ) {
-        onChangesUpdate({ anchor: props.sectionId, changes: changesWithoutSisaoppilaitosChanges });
+        onChangesUpdate({
+          anchor: props.sectionId,
+          changes: changesWithoutSisaoppilaitosChanges
+        });
       }
     }
   }, [props.changeObjects.opiskelijavuodet, isSisaoppilaitosVisible]);
@@ -283,10 +336,27 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           props.changeObjects.opiskelijavuodet
         )
       ) {
-        onChangesUpdate({ anchor: props.sectionId, changes: changesWithoutVaativaTukiChanges });
+        onChangesUpdate({
+          anchor: props.sectionId,
+          changes: changesWithoutVaativaTukiChanges
+        });
       }
     }
   }, [props.changeObjects.opiskelijavuodet, isVaativaTukiVisible]);
+
+  useEffect(() => {
+    const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
+      props.lupa.data.maaraykset
+    );
+    if (maarays) {
+      setKoodiarvot(prevState => {
+        return {
+          ...prevState,
+          vahimmaisopiskelijavuodet: maarays.koodiarvo
+        };
+      });
+    }
+  }, [props.lupa.data.maaraykset]);
 
   useEffect(() => {
     if (props.kohde && props.maaraystyyppi && props.muut) {
