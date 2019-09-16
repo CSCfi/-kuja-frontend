@@ -146,33 +146,76 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 />
               ) : null}
 
-              <FormSection
-                code={props.lupa.kohteet[5].headingNumber}
-                id="muut"
-                render={_props => (
-                  <React.Fragment>
-                    {kohteet.muut && props.muut && maaraystyypit && (
-                      <MuutospyyntoWizardMuut
-                        changeObjects={{
-                          muut: R.prop("muut", props.changeObjects)
-                        }}
-                        kohde={kohteet.muut}
-                        maaraykset={props.lupa.data.maaraykset}
-                        muut={props.muut}
-                        koulutukset={props.koulutukset}
-                        maaraystyyppi={maaraystyypit.VELVOITE}
-                        stateObjects={{
-                          muut: R.prop("muut", props.muutoshakemus)
-                        }}
-                        {..._props}
-                      />
+              {kohteet.opiskelijavuodet &&
+                !!R.path(["muut", "muutdata"], props.muutoshakemus) && (
+                  <FormSection
+                    code={props.lupa.kohteet[4].headingNumber}
+                    id="opiskelijavuodet"
+                    render={_props => (
+                      <React.Fragment>
+                        <MuutospyyntoWizardOpiskelijavuodet
+                          changeObjects={{
+                            opiskelijavuodet: R.prop(
+                              "opiskelijavuodet",
+                              props.changeObjects
+                            ),
+                            muut: R.prop("muut", props.changeObjects)
+                          }}
+                          kohde={kohteet.opiskelijavuodet}
+                          lupa={props.lupa}
+                          maaraystyyppi={maaraystyypit.OIKEUS}
+                          muut={props.muut}
+                          opiskelijavuodet={props.opiskelijavuodet}
+                          stateObjects={{
+                            opiskelijavuodet: R.prop(
+                              "opiskelijavuodet",
+                              props.muutoshakemus
+                            ),
+                            muut: R.prop("muut", props.muutoshakemus)
+                          }}
+                          {..._props}
+                        />
+                      </React.Fragment>
                     )}
-                  </React.Fragment>
+                    runOnStateUpdate={props.onStateUpdate}
+                    runOnChanges={props.onChangesUpdate}
+                    title={props.intl.formatMessage(
+                      wizardMessages.header_section4
+                    )}
+                  />
                 )}
-                runOnStateUpdate={props.onStateUpdate}
-                runOnChanges={props.onChangesUpdate}
-                title={props.intl.formatMessage(wizardMessages.header_section5)}
-              />
+
+              {kohteet.muut && props.muut && maaraystyypit && (
+                <FormSection
+                  code={props.lupa.kohteet[5].headingNumber}
+                  id="muut"
+                  render={_props => (
+                    <React.Fragment>
+                      {kohteet.muut && props.muut && maaraystyypit && (
+                        <MuutospyyntoWizardMuut
+                          changeObjects={{
+                            muut: R.prop("muut", props.changeObjects)
+                          }}
+                          kohde={kohteet.muut}
+                          maaraykset={props.lupa.data.maaraykset}
+                          muut={props.muut}
+                          koulutukset={props.koulutukset}
+                          maaraystyyppi={maaraystyypit.VELVOITE}
+                          stateObjects={{
+                            muut: R.prop("muut", props.muutoshakemus)
+                          }}
+                          {..._props}
+                        />
+                      )}
+                    </React.Fragment>
+                  )}
+                  runOnStateUpdate={props.onStateUpdate}
+                  runOnChanges={props.onChangesUpdate}
+                  title={props.intl.formatMessage(
+                    wizardMessages.header_section5
+                  )}
+                />
+              )}
 
               {/* {kunnat.fetched &&
                 maakunnat.fetched &&
@@ -198,18 +241,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   onUpdate={props.onUpdate}
                   opiskelijavuodet={props.opiskelijavuodet}
                   muut={props.muutoshakemus.muut}
-                />
-              )} */}
-
-              {/* {kohteet.muut && props.muut && maaraystyypit && (
-                <MuutospyyntoWizardMuut
-                  changeObjects={props.changeObjects.muut}
-                  kohde={kohteet.muut}
-                  headingNumber={props.lupa.kohteet[5].headingNumber}
-                  maaraykset={props.lupa.data.maaraykset}
-                  maaraystyyppi={maaraystyypit.OIKEUS}
-                  muut={props.muut}
-                  onUpdate={props.onUpdate}
                 />
               )} */}
             </React.Fragment>
