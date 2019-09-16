@@ -252,7 +252,7 @@ export const getOppisopimusPerusteluLomake = () => {
       styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "tehtavan-tarpeellisuus-title",
+          anchor: "oppisopimus-perustelut-title",
           name: "StatusTextRow",
           properties: {
             title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä"

@@ -6,9 +6,7 @@ import OppisopimusPerusteluLomake from "./index";
 storiesOf("Lomakkeet/Muut", module)
   .addDecorator(withInfo)
   .add("OppisopimusPerusteluLomake", () => {
-    const changes = [
-
-    ];
+    const changes = [];
     return (
       <OppisopimusPerusteluLomake
         changes={changes}
