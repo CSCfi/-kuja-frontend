@@ -296,12 +296,12 @@ export const getVaativaErityinenTukilomake = () => {
               ]
             },
             {
-              anchor: "tutkintokoulutukseen-label",
+              anchor: "ammatilliseenkoulutukseen-label",
               styleClasses: ["pl-6"],
               title: 'Ammatilliseen koulutukseen valmentavaan koulutukseen',
               categories: [
                 {
-                  anchor: "tutkintokoulutus-label",
+                  anchor: "ammatillinenkoulutus-label",
                   styleClasses: ["pl-6"],
                   components: [
                     {
@@ -317,12 +317,12 @@ export const getVaativaErityinenTukilomake = () => {
               ]
             },
             {
-              anchor: "tutkintokoulutukseen-label",
+              anchor: "tyohonjaitsenaiseenelamaan-label",
               styleClasses: ["pl-6"],
               title: 'Työhön ja itsenäiseen elämään valmentavaan koulutukseen',
               categories: [
                 {
-                  anchor: "tutkintokoulutus-label",
+                  anchor: "tyohonjaitsenaiseenelamaan-label",
                   styleClasses: ["pl-6"],
                   components: [
                     {
