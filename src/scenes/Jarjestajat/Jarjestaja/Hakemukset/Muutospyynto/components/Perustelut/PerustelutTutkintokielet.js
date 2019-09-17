@@ -78,7 +78,9 @@ const PerustelutTutkintokielet = React.memo(props => {
     const categories = getCategories();
     onStateUpdate({ categories }, sectionId);
   }, [
+    onStateUpdate,
     props.changeObjects.tutkintokielet,
+    props.intl.locale,
     props.koulutukset,
     props.stateObjects.tutkintokielet
   ]);

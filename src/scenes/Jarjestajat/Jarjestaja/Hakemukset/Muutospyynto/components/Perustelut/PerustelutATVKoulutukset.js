@@ -95,6 +95,8 @@ const PerustelutATVKoulutukset = props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,
@@ -103,23 +105,27 @@ const PerustelutATVKoulutukset = props => {
 
   return (
     <React.Fragment>
-      {props.stateObject.categories ? (
-        <ExpandableRowRoot
-          anchor={sectionId}
-          key={`expandable-row-root`}
-          categories={props.stateObject.categories}
-          changes={
-            props.changeObjects.perustelut.koulutukset
-              .ammatilliseenTehtavaanValmistavatKoulutukset
-          }
-          disableReverting={false}
-          hideAmountOfChanges={false}
-          isExpanded={true}
-          onChangesRemove={onChangesRemove}
-          onUpdate={onChangesUpdate}
-          title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
-        />
-      ) : null}
+      {props.stateObject.categories
+        ? (
+            <ExpandableRowRoot
+              anchor={sectionId}
+              key={`expandable-row-root`}
+              categories={props.stateObject.categories}
+              changes={
+                props.changeObjects.perustelut.koulutukset
+                  .ammatilliseenTehtavaanValmistavatKoulutukset
+              }
+              disableReverting={false}
+              hideAmountOfChanges={false}
+              isExpanded={true}
+              onChangesRemove={onChangesRemove}
+              onUpdate={onChangesUpdate}
+              title={props.intl.formatMessage(
+                wizardMessages.vocationalTraining
+              )}
+            />
+          )
+        : null}
     </React.Fragment>
   );
 };

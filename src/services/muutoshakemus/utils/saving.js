@@ -1,9 +1,6 @@
 import { getChangesToSave } from "./tutkinnot-ja-koulutukset";
 import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
-import getChangesOfOpiskelijavuodet from "./opiskelijavuodet";
-import { getChangesOfTutkintokielet } from "./opetus-ja-tutkintokieli";
-import getChangesOfToimintaalue from "./toiminta-alue";
-import getChangesOfMuut from "./muut";
+// import getChangesOfToimintaalue from "./toiminta-alue";
 import moment from "moment";
 import * as R from "ramda";
 

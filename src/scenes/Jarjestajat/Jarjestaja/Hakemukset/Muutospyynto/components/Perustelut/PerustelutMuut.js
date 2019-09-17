@@ -260,7 +260,15 @@ const PerustelutMuut = React.memo(
         : [];
 
       onStateUpdate({ items: expandableRows }, sectionId);
-    }, [kohde, locale, intl, maaraykset, muut.data, changeObjects.muut]);
+    }, [
+      kohde,
+      locale,
+      intl,
+      maaraykset,
+      muut.data,
+      changeObjects.muut,
+      onStateUpdate
+    ]);
 
     useEffect(() => {
       setLocale(R.toUpper(intl.locale));
@@ -276,10 +284,7 @@ const PerustelutMuut = React.memo(
                   anchor={`${sectionId}_${row.code}`}
                   key={`expandable-row-root-${i}`}
                   categories={row.categories}
-                  changes={R.path(
-                    ["perustelut", row.code],
-                    changeObjects
-                  )}
+                  changes={R.path(["perustelut", row.code], changeObjects)}
                   code={row.code}
                   isExpanded={true}
                   onChangesRemove={onChangesRemove}

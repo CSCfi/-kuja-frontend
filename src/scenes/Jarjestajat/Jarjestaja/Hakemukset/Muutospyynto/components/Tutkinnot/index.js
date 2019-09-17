@@ -51,7 +51,7 @@ const Tutkinnot = React.memo(props => {
     onStateUpdate({
       items
     });
-  }, [koulutusdata, getItems]);
+  }, [getItems, koulutusdata, onStateUpdate]);
 
   return (
     <React.Fragment>

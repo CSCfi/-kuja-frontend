@@ -96,6 +96,9 @@ const MuutospyyntoWizard = props => {
   } = props;
   const [steps, setSteps] = useState([]);
   const [page, setPage] = useState(1);
+  /**
+   * ChangeObjects contains all changes of the form by section.
+   */
   const [changeObjects, setChangeObjects] = useState({
     kielet: {
       opetuskielet: [],
@@ -228,6 +231,9 @@ const MuutospyyntoWizard = props => {
     setPage(parseInt(props.match.params.page, 10));
   }, [props.match.params.page]);
 
+  /**
+   * The function is called by FormSection.
+   */
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
       if (id && changeObjects) {
@@ -245,6 +251,7 @@ const MuutospyyntoWizard = props => {
     [setChangeObjects]
   );
 
+  /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
     (id, state) => {
       if (id && state) {

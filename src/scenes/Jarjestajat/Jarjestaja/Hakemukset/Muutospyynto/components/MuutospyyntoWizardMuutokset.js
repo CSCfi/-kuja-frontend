@@ -1,17 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
+// import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import { fetchKunnat } from "../../../../../../services/kunnat/actions";
-import { fetchMaakunnat } from "../../../../../../services/maakunnat/actions";
-import { fetchMaakuntakunnat } from "../../../../../../services/maakuntakunnat/actions";
-import { KunnatContext } from "context/kunnatContext";
-import { MaakunnatContext } from "context/maakunnatContext";
-import { MaakuntakunnatContext } from "context/maakuntakunnatContext";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
@@ -20,21 +14,6 @@ import FormSection from "../../../../../../components/03-templates/FormSection";
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState(null);
-
-  const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
-  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
-    MaakunnatContext
-  );
-  const {
-    state: maakuntakunnat,
-    dispatch: maakuntakunnatDispatch
-  } = useContext(MaakuntakunnatContext);
-
-  useEffect(() => {
-    fetchKunnat()(kunnatDispatch);
-    fetchMaakunnat()(maakunnatDispatch);
-    fetchMaakuntakunnat()(maakuntakunnatDispatch);
-  }, [kunnatDispatch, maakunnatDispatch, maakuntakunnatDispatch]);
 
   useEffect(() => {
     setKohteet(
@@ -63,14 +42,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
       )
     );
   }, [props.maaraystyypit]);
-
-  // useEffect(() => {
-  //   console.info("Muutoshakemus: ", props.muutoshakemus);
-  // }, [props.muutoshakemus]);
-
-  // useEffect(() => {
-  //   console.info("Muutokset: ", props.changeObjects);
-  // }, [props.changeObjects]);
 
   return (
     <React.Fragment>
@@ -194,7 +165,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       {kohteet.muut && props.muut && maaraystyypit && (
                         <MuutospyyntoWizardMuut
                           changeObjects={{
-                            muut: R.prop("muut", props.changeObjects)
+                            muut: props.changeObjects.muut
                           }}
                           kohde={kohteet.muut}
                           maaraykset={props.lupa.data.maaraykset}
@@ -202,7 +173,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                           koulutukset={props.koulutukset}
                           maaraystyyppi={maaraystyypit.VELVOITE}
                           stateObjects={{
-                            muut: R.prop("muut", props.muutoshakemus)
+                            muut: props.muutoshakemus.muut
                           }}
                           {..._props}
                         />
@@ -230,19 +201,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                     maaraystyyppi={maaraystyypit.VELVOITE}
                     onUpdate={props.onUpdate}
                   />
-                )}
-
-              {kohteet.opiskelijavuodet && !!R.path(["muut", "muutdata"]) && (
-                <MuutospyyntoWizardOpiskelijavuodet
-                  changeObjects={props.changeObjects.opiskelijavuodet}
-                  kohde={kohteet.opiskelijavuodet}
-                  lupa={props.lupa}
-                  maaraystyyppi={maaraystyypit.OIKEUS}
-                  onUpdate={props.onUpdate}
-                  opiskelijavuodet={props.opiskelijavuodet}
-                  muut={props.muutoshakemus.muut}
-                />
-              )} */}
+                )} */}
             </React.Fragment>
           ) : null}
         </form>

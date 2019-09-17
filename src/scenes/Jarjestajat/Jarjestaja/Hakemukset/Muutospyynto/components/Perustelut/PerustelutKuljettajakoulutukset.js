@@ -53,7 +53,7 @@ const PerustelutKuljettajakoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [props.changeObjects, props.lomakkeet.kuljettajienJatkokoulutus]);
 
   useEffect(() => {
     if (R.includes(koodisto, props.koulutukset.muut.fetched)) {
@@ -72,6 +72,8 @@ const PerustelutKuljettajakoulutukset = props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,

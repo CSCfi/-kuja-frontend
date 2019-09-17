@@ -5,7 +5,6 @@ import ExpandableRowRoot from "../../../../../../components/02-organisms/Expanda
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import _ from "lodash";
 
 const getApplyFor = (categoryName, items) => {
   return (
@@ -178,11 +177,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     initialValueVaativa,
     isSisaoppilaitosVisible,
     isVaativaTukiVisible,
-    props.intl
+    props.intl,
+    props.sectionId
   ]);
 
   useEffect(() => {
-    if (props.muut) {
+    if (props.muut && props.stateObjects.muut.muutdata) {
       let sisaoppilaitosKoodiarvo = null;
       let vaativatKoodiarvo = null;
 
@@ -198,9 +198,10 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         props.stateObjects.muut.muutdata
       );
 
-      const isSisaoppilaitosCheckedByDefault =
-        sisaoppilaitosState.categories[0].categories[0].components[0].properties
-          .isChecked;
+      const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
+        ? sisaoppilaitosState.categories[0].categories[0].components[0]
+            .properties.isChecked
+        : false;
 
       // 5. osion muutosten joukosta etsitään sisäoppilaitosta koskeva muutos.
       const sisaoppilaitosChange = R.find(item => {
@@ -296,7 +297,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       setIsSisaoppilaitosVisible(shouldSisaoppilaitosBeVisible);
       setIsVaativaTukiVisible(shouldVaativatBeVisible);
     }
-  }, [props.changeObjects.muut, props.stateObjects.muut]);
+  }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
 
   useEffect(() => {
     if (!isSisaoppilaitosVisible && props.changeObjects.opiskelijavuodet) {
@@ -319,7 +320,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         });
       }
     }
-  }, [props.changeObjects.opiskelijavuodet, isSisaoppilaitosVisible]);
+  }, [
+    isSisaoppilaitosVisible,
+    onChangesUpdate,
+    props.changeObjects.opiskelijavuodet,
+    props.sectionId
+  ]);
 
   useEffect(() => {
     if (!isVaativaTukiVisible && props.changeObjects.opiskelijavuodet) {
@@ -342,7 +348,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         });
       }
     }
-  }, [props.changeObjects.opiskelijavuodet, isVaativaTukiVisible]);
+  }, [
+    isVaativaTukiVisible,
+    onChangesUpdate,
+    props.changeObjects.opiskelijavuodet,
+    props.sectionId
+  ]);
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
@@ -368,7 +379,14 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         koodiarvot
       });
     }
-  }, [categories, props.kohde, props.maaraystyyppi, props.muut, koodiarvot]);
+  }, [
+    categories,
+    onStateUpdate,
+    props.kohde,
+    props.maaraystyyppi,
+    props.muut,
+    koodiarvot
+  ]);
 
   return (
     <ExpandableRowRoot

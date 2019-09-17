@@ -63,6 +63,8 @@ const ValmentavatKoulutukset = React.memo(props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.poikkeukset,
     props.intl.locale,

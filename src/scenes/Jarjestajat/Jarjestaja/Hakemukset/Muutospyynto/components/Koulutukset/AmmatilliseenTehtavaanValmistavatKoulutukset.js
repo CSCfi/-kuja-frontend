@@ -69,6 +69,8 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,

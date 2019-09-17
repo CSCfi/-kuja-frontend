@@ -9,6 +9,9 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutOpetuskielet = React.memo(props => {
+  /**
+   * Section id is automatically splitted.
+   */
   const sectionId = "perustelut_kielet_opetuskielet";
   const [locale, setLocale] = useState("FI");
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
@@ -83,7 +86,7 @@ const PerustelutOpetuskielet = React.memo(props => {
       },
       sectionId
     );
-  }, [getCategories]);
+  }, [getCategories, locale, onStateUpdate, props.kohde, props.opetuskielet]);
 
   return (
     <React.Fragment>

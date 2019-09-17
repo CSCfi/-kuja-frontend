@@ -74,7 +74,7 @@ const PerustelutTutkinnot = React.memo(
           return { areaCode, article, categories, title };
         }, _.cloneDeep(koulutusdata));
       };
-    }, [koulutusdata, locale, kohde, lomakkeet, lupa.kohteet, maaraystyyppi]);
+    }, [locale, kohde, lomakkeet, lupa.kohteet, maaraystyyppi]);
 
     useEffect(() => {
       if (koulutusdata.length) {
@@ -86,7 +86,7 @@ const PerustelutTutkinnot = React.memo(
           sectionId
         );
       }
-    }, [changeObjects.tutkinnot, koulutusdata]);
+    }, [getItems, onStateUpdate, changeObjects.tutkinnot, koulutusdata]);
 
     useEffect(() => {
       setLocale(R.toUpper(intl.locale));

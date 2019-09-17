@@ -85,6 +85,8 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       sectionId
     );
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,
