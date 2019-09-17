@@ -379,6 +379,7 @@ export const getTyovoimakoulutuslomake = () => {
             {
               anchor: "suunnitelma-label",
               name: "StatusTextRow",
+              styleClasses: ["text-base"],
               properties: {
                 code: 3,
                 labelStyles: {},
@@ -428,7 +429,7 @@ export const getTyovoimakoulutuslomake = () => {
                   styleClasses: ["text-base"],
                   properties: {
                     title:
-                      "Valitkaa listasta ne ELY-keskukset joiden kanssa suunnittelette tekevänne yhteistyötä työvoimakoulutuksen järsjestämisessä."
+                      "Valitkaa listasta ne ELY-keskukset joiden kanssa suunnittelette tekevänne yhteistyötä työvoimakoulutuksen järjestämisessä."
                   }
                 }
               ]
