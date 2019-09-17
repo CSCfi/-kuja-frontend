@@ -13,17 +13,26 @@ const FormSection = React.memo(
     runOnStateUpdate,
     title
   }) => {
-    const updateChanges = useCallback(payload => {
-      runOnChanges(payload.anchor, payload.changes);
-    });
+    const updateChanges = useCallback(
+      payload => {
+        runOnChanges(payload.anchor, payload.changes);
+      },
+      [runOnChanges]
+    );
 
-    const updateState = useCallback((data, sectionId) => {
-      runOnStateUpdate(sectionId || id, data);
-    });
+    const updateState = useCallback(
+      (data, sectionId) => {
+        runOnStateUpdate(sectionId || id, data);
+      },
+      [id, runOnStateUpdate]
+    );
 
-    const removeChanges = (...payload) => {
-      return updateChanges({ anchor: payload[1], changes: [] });
-    };
+    const removeChanges = useCallback(
+      (...payload) => {
+        return updateChanges({ anchor: payload[1], changes: [] });
+      },
+      [updateChanges]
+    );
 
     return (
       <Section code={code} title={title}>

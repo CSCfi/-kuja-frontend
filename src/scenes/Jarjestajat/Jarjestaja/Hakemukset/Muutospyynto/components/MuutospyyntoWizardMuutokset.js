@@ -165,7 +165,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       {kohteet.muut && props.muut && maaraystyypit && (
                         <MuutospyyntoWizardMuut
                           changeObjects={{
-                            muut: props.changeObjects.muut
+                            muut: R.prop("muut", props.changeObjects)
                           }}
                           kohde={kohteet.muut}
                           maaraykset={props.lupa.data.maaraykset}
