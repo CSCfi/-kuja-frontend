@@ -234,11 +234,7 @@ export const getVankilaopetusPerustelulomake = () => {
             }
           ]
         },
-        {
-          anchor: `${code}-4`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          categories: [opiskelijavuodet(code, 1)]
-        }
+        opiskelijavuodet(4, 4)
       ]
     }
   ];
@@ -401,7 +397,7 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
+                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
                   }
                 }
               ]
@@ -416,7 +412,7 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta)."
+                      "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut)."
                   }
                 }
               ]
@@ -446,7 +442,7 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
+                      "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
                   }
                 }
               ]
@@ -464,7 +460,7 @@ export const getVaativaErityinenTukilomake = () => {
               properties: {
                 code: 3,
                 labelStyles: {},
-                title: " Suunnitelma työvoimakoulutuksen järjestämiseksi"
+                title: "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi"
               }
             }
           ],
@@ -478,22 +474,17 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Toimintamalli työvoimakoulutuksen suunnittelusta ja toteutuksesta (mm. koulutusalat, joille työvoimakoulutusta aiotaan järjestää)."
+                      "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta)."
                   }
                 }
               ]
             }
           ]
         },
-        {
-          anchor: `${code}-5`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          categories: [opiskelijavuodet(4, 4)]
-        }
+        opiskelijavuodet(4, 4)
       ]
   }]
 }
-
 
 export const getOppisopimusPerusteluLomake = () => {
   const code = 4;
@@ -604,11 +595,7 @@ export const getOppisopimusPerusteluLomake = () => {
             }
           ]
         },
-        {
-          anchor: `${code}-4`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          categories: [opiskelijavuodet(4, 4)]
-        }
+        opiskelijavuodet(3, 3)
 
       ]
     },
@@ -620,59 +607,74 @@ const opiskelijavuodet = (code, anchorNumber) => {
   const year = new Date().getFullYear();
   return {
     anchor: `${code}-${anchorNumber}`,
-    styleClasses: [""],
+    styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
-        anchor: "opiskelijavuodet-header",
         name: "StatusTextRow",
         styleClasses: ["text-base"],
         properties: {
-          code: code,
           labelStyles: {},
-          title:
-            "Arvio koulutukseen suunnattavista opiskelijavuosista seuraavana kolmena vuotena"
+          code: code,
+          title: "Arvio koulutukseen suunnattavista opiskelijavuosista "
         }
       }
     ],
     categories: [
       {
-        anchor: "vuodet",
-        styleClasses: ["pl-6 flex sm:row"],
+        anchor: `${code}-${anchorNumber}`,
         components: [
           {
-            anchor: "A",
-            name: "Input",
-            styleClasses: ["mr-8"],
+            anchor: "opiskelijavuodet-header",
+            name: "StatusTextRow",
+            styleClasses: ["font-semibold pt-6"],
             properties: {
-              withoutMargin: true,
-              label: year + 1,
-              type: "number",
-              width: "7em"
+              labelStyles: {},
+              title:
+                "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina."
             }
           },
+        ],
+        categories: [
           {
-            anchor: "B",
-            name: "Input",
-            styleClasses: ["mr-8"],
-            properties: {
-              withoutMargin: true,
-              label: year + 2,
-              type: "number",
-              width: "7em"
-            }
-          },
-          {
-            anchor: "C",
-            name: "Input",
-            properties: {
-              withoutMargin: true,
-              label: year + 3,
-              type: "number",
-              width: "7em"
-            }
+            anchor: "vuodet",
+            styleClasses: ["flex sm:row"],
+            components: [
+              {
+                anchor: "A",
+                name: "Input",
+                styleClasses: ["mr-8"],
+                properties: {
+                  withoutMargin: true,
+                  label: year + 1,
+                  type: "number",
+                  width: "7em"
+                }
+              },
+              {
+                anchor: "B",
+                name: "Input",
+                styleClasses: ["mr-8"],
+                properties: {
+                  withoutMargin: true,
+                  label: year + 2,
+                  type: "number",
+                  width: "7em"
+                }
+              },
+              {
+                anchor: "C",
+                name: "Input",
+                properties: {
+                  withoutMargin: true,
+                  label: year + 3,
+                  type: "number",
+                  width: "7em"
+                }
+              }
+            ]
           }
         ]
       }
     ]
-  };
+  }
 };
