@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-// import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
+import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -117,6 +117,18 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 />
               ) : null}
 
+              <MuutospyyntoWizardToimialue
+                muutokset={props.toimintaalueMuutokset}
+                lupakohde={props.lupa.kohteet[3]}
+                kohde={kohteet.toimintaalue}
+                kunnat={props.kunnat}
+                maakuntakunnat={props.maakuntakunnat}
+                maakunnat={props.maakunnat}
+                maaraystyyppi={maaraystyypit.VELVOITE}
+                onChangesUpdate={props.onChangesUpdate}
+                onStateUpdate={props.onStateUpdate}
+              />
+
               {kohteet.opiskelijavuodet &&
                 !!R.path(["muut", "muutdata"], props.muutoshakemus) && (
                   <FormSection
@@ -187,21 +199,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   )}
                 />
               )}
-
-              {/* {kunnat.fetched &&
-                maakunnat.fetched &&
-                maakuntakunnat.fetched && (
-                  <MuutospyyntoWizardToimialue
-                    changeObjects={props.changeObjects.toimintaalue}
-                    lupakohde={props.lupa.kohteet[3]}
-                    kohde={kohteet.toimintaalue}
-                    kunnat={kunnat}
-                    maakunnat={maakunnat}
-                    maakuntakunnat={maakuntakunnat}
-                    maaraystyyppi={maaraystyypit.VELVOITE}
-                    onUpdate={props.onUpdate}
-                  />
-                )} */}
             </React.Fragment>
           ) : null}
         </form>
@@ -217,12 +214,16 @@ MuutospyyntoWizardMuutokset.propTypes = {
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.object,
+  kunnat: PropTypes.object,
+  maakuntakunnat: PropTypes.object,
+  maakunnat: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onStateUpdate: PropTypes.func,
-  onChangesUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func,
+  toimintaalueMuutokset: PropTypes.array
 };
 
 export default injectIntl(MuutospyyntoWizardMuutokset);
