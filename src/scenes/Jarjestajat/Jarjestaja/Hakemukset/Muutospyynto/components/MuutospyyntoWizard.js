@@ -307,7 +307,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={props.muutoshakemus}
+                changeObjects={changeObjects}
               >
                 <MuutospyyntoWizardMuutokset
                   changeObjects={changeObjects}
@@ -334,7 +334,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={dataBySection}
+                changeObjects={changeObjects}
               >
                 <MuutosperustelutProvider>
                   <LomakkeetProvider>
