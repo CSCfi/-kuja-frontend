@@ -178,7 +178,7 @@ const MuutospyyntoWizard = props => {
     setToimintaalueMuutokset(
       R.filter(
         R.pathEq(["kohde", "tunniste"], "toimintaalue"),
-        props.backendChanges.source
+        props.backendChanges.source || []
       )
     );
   }, [props.backendChanges]);
