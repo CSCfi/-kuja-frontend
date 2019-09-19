@@ -73,7 +73,6 @@ const CategorizedListRoot = React.memo(
       <React.Fragment>
         {!R.equals(R.head(changes), null)
           ? (() => {
-            console.info("Muutokset:", changes);
               return (
                 <CategorizedListMemory
                   changes={changes}

@@ -369,7 +369,6 @@ const CategorizedList = React.memo(
             ),
             props.changes
           );
-          console.info(anchor, categoryChanges);
           const categoryStyles = [
             "flex",
             "sm:items-center",
@@ -403,7 +402,7 @@ const CategorizedList = React.memo(
               )}
               <div className={categoryStyles}>
                 {_.map(category.components, (component, ii) => {
-                  console.info("Rendering...", component);
+                  // console.info("Rendering...", component);
                   const fullAnchor = `${anchor}.${component.anchor}`;
                   const fullPath = props.rootPath.concat([i, "components", ii]);
                   const idSuffix = `${i}-${ii}`;
