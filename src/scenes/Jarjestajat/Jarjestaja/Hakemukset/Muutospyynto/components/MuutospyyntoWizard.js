@@ -33,6 +33,7 @@ import * as R from "ramda";
 
 import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
+import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 // import { getChangeObjects } from "../../../../../../services/muutoshakemus/utils/common";
 
 const DialogTitle = withStyles(theme => ({
@@ -364,7 +365,22 @@ const MuutospyyntoWizard = props => {
                 onSave={save}
                 lupa={props.lupa}
                 muutoshakemus={dataBySection}
-              />
+              >
+                <MuutospyyntoWizardTaloudelliset
+                  changeObjects={changeObjects}
+                  kielet={props.kielet}
+                  kohteet={props.kohteet.data}
+                  koulutukset={props.koulutukset}
+                  koulutusalat={props.koulutusalat}
+                  koulutustyypit={props.koulutustyypit}
+                  lupa={props.lupa}
+                  maaraystyypit={props.maaraystyypit}
+                  muut={props.muut}
+                  muutoshakemus={dataBySection}
+                  onChangesUpdate={onSectionChangesUpdate}
+                  onStateUpdate={onSectionStateUpdate}
+                />
+              </WizardPage>
             )}
             {page === 4 && (
               <WizardPage
