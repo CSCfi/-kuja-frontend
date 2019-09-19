@@ -132,21 +132,16 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutKuljettajakoulutukset
               changeObjects={{
                 koulutukset: {
-                  kuljettajakoulutukset:
-                    R.path(["koulutukset", "kuljettajakoulutukset"])(
-                      props.changeObjects
-                    ) || []
+                  kuljettajakoulutukset: R.path([
+                    "koulutukset",
+                    "kuljettajakoulutukset"
+                  ])(props.changeObjects)
                 },
-                perustelut: {
-                  koulutukset: {
-                    kuljettajakoulutukset:
-                      R.path([
-                        "perustelut",
-                        "koulutukset",
-                        "kuljettajakoulutukset"
-                      ])(props.changeObjects) || []
-                  }
-                }
+                perustelut: R.path([
+                  "perustelut",
+                  "koulutukset",
+                  "kuljettajakoulutukset"
+                ])(props.changeObjects)
               }}
               kohde={props.kohde}
               koulutukset={props.koulutukset}
@@ -177,8 +172,8 @@ PerustelutKoulutukset.propTypes = {
   koulutukset: PropTypes.object,
   lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onChangesUpdate: PropTypes.func,
   muutoshakemus: PropTypes.object,
+  onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func
 };
 
