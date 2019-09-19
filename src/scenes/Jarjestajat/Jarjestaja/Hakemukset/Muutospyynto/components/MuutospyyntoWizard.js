@@ -179,7 +179,7 @@ const MuutospyyntoWizard = props => {
     setToimintaalueMuutokset(
       R.filter(
         R.pathEq(["kohde", "tunniste"], "toimintaalue"),
-        props.backendChanges.source || []
+        props.backendChanges.source || []
       )
     );
   }, [props.backendChanges]);
@@ -376,10 +376,10 @@ const MuutospyyntoWizard = props => {
                 onSave={save}
                 lupa={props.lupa}
                 muutoshakemus={dataBySection}
+                changeObjects={changeObjects}
               >
                 <MuutospyyntoWizardTaloudelliset
                   changeObjects={changeObjects}
-                  kielet={props.kielet}
                   kohteet={props.kohteet.data}
                   koulutukset={props.koulutukset}
                   koulutusalat={props.koulutusalat}

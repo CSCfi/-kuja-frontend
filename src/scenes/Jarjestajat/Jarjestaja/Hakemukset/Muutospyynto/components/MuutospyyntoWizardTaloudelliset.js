@@ -5,8 +5,24 @@ import Taloudelliset from "./Taloudelliset";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
+import * as R from "ramda";
+import PropTypes from "prop-types";
 
-const MuutospyyntoWizardTaloudelliset = props => {
+const MuutospyyntoWizardTaloudelliset = ({
+  changeObjects,
+  intl,
+  kielet,
+  kohteet = [],
+  koulutukset,
+  koulutusalat,
+  koulutustyypit,
+  maaraystyypit,
+  muut,
+  lupa,
+  muutoshakemus,
+  onChangesUpdate,
+  onStateUpdate
+}) => {
   // let { taloudellisetValue } = this.props;
   // const tutkintojaLisatty = _.find(tutkinnotjakoulutuksetValue, function(t) {
   //   return t.type === MUUTOS_TYPES.ADDITION;
@@ -46,15 +62,21 @@ const MuutospyyntoWizardTaloudelliset = props => {
     <FormSection
     // onSubmit={handleSubmit}
     >
-      <h2>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}</h2>
+      <h2 className="mb-4">
+        {MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}
+      </h2>
 
-      {/* {!tutkintojaLisatty && ( */}
-      <div>
-        {MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI}
-      </div>
-      {/* )} */}
-
-      <TaloudellisetYleisettiedot />
+      {!changeObjects && (
+        <p>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI}</p>
+      )}
+      {changeObjects && (
+        <TaloudellisetYleisettiedot
+          stateObject={{}}
+          onStateUpdate={onStateUpdate}
+          onChangesUpdate={onChangesUpdate}
+          changeObjects={changeObjects}
+        />
+      )}
     </FormSection>
   );
 };
@@ -84,5 +106,19 @@ const MuutospyyntoWizardTaloudelliset = props => {
 //   forceUnregisterOnUnmount: true,
 //   validate
 // })(MuutospyyntoWizardTaloudelliset)
+
+MuutospyyntoWizardTaloudelliset.propTypes = {
+  changeObjects: PropTypes.object,
+  kohteet: PropTypes.array,
+  koulutukset: PropTypes.object,
+  koulutusalat: PropTypes.object,
+  koulutustyypit: PropTypes.object,
+  maaraystyypit: PropTypes.array,
+  muut: PropTypes.object,
+  lupa: PropTypes.object,
+  muutoshakemus: PropTypes.object,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func
+};
 
 export default injectIntl(MuutospyyntoWizardTaloudelliset);

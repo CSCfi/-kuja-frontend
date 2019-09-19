@@ -8,8 +8,9 @@ import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettied
 import * as R from "ramda";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 
-const Taloudelliset = ({}) => {
+const Taloudelliset = props => {
   var { fields, taloudellisetValue } = this.props;
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
   const {
     edellytykset,
     vaikutukset,
@@ -48,6 +49,8 @@ const Taloudelliset = ({}) => {
       <FormSection
         code={1}
         id="taloudelliset_yleisettiedot"
+        stateObject={props.stateObject}
+        onStateUpdate={onStateUpdate}
         // muutoshakemus={muutoshakemus}
         // render={_props => (
         //   <React.Fragment>

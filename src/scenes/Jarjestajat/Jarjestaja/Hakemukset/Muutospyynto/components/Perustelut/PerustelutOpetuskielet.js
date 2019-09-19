@@ -68,6 +68,7 @@ const PerustelutOpetuskielet = React.memo(props => {
               ]
             };
           }
+          console.log(structure);
           return structure;
         }, opetuskielet.items).filter(Boolean);
     };
