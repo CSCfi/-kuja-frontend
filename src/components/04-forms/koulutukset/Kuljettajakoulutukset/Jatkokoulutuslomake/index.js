@@ -82,7 +82,7 @@ const KuljettajienJatkokoulutuslomake = ({
       }
     }
     setChanges(changeObjects);
-  }, [changeObjects]);
+  }, [changes, changeObjects]);
 
   return (
     <React.Fragment>
