@@ -69,49 +69,50 @@ export const getCategories = (
                   }
                 }
               ],
-              categories: (koulutus.osaamisalat || []).map(
-                osaamisala => {
-                  const isInLupaBool = article
-                    ? !!_.find(article.koulutusalat, koulutusala => {
-                      return !!_.find(koulutusala.koulutukset, {
-                        koodi: osaamisala.koodiArvo
-                      });
-                    })
-                    : false;
-                  const isAddedBool = false;
-                  const isRemovedBool = false;
-                  return {
-                    anchor: osaamisala.koodiArvo,
-                    meta: {
-                      kohde,
-                      maaraystyyppi,
-                      koodisto: osaamisala.koodisto,
-                      metadata: osaamisala.metadata,
-                      isInLupa: isInLupaBool
-                    },
-                    components: [
-                      {
-                        anchor: "A",
-                        name: "CheckboxWithLabel",
-                        properties: {
+              categories: (koulutus.osaamisalat || [])
+                .sort((a, b) => a.koodiArvo.localeCompare(b.koodiArvo))
+                .map(osaamisala => {
+                    const isInLupaBool = article
+                      ? !!_.find(article.koulutusalat, koulutusala => {
+                        return !!_.find(koulutusala.koulutukset, {
+                          koodi: osaamisala.koodiArvo
+                        });
+                      })
+                      : false;
+                    const isAddedBool = false;
+                    const isRemovedBool = false;
+                    return {
+                      anchor: osaamisala.koodiArvo,
+                      meta: {
+                        kohde,
+                        maaraystyyppi,
+                        koodisto: osaamisala.koodisto,
+                        metadata: osaamisala.metadata,
+                        isInLupa: isInLupaBool
+                      },
+                      components: [
+                        {
+                          anchor: "A",
                           name: "CheckboxWithLabel",
-                          code: osaamisala.koodiArvo,
-                          title:
-                            _.find(osaamisala.metadata, m => {
-                              return m.kieli === "FI";
-                            }).nimi || "[Osaamisalan otsikko tähän]",
-                          labelStyles: {
-                            addition: isAdded,
-                            removal: isRemoved
-                          },
-                          isChecked:
-                            (isInLupaBool && !isRemovedBool) || isAddedBool
+                          properties: {
+                            name: "CheckboxWithLabel",
+                            code: osaamisala.koodiArvo,
+                            title:
+                              _.find(osaamisala.metadata, m => {
+                                return m.kieli === "FI";
+                              }).nimi || "[Osaamisalan otsikko tähän]",
+                            labelStyles: {
+                              addition: isAdded,
+                              removal: isRemoved
+                            },
+                            isChecked:
+                              (isInLupaBool && !isRemovedBool) || isAddedBool
+                          }
                         }
-                      }
-                    ]
-                  };
-                }
-              )
+                      ]
+                    };
+                  }
+                )
             };
           }, koulutustyyppi.koulutukset)
         };
