@@ -239,6 +239,9 @@ const HakemusContainer = props => {
         koulutukset={koulutukset}
         koulutusalat={koulutusalat}
         koulutustyypit={koulutustyypit}
+        kunnat={kunnat}
+        maakuntakunnat={maakuntakunnat}
+        maakunnat={maakunnat}
         maaraystyypit={maaraystyypit.data}
         muutospyynnot={muutospyynnot}
         opiskelijavuodet={opiskelijavuodet}

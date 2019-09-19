@@ -7,8 +7,8 @@ const getItemsToAdd = (
   maaraystyyppi
 ) => {
   const toBeAdded = R.filter(item => {
-    return (
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(initialValueOfSelect)
+    return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(
+      initialValueOfSelect
     );
   }, valueOfSelect);
 
@@ -24,7 +24,7 @@ const getItemsToAdd = (
       maaraystyyppi
     });
   }, toBeAdded);
-}; 
+};
 
 const getItemsToRemove = (
   initialValueOfSelect,
@@ -33,9 +33,7 @@ const getItemsToRemove = (
   maaraystyyppi
 ) => {
   const toBeRemoved = R.filter(item => {
-    return (
-      !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect)
-    );
+    return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect);
   }, initialValueOfSelect);
 
   return R.map(item => {
@@ -52,36 +50,33 @@ const getItemsToRemove = (
   }, toBeRemoved);
 };
 
-export default function getChangesOfToimintaalue(
-  toimialuedata
-) {
+export default function getChangesOfToimintaalue(stateObject) {
   const {
     initialValueOfSelect,
     kohde,
     maaraystyyppi,
     valueOfSelect
-  } = toimialuedata.state;
-  if (toimialuedata.state.changesOfValtakunnallinen.properties.isChecked) {
-      const tilaVal = "LISAYS" 
-      // { toimialuedata.state ? "POISTO" : "LISAYS" },
-      const typeVal = "addition"
+  } = stateObject;
+  if (stateObject.changesOfValtakunnallinen.properties.isChecked) {
+    const tilaVal = "LISAYS";
+    // { toimialuedata.state ? "POISTO" : "LISAYS" },
+    const typeVal = "addition";
     return {
       tila: tilaVal,
       type: typeVal,
       meta: {
-        changeObj: toimialuedata.state.changesOfValtakunnallinen,
+        changeObj: stateObject.changesOfValtakunnallinen,
         perusteluteksti: null
       },
       muutosperustelukoodiarvo: null,
       kohde,
       maaraystyyppi,
       value: "02",
-      tyyppi:" valtakunnallinen",
+      tyyppi: " valtakunnallinen",
       koodisto: "nuts1",
-      koodiarvo: "FI1",
+      koodiarvo: "FI1"
     };
-  }
-  else {
+  } else {
     const itemsToAdd = getItemsToAdd(
       initialValueOfSelect,
       valueOfSelect,

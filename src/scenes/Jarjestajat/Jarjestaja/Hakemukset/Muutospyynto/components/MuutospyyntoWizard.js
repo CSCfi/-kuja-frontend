@@ -88,6 +88,7 @@ const MuutospyyntoWizard = props => {
       tutkinnot: {}
     }
   });
+  const [toimintaalueMuutokset, setToimintaalueMuutokset] = useState([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -175,6 +176,12 @@ const MuutospyyntoWizard = props => {
   useEffect(() => {
     console.info("Backend changes: ", props.backendChanges);
     setChangeObjects(props.backendChanges.changeObjects);
+    setToimintaalueMuutokset(
+      R.filter(
+        R.pathEq(["kohde", "tunniste"], "toimintaalue"),
+        props.backendChanges.source || []
+      )
+    );
   }, [props.backendChanges]);
 
   // useEffect(() => {
@@ -308,7 +315,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={props.muutoshakemus}
+                changeObjects={changeObjects}
               >
                 <MuutospyyntoWizardMuutokset
                   changeObjects={changeObjects}
@@ -317,6 +324,9 @@ const MuutospyyntoWizard = props => {
                   koulutukset={props.koulutukset}
                   koulutusalat={props.koulutusalat}
                   koulutustyypit={props.koulutustyypit}
+                  kunnat={props.kunnat}
+                  maakuntakunnat={props.maakuntakunnat}
+                  maakunnat={props.maakunnat}
                   lupa={props.lupa}
                   maaraystyypit={props.maaraystyypit}
                   muut={props.muut}
@@ -325,6 +335,7 @@ const MuutospyyntoWizard = props => {
                   onStateUpdate={onSectionStateUpdate}
                   setChangesBySection={setChangesBySection}
                   opiskelijavuodet={props.opiskelijavuodet}
+                  toimintaalueMuutokset={toimintaalueMuutokset}
                 />
               </WizardPage>
             )}
@@ -335,7 +346,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={dataBySection}
+                changeObjects={changeObjects}
               >
                 <MuutosperustelutProvider>
                   <LomakkeetProvider>
@@ -422,6 +433,9 @@ MuutospyyntoWizard.propTypes = {
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.object,
+  kunnat: PropTypes.object,
+  maakuntakunnat: PropTypes.object,
+  maakunnat: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muutospyynnot: PropTypes.object,
   opiskelijavuodet: PropTypes.object,

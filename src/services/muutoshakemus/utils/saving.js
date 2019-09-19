@@ -1,6 +1,6 @@
-import { getChangesToSave } from "./tutkinnot-ja-koulutukset";
-import { getChangesOfOpetuskielet } from "./opetus-ja-tutkintokieli";
-// import getChangesOfToimintaalue from "./toiminta-alue";
+import { getChangesToSave } from "./changes-to-save";
+import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
+import getChangesOfToimintaalue from "./toiminta-alue";
 import moment from "moment";
 import * as R from "ramda";
 
@@ -46,7 +46,7 @@ export function createObjectToSave(
           perustelut: R.compose(
             R.flatten,
             R.values
-          )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects))),
+          )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects)))
           // TODO: add taloudelliset edellytykset here
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
@@ -99,7 +99,10 @@ export function createObjectToSave(
         },
         R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
       ),
-      // getChangesOfToimintaalue(muutoshakemus.toimintaalue, muutospyynto),
+      getChangesOfToimintaalue(
+        R.prop("toimintaalue", muutoshakemus),
+        muutospyynto
+      ),
       getChangesToSave(
         "opiskelijavuodet",
         {
@@ -135,7 +138,6 @@ export function createObjectToSave(
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "muut"))(backendMuutokset)
       )
-      // getChangesOfMuut(muutoshakemus.muut)
     ]),
     liitteet: [],
     uuid
