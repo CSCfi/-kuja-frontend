@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import ExpandableRow from "./ExpandableRow";
@@ -51,11 +51,18 @@ const ExpandableRowRoot = React.memo(
     title
   }) => {
     const classes = useStyles();
+    const [isToggledOpen, setIsToggleOpen] = useState(false);
+
+
+    const onToggle = (...props) => {
+      console.info(props[1]);
+      setIsToggleOpen(props[1]);
+    }
 
     return (
       <React.Fragment>
         {categories && (
-          <ExpandableRow shouldBeExpanded={isExpanded}>
+          <ExpandableRow shouldBeExpanded={isExpanded} onToggle={onToggle}>
             <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
@@ -90,7 +97,7 @@ const ExpandableRowRoot = React.memo(
               data-slot="content"
               className={`w-full ${!children ? "p-8" : ""}`}
             >
-              {!children ? (
+              {!children && (isExpanded || isToggledOpen) ? (
                 <CategorizedListRoot
                   anchor={anchor}
                   categories={categories}

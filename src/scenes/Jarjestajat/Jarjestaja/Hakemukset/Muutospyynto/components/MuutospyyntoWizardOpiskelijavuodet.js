@@ -389,19 +389,25 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   ]);
 
   return (
-    <ExpandableRowRoot
-      anchor={props.sectionId}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={R.path(["opiskelijavuodet"], props.changeObjects)}
-      index={0}
-      onChangesRemove={onChangesRemove}
-      onUpdate={onChangesUpdate}
-      sectionId={props.sectionId}
-      showCategoryTitles={true}
-      title={""}
-      isExpanded={true}
-    />
+    <React.Fragment>
+      {!!R.path(["opiskelijavuodet", "categories"], props.stateObjects) ? (
+        <ExpandableRowRoot
+          anchor={props.sectionId}
+          key={`expandable-row-root`}
+          categories={R.path(
+            ["opiskelijavuodet", "categories"],
+            props.stateObjects
+          )}
+          changes={R.path(["opiskelijavuodet"], props.changeObjects)}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          sectionId={props.sectionId}
+          showCategoryTitles={true}
+          title={""}
+          isExpanded={true}
+        />
+      ) : null}
+    </React.Fragment>
   );
 });
 
