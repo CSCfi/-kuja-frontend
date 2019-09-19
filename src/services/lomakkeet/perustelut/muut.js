@@ -1,3 +1,5 @@
+import {isAdded, isInLupa, isRemoved} from "../../../css/label";
+
 export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
 
@@ -601,6 +603,131 @@ export const getOppisopimusPerusteluLomake = () => {
     },
 
   ]
+}
+
+export const getOpiskelijavuodetLomake = () => {
+  return [{
+    anchor: "opiskelijavuodet-perustelut-lomake",
+    styleClasses: ["px-10 py-10"],
+    components: [
+      {
+        anchor: "opiskelijavuodet-perustelut-title",
+        name: "StatusTextRow",
+        properties: {
+          title: "Muutospyynnön taustalla olevat syyt"
+        }
+      }
+    ],
+    categories: [
+      {
+        anchor: `1`,
+        styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+        components: [
+          {
+            anchor: "aiheuttanut-label",
+            name: "StatusTextRow",
+            styleClasses: ["text-base"],
+            properties: {
+              title: "Mikä on aiheuttanut muutostarpeen?"
+            }
+          }
+        ],
+        categories: [
+          {
+            anchor: 'A',
+            components: [
+              {
+                anchor: "A",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  title: 'Alueen työ- ja elinkeinoelämän työvoimatarve',
+                }
+              }
+            ]
+          },
+          {
+            anchor: 'B',
+            components: [
+              {
+                anchor: "B",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  title: 'Muut syyt',
+                }
+              },
+            ]
+          },
+          {
+            anchor: 'C',
+            components: [
+              {
+                anchor: "C",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  title: 'Järjestämisluvan muuhun muutosesitykseen liittyvät syyt',
+                }
+              },
+            ]
+          },
+          {
+            anchor: 'D',
+            components: [
+              {
+                anchor: "D",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  title: 'Koulutuksen järjestäjän koulutustarjonnan kysyntä',
+                }
+              },
+            ]
+          },
+          {
+            anchor: 'E',
+            components: [
+              {
+                anchor: "E",
+                name: "CheckboxWithLabel",
+                properties: {
+                  name: "CheckboxWithLabel",
+                  title: 'Alueen väestön koulutustarve',
+                }
+              }
+            ]
+          },
+        ]
+      },
+      {
+        anchor: `2`,
+        styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+        components: [
+          {
+            anchor: "aiheuttanut-label",
+            name: "StatusTextRow",
+            styleClasses: ["text-base"],
+            properties: {
+              title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+            }
+          }
+        ],
+        categories: [
+          {
+            anchor: "tehtavan-tarpeellisuus-field",
+            styleClasses: ["pl-6"],
+            components: [
+              {
+                anchor: "A",
+                name: "TextBox",
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }]
 }
 
 const opiskelijavuodet = (code, anchorNumber) => {
