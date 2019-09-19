@@ -205,7 +205,6 @@ const HakemusContainer = props => {
         );
       }, c);
 
-      console.info(changesBySection, backendMuutokset);
       setBackendChanges({
         changeObjects: changesBySection,
         source: backendMuutokset,
