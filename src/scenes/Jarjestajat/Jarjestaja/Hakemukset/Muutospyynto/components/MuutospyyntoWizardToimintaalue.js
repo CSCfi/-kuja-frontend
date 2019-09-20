@@ -45,7 +45,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState({
     properties: {}
   });
-  const { onUpdate } = props;
+  const { onStateUpdate } = props;
 
   useEffect(() => {
     const kunnat = R.flatten(
@@ -60,12 +60,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     const maakunnatWithoutRemovedOnes = filterOutRemovedOnes(
       props.maakuntakunnat.maakuntakunnatList,
       props.lupakohde.maakunnat,
-      props.changeObjects
+      props.muutokset
     );
 
     const addedItems = getAddedItems(
       R.concat(props.maakuntakunnat.maakuntakunnatList, kunnat),
-      props.changeObjects
+      props.muutokset
     );
 
     const kunnatInitial = getInitialItems(
@@ -82,20 +82,17 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.kunnat,
     props.maakunnat,
     props.maakuntakunnat,
-    props.changeObjects
+    props.muutokset
   ]);
 
   useEffect(() => {
     if (valueOfSelect) {
-      onUpdate({
-        sectionId,
-        state: {
-          changesOfValtakunnallinen,
-          initialValueOfSelect,
-          kohde: props.kohde,
-          maaraystyyppi: props.maaraystyyppi,
-          valueOfSelect
-        }
+      onStateUpdate(sectionId, {
+        changesOfValtakunnallinen,
+        initialValueOfSelect,
+        kohde: props.kohde,
+        maaraystyyppi: props.maaraystyyppi,
+        valueOfSelect
       });
     }
   }, [
@@ -103,7 +100,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.maaraystyyppi,
     changesOfValtakunnallinen,
     initialValueOfSelect,
-    onUpdate,
+    onStateUpdate,
     valueOfSelect
   ]);
 
@@ -113,12 +110,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         R.equals("valtakunnallinen"),
         R.path(["properties", "name"])
       )(changeObj)
-    )(props.changeObjects);
+    )(props.muutokset);
 
     if (valtakunnallinenChangeObj) {
       setChangesOfValtakunnallinen(valtakunnallinenChangeObj);
     }
-  }, [props.changeObjects]);
+  }, [props.muutokset]);
 
   const handleNewValueOfToimialuevalinta = value => {
     setValueOfSelect(value);
@@ -181,7 +178,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  changeObjects: [],
+  muutokset: [],
   kohde: {},
   kunnat: {},
   lupakohde: {},
@@ -191,14 +188,14 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  changeObjects: PropTypes.array,
+  muutokset: PropTypes.array,
   kohde: PropTypes.object,
   kunnat: PropTypes.object,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.object,
   maakuntakunnat: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func
 };
 
 export default injectIntl(MuutospyyntoWizardToimintaalue);

@@ -213,9 +213,7 @@ export const getChangesToSave = (
         R.split("_"),
         R.view(R.lensIndex(0))
       )(anchorArr);
-      const section = R.find(R.propEq("code", areaCode))(
-        stateObject.muutdata
-      );
+      const section = R.find(R.propEq("code", areaCode))(stateObject.muutdata);
       let category = false;
       let maarays = false;
       if (section) {
@@ -253,9 +251,44 @@ export const getChangesToSave = (
         isInLupa: category.meta.isInLupa,
         kohde: stateObject.kohde,
         maaraystyyppi: stateObject.maaraystyyppi,
-        meta: { changeObjects: R.flatten([[changeObj], perustelut])  },
+        meta: { changeObjects: R.flatten([[changeObj], perustelut]) },
         tila: tila,
         type: type
+      };
+    }, unhandledChangeObjects).filter(Boolean);
+  } else if (key === "opiskelijavuodet") {
+    uudetMuutokset = R.map(changeObj => {
+      let koodisto = "koulutussektori";
+      const anchorParts = R.split(".", changeObj.anchor);
+      const categoryKey = R.view(R.lensIndex(1))(anchorParts);
+      const koodiarvo = R.prop(
+        categoryKey,
+        stateObject.opiskelijavuodet.koodiarvot
+      );
+      const muutCategory = R.find(R.propEq("key", categoryKey))(
+        stateObject.muut.muutdata
+      );
+      console.info(muutCategory);
+      if (muutCategory) {
+        const meta = R.find(R.propEq("anchor", koodiarvo))(
+          R.flatten(R.map(R.prop("categories"), muutCategory.categories))
+        ).meta;
+        koodisto = meta.koodisto.koodistoUri;
+      }
+
+      // TODO: Define the list of perustelut for opiskelijavuodet
+      const perustelut = [];
+
+      return {
+        arvo: changeObj.properties.applyForValue,
+        kategoria: R.head(anchorParts),
+        koodiarvo,
+        koodisto,
+        kohde: stateObject.opiskelijavuodet.kohde,
+        maaraystyyppi: stateObject.opiskelijavuodet.maaraystyyppi,
+        meta: { changeObjects: R.flatten([[changeObj], perustelut]) },
+        tila: "MUUTOS",
+        type: "change"
       };
     }, unhandledChangeObjects).filter(Boolean);
   }

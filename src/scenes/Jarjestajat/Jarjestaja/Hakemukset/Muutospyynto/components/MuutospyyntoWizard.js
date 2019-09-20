@@ -87,6 +87,7 @@ const MuutospyyntoWizard = props => {
       tutkinnot: {}
     }
   });
+  const [toimintaalueMuutokset, setToimintaalueMuutokset] = useState([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -96,6 +97,9 @@ const MuutospyyntoWizard = props => {
   } = props;
   const [steps, setSteps] = useState([]);
   const [page, setPage] = useState(1);
+  /**
+   * ChangeObjects contains all changes of the form by section.
+   */
   const [changeObjects, setChangeObjects] = useState({
     kielet: {
       opetuskielet: [],
@@ -171,6 +175,12 @@ const MuutospyyntoWizard = props => {
   useEffect(() => {
     console.info("Backend changes: ", props.backendChanges);
     setChangeObjects(props.backendChanges.changeObjects);
+    setToimintaalueMuutokset(
+      R.filter(
+        R.pathEq(["kohde", "tunniste"], "toimintaalue"),
+        props.backendChanges.source || []
+      )
+    );
   }, [props.backendChanges]);
 
   // useEffect(() => {
@@ -228,6 +238,9 @@ const MuutospyyntoWizard = props => {
     setPage(parseInt(props.match.params.page, 10));
   }, [props.match.params.page]);
 
+  /**
+   * The function is called by FormSection.
+   */
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
       if (id && changeObjects) {
@@ -245,6 +258,7 @@ const MuutospyyntoWizard = props => {
     [setChangeObjects]
   );
 
+  /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
     (id, state) => {
       if (id && state) {
@@ -300,7 +314,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={props.muutoshakemus}
+                changeObjects={changeObjects}
               >
                 <MuutospyyntoWizardMuutokset
                   changeObjects={changeObjects}
@@ -309,6 +323,9 @@ const MuutospyyntoWizard = props => {
                   koulutukset={props.koulutukset}
                   koulutusalat={props.koulutusalat}
                   koulutustyypit={props.koulutustyypit}
+                  kunnat={props.kunnat}
+                  maakuntakunnat={props.maakuntakunnat}
+                  maakunnat={props.maakunnat}
                   lupa={props.lupa}
                   maaraystyypit={props.maaraystyypit}
                   muut={props.muut}
@@ -317,6 +334,7 @@ const MuutospyyntoWizard = props => {
                   onStateUpdate={onSectionStateUpdate}
                   setChangesBySection={setChangesBySection}
                   opiskelijavuodet={props.opiskelijavuodet}
+                  toimintaalueMuutokset={toimintaalueMuutokset}
                 />
               </WizardPage>
             )}
@@ -327,7 +345,7 @@ const MuutospyyntoWizard = props => {
                 onNext={handleNext}
                 onSave={save}
                 lupa={props.lupa}
-                muutoshakemus={dataBySection}
+                changeObjects={changeObjects}
               >
                 <MuutosperustelutProvider>
                   <LomakkeetProvider>
@@ -399,6 +417,9 @@ MuutospyyntoWizard.propTypes = {
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.object,
+  kunnat: PropTypes.object,
+  maakuntakunnat: PropTypes.object,
+  maakunnat: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muutospyynnot: PropTypes.object,
   opiskelijavuodet: PropTypes.object,

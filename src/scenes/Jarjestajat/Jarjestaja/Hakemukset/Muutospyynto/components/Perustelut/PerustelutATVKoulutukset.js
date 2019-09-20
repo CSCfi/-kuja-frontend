@@ -15,9 +15,8 @@ const PerustelutATVKoulutukset = props => {
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      R.path(["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"])(
-        props.changeObjects
-      )
+      props.changeObjects.koulutukset
+        .ammatilliseenTehtavaanValmistavatKoulutukset
     );
 
     return (koulutusData, kohde, maaraystyyppi) => {
@@ -58,7 +57,7 @@ const PerustelutATVKoulutukset = props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
-                      defaultValue: "Text 2"
+                      placeholder: "Perustelut..."
                     }
                   }
                 ]
@@ -70,7 +69,9 @@ const PerustelutATVKoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [
+    props.changeObjects.koulutukset.ammatilliseenTehtavaanValmistavatKoulutukset
+  ]);
 
   useEffect(() => {
     if (
@@ -95,6 +96,8 @@ const PerustelutATVKoulutukset = props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,

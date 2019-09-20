@@ -11,7 +11,7 @@ export const CategorizedListTextBox = ({
   onChanges,
   idSuffix
 }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState();
   let isDisabled = false;
   if (parentComponent) {
     isDisabled =
@@ -25,10 +25,13 @@ export const CategorizedListTextBox = ({
   }
 
   useEffect(() => {
-    setValue(
-      R.path(["properties", "value"], changeObj) || propsObj.defaultValue || ""
-    );
-  }, [changeObj, propsObj.defaultValue]);
+    const initialValue =
+      R.path(["properties", "value"], changeObj) ||
+      propsObj.value ||
+      propsObj.defaultValue ||
+      "";
+    setValue(initialValue);
+  }, [changeObj, propsObj.defaultValue, propsObj.value]);
 
   return (
     <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">

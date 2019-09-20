@@ -5,49 +5,59 @@ import Checkbox from "@material-ui/core/Checkbox";
 import green from "@material-ui/core/colors/green";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import * as R from "ramda";
 
 /**
  * Label and checkbox united.
  */
-const CheckboxWithLabel = React.memo(props => {
-  const styles = makeStyles({
-    root: {
-      color: green[600],
-      "&$checked": {
-        color: green[500]
-      }
-    },
-    label: props.labelStyles,
-    checked: {} // This object must be empty for checked color to work.
-  })();
-
-  const handleChanges = () => {
-    props.onChanges(props.payload, { isChecked: !props.isChecked });
-  };
-
-  return (
-    <FormGroup row>
-      <FormControlLabel
-        classes={{
-          label: styles.label
-        }}
-        control={
-          <Checkbox
-            checked={props.isChecked}
-            disabled={props.isDisabled}
-            value="1"
-            onChange={handleChanges}
-            classes={{
-              checked: styles.checked,
-              root: styles.root
-            }}
-          />
+const CheckboxWithLabel = React.memo(
+  props => {
+    const styles = makeStyles({
+      root: {
+        color: green[600],
+        "&$checked": {
+          color: green[500]
         }
-        label={props.children}
-      />
-    </FormGroup>
-  );
-});
+      },
+      label: props.labelStyles,
+      checked: {} // This object must be empty for checked color to work.
+    })();
+
+    const handleChanges = () => {
+      props.onChanges(props.payload, { isChecked: !props.isChecked });
+    };
+
+    return (
+      <FormGroup row>
+        <FormControlLabel
+          classes={{
+            label: styles.label
+          }}
+          control={
+            <Checkbox
+              checked={props.isChecked}
+              disabled={props.isDisabled}
+              value="1"
+              onChange={handleChanges}
+              classes={{
+                checked: styles.checked,
+                root: styles.root
+              }}
+            />
+          }
+          label={props.children}
+        />
+      </FormGroup>
+    );
+  },
+  (prevState, currentState) => {
+    return (
+      R.equals(prevState.payload, currentState.payload) &&
+      R.equals(prevState.isChecked, currentState.isChecked) &&
+      R.equals(prevState.isDisabled, currentState.isDisabled)
+    );
+  }
+);
 
 CheckboxWithLabel.defaultProps = {
   isChecked: false,

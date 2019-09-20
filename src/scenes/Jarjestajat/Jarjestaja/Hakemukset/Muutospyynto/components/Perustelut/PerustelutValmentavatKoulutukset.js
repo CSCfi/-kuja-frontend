@@ -8,110 +8,112 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const PerustelutValmentavatKoulutukset = React.memo(
-  props => {
-    const sectionId = "perustelut_koulutukset_valmentavatKoulutukset";
-    const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+const PerustelutValmentavatKoulutukset = React.memo(props => {
+  const sectionId = "perustelut_koulutukset_valmentavatKoulutukset";
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
-    const getCategories = useMemo(() => {
-      const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-        R.path(["koulutukset", "valmentavatKoulutukset"])(props.changeObjects)
-      );
-      return (koulutusData, kohde, maaraystyyppi) => {
-        const categories = R.map(item => {
-          let structure = null;
-          if (R.includes(item.code, getAnchorPartsByIndex(1))) {
-            structure = {
-              anchor: item.code,
-              components: [
-                {
-                  anchor: "A",
+  const getCategories = useMemo(() => {
+    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
+      props.changeObjects.koulutukset.valmentavatKoulutukset
+    );
+    return (koulutusData, kohde, maaraystyyppi) => {
+      const categories = R.map(item => {
+        let structure = null;
+        if (R.includes(item.code, getAnchorPartsByIndex(1))) {
+          structure = {
+            anchor: item.code,
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                properties: {
                   name: "StatusTextRow",
-                  properties: {
-                    name: "StatusTextRow",
-                    code: item.code,
-                    title: item.title,
-                    labelStyles: {
-                      addition: isAdded,
-                      removal: isRemoved,
-                      custom: Object({}, item.isInLupa ? isInLupa : {})
-                    }
+                  code: item.code,
+                  title: item.title,
+                  labelStyles: {
+                    addition: isAdded,
+                    removal: isRemoved,
+                    custom: Object({}, item.isInLupa ? isInLupa : {})
                   }
                 }
-              ],
-              meta: {
-                kohde,
-                maaraystyyppi,
-                isInLupa: item.isInLupa,
-                koodisto: item.koodisto,
-                metadata: item.metadata
-              },
-              categories: [
-                {
-                  anchor: "vapaa-tekstikentta",
-                  title:
-                    "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        defaultValue: "Text 2"
-                      }
+              }
+            ],
+            meta: {
+              kohde,
+              maaraystyyppi,
+              isInLupa: item.isInLupa,
+              koodisto: item.koodisto,
+              metadata: item.metadata
+            },
+            categories: [
+              {
+                anchor: "vapaa-tekstikentta",
+                title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+                components: [
+                  {
+                    anchor: "A",
+                    name: "TextBox",
+                    properties: {
+                      placeholder: "Perustelut..."
                     }
-                  ]
-                }
-              ]
-            };
-          }
-          return structure;
-        }, koulutusData.items);
-        return categories.filter(Boolean);
-      };
-    }, [props.changeObjects])
+                  }
+                ]
+              }
+            ]
+          };
+        }
+        return structure;
+      }, koulutusData.items);
+      return categories.filter(Boolean);
+    };
+  }, [props.changeObjects.koulutukset.valmentavatKoulutukset]);
 
-    useEffect(() => {
-      onStateUpdate(
-        {
-          categories: getCategories(
-            getDataForKoulutusList(
-              props.koulutukset.poikkeukset.data,
-              R.toUpper(props.intl.locale)
-            ),
-            props.kohde,
-            props.maaraystyyppi
-          )
-        },
-        sectionId
-      );
-    }, [
+  useEffect(() => {
+    const categories = getCategories(
+      getDataForKoulutusList(
+        props.koulutukset.poikkeukset.data,
+        R.toUpper(props.intl.locale)
+      ),
       props.kohde,
-      props.koulutukset.poikkeukset.data,
-      props.intl.locale,
       props.maaraystyyppi
-    ]);
-
-    return (
-      <React.Fragment>
-        {props.stateObject.categories ? (
-          <ExpandableRowRoot
-            anchor={sectionId}
-            key={`expandable-row-root`}
-            categories={props.stateObject.categories}
-            changes={props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset}
-            disableReverting={false}
-            hideAmountOfChanges={false}
-            isExpanded={true}
-            onChangesRemove={onChangesRemove}
-            onUpdate={onChangesUpdate}
-            sectionId={sectionId}
-            title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
-          />
-        ) : null}
-      </React.Fragment>
     );
-  }
-);
+    onStateUpdate(
+      {
+        categories
+      },
+      sectionId
+    );
+  }, [
+    getCategories,
+    // onStateUpdate,
+    props.kohde,
+    props.koulutukset.poikkeukset.data,
+    props.intl.locale,
+    props.maaraystyyppi
+  ]);
+
+  return (
+    <React.Fragment>
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={
+            props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset
+          }
+          disableReverting={false}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          sectionId={sectionId}
+          title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+        />
+      ) : null}
+    </React.Fragment>
+  );
+});
 
 PerustelutValmentavatKoulutukset.defaultProps = {
   changeObjects: {},

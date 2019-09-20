@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { isAdded } from "../../../../../../../css/label";
+// import { isAdded } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
-import { getAnchorPart } from "../../../../../../../utils/common";
 import * as R from "ramda";
 import _ from "lodash";
 
@@ -12,15 +11,11 @@ const Tutkintokielet = React.memo(props => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    // console.info(
-    //   props.stateObjects.tutkinnot.items,
-    //   props.changeObjects.tutkinnot
-    // );
     const items = R.map(stateItem => {
       R.addIndex(R.forEach)((category, ii) => {
         R.addIndex(R.forEach)((subCategory, iii) => {
           let changeObj = null;
-          if (R.path(["tutkinnot", stateItem.areaCode], props.changeObjects)) {
+          if (R.path([stateItem.areaCode], props.changeObjects.tutkinnot)) {
             const anchor = `tutkinnot_${R.join(".", [
               stateItem.areaCode,
               category.anchor,
@@ -29,10 +24,8 @@ const Tutkintokielet = React.memo(props => {
             ])}`;
             changeObj = R.find(
               R.propEq("anchor", anchor),
-              R.path(["tutkinnot", stateItem.areaCode], props.changeObjects) ||
-                []
+              R.path([stateItem.areaCode], props.changeObjects.tutkinnot) || []
             );
-            // console.info(changeObj, stateItem.areaCode);
           }
           if (
             (subCategory.components[0].properties.isChecked && !changeObj) ||
@@ -92,105 +85,48 @@ const Tutkintokielet = React.memo(props => {
     props.locale
   ]);
 
-  // const anchor = `tutkinnot_${R.join(".", [
-  //   stateItem.areaCode,
-  //   category.anchor,
-  //   subCategory.anchor,
-  //   subCategory.components[0].anchor
-  // ])}`;
-  // const change = R.find(
-  //   R.propEq("anchor", anchor),
-  //   R.path(["tutkinnot", stateItem.areaCode], props.changeObjects) || []
-  // );
-
-  // useEffect(() => {
-  //   if (items && props.changeObjects.tutkinnot) {
-  //     let updatedItems = _.cloneDeep(items);
-  //     const operations = R.addIndex(R.mapObjIndexed)(
-  //       (changeObjs, areaCode, obj, index) => {
-  //         const i = R.findIndex(R.propEq("areaCode", areaCode), items);
-  //         return R.map(changeObj => {
-  //           const ii = R.findIndex(
-  //             R.propEq("anchor", getAnchorPart(changeObj.anchor, 1)),
-  //             items[i].categories
-  //           );
-  //           const iii = R.findIndex(
-  //             R.propEq("anchor", getAnchorPart(changeObj.anchor, 2)),
-  //             items[i].categories[ii].categories
-  //           );
-  //           return {
-  //             path: [
-  //               index,
-  //               i,
-  //               "categories",
-  //               ii,
-  //               "categories",
-  //               iii,
-  //               "components"
-  //             ],
-  //             operation: changeObj.properties.isChecked ? "addition" : "removal"
-  //           };
-  //         }, changeObjs);
-
-  //         // const areaCode = R.compose(
-  //         //   R.view(R.lensIndex(1)),
-  //         //   R.split("_")
-  //         // )(getAnchorPart(changeObj.anchor, 0));
-  //       },
-  //       props.changeObjects.tutkinnot
-  //     );
-
-  //     R.forEach(obj => {
-  //       console.info(obj.operation, obj.path);
-  //       if (obj.operation === "addition") {
-  //         updatedItems = R.assocPath(
-  //           obj.path,
-  //           [
-  //             {
-  //               anchor: "A",
-  //               name: "StatusTextRow",
-  //               properties: {
-  //                 name: "StatusTextRow",
-  //                 code: "23",
-  //                 title: "testtiiiii",
-  //                 labelStyles: {}
-  //               }
-  //             },
-  //             {
-  //               anchor: "B",
-  //               name: "Autocomplete",
-  //               properties: {
-  //                 options: R.map(language => {
-  //                   return {
-  //                     label:
-  //                       R.find(m => {
-  //                         return m.kieli === props.locale;
-  //                       }, language.metadata).nimi || "[Kielen nimi tähän]",
-  //                     value: language.koodiArvo
-  //                   };
-  //                 }, props.kielet),
-  //                 value: []
-  //               }
-  //             }
-  //           ],
-  //           updatedItems
-  //         );
-  //       }
-  //     }, R.flatten(R.values(operations)));
-  //     console.info(R.flatten(R.values(operations)), items, updatedItems);
-  //     // setItems(updatedItems);
-  //     //   const anchor = `tutkinnot_${R.join(".", [
-  //     //   stateItem.areaCode,
-  //     //   category.anchor,
-  //     //   subCategory.anchor,
-  //     //   subCategory.components[0].anchor
-  //     // ])}`;
-  //   }
-  // }, [items, props.changeObjects.tutkinnot]);
-
   useEffect(() => {
     onStateUpdate({ items, koodistoUri: "kieli" }, sectionId);
-  }, [items]);
+  }, [items, onStateUpdate]);
+
+  useEffect(() => {
+    if (props.unselectedAnchors.length && props.changeObjects.tutkintokielet) {
+      const areaCode = R.compose(
+        R.last,
+        R.split("_"),
+        R.head,
+        R.split(".")
+      )(props.unselectedAnchors[0]);
+
+      const commonPart = R.compose(
+        R.join("."),
+        R.concat([areaCode])
+      )(R.slice(1, 3, R.split(".", props.unselectedAnchors[0])));
+
+      const tutkintokielichangesWithoutRemovedOnes = {
+        ...props.changeObjects.tutkintokielet,
+        [areaCode]: R.filter(changeObj => {
+          return !R.contains(commonPart, changeObj.anchor);
+        }, props.changeObjects.tutkintokielet[areaCode])
+      };
+
+      if (
+        !R.equals(
+          tutkintokielichangesWithoutRemovedOnes,
+          props.changeObjects.tutkintokielet
+        )
+      ) {
+        onChangesUpdate({
+          anchor: sectionId,
+          changes: tutkintokielichangesWithoutRemovedOnes
+        });
+      }
+    }
+  }, [
+    onChangesUpdate,
+    props.changeObjects.tutkintokielet,
+    props.unselectedAnchors
+  ]);
 
   return (
     <React.Fragment>
@@ -249,11 +185,12 @@ const Tutkintokielet = React.memo(props => {
 
 Tutkintokielet.defaultProps = {
   changeObjects: {
-    tutkinnot: []
+    tutkinnot: [],
+    tutkintokielet: {}
   },
   kielet: [],
   locale: "FI",
-  unselectedAnchors: {},
+  unselectedAnchors: [],
   stateObjects: {}
 };
 
@@ -270,7 +207,7 @@ Tutkintokielet.propTypes = {
   onChangesRemove: PropTypes.func,
   onStateUpdate: PropTypes.func,
   stateObjects: PropTypes.object,
-  unselectedAnchors: PropTypes.object
+  unselectedAnchors: PropTypes.array
 };
 
 export default Tutkintokielet;

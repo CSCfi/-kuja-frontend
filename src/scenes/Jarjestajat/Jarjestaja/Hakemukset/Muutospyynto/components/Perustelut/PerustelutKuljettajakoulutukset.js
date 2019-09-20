@@ -8,8 +8,6 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import KuljettajienJatkokoulutuslomake from "../../../../../../../components/04-forms/koulutukset/Kuljettajakoulutukset/Jatkokoulutuslomake";
-// import { getKuljettajakoulutusPerustelulomakeByCode } from "../../../../../../../services/muutoshakemus/utils/koulutusperustelut";
-
 const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
@@ -17,7 +15,7 @@ const PerustelutKuljettajakoulutukset = props => {
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      R.path(["koulutukset", "kuljettajakoulutukset"])(props.changeObjects)
+      props.changeObjects.koulutukset.kuljettajakoulutukset
     );
     return (koulutusData, kohde, maaraystyyppi) => {
       const categories = R.map(item => {
@@ -55,25 +53,31 @@ const PerustelutKuljettajakoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [
+    props.changeObjects.koulutukset.kuljettajakoulutukset,
+    props.lomakkeet.kuljettajienJatkokoulutus
+  ]);
 
   useEffect(() => {
     if (R.includes(koodisto, props.koulutukset.muut.fetched)) {
+      const categories = getCategories(
+        getDataForKoulutusList(
+          props.koulutukset.muut.muudata[koodisto],
+          R.toUpper(props.intl.locale)
+        ),
+        props.kohde,
+        props.maaraystyyppi
+      );
       onStateUpdate(
         {
-          categories: getCategories(
-            getDataForKoulutusList(
-              props.koulutukset.muut.muudata[koodisto],
-              R.toUpper(props.intl.locale)
-            ),
-            props.kohde,
-            props.maaraystyyppi
-          )
+          categories
         },
         sectionId
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,
@@ -88,17 +92,18 @@ const PerustelutKuljettajakoulutukset = props => {
           anchor={sectionId}
           key={`expandable-row-root`}
           categories={props.stateObject.categories}
-          changes={
-            props.changeObjects.perustelut.koulutukset.kuljettajakoulutukset
-          }
-          disableReverting={true}
+          changes={R.path(["perustelut"], props.changeObjects)}
+          disableReverting={false}
           hideAmountOfChanges={false}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
           title={props.intl.formatMessage(wizardMessages.driverTraining)}
         >
-          <KuljettajienJatkokoulutuslomake></KuljettajienJatkokoulutuslomake>
+          <KuljettajienJatkokoulutuslomake
+            onChangesUpdate={onChangesUpdate}
+            changeObjects={R.path(["perustelut"], props.changeObjects)}
+          ></KuljettajienJatkokoulutuslomake>
         </ExpandableRowRoot>
       ) : null}
     </React.Fragment>

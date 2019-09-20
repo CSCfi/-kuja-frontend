@@ -242,7 +242,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         sectionId
       );
     }
-  }, [muutdata, props.kohde, props.maaraystyyppi]);
+  }, [muutdata, onStateUpdate, props.kohde, props.maaraystyyppi]);
 
   return (
     <React.Fragment>

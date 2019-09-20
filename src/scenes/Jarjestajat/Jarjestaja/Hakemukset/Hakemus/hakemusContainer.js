@@ -10,6 +10,9 @@ import { OpiskelijavuodetContext } from "../../../../../context/opiskelijavuodet
 import { MuutContext } from "../../../../../context/muutContext";
 import { MaaraystyypitContext } from "../../../../../context/maaraystyypitContext";
 import { MuutospyynnotContext } from "../../../../../context/muutospyynnotContext";
+import { KunnatContext } from "context/kunnatContext";
+import { MaakunnatContext } from "context/maakunnatContext";
+import { MaakuntakunnatContext } from "context/maakuntakunnatContext";
 import Loading from "../../../../../modules/Loading";
 import { MUUT_KEYS } from "../Muutospyynto/modules/constants";
 import { fetchKoulutusalat } from "services/koulutusalat/actions";
@@ -27,6 +30,9 @@ import { fetchKohteet } from "../../../../../services/kohteet/actions";
 import { fetchKoulutustyypit } from "../../../../../services/koulutustyypit/actions";
 import { fetchMuutospyynto } from "../../../../../services/muutospyynnot/actions";
 import { fetchMaaraystyypit } from "../../../../../services/maaraystyypit/actions";
+import { fetchKunnat } from "../../../../../services/kunnat/actions";
+import { fetchMaakunnat } from "../../../../../services/maakunnat/actions";
+import { fetchMaakuntakunnat } from "../../../../../services/maakuntakunnat/actions";
 import { MessageWrapper } from "../../../../../modules/elements";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
@@ -61,6 +67,14 @@ const HakemusContainer = props => {
     dispatch: koulutustyypitDispatch
   } = useContext(KoulutustyypitContext);
   const { state: kielet, dispatch: kieletDispatch } = useContext(KieletContext);
+  const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
+  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
+    MaakunnatContext
+  );
+  const {
+    state: maakuntakunnat,
+    dispatch: maakuntakunnatDispatch
+  } = useContext(MaakuntakunnatContext);
 
   useEffect(() => {
     // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
@@ -84,6 +98,10 @@ const HakemusContainer = props => {
     fetchOppilaitoksenOpetuskielet()(kieletDispatch);
     fetchMaaraystyypit()(maaraystyypitDispatch);
     fetchMuut()(muutDispatch);
+
+    fetchKunnat()(kunnatDispatch);
+    fetchMaakunnat()(maakunnatDispatch);
+    fetchMaakuntakunnat()(maakuntakunnatDispatch);
     const uuid = props.match.params.uuid;
     if (uuid) {
       fetchMuutospyynto(uuid)(muutospyynnotDispatch);
@@ -97,6 +115,9 @@ const HakemusContainer = props => {
     maaraystyypitDispatch,
     muutDispatch,
     muutospyynnotDispatch,
+    kunnatDispatch,
+    maakunnatDispatch,
+    maakuntakunnatDispatch,
     props.intl.locale,
     props.match.params.uuid
   ]);
@@ -184,7 +205,6 @@ const HakemusContainer = props => {
         );
       }, c);
 
-      console.info(changesBySection, backendMuutokset);
       setBackendChanges({
         changeObjects: changesBySection,
         source: backendMuutokset,
@@ -205,6 +225,9 @@ const HakemusContainer = props => {
     koulutustyypit.fetched &&
     props.lupa.fetched &&
     maaraystyypit.fetched &&
+    kunnat.fetched &&
+    maakunnat.fetched &&
+    maakuntakunnat.fetched &&
     accessRight
   ) {
     return (
@@ -215,6 +238,9 @@ const HakemusContainer = props => {
         koulutukset={koulutukset}
         koulutusalat={koulutusalat}
         koulutustyypit={koulutustyypit}
+        kunnat={kunnat}
+        maakuntakunnat={maakuntakunnat}
+        maakunnat={maakunnat}
         maaraystyypit={maaraystyypit.data}
         muutospyynnot={muutospyynnot}
         opiskelijavuodet={opiskelijavuodet}

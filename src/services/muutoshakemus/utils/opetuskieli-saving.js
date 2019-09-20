@@ -77,36 +77,3 @@ export const getChangesOfOpetuskielet = (
   }, page1Changes).filter(Boolean);
   return R.flatten([backendMuutoksetWithChangeObjects, newObjectsToSave]);
 };
-
-export const getChangesOfTutkintokielet = tutkintokieliData => {
-  const changes = R.mapObjIndexed((changeObjects, areaCode) => {
-    const item = R.map(changeObj => {
-      const anchorParts = changeObj.anchor.split(".");
-      const code = R.last(anchorParts);
-      const item = R.find(R.propEq("areaCode", areaCode))(
-        tutkintokieliData.state.items
-      );
-      const meta =
-        item && item.categories
-          ? getMetadata(R.slice(1, -1)(anchorParts), item.categories)
-          : {};
-      return {
-        koodiarvo: code,
-        koodisto: tutkintokieliData.state.koodistoUri,
-        nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
-        kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
-        isInLupa: meta.isInLupa,
-        kohde: meta.kohde,
-        maaraystyyppi: meta.maaraystyyppi,
-        meta: {
-          tunniste: "tutkintokieli",
-          changeObj
-        },
-        tila: "LISAYS",
-        type: "addition"
-      };
-    }, changeObjects);
-    return item;
-  }, tutkintokieliData.state.changes);
-  return R.flatten(R.values(changes));
-};

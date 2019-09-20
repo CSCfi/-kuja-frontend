@@ -62,7 +62,7 @@ const Opetuskielet = React.memo(props => {
       },
       sectionId
     );
-  }, [getCategories]);
+  }, [getCategories, onStateUpdate]);
 
   return (
     <React.Fragment>

@@ -64,6 +64,8 @@ const Tyovoimakoulutukset = React.memo(props => {
       );
     }
   }, [
+    getCategories,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
     props.intl.locale,

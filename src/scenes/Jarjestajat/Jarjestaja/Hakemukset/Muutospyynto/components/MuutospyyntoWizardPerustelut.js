@@ -10,7 +10,7 @@ import { fetchMuutosperustelut } from "../../../../../../services/muutosperustel
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
+// import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
 import { updateFormStructure } from "../../../../../../services/lomakkeet/actions";
 import {
   getAdditionFormStructure,
@@ -144,14 +144,12 @@ const MuutospyyntoWizardPerustelut = ({
                     {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
                       <PerustelutKoulutukset
                         changeObjects={{
-                          koulutukset:
-                            R.prop("koulutukset", changeObjects) || {},
+                          koulutukset: R.prop("koulutukset", changeObjects),
                           perustelut: {
-                            koulutukset:
-                              R.path(
-                                ["perustelut", "koulutukset"],
-                                changeObjects
-                              ) || {}
+                            koulutukset: R.path(
+                              ["perustelut", "koulutukset"],
+                              changeObjects
+                            )
                           }
                         }}
                         kohde={R.find(
@@ -260,9 +258,11 @@ const MuutospyyntoWizardPerustelut = ({
                   {!!R.path(["muut"], changeObjects) ? (
                     <PerustelutMuut
                       changeObjects={{
-                        muut: R.path(["muut"], changeObjects) || [],
-                        perustelut:
-                          R.path(["perustelut", "muut"], changeObjects) || []
+                        muut: R.path(["muut"], changeObjects),
+                        perustelut: R.path(
+                          ["perustelut", "muut"],
+                          changeObjects
+                        )
                       }}
                       kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
                       maaraykset={lupa.data.maaraykset}

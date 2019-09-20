@@ -1,5 +1,5 @@
 import CategorizedListRoot from "./index";
-import React from "react";
+import React, { useState } from "react";
 import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
 import { checkboxStory } from "./storydata/checkboxStory";
@@ -26,24 +26,88 @@ storiesOf("CategorizedListRoot", module)
     );
   })
   .add("Simple example", () => {
+    const Stage = props => {
+      const [changes, setChanges] = useState(props.changes);
+
+      const handleUpdate = payload => {
+        setChanges(payload.changes);
+        console.info(payload);
+      };
+
+      return (
+        <React.Fragment>
+          {!!props.render
+            ? props.render({
+                categories: props.categories,
+                changes,
+                onUpdate: handleUpdate
+              })
+            : null}
+          {props.children}
+        </React.Fragment>
+      );
+    };
+
     return (
-      <CategorizedListRoot
-        anchor="simple"
+      <Stage
         categories={simpleStory.categories}
         changes={simpleStory.changes}
-        onUpdate={() => {}}
-      />
+        render={props => (
+          <CategorizedListRoot
+            anchor="simple"
+            categories={props.categories}
+            changes={props.changes}
+            onUpdate={props.onUpdate}
+          />
+        )}
+      ></Stage>
     );
   })
   .add("Complex example", () => {
+    const Stage = props => {
+      const [changes, setChanges] = useState(props.changes);
+
+      const handleUpdate = payload => {
+        setChanges(payload.changes);
+        console.info(payload);
+      };
+
+      return (
+        <React.Fragment>
+          {!!props.render
+            ? props.render({
+                categories: props.categories,
+                changes,
+                onUpdate: handleUpdate
+              })
+            : null}
+          {props.children}
+        </React.Fragment>
+      );
+    };
+
     return (
-      <CategorizedListRoot
-        anchor="complex"
+      <Stage
         categories={complexStory.categories}
         changes={complexStory.changes}
-        onUpdate={() => {}}
-        showCategoryTitles={true}
-      />
+        render={props => (
+          <CategorizedListRoot
+            anchor="complex"
+            categories={props.categories}
+            changes={props.changes}
+            onUpdate={props.onUpdate}
+            showCategoryTitles={false}
+          />
+        )}
+      ></Stage>
+
+      // <CategorizedListRoot
+      //   anchor="complex"
+      //   categories={complexStory.categories}
+      //   changes={complexStory.changes}
+      //   onUpdate={() => {}}
+      //   showCategoryTitles={true}
+      // />
     );
   })
   .add("Radio example", () => {
