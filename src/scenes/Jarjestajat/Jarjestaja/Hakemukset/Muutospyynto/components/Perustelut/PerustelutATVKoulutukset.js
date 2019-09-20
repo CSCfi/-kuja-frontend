@@ -15,9 +15,8 @@ const PerustelutATVKoulutukset = props => {
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      R.path(["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"])(
-        props.changeObjects
-      )
+      props.changeObjects.koulutukset
+        .ammatilliseenTehtavaanValmistavatKoulutukset
     );
 
     return (koulutusData, kohde, maaraystyyppi) => {
@@ -58,7 +57,7 @@ const PerustelutATVKoulutukset = props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
-                      defaultValue: "Text 2"
+                      placeholder: "Perustelut..."
                     }
                   }
                 ]
@@ -70,7 +69,9 @@ const PerustelutATVKoulutukset = props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [
+    props.changeObjects.koulutukset.ammatilliseenTehtavaanValmistavatKoulutukset
+  ]);
 
   useEffect(() => {
     if (
@@ -105,27 +106,23 @@ const PerustelutATVKoulutukset = props => {
 
   return (
     <React.Fragment>
-      {props.stateObject.categories
-        ? (
-            <ExpandableRowRoot
-              anchor={sectionId}
-              key={`expandable-row-root`}
-              categories={props.stateObject.categories}
-              changes={
-                props.changeObjects.perustelut.koulutukset
-                  .ammatilliseenTehtavaanValmistavatKoulutukset
-              }
-              disableReverting={false}
-              hideAmountOfChanges={false}
-              isExpanded={true}
-              onChangesRemove={onChangesRemove}
-              onUpdate={onChangesUpdate}
-              title={props.intl.formatMessage(
-                wizardMessages.vocationalTraining
-              )}
-            />
-          )
-        : null}
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={
+            props.changeObjects.perustelut.koulutukset
+              .ammatilliseenTehtavaanValmistavatKoulutukset
+          }
+          disableReverting={false}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
+        />
+      ) : null}
     </React.Fragment>
   );
 };

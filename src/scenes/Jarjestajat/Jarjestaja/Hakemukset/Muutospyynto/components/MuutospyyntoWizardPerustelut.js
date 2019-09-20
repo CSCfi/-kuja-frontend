@@ -144,14 +144,12 @@ const MuutospyyntoWizardPerustelut = ({
                     {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
                       <PerustelutKoulutukset
                         changeObjects={{
-                          koulutukset:
-                            R.prop("koulutukset", changeObjects) || {},
+                          koulutukset: R.prop("koulutukset", changeObjects),
                           perustelut: {
-                            koulutukset:
-                              R.path(
-                                ["perustelut", "koulutukset"],
-                                changeObjects
-                              ) || {}
+                            koulutukset: R.path(
+                              ["perustelut", "koulutukset"],
+                              changeObjects
+                            )
                           }
                         }}
                         kohde={R.find(

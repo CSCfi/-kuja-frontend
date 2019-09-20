@@ -10,7 +10,7 @@ const getItemsToAdd = (
     return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(
       initialValueOfSelect
     );
-  }, valueOfSelect);
+  }, valueOfSelect || []);
 
   return R.map(item => {
     return Object.assign({}, item, {
@@ -23,7 +23,7 @@ const getItemsToAdd = (
       kohde,
       maaraystyyppi
     });
-  }, toBeAdded);
+  }, toBeAdded || []);
 };
 
 const getItemsToRemove = (
@@ -34,7 +34,7 @@ const getItemsToRemove = (
 ) => {
   const toBeRemoved = R.filter(item => {
     return !!!R.find(R.propEq("koodiarvo", item.koodiarvo))(valueOfSelect);
-  }, initialValueOfSelect);
+  }, initialValueOfSelect || []);
 
   return R.map(item => {
     return Object.assign({}, item, {
@@ -47,7 +47,7 @@ const getItemsToRemove = (
       kohde,
       maaraystyyppi
     });
-  }, toBeRemoved);
+  }, toBeRemoved || []);
 };
 
 export default function getChangesOfToimintaalue(stateObject) {
@@ -57,7 +57,10 @@ export default function getChangesOfToimintaalue(stateObject) {
     maaraystyyppi,
     valueOfSelect
   } = stateObject;
-  if (stateObject.changesOfValtakunnallinen.properties.isChecked) {
+  if (
+    stateObject.changesOfValtakunnallinen &&
+    stateObject.changesOfValtakunnallinen.properties.isChecked
+  ) {
     const tilaVal = "LISAYS";
     // { toimialuedata.state ? "POISTO" : "LISAYS" },
     const typeVal = "addition";

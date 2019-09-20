@@ -14,7 +14,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      R.path(["koulutukset", "valmentavatKoulutukset"])(props.changeObjects)
+      props.changeObjects.koulutukset.valmentavatKoulutukset
     );
     return (koulutusData, kohde, maaraystyyppi) => {
       const categories = R.map(item => {
@@ -54,7 +54,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
-                      defaultValue: "Text 2"
+                      placeholder: "Perustelut..."
                     }
                   }
                 ]
@@ -66,25 +66,26 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [props.changeObjects.koulutukset.valmentavatKoulutukset]);
 
   useEffect(() => {
+    const categories = getCategories(
+      getDataForKoulutusList(
+        props.koulutukset.poikkeukset.data,
+        R.toUpper(props.intl.locale)
+      ),
+      props.kohde,
+      props.maaraystyyppi
+    );
     onStateUpdate(
       {
-        categories: getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.poikkeukset.data,
-            R.toUpper(props.intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
+        categories
       },
       sectionId
     );
   }, [
     getCategories,
-    onStateUpdate,
+    // onStateUpdate,
     props.kohde,
     props.koulutukset.poikkeukset.data,
     props.intl.locale,

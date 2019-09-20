@@ -5,7 +5,7 @@ export const getKuljettajienJatkokoulutuslomake = (
   const code = 4;
   return [
     {
-      anchor: "kuljettajien-jatkokoulutuslomake",
+      anchor: code,
       styleClasses: ["px-10 py-10"],
       components: [
         {
@@ -17,15 +17,20 @@ export const getKuljettajienJatkokoulutuslomake = (
         }
       ],
       categories: [
-        tehtavanTarpeellisuus(code, 1, 1),
-        voimassaOlo(code, 2, 2),
-        suunnitelma(code, 3, 3),
-        osaaminen(code, 4, 4),
-        johtaja(code, 5, 5),
-        opettajien(code, 6, addPeopleFormCallback, peopleForms, 6, "Selvitys jatkokoulutuksen opettajien kelpoisuuksista ja työkokemuksista"),
-        ajoneuvoKanta(code, 7, 7),
-        muutOpetusvalineet(code, 8, 8),
-
+        tehtavanTarpeellisuus(1, 1),
+        voimassaOlo(2, 2),
+        suunnitelma(3, 3),
+        osaaminen(4, 4),
+        johtaja(5, 5),
+        opettajien(
+          6,
+          addPeopleFormCallback,
+          peopleForms,
+          6,
+          "Selvitys jatkokoulutuksen opettajien kelpoisuuksista ja työkokemuksista"
+        ),
+        ajoneuvoKanta(7, 7),
+        muutOpetusvalineet(8, 8)
       ]
     }
   ];
@@ -45,27 +50,34 @@ export const getKuljettajienPeruskoulutuslomake = (
           anchor: "tehtavan-tarpeellisuus-title",
           name: "StatusTextRow",
           properties: {
-            title: "Perustason ammattipätevyyskoulutusta antavan koulutuskeskuksen tehtävä "
+            title:
+              "Perustason ammattipätevyyskoulutusta antavan koulutuskeskuksen tehtävä "
           }
         }
       ],
       categories: [
-        tehtavanTarpeellisuus(code, 1, 1),
-        voimassaOlo(code, 2, 2),
-        suunnitelma(code, 3, 3),
-        johtaja(code, 4, 4),
-        opettajien(code, 5, addPeopleFormCallback, peopleForms, 5, "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista"),
+        tehtavanTarpeellisuus(1, 1),
+        voimassaOlo(2, 2),
+        suunnitelma(3, 3),
+        johtaja(4, 4),
+        opettajien(
+          code,
+          5,
+          addPeopleFormCallback,
+          peopleForms,
+          5,
+          "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista"
+        ),
         ajoneuvoKanta(code, 6, 6),
-        muutOpetusvalineet(code, 7, 7),
-
+        muutOpetusvalineet(code, 7, 7)
       ]
     }
   ];
 };
 
-export const getAddPeopleForm = code => {
+export const getAddPeopleForm = orderNumber => {
   return {
-    anchor: `people-addition-${code}`,
+    anchor: orderNumber,
     styleClasses: ["border-t py-8"],
     components: [
       {
@@ -74,7 +86,7 @@ export const getAddPeopleForm = code => {
         styleClasses: ["text-base"],
         properties: {
           labelStyles: {},
-          title: `Henkilö ${code}`
+          title: `Henkilö ${orderNumber}`
         }
       }
     ],
@@ -305,9 +317,9 @@ export const getAddPeopleForm = code => {
   };
 };
 
-const tehtavanTarpeellisuus = (code, anchorNumber, orderCode) => {
+const tehtavanTarpeellisuus = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -336,12 +348,12 @@ const tehtavanTarpeellisuus = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const voimassaOlo = (code, anchorNumber, orderCode) => {
+const voimassaOlo = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -391,12 +403,12 @@ const voimassaOlo = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const suunnitelma = (code, anchorNumber, orderCode) => {
+const suunnitelma = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -426,12 +438,12 @@ const suunnitelma = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const osaaminen = (code, anchorNumber, orderCode) => {
+const osaaminen = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -460,12 +472,12 @@ const osaaminen = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const johtaja = (code, anchorNumber, orderCode) => {
+const johtaja = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -533,8 +545,7 @@ const johtaja = (code, anchorNumber, orderCode) => {
             name: "CheckboxWithLabel",
             properties: {
               name: "checkbox-kuorma-autonkuljettaja",
-              title:
-                "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
+              title: "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
               labelStyles: {},
               isChecked: false
             }
@@ -550,8 +561,7 @@ const johtaja = (code, anchorNumber, orderCode) => {
             name: "CheckboxWithLabel",
             properties: {
               name: "checkbox-linja-autonkuljettaja",
-              title:
-                "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
+              title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
               labelStyles: {},
               isChecked: false
             }
@@ -719,12 +729,18 @@ const johtaja = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const opettajien = (code, anchorNumber, addPeopleFormCallback, peopleForms, orderCode, helpText) => {
+const opettajien = (
+  anchorNumber,
+  addPeopleFormCallback,
+  peopleForms,
+  orderCode,
+  helpText
+) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -748,8 +764,7 @@ const opettajien = (code, anchorNumber, addPeopleFormCallback, peopleForms, orde
             styleClasses: ["py-4"],
             properties: {
               withoutMargin: true,
-              title:
-                helpText
+              title: helpText
             }
           },
           {
@@ -781,12 +796,12 @@ const opettajien = (code, anchorNumber, addPeopleFormCallback, peopleForms, orde
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const ajoneuvoKanta = (code, anchorNumber, orderCode) => {
+const ajoneuvoKanta = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -849,12 +864,12 @@ const ajoneuvoKanta = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
 
-const muutOpetusvalineet = (code, anchorNumber, orderCode) => {
+const muutOpetusvalineet = (anchorNumber, orderCode) => {
   return {
-    anchor: `${code}-${anchorNumber}`,
+    anchor: anchorNumber,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     components: [
       {
@@ -914,5 +929,5 @@ const muutOpetusvalineet = (code, anchorNumber, orderCode) => {
         ]
       }
     ]
-  }
-}
+  };
+};
