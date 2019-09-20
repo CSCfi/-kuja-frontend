@@ -552,9 +552,11 @@ const CategorizedList = React.memo(props => {
                               <div
                                 className={`${component.styleClasses} flex row content-center pt-2 pr-2 my-2 sm:my-0 sm:mb-1`}
                               >
-                                <label className="my-auto mr-2">
-                                  {propsObj.label}
-                                </label>
+                                {propsObj.label && (
+                                  <label className="my-auto mr-2 font-sans">
+                                    {propsObj.label}
+                                  </label>
+                                )}
                                 <Input
                                   id={`input-${idSuffix}`}
                                   isDisabled={isDisabled}

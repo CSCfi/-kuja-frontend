@@ -4,9 +4,9 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import _ from "lodash";
 
-const TaloudellisetYleisettiedot = React.memo(props => {
+const TaloudellisetInvestoinnit = React.memo(props => {
   const { onStateUpdate } = props;
-  const sectionId = "taloudellisetyleisettiedot";
+  const sectionId = "taloudellisetinvestoinnit";
   const [cats, setCats] = useState([]);
 
   const getCategories = useMemo(() => {
@@ -18,41 +18,57 @@ const TaloudellisetYleisettiedot = React.memo(props => {
         components: [
           {
             anchor: "A",
-            name: "taloudellisetyleisettiedot"
+            name: "taloudellisetinvestoinnit"
           }
         ],
         categories: [
           {
-            anchor: "edellytykset-tekstikentta",
-            title: "Taloudelliset edellytykset",
-            styleClasses: ["mb-6"],
+            anchor: "investoinnit-tekstikentta",
+            title: "Tarvittavat investoinnit",
+            styleClasses: ["mb-6 font-normal"],
+            components: [
+              {
+                anchor: "label",
+                name: "TextBox",
+                properties: {
+                  placeholder: ""
+                }
+              }
+            ]
+          },
+          {
+            anchor: "kustannukset-header",
+            styleClasses: [""],
+            components: [
+              {
+                anchor: "label",
+                name: "StatusTextRow",
+                styleClasses: ["font-semibold text-base mb-2"],
+                properties: {
+                  title: "Investoinnin kustannukset"
+                }
+              }
+            ]
+          },
+          {
+            anchor: "vuodet",
+            styleClasses: ["flex sm:row mb-6"],
             components: [
               {
                 anchor: "A",
-                name: "TextBox",
+                name: "Input",
+                styleClasses: [""],
                 properties: {
-                  placeholder: ""
+                  withoutMargin: true,
+                  type: "number",
+                  width: "8em"
                 }
               }
             ]
           },
           {
-            anchor: "Vaikutukset-tekstikentta",
-            title: "Vaikutukset taloudellisten resurssien kohdentamiseen",
-            styleClasses: ["mb-6"],
-            components: [
-              {
-                anchor: "B",
-                name: "TextBox",
-                properties: {
-                  placeholder: ""
-                }
-              }
-            ]
-          },
-          {
-            anchor: "sopeuttaminen-tekstikentta",
-            title: "Toiminnan ja talouden sopeuttaminen",
+            anchor: "rahoitus-tekstikentta",
+            title: "Investointien rahoitus",
             styleClasses: [""],
             components: [
               {
@@ -91,9 +107,9 @@ const TaloudellisetYleisettiedot = React.memo(props => {
     <React.Fragment>
       <ExpandableRowRoot
         id={sectionId}
-        title="Yleiset tiedot"
-        anchor="yleiset"
-        key={`taloudelliset-yleisetiedot`}
+        title="Investoinnit"
+        anchor="investoinnit"
+        key={`taloudelliset-investoinnit`}
         // categories={props.stateObject.categories}
         categories={cats}
         disableReverting={true}
@@ -108,7 +124,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
   );
 });
 
-TaloudellisetYleisettiedot.propTypes = {
+TaloudellisetInvestoinnit.propTypes = {
   changes: PropTypes.array,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
@@ -117,4 +133,4 @@ TaloudellisetYleisettiedot.propTypes = {
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
-export default injectIntl(TaloudellisetYleisettiedot);
+export default injectIntl(TaloudellisetInvestoinnit);

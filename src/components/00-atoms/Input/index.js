@@ -5,8 +5,6 @@ import _ from "lodash";
 
 const Input = props => {
   const changesOutDelayed = _.debounce(props.onChanges, props.delay);
-
-  console.log(props.type);
   return (
     <React.Fragment>
       <TextField

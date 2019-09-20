@@ -1,11 +1,10 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
-import Taloudelliset from "./Taloudelliset";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
-import * as R from "ramda";
+import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit";
 import PropTypes from "prop-types";
 
 const MuutospyyntoWizardTaloudelliset = ({
@@ -70,12 +69,20 @@ const MuutospyyntoWizardTaloudelliset = ({
         <p>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI}</p>
       )}
       {changeObjects && (
-        <TaloudellisetYleisettiedot
-          stateObject={{}}
-          onStateUpdate={onStateUpdate}
-          onChangesUpdate={onChangesUpdate}
-          changeObjects={changeObjects}
-        />
+        <React.Fragment>
+          <TaloudellisetYleisettiedot
+            stateObject={{}}
+            onStateUpdate={onStateUpdate}
+            onChangesUpdate={onChangesUpdate}
+            changeObjects={changeObjects}
+          />
+          <TaloudellisetInvestoinnit
+            stateObject={{}}
+            onStateUpdate={onStateUpdate}
+            onChangesUpdate={onChangesUpdate}
+            changeObjects={changeObjects}
+          />
+        </React.Fragment>
       )}
     </FormSection>
   );
