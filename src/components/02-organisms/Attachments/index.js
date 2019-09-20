@@ -393,10 +393,10 @@ const Attachments = React.memo(props => {
 
   return (
     <React.Fragment>
-      {!props.listHidden && (
+      {/* {!props.listHidden && (
         <h4>{props.header ? props.header : HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
       )}
-      {props.listHidden && <br />}
+      {props.listHidden && <br />} */}
       {!props.showListOnly && (
         <Attachment
           setAttachment={setAttachment}

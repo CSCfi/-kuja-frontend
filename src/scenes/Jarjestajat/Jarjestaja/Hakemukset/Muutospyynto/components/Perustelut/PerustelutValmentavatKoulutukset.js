@@ -85,7 +85,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
     );
   }, [
     getCategories,
-    // onStateUpdate,
+    onStateUpdate,
     props.kohde,
     props.koulutukset.poikkeukset.data,
     props.intl.locale,

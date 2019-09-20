@@ -6,12 +6,12 @@ import _ from "lodash";
 const Input = props => {
   const changesOutDelayed = _.debounce(props.onChanges, props.delay);
 
-  console.log(props.type);
   return (
     <React.Fragment>
       <TextField
         aria-label={props.ariaLabel}
         defaultValue={props.value}
+        label={props.label}
         disabled={props.isDisabled}
         placeholder={props.placeholder}
         rows={props.rows}
@@ -22,7 +22,7 @@ const Input = props => {
         }
         error={props.error}
         variant="outlined"
-        style={{ width: props.width }}
+        style={props.fullWidth ? {} : { width: props.width }}
         fullWidth={props.fullWidth}
         type={props.type}
       />
@@ -33,6 +33,7 @@ const Input = props => {
 Input.defaultProps = {
   ariaLabel: "Text area",
   delay: 300,
+  id: `input-${Math.random()}`,
   isDisabled: false,
   isHidden: false,
   payload: {},
@@ -48,8 +49,10 @@ Input.defaultProps = {
 Input.propTypes = {
   ariaLabel: PropTypes.string,
   delay: PropTypes.number,
+  id: PropTypes.string,
   isDisabled: PropTypes.bool,
   isHidden: PropTypes.bool,
+  label: PropTypes.string,
   /** Is called with the payload and the value. */
   onChanges: PropTypes.func.isRequired,
   /** Custom object defined by user. */

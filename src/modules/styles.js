@@ -156,20 +156,6 @@ injectGlobal`
     }
   }
   
-  input[type="number"] {
-    font-size: 15px;
-    padding: 8px 16px;
-    width: 140px;
-    margin: 10px 10px 10px 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    
-    &:focus {
-      outline: none;
-    }
-  }
-  
   .control {
     display: flex;
     position: relative;

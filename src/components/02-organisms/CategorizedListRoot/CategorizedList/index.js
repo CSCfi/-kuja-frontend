@@ -590,16 +590,12 @@ const CategorizedList = React.memo(
                               ? change.properties.value
                               : propsObj.defaultValue;
                             return (
-                              <div
-                                className={`${component.styleClasses} flex row content-center pt-2 pr-2 my-2 sm:my-0 sm:mb-1`}
-                              >
-                                <label className="my-auto mr-2">
-                                  {propsObj.label}
-                                </label>
+                              <div className={component.styleClasses}>
                                 <Input
                                   id={`input-${idSuffix}`}
                                   isDisabled={isDisabled}
                                   isHidden={isDisabled}
+                                  label={propsObj.label}
                                   onChanges={runOperations}
                                   payload={{
                                     anchor,
