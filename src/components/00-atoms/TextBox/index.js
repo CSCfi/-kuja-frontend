@@ -24,7 +24,7 @@ const TextBox = props => {
     if (props.value !== value || !value) {
       setValue(props.value);
     }
-  }, [props.value]);
+  }, [props.value, value]);
 
   return (
     <React.Fragment>

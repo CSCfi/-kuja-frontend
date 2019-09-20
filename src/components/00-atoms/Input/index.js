@@ -56,7 +56,7 @@ Input.propTypes = {
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
   error: PropTypes.bool,
-  width: PropTypes.number,
+  width: PropTypes.string,
   fullWidth: PropTypes.bool,
   type: PropTypes.string
 };

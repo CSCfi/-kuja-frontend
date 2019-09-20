@@ -24,8 +24,8 @@ const MuutospyyntoWizardTaloudelliset = ({
   onStateUpdate
 }) => {
   return (
-    <FormSection>
-      <h2 className="mb-4">
+    <React.Fragment>
+      <h2 className="my-6">
         {MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}
       </h2>
 
@@ -35,6 +35,7 @@ const MuutospyyntoWizardTaloudelliset = ({
       {changeObjects && (
         <React.Fragment>
           <FormSection
+            className="my-0"
             id="taloudelliset_yleisettiedot"
             render={_props => (
               <React.Fragment>
@@ -44,7 +45,6 @@ const MuutospyyntoWizardTaloudelliset = ({
                     muutoshakemus
                   )}
                   changeObjects={{
-                    tutkinnot: R.path(["tutkinnot"], changeObjects),
                     taloudelliset: R.path(
                       ["taloudelliset", "yleisettiedot"],
                       changeObjects
@@ -57,14 +57,28 @@ const MuutospyyntoWizardTaloudelliset = ({
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
-
-          {/* <TaloudellisetInvestoinnit
-            stateObject={{}}
-            onStateUpdate={onStateUpdate}
-            onChangesUpdate={onChangesUpdate}
-            changeObjects={changeObjects}
-          /> */}
-
+          <FormSection
+            id="taloudelliset_investoinnit"
+            render={_props => (
+              <React.Fragment>
+                <TaloudellisetInvestoinnit
+                  stateObject={R.path(
+                    ["taloudelliset", "investoinnit"],
+                    muutoshakemus
+                  )}
+                  changeObjects={{
+                    taloudelliset: R.path(
+                      ["taloudelliset", "investoinnit"],
+                      changeObjects
+                    )
+                  }}
+                  {..._props}
+                />
+              </React.Fragment>
+            )}
+            runOnStateUpdate={onStateUpdate}
+            runOnChanges={onChangesUpdate}
+          />
           <FormSection
             id="taloudelliset_liitteet"
             render={_props => (
@@ -89,7 +103,7 @@ const MuutospyyntoWizardTaloudelliset = ({
           />
         </React.Fragment>
       )}
-    </FormSection>
+    </React.Fragment>
   );
 };
 

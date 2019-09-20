@@ -123,15 +123,19 @@ const CategorizedList = React.memo(
     );
 
     const handleAttachmentChanges = (payload, changeProps) => {
-      const addition = {
-        type: "addition",
-        payload: {
-          anchor: payload.anchor,
-          properties: changeProps
-        }
-      };
-      console.log(payload);
       console.log(changeProps);
+      const operations = R.map(attachment => {
+        return {
+          type: "addition",
+          payload: {
+            anchor: payload.anchor,
+            properties: attachment
+          }
+        };
+      }, changeProps.attachments);
+      console.log(operations);
+      const result = runRootOperations(operations);
+      return onChangesUpdate(result);
     };
 
     /**
@@ -605,9 +609,11 @@ const CategorizedList = React.memo(
                               <div
                                 className={`${component.styleClasses} flex row content-center pt-2 pr-2 my-2 sm:my-0 sm:mb-1`}
                               >
-                                <label className="my-auto mr-2">
-                                  {propsObj.label}
-                                </label>
+                                {propsObj.label && (
+                                  <label className="my-auto mr-2 font-sans">
+                                    {propsObj.label}
+                                  </label>
+                                )}
                                 <Input
                                   id={`input-${idSuffix}`}
                                   isDisabled={isDisabled}

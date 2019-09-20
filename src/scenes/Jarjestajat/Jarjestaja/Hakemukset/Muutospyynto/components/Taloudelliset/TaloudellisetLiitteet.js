@@ -41,7 +41,7 @@ const TaloudellisetLiitteet = React.memo(props => {
       },
       sectionId
     );
-  }, [getCategories, onStateUpdate]);
+  }, [getCategories, onStateUpdate, sectionId]);
   return (
     <React.Fragment>
       <p></p>

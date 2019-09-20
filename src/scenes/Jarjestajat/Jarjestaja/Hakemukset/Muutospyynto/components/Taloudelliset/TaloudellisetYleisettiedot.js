@@ -5,9 +5,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const TaloudellisetYleisettiedot = React.memo(props => {
-  const { onStateUpdate } = props;
-  const sectionId = "taloudelliset_yleisettiedot";
-
+  const { sectionId, onStateUpdate } = props;
   const getCategories = useMemo(() => {
     return () => {
       let structure = null;
@@ -66,16 +64,13 @@ const TaloudellisetYleisettiedot = React.memo(props => {
   }, []);
 
   useEffect(() => {
-    const array = getCategories();
-    console.log(array);
-
     onStateUpdate(
       {
-        categories: array
+        categories: getCategories()
       },
       sectionId
     );
-  }, [getCategories, onStateUpdate]);
+  }, [getCategories, onStateUpdate, sectionId]);
   return (
     <React.Fragment>
       <p></p>
@@ -102,8 +97,6 @@ const TaloudellisetYleisettiedot = React.memo(props => {
 TaloudellisetYleisettiedot.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
-  headingNumber: PropTypes.number,
-  kohde: PropTypes.object,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
