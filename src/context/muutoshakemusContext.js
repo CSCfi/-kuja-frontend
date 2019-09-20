@@ -1,34 +1,7 @@
 import React, { useReducer } from "react";
 import reducer from "../services/muutoshakemus/reducer";
 
-const initialState = {
-  backendChanges: {
-    tutkinnotjakoulutukset: [],
-    kielet: {
-      opetuskielet: [],
-      tutkintokielet: {}
-    },
-    opiskelijavuodet: [],
-    toimintaalue: [],
-    muut: {},
-    handled: true
-  },
-  perustelutmuut: {},
-  muut: {
-    state: {
-      changes: {}
-    }
-  },
-  tutkinnot: {
-    state: {}
-  },
-  opetuskielet: {
-    state: {}
-  },
-  opiskelijavuodet: {},
-  tutkintokielet: {},
-  toimintaalue: {}
-};
+const initialState = {};
 
 const MuutoshakemusContext = React.createContext(initialState);
 

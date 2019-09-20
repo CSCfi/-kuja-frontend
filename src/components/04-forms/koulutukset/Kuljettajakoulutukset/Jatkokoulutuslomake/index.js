@@ -8,14 +8,17 @@ import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import * as R from "ramda";
 
 const defaultProps = {
-  changes: []
+  changeObjects: []
 };
 
 const KuljettajienJatkokoulutuslomake = ({
-  changes = defaultProps.changes
+  changeObjects = defaultProps.changeObjects,
+  onChangesUpdate
 }) => {
+  const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const [lomake, setLomake] = useState(getKuljettajienJatkokoulutuslomake());
   const [peopleForms, setPeopleForms] = useState([]);
+  const [changes, setChanges] = useState(null);
 
   useEffect(() => {
     const addPeopleForm = () => {
@@ -27,19 +30,78 @@ const KuljettajienJatkokoulutuslomake = ({
     setLomake(getKuljettajienJatkokoulutuslomake(addPeopleForm, peopleForms));
   }, [peopleForms]);
 
+  useEffect(() => {
+    if (!changes) {
+      /**
+       * At this point we have some changes given to this component by props. Some
+       * of the changes are related to the people form (Opettajien kelpoisuus ja
+       * työkokemus) so we have to show as many people forms as what user has made
+       * changes to.
+       */
+      const peopleFormAnchors = R.map(
+        R.compose(
+          R.split("."),
+          R.prop("anchor")
+        ),
+        R.filter(
+          R.compose(
+            R.contains(
+              "opettajien-kelpoisuus-ja-tyokokemus-info.lisatyt-henkilot"
+            ),
+            R.prop("anchor")
+          )
+        )(changeObjects)
+      );
+
+      if (peopleFormAnchors.length) {
+        /**
+         * People form count is calculated using the anchors related to the people
+         * forms.
+         */
+        const peopleFormCount = Math.max(
+          ...R.map(
+            R.compose(
+              Number,
+              R.view(R.lensIndex(5))
+            ),
+            peopleFormAnchors
+          )
+        );
+
+        /**
+         * Let's add the needed people forms so that we can show the changes user
+         * has made on them.
+         */
+        R.forEach(() => {
+          setPeopleForms(prevForms => {
+            return R.insert(-1, getAddPeopleForm(prevForms.length + 1))(
+              prevForms
+            );
+          });
+        }, new Array(peopleFormCount));
+      }
+    }
+    setChanges(changeObjects);
+  }, [changes, changeObjects]);
+
   return (
-    <CategorizedListRoot
-      anchor="lomake"
-      categories={lomake}
-      changes={changes}
-      onUpdate={() => {}}
-      showCategoryTitles={true}
-    />
+    <React.Fragment>
+      {changes ? (
+        <CategorizedListRoot
+          anchor={sectionId}
+          categories={lomake}
+          changes={changes}
+          onUpdate={onChangesUpdate}
+          showCategoryTitles={true}
+        />
+      ) : null}
+    </React.Fragment>
   );
 };
 
 KuljettajienJatkokoulutuslomake.propTypes = {
-  changes: PropTypes.array
+  changeObjects: PropTypes.array,
+  onChangesUpdate: PropTypes.func
 };
 
 export default KuljettajienJatkokoulutuslomake;

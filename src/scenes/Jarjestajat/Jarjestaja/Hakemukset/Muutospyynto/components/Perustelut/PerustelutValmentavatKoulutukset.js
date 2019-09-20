@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
@@ -9,14 +9,14 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutValmentavatKoulutukset = React.memo(props => {
-  const sectionId = "valmentavatkoulutukset";
-  const { onUpdate } = props;
-  const [categories, setCategories] = useState([]);
-  const [changes, setChanges] = useState([]);
+  const sectionId = "perustelut_koulutukset_valmentavatKoulutukset";
+  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
-  useEffect(() => {
-    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(changes);
-    const getCategories = (koulutusData, kohde, maaraystyyppi) => {
+  const getCategories = useMemo(() => {
+    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
+      props.changeObjects.koulutukset.valmentavatKoulutukset
+    );
+    return (koulutusData, kohde, maaraystyyppi) => {
       const categories = R.map(item => {
         let structure = null;
         if (R.includes(item.code, getAnchorPartsByIndex(1))) {
@@ -54,7 +54,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
-                      defaultValue: "Text 2"
+                      placeholder: "Perustelut..."
                     }
                   }
                 ]
@@ -66,66 +66,69 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
+  }, [props.changeObjects.koulutukset.valmentavatKoulutukset]);
 
-    if (props.koulutukset.poikkeukset.fetched.length === 2 && changes.length) {
-      setCategories(
-        getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.poikkeukset.data,
-            R.toUpper(props.intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
-      );
-    }
+  useEffect(() => {
+    const categories = getCategories(
+      getDataForKoulutusList(
+        props.koulutukset.poikkeukset.data,
+        R.toUpper(props.intl.locale)
+      ),
+      props.kohde,
+      props.maaraystyyppi
+    );
+    onStateUpdate(
+      {
+        categories
+      },
+      sectionId
+    );
   }, [
+    getCategories,
+    // onStateUpdate,
     props.kohde,
-    props.koulutukset.poikkeukset,
-    props.intl,
-    props.maaraystyyppi,
-    changes
+    props.koulutukset.poikkeukset.data,
+    props.intl.locale,
+    props.maaraystyyppi
   ]);
 
-  const saveChanges = payload => {
-    setChanges(payload.changes || []);
-  };
-
-  useEffect(() => {
-    setChanges(props.changes);
-  }, [props.changes]);
-
-  useEffect(() => {
-    onUpdate({ sectionId, categories, changes });
-  }, [categories, onUpdate, changes]);
-
-  const removeChanges = () => {
-    return saveChanges({ changes: [] });
-  };
-
   return (
-    <ExpandableRowRoot
-      anchor={sectionId}
-      key={`expandable-row-root`}
-      categories={categories}
-      changes={changes}
-      disableReverting={true}
-      hideAmountOfChanges={false}
-      index={0}
-      isExpanded={true}
-      onChangesRemove={removeChanges}
-      onUpdate={saveChanges}
-      sectionId={sectionId}
-      title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
-    />
+    <React.Fragment>
+      {props.stateObject.categories ? (
+        <ExpandableRowRoot
+          anchor={sectionId}
+          key={`expandable-row-root`}
+          categories={props.stateObject.categories}
+          changes={
+            props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset
+          }
+          disableReverting={false}
+          hideAmountOfChanges={false}
+          isExpanded={true}
+          onChangesRemove={onChangesRemove}
+          onUpdate={onChangesUpdate}
+          sectionId={sectionId}
+          title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+        />
+      ) : null}
+    </React.Fragment>
   );
 });
 
+PerustelutValmentavatKoulutukset.defaultProps = {
+  changeObjects: {},
+  stateObject: {}
+};
+
 PerustelutValmentavatKoulutukset.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  maaraystyyppi: PropTypes.object
+  maaraystyyppi: PropTypes.object,
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  stateObject: PropTypes.object
 };
 
 export default injectIntl(PerustelutValmentavatKoulutukset);

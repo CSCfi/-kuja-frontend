@@ -1,4 +1,5 @@
 import { parseKoulutuksetAll, parseMuut } from "./koulutusParser";
+import * as R from "ramda";
 
 import {
   FETCH_KOULUTUKSET_ALL_START,
@@ -54,10 +55,7 @@ export default function(state, action) {
         ...state,
         muut: {
           isFetching: false,
-          fetched: [
-            ...state.muut.fetched,
-            action.koodisto
-          ],
+          fetched: [...state.muut.fetched, action.koodisto],
           hasErrored: false,
           muudata: {
             ...state.muut.muudata,
@@ -90,12 +88,9 @@ export default function(state, action) {
         poikkeukset: {
           ...state.poikkeukset,
           isFetching: false,
-          fetched: [
-            ...state.poikkeukset.fetched,
-            action.koodi
-          ],
+          fetched: [...state.poikkeukset.fetched, action.koodi],
           hasErrored: false,
-          data: [...state.poikkeukset.data, action.payload]
+          data: R.uniq([...state.poikkeukset.data, action.payload])
         }
       };
     case FETCH_KOULUTUS_FAILURE:

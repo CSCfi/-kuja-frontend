@@ -41,11 +41,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const sectionId = "toimintaalue";
   const heading = props.intl.formatMessage(wizardMessages.header_section3);
   const [initialValueOfSelect, setInitialValueOfSelect] = useState([]);
-  const [valueOfSelect, setValueOfSelect] = useState([]);
+  const [valueOfSelect, setValueOfSelect] = useState(null);
   const [changesOfValtakunnallinen, setChangesOfValtakunnallinen] = useState({
     properties: {}
   });
-  const { onUpdate } = props;
+  const { onStateUpdate } = props;
 
   useEffect(() => {
     const kunnat = R.flatten(
@@ -60,12 +60,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     const maakunnatWithoutRemovedOnes = filterOutRemovedOnes(
       props.maakuntakunnat.maakuntakunnatList,
       props.lupakohde.maakunnat,
-      props.backendChanges
+      props.muutokset
     );
 
     const addedItems = getAddedItems(
       R.concat(props.maakuntakunnat.maakuntakunnatList, kunnat),
-      props.backendChanges
+      props.muutokset
     );
 
     const kunnatInitial = getInitialItems(
@@ -82,24 +82,25 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.kunnat,
     props.maakunnat,
     props.maakuntakunnat,
-    props.backendChanges
+    props.muutokset
   ]);
 
   useEffect(() => {
-    onUpdate({
-      sectionId,
-      changesOfValtakunnallinen,
-      initialValueOfSelect,
-      kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi,
-      valueOfSelect
-    });
+    if (valueOfSelect) {
+      onStateUpdate(sectionId, {
+        changesOfValtakunnallinen,
+        initialValueOfSelect,
+        kohde: props.kohde,
+        maaraystyyppi: props.maaraystyyppi,
+        valueOfSelect
+      });
+    }
   }, [
     props.kohde,
     props.maaraystyyppi,
     changesOfValtakunnallinen,
     initialValueOfSelect,
-    onUpdate,
+    onStateUpdate,
     valueOfSelect
   ]);
 
@@ -109,12 +110,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         R.equals("valtakunnallinen"),
         R.path(["properties", "name"])
       )(changeObj)
-    )(props.backendChanges);
+    )(props.muutokset);
 
     if (valtakunnallinenChangeObj) {
       setChangesOfValtakunnallinen(valtakunnallinenChangeObj);
     }
-  }, [props.backendChanges]);
+  }, [props.muutokset]);
 
   const handleNewValueOfToimialuevalinta = value => {
     setValueOfSelect(value);
@@ -133,7 +134,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   return (
     <Section code={props.lupakohde.headingNumber} title={heading}>
-      <p className={!!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"}>
+      <p
+        className={
+          !!changesOfValtakunnallinen.properties.isChecked ? "hidden" : "pb-4"
+        }
+      >
         {props.intl.formatMessage(wizardMessages.areasInfo1)}
       </p>
       <div
@@ -149,13 +154,19 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           callback={handleNewValueOfToimialuevalinta}
         />
 
-        <Toimialuemuutokset
-          name="toimintaalueet"
-          initialValues={initialValueOfSelect}
-          values={valueOfSelect}
-        />
+        {valueOfSelect && (
+          <Toimialuemuutokset
+            name="toimintaalueet"
+            initialValues={initialValueOfSelect}
+            values={valueOfSelect}
+          />
+        )}
       </div>
-      <div className={!!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"}>
+      <div
+        className={
+          !!changesOfValtakunnallinen.properties.isChecked ? "" : "pt-4"
+        }
+      >
         <Valtakunnallinen
           callback={handleChangeOfValtakunnallinen}
           changes={changesOfValtakunnallinen}
@@ -167,7 +178,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  backendChanges: [],
+  muutokset: [],
   kohde: {},
   kunnat: {},
   lupakohde: {},
@@ -177,14 +188,14 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  backendChanges: PropTypes.array,
+  muutokset: PropTypes.array,
   kohde: PropTypes.object,
   kunnat: PropTypes.object,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.object,
   maakuntakunnat: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  onUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func
 };
 
 export default injectIntl(MuutospyyntoWizardToimintaalue);

@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
 import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
-import TextBox from "../../../00-atoms/TextBox";
 import Input from "../../../00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
@@ -13,6 +12,7 @@ import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
+import CategorizedListTextBox from "./components/CategorizedListTextBox";
 
 /**
  *
@@ -35,295 +35,340 @@ const getPropertiesObject = (changeObj, component) => {
   return Object.assign({}, component.properties, changeObj.properties || {});
 };
 
-const CategorizedList = React.memo(props => {
-  const getOperation = (component, changeObj, payload, changeProps) => {
-    const addition = {
-      type: "addition",
-      payload: {
-        anchor: payload.anchor,
-        properties: changeProps
-      }
-    };
-    const removal = {
-      type: "removal",
-      payload: {
-        anchor: payload.anchor
-      }
-    };
-    if (payload.shouldBeChecked) {
-      if (component.properties.isChecked) {
-        if (changeObj && !changeObj.properties.isChecked) {
-          return removal;
+const CategorizedList = React.memo(
+  props => {
+    const { getAllChanges, onChangesUpdate, runRootOperations } = props;
+
+    const getOperation = (component, changeObj, payload, changeProps) => {
+      const addition = {
+        type: "addition",
+        payload: {
+          anchor: payload.anchor,
+          properties: changeProps
+        }
+      };
+      const removal = {
+        type: "removal",
+        payload: {
+          anchor: payload.anchor
+        }
+      };
+      if (payload.shouldBeChecked) {
+        if (component.properties.isChecked) {
+          if (changeObj && !changeObj.properties.isChecked) {
+            return removal;
+          }
+        } else {
+          if (R.isEmpty(changeObj.properties)) {
+            return addition;
+          }
         }
       } else {
-        if (R.isEmpty(changeObj.properties)) {
+        if (component.properties.isChecked) {
           return addition;
+        } else {
+          if (
+            R.has("isChecked")(changeObj.properties) &&
+            changeObj.properties.isChecked
+          ) {
+            return removal;
+          }
         }
       }
-    } else {
-      if (component.properties.isChecked) {
-        return addition;
-      } else {
-        if (
-          R.has("isChecked")(changeObj.properties) &&
-          changeObj.properties.isChecked
-        ) {
-          return removal;
-        }
-      }
-    }
-    return false;
-  };
+      return false;
+    };
 
-  const handleDescendants = (changeProps, payload, operations = []) => {
-    R.addIndex(R.map)((category, i) => {
-      const component = category.components[0];
-      const anchor = R.join(".", [payload.anchor, category.anchor]);
-      const fullAnchor = `${anchor}.${component.anchor}`;
-      const fullPath = R.slice(0, -2, payload.fullPath).concat([
-        "categories",
-        i,
-        "components",
-        0
-      ]);
-      const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
-      const operation = getOperation(
-        component,
-        changeObj,
-        {
-          anchor: fullAnchor,
-          fullPath,
-          shouldBeChecked: false
-        },
-        changeProps
-      );
-
-      if (operation) {
-        operations.push(operation);
-      }
-
-      return handleDescendants(
-        changeProps,
-        {
-          anchor,
-          categories: category.categories,
-          fullPath
-        },
-        operations
-      );
-    }, payload.categories || []);
-    return operations;
-  };
-
-  const handlePredecessors = (changeProps, payload, operations = []) => {
-    const component = payload.parent
-      ? payload.parent.category.components[0]
-      : payload.component;
-    const anchor = R.join(".", R.init(payload.anchor.split(".")));
-    const fullAnchor = `${anchor}.${component.anchor}`;
-    const fullPath = R.concat(R.slice(0, -1, payload.rootPath), [
-      "components",
-      0
-    ]);
-    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
-
-    const operation = getOperation(
-      component,
-      changeObj,
-      {
-        anchor: fullAnchor,
-        fullPath,
-        shouldBeChecked: true
-      },
-      changeProps
-    );
-
-    if (operation) {
-      operations.push(operation);
-    }
-
-    if (component.name === "RadioButtonWithLabel") {
-      // Walk through the siblings
-      R.addIndex(R.forEach)((category, i) => {
-        const component = category.components[0];
-        if (component.name === "RadioButtonWithLabel") {
-          const _fullPath = R.concat(payload.parent.rootPath, [
+    const handleDescendants = useCallback(
+      (changeProps, payload, operations = []) => {
+        const allChanges = getAllChanges();
+        R.addIndex(R.map)((category, i) => {
+          const component = category.components[0];
+          const anchor = R.join(".", [payload.anchor, category.anchor]);
+          const fullAnchor = `${anchor}.${component.anchor}`;
+          const fullPath = R.slice(0, -2, payload.fullPath).concat([
+            "categories",
             i,
             "components",
             0
           ]);
-          // R.concat(payload.rootPath, [i, "components", 0]);
-          if (
-            !R.equals(
-              R.concat(payload.parent.rootPath, [i]),
-              R.init(payload.rootPath)
-            )
-          ) {
-            // All the radio button siblings must be unchecked
-            const nextPayload = {
-              anchor: `${R.join(
-                ".",
-                R.init(payload.parent.anchor.split("."))
-              )}.${payload.parent.siblings[i].anchor}`,
-              categories: category.categories,
-              component,
-              fullPath: _fullPath,
-              parent: payload.parent.parent,
-              rootPath: payload.parent.rootPath,
-              siblings: payload.parent.siblings
-            };
-            const nextChangeProps = {
-              isChecked: false
-            };
-            operations = handleTree(nextPayload, nextChangeProps, operations);
+          const changeObj = getChangeObjByAnchor(fullAnchor, allChanges);
+          const operation = getOperation(
+            component,
+            changeObj,
+            {
+              anchor: fullAnchor,
+              fullPath,
+              shouldBeChecked: false
+            },
+            changeProps
+          );
+
+          if (operation) {
+            operations.push(operation);
           }
-        }
-      }, payload.parent.siblings);
-    }
 
-    if (payload.parent.parent && payload.parent.parent.category.components) {
-      return handlePredecessors(
-        changeProps,
-        {
-          anchor,
-          component,
-          parent: payload.parent.parent,
-          rootPath: payload.parent.rootPath
-        },
-        operations
-      );
-    }
-
-    return operations;
-  };
-
-  const handleChanges = (payload, changeProps) => {
-    const operations = handleTree(payload, changeProps);
-    return props.runOperations(operations);
-  };
-
-  const handleButtonClick = (payload, changeProps) => {
-    payload.component.onClick(payload, changeProps);
-  };
-
-  const runOperations = (payload, changeProps) => {
-    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
-    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
-    let operations = [];
-    if (R.isEmpty(changeObj.properties)) {
-      operations.push({
-        type: "addition",
-        payload: {
-          anchor: fullAnchor,
-          path: payload.fullPath,
-          properties: changeProps,
-          attachments: payload.attachments
-        }
-      });
-    } else {
-      operations.push({
-        type: "modification",
-        payload: {
-          anchor: fullAnchor,
-          path: payload.fullPath,
-          properties: changeProps,
-          attachments: payload.attachments
-        }
-      });
-    }
-    return props.runOperations(operations);
-  };
-
-  /**
-   * Main handler
-   * Returns array of changes
-   */
-  const handleTree = (payload, changeProps, operations = []) => {
-    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
-    const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
-
-    let _operations = _.cloneDeep(operations);
-
-    // Handle the current component
-    const operation = getOperation(
-      payload.component,
-      changeObj,
-      {
-        anchor: fullAnchor,
-        fullPath: payload.fullPath,
-        shouldBeChecked: changeProps.isChecked
+          return handleDescendants(
+            changeProps,
+            {
+              anchor,
+              categories: category.categories,
+              fullPath
+            },
+            operations
+          );
+        }, payload.categories || []);
+        return operations;
       },
-      changeProps
+      [getAllChanges]
     );
 
-    if (operation) {
-      _operations = R.concat(operations, [operation]);
-    }
+    /**
+     * Main handler
+     * Returns array of changes
+     */
+    const handleTree = useCallback(
+      (payload, changeProps, operations = []) => {
+        const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+        const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
 
-    // Walk through the descendants
-    if (!changeProps.isChecked && payload.categories) {
-      _operations = R.concat(
-        _operations,
-        handleDescendants(changeProps, payload, [])
-      );
-    }
+        let _operations = _.cloneDeep(operations);
 
-    if (changeProps.isChecked) {
-      // Walk through the predecessors
-      if (
-        payload.parent &&
-        payload.parent.category &&
-        payload.parent.category.components
-      ) {
-        _operations = R.concat(
-          _operations,
-          handlePredecessors(changeProps, payload, [])
+        // Handle the current component
+        const operation = getOperation(
+          payload.component,
+          changeObj,
+          {
+            anchor: fullAnchor,
+            fullPath: payload.fullPath,
+            shouldBeChecked: changeProps.isChecked
+          },
+          changeProps
         );
-      }
-      if (payload.component.name === "RadioButtonWithLabel") {
-        // Walk through the siblings
-        R.addIndex(R.forEach)((category, i) => {
-          const component = category.components[0];
-          if (component.name === "RadioButtonWithLabel") {
-            const fullPath = R.concat(payload.rootPath, [i, "components", 0]);
-            if (!R.equals(fullPath, payload.fullPath)) {
-              // All the radio button siblings must be unchecked
-              const nextPayload = {
-                anchor: `${R.join(".", R.init(payload.anchor.split(".")))}.${
-                  category.anchor
-                }`,
-                categories: category.categories,
-                component,
-                fullPath,
-                parent: payload.parent,
-                rootPath: payload.rootPath,
-                siblings: payload.siblings
-              };
-              const nextChangeProps = {
-                isChecked: false
-              };
-              _operations = handleTree(
-                nextPayload,
-                nextChangeProps,
-                _operations
-              );
-            }
+
+        if (operation) {
+          _operations = R.concat(operations, [operation]);
+        }
+
+        // Walk through the descendants
+        if (!changeProps.isChecked && payload.categories) {
+          _operations = R.concat(
+            _operations,
+            handleDescendants(changeProps, payload, [])
+          );
+        }
+
+        if (changeProps.isChecked) {
+          // Walk through the predecessors
+          if (
+            payload.parent &&
+            payload.parent.category &&
+            payload.parent.category.components
+          ) {
+            _operations = R.concat(
+              _operations,
+              handlePredecessors(changeProps, payload, [])
+            );
           }
-        }, payload.siblings);
+          if (payload.component.name === "RadioButtonWithLabel") {
+            // Walk through the siblings
+            R.addIndex(R.forEach)((category, i) => {
+              const component = category.components[0];
+              if (component.name === "RadioButtonWithLabel") {
+                const fullPath = R.concat(payload.rootPath, [
+                  i,
+                  "components",
+                  0
+                ]);
+                if (!R.equals(fullPath, payload.fullPath)) {
+                  // All the radio button siblings must be unchecked
+                  const nextPayload = {
+                    anchor: `${R.join(
+                      ".",
+                      R.init(payload.anchor.split("."))
+                    )}.${category.anchor}`,
+                    categories: category.categories,
+                    component,
+                    fullPath,
+                    parent: payload.parent,
+                    rootPath: payload.rootPath,
+                    siblings: payload.siblings
+                  };
+                  const nextChangeProps = {
+                    isChecked: false
+                  };
+                  _operations = handleTree(
+                    nextPayload,
+                    nextChangeProps,
+                    _operations
+                  );
+                }
+              }
+            }, payload.siblings);
+          }
+        }
+
+        // Put all changes into one array for later handing
+        return _operations;
+      },
+      [handleDescendants, handlePredecessors, props.changes]
+    );
+
+    const handlePredecessors = useCallback(
+      (changeProps, payload, operations = []) => {
+        const allChanges = getAllChanges();
+        const component = payload.parent
+          ? payload.parent.category.components[0]
+          : payload.component;
+        const anchor = R.join(".", R.init(payload.anchor.split(".")));
+        const fullAnchor = `${anchor}.${component.anchor}`;
+        const fullPath = R.concat(R.slice(0, -1, payload.rootPath), [
+          "components",
+          0
+        ]);
+        const changeObj = getChangeObjByAnchor(fullAnchor, allChanges);
+
+        if (
+          component.name === "CheckboxWithLabel" ||
+          component.name === "RadioButtonWithLabel"
+        ) {
+          const operation = getOperation(
+            component,
+            changeObj,
+            {
+              anchor: fullAnchor,
+              fullPath,
+              shouldBeChecked: true
+            },
+            changeProps
+          );
+
+          if (operation) {
+            operations.push(operation);
+          }
+        }
+
+        if (component.name === "RadioButtonWithLabel") {
+          // Walk through the siblings
+          R.addIndex(R.forEach)((category, i) => {
+            const component = category.components[0];
+            if (component.name === "RadioButtonWithLabel") {
+              const _fullPath = R.concat(payload.parent.rootPath, [
+                i,
+                "components",
+                0
+              ]);
+              // R.concat(payload.rootPath, [i, "components", 0]);
+              if (
+                !R.equals(
+                  R.concat(payload.parent.rootPath, [i]),
+                  R.init(payload.rootPath)
+                )
+              ) {
+                // All the radio button siblings must be unchecked
+                const nextPayload = {
+                  anchor: `${R.join(
+                    ".",
+                    R.init(payload.parent.anchor.split("."))
+                  )}.${payload.parent.siblings[i].anchor}`,
+                  categories: category.categories,
+                  component,
+                  fullPath: _fullPath,
+                  parent: payload.parent.parent,
+                  rootPath: payload.parent.rootPath,
+                  siblings: payload.parent.siblings
+                };
+                const nextChangeProps = {
+                  isChecked: false
+                };
+                operations = handleTree(
+                  nextPayload,
+                  nextChangeProps,
+                  operations
+                );
+              }
+            }
+          }, payload.parent.siblings);
+        }
+
+        if (
+          payload.parent.parent &&
+          payload.parent.parent.category.components
+        ) {
+          return handlePredecessors(
+            changeProps,
+            {
+              anchor,
+              component,
+              parent: payload.parent.parent,
+              rootPath: payload.parent.rootPath
+            },
+            operations
+          );
+        }
+
+        return operations;
+      },
+      [handleTree, getAllChanges]
+    );
+
+    const handleButtonClick = (payload, changeProps) => {
+      payload.component.onClick(payload, changeProps);
+    };
+
+    const handleChanges = useCallback(
+      (payload, changeProps) => {
+        const operations = handleTree(payload, changeProps);
+        const result = runRootOperations(operations);
+        return onChangesUpdate(result);
+      },
+      [handleTree, onChangesUpdate, runRootOperations]
+    );
+
+    const runOperations = (payload, changeProps) => {
+      const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+      const changeObj = getChangeObjByAnchor(fullAnchor, props.changes);
+      let operations = [];
+      if (R.isEmpty(changeObj.properties)) {
+        operations.push({
+          type: "addition",
+          payload: {
+            anchor: fullAnchor,
+            path: payload.fullPath,
+            properties: changeProps,
+            attachments: payload.attachments
+          }
+        });
+      } else {
+        operations.push({
+          type: "modification",
+          payload: {
+            anchor: fullAnchor,
+            path: payload.fullPath,
+            properties: changeProps,
+            attachments: payload.attachments
+          }
+        });
       }
-    }
+      const result = runRootOperations(operations);
+      return onChangesUpdate(result);
+    };
 
-    // Put all changes into one array for later handing
-    return _operations;
-  };
-
-  return (() => {
     return (
       <div>
         {_.map(props.categories, (category, i) => {
           const isCategoryTitleVisible =
             props.showCategoryTitles && (category.code || category.title);
           const anchor = `${props.anchor}.${category.anchor}`;
+          const splittedAnchor = R.split(".", anchor);
+          const categoryChanges = R.filter(
+            R.compose(
+              R.equals(splittedAnchor),
+              R.slice(0, splittedAnchor.length),
+              R.split("."),
+              R.prop("anchor")
+            ),
+            props.changes
+          );
           const categoryStyles = [
             "flex",
             "sm:items-center",
@@ -357,6 +402,7 @@ const CategorizedList = React.memo(props => {
               )}
               <div className={categoryStyles}>
                 {_.map(category.components, (component, ii) => {
+                  // console.info("Rendering...", component);
                   const fullAnchor = `${anchor}.${component.anchor}`;
                   const fullPath = props.rootPath.concat([i, "components", ii]);
                   const idSuffix = `${i}-${ii}`;
@@ -364,6 +410,16 @@ const CategorizedList = React.memo(props => {
                     fullAnchor,
                     props.changes
                   );
+                  const parentComponent =
+                    props.parent && props.parent.category.components
+                      ? props.parent.category.components[0]
+                      : null;
+                  const parentChangeObj = parentComponent
+                    ? getChangeObjByAnchor(
+                        `${props.parent.anchor}.${parentComponent.anchor}`,
+                        props.changes
+                      )
+                    : {};
                   const propsObj = getPropertiesObject(changeObj, component);
                   const isAddition = !!changeObj.properties.isChecked;
                   const isRemoved =
@@ -381,6 +437,7 @@ const CategorizedList = React.memo(props => {
                     (props.debug
                       ? props.rootPath.concat([i, "components", ii])
                       : "");
+                  // console.info(fullAnchor, component);
                   return (
                     <React.Fragment key={`item-${ii}`}>
                       {component.name === "CheckboxWithLabel" && (
@@ -482,6 +539,26 @@ const CategorizedList = React.memo(props => {
                             );
                           })(category)
                         : null}
+                      {component.name === "TextBox" && (
+                        <CategorizedListTextBox
+                          changeObj={changeObj}
+                          parentComponent={parentComponent}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
+                          _props={props}
+                          onChanges={runOperations}
+                          idSuffix
+                          propsObj={propsObj}
+                          parentChangeObj={parentChangeObj}
+                        ></CategorizedListTextBox>
+                      )}
                       {component.name === "Input"
                         ? (category => {
                             const change = getChangeObjByAnchor(
@@ -544,59 +621,6 @@ const CategorizedList = React.memo(props => {
                             );
                           })(category)
                         : null}
-                      {component.name === "TextBox"
-                        ? (category => {
-                            const change = getChangeObjByAnchor(
-                              fullAnchor,
-                              props.changes
-                            );
-                            let parentComponent = null;
-                            let isDisabled = false;
-                            if (
-                              props.parent &&
-                              props.parent.category.components
-                            ) {
-                              parentComponent =
-                                props.parent.category.components[0];
-                              const parentChange = getChangeObjByAnchor(
-                                `${props.parent.anchor}.${parentComponent.anchor}`,
-                                props.changes
-                              );
-                              isDisabled =
-                                R.includes(parentComponent.name, [
-                                  "CheckboxWithLabel",
-                                  "RadioButtonWithLabel"
-                                ]) &&
-                                ((!parentComponent.properties.isChecked &&
-                                  R.isEmpty(parentChange.properties)) ||
-                                  !parentChange.properties.isChecked);
-                            }
-                            const value = change
-                              ? change.properties.value
-                              : propsObj.defaultValue;
-                            return (
-                              <div className="pt-4 pr-2 w-full my-2 sm:my-0 sm:mb-1">
-                                <TextBox
-                                  id={`textbox-${idSuffix}`}
-                                  isDisabled={isDisabled}
-                                  isHidden={isDisabled}
-                                  onChanges={runOperations}
-                                  payload={{
-                                    anchor,
-                                    categories: category.categories,
-                                    component,
-                                    fullPath,
-                                    parent: props.parent,
-                                    rootPath: props.rootPath,
-                                    siblings: props.categories
-                                  }}
-                                  placeholder={propsObj.placeholder}
-                                  value={value}
-                                />
-                              </div>
-                            );
-                          })(category)
-                        : null}
                       {component.name === "Attachments"
                         ? (category => {
                             const previousSibling =
@@ -650,10 +674,16 @@ const CategorizedList = React.memo(props => {
                                 <StatusTextRow
                                   labelStyles={labelStyles}
                                   styleClasses={styleClasses}
+                                  statusText={propsObj.statusText}
+                                  statusTextStyleClasses={
+                                    propsObj.statusTextStyleClasses
+                                  }
                                 >
                                   <div className="flex">
-                                    {codeMarkup}
-                                    <p>{title}</p>
+                                    <div className="flex-1">
+                                      {codeMarkup}
+                                      <span>{title}</span>
+                                    </div>
                                   </div>
                                 </StatusTextRow>
                               </div>
@@ -748,8 +778,9 @@ const CategorizedList = React.memo(props => {
                 <CategorizedList
                   anchor={anchor}
                   categories={category.categories}
-                  changes={props.changes}
+                  changes={categoryChanges}
                   debug={props.debug}
+                  getAllChanges={props.getAllChanges}
                   id={`${props.id}-${category.code}`}
                   level={props.level + 1}
                   parent={{
@@ -761,8 +792,9 @@ const CategorizedList = React.memo(props => {
                   }}
                   parentRootPath={props.rootPath}
                   rootPath={props.rootPath.concat([i, "categories"])}
-                  runOperations={props.runOperations}
+                  runRootOperations={props.runRootOperations}
                   showCategoryTitles={props.showCategoryTitles}
+                  onChangesUpdate={props.onChangesUpdate}
                 />
               )}
             </div>
@@ -770,8 +802,42 @@ const CategorizedList = React.memo(props => {
         })}
       </div>
     );
-  })();
-});
+  }
+  // (prevState, currentState) => {
+  //   const splittedAnchor = R.split(".", currentState.anchor);
+  //   // console.info(splittedAnchor);
+  //   // console.info(prevState, currentState)
+  //   const prevCategoryChanges = R.filter(
+  //     R.compose(
+  //       R.equals(splittedAnchor),
+  //       R.slice(0, splittedAnchor.length),
+  //       R.split("."),
+  //       R.prop("anchor")
+  //     ),
+  //     prevState.changes
+  //   );
+  //   const categoryChanges = R.filter(
+  //     R.compose(
+  //       R.equals(splittedAnchor),
+  //       R.slice(0, splittedAnchor.length),
+  //       R.split("."),
+  //       R.prop("anchor")
+  //     ),
+  //     currentState.changes
+  //   );
+  //   console.group();
+  //   console.info("prevState: ", prevState);
+  //   console.info("Anchor: ", currentState.anchor);
+  //   console.info("Prev changes:", prevCategoryChanges);
+  //   console.info("Current changes:", categoryChanges);
+  //   console.info("Equals: ", R.equals(prevCategoryChanges, categoryChanges));
+  //   console.groupEnd();
+  //   return (
+  //     R.equals(prevCategoryChanges, categoryChanges) &&
+  //     prevState.categories.length
+  //   );
+  // }
+);
 
 CategorizedList.propTypes = {
   anchor: PropTypes.string,
@@ -781,7 +847,9 @@ CategorizedList.propTypes = {
   onChanges: PropTypes.func,
   parentCategory: PropTypes.object,
   path: PropTypes.array,
-  showCategoryTitles: PropTypes.bool
+  runRootOperations: PropTypes.func,
+  showCategoryTitles: PropTypes.bool,
+  onChangesUpdate: PropTypes.func
 };
 
 export default CategorizedList;

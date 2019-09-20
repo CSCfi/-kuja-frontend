@@ -13,7 +13,7 @@ const WizardPage = props => {
 
   useEffect(() => {
     setIsSavingEnabled(true);
-  }, [props.muutoshakemus]);
+  }, [props.changeObjects]);
 
   return (
     <div>
@@ -35,7 +35,7 @@ WizardPage.defaultProps = {
 
 WizardPage.propTypes = {
   lupa: PropTypes.object,
-  muutoshakemus: PropTypes.object,
+  changeObjects: PropTypes.object,
   onNext: PropTypes.func,
   onPrev: PropTypes.func,
   onSave: PropTypes.func,

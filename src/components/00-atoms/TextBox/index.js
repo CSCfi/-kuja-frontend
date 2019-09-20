@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import PropTypes from "prop-types";
-import _ from "lodash";
 
 const TextBox = props => {
-  const changesOutDelayed = _.debounce(props.onChanges, props.delay);
+  const [value, setValue] = useState(null);
+  const [handle, setHandle] = useState(null);
+
+  const updateValue = e => {
+    setValue(e.target.value);
+    if (handle) {
+      clearTimeout(handle);
+    }
+    setHandle(
+      (v => {
+        return setTimeout(() => {
+          props.onChanges(props.payload, { value: v });
+        }, props.delay);
+      })(e.target.value)
+    );
+  };
+
+  useEffect(() => {
+    if (props.value !== value || !value) {
+      setValue(props.value);
+    }
+  }, [props.value]);
 
   return (
-    <div>
-      <TextareaAutosize
-        aria-label={props.ariaLabel}
-        defaultValue={props.value}
-        disabled={props.isDisabled}
-        placeholder={props.placeholder}
-        rows={props.rows}
-        rowsMax={props.rowsMax}
-        className={`${
-          props.isHidden ? "hidden" : ""
-        } w-full border border-solid p-2`}
-        onChange={e =>
-          changesOutDelayed(props.payload, { value: e.target.value })
-        }
-      />
-    </div>
+    <React.Fragment>
+      {value !== null ? (
+        <TextareaAutosize
+          aria-label={props.ariaLabel}
+          disabled={props.isDisabled}
+          placeholder={props.placeholder}
+          rows={props.rows}
+          rowsMax={props.rowsMax}
+          className={`${
+            props.isHidden ? "hidden" : ""
+          } w-full border border-solid p-2`}
+          onChange={updateValue}
+          value={value}
+        />
+      ) : null}
+    </React.Fragment>
   );
 };
 
@@ -48,7 +68,8 @@ TextBox.propTypes = {
   payload: PropTypes.object,
   placeholder: PropTypes.string,
   rows: PropTypes.number,
-  rowsMax: PropTypes.number
+  rowsMax: PropTypes.number,
+  value: PropTypes.string
 };
 
 export default TextBox;

@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
+import CategorizedListMemory from "./CategorizedListMemory";
 import * as R from "ramda";
 import _ from "lodash";
 
@@ -18,74 +19,80 @@ const CategorizedListRoot = React.memo(
     anchor = defaultProps.anchor,
     categories = defaultProps.categories,
     changes = defaultProps.changes,
-    index,
     onUpdate,
-    sectionId = defaultProps.sectionId,
     showCategoryTitles = defaultProps.showCategoryTitles,
     debug = defaultProps.debug
   }) => {
-    const [allChanges, setAllChanges] = useState([null]);
-
-    useEffect(() => {
-      setAllChanges(changes);
-    }, [changes]);
-
-    const runOperations = useMemo(() => {
-      return operations => {
-        let allChangesClone = _.cloneDeep(allChanges);
-        R.forEach(operation => {
-          if (operation.type === "addition") {
-            if (!!!R.find(R.propEq("anchor", operation.payload.anchor))(allChangesClone)) {
-              allChangesClone = R.insert(-1, operation.payload, allChangesClone);
-            }
-          } else if (operation.type === "removal") {
-            allChangesClone = R.filter(
-              R.compose(
-                R.not,
-                R.propEq("anchor")(operation.payload.anchor)
-              )
-            )(allChangesClone);
-          } else if (operation.type === "modification") {
-            const withoutTargetChange = R.filter(
-              R.compose(
-                R.not,
-                R.equals(operation.payload.anchor),
-                R.prop("anchor")
-              ))(allChangesClone);
-            allChangesClone = R.insert(
-              -1,
-              operation.payload,
-              withoutTargetChange
-            );
-          }
-        }, operations);
-        setAllChanges(allChangesClone);
+    const onChangesUpdate = useCallback(
+      changes => {
         onUpdate({
           anchor: anchor,
-          categories: categories,
-          changes: allChangesClone,
-          index: index,
-          sectionId: sectionId
+          changes
         });
-      };
-    }, [allChanges, onUpdate, anchor, categories, index, sectionId]);
+      },
+      [anchor, onUpdate]
+    );
+
+    const runRootOperations = useCallback((operations, _allChanges) => {
+      let allChangesClone = _.cloneDeep(_allChanges);
+      R.forEach(operation => {
+        if (operation.type === "addition") {
+          if (
+            !!!R.find(R.propEq("anchor", operation.payload.anchor))(
+              allChangesClone
+            )
+          ) {
+            allChangesClone = R.insert(-1, operation.payload, allChangesClone);
+          }
+        } else if (operation.type === "removal") {
+          allChangesClone = R.filter(
+            R.compose(
+              R.not,
+              R.propEq("anchor")(operation.payload.anchor)
+            )
+          )(allChangesClone);
+        } else if (operation.type === "modification") {
+          const withoutTargetChange = R.filter(
+            R.compose(
+              R.not,
+              R.equals(operation.payload.anchor),
+              R.prop("anchor")
+            )
+          )(allChangesClone);
+          allChangesClone = R.insert(
+            -1,
+            operation.payload,
+            withoutTargetChange
+          );
+        }
+      }, operations);
+      return allChangesClone;
+    }, []);
 
     return (
       <React.Fragment>
-        {R.compose(
-          R.not,
-          R.equals(null),
-          R.head
-        )(allChanges) && (
-          <CategorizedList
-            anchor={anchor}
-            categories={categories}
-            changes={allChanges}
-            rootPath={[]}
-            runOperations={runOperations}
-            showCategoryTitles={showCategoryTitles}
-          />
-        )}
+        {!R.equals(R.head(changes), null)
+          ? (() => {
+              return (
+                <CategorizedListMemory
+                  changes={changes}
+                  runRootOperations={runRootOperations}
+                  render={_props => (
+                    <CategorizedList
+                      anchor={anchor}
+                      categories={categories}
+                      changes={_props.changes}
+                      getAllChanges={_props.getAllChanges}
+                      rootPath={[]}
+                      runRootOperations={_props.runRootOperations}
+                      showCategoryTitles={showCategoryTitles}
+                      onChangesUpdate={onChangesUpdate}
+                    />
+                  )}
+                ></CategorizedListMemory>
+              );
+            })()
+          : null}
       </React.Fragment>
     );
   }
