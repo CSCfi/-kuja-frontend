@@ -5,8 +5,7 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 
 const TaloudellisetInvestoinnit = React.memo(props => {
-  const { onStateUpdate } = props;
-  const sectionId = "taloudellisetinvestoinnit";
+  const { sectionId, onStateUpdate } = props;
   const [cats, setCats] = useState([]);
 
   const getCategories = useMemo(() => {

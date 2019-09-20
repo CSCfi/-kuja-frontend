@@ -208,6 +208,18 @@ const CategorizedList = React.memo(props => {
     return props.runOperations(operations);
   };
 
+  const handleAttachmentChanges = (payload, changeProps) => {
+    const addition = {
+      type: "addition",
+      payload: {
+        anchor: payload.anchor,
+        properties: changeProps
+      }
+    };
+    console.log(payload);
+    console.log(changeProps);
+  };
+
   const handleButtonClick = (payload, changeProps) => {
     payload.component.onClick(payload, changeProps);
   };
@@ -607,7 +619,7 @@ const CategorizedList = React.memo(props => {
                               <div className="flex-2">
                                 <Attachments
                                   id={`attachments-${idSuffix}`}
-                                  onUpdate={e => (propsObj.attachments = e)} // TODO
+                                  onUpdate={handleAttachmentChanges}
                                   placement={props.placement}
                                   payload={{
                                     anchor,
