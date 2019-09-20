@@ -19,19 +19,18 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutValmentavatKoulutukset
               changeObjects={{
                 koulutukset: {
-                  valmentavatKoulutukset:
-                    R.path(["koulutukset", "valmentavatKoulutukset"])(
-                      props.changeObjects
-                    ) || []
+                  valmentavatKoulutukset: R.path([
+                    "koulutukset",
+                    "valmentavatKoulutukset"
+                  ])(props.changeObjects)
                 },
                 perustelut: {
                   koulutukset: {
-                    valmentavatKoulutukset:
-                      R.path([
-                        "perustelut",
-                        "koulutukset",
-                        "valmentavatKoulutukset"
-                      ])(props.changeObjects) || []
+                    valmentavatKoulutukset: R.path([
+                      "perustelut",
+                      "koulutukset",
+                      "valmentavatKoulutukset"
+                    ])(props.changeObjects)
                   }
                 }
               }}
@@ -55,20 +54,18 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutATVKoulutukset
               changeObjects={{
                 koulutukset: {
-                  ammatilliseenTehtavaanValmistavatKoulutukset:
-                    R.path([
-                      "koulutukset",
-                      "ammatilliseenTehtavaanValmistavatKoulutukset"
-                    ])(props.changeObjects) || []
+                  ammatilliseenTehtavaanValmistavatKoulutukset: R.path([
+                    "koulutukset",
+                    "ammatilliseenTehtavaanValmistavatKoulutukset"
+                  ])(props.changeObjects)
                 },
                 perustelut: {
                   koulutukset: {
-                    ammatilliseenTehtavaanValmistavatKoulutukset:
-                      R.path([
-                        "perustelut",
-                        "koulutukset",
-                        "ammatilliseenTehtavaanValmistavatKoulutukset"
-                      ])(props.changeObjects) || []
+                    ammatilliseenTehtavaanValmistavatKoulutukset: R.path([
+                      "perustelut",
+                      "koulutukset",
+                      "ammatilliseenTehtavaanValmistavatKoulutukset"
+                    ])(props.changeObjects)
                   }
                 }
               }}
@@ -96,19 +93,18 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutTyovoimakoulutukset
               changeObjects={{
                 koulutukset: {
-                  tyovoimakoulutukset:
-                    R.path(["koulutukset", "tyovoimakoulutukset"])(
-                      props.changeObjects
-                    ) || []
+                  tyovoimakoulutukset: R.path([
+                    "koulutukset",
+                    "tyovoimakoulutukset"
+                  ])(props.changeObjects)
                 },
                 perustelut: {
                   koulutukset: {
-                    tyovoimakoulutukset:
-                      R.path([
-                        "perustelut",
-                        "koulutukset",
-                        "tyovoimakoulutukset"
-                      ])(props.changeObjects) || []
+                    tyovoimakoulutukset: R.path([
+                      "perustelut",
+                      "koulutukset",
+                      "tyovoimakoulutukset"
+                    ])(props.changeObjects)
                   }
                 }
               }}

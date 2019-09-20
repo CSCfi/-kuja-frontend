@@ -15,7 +15,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      R.path(["koulutukset", "tyovoimakoulutukset"])(props.changeObjects)
+      props.changeObjects.koulutukset.tyovoimakoulutukset
     );
 
     return (koulutusData, kohde, maaraystyyppi) => {
@@ -56,7 +56,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
-                      defaultValue: "Text 2"
+                      placeholder: "Perustelut..."
                     }
                   }
                 ]
@@ -68,7 +68,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects]);
+  }, [props.changeObjects.koulutukset.tyovoimakoulutukset]);
 
   useEffect(() => {
     onStateUpdate(
