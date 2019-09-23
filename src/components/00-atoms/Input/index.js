@@ -51,7 +51,7 @@ Input.defaultProps = {
   rows: 1,
   rowsMax: 1,
   error: false,
-  width: 100,
+  width: "20em",
   fullWidth: false,
   type: "text"
 };
@@ -71,7 +71,7 @@ Input.propTypes = {
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
   error: PropTypes.bool,
-  width: PropTypes.number,
+  width: PropTypes.string,
   fullWidth: PropTypes.bool,
   type: PropTypes.string
 };
