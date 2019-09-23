@@ -61,7 +61,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
           styleClasses: [""],
           components: [
             {
-              anchor: "C",
+              anchor: "A",
               name: "TextBox",
               properties: {
                 placeholder: ""

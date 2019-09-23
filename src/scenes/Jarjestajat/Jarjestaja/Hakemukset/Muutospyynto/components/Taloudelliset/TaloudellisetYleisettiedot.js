@@ -34,7 +34,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               styleClasses: ["mb-6"],
               components: [
                 {
-                  anchor: "B",
+                  anchor: "A",
                   name: "TextBox",
                   properties: {
                     placeholder: ""
@@ -48,7 +48,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               styleClasses: [""],
               components: [
                 {
-                  anchor: "C",
+                  anchor: "A",
                   name: "TextBox",
                   properties: {
                     placeholder: ""

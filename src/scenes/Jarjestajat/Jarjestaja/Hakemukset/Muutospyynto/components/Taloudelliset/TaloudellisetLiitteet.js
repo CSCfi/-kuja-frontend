@@ -33,7 +33,6 @@ const TaloudellisetLiitteet = React.memo(props => {
 
   useEffect(() => {
     const array = getCategories();
-    console.log(array);
 
     onStateUpdate(
       {
