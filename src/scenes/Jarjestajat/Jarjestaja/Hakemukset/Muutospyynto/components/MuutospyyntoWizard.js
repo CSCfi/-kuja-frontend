@@ -113,6 +113,9 @@ const MuutospyyntoWizard = props => {
     },
     perustelut: {
       tutkinnot: {}
+    },
+    yhteenveto: {
+      yleisettiedot: []
     }
   });
 

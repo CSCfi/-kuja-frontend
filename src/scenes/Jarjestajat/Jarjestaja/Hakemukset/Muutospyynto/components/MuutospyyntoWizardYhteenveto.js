@@ -26,7 +26,12 @@ const MuutospyyntoWizardTaloudelliset = ({
                 ["yhteenveto", "yleisettiedot"],
                 muutoshakemus
               )}
-              changeObjects={{}}
+              changeObjects={{
+                yhteenveto: R.path(
+                  ["yhteenveto", "yleisettiedot"],
+                  changeObjects
+                )
+              }}
               {..._props}
             />
           </React.Fragment>

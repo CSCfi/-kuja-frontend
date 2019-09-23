@@ -189,8 +189,12 @@ const HakemusContainer = props => {
         R.path(
           ["meta", "taloudelliset", "changeObjects"],
           muutospyynnot.muutospyynto
-        )
-      ]);
+        ) || [],
+        R.path(
+          ["meta", "yhteenveto", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || []
+      ]).filter(Boolean);
 
       let changesBySection = {};
 
