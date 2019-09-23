@@ -122,22 +122,6 @@ const CategorizedList = React.memo(
       [getAllChanges]
     );
 
-    const handleAttachmentChanges = (payload, changeProps) => {
-      console.log(changeProps);
-      const operations = R.map(attachment => {
-        return {
-          type: "addition",
-          payload: {
-            anchor: payload.anchor,
-            properties: attachment
-          }
-        };
-      }, changeProps.attachments);
-      console.log(operations);
-      const result = runRootOperations(operations);
-      return onChangesUpdate(result);
-    };
-
     /**
      * Main handler
      * Returns array of changes
@@ -606,18 +590,12 @@ const CategorizedList = React.memo(
                               ? change.properties.value
                               : propsObj.defaultValue;
                             return (
-                              <div
-                                className={`${component.styleClasses} flex row content-center pt-2 pr-2 my-2 sm:my-0 sm:mb-1`}
-                              >
-                                {propsObj.label && (
-                                  <label className="my-auto mr-2 font-sans">
-                                    {propsObj.label}
-                                  </label>
-                                )}
+                              <div className={component.styleClasses}>
                                 <Input
                                   id={`input-${idSuffix}`}
                                   isDisabled={isDisabled}
                                   isHidden={isDisabled}
+                                  label={propsObj.label}
                                   onChanges={runOperations}
                                   payload={{
                                     anchor,
@@ -664,7 +642,7 @@ const CategorizedList = React.memo(
                               <div className="flex-2">
                                 <Attachments
                                   id={`attachments-${idSuffix}`}
-                                  onUpdate={handleAttachmentChanges}
+                                  onUpdate={e => (propsObj.attachments = e)} // TODO
                                   placement={props.placement}
                                   payload={{
                                     anchor,

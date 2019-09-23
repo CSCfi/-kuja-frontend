@@ -13,7 +13,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
       structure = [
         {
           anchor: "omavaraisuusaste-input",
-          styleClasses: ["flex sm:row mb-6"],
+          styleClasses: ["mb-2"],
           components: [
             {
               anchor: "A",
@@ -21,7 +21,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "12em",
+                width: "20em",
                 label: "Omavaraisuusaste"
               }
             }
@@ -29,7 +29,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
         },
         {
           anchor: "maksuvalmius-input",
-          styleClasses: ["flex sm:row mb-6"],
+          styleClasses: ["mb-2"],
           components: [
             {
               anchor: "A",
@@ -38,7 +38,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "12em",
+                width: "20em",
                 label: "Maksuvalmius"
               }
             }
@@ -46,7 +46,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
         },
         {
           anchor: "velkaantuneisuus-input",
-          styleClasses: ["flex sm:row mb-6"],
+          styleClasses: ["mb-2"],
           components: [
             {
               anchor: "A",
@@ -55,7 +55,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "12em",
+                width: "20em",
                 label: "Velkaantuneisuus"
               }
             }
@@ -63,7 +63,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
         },
         {
           anchor: "kannattavuus-input",
-          styleClasses: ["flex sm:row mb-6"],
+          styleClasses: ["mb-2"],
           components: [
             {
               anchor: "A",
@@ -72,7 +72,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "12em",
+                width: "20em",
                 label: "Kannattavuus"
               }
             }
@@ -80,7 +80,6 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
         },
         {
           anchor: "jaama-input",
-          styleClasses: ["flex sm:row mb-6"],
           components: [
             {
               anchor: "A",
@@ -89,7 +88,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "12em",
+                width: "20em",
                 label: "Kumulatiivinen yli- tai alijäämä"
               }
             }
