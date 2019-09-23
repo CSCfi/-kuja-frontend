@@ -34,6 +34,7 @@ import * as R from "ramda";
 import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
+import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 // import { getChangeObjects } from "../../../../../../services/muutoshakemus/utils/common";
 
 const DialogTitle = withStyles(theme => ({
@@ -400,7 +401,14 @@ const MuutospyyntoWizard = props => {
                 onSave={save}
                 lupa={props.lupa}
                 muutoshakemus={dataBySection}
-              />
+              >
+                <MuutospyyntoWizardYhteenveto
+                  changeObjects={changeObjects}
+                  muutoshakemus={dataBySection}
+                  onChangesUpdate={onSectionChangesUpdate}
+                  onStateUpdate={onSectionStateUpdate}
+                />
+              </WizardPage>
             )}
           </div>
         </DialogContent>
