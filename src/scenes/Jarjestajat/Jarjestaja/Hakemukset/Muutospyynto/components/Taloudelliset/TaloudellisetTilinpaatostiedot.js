@@ -4,7 +4,7 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const TaloudellisetInvestoinnit = React.memo(props => {
+const TaloudellisetTilinpaatostiedot = React.memo(props => {
   const { sectionId, onStateUpdate } = props;
   const getCategories = useMemo(() => {
     return () => {
@@ -12,35 +12,23 @@ const TaloudellisetInvestoinnit = React.memo(props => {
 
       structure = [
         {
-          anchor: "investoinnit-tekstikentta",
-          title: "Tarvittavat investoinnit",
-          styleClasses: ["mb-6 font-normal"],
+          anchor: "omavaraisuusaste-input",
+          styleClasses: ["flex sm:row mb-6"],
           components: [
             {
-              anchor: "label",
-              name: "TextBox",
+              anchor: "A",
+              name: "Input",
               properties: {
-                placeholder: ""
+                withoutMargin: true,
+                type: "number",
+                width: "12em",
+                label: "Omavaraisuusaste"
               }
             }
           ]
         },
         {
-          anchor: "kustannukset-header",
-          styleClasses: [""],
-          components: [
-            {
-              anchor: "label",
-              name: "StatusTextRow",
-              styleClasses: ["font-semibold text-base mb-2"],
-              properties: {
-                title: "Investoinnin kustannukset"
-              }
-            }
-          ]
-        },
-        {
-          anchor: "kustannukset-Input",
+          anchor: "maksuvalmius-input",
           styleClasses: ["flex sm:row mb-6"],
           components: [
             {
@@ -50,21 +38,59 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               properties: {
                 withoutMargin: true,
                 type: "number",
-                width: "8em"
+                width: "12em",
+                label: "Maksuvalmius"
               }
             }
           ]
         },
         {
-          anchor: "rahoitus-tekstikentta",
-          title: "Investointien rahoitus",
-          styleClasses: [""],
+          anchor: "velkaantuneisuus-input",
+          styleClasses: ["flex sm:row mb-6"],
           components: [
             {
-              anchor: "C",
-              name: "TextBox",
+              anchor: "A",
+              name: "Input",
+              styleClasses: [""],
               properties: {
-                placeholder: ""
+                withoutMargin: true,
+                type: "number",
+                width: "12em",
+                label: "Velkaantuneisuus"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "kannattavuus-input",
+          styleClasses: ["flex sm:row mb-6"],
+          components: [
+            {
+              anchor: "A",
+              name: "Input",
+              styleClasses: [""],
+              properties: {
+                withoutMargin: true,
+                type: "number",
+                width: "12em",
+                label: "Kannattavuus"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "jaama-input",
+          styleClasses: ["flex sm:row mb-6"],
+          components: [
+            {
+              anchor: "A",
+              name: "Input",
+              styleClasses: [""],
+              properties: {
+                withoutMargin: true,
+                type: "number",
+                width: "12em",
+                label: "Kumulatiivinen yli- tai alijäämä"
               }
             }
           ]
@@ -86,9 +112,9 @@ const TaloudellisetInvestoinnit = React.memo(props => {
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
-          title={"Investoinnit"}
+          title={"Tilinpäätöstiedot"}
           anchor={sectionId}
-          key={`taloudelliset-investoinnit`}
+          key={`taloudelliset-tilinpaatos`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
           disableReverting={true}
@@ -104,11 +130,11 @@ const TaloudellisetInvestoinnit = React.memo(props => {
   );
 });
 
-TaloudellisetInvestoinnit.propTypes = {
+TaloudellisetTilinpaatostiedot.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
-export default injectIntl(TaloudellisetInvestoinnit);
+export default injectIntl(TaloudellisetTilinpaatostiedot);

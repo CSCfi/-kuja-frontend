@@ -44,7 +44,6 @@ const TaloudellisetLiitteet = React.memo(props => {
   }, [getCategories, onStateUpdate, sectionId]);
   return (
     <React.Fragment>
-      <p></p>
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
           title={"Liitteet"}

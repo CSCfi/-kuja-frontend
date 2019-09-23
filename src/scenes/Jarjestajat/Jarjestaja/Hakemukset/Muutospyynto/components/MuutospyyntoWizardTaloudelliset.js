@@ -4,21 +4,13 @@ import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit";
+import TaloudellisetTilinpaatostiedot from "./Taloudelliset/TaloudellisetTilinpaatostiedot";
 import TaloudellisetLiitteet from "./Taloudelliset/TaloudellisetLiitteet";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const MuutospyyntoWizardTaloudelliset = ({
   changeObjects,
-  intl,
-  kielet,
-  kohteet = [],
-  koulutukset,
-  koulutusalat,
-  koulutustyypit,
-  maaraystyypit,
-  muut,
-  lupa,
   muutoshakemus,
   onChangesUpdate,
   onStateUpdate
@@ -69,6 +61,28 @@ const MuutospyyntoWizardTaloudelliset = ({
                   changeObjects={{
                     taloudelliset: R.path(
                       ["taloudelliset", "investoinnit"],
+                      changeObjects
+                    )
+                  }}
+                  {..._props}
+                />
+              </React.Fragment>
+            )}
+            runOnStateUpdate={onStateUpdate}
+            runOnChanges={onChangesUpdate}
+          />
+          <FormSection
+            id="taloudelliset_tilinpaatostiedot"
+            render={_props => (
+              <React.Fragment>
+                <TaloudellisetTilinpaatostiedot
+                  stateObject={R.path(
+                    ["taloudelliset", "tilinpaatostiedot"],
+                    muutoshakemus
+                  )}
+                  changeObjects={{
+                    taloudelliset: R.path(
+                      ["taloudelliset", "tilinpaatostiedot"],
                       changeObjects
                     )
                   }}
