@@ -29,6 +29,11 @@ export function createObjectToSave(
     meta: {
       meta: {},
       taloudelliset: {
+        changeObjects: R.flatten([
+          R.path(["taloudelliset", "investoinnit"], changeObjects),
+          R.path(["taloudelliset", "tilinpaatostiedot"], changeObjects),
+          R.path(["taloudelliset", "yleisettiedot"], changeObjects)
+        ]),
         taloudelliset: []
       }
     },
@@ -47,7 +52,6 @@ export function createObjectToSave(
             R.flatten,
             R.values
           )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects)))
-          // TODO: add taloudelliset edellytykset here
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
           backendMuutokset

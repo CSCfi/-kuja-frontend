@@ -185,7 +185,11 @@ const HakemusContainer = props => {
         }),
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
-        getChangesOf("muut", backendMuutokset)
+        getChangesOf("muut", backendMuutokset),
+        R.path(
+          ["meta", "taloudelliset", "changeObjects"],
+          muutospyynnot.muutospyynto
+        )
       ]);
 
       let changesBySection = {};

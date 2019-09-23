@@ -51,7 +51,7 @@ Input.defaultProps = {
   rows: 1,
   rowsMax: 1,
   error: false,
-  width: 100,
+  width: "20em",
   fullWidth: false,
   type: "text"
 };
