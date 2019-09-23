@@ -49,8 +49,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               styleClasses: [""],
               properties: {
                 withoutMargin: true,
-                type: "number",
-                width: "8em"
+                type: "number"
               }
             }
           ]

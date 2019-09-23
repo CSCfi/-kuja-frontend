@@ -12,84 +12,57 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
 
       structure = [
         {
-          anchor: "omavaraisuusaste-input",
+          anchor: "tilinpaatostiedot",
           styleClasses: ["mb-2"],
           components: [
             {
-              anchor: "A",
+              anchor: "omavaraisuusaste",
               name: "Input",
+              styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
-                withoutMargin: true,
-                type: "number",
-                width: "20em",
-                label: "Omavaraisuusaste"
+                fullWidth: true,
+                label: "Omavaraisuusaste",
+                type: "number"
               }
-            }
-          ]
-        },
-        {
-          anchor: "maksuvalmius-input",
-          styleClasses: ["mb-2"],
-          components: [
+            },
             {
-              anchor: "A",
+              anchor: "maksuvalmius",
               name: "Input",
-              styleClasses: [""],
+              styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
-                withoutMargin: true,
-                type: "number",
-                width: "20em",
-                label: "Maksuvalmius"
+                fullWidth: true,
+                label: "Maksuvalmius",
+                type: "number"
               }
-            }
-          ]
-        },
-        {
-          anchor: "velkaantuneisuus-input",
-          styleClasses: ["mb-2"],
-          components: [
+            },
             {
-              anchor: "A",
+              anchor: "velkaantuneisuus",
               name: "Input",
-              styleClasses: [""],
+              styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
-                withoutMargin: true,
-                type: "number",
-                width: "20em",
-                label: "Velkaantuneisuus"
+                fullWidth: true,
+                label: "Velkaantuneisuus",
+                type: "number"
               }
-            }
-          ]
-        },
-        {
-          anchor: "kannattavuus-input",
-          styleClasses: ["mb-2"],
-          components: [
+            },
             {
-              anchor: "A",
+              anchor: "kannattavuus",
               name: "Input",
-              styleClasses: [""],
+              styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
-                withoutMargin: true,
-                type: "number",
-                width: "20em",
-                label: "Kannattavuus"
+                fullWidth: true,
+                label: "Kannattavuus",
+                type: "number"
               }
-            }
-          ]
-        },
-        {
-          anchor: "jaama-input",
-          components: [
+            },
             {
-              anchor: "A",
+              anchor: "jaama",
               name: "Input",
-              styleClasses: [""],
+              styleClasses: ["px-2 w-full sm:w-1/2 md:w-2/3"],
               properties: {
-                withoutMargin: true,
-                type: "number",
-                width: "20em",
-                label: "Kumulatiivinen yli- tai alijäämä"
+                fullWidth: true,
+                label: "Kumulatiivinen yli- tai alijäämä",
+                type: "number"
               }
             }
           ]
