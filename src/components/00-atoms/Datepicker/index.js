@@ -24,25 +24,8 @@ const styles = createStyles(theme => ({
 }));
 
 const materialTheme = createMuiTheme({
-  overrides: {
-    MuiPickersToolbar: {
-      toolbar: {
-        backgroundColor: green[800]
-      }
-    },
-    MuiPickersDay: {
-      daySelected: {
-        backgroundColor: green["900"]
-      },
-      current: {
-        backgroundColor: green["100"]
-      }
-    },
-    MuiPickersModal: {
-      dialogAction: {
-        color: green["900"]
-      }
-    }
+  palette: {
+    primary: green
   }
 });
 
@@ -76,8 +59,6 @@ const Datepicker = props => {
     }
   }, [props.value]);
 
-  console.log(props.intl);
-
   return (
     <ThemeProvider theme={materialTheme}>
       <MuiPickersUtilsProvider
@@ -108,8 +89,9 @@ const Datepicker = props => {
           cancelLabel={formatMessage(common.cancel)}
           todayLabel={formatMessage(common.today)}
           clearable={props.clearable}
-          FormHelperTextProps=""
-          maxDateMessage="Liian suuri"
+          maxDateMessage={formatMessage(common.datemax)}
+          minDateMessage={formatMessage(common.datemin)}
+          invalidDateMessage={formatMessage(common.dateinvalid)}
         />
       </MuiPickersUtilsProvider>
     </ThemeProvider>

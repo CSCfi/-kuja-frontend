@@ -7,6 +7,7 @@ import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import Input from "../../../00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
+import Datepicker from "../../../00-atoms/Datepicker";
 import Autocomplete from "../../Autocomplete";
 import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
@@ -754,6 +755,24 @@ const CategorizedList = React.memo(
                             text={propsObj.text}
                             variant={propsObj.variant}
                             onClick={handleButtonClick}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                          />
+                        </div>
+                      )}
+                      {component.name === "Datepicker" && (
+                        <div className={`${component.styleClasses} flex-2`}>
+                          <Datepicker
+                            text={propsObj.text}
+                            variant={propsObj.variant}
+                            onChanges={runOperations}
                             payload={{
                               anchor,
                               categories: category.categories,

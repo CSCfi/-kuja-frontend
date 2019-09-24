@@ -40,5 +40,17 @@ export default defineMessages({
   today: {
     id: "common.today",
     defaultMessage: "Tänään"
+  },
+  datemax: {
+    id: "common.datemax",
+    defaultMessage: "Päiväys on liian suuri"
+  },
+  datemin: {
+    id: "common.datemin",
+    defaultMessage: "Päiväys on liian pieni"
+  },
+  dateinvalid: {
+    id: "common.dateinvalid",
+    defaultMessage: "Päiväys on virheellinen"
   }
 });
