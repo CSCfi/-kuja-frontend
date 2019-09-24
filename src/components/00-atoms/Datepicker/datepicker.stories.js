@@ -19,17 +19,17 @@ storiesOf("Datepicker", module)
           payload={{ value: today }}
           onChanges={onChanges}
         />
-        <p>Error</p>
+        <p>Error + clearable</p>
         <Datepicker
           value={yesterday}
           payload={{ value: yesterday }}
           onChanges={onChanges}
           error={true}
+          clearable={true}
+          showTodayButton={false}
         />
         <p>Wide</p>
-        <Datepicker payload={{ testProp: 2 }} onChanges={onChanges} fullWidth />
-        <p>Number</p>
-        <Datepicker payload={{ testProp: 2 }} onChanges={onChanges} />
+        <Datepicker value={today} onChanges={onChanges} fullWidth />
       </div>
     );
   });

@@ -24,5 +24,21 @@ export default defineMessages({
   loading: {
     id: "common.loading",
     defaultMessage: "Ladataan"
+  },
+  ok: {
+    id: "common.ok",
+    defaultMessage: "Ok"
+  },
+  clear: {
+    id: "common.clear",
+    defaultMessage: "Tyhjennä"
+  },
+  cancel: {
+    id: "common.cancel",
+    defaultMessage: "Peruuta"
+  },
+  today: {
+    id: "common.today",
+    defaultMessage: "Tänään"
   }
 });

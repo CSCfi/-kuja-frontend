@@ -3,20 +3,67 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker
 } from "@material-ui/pickers";
+import { createStyles } from "@material-ui/styles";
+import green from "@material-ui/core/colors/green";
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import DateFnsUtils from "@date-io/date-fns";
+import { injectIntl } from "react-intl";
+import fiLocale from "date-fns/locale/fi";
+import svLocale from "date-fns/locale/sv";
+import enLocale from "date-fns/locale/en-GB";
+import format from "date-fns/format";
+import common from "../../../i18n/definitions/common";
 
-const styles = theme => ({
+const styles = createStyles(theme => ({
   dense: {
     marginTop: theme.spacing(2)
   }
+}));
+
+const materialTheme = createMuiTheme({
+  overrides: {
+    MuiPickersToolbar: {
+      toolbar: {
+        backgroundColor: green[800]
+      }
+    },
+    MuiPickersDay: {
+      daySelected: {
+        backgroundColor: green["900"]
+      },
+      current: {
+        backgroundColor: green["100"]
+      }
+    },
+    MuiPickersModal: {
+      dialogAction: {
+        color: green["900"]
+      }
+    }
+  }
 });
 
-const Datepicker = withStyles(styles)(props => {
+class LocalizedUtils extends DateFnsUtils {
+  getDatePickerHeaderText(date) {
+    return format(date, "d. MMMM", { locale: this.locale });
+  }
+}
+
+const Datepicker = props => {
   const { classes } = props;
   const [selectedDate, setSelectedDate] = useState(props.value);
+  const localeMap = {
+    en: enLocale,
+    fi: fiLocale,
+    sv: svLocale
+  };
+  const {
+    intl: { formatMessage }
+  } = props;
+  const locale = props.intl.locale;
 
   const handleDateChange = date => {
     props.onChanges(props.payload, { value: date });
@@ -29,28 +76,45 @@ const Datepicker = withStyles(styles)(props => {
     }
   }, [props.value]);
 
+  console.log(props.intl);
+
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker
-        format="dd/MM/yyyy" // Always is Finnish format
-        aria-label={props.ariaLabel}
-        label={props.label}
-        disabled={props.isDisabled}
-        placeholder={props.placeholder}
-        margin="dense"
-        className={`${props.isHidden ? "hidden" : ""} p-2`}
-        onChange={handleDateChange}
-        error={props.error}
-        style={props.fullWidth ? {} : { width: props.width }}
-        fullWidth={props.fullWidth}
-        InputProps={{
-          className: classes.input
-        }}
-        value={selectedDate}
-      />
-    </MuiPickersUtilsProvider>
+    <ThemeProvider theme={materialTheme}>
+      <MuiPickersUtilsProvider
+        utils={LocalizedUtils}
+        locale={localeMap[locale]}
+        theme={materialTheme}
+      >
+        <KeyboardDatePicker
+          format="d.M.yyyy" // Always is Finnish format
+          aria-label={props.ariaLabel}
+          label={props.label}
+          disabled={props.isDisabled}
+          placeholder={props.placeholder}
+          margin="dense"
+          className={`${props.isHidden ? "hidden" : ""} p-2`}
+          onChange={handleDateChange}
+          error={props.error}
+          style={props.fullWidth ? {} : { width: props.width }}
+          fullWidth={props.fullWidth}
+          InputProps={{
+            className: classes.input
+          }}
+          value={selectedDate}
+          inputVariant="outlined"
+          showTodayButton={props.showTodayButton}
+          okLabel={formatMessage(common.ok)}
+          clearLabel={formatMessage(common.clear)}
+          cancelLabel={formatMessage(common.cancel)}
+          todayLabel={formatMessage(common.today)}
+          clearable={props.clearable}
+          FormHelperTextProps=""
+          maxDateMessage="Liian suuri"
+        />
+      </MuiPickersUtilsProvider>
+    </ThemeProvider>
   );
-});
+};
 
 Datepicker.defaultProps = {
   ariaLabel: "Datepicker",
@@ -61,8 +125,10 @@ Datepicker.defaultProps = {
   isHidden: false,
   payload: {},
   error: false,
-  width: "10em",
-  fullWidth: false
+  width: "12em",
+  fullWidth: false,
+  clearable: false,
+  showTodayButton: true
 };
 
 Datepicker.propTypes = {
@@ -81,7 +147,9 @@ Datepicker.propTypes = {
   error: PropTypes.bool,
   width: PropTypes.string,
   fullWidth: PropTypes.bool,
-  value: PropTypes.instanceOf(Date)
+  value: PropTypes.instanceOf(Date),
+  clearable: PropTypes.bool,
+  showTodayButton: PropTypes.bool
 };
 
-export default Datepicker;
+export default withStyles(styles)(injectIntl(Datepicker));
