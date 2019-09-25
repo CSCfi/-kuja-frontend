@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
 import CategorizedListMemory from "./CategorizedListMemory";
@@ -10,8 +10,10 @@ const defaultProps = {
   categories: [],
   changes: [null],
   debug: false,
+  interval: 2000,
   sectionId: "sectionidmissing",
-  showCategoryTitles: false
+  showCategoryTitles: false,
+  nodeIndex: 0
 };
 
 const CategorizedListRoot = React.memo(
@@ -19,9 +21,12 @@ const CategorizedListRoot = React.memo(
     anchor = defaultProps.anchor,
     categories = defaultProps.categories,
     changes = defaultProps.changes,
+    debug = defaultProps.debug,
+    interval = defaultProps.interval,
     onUpdate,
     showCategoryTitles = defaultProps.showCategoryTitles,
-    debug = defaultProps.debug
+    nodeIndex = defaultProps.nodeIndex,
+    updateNodeIndex
   }) => {
     const onChangesUpdate = useCallback(
       changes => {
@@ -69,10 +74,20 @@ const CategorizedListRoot = React.memo(
       return allChangesClone;
     }, []);
 
+    useEffect(() => {
+      const handle = setTimeout(() => {
+        updateNodeIndex(nodeIndex);
+      }, interval);
+      return () => {
+        clearTimeout(handle);
+      };
+    }, [interval, nodeIndex, updateNodeIndex]);
+
     return (
       <React.Fragment>
         {!R.equals(R.head(changes), null)
           ? (() => {
+              // console.info("Target node index: ", nodeIndex);
               return (
                 <CategorizedListMemory
                   changes={changes}
