@@ -43,7 +43,7 @@ export const getKuljettajienPeruskoulutuslomake = (
   const code = 3;
   return [
     {
-      anchor: "kuljettajien-peruskoulutuslomake",
+      anchor: code,
       styleClasses: ["px-10 py-10"],
       components: [
         {
@@ -61,15 +61,14 @@ export const getKuljettajienPeruskoulutuslomake = (
         suunnitelma(3, 3),
         johtaja(4, 4),
         opettajien(
-          code,
           5,
           addPeopleFormCallback,
           peopleForms,
           5,
           "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista"
         ),
-        ajoneuvoKanta(code, 6, 6),
-        muutOpetusvalineet(code, 7, 7)
+        ajoneuvoKanta( 6, 6),
+        muutOpetusvalineet( 7, 7)
       ]
     }
   ];
