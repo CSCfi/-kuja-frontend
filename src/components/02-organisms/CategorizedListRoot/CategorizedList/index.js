@@ -7,6 +7,7 @@ import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import Input from "../../../00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
+import Datepicker from "../../../00-atoms/Datepicker";
 import Autocomplete from "../../Autocomplete";
 import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
@@ -724,6 +725,7 @@ const CategorizedList = React.memo(
                                   value={propsObj.value}
                                   isDisabled={isDisabled}
                                   height={heights.SHORT}
+                                  error={propsObj.error}
                                 />
                               </div>
                             );
@@ -754,6 +756,32 @@ const CategorizedList = React.memo(
                             text={propsObj.text}
                             variant={propsObj.variant}
                             onClick={handleButtonClick}
+                            payload={{
+                              anchor,
+                              categories: category.categories,
+                              component,
+                              fullPath,
+                              parent: props.parent,
+                              rootPath: props.rootPath,
+                              siblings: props.categories
+                            }}
+                          />
+                        </div>
+                      )}
+                      {component.name === "Datepicker" && (
+                        <div className={`${component.styleClasses} flex-2`}>
+                          <Datepicker
+                            text={propsObj.text}
+                            variant={propsObj.variant}
+                            onChanges={runOperations}
+                            value={propsObj.value}
+                            isDisabled={propsObj.isDisabled}
+                            isHidden={propsObj.isHidden}
+                            clearable={propsObj.clearable}
+                            showTodayButton={propsObj.showTodayButton}
+                            error={propsObj.error}
+                            placeholder={propsObj.placeholder}
+                            fullWidth={propsObj.fullWidth}
                             payload={{
                               anchor,
                               categories: category.categories,
