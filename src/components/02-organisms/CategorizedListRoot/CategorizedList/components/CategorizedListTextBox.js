@@ -34,7 +34,7 @@ export const CategorizedListTextBox = ({
   }, [changeObj, propsObj.defaultValue, propsObj.value]);
 
   return (
-    <div className={payload.component.styleClasses}>
+    <div className={`w-full ${payload.component.styleClasses}`}>
       <TextBox
         id={`textbox-${idSuffix}`}
         isDisabled={isDisabled}
