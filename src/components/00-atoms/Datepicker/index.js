@@ -124,8 +124,6 @@ Datepicker.propTypes = {
   /** Custom object defined by user. */
   payload: PropTypes.object,
   placeholder: PropTypes.string,
-  rows: PropTypes.number,
-  rowsMax: PropTypes.number,
   error: PropTypes.bool,
   width: PropTypes.string,
   fullWidth: PropTypes.bool,

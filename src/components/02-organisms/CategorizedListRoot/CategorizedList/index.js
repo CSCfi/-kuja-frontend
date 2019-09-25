@@ -773,6 +773,10 @@ const CategorizedList = React.memo(
                             text={propsObj.text}
                             variant={propsObj.variant}
                             onChanges={runOperations}
+                            value={propsObj.value}
+                            isDisabled={propsObj.isDisabled}
+                            clearable={propsObj.clearable}
+                            showTodayButton={propsObj.showTodayButton}
                             payload={{
                               anchor,
                               categories: category.categories,
