@@ -725,6 +725,7 @@ const CategorizedList = React.memo(
                                   value={propsObj.value}
                                   isDisabled={isDisabled}
                                   height={heights.SHORT}
+                                  error={propsObj.error}
                                 />
                               </div>
                             );
@@ -775,8 +776,12 @@ const CategorizedList = React.memo(
                             onChanges={runOperations}
                             value={propsObj.value}
                             isDisabled={propsObj.isDisabled}
+                            isHidden={propsObj.isHidden}
                             clearable={propsObj.clearable}
                             showTodayButton={propsObj.showTodayButton}
+                            error={propsObj.error}
+                            placeholder={propsObj.placeholder}
+                            fullWidth={propsObj.fullWidth}
                             payload={{
                               anchor,
                               categories: category.categories,
