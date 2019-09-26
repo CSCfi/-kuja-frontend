@@ -488,6 +488,32 @@ const CategorizedList = React.memo(props => {
                         />
                       </div>
                     )}
+                    {component.name === "Datepicker" && (
+                      <div className={`${component.styleClasses} flex-2`}>
+                        <Datepicker
+                          text={propsObj.text}
+                          variant={propsObj.variant}
+                          onChanges={handleChanges}
+                          value={propsObj.value}
+                          isDisabled={propsObj.isDisabled}
+                          isHidden={propsObj.isHidden}
+                          clearable={propsObj.clearable}
+                          showTodayButton={propsObj.showTodayButton}
+                          error={propsObj.error}
+                          placeholder={propsObj.placeholder}
+                          fullWidth={propsObj.fullWidth}
+                          payload={{
+                            anchor,
+                            categories: category.categories,
+                            component,
+                            fullPath,
+                            parent: props.parent,
+                            rootPath: props.rootPath,
+                            siblings: props.categories
+                          }}
+                        />
+                      </div>
+                    )}
                   </React.Fragment>
                 );
               })}

@@ -34,7 +34,7 @@ const PerustelutKuljettajakoulutukset = props => {
           onUpdate={onChangesUpdate}
           title={props.intl.formatMessage(wizardMessages.driverTraining)}
         >
-          {code === '3' ?
+          {code === '5' ?
             <KuljettajienPeruskoulutuslomake
               onChangesUpdate={onChangesUpdate}
               changeObjects={R.path(["perustelut"], props.changeObjects)}

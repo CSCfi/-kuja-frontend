@@ -4,7 +4,7 @@ export const getKuljettajienJatkokoulutuslomake = (
   addPeopleFormCallback,
   peopleForms
 ) => {
-  const code = 4;
+  const code = 6;
   return [
     {
       anchor: code,
@@ -34,7 +34,7 @@ export const getKuljettajienPeruskoulutuslomake = (
   addPeopleFormCallback,
   peopleForms
 ) => {
-  const code = 3;
+  const code = 5;
   return [
     {
       anchor: code,
@@ -295,15 +295,15 @@ export const getAddPeopleForm = orderNumber => {
   };
 };
 
-const tehtavanTarpeellisuus = (anchorNumber, orderCode) => {
+const tehtavanTarpeellisuus = orderCode => {
   return {
-    anchor: anchorNumber,
+    anchor: "tehtavan-tarpeellisuus",
     code: orderCode,
     title: "Tehtävän tarpeellisuus",
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     categories: [
       {
-        anchor: "tehtavan-tarpeellisuus-field",
+        anchor: "textbox",
         styleClasses: ["pl-6"],
         components: [
           {
@@ -680,13 +680,13 @@ const opettajien = (
   helpText
 ) => {
   return {
-    anchor: anchorNumber,
+    anchor: "opettajien-kelpoisuus-ja-tyokokemus",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Opettajien kelpoisuus ja työkokemus",
     categories: [
       {
-        anchor: `opettajien-kelpoisuus-ja-tyokokemus-info`,
+        anchor: `opettajien-kelpoisuus-ja-tyokokemus-lakiteksti`,
         code: "!",
         title:
           "Valtioneuvoston asetus 434/2018 10 §. Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista.",
@@ -715,7 +715,6 @@ const opettajien = (
           }
         ]
       },
-
       {
         anchor: "lisatyt-henkilot",
         styleClasses: ["pt-6"],
