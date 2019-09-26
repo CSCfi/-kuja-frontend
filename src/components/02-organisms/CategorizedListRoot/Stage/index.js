@@ -78,6 +78,15 @@ const Stage = props => {
           })
         : null}
       {props.children}
+      {targetNode.original ? (
+        <div className="p-20">
+          Target node:{" "}
+          <span className="font-bold">{targetNode.original.fullAnchor}</span>{" "}
+          <br />
+          <span className="pr-4">Latest operations:</span>
+          <code>{JSON.stringify(targetNode.requestedChanges)}</code>
+        </div>
+      ) : null}
     </React.Fragment>
   );
 };

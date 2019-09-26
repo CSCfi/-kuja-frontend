@@ -92,8 +92,6 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
     return R.equals(R.dropLast(2, _node.anchorParts), categoryAnchor);
   }, reducedStructure);
   const changeObj = getChangeObjByAnchor(node.fullAnchor, changes);
-  // console.info("Node", node, "Child nodes", childNodes);
-  // console.info(node.fullAnchor, nodes, changes);
   if (changeObj) {
     if (changeObj.properties.isChecked) {
       changes = R.filter(
@@ -116,15 +114,12 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
     );
   }
 
-  // console.info(node.fullAnchor, nodes, changes);
   if (childNodes.length) {
     changes = disableNodes(childNodes, reducedStructure, changes);
   }
 
   if (index < nodes.length - 1) {
-    // if (nodes[index + 1].name === "RadioButtonWithLabel") {
     return disableNodes(nodes, reducedStructure, changes, index + 1);
-    // }
   }
   return changes;
 };
@@ -169,9 +164,14 @@ export const checkNode = (node, reducedStructure, changes) => {
 };
 
 const disableSiblings = (node, reducedStructure, changes) => {
-  const siblings = findSiblings(node, reducedStructure);
-  if (siblings.length) {
-    return disableNodes(siblings, reducedStructure, changes);
+  const radioSiblings = R.filter(
+    R.and(
+      R.propEq("columnIndex", node.columnIndex),
+      R.propEq("name", "RadioButtonWithLabel")
+    )
+  )(findSiblings(node, reducedStructure));
+  if (radioSiblings.length) {
+    return disableNodes(radioSiblings, reducedStructure, changes);
   }
   return changes;
 };
@@ -256,7 +256,6 @@ const runDeactivationProcedure = (
   const childNodes = R.filter(_node => {
     return R.equals(R.dropLast(2, _node.anchorParts), categoryAnchor);
   }, reducedStructure);
-  console.info(childNodes);
   if (childNodes.length) {
     return disableNodes(childNodes, reducedStructure, changesWithoutRootAnchor);
   }
