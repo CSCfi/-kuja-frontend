@@ -13,6 +13,7 @@ import { subformStory } from "./storydata/subformStory";
 import { textBoxStory } from "./storydata/textBoxStory";
 import { attachmentsStory } from "./storydata/attachmentsStory";
 import { inputStory } from "./storydata/inputStory";
+import { datepickerStory } from "./storydata/datepickerStory";
 import Stage from "./Stage";
 
 storiesOf("CategorizedListRoot", module)
@@ -219,6 +220,17 @@ storiesOf("CategorizedListRoot", module)
           <CategorizedListRoot showCategoryTitles={false} {...props} />
         )}
       ></Stage>
+    );
+  })
+  .add("Datepicker example", () => {
+    return (
+      <CategorizedListRoot
+        anchor="datepicker"
+        categories={datepickerStory.categories}
+        changes={datepickerStory.changes}
+        onUpdate={() => {}}
+        showCategoryTitles={false}
+      />
     );
   })
   .add("Attachments example", () => {
