@@ -18,10 +18,9 @@ export function createObjectToSave(
         R.contains("liitteet"),
         R.prop("anchor")
       ),
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects)
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
     )
   ]);
-  console.info(liitteet);
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,

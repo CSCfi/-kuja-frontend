@@ -10,22 +10,24 @@ export const getChangesByLevel = (level, changes) => {
 };
 
 export const findCategoryAnchor = (category, anchor, structure, level) => {
-  R.addIndex(R.forEach)((component, index) => {
-    const fullAnchor = R.join(".", [anchor, component.anchor]);
-    structure = R.insert(
-      -1,
-      {
-        ...component,
-        anchorParts: R.split(".", fullAnchor),
-        fullAnchor,
-        level,
-        columnIndex: index
-      },
-      structure
-    );
-  }, category.components);
+  if (category.components) {
+    R.addIndex(R.forEach)((component, index) => {
+      const fullAnchor = R.join(".", [anchor, component.anchor]);
+      structure = R.insert(
+        -1,
+        {
+          ...component,
+          anchorParts: R.split(".", fullAnchor),
+          fullAnchor,
+          level,
+          columnIndex: index
+        },
+        structure
+      );
+    }, category.components);
+  }
 
-  if (category.categories) {
+  if (category.categories && category.categories.length) {
     return R.map(_category => {
       return findCategoryAnchor(
         _category,
@@ -126,14 +128,14 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
 
 export const checkLeafNode = (node, changes) => {
   const changeObj = getChangeObjByAnchor(node.fullAnchor, changes);
-  if (changeObj && changeObj.properties.isChecked === false) {
+  if (changeObj && !changeObj.properties.isChecked) {
     changes = R.filter(
       R.compose(
         R.not,
         R.propEq("anchor")(node.fullAnchor)
       )
     )(changes);
-  } else if (!changeObj && node.properties.isChecked === false) {
+  } else if (!changeObj && !node.properties.isChecked) {
     changes = R.insert(
       -1,
       {
@@ -155,7 +157,7 @@ export const checkNode = (node, reducedStructure, changes) => {
     if (parentNode.name === "RadioButtonWithLabel") {
       changes = disableSiblings(node, reducedStructure, changes);
     }
-    return checkNode(parentNode, reducedStructure, changes);
+    changes = checkNode(parentNode, reducedStructure, changes);
   }
   if (node.name === "RadioButtonWithLabel") {
     return disableSiblings(node, reducedStructure, changes);
@@ -185,14 +187,14 @@ const runActivationProcedure = (
     node.fullAnchor,
     changesWithoutRootAnchor
   );
-  if (changeObj && changeObj.properties.isChecked === false) {
+  if (changeObj && !changeObj.properties.isChecked) {
     changesWithoutRootAnchor = R.filter(
       R.compose(
         R.not,
         R.propEq("anchor")(node.fullAnchor)
       )
     )(changesWithoutRootAnchor);
-  } else if (!changeObj && node.properties.isChecked === false) {
+  } else if (!changeObj && !node.properties.isChecked) {
     changesWithoutRootAnchor = R.insert(
       -1,
       {
@@ -204,6 +206,7 @@ const runActivationProcedure = (
       changesWithoutRootAnchor
     );
   }
+
   if (node.name === "RadioButtonWithLabel") {
     changesWithoutRootAnchor = disableSiblings(
       node,
@@ -262,6 +265,10 @@ const runDeactivationProcedure = (
   return changesWithoutRootAnchor;
 };
 
+const getPropertiesObject = (changeObj = {}, requestedChanges) => {
+  return Object.assign({}, changeObj.properties || {}, requestedChanges);
+};
+
 /**
  * Main function. This will be run when a user enables a radio button.
  *
@@ -289,7 +296,6 @@ export const handleNodeMain = (
     );
   }, changes);
 
-  // If user wants to deactivate the target node
   if (requestedChanges.isChecked) {
     changesWithoutRootAnchor = runActivationProcedure(
       node,
@@ -302,6 +308,27 @@ export const handleNodeMain = (
       reducedStructure,
       changesWithoutRootAnchor
     );
+  } else {
+    const changeObj = getChangeObjByAnchor(
+      node.fullAnchor,
+      changesWithoutRootAnchor
+    );
+    const propsObj = getPropertiesObject(changeObj, requestedChanges);
+    const updatedChangeObj = { anchor: node.fullAnchor, properties: propsObj };
+    if (changeObj) {
+      changesWithoutRootAnchor = R.map(_changeObj => {
+        if (R.equals(_changeObj.anchor, updatedChangeObj.anchor)) {
+          return updatedChangeObj;
+        }
+        return _changeObj;
+      }, changesWithoutRootAnchor);
+    } else {
+      changesWithoutRootAnchor = R.insert(
+        -1,
+        updatedChangeObj,
+        changesWithoutRootAnchor
+      );
+    }
   }
 
   const updatedChangesArr = R.map(changeObj => {

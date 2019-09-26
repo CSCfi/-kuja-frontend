@@ -6,9 +6,9 @@ import PropTypes from "prop-types";
 const Stage = props => {
   const [changes, setChanges] = useState(props.changes);
   const [nodeIndex, setNodeIndex] = useState(0);
+  const [interval, setInterval] = useState();
 
   const handleUpdate = payload => {
-    console.info("handling update");
     setChanges(payload.changes);
   };
 
@@ -24,33 +24,37 @@ const Stage = props => {
 
   const updateNodeIndex = useCallback(
     nodeIndex => {
-      if (props.loopChanges[nodeIndex + 1]) {
-        setNodeIndex(nodeIndex + 1);
-      } else {
-        setNodeIndex(0);
+      if (interval) {
+        if (props.loopChanges[nodeIndex + 1]) {
+          setNodeIndex(nodeIndex + 1);
+        } else {
+          setNodeIndex(0);
+        }
       }
     },
-    [props.loopChanges]
+    [interval, props.loopChanges]
   );
 
   const targetNode = useMemo(() => {
-    const loopChange = R.view(R.lensIndex(nodeIndex))(props.loopChanges);
-    const targetNode = {
-      original: R.find(
-        R.propEq("fullAnchor", R.prop("anchor", loopChange)),
-        reducedStructure
-      ),
-      requestedChanges: loopChange ? loopChange.properties : {}
-    };
-    console.group();
-    console.info("Target node", targetNode);
-    console.info("Reduced structure", reducedStructure);
-    console.groupEnd();
+    let targetNode = null;
+    if (interval) {
+      const loopChange = R.view(R.lensIndex(nodeIndex))(props.loopChanges);
+      targetNode = {
+        original: R.find(
+          R.propEq("fullAnchor", R.prop("anchor", loopChange)),
+          reducedStructure
+        ),
+        requestedChanges: loopChange ? loopChange.properties : {}
+      };
+      console.group();
+      console.info("Target node", targetNode);
+      console.info("Reduced structure", reducedStructure);
+      console.groupEnd();
+    }
     return targetNode;
-  }, [nodeIndex, props.loopChanges, reducedStructure]);
+  }, [nodeIndex, interval, props.loopChanges, reducedStructure]);
 
   useEffect(() => {
-    // const propsObj = R.view(R.lensIndex(nodeIndex))(props.loopChanges);
     if (reducedStructure && targetNode) {
       const nextChanges = handleNodeMain(
         targetNode,
@@ -64,6 +68,10 @@ const Stage = props => {
     }
   }, [changes, props.anchor, reducedStructure, targetNode]);
 
+  useEffect(() => {
+    setInterval(props.interval);
+  }, [props.interval]);
+
   return (
     <React.Fragment>
       {!!props.render
@@ -71,22 +79,34 @@ const Stage = props => {
             anchor: props.anchor,
             categories: props.categories,
             changes,
-            interval: props.interval || 2000,
+            interval: R.isNil(interval) ? 2000 : interval,
             onUpdate: handleUpdate,
             updateNodeIndex,
             nodeIndex
           })
         : null}
-      {props.children}
-      {targetNode.original ? (
-        <div className="p-20">
-          Target node:{" "}
-          <span className="font-bold">{targetNode.original.fullAnchor}</span>{" "}
-          <br />
-          <span className="pr-4">Latest operations:</span>
-          <code>{JSON.stringify(targetNode.requestedChanges)}</code>
-        </div>
-      ) : null}
+      {/* {props.children} */}
+      <div className="p-20">
+        <button
+          type="button"
+          onClick={() => {
+            setInterval(interval > 0 ? 0 : 1000);
+          }}
+        >
+          {interval > 0 ? "Stop" : "Play"}
+        </button>
+        {targetNode && targetNode.original ? (
+          <div>
+            Target node:
+            <span className="font-bold">
+              {targetNode.original.fullAnchor}
+            </span>{" "}
+            <br />
+            <span className="pr-4">Latest operations:</span>
+            <code>{JSON.stringify(targetNode.requestedChanges)}</code>
+          </div>
+        ) : null}
+      </div>
     </React.Fragment>
   );
 };
