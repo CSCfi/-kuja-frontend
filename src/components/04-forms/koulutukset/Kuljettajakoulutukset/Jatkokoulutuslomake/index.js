@@ -45,14 +45,11 @@ const KuljettajienJatkokoulutuslomake = ({
         ),
         R.filter(
           R.compose(
-            R.contains(
-              "opettajien-kelpoisuus-ja-tyokokemus-info.lisatyt-henkilot"
-            ),
+            R.contains("opettajien-kelpoisuus-ja-tyokokemus.lisatyt-henkilot"),
             R.prop("anchor")
           )
         )(changeObjects)
       );
-
       if (peopleFormAnchors.length) {
         /**
          * People form count is calculated using the anchors related to the people
@@ -62,7 +59,7 @@ const KuljettajienJatkokoulutuslomake = ({
           ...R.map(
             R.compose(
               Number,
-              R.view(R.lensIndex(5))
+              R.view(R.lensIndex(4))
             ),
             peopleFormAnchors
           )
