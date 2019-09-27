@@ -169,6 +169,7 @@ const CategorizedList = React.memo(props => {
                           name={component.name}
                           isChecked={propsObj.isChecked}
                           isDisabled={propsObj.isDisabled}
+                          isReadOnly={propsObj.isReadOnly}
                           onChanges={handleChanges}
                           payload={{
                             anchor,
@@ -317,6 +318,7 @@ const CategorizedList = React.memo(props => {
                                 id={`input-${idSuffix}`}
                                 isDisabled={isDisabled}
                                 isHidden={isDisabled}
+                                isReadOnly={propsObj.isReadOnly}
                                 label={propsObj.label}
                                 onChanges={handleChanges}
                                 payload={{
