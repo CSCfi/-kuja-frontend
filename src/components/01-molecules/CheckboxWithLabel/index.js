@@ -28,26 +28,30 @@ const CheckboxWithLabel = React.memo(
     };
 
     return (
-      <FormGroup row>
-        <FormControlLabel
-          classes={{
-            label: styles.label
-          }}
-          control={
-            <Checkbox
-              checked={props.isChecked}
-              disabled={props.isDisabled}
-              value="1"
-              onChange={handleChanges}
+      <React.Fragment>
+        {!props.isReadOnly || (props.isReadOnly && props.isChecked) ? (
+          <FormGroup row>
+            <FormControlLabel
               classes={{
-                checked: styles.checked,
-                root: styles.root
+                label: styles.label
               }}
+              disabled={props.isDisabled || props.isReadOnly}
+              control={
+                <Checkbox
+                  checked={props.isChecked}
+                  value="1"
+                  onChange={handleChanges}
+                  classes={{
+                    checked: styles.checked,
+                    root: styles.root
+                  }}
+                />
+              }
+              label={props.children}
             />
-          }
-          label={props.children}
-        />
-      </FormGroup>
+          </FormGroup>
+        ) : null}
+      </React.Fragment>
     );
   },
   (prevState, currentState) => {
@@ -62,6 +66,7 @@ const CheckboxWithLabel = React.memo(
 CheckboxWithLabel.defaultProps = {
   isChecked: false,
   isDisabled: false,
+  isReadOnly: false,
   payload: {}
 };
 
@@ -76,8 +81,9 @@ CheckboxWithLabel.propTypes = {
   /**
    * A parameter of the onChanges function.
    */
+  labelStyles: PropTypes.object,
   payload: PropTypes.object,
-  labelStyles: PropTypes.object
+  isReadOnly: PropTypes.bool
 };
 
 export default CheckboxWithLabel;
