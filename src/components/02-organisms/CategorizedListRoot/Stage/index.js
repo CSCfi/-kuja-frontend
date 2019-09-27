@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
-import { handleNodeMain, findCategoryAnchor } from "../utils";
+import { handleNodeMain, getReducedStructure, getTargetNode } from "../utils";
 import * as R from "ramda";
 import PropTypes from "prop-types";
 
@@ -13,13 +13,7 @@ const Stage = props => {
   };
 
   const reducedStructure = useMemo(() => {
-    return R.uniq(
-      R.flatten(
-        R.map(category => {
-          return findCategoryAnchor(category, category.anchor, [], 0);
-        }, props.categories)
-      )
-    );
+    return getReducedStructure(props.categories);
   }, [props.categories]);
 
   const updateNodeIndex = useCallback(
@@ -39,13 +33,7 @@ const Stage = props => {
     let targetNode = null;
     if (interval) {
       const loopChange = R.view(R.lensIndex(nodeIndex))(props.loopChanges);
-      targetNode = {
-        original: R.find(
-          R.propEq("fullAnchor", R.prop("anchor", loopChange)),
-          reducedStructure
-        ),
-        requestedChanges: loopChange ? loopChange.properties : {}
-      };
+      targetNode = getTargetNode(loopChange, reducedStructure);
       console.group();
       console.info("Target node", targetNode);
       console.info("Reduced structure", reducedStructure);

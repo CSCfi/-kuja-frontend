@@ -9,9 +9,17 @@ export const getChangesByLevel = (level, changes) => {
   });
 };
 
-export const findCategoryAnchor = (category, anchor, structure, level) => {
+export const findCategoryAnchor = (
+  category,
+  anchor,
+  structure = [],
+  level = 0,
+  path = []
+) => {
   if (category.components) {
+    path = R.insert(-1, "components", path);
     R.addIndex(R.forEach)((component, index) => {
+      path = R.insert(-1, index, path);
       const fullAnchor = R.join(".", [anchor, component.anchor]);
       structure = R.insert(
         -1,
@@ -20,7 +28,8 @@ export const findCategoryAnchor = (category, anchor, structure, level) => {
           anchorParts: R.split(".", fullAnchor),
           fullAnchor,
           level,
-          columnIndex: index
+          columnIndex: index,
+          path
         },
         structure
       );
@@ -28,16 +37,38 @@ export const findCategoryAnchor = (category, anchor, structure, level) => {
   }
 
   if (category.categories && category.categories.length) {
+    path = R.insert(-1, "categories", path);
     return R.map(_category => {
       return findCategoryAnchor(
         _category,
         R.join(".", [anchor, _category.anchor]),
         structure,
-        level + 1
+        level + 1,
+        path
       );
     }, category.categories);
   }
   return structure;
+};
+
+export const getReducedStructure = categories => {
+  return R.uniq(
+    R.flatten(
+      R.map(category => {
+        return findCategoryAnchor(category, category.anchor);
+      }, categories)
+    )
+  );
+};
+
+export const getTargetNode = (loopChange, reducedStructure) => {
+  return {
+    original: R.find(
+      R.propEq("fullAnchor", R.prop("anchor", loopChange)),
+      reducedStructure
+    ),
+    requestedChanges: loopChange ? loopChange.properties : {}
+  };
 };
 
 const findParent = (node, reducedStructure) => {
@@ -217,7 +248,11 @@ const runActivationProcedure = (
 
   const parentNode = findParent(node, reducedStructure);
 
-  if (parentNode) {
+  if (
+    parentNode &&
+    (parentNode.name === "CheckboxWithLabel" ||
+      parentNode.name === "RadioButtonWithLabel")
+  ) {
     changesWithoutRootAnchor = checkNode(
       parentNode,
       reducedStructure,
@@ -283,18 +318,20 @@ export const handleNodeMain = (
 ) => {
   const node = R.prop("original", nodeWithRequestedChanges);
   const requestedChanges = R.prop("requestedChanges", nodeWithRequestedChanges);
-  let changesWithoutRootAnchor = R.map(changeObj => {
-    return R.assoc(
-      "anchor",
-      R.compose(
-        R.join("."),
-        R.tail(),
-        R.split("."),
-        R.prop("anchor")
-      )(changeObj),
-      changeObj
-    );
-  }, changes);
+  let changesWithoutRootAnchor = rootAnchor
+    ? R.map(changeObj => {
+        return R.assoc(
+          "anchor",
+          R.compose(
+            R.join("."),
+            R.tail(),
+            R.split("."),
+            R.prop("anchor")
+          )(changeObj),
+          changeObj
+        );
+      }, changes)
+    : changes;
 
   if (requestedChanges.isChecked) {
     changesWithoutRootAnchor = runActivationProcedure(
@@ -331,9 +368,41 @@ export const handleNodeMain = (
     }
   }
 
-  const updatedChangesArr = R.map(changeObj => {
-    return R.assoc("anchor", `${rootAnchor}.${changeObj.anchor}`, changeObj);
-  }, changesWithoutRootAnchor);
+  const updatedChangesArr = rootAnchor
+    ? R.map(changeObj => {
+        return R.assoc(
+          "anchor",
+          `${rootAnchor}.${changeObj.anchor}`,
+          changeObj
+        );
+      }, changesWithoutRootAnchor)
+    : changesWithoutRootAnchor;
 
   return updatedChangesArr;
+};
+
+export const getChangesForReadOnlyLomake = (
+  reducedStructure,
+  index = 0,
+  changes = []
+) => {
+  const changeObj = {
+    anchor: reducedStructure[index].fullAnchor,
+    properties: { isReadOnly: true }
+  };
+  const targetNode = getTargetNode(changeObj, reducedStructure);
+  const cumulativeChanges = handleNodeMain(
+    targetNode,
+    null,
+    reducedStructure,
+    changes
+  );
+  if (R.view(R.lensIndex(index + 1))(reducedStructure)) {
+    return getChangesForReadOnlyLomake(
+      reducedStructure,
+      index + 1,
+      cumulativeChanges
+    );
+  }
+  return cumulativeChanges;
 };
