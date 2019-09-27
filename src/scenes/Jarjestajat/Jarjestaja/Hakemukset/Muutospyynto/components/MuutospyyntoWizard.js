@@ -70,7 +70,7 @@ const DialogTitle = withStyles(theme => ({
 
 const FormDialog = withStyles(() => ({
   paper: {
-    background: "#effcec"
+    background: "#f8faf8"
   }
 }))(props => {
   return <Dialog {...props}>{props.children}</Dialog>;
@@ -196,7 +196,23 @@ const MuutospyyntoWizard = props => {
   //   }
   // }, [changeObjects, muutoshakemus]);
 
+  const getFiles = () => {
+    console.log(changeObjects);
+    const allAttachments = R.path(
+      ["yhteenveto", "yleisettiedot"],
+      changeObjects
+    );
+    const attachments = R.map(obj => {
+      return R.map(file => {
+        return file;
+      }, obj.properties.attachments);
+    }, allAttachments);
+    return attachments[0];
+  };
+
   const save = () => {
+    const attachments = getFiles();
+    console.log(attachments);
     if (props.match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(
@@ -206,7 +222,8 @@ const MuutospyyntoWizard = props => {
           dataBySection,
           props.match.params.uuid,
           props.muutospyynnot.muutospyynto
-        )
+        ),
+        attachments
       )(muutoshakemusDispatch);
     } else {
       saveMuutospyynto(
@@ -215,7 +232,8 @@ const MuutospyyntoWizard = props => {
           changeObjects,
           props.backendChanges.source,
           dataBySection
-        )
+        ),
+        attachments
       )(muutoshakemusDispatch);
     }
   };
