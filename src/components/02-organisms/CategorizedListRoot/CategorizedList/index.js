@@ -312,6 +312,25 @@ const CategorizedList = React.memo(
       [handleTree, getAllChanges]
     );
 
+    const handleAttachmentChanges = (payload, changeProps) => {
+      const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
+      const operations = [
+        {
+          type: "addition",
+          payload: {
+            anchor: fullAnchor,
+            path: payload.fullPath,
+            properties: {
+              attachments: changeProps.attachments
+            }
+          }
+        }
+      ];
+      console.info(payload, changeProps, operations);
+      const result = runRootOperations(operations);
+      return onChangesUpdate(result);
+    };
+
     const handleButtonClick = (payload, changeProps) => {
       payload.component.onClick(payload, changeProps);
     };
@@ -335,8 +354,7 @@ const CategorizedList = React.memo(
           payload: {
             anchor: fullAnchor,
             path: payload.fullPath,
-            properties: changeProps,
-            attachments: payload.attachments
+            properties: changeProps
           }
         });
       } else {
@@ -345,8 +363,7 @@ const CategorizedList = React.memo(
           payload: {
             anchor: fullAnchor,
             path: payload.fullPath,
-            properties: changeProps,
-            attachments: payload.attachments
+            properties: changeProps
           }
         });
       }
@@ -640,10 +657,10 @@ const CategorizedList = React.memo(
                               );
                             let attachments = propsObj.attachments || [];
                             return (
-                              <div className="flex-2">
+                              <div className={component.styleClasses}>
                                 <Attachments
                                   id={`attachments-${idSuffix}`}
-                                  onUpdate={e => (propsObj.attachments = e)} // TODO
+                                  onUpdate={handleAttachmentChanges}
                                   placement={props.placement}
                                   payload={{
                                     anchor,
