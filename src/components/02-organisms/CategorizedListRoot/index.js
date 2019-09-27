@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 import CategorizedList from "./CategorizedList";
-import { findCategoryAnchor, handleNodeMain } from "./utils";
+import { handleNodeMain, getReducedStructure, getTargetNode } from "./utils";
 import * as R from "ramda";
 
 const defaultProps = {
@@ -34,24 +34,12 @@ const CategorizedListRoot = React.memo(
     }, [changes]);
 
     const reducedStructure = useMemo(() => {
-      return R.uniq(
-        R.flatten(
-          R.map(category => {
-            return findCategoryAnchor(category, category.anchor, [], 0);
-          }, categories)
-        )
-      );
+      return getReducedStructure(categories);
     }, [categories]);
 
     const onChangesUpdate = useCallback(
       changeObj => {
-        const targetNode = {
-          original: R.find(
-            R.propEq("fullAnchor", R.prop("anchor", changeObj)),
-            reducedStructure
-          ),
-          requestedChanges: changeObj ? changeObj.properties : {}
-        };
+        const targetNode = getTargetNode(changeObj, reducedStructure);
         const nextChanges = handleNodeMain(
           targetNode,
           anchor,
@@ -81,6 +69,7 @@ const CategorizedListRoot = React.memo(
       <React.Fragment>
         {!R.equals(R.head(changes), null)
           ? (() => {
+              console.info("Reduced: ", reducedStructure);
               return (
                 <CategorizedList
                   anchor={anchor}
