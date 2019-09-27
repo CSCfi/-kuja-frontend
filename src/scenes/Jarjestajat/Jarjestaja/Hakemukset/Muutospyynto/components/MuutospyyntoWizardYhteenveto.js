@@ -5,9 +5,18 @@ import { injectIntl } from "react-intl";
 import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
 
 const MuutospyyntoWizardTaloudelliset = ({
   changeObjects,
+  kielet,
+  kohteet,
+  koulutukset,
+  koulutusalat,
+  koulutustyypit,
+  lupa,
+  maaraystyypit,
+  muut,
   muutoshakemus,
   onChangesUpdate,
   onStateUpdate
@@ -34,6 +43,20 @@ const MuutospyyntoWizardTaloudelliset = ({
               }}
               {..._props}
             />
+            <YhteenvetoKooste
+              changeObjects={changeObjects}
+              kielet={kielet}
+              kohteet={kohteet}
+              koulutukset={koulutukset}
+              koulutusalat={koulutusalat}
+              koulutustyypit={koulutustyypit}
+              lupa={lupa}
+              maaraystyypit={maaraystyypit}
+              muut={muut}
+              muutoshakemus={muutoshakemus}
+              onChangesUpdate={onChangesUpdate}
+              onStateUpdate={onStateUpdate}
+            ></YhteenvetoKooste>
           </React.Fragment>
         )}
         runOnStateUpdate={onStateUpdate}
