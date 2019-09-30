@@ -201,7 +201,7 @@ const MuutospyyntoWizard = props => {
     const allAttachments = R.path(
       ["yhteenveto", "yleisettiedot"],
       changeObjects
-    );
+    ) || [];
     const attachments = R.map(obj => {
       return R.map(file => {
         return file;
