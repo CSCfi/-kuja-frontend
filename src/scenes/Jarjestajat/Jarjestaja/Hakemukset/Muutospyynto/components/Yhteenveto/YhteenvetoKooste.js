@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 // import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 // import PerustelutMuut from "./Perustelut/PerustelutMuut";
-// import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
+import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 // import PerustelutTutkintokielet from "./Perustelut/PerustelutTutkintokielet";
 import YhteenvetoTutkinnot from "./YhteenvetoTutkinnot";
 import { MuutosperustelutContext } from "../../../../../../../context/muutosperustelutContext";
@@ -179,9 +179,8 @@ const YhteenvetoKooste = ({
               />
             )}
 
-          {/* {!!R.prop(["kielet"], changeObjects) ? (
+          {!!R.prop(["kielet"], changeObjects) ? (
             <FormSection
-              code={2}
               id="perustelut_kielet"
               muutoshakemus={muutoshakemus}
               render={_props => (
@@ -209,11 +208,12 @@ const YhteenvetoKooste = ({
                         "kielet",
                         "opetuskielet"
                       ])(muutoshakemus)}
+                      isReadOnly={true}
                       {..._props}
                     />
                   ) : null}
 
-                  {!!R.path(["kielet", "tutkintokielet"], changeObjects) ? (
+                  {/* {!!R.path(["kielet", "tutkintokielet"], changeObjects) ? (
                     <PerustelutTutkintokielet
                       changeObjects={{
                         tutkintokielet:
@@ -244,14 +244,14 @@ const YhteenvetoKooste = ({
                       }}
                       {..._props}
                     />
-                  ) : null}
+                  ) : null} */}
                 </React.Fragment>
               )}
               runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[1].title}
             />
-          ) : null} */}
+          ) : null}
 
           {/* {!!R.prop(["muut"], changeObjects) ? (
             <FormSection
