@@ -72,7 +72,12 @@ const PerustelutOpetuskielet = React.memo(props => {
           return structure;
         }, opetuskielet.items).filter(Boolean);
     };
-  }, [props.changeObjects.opetuskielet, props.kohde, props.maaraystyyppi]);
+  }, [
+    props.changeObjects.opetuskielet,
+    props.isReadOnly,
+    props.kohde,
+    props.maaraystyyppi
+  ]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));

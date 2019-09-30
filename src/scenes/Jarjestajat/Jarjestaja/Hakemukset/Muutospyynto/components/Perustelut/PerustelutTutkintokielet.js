@@ -82,6 +82,7 @@ const PerustelutTutkintokielet = React.memo(props => {
     onStateUpdate,
     props.changeObjects.tutkintokielet,
     props.intl.locale,
+    props.isReadOnly,
     props.koulutukset,
     props.stateObjects.tutkintokielet
   ]);

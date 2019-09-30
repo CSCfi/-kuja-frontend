@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
-import { props } from "ramda";
 
 const defaultProps = {
   isReadOnly: false,

@@ -71,6 +71,7 @@ const PerustelutATVKoulutukset = props => {
       return categories.filter(Boolean);
     };
   }, [
+    props.isReadOnly,
     props.changeObjects.koulutukset.ammatilliseenTehtavaanValmistavatKoulutukset
   ]);
 

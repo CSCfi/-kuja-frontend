@@ -69,7 +69,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects.koulutukset.tyovoimakoulutukset]);
+  }, [props.isReadOnly, props.changeObjects.koulutukset.tyovoimakoulutukset]);
 
   useEffect(() => {
     onStateUpdate(

@@ -67,7 +67,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.changeObjects.koulutukset.valmentavatKoulutukset]);
+  }, [props.isReadOnly, props.changeObjects.koulutukset.valmentavatKoulutukset]);
 
   useEffect(() => {
     const categories = getCategories(
