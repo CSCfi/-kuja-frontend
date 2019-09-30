@@ -17,6 +17,14 @@ const TaloudellisetLiitteet = React.memo(props => {
           anchor: "liitteet",
           components: [
             {
+              name: "StatusTextRow",
+              styleClasses: ["w-full"],
+              properties: {
+                title:
+                  "Liittäkää asiakirja tai asiakirjat, joista ilmenee hakemuksen hyväksyntä tai hyväksyjän päätösvalta (esim. hyväksyjän allekirjoitusoikeus ja päättävän elimen kokouksen pöytäkirjanote). Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet."
+              }
+            },
+            {
               styleClasses: ["w-full"],
               anchor: "A",
               name: "Attachments"

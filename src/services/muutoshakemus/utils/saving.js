@@ -12,6 +12,7 @@ export function createObjectToSave(
   uuid,
   muutospyynto
 ) {
+  // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
     changeObjects
@@ -25,6 +26,7 @@ export function createObjectToSave(
     yhteenvetoYleiset,
     taloudellisetLiitteet
   );
+  // Gets only attachment structures
   let liitteet = {};
   if (allAttachments) {
     liitteet = Object.assign(
@@ -36,8 +38,6 @@ export function createObjectToSave(
       }, allAttachments)
     );
   }
-  console.log(liitteet);
-
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
