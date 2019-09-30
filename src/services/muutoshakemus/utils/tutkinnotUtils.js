@@ -133,7 +133,8 @@ export const getCategoriesForPerustelut = (
   anchorInitial,
   lomakkeet
 ) => {
-  const relevantAnchors = R.map(R.prop("anchor"))(changes);
+  const anchor = R.prop("anchor");
+  const relevantAnchors = R.map(anchor)(changes);
   const relevantKoulutustyypit = R.filter(
     R.compose(
       R.not,
@@ -170,25 +171,27 @@ export const getCategoriesForPerustelut = (
 
             const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
 
-            const changeObjs = R.filter(
-              R.compose(
-                R.startsWith(anchorBase),
-                R.prop("anchor")
-              )
-            )(changes);
+            const changeObjs = R.sortWith(
+              [R.ascend(R.compose(R.length, anchor)), R.ascend(anchor)],
+              R.filter(
+                R.compose(
+                  R.startsWith(anchorBase),
+                  anchor
+                )
+              )(changes));
 
             const toStructure = (changeObj) => {
-
-              const osaamisalakoodi = R.last(R.init((R.split('.', changeObj.anchor))));
+              const anchorWOLast = R.init(R.split('.')(anchor(changeObj)));
+              const osaamisalakoodi = R.last(anchorWOLast);
               const osaamisala = R.find(i => i.koodiArvo === osaamisalakoodi, koulutus.osaamisalat);
               const isAddition = changeObj.properties.isChecked;
 
-              console.log("%c tutkinto tai rajoite", 'color:pink;', changeObj, osaamisala);
+              console.info("%c Handling changes", 'color:green;', changeObj, osaamisala);
 
-              const nimi = (obj) => _.find(R.prop('metadata', obj), m => m.kieli === locale ).nimi;
+              const nimi = (obj) => _.find(R.prop('metadata', obj), m => m.kieli === locale).nimi;
 
               return {
-                anchor: R.join('.', R.init(R.split('.', R.prop('anchor', changeObj)))),
+                anchor: R.join('.', anchorWOLast),
                 meta: {
                   kohde,
                   maaraystyyppi,
@@ -222,6 +225,7 @@ export const getCategoriesForPerustelut = (
                 ]
               }
             };
+
             return R.map(toStructure, changeObjs);
           }, koulutustyyppi.koulutukset)
         };
