@@ -14,15 +14,20 @@ const TaloudellisetLiitteet = React.memo(props => {
       structure = [
         {
           anchor: "taloudelliset",
-          categories: [
+          anchor: "liitteet",
+          components: [
             {
-              anchor: "liitteet",
-              components: [
-                {
-                  anchor: "A",
-                  name: "Attachments"
-                }
-              ]
+              name: "StatusTextRow",
+              styleClasses: ["w-full"],
+              properties: {
+                title:
+                  "Liittäkää asiakirja tai asiakirjat, joista ilmenee hakemuksen hyväksyntä tai hyväksyjän päätösvalta (esim. hyväksyjän allekirjoitusoikeus ja päättävän elimen kokouksen pöytäkirjanote). Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet."
+              }
+            },
+            {
+              styleClasses: ["w-full"],
+              anchor: "A",
+              name: "Attachments"
             }
           ]
         }
@@ -47,7 +52,7 @@ const TaloudellisetLiitteet = React.memo(props => {
         <ExpandableRowRoot
           title={"Liitteet"}
           anchor={sectionId}
-          key={`taloudelliset-yleisetiedot`}
+          key={`taloudelliset-liitteet`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
           disableReverting={true}

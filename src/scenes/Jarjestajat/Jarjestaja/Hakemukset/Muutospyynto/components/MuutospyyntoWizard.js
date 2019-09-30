@@ -17,10 +17,7 @@ import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
-import {
-  saveMuutospyynto
-  // setSectionData
-} from "../../../../../../services/muutoshakemus/actions";
+import { saveMuutospyynto } from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
@@ -35,7 +32,6 @@ import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
-// import { getChangeObjects } from "../../../../../../services/muutoshakemus/utils/common";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -188,31 +184,30 @@ const MuutospyyntoWizard = props => {
     );
   }, [props.backendChanges]);
 
-  // useEffect(() => {
-  //   const nextChangeObjects = getChangeObjects(muutoshakemus);
-  //   const isEqual = R.compose(R.equals(changeObjects))(nextChangeObjects);
-  //   if (!isEqual) {
-  //     setChangeObjects(nextChangeObjects);
-  //   }
-  // }, [changeObjects, muutoshakemus]);
-
   const getFiles = () => {
-    console.log(changeObjects);
-    const allAttachments = R.path(
-      ["yhteenveto", "yleisettiedot"],
-      changeObjects
+    // Gets all attachment data from changeObjects
+    const allAttachments = R.concat(
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || []
     );
-    const attachments = R.map(obj => {
-      return R.map(file => {
-        return file;
-      }, obj.properties.attachments);
-    }, allAttachments);
-    return attachments[0];
+    // Returns only binary files
+    let attachments;
+    if (allAttachments) {
+      attachments = R.map(obj => {
+        if (obj.properties.attachments)
+          return R.map(file => {
+            return file;
+          }, obj.properties.attachments);
+        else return null;
+      }, allAttachments);
+      return attachments;
+    } else {
+      return null;
+    }
   };
 
   const save = () => {
     const attachments = getFiles();
-    console.log(attachments);
     if (props.match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(
