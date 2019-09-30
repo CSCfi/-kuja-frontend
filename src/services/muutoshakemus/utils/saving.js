@@ -12,7 +12,6 @@ export function createObjectToSave(
   uuid,
   muutospyynto
 ) {
-  let yhteenvetoAttachments;
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
     changeObjects
@@ -61,9 +60,9 @@ export function createObjectToSave(
         changeObjects: R.flatten([
           R.path(["taloudelliset", "investoinnit"], changeObjects),
           R.path(["taloudelliset", "tilinpaatostiedot"], changeObjects),
-          R.path(["taloudelliset", "yleisettiedot"], changeObjects)
-        ]),
-        taloudelliset: []
+          R.path(["taloudelliset", "yleisettiedot"], changeObjects),
+          R.path(["taloudelliset", "liitteet"], changeObjects)
+        ])
       },
       yhteenveto: {
         changeObjects: R.flatten([

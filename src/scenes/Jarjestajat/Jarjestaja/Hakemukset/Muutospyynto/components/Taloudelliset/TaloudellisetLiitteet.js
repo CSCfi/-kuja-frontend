@@ -14,15 +14,12 @@ const TaloudellisetLiitteet = React.memo(props => {
       structure = [
         {
           anchor: "taloudelliset",
-          categories: [
+          anchor: "liitteet",
+          components: [
             {
-              anchor: "liitteet",
-              components: [
-                {
-                  anchor: "A",
-                  name: "Attachments"
-                }
-              ]
+              styleClasses: ["w-full"],
+              anchor: "A",
+              name: "Attachments"
             }
           ]
         }
@@ -47,7 +44,7 @@ const TaloudellisetLiitteet = React.memo(props => {
         <ExpandableRowRoot
           title={"Liitteet"}
           anchor={sectionId}
-          key={`taloudelliset-yleisetiedot`}
+          key={`taloudelliset-liitteet`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
           disableReverting={true}

@@ -207,9 +207,11 @@ const MuutospyyntoWizard = props => {
     let attachments;
     if (allAttachments) {
       attachments = R.map(obj => {
-        return R.map(file => {
-          return file;
-        }, obj.properties.attachments);
+        if (obj.properties.attachments)
+          return R.map(file => {
+            return file;
+          }, obj.properties.attachments);
+        else return null;
       }, allAttachments);
       return attachments;
     } else {
