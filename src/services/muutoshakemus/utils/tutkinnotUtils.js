@@ -68,49 +68,47 @@ export const getCategories = (
                   }
                 }
               ],
-              categories: (koulutus.osaamisalat || []).map(
-                osaamisala => {
-                  const isInLupaBool = article
-                    ? !!_.find(article.koulutusalat, koulutusala => {
+              categories: (koulutus.osaamisalat || []).map(osaamisala => {
+                const isInLupaBool = article
+                  ? !!_.find(article.koulutusalat, koulutusala => {
                       return !!_.find(koulutusala.koulutukset, {
                         koodi: osaamisala.koodiArvo
                       });
                     })
-                    : false;
-                  const isAddedBool = false;
-                  const isRemovedBool = false;
-                  return {
-                    anchor: osaamisala.koodiArvo,
-                    meta: {
-                      kohde,
-                      maaraystyyppi,
-                      koodisto: osaamisala.koodisto,
-                      metadata: osaamisala.metadata,
-                      isInLupa: isInLupaBool
-                    },
-                    components: [
-                      {
-                        anchor: "A",
+                  : false;
+                const isAddedBool = false;
+                const isRemovedBool = false;
+                return {
+                  anchor: osaamisala.koodiArvo,
+                  meta: {
+                    kohde,
+                    maaraystyyppi,
+                    koodisto: osaamisala.koodisto,
+                    metadata: osaamisala.metadata,
+                    isInLupa: isInLupaBool
+                  },
+                  components: [
+                    {
+                      anchor: "A",
+                      name: "CheckboxWithLabel",
+                      properties: {
                         name: "CheckboxWithLabel",
-                        properties: {
-                          name: "CheckboxWithLabel",
-                          code: osaamisala.koodiArvo,
-                          title:
-                            _.find(osaamisala.metadata, m => {
-                              return m.kieli === "FI";
-                            }).nimi || "[Osaamisalan otsikko tähän]",
-                          labelStyles: {
-                            addition: isAdded,
-                            removal: isRemoved
-                          },
-                          isChecked:
-                            (isInLupaBool && !isRemovedBool) || isAddedBool
-                        }
+                        code: osaamisala.koodiArvo,
+                        title:
+                          _.find(osaamisala.metadata, m => {
+                            return m.kieli === "FI";
+                          }).nimi || "[Osaamisalan otsikko tähän]",
+                        labelStyles: {
+                          addition: isAdded,
+                          removal: isRemoved
+                        },
+                        isChecked:
+                          (isInLupaBool && !isRemovedBool) || isAddedBool
                       }
-                    ]
-                  };
-                }
-              )
+                    }
+                  ]
+                };
+              })
             };
           }, koulutustyyppi.koulutukset)
         };
@@ -151,86 +149,105 @@ export const getCategoriesForPerustelut = (
     })(koulutustyypit)
   );
 
-  
-    return R.values(
-      R.map(koulutustyyppi => {
-        return {
-          anchor: koulutustyyppi.koodiArvo,
-          code: koulutustyyppi.koodiArvo,
-          title:
-            _.find(koulutustyyppi.metadata, m => {
-              return m.kieli === locale;
-            }).nimi || "[Koulutustyypin otsikko tähän]",
-          categories: R.chain(koulutus => {
-            const isInLupaBool = article
-              ? !!_.find(article.koulutusalat, koulutusala => {
-                  return !!_.find(koulutusala.koulutukset, {
-                    koodi: koulutus.koodiArvo
-                  });
-                })
-              : false;
+  return R.values(
+    R.map(koulutustyyppi => {
+      return {
+        anchor: koulutustyyppi.koodiArvo,
+        code: koulutustyyppi.koodiArvo,
+        title:
+          _.find(koulutustyyppi.metadata, m => {
+            return m.kieli === locale;
+          }).nimi || "[Koulutustyypin otsikko tähän]",
+        categories: R.chain(koulutus => {
+          const isInLupaBool = article
+            ? !!_.find(article.koulutusalat, koulutusala => {
+                return !!_.find(koulutusala.koulutukset, {
+                  koodi: koulutus.koodiArvo
+                });
+              })
+            : false;
 
           const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
 
-            const changeObjs = R.sortWith(
-              [R.ascend(R.compose(R.length, anchor)), R.ascend(anchor)],
-              R.filter(
+          const changeObjs = R.sortWith(
+            [
+              R.ascend(
                 R.compose(
-                  R.startsWith(anchorBase),
+                  R.length,
                   anchor
                 )
-              )(changes));
+              ),
+              R.ascend(anchor)
+            ],
+            R.filter(
+              R.compose(
+                R.startsWith(anchorBase),
+                anchor
+              )
+            )(changes)
+          );
 
-            const toStructure = (changeObj) => {
-              const anchorWOLast = R.init(R.split('.')(anchor(changeObj)));
-              const osaamisalakoodi = R.last(anchorWOLast);
-              const osaamisala = R.find(i => i.koodiArvo === osaamisalakoodi, koulutus.osaamisalat);
-              const isAddition = changeObj.properties.isChecked;
+          const toStructure = changeObj => {
+            const anchorWOLast = R.init(R.split(".")(anchor(changeObj)));
+            const osaamisalakoodi = R.last(anchorWOLast);
+            const osaamisala = R.find(
+              i => i.koodiArvo === osaamisalakoodi,
+              koulutus.osaamisalat
+            );
+            const isAddition = changeObj.properties.isChecked;
 
-              console.info("%c Handling changes", 'color:green;', changeObj, osaamisala);
+            console.info(
+              "%c Handling changes",
+              "color:green;",
+              changeObj,
+              osaamisala
+            );
 
-              const nimi = (obj) => _.find(R.prop('metadata', obj), m => m.kieli === locale).nimi;
+            const nimi = obj =>
+              _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
-              return {
-                anchor: R.join('.', anchorWOLast),
-                meta: {
-                  kohde,
-                  maaraystyyppi,
-                  koodisto: koulutus.koodisto,
-                  metadata: koulutus.metadata,
-                  isInLupa: isInLupaBool
-                },
-                categories: (isAddition ? lomakkeet.addition : lomakkeet.removal),
-                components: [
-                  {
-                    anchor: "A",
-                    name: "StatusTextRow",
-                    properties: {
-                      code: koulutus.koodiArvo,
-                      title: nimi(koulutus) +
-                        (osaamisala ?
-                          ", lukuun ottamatta " + osaamisalakoodi + " " + nimi(osaamisala) :
-                          ""),
-                      labelStyles: {
-                        addition: isAdded,
-                        removal: isRemoved,
-                        custom: Object.assign({}, isInLupaBool ? isInLupa : {})
-                      },
-                      styleClasses: ["flex"],
-                      statusTextStyleClasses: isAddition
-                        ? ["text-green-600 pr-4 w-20 font-bold"]
-                        : ["text-red-500 pr-4 w-20 font-bold"],
-                      statusText: isAddition ? " LISÄYS:" : " POISTO:"
-                    }
+            return {
+              anchor: R.join(".", anchorWOLast),
+              meta: {
+                kohde,
+                maaraystyyppi,
+                koodisto: koulutus.koodisto,
+                metadata: koulutus.metadata,
+                isInLupa: isInLupaBool
+              },
+              categories: isAddition ? lomakkeet.addition : lomakkeet.removal,
+              components: [
+                {
+                  anchor: "A",
+                  name: "StatusTextRow",
+                  properties: {
+                    code: koulutus.koodiArvo,
+                    title:
+                      nimi(koulutus) +
+                      (osaamisala
+                        ? ", lukuun ottamatta " +
+                          osaamisalakoodi +
+                          " " +
+                          nimi(osaamisala)
+                        : ""),
+                    labelStyles: {
+                      addition: isAdded,
+                      removal: isRemoved,
+                      custom: Object.assign({}, isInLupaBool ? isInLupa : {})
+                    },
+                    styleClasses: ["flex"],
+                    statusTextStyleClasses: isAddition
+                      ? ["text-green-600 pr-4 w-20 font-bold"]
+                      : ["text-red-500 pr-4 w-20 font-bold"],
+                    statusText: isAddition ? " LISÄYS:" : " POISTO:"
                   }
-                ]
-              }
+                }
+              ]
             };
-
-    );
-            return R.map(toStructure, changeObjs);
-          }, koulutustyyppi.koulutukset)
-        };
-      }, _.cloneDeep(relevantKoulutustyypit))
-    );
+          };
+          return R.map(toStructure, changeObjs);
+        }, koulutustyyppi.koulutukset)
+      };
+    }, _.cloneDeep(relevantKoulutustyypit))
+  );
 };
