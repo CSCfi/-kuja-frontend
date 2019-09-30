@@ -192,8 +192,6 @@ const Attachments = React.memo(props => {
     setIsNameModalOpen(true);
   };
 
-  const afterOpenNamneModal = () => {};
-
   const closeNameModal = () => {
     setIsNameModalOpen(false);
   };
