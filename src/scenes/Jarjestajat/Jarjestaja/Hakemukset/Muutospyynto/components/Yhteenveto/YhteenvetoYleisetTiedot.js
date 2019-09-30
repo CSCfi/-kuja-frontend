@@ -113,20 +113,18 @@ const YhteenvetoYleisettiedot = React.memo(props => {
         {
           anchor: "liitteet",
           title: "Liitteet",
-          styleClasses: ["mt-6 px-0"],
+          styleClasses: ["mt-6 w-full"],
           components: [
             {
               name: "StatusTextRow",
-              styleClasses: ["w-full pt-2 pr-6"],
+              styleClasses: ["w-full"],
               properties: {
                 title:
                   "Liittäkää asiakirja tai asiakirjat, joista ilmenee hakemuksen hyväksyntä tai hyväksyjän päätösvalta (esim. hyväksyjän allekirjoitusoikeus ja päättävän elimen kokouksen pöytäkirjanote). Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet."
               }
             },
             {
-              styleClasses: [
-                "flex pt-12 sm:pt-0 justify-center pl-2 w-full sm:pr-2 sm:w-1/2"
-              ],
+              styleClasses: ["w-full"],
               anchor: "A",
               name: "Attachments"
             }

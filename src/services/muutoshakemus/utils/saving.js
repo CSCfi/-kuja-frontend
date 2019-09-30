@@ -12,15 +12,25 @@ export function createObjectToSave(
   uuid,
   muutospyynto
 ) {
-  const liitteet = R.flatten([
-    R.filter(
-      R.compose(
-        R.contains("liitteet"),
-        R.prop("anchor")
-      ),
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
-    )
-  ]);
+  let yhteenvetoYleisetAttachments;
+  const allAttachments = R.path(["yhteenveto", "yleisettiedot"], changeObjects);
+  if (allAttachments) {
+    yhteenvetoYleisetAttachments = R.flatten([
+      R.filter(
+        R.compose(
+          R.contains("liitteet"),
+          R.prop("anchor")
+        ),
+        allAttachments
+      )
+    ]);
+  }
+  let liitteet = [];
+  if (yhteenvetoYleisetAttachments) {
+    liitteet.push(yhteenvetoYleisetAttachments[0].properties.attachments);
+  }
+  console.log(liitteet);
+
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
