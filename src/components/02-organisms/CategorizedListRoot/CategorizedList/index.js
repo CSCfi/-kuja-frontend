@@ -39,23 +39,21 @@ const getPropertiesObject = (changeObj, component) => {
 const CategorizedList = React.memo(props => {
   const { onChangesUpdate, runRootOperations } = props;
 
-  const handleAttachmentChanges = (payload, changeProps) => {
-    const fullAnchor = `${payload.anchor}.${payload.component.anchor}`;
-    const operations = [
-      {
-        type: "addition",
-        payload: {
-          anchor: fullAnchor,
-          path: payload.fullPath,
-          properties: {
-            attachments: changeProps.attachments
-          }
+  const handleAttachmentChanges = useCallback(
+    (payload, changeProps) => {
+      return onChangesUpdate({
+        anchor: `${R.compose(
+          R.join("."),
+          R.tail(),
+          R.split(".")
+        )(payload.anchor)}.${payload.component.anchor}`,
+        properties: {
+          attachments: changeProps.attachments
         }
-      }
-    ];
-    const result = runRootOperations(operations);
-    return onChangesUpdate(result);
-  };
+      });
+    },
+    [onChangesUpdate]
+  );
 
   const handleButtonClick = (payload, changeProps) => {
     payload.component.onClick(payload, changeProps);
