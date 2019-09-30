@@ -197,6 +197,7 @@ const CategorizedList = React.memo(props => {
                           id={`radio-button-with-label-${idSuffix}`}
                           name={propsObj.name}
                           isChecked={propsObj.isChecked}
+                          isReadOnly={propsObj.isReadOnly}
                           onChanges={handleChanges}
                           payload={{
                             anchor,
@@ -475,6 +476,7 @@ const CategorizedList = React.memo(props => {
                     {component.name === "SimpleButton" && (
                       <div className={`${component.styleClasses} flex-2`}>
                         <SimpleButton
+                          isReadOnly={propsObj.isReadOnly}
                           text={propsObj.text}
                           variant={propsObj.variant}
                           onClick={handleButtonClick}
