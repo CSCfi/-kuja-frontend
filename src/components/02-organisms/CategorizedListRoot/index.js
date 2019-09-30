@@ -69,7 +69,6 @@ const CategorizedListRoot = React.memo(
       <React.Fragment>
         {!R.equals(R.head(changes), null)
           ? (() => {
-              console.info("Reduced: ", reducedStructure);
               return (
                 <CategorizedList
                   anchor={anchor}
