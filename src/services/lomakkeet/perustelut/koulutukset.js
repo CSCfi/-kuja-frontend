@@ -2,29 +2,30 @@ import { HAKEMUS_OTSIKOT } from "../../../locales/uusiHakemusFormConstants";
 
 export const getKuljettajienJatkokoulutuslomake = (
   addPeopleFormCallback,
+  isReadOnly,
   peopleForms
 ) => {
-  const code = 4;
+  const code = 6;
   return [
     {
       anchor: code,
       styleClasses: ["px-10 py-10"],
       title: "Jatkokoulutusta antavan koulutuskeskuksen tehtävä",
       categories: [
-        tehtavanTarpeellisuus(1, 1),
-        voimassaOlo(2, 2),
-        suunnitelma(3, 3),
-        osaaminen(4, 4),
-        johtaja(5, 5),
+        tehtavanTarpeellisuus(1, isReadOnly),
+        voimassaOlo(2, isReadOnly),
+        suunnitelma(3, isReadOnly),
+        osaaminen(4, isReadOnly),
+        johtaja(5, isReadOnly),
         opettajien(
-          6,
           addPeopleFormCallback,
           peopleForms,
           6,
-          "Selvitys jatkokoulutuksen opettajien kelpoisuuksista ja työkokemuksista"
+          "Selvitys jatkokoulutuksen opettajien kelpoisuuksista ja työkokemuksista",
+          isReadOnly
         ),
-        ajoneuvoKanta(7, 7),
-        muutOpetusvalineet(8, 8)
+        ajoneuvoKanta(7, isReadOnly),
+        muutOpetusvalineet(8, isReadOnly)
       ]
     }
   ];
@@ -32,9 +33,10 @@ export const getKuljettajienJatkokoulutuslomake = (
 
 export const getKuljettajienPeruskoulutuslomake = (
   addPeopleFormCallback,
+  isReadOnly,
   peopleForms
 ) => {
-  const code = 3;
+  const code = 5;
   return [
     {
       anchor: code,
@@ -50,25 +52,25 @@ export const getKuljettajienPeruskoulutuslomake = (
         }
       ],
       categories: [
-        tehtavanTarpeellisuus(1, 1),
-        voimassaOlo(2, 2),
-        suunnitelma(3, 3),
-        johtaja(4, 4),
+        tehtavanTarpeellisuus(1, isReadOnly),
+        voimassaOlo(2, isReadOnly),
+        suunnitelma(3, isReadOnly),
+        johtaja(4, isReadOnly),
         opettajien(
-          5,
           addPeopleFormCallback,
           peopleForms,
           5,
-          "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista"
+          "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista",
+          isReadOnly
         ),
-        ajoneuvoKanta(6, 6),
-        muutOpetusvalineet(7, 7)
+        ajoneuvoKanta(6, isReadOnly),
+        muutOpetusvalineet(7, isReadOnly)
       ]
     }
   ];
 };
 
-export const getAddPeopleForm = orderNumber => {
+export const getAddPeopleForm = (orderNumber, isReadOnly) => {
   return {
     anchor: orderNumber,
     styleClasses: ["border-t pl-6 py-8"],
@@ -83,6 +85,7 @@ export const getAddPeopleForm = orderNumber => {
             anchor: "A",
             name: "TextBox",
             properties: {
+              isReadOnly,
               labelStyles: {},
               placeholder: "Henkilön nimi"
             }
@@ -101,10 +104,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-liikenneopettajalupa",
-                  title: "Liikenneopettajalupa (pakollinen)",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-liikenneopettajalupa",
+                  title: "Liikenneopettajalupa (pakollinen)"
                 }
               }
             ]
@@ -117,11 +121,12 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
+                  isChecked: false,
+                  isReadOnly,
+                  labelStyles: {},
                   name: "checkbox-kuorma-autonkuljettaja",
                   title:
-                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
-                  labelStyles: {},
-                  isChecked: false
+                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
                 }
               }
             ]
@@ -134,11 +139,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-linja-autonkuljettaja",
-                  title:
-                    "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-linja-autonkuljettaja",
+                  title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
                 }
               }
             ]
@@ -160,10 +165,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-c-luokka",
-                  title: "C-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-c-luokka",
+                  title: "C-luokka"
                 }
               }
             ]
@@ -176,10 +182,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-ce-luokka",
-                  title: "CE-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-ce-luokka",
+                  title: "CE-luokka"
                 }
               }
             ]
@@ -192,10 +199,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-d-luokka",
-                  title: "D-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-d-luokka",
+                  title: "D-luokka"
                 }
               }
             ]
@@ -216,10 +224,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-linja-auto-ammattitutkinto",
-                  title: "Linja-auton kuljettajan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-linja-auto-ammattitutkinto",
+                  title: "Linja-auton kuljettajan ammattitutkinto"
                 }
               }
             ]
@@ -232,10 +241,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
-                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
+                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
                 }
               }
             ]
@@ -248,10 +258,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
-                  title: "Puutavaran autonkuljetuksen ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
+                  title: "Puutavaran autonkuljetuksen ammattitutkinto"
                 }
               }
             ]
@@ -264,11 +275,12 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
+                  isChecked: false,
+                  isReadOnly,
+                  labelStyles: {},
                   name: "checkbox-kuljetuspalvelut-logistiikan-perustutkinto",
                   title:
-                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
-                  labelStyles: {},
-                  isChecked: false
+                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
                 }
               }
             ]
@@ -281,10 +293,11 @@ export const getAddPeopleForm = orderNumber => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-kuljetusalan-ammattitutkinto",
-                  title: "Kuljetusalan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-kuljetusalan-ammattitutkinto",
+                  title: "Kuljetusalan ammattitutkinto"
                 }
               }
             ]
@@ -295,21 +308,22 @@ export const getAddPeopleForm = orderNumber => {
   };
 };
 
-const tehtavanTarpeellisuus = (anchorNumber, orderCode) => {
+const tehtavanTarpeellisuus = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "tehtavan-tarpeellisuus",
     code: orderCode,
     title: "Tehtävän tarpeellisuus",
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     categories: [
       {
-        anchor: "tehtavan-tarpeellisuus-field",
+        anchor: "textbox",
         styleClasses: ["pl-6"],
         components: [
           {
             anchor: "A",
             name: "TextBox",
             properties: {
+              isReadOnly,
               placeholder:
                 "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
             }
@@ -320,9 +334,9 @@ const tehtavanTarpeellisuus = (anchorNumber, orderCode) => {
   };
 };
 
-const voimassaOlo = (anchorNumber, orderCode) => {
+const voimassaOlo = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "voimassaolo",
     code: orderCode,
     title:
       "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?",
@@ -336,6 +350,7 @@ const voimassaOlo = (anchorNumber, orderCode) => {
             anchor: "A",
             name: "RadioButtonWithLabel",
             properties: {
+              isReadOnly,
               name: "voimassaolo-field-radio-no",
               code: 1,
               title: "Ei",
@@ -353,6 +368,7 @@ const voimassaOlo = (anchorNumber, orderCode) => {
             anchor: "A",
             name: "RadioButtonWithLabel",
             properties: {
+              isReadOnly,
               name: "voimassaolo-field-radio-yes",
               code: 2,
               title: "Kyllä",
@@ -366,9 +382,9 @@ const voimassaOlo = (anchorNumber, orderCode) => {
   };
 };
 
-const suunnitelma = (anchorNumber, orderCode) => {
+const suunnitelma = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "suunnitelma",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Suunnitelma ammattipätevyyskoulutuksen järjestämiseksi",
@@ -381,6 +397,7 @@ const suunnitelma = (anchorNumber, orderCode) => {
             anchor: "A",
             name: "TextBox",
             properties: {
+              isReadOnly,
               placeholder:
                 "Toimintamalli ammattipätevyyskoulutuksen suunnittelusta ja toteutuksesta."
             }
@@ -391,9 +408,9 @@ const suunnitelma = (anchorNumber, orderCode) => {
   };
 };
 
-const osaaminen = (anchorNumber, orderCode) => {
+const osaaminen = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "osaaminen",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Koulutusohjelmien edellyttämä osaaminen",
@@ -406,6 +423,7 @@ const osaaminen = (anchorNumber, orderCode) => {
             anchor: "A",
             name: "TextBox",
             properties: {
+              isReadOnly,
               placeholder: "Kerro osaamisesta?"
             }
           }
@@ -415,9 +433,9 @@ const osaaminen = (anchorNumber, orderCode) => {
   };
 };
 
-const johtaja = (anchorNumber, orderCode) => {
+const johtaja = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "johtaja",
     code: orderCode,
     title: "Opetuksesta vastaavan johtajan kelpoisuus ja työkokemus",
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
@@ -433,6 +451,7 @@ const johtaja = (anchorNumber, orderCode) => {
             anchor: "A",
             name: "TextBox",
             properties: {
+              isReadOnly,
               placeholder: "Sana on vapaa..."
             }
           }
@@ -450,10 +469,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-liikenneopettajalupa",
-                  title: "Liikenneopettajalupa (pakollinen)",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-liikenneopettajalupa",
+                  title: "Liikenneopettajalupa (pakollinen)"
                 }
               }
             ]
@@ -466,11 +486,12 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
+                  isChecked: false,
+                  isReadOnly,
+                  labelStyles: {},
                   name: "checkbox-kuorma-autonkuljettaja",
                   title:
-                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
-                  labelStyles: {},
-                  isChecked: false
+                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
                 }
               }
             ]
@@ -483,11 +504,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-linja-autonkuljettaja",
-                  title:
-                    "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-linja-autonkuljettaja",
+                  title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
                 }
               }
             ]
@@ -509,10 +530,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-c-luokka",
-                  title: "C-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-c-luokka",
+                  title: "C-luokka"
                 }
               }
             ]
@@ -525,10 +547,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-ce-luokka",
-                  title: "CE-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-ce-luokka",
+                  title: "CE-luokka"
                 }
               }
             ]
@@ -541,10 +564,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-d-luokka",
-                  title: "D-luokka",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-d-luokka",
+                  title: "D-luokka"
                 }
               }
             ]
@@ -565,10 +589,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-linja-auto-ammattitutkinto",
-                  title: "Linja-auton kuljettajan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-linja-auto-ammattitutkinto",
+                  title: "Linja-auton kuljettajan ammattitutkinto"
                 }
               }
             ]
@@ -581,10 +606,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
-                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
+                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
                 }
               }
             ]
@@ -597,10 +623,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
-                  title: "Puutavaran autonkuljetuksen ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
+                  title: "Puutavaran autonkuljetuksen ammattitutkinto"
                 }
               }
             ]
@@ -613,11 +640,12 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
+                  isChecked: false,
+                  isReadOnly,
+                  labelStyles: {},
                   name: "checkbox-kuljetuspalvelut-logistiikan-perustutkinto",
                   title:
-                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
-                  labelStyles: {},
-                  isChecked: false
+                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
                 }
               }
             ]
@@ -630,10 +658,11 @@ const johtaja = (anchorNumber, orderCode) => {
                 anchor: "A",
                 name: "CheckboxWithLabel",
                 properties: {
-                  name: "checkbox-kuljetusalan-ammattitutkinto",
-                  title: "Kuljetusalan ammattitutkinto",
+                  isChecked: false,
+                  isReadOnly,
                   labelStyles: {},
-                  isChecked: false
+                  name: "checkbox-kuljetusalan-ammattitutkinto",
+                  title: "Kuljetusalan ammattitutkinto"
                 }
               }
             ]
@@ -673,20 +702,20 @@ const johtaja = (anchorNumber, orderCode) => {
 };
 
 const opettajien = (
-  anchorNumber,
   addPeopleFormCallback,
   peopleForms,
   orderCode,
-  helpText
+  helpText,
+  isReadOnly
 ) => {
   return {
-    anchor: anchorNumber,
+    anchor: "opettajien-kelpoisuus-ja-tyokokemus",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Opettajien kelpoisuus ja työkokemus",
     categories: [
       {
-        anchor: `opettajien-kelpoisuus-ja-tyokokemus-info`,
+        anchor: `opettajien-kelpoisuus-ja-tyokokemus-lakiteksti`,
         code: "!",
         title:
           "Valtioneuvoston asetus 434/2018 10 §. Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista.",
@@ -710,12 +739,12 @@ const opettajien = (
             onClick: addPeopleFormCallback,
             styleClasses: "flex justify-end",
             properties: {
+              isReadOnly,
               text: "Lisää henkilö"
             }
           }
         ]
       },
-
       {
         anchor: "lisatyt-henkilot",
         styleClasses: ["pt-6"],
@@ -725,9 +754,9 @@ const opettajien = (
   };
 };
 
-const ajoneuvoKanta = (anchorNumber, orderCode) => {
+const ajoneuvoKanta = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "ajoneuvokanta",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Ajoneuvokanta",
@@ -745,6 +774,7 @@ const ajoneuvoKanta = (anchorNumber, orderCode) => {
             styleClasses: ["mt-6"],
             properties: {
               fullWidth: true,
+              isReadOnly,
               label: "Linja-autoja",
               placeholder: "Linja-autoja",
               type: "number"
@@ -756,6 +786,7 @@ const ajoneuvoKanta = (anchorNumber, orderCode) => {
             styleClasses: ["mt-6"],
             properties: {
               fullWidth: true,
+              isReadOnly,
               label: "Kuorma-autoja",
               placeholder: "Kuorma-autoja",
               type: "number"
@@ -767,6 +798,7 @@ const ajoneuvoKanta = (anchorNumber, orderCode) => {
             styleClasses: ["mt-6"],
             properties: {
               fullWidth: true,
+              isReadOnly,
               label: "Perävaunuja",
               placeholder: "Perävaunuja",
               type: "number"
@@ -778,9 +810,9 @@ const ajoneuvoKanta = (anchorNumber, orderCode) => {
   };
 };
 
-const muutOpetusvalineet = (anchorNumber, orderCode) => {
+const muutOpetusvalineet = (orderCode, isReadOnly) => {
   return {
-    anchor: anchorNumber,
+    anchor: "muut-opetusvalineet",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Muut opetusvälineet",
@@ -795,7 +827,9 @@ const muutOpetusvalineet = (anchorNumber, orderCode) => {
           {
             anchor: "A",
             name: "TextBox",
-            properties: {}
+            properties: {
+              isReadOnly
+            }
           }
         ]
       },
@@ -809,6 +843,7 @@ const muutOpetusvalineet = (anchorNumber, orderCode) => {
             anchor: "B",
             name: "TextBox",
             properties: {
+              isReadOnly,
               labelStyles: {},
               placeholder:
                 "Muut oppilaitoksen oppimisympäristöissä tapahtuvaan osaamisen hankkimiseen liittyvät välineet"

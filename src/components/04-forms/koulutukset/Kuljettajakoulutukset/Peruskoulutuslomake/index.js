@@ -8,13 +8,15 @@ import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import * as R from "ramda";
 
 const defaultProps = {
-  changeObjects: []
+  changeObjects: [],
+  isReadOnly: false
 };
 
 const KuljettajienPeruskoulutuslomake = ({
-                                           changeObjects = defaultProps.changeObjects,
-                                           onChangesUpdate
-                                         }) => {
+  changeObjects = defaultProps.changeObjects,
+  isReadOnly = defaultProps.isReadOnly,
+  onChangesUpdate
+}) => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const [lomake, setLomake] = useState(getKuljettajienPeruskoulutuslomake());
   const [peopleForms, setPeopleForms] = useState([]);
@@ -27,8 +29,10 @@ const KuljettajienPeruskoulutuslomake = ({
       });
     };
 
-    setLomake(getKuljettajienPeruskoulutuslomake(addPeopleForm, peopleForms));
-  }, [peopleForms]);
+    setLomake(
+      getKuljettajienPeruskoulutuslomake(addPeopleForm, isReadOnly, peopleForms)
+    );
+  }, [isReadOnly, peopleForms]);
 
   useEffect(() => {
     if (!changes) {
@@ -74,7 +78,7 @@ const KuljettajienPeruskoulutuslomake = ({
          */
         R.forEach(() => {
           setPeopleForms(prevForms => {
-            return R.insert(-1, getAddPeopleForm(prevForms.length + 1))(
+            return R.insert(-1, getAddPeopleForm(prevForms.length + 1, isReadOnly))(
               prevForms
             );
           });
@@ -82,7 +86,7 @@ const KuljettajienPeruskoulutuslomake = ({
       }
     }
     setChanges(changeObjects);
-  }, [changes, changeObjects]);
+  }, [changes, changeObjects, isReadOnly]);
 
   return (
     <React.Fragment>
@@ -101,6 +105,7 @@ const KuljettajienPeruskoulutuslomake = ({
 
 KuljettajienPeruskoulutuslomake.propTypes = {
   changeObjects: PropTypes.array,
+  isReadOnly: PropTypes.bool,
   onChangesUpdate: PropTypes.func
 };
 

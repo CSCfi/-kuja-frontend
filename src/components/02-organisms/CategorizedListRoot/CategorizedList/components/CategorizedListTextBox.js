@@ -42,6 +42,7 @@ export const CategorizedListTextBox = ({
         onChanges={onChanges}
         payload={payload}
         placeholder={propsObj.placeholder}
+        isReadOnly={propsObj.isReadOnly}
         value={value}
       />
     </div>

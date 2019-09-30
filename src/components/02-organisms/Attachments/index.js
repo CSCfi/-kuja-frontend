@@ -206,15 +206,21 @@ const Attachments = React.memo(props => {
     if (selectedAttachment.nimi) {
       setNameMissing(false);
       closeNameModal();
-      let item = {};
-      item.nimi = selectedAttachment.nimi;
-      if (props.payload) {
-        let items = JSON.parse(JSON.stringify(props.payload.attachments));
-        items.push(item);
-        props.onUpdate(props.payload, {
-          attachments: items
-        });
-      }
+      // Find correct attachment and set name
+      props.payload.attachments.map((liite, idx) => {
+        if (
+          (selectedAttachment.tiedostoId &&
+            liite.tiedostoId === selectedAttachment.tiedostoId) ||
+          (selectedAttachment.uuid && liite.uuid === selectedAttachment.uuid)
+        ) {
+          let atts = props.payload.attachments;
+          atts[idx].nimi = selectedAttachment.nimi;
+          setAttachments(atts);
+          props.onUpdate(props.payload, {
+            attachments: atts
+          });
+        }
+      });
     } else setNameMissing(true);
   };
 
@@ -263,9 +269,9 @@ const Attachments = React.memo(props => {
       let atts = props.payload.attachments;
       atts.push(liite);
       setAttachments(atts);
-      props.onUpdate(props.payload, {
-        attachments: atts
-      });
+      // props.onUpdate(props.payload, {
+      //   attachments: atts
+      // });
       setSelectedAttachment(liite);
 
       openNameModal();

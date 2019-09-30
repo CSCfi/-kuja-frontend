@@ -9,6 +9,7 @@ import _ from "lodash";
 
 const defaultProps = {
   changeObjects: {},
+  isReadOnly: false,
   kohde: {},
   maaraykset: [],
   muut: {},
@@ -19,6 +20,7 @@ const PerustelutMuut = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
     intl,
+    isReadOnly = PropTypes.isReadOnly,
     kohde = PropTypes.kohde,
     maaraykset = defaultProps.maaraykset,
     muut = defaultProps.muut,
@@ -124,6 +126,7 @@ const PerustelutMuut = React.memo(
                       anchor: "A",
                       name: "TextBox",
                       properties: {
+                        isReadOnly,
                         placeholder: "Perustele muutokset tähän, kiitos."
                       }
                     }
@@ -264,6 +267,7 @@ const PerustelutMuut = React.memo(
       kohde,
       locale,
       intl,
+      isReadOnly,
       maaraykset,
       muut.data,
       changeObjects.muut,
@@ -305,6 +309,7 @@ PerustelutMuut.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,
   muut: PropTypes.object,

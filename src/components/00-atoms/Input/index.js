@@ -2,24 +2,43 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core";
 
-const styles = theme => ({
-  dense: {
-    marginTop: theme.spacing(2)
+const CssTextField = withStyles({
+  root: {
+    "& MuiInputBase-input": {
+      "& .Mui-disabled": {
+        color: "pink"
+      }
+    },
+    "& label.Mui-focused": {
+      color: "green"
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "green"
+    },
+    "& .MuiInputBase-root": {
+      "&.Mui-disabled": {
+        color: "rgba(0, 0, 0, 0.87)"
+      }
+    },
+    "& .MuiOutlinedInput-root": {
+      "&.Mui-disabled fieldset": {
+        border: "none"
+      }
+    }
   }
-});
+})(TextField);
 
-const Input = withStyles(styles)(props => {
+const Input = props => {
   const changesOutDelayed = _.debounce(props.onChanges, props.delay);
-  const { classes } = props;
 
   return (
-    <TextField
+    <CssTextField
       aria-label={props.ariaLabel}
       defaultValue={props.value}
       label={props.label}
-      disabled={props.isDisabled}
+      disabled={props.isDisabled || props.isReadOnly}
       placeholder={props.placeholder}
       rows={props.rows}
       margin="dense"
@@ -30,15 +49,16 @@ const Input = withStyles(styles)(props => {
       }
       error={props.error}
       variant="outlined"
-      style={props.fullWidth ? {} : { width: props.width }}
+      style={
+        props.fullWidth
+          ? { border: "none" }
+          : { width: props.width, border: "none" }
+      }
       fullWidth={props.fullWidth}
       type={props.type}
-      InputProps={{
-        className: classes.input
-      }}
     />
   );
-});
+};
 
 Input.defaultProps = {
   ariaLabel: "Text area",
@@ -46,6 +66,7 @@ Input.defaultProps = {
   id: `input-${Math.random()}`,
   isDisabled: false,
   isHidden: false,
+  isReadOnly: false,
   payload: {},
   placeholder: "",
   rows: 1,
@@ -62,6 +83,7 @@ Input.propTypes = {
   id: PropTypes.string,
   isDisabled: PropTypes.bool,
   isHidden: PropTypes.bool,
+  isReadOnly: PropTypes.bool,
   label: PropTypes.string,
   /** Is called with the payload and the value. */
   onChanges: PropTypes.func.isRequired,

@@ -107,7 +107,7 @@ const Tutkintokielet = React.memo(props => {
         ...props.changeObjects.tutkintokielet,
         [areaCode]: R.filter(changeObj => {
           return !R.contains(commonPart, changeObj.anchor);
-        }, props.changeObjects.tutkintokielet[areaCode])
+        }, props.changeObjects.tutkintokielet[areaCode] || [])
       };
 
       if (

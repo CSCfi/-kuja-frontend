@@ -9,7 +9,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
   const getCategories = useMemo(() => {
     return () => {
       let structure = null;
-
+      console.info(props.isReadOnly);
       structure = [
         {
           anchor: "yleisettiedot",
@@ -23,6 +23,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly: props.isReadOnly,
                     placeholder: ""
                   }
                 }
@@ -37,6 +38,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly: props.isReadOnly,
                     placeholder: ""
                   }
                 }
@@ -51,6 +53,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly: props.isReadOnly,
                     placeholder: ""
                   }
                 }
@@ -61,7 +64,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
       ];
       return structure;
     };
-  }, []);
+  }, [props.isReadOnly]);
 
   useEffect(() => {
     onStateUpdate(
@@ -73,11 +76,10 @@ const TaloudellisetYleisettiedot = React.memo(props => {
   }, [getCategories, onStateUpdate, sectionId]);
   return (
     <React.Fragment>
-      <p></p>
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
           title={"Yleiset tiedot"}
-          anchor={sectionId}
+          anchor={"taloudelliset_yleisettiedot"}
           key={`taloudelliset-yleisetiedot`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
@@ -99,6 +101,8 @@ TaloudellisetYleisettiedot.propTypes = {
   handleChanges: PropTypes.func,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  isReadOnly: PropTypes.bool
 };
+
 export default injectIntl(TaloudellisetYleisettiedot);

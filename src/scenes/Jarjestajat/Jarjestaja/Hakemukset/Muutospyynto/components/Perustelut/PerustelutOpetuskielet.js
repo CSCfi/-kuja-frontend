@@ -60,6 +60,7 @@ const PerustelutOpetuskielet = React.memo(props => {
                       anchor: "A",
                       name: "TextBox",
                       properties: {
+                        isReadOnly: props.isReadOnly,
                         placeholder: "Sana on vapaa..."
                       }
                     }
@@ -71,7 +72,12 @@ const PerustelutOpetuskielet = React.memo(props => {
           return structure;
         }, opetuskielet.items).filter(Boolean);
     };
-  }, [props.changeObjects.opetuskielet, props.kohde, props.maaraystyyppi]);
+  }, [
+    props.changeObjects.opetuskielet,
+    props.isReadOnly,
+    props.kohde,
+    props.maaraystyyppi
+  ]);
 
   useEffect(() => {
     setLocale(R.toUpper(props.intl.locale));
@@ -96,6 +102,7 @@ const PerustelutOpetuskielet = React.memo(props => {
           key={`expandable-row-root`}
           categories={props.stateObject.categories}
           changes={props.changeObjects.perustelut}
+          disableReverting={props.isReadOnly}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
           sectionId={sectionId}
@@ -118,6 +125,7 @@ PerustelutOpetuskielet.propTypes = {
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   stateObject: PropTypes.object

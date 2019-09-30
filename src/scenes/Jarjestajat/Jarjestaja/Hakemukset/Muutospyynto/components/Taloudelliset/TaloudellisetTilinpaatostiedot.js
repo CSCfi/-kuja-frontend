@@ -21,6 +21,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
                 fullWidth: true,
+                isReadOnly: props.isReadOnly,
                 label: "Omavaraisuusaste",
                 type: "number"
               }
@@ -31,6 +32,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
                 fullWidth: true,
+                isReadOnly: props.isReadOnly,
                 label: "Maksuvalmius",
                 type: "number"
               }
@@ -41,6 +43,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
                 fullWidth: true,
+                isReadOnly: props.isReadOnly,
                 label: "Velkaantuneisuus",
                 type: "number"
               }
@@ -51,6 +54,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               styleClasses: ["px-2 w-full sm:w-1/2 md:w-1/3"],
               properties: {
                 fullWidth: true,
+                isReadOnly: props.isReadOnly,
                 label: "Kannattavuus",
                 type: "number"
               }
@@ -61,6 +65,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
               styleClasses: ["px-2 w-full sm:w-1/2 md:w-2/3"],
               properties: {
                 fullWidth: true,
+                isReadOnly: props.isReadOnly,
                 label: "Kumulatiivinen yli- tai alijäämä",
                 type: "number"
               }
@@ -70,7 +75,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
       ];
       return structure;
     };
-  }, []);
+  }, [props.isReadOnly]);
 
   useEffect(() => {
     onStateUpdate(
@@ -85,7 +90,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
           title={"Tilinpäätöstiedot"}
-          anchor={sectionId}
+          anchor={"taloudelliset_tilinpaatostiedot"}
           key={`taloudelliset-tilinpaatos`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
@@ -101,6 +106,10 @@ const TaloudellisetTilinpaatostiedot = React.memo(props => {
     </React.Fragment>
   );
 });
+
+TaloudellisetTilinpaatostiedot.defaultProps = {
+  isReadOnly: false
+};
 
 TaloudellisetTilinpaatostiedot.propTypes = {
   changeObjects: PropTypes.object,

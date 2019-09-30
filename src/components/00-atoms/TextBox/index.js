@@ -31,13 +31,13 @@ const TextBox = props => {
       {value !== null ? (
         <TextareaAutosize
           aria-label={props.ariaLabel}
-          disabled={props.isDisabled}
+          disabled={props.isDisabled || props.isReadOnly}
           placeholder={props.placeholder}
           rows={props.rows}
           rowsMax={props.rowsMax}
-          className={`${
-            props.isHidden ? "hidden" : ""
-          } w-full border border-solid p-2`}
+          className={`${props.isHidden ? "hidden" : ""} ${
+            props.isReadOnly ? "" : "border border-solid"
+          } w-full p-2`}
           onChange={updateValue}
           value={value}
         />
@@ -53,6 +53,7 @@ TextBox.defaultProps = {
   isHidden: false,
   payload: {},
   placeholder: "",
+  isReadOnly: false,
   rows: 3,
   rowsMax: 100
 };
@@ -67,6 +68,7 @@ TextBox.propTypes = {
   /** Custom object defined by user. */
   payload: PropTypes.object,
   placeholder: PropTypes.string,
+  isReadOnly: PropTypes.bool,
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
   value: PropTypes.string

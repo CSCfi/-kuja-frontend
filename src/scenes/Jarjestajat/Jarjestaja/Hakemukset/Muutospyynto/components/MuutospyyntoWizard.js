@@ -418,12 +418,24 @@ const MuutospyyntoWizard = props => {
                 lupa={props.lupa}
                 muutoshakemus={dataBySection}
               >
-                <MuutospyyntoWizardYhteenveto
-                  changeObjects={changeObjects}
-                  muutoshakemus={dataBySection}
-                  onChangesUpdate={onSectionChangesUpdate}
-                  onStateUpdate={onSectionStateUpdate}
-                />
+                <MuutosperustelutProvider>
+                  <LomakkeetProvider>
+                    <MuutospyyntoWizardYhteenveto
+                      changeObjects={changeObjects}
+                      kielet={props.kielet}
+                      kohteet={props.kohteet.data}
+                      koulutukset={props.koulutukset}
+                      koulutusalat={props.koulutusalat}
+                      koulutustyypit={props.koulutustyypit}
+                      lupa={props.lupa}
+                      maaraystyypit={props.maaraystyypit}
+                      muut={props.muut}
+                      muutoshakemus={dataBySection}
+                      onChangesUpdate={onSectionChangesUpdate}
+                      onStateUpdate={onSectionStateUpdate}
+                    />
+                  </LomakkeetProvider>
+                </MuutosperustelutProvider>
               </WizardPage>
             )}
           </div>

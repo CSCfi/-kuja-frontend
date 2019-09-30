@@ -20,6 +20,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               anchor: "label",
               name: "TextBox",
               properties: {
+                isReadOnly: props.isReadOnly,
                 placeholder: ""
               }
             }
@@ -48,6 +49,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               name: "Input",
               styleClasses: [""],
               properties: {
+                isReadOnly: props.isReadOnly,
                 withoutMargin: true,
                 type: "number"
               }
@@ -63,6 +65,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               anchor: "A",
               name: "TextBox",
               properties: {
+                isReadOnly: props.isReadOnly,
                 placeholder: ""
               }
             }
@@ -71,7 +74,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
       ];
       return structure;
     };
-  }, []);
+  }, [props.isReadOnly]);
 
   useEffect(() => {
     onStateUpdate(
@@ -86,7 +89,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
           title={"Investoinnit"}
-          anchor={sectionId}
+          anchor={"taloudelliset_investoinnit"}
           key={`taloudelliset-investoinnit`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
@@ -103,9 +106,14 @@ const TaloudellisetInvestoinnit = React.memo(props => {
   );
 });
 
+TaloudellisetInvestoinnit.defaultProps = {
+  isReadOnly: false
+};
+
 TaloudellisetInvestoinnit.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
+  isReadOnly: PropTypes.bool,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
