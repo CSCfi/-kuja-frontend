@@ -59,6 +59,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                         anchor: index,
                         name: "TextBox",
                         properties: {
+                          isReadOnly: props.isReadOnly,
                           placeholder: "Perustele muutos, kiitos"
                         }
                       }
@@ -98,6 +99,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                 key={`expandable-row-root-${index}`}
                 categories={categories}
                 changes={R.path(["perustelut", areaCode], props.changeObjects)}
+                disableReverting={props.isReadOnly}
                 onChangesRemove={onChangesRemove}
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
@@ -116,6 +118,7 @@ const PerustelutTutkintokielet = React.memo(props => {
 
 PerustelutTutkintokielet.defaultValues = {
   changeObjects: {},
+  isReadOnly: false,
   stateObjects: {}
 };
 

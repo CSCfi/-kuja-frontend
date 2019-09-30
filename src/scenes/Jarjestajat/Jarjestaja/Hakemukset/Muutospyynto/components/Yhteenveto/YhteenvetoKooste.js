@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 // import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 // import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
-// import PerustelutTutkintokielet from "./Perustelut/PerustelutTutkintokielet";
+import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
 import YhteenvetoTutkinnot from "./YhteenvetoTutkinnot";
 import { MuutosperustelutContext } from "../../../../../../../context/muutosperustelutContext";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
@@ -213,7 +213,7 @@ const YhteenvetoKooste = ({
                     />
                   ) : null}
 
-                  {/* {!!R.path(["kielet", "tutkintokielet"], changeObjects) ? (
+                  {!!R.path(["kielet", "tutkintokielet"], changeObjects) ? (
                     <PerustelutTutkintokielet
                       changeObjects={{
                         tutkintokielet:
@@ -242,9 +242,10 @@ const YhteenvetoKooste = ({
                           "tutkintokielet"
                         ])(muutoshakemus)
                       }}
+                      isReadOnly={true}
                       {..._props}
                     />
-                  ) : null} */}
+                  ) : null}
                 </React.Fragment>
               )}
               runOnStateUpdate={onStateUpdate}
