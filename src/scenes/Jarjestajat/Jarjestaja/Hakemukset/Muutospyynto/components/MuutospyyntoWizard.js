@@ -198,16 +198,23 @@ const MuutospyyntoWizard = props => {
 
   const getFiles = () => {
     console.log(changeObjects);
-    const allAttachments = R.path(
-      ["yhteenveto", "yleisettiedot"],
-      changeObjects
+    const allAttachments = R.concat(
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || []
     );
-    const attachments = R.map(obj => {
-      return R.map(file => {
-        return file;
-      }, obj.properties.attachments);
-    }, allAttachments);
-    return attachments[0];
+    console.log(allAttachments);
+
+    let attachments;
+    if (allAttachments) {
+      attachments = R.map(obj => {
+        return R.map(file => {
+          return file;
+        }, obj.properties.attachments);
+      }, allAttachments);
+      return attachments;
+    } else {
+      return null;
+    }
   };
 
   const save = () => {

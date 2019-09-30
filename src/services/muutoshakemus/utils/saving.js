@@ -12,22 +12,30 @@ export function createObjectToSave(
   uuid,
   muutospyynto
 ) {
-  let yhteenvetoYleisetAttachments;
-  const allAttachments = R.path(["yhteenveto", "yleisettiedot"], changeObjects);
+  let yhteenvetoAttachments;
+  const yhteenvetoYleiset = R.path(
+    ["yhteenveto", "yleisettiedot"],
+    changeObjects
+  );
+  const taloudellisetLiitteet = R.path(
+    ["taloudelliset", "liitteet"],
+    changeObjects
+  );
+  let allAttachments = Object.assign(
+    {},
+    yhteenvetoYleiset,
+    taloudellisetLiitteet
+  );
+  let liitteet = {};
   if (allAttachments) {
-    yhteenvetoYleisetAttachments = R.flatten([
-      R.filter(
-        R.compose(
-          R.contains("liitteet"),
-          R.prop("anchor")
-        ),
-        allAttachments
-      )
-    ]);
-  }
-  let liitteet = [];
-  if (yhteenvetoYleisetAttachments) {
-    liitteet.push(yhteenvetoYleisetAttachments[0].properties.attachments);
+    liitteet = Object.assign(
+      {},
+      R.map(attachs => {
+        return R.map(attach => {
+          return attach;
+        }, attachs.properties.attachments);
+      }, allAttachments)
+    );
   }
   console.log(liitteet);
 
@@ -45,10 +53,10 @@ export function createObjectToSave(
     paivityspvm: null,
     voimassaalkupvm: lupa.data.alkupvm,
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
-    liitteet: [],
+    liitteet: liitteet[0],
     meta: {
       meta: {},
-      liitteet,
+      liitteet: [],
       taloudelliset: {
         changeObjects: R.flatten([
           R.path(["taloudelliset", "investoinnit"], changeObjects),
