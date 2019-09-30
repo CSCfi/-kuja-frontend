@@ -73,13 +73,13 @@ const YhteenvetoTaloudelliset = ({
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
-          {/* <FormSection
-            id="taloudelliset_tilinpaatostiedot"
+          <FormSection
+            id="yhteenveto_taloudelliset_tilinpaatostiedot"
             render={_props => (
               <React.Fragment>
                 <TaloudellisetTilinpaatostiedot
                   stateObject={R.path(
-                    ["taloudelliset", "tilinpaatostiedot"],
+                    ["yhteenveto", "taloudelliset", "tilinpaatostiedot"],
                     muutoshakemus
                   )}
                   changeObjects={{
@@ -88,6 +88,7 @@ const YhteenvetoTaloudelliset = ({
                       changeObjects
                     )
                   }}
+                  isReadOnly={true}
                   {..._props}
                 />
               </React.Fragment>
@@ -95,13 +96,13 @@ const YhteenvetoTaloudelliset = ({
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
-          <FormSection
-            id="taloudelliset_liitteet"
+          {/* <FormSection
+            id="yhteenveto_taloudelliset_liitteet"
             render={_props => (
               <React.Fragment>
                 <TaloudellisetLiitteet
                   stateObject={R.path(
-                    ["taloudelliset", "liitteet"],
+                    ["yhteenveto", "taloudelliset", "liitteet"],
                     muutoshakemus
                   )}
                   changeObjects={{

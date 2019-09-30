@@ -77,7 +77,6 @@ const TaloudellisetInvestoinnit = React.memo(props => {
   }, [props.isReadOnly]);
 
   useEffect(() => {
-    console.info(sectionId);
     onStateUpdate(
       {
         categories: getCategories()
