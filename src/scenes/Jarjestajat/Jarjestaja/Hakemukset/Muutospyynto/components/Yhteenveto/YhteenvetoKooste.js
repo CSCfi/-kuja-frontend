@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-// import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
+import PerustelutKoulutukset from "../Perustelut/PerustelutKoulutukset";
 // import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
@@ -146,7 +146,7 @@ const YhteenvetoKooste = ({
                         {..._props}
                       />
                     )}
-                    {/* {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
+                    {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
                       <PerustelutKoulutukset
                         changeObjects={{
                           koulutukset: R.prop("koulutukset", changeObjects),
@@ -168,9 +168,10 @@ const YhteenvetoKooste = ({
                           "koulutukset",
                           "valmentavatKoulutukset"
                         ])(muutoshakemus)}
+                        isReadOnly={true}
                         {..._props}
                       />
-                    ) : null} */}
+                    ) : null}
                   </React.Fragment>
                 )}
                 runOnStateUpdate={onStateUpdate}

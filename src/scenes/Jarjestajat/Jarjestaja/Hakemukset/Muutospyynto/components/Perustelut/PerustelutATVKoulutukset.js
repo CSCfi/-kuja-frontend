@@ -57,6 +57,7 @@ const PerustelutATVKoulutukset = props => {
                     anchor: "A",
                     name: "TextBox",
                     properties: {
+                      isReadOnly: props.isReadOnly,
                       placeholder: "Perustelut..."
                     }
                   }
@@ -115,7 +116,7 @@ const PerustelutATVKoulutukset = props => {
             props.changeObjects.perustelut.koulutukset
               .ammatilliseenTehtavaanValmistavatKoulutukset
           }
-          disableReverting={false}
+          disableReverting={props.isReadOnly}
           hideAmountOfChanges={false}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
@@ -129,11 +130,13 @@ const PerustelutATVKoulutukset = props => {
 
 PerustelutATVKoulutukset.defaultProps = {
   changeObjects: {},
+  isReadOnly: false,
   stateObject: {}
 };
 
 PerustelutATVKoulutukset.propTypes = {
   changeObjects: PropTypes.object,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
