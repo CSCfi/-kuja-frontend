@@ -2,12 +2,13 @@ import React from "react";
 import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
-import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
+import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 
-const MuutospyyntoWizardTaloudelliset = ({
+const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
   kielet,
   kohteet,
@@ -26,8 +27,8 @@ const MuutospyyntoWizardTaloudelliset = ({
       <h2 className="my-6">{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
 
       <FormSection
-        className="my-0"
         id="yhteenveto_yleisettiedot"
+        className="my-0"
         render={_props => (
           <React.Fragment>
             <YhteenvetoYleisetTiedot
@@ -62,11 +63,34 @@ const MuutospyyntoWizardTaloudelliset = ({
         runOnStateUpdate={onStateUpdate}
         runOnChanges={onChangesUpdate}
       />
+      <FormSection
+        id="yhteenveto_hakemuksenliitteet"
+        className="my-0"
+        render={_props => (
+          <React.Fragment>
+            <YhteenvetoLiitteet
+              stateObject={R.path(
+                ["yhteenveto", "hakemuksenliitteet"],
+                muutoshakemus
+              )}
+              changeObjects={{
+                yhteenveto: R.path(
+                  ["yhteenveto", "hakemuksenliitteet"],
+                  changeObjects
+                )
+              }}
+              {..._props}
+            />
+          </React.Fragment>
+        )}
+        runOnStateUpdate={onStateUpdate}
+        runOnChanges={onChangesUpdate}
+      />
     </React.Fragment>
   );
 };
 
-MuutospyyntoWizardTaloudelliset.propTypes = {
+MuutospyyntoWizardYhteenveto.propTypes = {
   changeObjects: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
@@ -80,4 +104,4 @@ MuutospyyntoWizardTaloudelliset.propTypes = {
   onStateUpdate: PropTypes.func
 };
 
-export default injectIntl(MuutospyyntoWizardTaloudelliset);
+export default injectIntl(MuutospyyntoWizardYhteenveto);

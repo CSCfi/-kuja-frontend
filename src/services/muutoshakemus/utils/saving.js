@@ -17,14 +17,19 @@ export function createObjectToSave(
     ["yhteenveto", "yleisettiedot"],
     changeObjects
   );
+  const yhteenvetoLiitteet = R.path(
+    ["yhteenveto", "hakemuksenliitteet"],
+    changeObjects
+  );
   const taloudellisetLiitteet = R.path(
     ["taloudelliset", "liitteet"],
     changeObjects
   );
   let allAttachments = Object.assign(
     {},
+    taloudellisetLiitteet,
     yhteenvetoYleiset,
-    taloudellisetLiitteet
+    yhteenvetoLiitteet
   );
   // Gets only attachment structures
   let liitteet = {};
@@ -62,12 +67,13 @@ export function createObjectToSave(
           R.path(["taloudelliset", "tilinpaatostiedot"], changeObjects),
           R.path(["taloudelliset", "yleisettiedot"], changeObjects),
           R.path(["taloudelliset", "liitteet"], changeObjects)
-        ])
+        ]).filter(Boolean)
       },
       yhteenveto: {
         changeObjects: R.flatten([
-          R.path(["yhteenveto", "yleisettiedot"], changeObjects)
-        ])
+          R.path(["yhteenveto", "yleisettiedot"], changeObjects),
+          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects)
+        ]).filter(Boolean)
       }
     },
     muutokset: R.flatten([

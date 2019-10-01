@@ -354,6 +354,7 @@ const Attachments = React.memo(props => {
 
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
+    console.log(attachments);
     if (attachments)
       return attachments.map(liite => {
         if (
