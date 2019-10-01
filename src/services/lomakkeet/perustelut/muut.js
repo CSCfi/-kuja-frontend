@@ -241,6 +241,7 @@ export const getVankilaopetusPerustelulomake = () => {
     }
   ];
 };
+
 export const getTyovoimakoulutuslomake = () => {
   const code = 4;
   return [{
@@ -817,9 +818,9 @@ export const getOppisopimusPerusteluLomake = () => {
   ]
 }
 
-export const getOpiskelijavuodetLomake = () => {
+export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = () => {
   return [{
-    anchor: "opiskelijavuodet-perustelut-lomake",
+    anchor: "vahimmaisopiskelijavuodet",
     styleClasses: ["px-10 py-10"],
     components: [
       {
@@ -940,6 +941,40 @@ export const getOpiskelijavuodetLomake = () => {
       }
     ]
   }]
+}
+
+export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = () => {
+  return [{
+    anchor: "vaativatuki",
+    title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+    styleClasses:
+      ["px-10 py-10"],
+    components:
+      [
+        {
+          anchor: "A",
+          name: "TextBox",
+        }
+      ]
+  }
+  ]
+}
+
+export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = () => {
+  return [{
+    anchor: "sisaoppilaitos",
+    title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+    styleClasses:
+      ["px-10 py-10"],
+    components:
+      [
+        {
+          anchor: "A",
+          name: "TextBox",
+        }
+      ]
+  }
+  ]
 }
 
 const opiskelijavuodet = (code, anchorNumber) => {
