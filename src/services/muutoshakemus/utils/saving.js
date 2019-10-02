@@ -25,24 +25,27 @@ export function createObjectToSave(
     ["taloudelliset", "liitteet"],
     changeObjects
   );
-  let allAttachments = Object.assign(
-    {},
-    taloudellisetLiitteet,
-    yhteenvetoYleiset,
-    yhteenvetoLiitteet
+
+  //get actual attachment props
+  const taloudellisetLiitteetList =
+    taloudellisetLiitteet && taloudellisetLiitteet[0].properties
+      ? taloudellisetLiitteet[0].properties.attachments
+      : [];
+
+  const yhteenvetoYleisetList =
+    yhteenvetoYleiset && yhteenvetoYleiset[0].properties
+      ? yhteenvetoYleiset[0].properties.attachments
+      : [];
+
+  const yhteenvetoLiitteetList =
+    yhteenvetoLiitteet && yhteenvetoLiitteet[0].properties
+      ? yhteenvetoLiitteet[0].properties.attachments
+      : [];
+
+  const allAttachments = taloudellisetLiitteetList.concat(
+    yhteenvetoYleisetList.concat(yhteenvetoLiitteetList)
   );
-  // Gets only attachment structures
-  let liitteet = {};
-  if (allAttachments) {
-    liitteet = Object.assign(
-      {},
-      R.map(attachs => {
-        return R.map(attach => {
-          return attach;
-        }, attachs.properties.attachments);
-      }, allAttachments)
-    );
-  }
+
   return {
     diaarinumero: lupa.data.diaarinumero,
     jarjestajaOid: lupa.data.jarjestajaOid,
@@ -57,7 +60,7 @@ export function createObjectToSave(
     paivityspvm: null,
     voimassaalkupvm: lupa.data.alkupvm,
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
-    liitteet: liitteet[0],
+    liitteet: allAttachments,
     meta: {
       meta: {},
       liitteet: [],
