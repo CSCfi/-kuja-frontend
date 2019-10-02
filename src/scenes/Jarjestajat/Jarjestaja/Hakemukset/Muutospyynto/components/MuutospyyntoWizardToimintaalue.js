@@ -4,6 +4,7 @@ import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getAnchorPart } from "../../../../../../utils/common";
+import { isAdded, isInLupa, isRemoved } from "../../../../../../css/label";
 import * as R from "ramda";
 
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
@@ -301,6 +302,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             styleClasses: "sm:px-4",
             properties: {
               isChecked: isValtakunnallinenChecked,
+              labelStyles: {
+                addition: isAdded,
+                custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
+                removal: isRemoved
+              },
               title: props.intl.formatMessage(wizardMessages.responsibilities)
             }
           }
@@ -454,6 +460,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     poistettavatKunnat,
     poistettavatMaakunnat,
     props.intl,
+    props.lupakohde.valtakunnallinen,
     valittavissaOlevatKunnat,
     valittavissaOlevatMaakunnat
   ]);

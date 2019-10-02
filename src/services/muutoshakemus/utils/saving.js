@@ -1,6 +1,5 @@
 import { getChangesToSave } from "./changes-to-save";
 import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
-import getChangesOfToimintaalue from "./toiminta-alue";
 import moment from "moment";
 import * as R from "ramda";
 
