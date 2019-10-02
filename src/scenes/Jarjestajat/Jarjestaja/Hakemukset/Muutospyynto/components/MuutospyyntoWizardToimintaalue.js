@@ -116,7 +116,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   }, [kunnatInLupa, poistettavatKunnat]);
 
   const lupaanKuuluvatMaakunnatItems = useMemo(() => {
-    R.map(maakuntaInLupa => {
+    return R.map(maakuntaInLupa => {
       const asetettuPoistettavaksi = !!!R.find(
         R.pathEq(["meta", "koodiarvo"], maakuntaInLupa.meta.koodiarvo),
         poistettavatMaakunnat
