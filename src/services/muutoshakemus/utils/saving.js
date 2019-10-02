@@ -32,7 +32,7 @@ export function createObjectToSave(
       ? taloudellisetLiitteet[0].properties.attachments
       : [];
 
-  const yhteenvetoYleisetList =
+  const yhteenvetoYleisetLiitteetList =
     yhteenvetoYleiset && yhteenvetoYleiset[0].properties
       ? yhteenvetoYleiset[0].properties.attachments
       : [];
@@ -43,7 +43,7 @@ export function createObjectToSave(
       : [];
 
   const allAttachments = taloudellisetLiitteetList.concat(
-    yhteenvetoYleisetList.concat(yhteenvetoLiitteetList)
+    yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
   );
 
   return {
