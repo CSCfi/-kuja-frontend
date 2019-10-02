@@ -1,5 +1,13 @@
 import * as R from "ramda";
 
+export const replaceAnchorPartWith = (anchor, index, replaceWith) => {
+  return R.compose(
+    R.join("."),
+    R.update(index, replaceWith),
+    R.split(".")
+  )(anchor);
+};
+
 export const getAnchorPart = (anchor, index) => {
   return R.compose(
     R.view(R.lensIndex(index)),
@@ -14,10 +22,12 @@ export const curriedGetAnchorPartsByIndex = R.curry((objects, index) => {
 });
 
 export const getAnchorsStartingWith = (prefix, objects) => {
-  return R.filter(R.compose(
-    R.startsWith(prefix),
-    R.head,
-    R.split("."),
-    R.prop("anchor")
-  ))(objects);
+  return R.filter(
+    R.compose(
+      R.startsWith(prefix),
+      R.head,
+      R.split("."),
+      R.prop("anchor")
+    )
+  )(objects);
 };
