@@ -9,11 +9,10 @@ const defaultProps = {
 
 const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
                                                                         changeObjects = defaultProps.changeObjects,
-                                                                        onChangesUpdate
+                                                                        onChangesUpdate, sectionId
                                                                       }) => {
   const [lomake, setLomake] = useState(getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake());
   const [changes, setChanges] = useState(null);
-  const sectionId = "perustelut_opiskelijavuodet";
   useEffect(() => {
     setChanges(changeObjects);
   }, [changes, changeObjects]);

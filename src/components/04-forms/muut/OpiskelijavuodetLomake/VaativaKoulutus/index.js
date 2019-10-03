@@ -9,11 +9,10 @@ const defaultProps = {
 
 const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
                                            changeObjects = defaultProps.changeObjects,
-                                           onChangesUpdate
+                                           onChangesUpdate, sectionId
                                          }) => {
   const [lomake, setLomake] = useState(getOpiskelijavuodetVaativaKoulutusPerustelulomake());
   const [changes, setChanges] = useState(null);
-  const sectionId = "perustelut_opiskelijavuodet";
   useEffect(() => {
     setChanges(changeObjects);
   }, [changes, changeObjects]);

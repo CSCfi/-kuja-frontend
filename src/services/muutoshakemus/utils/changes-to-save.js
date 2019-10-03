@@ -275,9 +275,19 @@ export const getChangesToSave = (
         ).meta;
         koodisto = meta.koodisto.koodistoUri;
       }
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
 
-      // TODO: Define the list of perustelut for opiskelijavuodet
-      const perustelut = [];
+      const perustelut = R.filter(
+        R.compose(
+          R.includes(anchorInit),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
 
       return {
         arvo: changeObj.properties.applyForValue,

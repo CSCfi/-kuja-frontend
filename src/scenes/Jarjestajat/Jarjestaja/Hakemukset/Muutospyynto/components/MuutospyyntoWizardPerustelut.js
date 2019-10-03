@@ -18,6 +18,7 @@ import {
 } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import { getRemovalFormStructure } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import FormSection from "../../../../../../components/03-templates/FormSection";
+import PerustelutOpiskelijavuodet from "./Perustelut/PerustelutOpiskelijavuodet";
 
 const MuutospyyntoWizardPerustelut = ({
   changeObjects,
@@ -45,7 +46,7 @@ const MuutospyyntoWizardPerustelut = ({
   );
 
   useEffect(() => {
-    fetchMuutosperustelut()(muutosperustelutDispatch);
+    fetchMuutosperustelut()(muutosperustelutDispatch );
   }, [muutosperustelutDispatch]);
 
   useEffect(() => {
@@ -245,6 +246,37 @@ const MuutospyyntoWizardPerustelut = ({
               runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[1].title}
+            />
+          ) : null}
+
+          {!!R.prop(["opiskelijavuodet"], changeObjects) ? (
+            <FormSection
+              code={4}
+              id="perustelut_opiskelijavuodet"
+              muutoshakemus={muutoshakemus}
+              render={_props => (
+                <React.Fragment>
+                  {!!R.path(["opiskelijavuodet"], changeObjects) ? (
+                    <PerustelutOpiskelijavuodet
+                      changeObjects={{
+                        opiskelijavuodet: R.path(["opiskelijavuodet"], changeObjects),
+                        perustelut: R.path(
+                          ["perustelut", "opiskelijavuodet"],
+                          changeObjects
+                        )
+                      }}
+                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(kohteet)}
+                      stateObject={R.path(["perustelut", "opiskelijavuodet"])(
+                        muutoshakemus
+                      )}
+                      {..._props}
+                    />
+                  ) : null}
+                </React.Fragment>
+              )}
+              runOnStateUpdate={onStateUpdate}
+              runOnChanges={onChangesUpdate}
+              title={kohdetiedot[3].title}
             />
           ) : null}
 

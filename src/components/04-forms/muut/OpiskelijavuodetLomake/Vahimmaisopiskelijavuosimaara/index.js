@@ -11,22 +11,17 @@ const defaultProps = {
 
 const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
                                            changeObjects = defaultProps.changeObjects,
-                                           onChangesUpdate
+                                           onChangesUpdate, sectionId
                                          }) => {
-  const [lomake, setLomake] = useState(getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake());
-  const [changes, setChanges] = useState(null);
-  const sectionId = "perustelut_opiskelijavuodet";
-  useEffect(() => {
-    setChanges(changeObjects);
-  }, [changes, changeObjects]);
+  const lomake = getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake();
 
   return (
     <React.Fragment>
-    {changes ? (
+    {changeObjects ? (
         <CategorizedListRoot
           anchor={sectionId}
           categories={lomake}
-          changes={changes}
+          changes={changeObjects}
           onUpdate={onChangesUpdate}
           showCategoryTitles={true}
         />

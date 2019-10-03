@@ -833,7 +833,7 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
     ],
     categories: [
       {
-        anchor: `1`,
+        anchor: "1",
         styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
         components: [
           {
@@ -914,7 +914,7 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
         ]
       },
       {
-        anchor: `2`,
+        anchor: "2",
         styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
         components: [
           {
