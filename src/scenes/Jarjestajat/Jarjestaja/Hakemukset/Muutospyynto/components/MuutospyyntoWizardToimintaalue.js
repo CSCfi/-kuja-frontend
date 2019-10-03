@@ -408,7 +408,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             styleClasses: "sm:px-4",
             properties: {
               info: lupaanKuuluvatMaakunnatItems.length
-                ? "(Suluissa koodiarvo)"
+                ? ""
                 : "Ei lupaan kuuluvia maakuntia.",
               items: lupaanKuuluvatMaakunnatItems,
               title: "Lupaan kuuluvat maakunnat:"
@@ -420,7 +420,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             styleClasses: "sm:px-4",
             properties: {
               info: lupaanKuuluvatKunnatItems.length
-                ? "(Suluissa koodiarvo)"
+                ? ""
                 : "Ei lupaan kuuluvia kuntia.",
               items: lupaanKuuluvatKunnatItems,
               title: "Lupaan kuuluvat kunnat:"
