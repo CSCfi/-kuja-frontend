@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 // import { isAdded } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
@@ -8,12 +8,13 @@ import _ from "lodash";
 const Tutkintokielet = React.memo(props => {
   const sectionId = "kielet_tutkintokielet";
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
-  const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const items = R.map(stateItem => {
-      R.addIndex(R.forEach)((category, ii) => {
-        R.addIndex(R.forEach)((subCategory, iii) => {
+  const items = useMemo(() => {
+    return R.map(stateItem => {
+      const categories = R.map(category => {
+        const categories = R.map(subCategory => {
+          // Let's create the updatedSubCategory variable without categories key
+          let { categories, ...updatedSubCategory } = subCategory;
           let changeObj = null;
           if (R.path([stateItem.areaCode], props.changeObjects.tutkinnot)) {
             const anchor = `tutkinnot_${R.join(".", [
@@ -31,53 +32,54 @@ const Tutkintokielet = React.memo(props => {
             (subCategory.components[0].properties.isChecked && !changeObj) ||
             (changeObj && changeObj.properties.isChecked)
           ) {
-            stateItem.categories[ii].categories[iii].components[0] = {
-              ...subCategory.components[0],
-              anchor: "A",
-              name: "StatusTextRow",
-              properties: {
+            updatedSubCategory.components = [
+              {
+                ...subCategory.components[0],
+                anchor: "A",
                 name: "StatusTextRow",
-                code: subCategory.components[0].properties.code,
-                title: subCategory.components[0].properties.title,
-                labelStyles: {}
+                properties: {
+                  name: "StatusTextRow",
+                  code: subCategory.components[0].properties.code,
+                  title: subCategory.components[0].properties.title,
+                  labelStyles: {}
+                }
+              },
+              {
+                anchor: "B",
+                name: "Autocomplete",
+                properties: {
+                  options: R.map(language => {
+                    return {
+                      label:
+                        R.find(m => {
+                          return m.kieli === props.locale;
+                        }, language.metadata).nimi || "[Kielen nimi tähän]",
+                      value: language.koodiArvo
+                    };
+                  }, props.kielet),
+                  value: []
+                }
               }
-            };
-            stateItem.categories[ii].categories[iii].components.push({
-              anchor: "B",
-              name: "Autocomplete",
-              properties: {
-                options: R.map(language => {
-                  return {
-                    label:
-                      R.find(m => {
-                        return m.kieli === props.locale;
-                      }, language.metadata).nimi || "[Kielen nimi tähän]",
-                    value: language.koodiArvo
-                  };
-                }, props.kielet),
-                value: []
-              }
-            });
+            ];
           } else {
-            delete stateItem.categories[ii].categories[iii].components;
+            updatedSubCategory = null;
           }
-          delete stateItem.categories[ii].categories[iii].categories;
-        }, category.categories);
-        if (
-          !!!R.filter(R.prop("components"), stateItem.categories[ii].categories)
-            .length
-        ) {
-          stateItem.categories[ii] = false;
-        }
-      }, stateItem.categories);
-      stateItem.categories = stateItem.categories.filter(Boolean);
-      if (!!!R.filter(R.prop("categories"), stateItem.categories).length) {
-        stateItem = {};
-      }
-      return stateItem;
-    }, _.cloneDeep(props.stateObjects.tutkinnot.items));
-
-    setItems(items);
+          return updatedSubCategory;
+        }, category.categories).filter(Boolean);
+        return categories.length
+          ? {
+              ...category,
+              categories
+            }
+          : null;
+      }, stateItem.categories).filter(Boolean);
+      return categories.length
+        ? {
+            ...stateItem,
+            categories
+          }
+        : null;
+    }, _.cloneDeep(props.stateObjects.tutkinnot.items)).filter(Boolean);
   }, [
     props.stateObjects.tutkinnot.items,
     props.changeObjects.tutkinnot,
@@ -107,7 +109,7 @@ const Tutkintokielet = React.memo(props => {
         ...props.changeObjects.tutkintokielet,
         [areaCode]: R.filter(changeObj => {
           return !R.contains(commonPart, changeObj.anchor);
-        }, props.changeObjects.tutkintokielet[areaCode] || [])
+        }, props.changeObjects.tutkintokielet[areaCode] || [])
       };
 
       if (
