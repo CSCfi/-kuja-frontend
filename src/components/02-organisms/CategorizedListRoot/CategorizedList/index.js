@@ -16,6 +16,46 @@ import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
 
+const componentContainerBaseClasses = [
+  "flex",
+  "justify-between",
+  "flex-wrap",
+  "flex-col",
+  "sm:flex-row"
+];
+
+const componentStyleMapping = {
+  verticalAlignment: {
+    center: "items-center"
+  }
+};
+
+const categoryStyleMapping = {
+  intendations: {
+    none: 0,
+    extraSmall: 2,
+    small: 4,
+    medium: 6, 
+    large: 10 // default
+  },
+  topMargins: {
+    none: 0,
+    extraSmall: 2, // default
+    small: 4,
+    medium: 6,
+    large: 10
+  }
+};
+
+const defaultComponentStyles = {
+  verticalAlignment: componentStyleMapping.verticalAlignment.center
+};
+
+const defaultCategoryStyles = {
+  intendation: categoryStyleMapping.intendations.large,
+  topMargin: categoryStyleMapping.topMargins.extraSmall
+};
+
 /**
  *
  * @param {string} anchor
@@ -75,13 +115,13 @@ const CategorizedList = React.memo(props => {
   );
 
   return (
-    <div>
+    <div data-parentofall={true}>
       {_.map(props.categories, (category, i) => {
         if (category.isVisible === false) {
           return null;
         }
         const isCategoryTitleVisible =
-          props.showCategoryTitles && (category.code || category.title);
+          props.showCategoryTitles && !!(category.code || category.title);
         const anchor = `${props.anchor}.${category.anchor}`;
         const splittedAnchor = R.split(".", anchor);
         const categoryChanges = R.filter(
@@ -93,25 +133,50 @@ const CategorizedList = React.memo(props => {
           ),
           props.changes
         );
-        const categoryStyles = R.concat(
-          ["flex", "justify-between", "flex-wrap", "flex-col", "sm:flex-row"],
-          category.styleClasses || ["sm:items-center"]
-        ).join(" ");
-        const defaultIntendationClasses = !R.equals(props.rootPath, [])
-          ? ["pl-10"]
-          : i !== 0 && isCategoryTitleVisible
-          ? ["pt-10"]
-          : [];
-        const styleClasses = R.join(
-          " ",
-          R.concat(category.styleClasses || defaultIntendationClasses, [
-            "select-none"
-          ])
+
+        const topMarginInteger = category.topMargin
+          ? categoryStyleMapping.topMargins[category.topMargin]
+          : defaultCategoryStyles.topMargin;
+
+        const categoryStyles = {
+          classes: {
+            intendation: `pl-${Number(!!props.level) *
+              (category.intendation || defaultCategoryStyles.intendation)}`,
+            topMargin: `pt-${Number(!!props.level) * topMarginInteger}`
+          }
+        };
+
+        const categoryStyleClasses = R.values(
+          R.mapObjIndexed(styleClass => {
+            return styleClass;
+          }, categoryStyles.classes)
         );
+
+        const componentStyles = {
+          classes: {
+            verticalAlignment:
+              componentStyleMapping.verticalAlignment[
+                category.alignComponents
+              ] || defaultComponentStyles.verticalAlignment
+          }
+        };
+
+        const componentContainerClasses = R.concat(
+          componentContainerBaseClasses,
+          R.values(
+            R.mapObjIndexed(styleClass => {
+              return styleClass;
+            }, componentStyles.classes)
+          )
+        );
+        const categoryTitleClasses = R.join(" ", [
+          `py-${topMarginInteger}`,
+          i === 0 ? "" : `mt-${2 * topMarginInteger}`
+        ]);
         return (
-          <div key={i} className={styleClasses}>
+          <div key={i} className={R.join(" ", categoryStyleClasses)}>
             {isCategoryTitleVisible && (
-              <div className="py-2">
+              <div className={categoryTitleClasses}>
                 <h4>
                   {category.code && (
                     <span className="mr-4">{category.code}</span>
@@ -120,9 +185,8 @@ const CategorizedList = React.memo(props => {
                 </h4>
               </div>
             )}
-            <div className={categoryStyles}>
+            <div className={R.join(" ", componentContainerClasses)}>
               {_.map(category.components, (component, ii) => {
-                // console.info("Rendering...", component);
                 const fullAnchor = `${anchor}.${component.anchor}`;
                 const fullPath = props.rootPath.concat([i, "components", ii]);
                 const idSuffix = `${i}-${ii}`;
@@ -157,7 +221,6 @@ const CategorizedList = React.memo(props => {
                   (props.debug
                     ? props.rootPath.concat([i, "components", ii])
                     : "");
-                // console.info(fullAnchor, component);
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (
@@ -566,6 +629,10 @@ const CategorizedList = React.memo(props => {
     </div>
   );
 });
+
+CategorizedList.defaultProps = {
+  level: 0
+};
 
 CategorizedList.propTypes = {
   anchor: PropTypes.string,
