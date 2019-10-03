@@ -1,6 +1,5 @@
 import { getChangesToSave } from "./changes-to-save";
 import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
-import getChangesOfToimintaalue from "./toiminta-alue";
 import moment from "moment";
 import * as R from "ramda";
 
@@ -136,9 +135,16 @@ export function createObjectToSave(
         },
         R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
       ),
-      getChangesOfToimintaalue(
-        R.prop("toimintaalue", muutoshakemus),
-        muutospyynto
+      getChangesToSave(
+        "toimintaalue",
+        R.path(["toimintaalue"], muutoshakemus),
+        {
+          muutokset: R.path(["toimintaalue"], changeObjects),
+          perustelut: R.path(["perustelut", "toimintaalue"], changeObjects) || []
+        },
+        R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(
+          backendMuutokset
+        )
       ),
       getChangesToSave(
         "opiskelijavuodet",

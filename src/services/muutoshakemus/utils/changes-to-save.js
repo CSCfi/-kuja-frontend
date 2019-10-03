@@ -256,6 +256,58 @@ export const getChangesToSave = (
         type: type
       };
     }, unhandledChangeObjects).filter(Boolean);
+  } else if (key === "toimintaalue") {
+    uudetMuutokset = R.map(changeObj => {
+      if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
+        const tilaVal = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
+        const typeVal = changeObj.properties.isChecked ? "addition" : "removal";
+        return {
+          tila: tilaVal,
+          type: typeVal,
+          meta: {
+            changeObjects: [changeObj],
+            perusteluteksti: null
+          },
+          muutosperustelukoodiarvo: null,
+          kohde: stateObject.kohde,
+          maaraystyyppi: stateObject.maaraystyyppi,
+          value: "02",
+          tyyppi: " valtakunnallinen",
+          koodisto: "nuts1",
+          koodiarvo: "FI1"
+        };
+      } else if (
+        R.equals(getAnchorPart(changeObj.anchor, 1), "valintakentat")
+      ) {
+        return {
+          koodiarvo: changeObj.properties.meta.koodiarvo,
+          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          tila: "LISAYS",
+          type: "addition",
+          meta: {
+            perusteluteksti: null,
+            changeObjects: [changeObj]
+          },
+          muutosperustelukoodiarvo: null,
+          kohde: stateObject.kohde,
+          maaraystyyppi: stateObject.maaraystyyppi
+        };
+      } else {
+        return {
+          koodiarvo: changeObj.properties.meta.koodiarvo,
+          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          tila: "POISTO",
+          type: "removal",
+          meta: {
+            perusteluteksti: null,
+            changeObjects: [changeObj]
+          },
+          muutosperustelukoodiarvo: null,
+          kohde: stateObject.kohde,
+          maaraystyyppi: stateObject.maaraystyyppi
+        };
+      }
+    }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "opiskelijavuodet") {
     uudetMuutokset = R.map(changeObj => {
       let koodisto = "koulutussektori";
