@@ -14,6 +14,7 @@ import { heights } from "../../../../css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
+import ActionList from "../../ActionList";
 
 /**
  *
@@ -37,7 +38,7 @@ const getPropertiesObject = (changeObj, component) => {
 };
 
 const CategorizedList = React.memo(props => {
-  const { onChangesUpdate, runRootOperations } = props;
+  const { onChangesUpdate } = props;
 
   const handleAttachmentChanges = useCallback(
     (payload, changeProps) => {
@@ -76,6 +77,9 @@ const CategorizedList = React.memo(props => {
   return (
     <div>
       {_.map(props.categories, (category, i) => {
+        if (category.isVisible === false) {
+          return null;
+        }
         const isCategoryTitleVisible =
           props.showCategoryTitles && (category.code || category.title);
         const anchor = `${props.anchor}.${category.anchor}`;
@@ -89,14 +93,10 @@ const CategorizedList = React.memo(props => {
           ),
           props.changes
         );
-        const categoryStyles = [
-          "flex",
-          "sm:items-center",
-          "justify-between",
-          "flex-wrap",
-          "flex-col",
-          "sm:flex-row"
-        ].join(" ");
+        const categoryStyles = R.concat(
+          ["flex", "justify-between", "flex-wrap", "flex-col", "sm:flex-row"],
+          category.styleClasses || ["sm:items-center"]
+        ).join(" ");
         const defaultIntendationClasses = !R.equals(props.rootPath, [])
           ? ["pl-10"]
           : i !== 0 && isCategoryTitleVisible
@@ -161,7 +161,7 @@ const CategorizedList = React.memo(props => {
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (
-                      <div className="flex-2">
+                      <div className={component.styleClasses}>
                         <CheckboxWithLabel
                           id={`checkbox-with-label-${idSuffix}`}
                           name={component.name}
@@ -365,8 +365,8 @@ const CategorizedList = React.memo(props => {
                             <div className={component.styleClasses}>
                               <Attachments
                                 id={`attachments-${idSuffix}`}
+                                isDisabled={isDisabled}
                                 onUpdate={handleAttachmentChanges}
-                                placement={props.placement}
                                 payload={{
                                   anchor,
                                   categories: category.categories,
@@ -377,7 +377,7 @@ const CategorizedList = React.memo(props => {
                                   siblings: props.categories,
                                   attachments: attachments
                                 }}
-                                isDisabled={isDisabled}
+                                placement={props.placement}
                               />
                             </div>
                           );
@@ -430,10 +430,11 @@ const CategorizedList = React.memo(props => {
                               change.properties.isChecked
                             );
                           return (
-                            <div className="flex-1 px-2 my-2 sm:my-0 sm:mb-1">
+                            <div className={`flex-1 ${component.styleClasses}`}>
                               <Autocomplete
                                 callback={handleChanges}
                                 id={`autocomplete-${idSuffix}`}
+                                isMulti={propsObj.isMulti}
                                 options={propsObj.options}
                                 payload={{
                                   anchor,
@@ -444,9 +445,11 @@ const CategorizedList = React.memo(props => {
                                   rootPath: props.rootPath,
                                   siblings: props.categories
                                 }}
-                                value={propsObj.value}
+                                placeholder={propsObj.placeholder}
+                                value={R.flatten([propsObj.value])}
                                 isDisabled={isDisabled}
                                 height={heights.SHORT}
+                                title={propsObj.title}
                               />
                             </div>
                           );
@@ -516,6 +519,20 @@ const CategorizedList = React.memo(props => {
                         />
                       </div>
                     )}
+                    {component.name === "ActionList" && (
+                      <div className={`${component.styleClasses} flex-2`}>
+                        <ActionList
+                          info={propsObj.info}
+                          items={propsObj.items}
+                          payload={{
+                            anchor,
+                            component
+                          }}
+                          removalCallback={handleChanges}
+                          title={propsObj.title}
+                        />
+                      </div>
+                    )}
                   </React.Fragment>
                 );
               })}
@@ -545,7 +562,7 @@ const CategorizedList = React.memo(props => {
             )}
           </div>
         );
-      })}
+      }).filter(Boolean)}
     </div>
   );
 });
