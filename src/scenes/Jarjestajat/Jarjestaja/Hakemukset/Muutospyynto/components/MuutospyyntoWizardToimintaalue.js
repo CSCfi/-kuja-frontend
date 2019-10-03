@@ -76,7 +76,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.map(kunta => {
         return {
           availableActions: ["remove"],
-          title: `${kunta.arvo} (${kunta.koodiarvo})`,
+          title: kunta.arvo,
           meta: kunta
         };
       }, props.lupakohde.kunnat)
@@ -89,7 +89,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.map(maakunta => {
         return {
           availableActions: ["remove"],
-          title: `${maakunta.arvo} (${maakunta.koodiarvo})`,
+          title: maakunta.arvo,
           meta: maakunta
         };
       }, props.lupakohde.maakunnat)
@@ -240,10 +240,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                       changeObjOfRemoval.properties.item.meta.koodisto
                   }
                 },
-                title: R.join(" ", [
-                  changeObjOfRemoval.properties.item.meta.arvo,
-                  `(${changeObjOfRemoval.properties.item.meta.koodiarvo})`
-                ])
+                title: changeObjOfRemoval.properties.item.meta.arvo
               }
             },
             changesByAnchor.changes
@@ -265,7 +262,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                   koodiarvo: changeObj.properties.value.value,
                   koodisto: changeObj.properties.value.meta.koodisto
                 },
-                title: `${changeObj.properties.value.label} (${changeObj.properties.value.value})`
+                title: changeObj.properties.value.label
               }
             };
           }
@@ -293,29 +290,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         ]
       },
       {
-        anchor: "valtakunnallinen",
-        title: "Koko Suomi - pois lukien Ahvenanmaan maakunta",
-        components: [
-          {
-            anchor: "A",
-            name: "CheckboxWithLabel",
-            styleClasses: "sm:px-4",
-            properties: {
-              isChecked: isValtakunnallinenChecked,
-              labelStyles: {
-                addition: isAdded,
-                custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
-                removal: isRemoved
-              },
-              title: props.intl.formatMessage(wizardMessages.responsibilities)
-            }
-          }
-        ]
-      },
-      {
         anchor: "valintakentat",
         isVisible: !isValtakunnallinenChecked,
         title: "Yksittäiset kunnat ja maakunnat",
+        styleClasses: ["pt-0"],
         components: [
           {
             anchor: "maakunnat",
@@ -385,7 +363,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             (!!poistettavatMaakunnat && poistettavatMaakunnat.length) ||
             (!!poistettavatKunnat && poistettavatKunnat.length)
           ),
-        styleClasses: ["mt-6"],
+        styleClasses: ["mt-2"],
         components: [
           {
             anchor: "maakunnat",
@@ -422,7 +400,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               lupaanKuuluvatMaakunnatItems.length) ||
             (!!lupaanKuuluvatKunnatItems && lupaanKuuluvatKunnatItems.length)
           ),
-        styleClasses: ["sm:items-baseline", "mt-6"],
+        styleClasses: ["sm:items-baseline", "mt-2"],
         components: [
           {
             anchor: "maakunnat",
@@ -446,6 +424,26 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 : "Ei lupaan kuuluvia kuntia.",
               items: lupaanKuuluvatKunnatItems,
               title: "Lupaan kuuluvat kunnat:"
+            }
+          }
+        ]
+      },
+      {
+        anchor: "valtakunnallinen",
+        title: "Koko Suomi - pois lukien Ahvenanmaan maakunta",
+        components: [
+          {
+            anchor: "A",
+            name: "CheckboxWithLabel",
+            styleClasses: "sm:px-4",
+            properties: {
+              isChecked: isValtakunnallinenChecked,
+              labelStyles: {
+                addition: isAdded,
+                custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
+                removal: isRemoved
+              },
+              title: props.intl.formatMessage(wizardMessages.responsibilities)
             }
           }
         ]
