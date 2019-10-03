@@ -824,7 +824,6 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
     {
       anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
-      styleClasses: ["pl-6 pt-6"],
       categories: [
         {
           anchor: "A",
@@ -890,17 +889,7 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
     },
     {
       anchor: "2",
-      styleClasses: ["px-4 py-8 hover:bg-gray-100"],
-      components: [
-        {
-          anchor: "aiheuttanut-label",
-          name: "StatusTextRow",
-          styleClasses: ["text-base"],
-          properties: {
-            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
-          }
-        }
-      ],
+      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
       categories: [
         {
           anchor: "tehtavan-tarpeellisuus-field",

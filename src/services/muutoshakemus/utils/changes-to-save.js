@@ -51,6 +51,8 @@ export const getChangesToSave = (
       R.split("."),
       R.prop("anchor")
     )(changeObj);
+    const anchorBase =
+      key === "opiskelijavuodet" ? R.replace(".", "_", anchorInit) : anchorInit;
     const backendMuutos = R.find(muutos => {
       return !!R.find(
         R.startsWith(anchorInit),
@@ -66,7 +68,7 @@ export const getChangesToSave = (
       );
     }, backendMuutokset);
     if (backendMuutos) {
-      const perustelutAnchorInitial = `perustelut_${anchorInit}`;
+      const perustelutAnchorInitial = `perustelut_${anchorBase}`;
       const perustelut = R.filter(
         R.compose(
           R.contains(perustelutAnchorInitial),

@@ -1,23 +1,22 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
-import {
-  getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake
-} from "../../../../../services/lomakkeet/perustelut/muut";
+import { getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake } from "../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
   changeObjects: []
 };
 
 const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
-                                           changeObjects = defaultProps.changeObjects,
-                                           onChangesUpdate, sectionId
-                                         }) => {
+  changeObjects = defaultProps.changeObjects,
+  onChangesUpdate,
+  sectionId
+}) => {
   const lomake = getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake();
 
   return (
-    <React.Fragment>
-    {changeObjects ? (
+    <div className="p-8">
+      {changeObjects ? (
         <CategorizedListRoot
           anchor={sectionId}
           categories={lomake}
@@ -26,7 +25,7 @@ const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
           showCategoryTitles={true}
         />
       ) : null}
-    </React.Fragment>
+    </div>
   );
 };
 

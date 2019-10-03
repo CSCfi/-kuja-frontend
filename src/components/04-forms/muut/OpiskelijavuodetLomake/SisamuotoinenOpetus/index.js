@@ -1,34 +1,31 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
-import {getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake} from "../../../../../services/lomakkeet/perustelut/muut";
+import { getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake } from "../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
   changeObjects: []
 };
 
 const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
-                                                                        changeObjects = defaultProps.changeObjects,
-                                                                        onChangesUpdate, sectionId
-                                                                      }) => {
-  const [lomake, setLomake] = useState(getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake());
-  const [changes, setChanges] = useState(null);
-  useEffect(() => {
-    setChanges(changeObjects);
-  }, [changes, changeObjects]);
+  changeObjects = defaultProps.changeObjects,
+  onChangesUpdate,
+  sectionId
+}) => {
+  const lomake = getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake();
 
   return (
-    <React.Fragment>
-      {changes ? (
+    <div className="p-8">
+      {changeObjects ? (
         <CategorizedListRoot
           anchor={sectionId}
           categories={lomake}
-          changes={changes}
+          changes={changeObjects}
           onUpdate={onChangesUpdate}
           showCategoryTitles={true}
         />
       ) : null}
-    </React.Fragment>
+    </div>
   );
 };
 
