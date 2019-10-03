@@ -252,39 +252,43 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         );
       })(flattenChangesOfMuut);
 
-      // Let's find out the koodiarvo for vaativa tuki.
-      if (vaativatChanges.length) {
-        vaativatKoodiarvo = R.compose(
-          R.view(R.lensIndex(2)),
-          R.split(".")
-        )(vaativatChanges[0].anchor);
-      } else {
-        vaativatKoodiarvo = R.head(
-          R.map(category => {
-            return R.equals(
-              true,
-              R.path(["properties", "isChecked"], category.components[0])
-            )
-              ? category.anchor
-              : null;
-          }, vaativatukiState.categories[0].categories).filter(Boolean)
-        );
+      if (vaativatukiState) {
+        // Let's find out the koodiarvo for vaativa tuki.
+        if (vaativatChanges.length) {
+          vaativatKoodiarvo = R.compose(
+            R.view(R.lensIndex(2)),
+            R.split(".")
+          )(vaativatChanges[0].anchor);
+        } else {
+          vaativatKoodiarvo = R.head(
+            R.map(category => {
+              return R.equals(
+                true,
+                R.path(["properties", "isChecked"], category.components[0])
+              )
+                ? category.anchor
+                : null;
+            }, vaativatukiState.categories[0].categories).filter(Boolean)
+          );
+        }
+
+        const isVaativatukiCheckedByDefault = R.find(category => {
+          return category.components[0].properties.isChecked;
+        }, vaativatukiState.categories[0].categories);
+
+        const isCheckedByChange = !!R.filter(
+          R.compose(
+            R.equals(true),
+            R.path(["properties", "isChecked"])
+          )
+        )(vaativatChanges).length;
+
+        const shouldVaativatBeVisible =
+          isVaativatukiCheckedByDefault || isCheckedByChange;
+
+        setIsVaativaTukiVisible(shouldVaativatBeVisible);
       }
-
-      const isVaativatukiCheckedByDefault = R.find(category => {
-        return category.components[0].properties.isChecked;
-      }, vaativatukiState.categories[0].categories);
-
-      const isCheckedByChange = !!R.filter(
-        R.compose(
-          R.equals(true),
-          R.path(["properties", "isChecked"])
-        )
-      )(vaativatChanges).length;
-
-      const shouldVaativatBeVisible =
-        isVaativatukiCheckedByDefault || isCheckedByChange;
-
+      
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
       setKoodiarvot(prevState => {
         return {
@@ -295,7 +299,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       });
 
       setIsSisaoppilaitosVisible(shouldSisaoppilaitosBeVisible);
-      setIsVaativaTukiVisible(shouldVaativatBeVisible);
     }
   }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
 
