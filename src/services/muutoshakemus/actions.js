@@ -54,7 +54,6 @@ export function saveMuutospyynto(muutospyynto, attachments) {
         withCredentials: true
       })
       .then(response => {
-        console.log(response);
         dispatch({ type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: response });
       })
       .catch(err => {

@@ -61,7 +61,6 @@ const YhteenvetoLiitteet = React.memo(props => {
           categories={props.stateObject.categories}
           changes={R.path(["yhteenveto"], props.changeObjects)}
           disableReverting={true}
-          hideAmountOfChanges={false}
           showCategoryTitles={true}
           isExpanded={true}
           sectionId={sectionId}

@@ -220,6 +220,7 @@ const Attachments = React.memo(props => {
             attachments: atts
           });
         }
+        return null;
       });
     } else setNameMissing(true);
   };
@@ -475,7 +476,7 @@ const Attachments = React.memo(props => {
               );
             }}
             onKeyUp={e => {
-              if (e.keyCode == 13) {
+              if (e.keyCode === 13) {
                 setAttachmentName(
                   e,
                   selectedAttachment.tiedostoId,
