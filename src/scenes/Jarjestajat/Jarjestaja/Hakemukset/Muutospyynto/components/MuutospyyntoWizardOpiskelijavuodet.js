@@ -215,16 +215,18 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           R.split(".")
         )(sisaoppilaitosChange.anchor);
       } else {
-        sisaoppilaitosKoodiarvo = R.head(
-          R.map(category => {
-            return R.equals(
-              true,
-              R.path(["properties", "isChecked"], category.components[0])
-            )
-              ? category.anchor
-              : null;
-          }, sisaoppilaitosState.categories[0].categories).filter(Boolean)
-        );
+        if (sisaoppilaitosState) {
+          sisaoppilaitosKoodiarvo = R.head(
+            R.map(category => {
+              return R.equals(
+                true,
+                R.path(["properties", "isChecked"], category.components[0])
+              )
+                ? category.anchor
+                : null;
+            }, sisaoppilaitosState.categories[0].categories).filter(Boolean)
+          );
+        }
       }
 
       /**

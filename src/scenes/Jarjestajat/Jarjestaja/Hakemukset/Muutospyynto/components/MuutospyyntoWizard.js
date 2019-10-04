@@ -111,7 +111,8 @@ const MuutospyyntoWizard = props => {
       tutkinnot: {}
     },
     yhteenveto: {
-      yleisettiedot: []
+      yleisettiedot: [],
+      hakemuksenliitteet: []
     }
   });
 
@@ -186,9 +187,14 @@ const MuutospyyntoWizard = props => {
 
   const getFiles = () => {
     // Gets all attachment data from changeObjects
-    const allAttachments = R.concat(
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
-      R.path(["taloudelliset", "liitteet"], changeObjects) || []
+    const allAttachments = (
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
+    ).concat(
+      (R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []).concat(
+        (
+          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || []
+        ).concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
+      )
     );
     // Returns only binary files
     let attachments;
