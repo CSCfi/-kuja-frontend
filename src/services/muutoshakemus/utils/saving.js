@@ -148,7 +148,7 @@ export function createObjectToSave(
         "toimintaalue",
         R.path(["toimintaalue"], muutoshakemus),
         {
-          muutokset: R.path(["toimintaalue"], changeObjects),
+          muutokset: R.path(["toimintaalue"], changeObjects) || [],
           perustelut: R.path(["perustelut", "toimintaalue"], changeObjects) || []
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(

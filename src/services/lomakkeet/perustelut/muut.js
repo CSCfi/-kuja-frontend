@@ -1,4 +1,4 @@
-import {isAdded, isInLupa, isRemoved} from "../../../css/label";
+import { isAdded, isInLupa, isRemoved } from "../../../css/label";
 
 export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
@@ -243,12 +243,11 @@ export const getVankilaopetusPerustelulomake = () => {
 };
 export const getTyovoimakoulutuslomake = () => {
   const code = 4;
-  return [{
-    anchor: "tyovoimakoulutus-perustelut-lomake",
-    styleClasses:
-      ["px-10 py-10"],
-    components:
-      [
+  return [
+    {
+      anchor: "tyovoimakoulutus-perustelut-lomake",
+      styleClasses: ["px-10 py-10"],
+      components: [
         {
           anchor: "tyovoimakoulutus-perustelut-title",
           styleClasses: ["text-base"],
@@ -258,8 +257,7 @@ export const getTyovoimakoulutuslomake = () => {
           }
         }
       ],
-    categories:
-      [
+      categories: [
         {
           anchor: `${code}-1`,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
@@ -303,14 +301,15 @@ export const getTyovoimakoulutuslomake = () => {
               properties: {
                 code: 2,
                 labelStyles: {},
-                title: "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
+                title:
+                  "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
               }
             }
           ],
           categories: [
             {
               anchor: "henkilostoresurssit-field",
-              title: 'Henkilöstöresurssit',
+              title: "Henkilöstöresurssit",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -325,7 +324,7 @@ export const getTyovoimakoulutuslomake = () => {
             },
             {
               anchor: "osaaminen-field",
-              title: 'Osaaminen',
+              title: "Osaaminen",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -340,7 +339,7 @@ export const getTyovoimakoulutuslomake = () => {
             },
             {
               anchor: "jarjestelyt-field",
-              title: 'Pedagogiset järjestelyt',
+              title: "Pedagogiset järjestelyt",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -355,7 +354,7 @@ export const getTyovoimakoulutuslomake = () => {
             },
             {
               anchor: "sidosryhmayhteistyo-field",
-              title: 'Sidosryhmäyhteistyö',
+              title: "Sidosryhmäyhteistyö",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -414,7 +413,7 @@ export const getTyovoimakoulutuslomake = () => {
                 labelStyles: {},
                 title: "ELY-keskusten kanssa suunniteltu yhteistyö"
               }
-            },
+            }
           ],
           categories: [
             {
@@ -451,17 +450,17 @@ export const getTyovoimakoulutuslomake = () => {
           categories: [opiskelijavuodet(4, 4)]
         }
       ]
-  }]
-}
+    }
+  ];
+};
 
 export const getVaativaErityinenTukilomake = () => {
   const code = 4;
-  return [{
-    anchor: "vaativa-erityinen-tuki-perustelut-lomake",
-    styleClasses:
-      ["px-10 py-10"],
-    components:
-      [
+  return [
+    {
+      anchor: "vaativa-erityinen-tuki-perustelut-lomake",
+      styleClasses: ["px-10 py-10"],
+      components: [
         {
           anchor: "vaativa-erityinen-tuki-perustelut-title",
           styleClasses: ["text-base"],
@@ -471,8 +470,7 @@ export const getVaativaErityinenTukilomake = () => {
           }
         }
       ],
-    categories:
-      [
+      categories: [
         {
           anchor: `${code}-0`,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
@@ -483,7 +481,8 @@ export const getVaativaErityinenTukilomake = () => {
               name: "StatusTextRow",
               properties: {
                 labelStyles: {},
-                title: "Vaativan erityisen tuen tehtävää on haettu seuraaviin koulutuksiin:"
+                title:
+                  "Vaativan erityisen tuen tehtävää on haettu seuraaviin koulutuksiin:"
               }
             }
           ],
@@ -491,7 +490,7 @@ export const getVaativaErityinenTukilomake = () => {
             {
               anchor: "tutkintokoulutukseen-label",
               styleClasses: ["pl-6"],
-              title: 'Tutkintokoulutukseen',
+              title: "Tutkintokoulutukseen",
               categories: [
                 {
                   anchor: "tutkintokoulutus-label",
@@ -502,7 +501,7 @@ export const getVaativaErityinenTukilomake = () => {
                       styleClasses: ["text-base"],
                       name: "StatusTextRow",
                       properties: {
-                        labelStyles: {},
+                        labelStyles: {}
                       }
                     }
                   ]
@@ -512,7 +511,7 @@ export const getVaativaErityinenTukilomake = () => {
             {
               anchor: "ammatilliseenkoulutukseen-label",
               styleClasses: ["pl-6"],
-              title: 'Ammatilliseen koulutukseen valmentavaan koulutukseen',
+              title: "Ammatilliseen koulutukseen valmentavaan koulutukseen",
               categories: [
                 {
                   anchor: "ammatillinenkoulutus-label",
@@ -523,7 +522,7 @@ export const getVaativaErityinenTukilomake = () => {
                       styleClasses: ["text-base"],
                       name: "StatusTextRow",
                       properties: {
-                        labelStyles: {},
+                        labelStyles: {}
                       }
                     }
                   ]
@@ -533,7 +532,7 @@ export const getVaativaErityinenTukilomake = () => {
             {
               anchor: "tyohonjaitsenaiseenelamaan-label",
               styleClasses: ["pl-6"],
-              title: 'Työhön ja itsenäiseen elämään valmentavaan koulutukseen',
+              title: "Työhön ja itsenäiseen elämään valmentavaan koulutukseen",
               categories: [
                 {
                   anchor: "tyohonjaitsenaiseenelamaan-label",
@@ -544,7 +543,7 @@ export const getVaativaErityinenTukilomake = () => {
                       styleClasses: ["text-base"],
                       name: "StatusTextRow",
                       properties: {
-                        labelStyles: {},
+                        labelStyles: {}
                       }
                     }
                   ]
@@ -596,14 +595,15 @@ export const getVaativaErityinenTukilomake = () => {
               properties: {
                 code: 2,
                 labelStyles: {},
-                title: "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
+                title:
+                  "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
               }
             }
           ],
           categories: [
             {
               anchor: "henkilostoresurssit-field",
-              title: 'Henkilöstöresurssit',
+              title: "Henkilöstöresurssit",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -618,7 +618,7 @@ export const getVaativaErityinenTukilomake = () => {
             },
             {
               anchor: "osaaminen-field",
-              title: 'Osaaminen',
+              title: "Osaaminen",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -633,7 +633,7 @@ export const getVaativaErityinenTukilomake = () => {
             },
             {
               anchor: "jarjestelyt-field",
-              title: 'Pedagogiset järjestelyt',
+              title: "Pedagogiset järjestelyt",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -648,7 +648,7 @@ export const getVaativaErityinenTukilomake = () => {
             },
             {
               anchor: "sidosryhmayhteistyo-field",
-              title: 'Sidosryhmäyhteistyö',
+              title: "Sidosryhmäyhteistyö",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -674,7 +674,8 @@ export const getVaativaErityinenTukilomake = () => {
               properties: {
                 code: 3,
                 labelStyles: {},
-                title: "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi"
+                title:
+                  "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi"
               }
             }
           ],
@@ -697,8 +698,9 @@ export const getVaativaErityinenTukilomake = () => {
         },
         opiskelijavuodet(4, 4)
       ]
-  }]
-}
+    }
+  ];
+};
 
 export const getOppisopimusPerusteluLomake = () => {
   const code = 4;
@@ -757,14 +759,15 @@ export const getOppisopimusPerusteluLomake = () => {
               properties: {
                 code: 2,
                 labelStyles: {},
-                title: "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
+                title:
+                  "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
               }
             }
           ],
           categories: [
             {
               anchor: "henkilostoresurssit-field",
-              title: 'Henkilöstöresurssit',
+              title: "Henkilöstöresurssit",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -779,7 +782,7 @@ export const getOppisopimusPerusteluLomake = () => {
             },
             {
               anchor: "osaaminen-field",
-              title: 'Osaaminen',
+              title: "Osaaminen",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -794,7 +797,7 @@ export const getOppisopimusPerusteluLomake = () => {
             },
             {
               anchor: "sidosryhmayhteistyo-field",
-              title: 'Sidosryhmäyhteistyö',
+              title: "Sidosryhmäyhteistyö",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -810,137 +813,140 @@ export const getOppisopimusPerusteluLomake = () => {
           ]
         },
         opiskelijavuodet(3, 3)
+      ]
+    }
+  ];
+};
 
+export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = () => {
+  return [
+    {
+      anchor: "perustelut",
+      title: "Mikä on aiheuttanut muutostarpeen?",
+      styleClasses: ["pl-6 pt-6"],
+      categories: [
+        {
+          anchor: "A",
+          name: "CheckboxWithLabel",
+          properties: {
+            name: "CheckboxWithLabel",
+            title: "Alueen työ- ja elinkeinoelämän työvoimatarve"
+          }
+        },
+        {
+          anchor: "B",
+          components: [
+            {
+              anchor: "B",
+              name: "CheckboxWithLabel",
+              properties: {
+                name: "CheckboxWithLabel",
+                title: "Muut syyt"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "C",
+          components: [
+            {
+              anchor: "C",
+              name: "CheckboxWithLabel",
+              properties: {
+                name: "CheckboxWithLabel",
+                title: "Järjestämisluvan muuhun muutosesitykseen liittyvät syyt"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "D",
+          components: [
+            {
+              anchor: "D",
+              name: "CheckboxWithLabel",
+              properties: {
+                name: "CheckboxWithLabel",
+                title: "Koulutuksen järjestäjän koulutustarjonnan kysyntä"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "E",
+          components: [
+            {
+              anchor: "E",
+              name: "CheckboxWithLabel",
+              properties: {
+                name: "CheckboxWithLabel",
+                title: "Alueen väestön koulutustarve"
+              }
+            }
+          ]
+        }
       ]
     },
-
-  ]
-}
-
-export const getOpiskelijavuodetLomake = () => {
-  return [{
-    anchor: "opiskelijavuodet-perustelut-lomake",
-    styleClasses: ["px-10 py-10"],
-    components: [
-      {
-        anchor: "opiskelijavuodet-perustelut-title",
-        name: "StatusTextRow",
-        properties: {
-          title: "Muutospyynnön taustalla olevat syyt"
+    {
+      anchor: "2",
+      styleClasses: ["px-4 py-8 hover:bg-gray-100"],
+      components: [
+        {
+          anchor: "aiheuttanut-label",
+          name: "StatusTextRow",
+          styleClasses: ["text-base"],
+          properties: {
+            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+          }
         }
-      }
-    ],
-    categories: [
-      {
-        anchor: `1`,
-        styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-        components: [
-          {
-            anchor: "aiheuttanut-label",
-            name: "StatusTextRow",
-            styleClasses: ["text-base"],
-            properties: {
-              title: "Mikä on aiheuttanut muutostarpeen?"
+      ],
+      categories: [
+        {
+          anchor: "tehtavan-tarpeellisuus-field",
+          styleClasses: ["pl-6"],
+          components: [
+            {
+              anchor: "A",
+              name: "TextBox"
             }
-          }
-        ],
-        categories: [
-          {
-            anchor: 'A',
-            components: [
-              {
-                anchor: "A",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  title: 'Alueen työ- ja elinkeinoelämän työvoimatarve',
-                }
-              }
-            ]
-          },
-          {
-            anchor: 'B',
-            components: [
-              {
-                anchor: "B",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  title: 'Muut syyt',
-                }
-              },
-            ]
-          },
-          {
-            anchor: 'C',
-            components: [
-              {
-                anchor: "C",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  title: 'Järjestämisluvan muuhun muutosesitykseen liittyvät syyt',
-                }
-              },
-            ]
-          },
-          {
-            anchor: 'D',
-            components: [
-              {
-                anchor: "D",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  title: 'Koulutuksen järjestäjän koulutustarjonnan kysyntä',
-                }
-              },
-            ]
-          },
-          {
-            anchor: 'E',
-            components: [
-              {
-                anchor: "E",
-                name: "CheckboxWithLabel",
-                properties: {
-                  name: "CheckboxWithLabel",
-                  title: 'Alueen väestön koulutustarve',
-                }
-              }
-            ]
-          },
-        ]
-      },
-      {
-        anchor: `2`,
-        styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-        components: [
-          {
-            anchor: "aiheuttanut-label",
-            name: "StatusTextRow",
-            styleClasses: ["text-base"],
-            properties: {
-              title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
-            }
-          }
-        ],
-        categories: [
-          {
-            anchor: "tehtavan-tarpeellisuus-field",
-            styleClasses: ["pl-6"],
-            components: [
-              {
-                anchor: "A",
-                name: "TextBox",
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }]
-}
+          ]
+        }
+      ]
+    }
+  ];
+};
+
+export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = () => {
+  return [
+    {
+      anchor: "vaativatuki",
+      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+      styleClasses: ["px-10 py-10"],
+      components: [
+        {
+          anchor: "A",
+          name: "TextBox"
+        }
+      ]
+    }
+  ];
+};
+
+export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = () => {
+  return [
+    {
+      anchor: "sisaoppilaitos",
+      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+      styleClasses: ["px-10 py-10"],
+      components: [
+        {
+          anchor: "A",
+          name: "TextBox"
+        }
+      ]
+    }
+  ];
+};
 
 const opiskelijavuodet = (code, anchorNumber) => {
   const year = new Date().getFullYear();
@@ -971,7 +977,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
               title:
                 "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina."
             }
-          },
+          }
         ],
         categories: [
           {
@@ -1015,5 +1021,5 @@ const opiskelijavuodet = (code, anchorNumber) => {
         ]
       }
     ]
-  }
+  };
 };
