@@ -73,7 +73,7 @@ const MuutospyyntoWizardYhteenveto = ({
         return (
           <div className="flex" key={key}>
             <div className="w-1/2 sm:w-1/4 border-b px-6 py-2">
-              {obj.label}:
+              {obj.label}
             </div>
             <div className="w-1/2 sm:w-3/4 bg-white px-6 py-2">{obj.value}</div>
           </div>
