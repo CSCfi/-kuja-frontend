@@ -73,7 +73,6 @@ CheckboxWithLabel.defaultProps = {
 CheckboxWithLabel.propTypes = {
   isChecked: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  name: PropTypes.string.isRequired,
   /**
    * Will be called after checking or unchecking the checkbox.
    */
