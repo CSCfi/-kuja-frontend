@@ -199,7 +199,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       );
 
       if (sisaoppilaitosState) {
-        console.info(sisaoppilaitosState);
         const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
           ? sisaoppilaitosState.categories[0].categories[0].components[0]
               .properties.isChecked
