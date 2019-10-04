@@ -115,7 +115,7 @@ const CategorizedList = React.memo(props => {
   );
 
   return (
-    <div>
+    <div data-parentofall={true}>
       {_.map(props.categories, (category, i) => {
         if (category.isVisible === false) {
           return null;
