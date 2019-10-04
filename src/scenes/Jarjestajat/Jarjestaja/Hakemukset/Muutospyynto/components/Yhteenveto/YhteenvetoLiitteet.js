@@ -4,7 +4,7 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const TaloudellisetLiitteet = React.memo(props => {
+const YhteenvetoLiitteet = React.memo(props => {
   const { onStateUpdate, sectionId } = props;
 
   const getCategories = useMemo(() => {
@@ -13,7 +13,7 @@ const TaloudellisetLiitteet = React.memo(props => {
 
       structure = [
         {
-          anchor: "liitteet",
+          anchor: "hakemuksenliitteet",
           components: [
             {
               name: "StatusTextRow",
@@ -45,21 +45,27 @@ const TaloudellisetLiitteet = React.memo(props => {
       sectionId
     );
   }, [getCategories, onStateUpdate, sectionId]);
+
+  useEffect(() => {
+    console.log(sectionId);
+    console.log(props.changeObjects);
+  }, [props.changeObjects]);
+
   return (
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
-          title={"Liitteet"}
+          title={"Hakemuksen liitteet"}
           anchor={sectionId}
-          key={`taloudelliset-liitteet`}
+          key={`yhteenveto-hakemuksenliitteet`}
           categories={props.stateObject.categories}
-          changes={R.path(["taloudelliset"], props.changeObjects)}
+          changes={R.path(["yhteenveto"], props.changeObjects)}
           disableReverting={true}
-          hideAmountOfChanges={true}
           showCategoryTitles={true}
           isExpanded={true}
           sectionId={sectionId}
           onUpdate={props.onChangesUpdate}
+          hideAmountOfChanges={true}
           {...props}
         />
       )}
@@ -67,7 +73,7 @@ const TaloudellisetLiitteet = React.memo(props => {
   );
 });
 
-TaloudellisetLiitteet.propTypes = {
+YhteenvetoLiitteet.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
@@ -76,4 +82,4 @@ TaloudellisetLiitteet.propTypes = {
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
-export default injectIntl(TaloudellisetLiitteet);
+export default injectIntl(YhteenvetoLiitteet);

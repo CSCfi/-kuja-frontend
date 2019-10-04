@@ -139,6 +139,7 @@ const HakemusContainer = props => {
         ["muutospyynto", "muutokset"],
         muutospyynnot
       );
+      console.log(muutospyynnot.muutospyynto);
       const getChangesOf = (
         key,
         changes,

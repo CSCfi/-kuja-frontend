@@ -227,7 +227,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
             }, sisaoppilaitosState.categories[0].categories).filter(Boolean)
           );
         }
-
+        
         /**
          * Mikäli muutos löytyy ja sisäoppilaitosta koskeva kohta osiossa 5 on valittu, tulee sisäoppilaitosta
          * koskeva tietue näyttää osiossa 4.
