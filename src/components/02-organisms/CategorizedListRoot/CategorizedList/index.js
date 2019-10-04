@@ -15,32 +15,36 @@ import * as R from "ramda";
 import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
+import { flattenObj } from "../../../../utils/common";
 
 const componentContainerBaseClasses = [
   "flex",
-  "justify-between",
   "flex-wrap",
   "flex-col",
   "sm:flex-row"
 ];
 
 const componentStyleMapping = {
+  justification: {
+    between: "justify-between",
+    start: "justify-start"
+  },
   verticalAlignment: {
     center: "items-center"
   }
 };
 
 const categoryStyleMapping = {
-  intendations: {
+  indentations: {
     none: 0,
     extraSmall: 2,
     small: 4,
-    medium: 6, 
-    large: 10 // default
+    medium: 6,
+    large: 10
   },
-  topMargins: {
+  margins: {
     none: 0,
-    extraSmall: 2, // default
+    extraSmall: 2,
     small: 4,
     medium: 6,
     large: 10
@@ -48,12 +52,15 @@ const categoryStyleMapping = {
 };
 
 const defaultComponentStyles = {
+  justification: componentStyleMapping.justification.between,
   verticalAlignment: componentStyleMapping.verticalAlignment.center
 };
 
 const defaultCategoryStyles = {
-  intendation: categoryStyleMapping.intendations.large,
-  topMargin: categoryStyleMapping.topMargins.extraSmall
+  indentation: categoryStyleMapping.indentations.large,
+  margins: {
+    top: categoryStyleMapping.margins.extraSmall
+  }
 };
 
 /**
@@ -134,26 +141,41 @@ const CategorizedList = React.memo(props => {
           props.changes
         );
 
-        const topMarginInteger = category.topMargin
-          ? categoryStyleMapping.topMargins[category.topMargin]
-          : defaultCategoryStyles.topMargin;
+        const { indentation, margins } = category.layout || {};
+
+        const { justification } =
+          R.path(["layout", "components"], category) || {};
+
+        const topMarginInteger = R.path(["margins", "top"], category)
+          ? categoryStyleMapping.margins[category.margins.top]
+          : defaultCategoryStyles.margins.top;
 
         const categoryStyles = {
           classes: {
-            intendation: `pl-${Number(!!props.level) *
-              (category.intendation || defaultCategoryStyles.intendation)}`,
-            topMargin: `pt-${Number(!!props.level) * topMarginInteger}`
+            indentation: `pl-${
+              !R.isNil(categoryStyleMapping.indentations[indentation])
+                ? categoryStyleMapping.indentations[indentation]
+                : // Number(!!props.level) returns 0 when props.level is 0 otherwise 1
+                  Number(!!props.level) * defaultCategoryStyles.indentation
+            }`,
+            margins: {
+              top: `pt-${
+                R.prop("top", margins) &&
+                !R.isNil(categoryStyleMapping.margins[margins.top])
+                  ? categoryStyleMapping.margins[margins.top]
+                  : Number(!!props.level) * topMarginInteger
+              }`
+            }
           }
         };
 
-        const categoryStyleClasses = R.values(
-          R.mapObjIndexed(styleClass => {
-            return styleClass;
-          }, categoryStyles.classes)
-        );
-
         const componentStyles = {
           classes: {
+            justification:
+              justification &&
+              !R.isNil(componentStyleMapping.justification[justification])
+                ? componentStyleMapping.justification[justification]
+                : defaultComponentStyles.justification,
             verticalAlignment:
               componentStyleMapping.verticalAlignment[
                 category.alignComponents
@@ -173,8 +195,11 @@ const CategorizedList = React.memo(props => {
           `py-${topMarginInteger}`,
           i === 0 ? "" : `mt-${2 * topMarginInteger}`
         ]);
+
+        const categoryClasses = R.values(flattenObj(categoryStyles.classes));
+
         return (
-          <div key={i} className={R.join(" ", categoryStyleClasses)}>
+          <div key={i} className={R.join(" ", categoryClasses)}>
             {isCategoryTitleVisible && (
               <div className={categoryTitleClasses}>
                 <h4>
@@ -221,6 +246,7 @@ const CategorizedList = React.memo(props => {
                   (props.debug
                     ? props.rootPath.concat([i, "components", ii])
                     : "");
+                component.name === "ActionList" && console.info(propsObj);
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (
@@ -591,6 +617,7 @@ const CategorizedList = React.memo(props => {
                             anchor,
                             component
                           }}
+                          onChanges={propsObj.onChanges}
                           removalCallback={handleChanges}
                           title={propsObj.title}
                         />
