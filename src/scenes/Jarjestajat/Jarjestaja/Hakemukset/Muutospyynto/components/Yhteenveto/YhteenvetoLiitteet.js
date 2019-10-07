@@ -55,7 +55,7 @@ const YhteenvetoLiitteet = React.memo(props => {
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (
         <ExpandableRowRoot
-          title={"Hakemuksen liitteet"}
+          title={"Hakemuksen yleiset liitteet"}
           anchor={sectionId}
           key={`yhteenveto-hakemuksenliitteet`}
           categories={props.stateObject.categories}
