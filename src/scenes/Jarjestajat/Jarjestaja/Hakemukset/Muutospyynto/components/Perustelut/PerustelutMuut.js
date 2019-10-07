@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -6,6 +6,8 @@ import { parseLocalizedField } from "../../../../../../../modules/helpers";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import VankilaopetusPerustelulomake from "../../../../../../../components/04-forms/muut/VankilaopetusPerustelulomake";
+import { getVankilaopetusPerustelulomake } from "../../../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
   changeObjects: {},
@@ -14,6 +16,15 @@ const defaultProps = {
   maaraykset: [],
   muut: {},
   stateObject: {}
+};
+
+const getCategoriesByKeyAndCode = (key, code) => {
+  const mapping = {
+    vankila: {
+      13: getVankilaopetusPerustelulomake()
+    }
+  };
+  return R.path([key, code], mapping) || [];
 };
 
 const PerustelutMuut = React.memo(
@@ -32,8 +43,8 @@ const PerustelutMuut = React.memo(
     const sectionId = "perustelut_muut";
     const [locale, setLocale] = useState("FI");
 
-    useEffect(() => {
-      const divideArticles = (articles, relevantCodes) => {
+    const divideArticles = useMemo(() => {
+      return (articles, relevantCodes) => {
         const dividedArticles = {};
         const relevantMaaraykset = R.filter(
           R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
@@ -58,8 +69,10 @@ const PerustelutMuut = React.memo(
         }, articles);
         return dividedArticles;
       };
+    }, [maaraykset]);
 
-      const getCategories = (configObj, locale) => {
+    const getCategories = useMemo(() => {
+      return (configObj, locale) => {
         return R.map(item => {
           return {
             anchor: configObj.key,
@@ -117,6 +130,7 @@ const PerustelutMuut = React.memo(
                   }
                 ]
               };
+              console.info(configObj);
               structure.categories = [
                 {
                   anchor: "perustelut",
@@ -138,8 +152,10 @@ const PerustelutMuut = React.memo(
           };
         }, configObj.categoryData);
       };
+    }, [changeObjects.muut, isReadOnly]);
 
-      const relevantCodes = R.map(
+    const relevantCodes = useMemo(() => {
+      return R.map(
         R.compose(
           R.view(R.lensIndex(2)),
           R.split(".")
@@ -153,9 +169,14 @@ const PerustelutMuut = React.memo(
           )(changeObjects.muut)
         )
       );
-      const dividedArticles = divideArticles(muut.data, relevantCodes);
+    }, [changeObjects.muut]);
 
-      const config = [
+    const dividedArticles = useMemo(() => {
+      return divideArticles(muut.data, relevantCodes);
+    }, [divideArticles, muut.data, relevantCodes]);
+
+    const config = useMemo(() => {
+      return [
         {
           code: "01",
           key: "laajennettu",
@@ -249,8 +270,10 @@ const PerustelutMuut = React.memo(
           ]
         }
       ];
+    }, [changeObjects.muut, dividedArticles]);
 
-      const expandableRows = !!locale.length
+    const expandableRows = useMemo(() => {
+      return !!locale.length
         ? R.addIndex(R.map)((configObj, i) => {
             return {
               code: configObj.code,
@@ -261,17 +284,23 @@ const PerustelutMuut = React.memo(
             };
           }, R.filter(R.propEq("isInUse", true))(config))
         : [];
+    }, [config, getCategories, kohde, locale]);
 
+    useEffect(() => {
       onStateUpdate({ items: expandableRows }, sectionId);
     }, [
-      kohde,
-      locale,
+      changeObjects.muut,
+      divideArticles,
+      expandableRows,
+      getCategories,
       intl,
       isReadOnly,
+      kohde,
+      locale,
       maaraykset,
       muut.data,
-      changeObjects.muut,
-      onStateUpdate
+      onStateUpdate,
+      relevantCodes
     ]);
 
     useEffect(() => {
@@ -283,6 +312,7 @@ const PerustelutMuut = React.memo(
         {stateObject.items ? (
           <React.Fragment>
             {R.addIndex(R.map)((row, i) => {
+              // console.info(row);
               return (
                 <ExpandableRowRoot
                   anchor={`${sectionId}_${row.code}`}
@@ -295,7 +325,13 @@ const PerustelutMuut = React.memo(
                   onUpdate={onChangesUpdate}
                   sectionId={sectionId}
                   title={row.title}
-                />
+                >
+                  {R.addIndex(R.map)((category, index) => {
+                    return (
+                      <VankilaopetusPerustelulomake key={`subform-${index}`} />
+                    );
+                  }, row.categories)}
+                </ExpandableRowRoot>
               );
             })(stateObject.items)}
           </React.Fragment>

@@ -140,8 +140,8 @@ const PerustelutTutkintokielet = React.memo(props => {
         <div>
           <h2 className="py-4">Tutkintokielet</h2>
           {R.addIndex(R.map)((categories, index) => {
-            const areaCode = categories[0].metadata.areaCode;
-            return (
+            const areaCode = R.path([0, "metadata", "areaCode"], categories);
+            return areaCode ? (
               <ExpandableRowRoot
                 anchor={`${sectionId}_${areaCode}`}
                 key={`expandable-row-root-${index}`}
@@ -156,7 +156,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                 title={categories[0].metadata.title}
                 isExpanded={true}
               />
-            );
+            ) : null;
           }, R.values(R.path(["perustelut", "categories"], props.stateObjects)))}
         </div>
       ) : null}
