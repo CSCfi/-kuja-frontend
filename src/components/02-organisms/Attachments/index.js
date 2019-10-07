@@ -220,6 +220,7 @@ const Attachments = React.memo(props => {
             attachments: atts
           });
         }
+        return null;
       });
     } else setNameMissing(true);
   };
@@ -269,13 +270,16 @@ const Attachments = React.memo(props => {
       let atts = props.payload.attachments;
       atts.push(liite);
       setAttachments(atts);
-      // props.onUpdate(props.payload, {
-      //   attachments: atts
-      // });
       setSelectedAttachment(liite);
 
       openNameModal();
     } else return setFileError(true);
+  };
+
+  const cancelAttachment = () => {
+    closeNameModal();
+    let atts = attachments.pop(); // take last out
+    setAttachments(atts);
   };
 
   const removeAttachment = (e, tiedostoId, uuid) => {
@@ -354,7 +358,8 @@ const Attachments = React.memo(props => {
 
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
-    if (attachments)
+    console.log(attachments);
+    if (attachments && attachments.length > 0)
       return attachments.map(liite => {
         if (
           (liite.tiedostoId || liite.uuid) &&
@@ -470,6 +475,16 @@ const Attachments = React.memo(props => {
                 selectedAttachment.uuid
               );
             }}
+            onKeyUp={e => {
+              if (e.keyCode === 13) {
+                setAttachmentName(
+                  e,
+                  selectedAttachment.tiedostoId,
+                  selectedAttachment.uuid
+                );
+                addAttachment(e);
+              }
+            }}
           />
           <Error>{nameMissing && HAKEMUS_VIESTI.TIEDOSTO_NIMI_ERROR.FI}</Error>
         </DialogContent>
@@ -477,7 +492,11 @@ const Attachments = React.memo(props => {
           <Button onClick={addAttachment} color="primary" variant="contained">
             {HAKEMUS_VIESTI.OK.FI}
           </Button>
-          <Button onClick={closeNameModal} color="secondary" variant="outlined">
+          <Button
+            onClick={cancelAttachment}
+            color="secondary"
+            variant="outlined"
+          >
             {HAKEMUS_VIESTI.PERUUTA.FI}
           </Button>
         </DialogActions>

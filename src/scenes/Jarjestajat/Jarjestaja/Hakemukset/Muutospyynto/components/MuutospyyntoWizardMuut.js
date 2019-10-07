@@ -14,24 +14,27 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const [locale, setLocale] = useState("FI");
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
+  const osiota5koskevatMaaraykset = useMemo(() => {
+    return R.filter(
+      R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
+    )(props.maaraykset);
+  }, [props.maaraykset]);
+
   const divideArticles = useMemo(() => {
     return () => {
       const group = {};
-      const relevantMaaraykset = R.filter(
-        R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
-      )(props.maaraykset);
       R.forEach(article => {
         const { metadata } = article;
         const kasite = parseLocalizedField(metadata, "FI", "kasite");
         const kuvaus = parseLocalizedField(metadata, "FI", "kuvaus");
-        const isInRelevantMaaraykset = !!R.find(
+        const isInLupa = !!R.find(
           R.propEq("koodiarvo", article.koodiArvo)
-        )(relevantMaaraykset);
+        )(osiota5koskevatMaaraykset);
 
         if (
           (kuvaus || article.koodiArvo === "22") &&
           kasite &&
-          (isInRelevantMaaraykset ||
+          (isInLupa ||
             (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
         ) {
           group[kasite] = group[kasite] || [];
@@ -40,7 +43,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       }, props.muut.data);
       return group;
     };
-  }, [props.maaraykset, props.muut.data]);
+  }, [osiota5koskevatMaaraykset, props.muut.data]);
 
   const getCategories = useMemo(() => {
     return (configObj, locale) => {
@@ -53,11 +56,9 @@ const MuutospyyntoWizardMuut = React.memo(props => {
               _.find(article.metadata, m => {
                 return m.kieli === locale;
               }).kuvaus || "Muu";
-            const isInLupaBool = article
-              ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
-                  return article.koodiArvo === koulutusala;
-                })
-              : false;
+            const isInLupaBool = !!R.find(
+              R.propEq("koodiarvo", article.koodiArvo)
+            )(osiota5koskevatMaaraykset);
             const labelClasses = {
               isInLupa: isInLupaBool
             };
@@ -111,11 +112,10 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         };
       }, configObj.categoryData);
     };
-  }, [props.intl]);
+  }, [props.intl, osiota5koskevatMaaraykset]);
 
   const config = useMemo(() => {
     const dividedArticles = divideArticles();
-    console.info(dividedArticles);
     return [
       {
         code: "01",
