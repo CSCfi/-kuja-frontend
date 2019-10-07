@@ -142,6 +142,45 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const handleChanges = useCallback(
     changesByAnchor => {
       const updatedChanges = R.map(changeObj => {
+        let changeObjectsForKunnatInLupa = [];
+        const koodistoUri = R.path(
+          ["properties", "value", "meta", "koodisto", "koodistoUri"],
+          changeObj
+        );
+        const isMaakunta = koodistoUri && koodistoUri === "maakunta";
+        if (isMaakunta) {
+          const relatedKunnatParentObject = R.find(
+            R.propEq("koodiArvo", changeObj.properties.value.meta.koodiarvo),
+            props.maakuntakunnat.maakuntakunnatList
+          );
+          const kunnat = relatedKunnatParentObject
+            ? relatedKunnatParentObject.kunta
+            : [];
+
+          changeObjectsForKunnatInLupa = R.map(kunta => {
+            const kuntaInLupa = R.find(
+              R.pathEq(["meta", "koodiarvo"], kunta.koodiArvo),
+              kunnatInLupa
+            );
+            const kuntaChangeObj = R.find(
+              R.propEq(
+                "anchor",
+                `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiarvo}`
+              ),
+              props.changeObjects
+            );
+            const isKuntaAlreadyUnchecked = kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
+            return !!kuntaInLupa && !isKuntaAlreadyUnchecked
+              ? {
+                  anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
+                  properties: {
+                    isChecked: false
+                  }
+                }
+              : null;
+          }, kunnat).filter(Boolean);
+        }
+
         if (
           // Let's remove all the change objects which are not checked and which are not in LUPA
           R.includes("lupaan-lisattavat", changeObj.anchor) &&
@@ -158,25 +197,28 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             ),
             -1
           )}.${changeObj.properties.value.value}`;
-          return {
-            anchor: updatedAnchor,
-            properties: {
-              isChecked: true,
-              meta: changeObj.properties.value.meta,
-              title: changeObj.properties.value.label
-            }
-          };
+          return [
+            {
+              anchor: updatedAnchor,
+              properties: {
+                isChecked: true,
+                meta: changeObj.properties.value.meta,
+                title: changeObj.properties.value.label
+              }
+            },
+            changeObjectsForKunnatInLupa
+          ];
         }
-        return changeObj;
+        return [changeObj, changeObjectsForKunnatInLupa];
       }, changesByAnchor.changes).filter(Boolean);
 
       const sectionChanges = {
         anchor: changesByAnchor.anchor,
-        changes: updatedChanges
+        changes: R.flatten(updatedChanges)
       };
       onChangesUpdate(sectionChanges);
     },
-    [onChangesUpdate]
+    [onChangesUpdate, kunnatInLupa, props.changeObjects]
   );
 
   const getCategories = useMemo(() => {
