@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-// import { isAdded } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
+import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import _ from "lodash";
 
@@ -10,9 +10,42 @@ const Tutkintokielet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
   const items = useMemo(() => {
+    const localeUpper = R.toUpper(props.intl.locale);
+    const currentDate = new Date();
     return R.map(stateItem => {
       const categories = R.map(category => {
         const categories = R.map(subCategory => {
+
+          /**
+           * There might be some sub articles (alimääräyksiä) under the current article (määräys).
+           * We are interested of them which are related to tutkintokielet section.
+           * */
+          const maarays = R.find(
+            R.propEq("koodiarvo", subCategory.anchor),
+            props.lupa.data.maaraykset
+          );
+          const alimaaraykset = maarays ? maarays.aliMaaraykset : [];
+
+          /**
+           * selectedByDefault includes all the languages which already are in LUPA.
+           * Those languages must be shown on Autocomplete as selected by default.
+           * */ 
+          const selectedByDefault = R.map(alimaarays => {
+            if (
+              alimaarays.kohde.tunniste === "opetusjatutkintokieli" &&
+              new Date(alimaarays.koodi.voimassaAlkuPvm) < currentDate
+            ) {
+              const metadataObj = R.find(
+                R.propEq("kieli", localeUpper),
+                alimaarays.koodi.metadata
+              );
+              return metadataObj
+                ? { label: metadataObj.nimi, value: alimaarays.koodi.koodiArvo }
+                : null;
+            }
+            return null;
+          }, alimaaraykset || []).filter(Boolean);
+
           // Let's create the updatedSubCategory variable without categories key
           let { categories, ...updatedSubCategory } = subCategory;
           let changeObj = null;
@@ -57,7 +90,7 @@ const Tutkintokielet = React.memo(props => {
                       value: language.koodiArvo
                     };
                   }, props.kielet),
-                  value: []
+                  value: selectedByDefault
                 }
               }
             ];
@@ -81,10 +114,12 @@ const Tutkintokielet = React.memo(props => {
         : null;
     }, _.cloneDeep(props.stateObjects.tutkinnot.items)).filter(Boolean);
   }, [
-    props.stateObjects.tutkinnot.items,
     props.changeObjects.tutkinnot,
+    props.intl.locale,
     props.kielet,
-    props.locale
+    props.locale,
+    props.lupa.data.maaraykset,
+    props.stateObjects.tutkinnot.items
   ]);
 
   useEffect(() => {
@@ -212,4 +247,4 @@ Tutkintokielet.propTypes = {
   unselectedAnchors: PropTypes.array
 };
 
-export default Tutkintokielet;
+export default injectIntl(Tutkintokielet);

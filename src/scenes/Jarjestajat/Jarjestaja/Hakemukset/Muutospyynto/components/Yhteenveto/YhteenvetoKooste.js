@@ -230,8 +230,8 @@ const YhteenvetoKooste = ({
                         R.propEq("tunniste", "opetusjatutkintokieli")
                       )(kohteet)}
                       koulutukset={koulutukset}
-                      lupa={lupa}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
+                      maaraykset={lupa.data.maaraykset}
                       opetuskielet={kielet.opetuskielet}
                       stateObjects={{
                         tutkintokielet: R.path(["kielet", "tutkintokielet"])(

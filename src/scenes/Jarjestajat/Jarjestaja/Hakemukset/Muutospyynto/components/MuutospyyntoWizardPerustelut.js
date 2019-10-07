@@ -158,6 +158,7 @@ const MuutospyyntoWizardPerustelut = ({
                         )(kohteet)}
                         koulutukset={koulutukset}
                         maaraystyyppi={maaraystyypitState.OIKEUS}
+                        maaraykset={lupa.data.maaraykset}
                         lomakkeet={lomakkeet.perustelut.koulutukset}
                         stateObject={R.path([
                           "perustelut",
@@ -225,8 +226,8 @@ const MuutospyyntoWizardPerustelut = ({
                         R.propEq("tunniste", "opetusjatutkintokieli")
                       )(kohteet)}
                       koulutukset={koulutukset}
-                      lupa={lupa}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
+                      maaraykset={lupa.data.maaraykset}
                       opetuskielet={kielet.opetuskielet}
                       stateObjects={{
                         tutkintokielet: R.path(["kielet", "tutkintokielet"])(
