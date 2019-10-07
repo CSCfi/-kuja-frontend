@@ -273,7 +273,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               title: maakunta.title
             }
           };
-        }, maakunnatInLupa)
+        }, maakunnatInLupa),
+        title: maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
       },
       /**
        * LUPAAN LISÄTTÄVÄT MAAKUNNAT
@@ -357,7 +358,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             }
           };
         }, kunnatInLupa),
-        title: "Lupaan kuuluvat"
+        title: kunnatInLupa && kunnatInLupa.length ? "Lupaan kuuluvat" : ""
       },
       /**
        * LUPAAN LISÄTTÄVÄT KUNNAT
