@@ -78,9 +78,10 @@ const KuljettajienPeruskoulutuslomake = ({
          */
         R.forEach(() => {
           setPeopleForms(prevForms => {
-            return R.insert(-1, getAddPeopleForm(prevForms.length + 1, isReadOnly))(
-              prevForms
-            );
+            return R.insert(
+              -1,
+              getAddPeopleForm(prevForms.length + 1, isReadOnly)
+            )(prevForms);
           });
         }, new Array(peopleFormCount));
       }
@@ -89,7 +90,7 @@ const KuljettajienPeruskoulutuslomake = ({
   }, [changes, changeObjects, isReadOnly]);
 
   return (
-    <React.Fragment>
+    <div className="p-8">
       {changes ? (
         <CategorizedListRoot
           anchor={sectionId}
@@ -99,7 +100,7 @@ const KuljettajienPeruskoulutuslomake = ({
           showCategoryTitles={true}
         />
       ) : null}
-    </React.Fragment>
+    </div>
   );
 };
 

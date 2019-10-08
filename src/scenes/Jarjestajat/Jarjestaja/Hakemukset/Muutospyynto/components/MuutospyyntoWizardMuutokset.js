@@ -27,7 +27,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
         )
       )
     );
-    console.info(props.kohteet);
   }, [props.kohteet]);
 
   useEffect(() => {

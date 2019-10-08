@@ -1,40 +1,30 @@
-import { isAdded, isInLupa, isRemoved } from "../../../css/label";
-
 export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
 
   return [
     {
       anchor: "vankilaopetus",
-      styleClasses: ["px-10 py-10"],
-      components: [
-        {
-          anchor: "tehtavan-tarpeellisuus-title",
-          name: "StatusTextRow",
-          properties: {
-            title: "Vankilaopetuksen järjestämistehtävä"
-          }
+      layout: {
+        indentation: "large",
+        strategy: {
+          key: "groups"
         }
-      ],
+      },
+      title: "Vankilaopetuksen järjestämistehtävä",
       categories: [
         {
           anchor: `${code}-1`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "tehtavan-tarpeellisuus-label",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
-              properties: {
-                code: 1,
-                title: "Tehtävän tarpeellisuus"
-              }
+          code: 1,
+          layout: {
+            strategy: {
+              key: "groups"
             }
-          ],
+          },
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          title: "Tehtävän tarpeellisuus",
           categories: [
             {
-              anchor: "tehtavan-tarpeellisuus-field",
-              styleClasses: ["pl-6"],
+              anchor: "perustelut",
               components: [
                 {
                   anchor: "A",
@@ -50,34 +40,15 @@ export const getVankilaopetusPerustelulomake = () => {
         },
         {
           anchor: `${code}-2`,
-          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "edellytykset-label",
-              name: "StatusTextRow",
-              styleClasses: ["pb-4 text-base"],
-              properties: {
-                code: 2,
-                title:
-                  "Toiminnalliset edellytykset vankilaopetuksen järjestämiseksi"
-              }
+          code: 2,
+          layout: {
+            strategy: {
+              key: "groups"
             }
-          ],
+          },
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          title: "Toiminnalliset edellytykset vankilaopetuksen järjestämiseksi",
           categories: [
-            {
-              anchor: `resurssit-label`,
-              styleClasses: ["font-semibold pl-6 pt-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["pb-4 text-base"],
-                  properties: {
-                    title: "Henkilöstöresurssit"
-                  }
-                }
-              ]
-            },
             {
               anchor: "resurssit-field",
               styleClasses: ["pl-6"],
@@ -87,21 +58,8 @@ export const getVankilaopetusPerustelulomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
-                  }
-                }
-              ]
-            },
-            {
-              anchor: `osaaminen-label`,
-              styleClasses: ["font-semibold pl-6 pt-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["pb-4 text-base"],
-                  properties: {
-                    title: "Osaaminen"
+                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+                    title: "Henkilöstöresurssit"
                   }
                 }
               ]
@@ -115,21 +73,8 @@ export const getVankilaopetusPerustelulomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut)."
-                  }
-                }
-              ]
-            },
-            {
-              anchor: "jarjestelyt-label",
-              styleClasses: ["font-semibold pl-6 pt-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["pb-4 text-base"],
-                  properties: {
-                    title: "Pedagogiset järjestelyt"
+                      "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
+                    title: "Osaaminen"
                   }
                 }
               ]
@@ -143,21 +88,8 @@ export const getVankilaopetusPerustelulomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet)."
-                  }
-                }
-              ]
-            },
-            {
-              anchor: "yhteistyo-label",
-              styleClasses: ["font-semibold pl-6 pt-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["pb-4 text-base"],
-                  properties: {
-                    title: "Sidosryhmäyhteistyö"
+                      "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
+                    title: "Pedagogiset järjestelyt"
                   }
                 }
               ]
@@ -171,7 +103,8 @@ export const getVankilaopetusPerustelulomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
+                      "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+                    title: "Sidosryhmäyhteistyö"
                   }
                 }
               ]
@@ -180,49 +113,10 @@ export const getVankilaopetusPerustelulomake = () => {
         },
         {
           anchor: `${code}-3`,
+          code: 3,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "toteuttaminen-header",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
-              properties: {
-                code: 3,
-                labelStyles: {},
-                title: "Vankilaopetuksen toteuttaminen"
-              }
-            }
-          ],
+          title: "Vankilaopetuksen toteuttaminen",
           categories: [
-            {
-              anchor: "toteuttaminen-missa-label",
-              styleClasses: ["font-semibold pl-6 pt-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["text-base"],
-                  properties: {
-                    title: "Vankila/t missä opetusta aiotaan järjestää"
-                  }
-                }
-              ]
-            },
-            {
-              anchor: "toteuttaminen-missa-info",
-              styleClasses: ["pl-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  styleClasses: ["text-base"],
-                  properties: {
-                    title:
-                      "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta."
-                  }
-                }
-              ]
-            },
             {
               anchor: "toteuttaminen-missa-select",
               styleClasses: ["pl-6 pt-6"],
@@ -230,7 +124,11 @@ export const getVankilaopetusPerustelulomake = () => {
                 {
                   anchor: "A",
                   name: "Autocomplete",
-                  styleClasses: ["pb-4 text-base"]
+                  styleClasses: ["pb-4 text-base"],
+                  properties: {
+                    title:
+                      "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta."
+                  }
                 }
               ]
             }
@@ -241,6 +139,7 @@ export const getVankilaopetusPerustelulomake = () => {
     }
   ];
 };
+
 export const getTyovoimakoulutuslomake = () => {
   const code = 4;
   return [
@@ -455,21 +354,17 @@ export const getTyovoimakoulutuslomake = () => {
 };
 
 export const getVaativaErityinenTukilomake = () => {
-  const code = 4;
+  const code = "TODO-WHAT-IS-THE-CODE";
   return [
     {
       anchor: "vaativa-erityinen-tuki-perustelut-lomake",
-      styleClasses: ["px-10 py-10"],
-      components: [
-        {
-          anchor: "vaativa-erityinen-tuki-perustelut-title",
-          styleClasses: ["text-base"],
-          name: "StatusTextRow",
-          properties: {
-            title: "Vaativan erityisen tuen tehtävä"
-          }
+      layout: {
+        margins: { top: "small" },
+        strategy: {
+          key: "groups"
         }
-      ],
+      },
+      title: "Vaativan erityisen tuen tehtävä",
       categories: [
         {
           anchor: `${code}-0`,
@@ -554,19 +449,9 @@ export const getVaativaErityinenTukilomake = () => {
         },
         {
           anchor: `${code}-1`,
+          code: 1,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "tehtavan-tarpeellisuus-label",
-              styleClasses: ["text-base"],
-              name: "StatusTextRow",
-              properties: {
-                code: 1,
-                labelStyles: {},
-                title: "Tehtävän tarpeellisuus"
-              }
-            }
-          ],
+          title: "Tehtävän tarpeellisuus",
           categories: [
             {
               anchor: "tehtavan-tarpeellisuus-field",
@@ -586,39 +471,27 @@ export const getVaativaErityinenTukilomake = () => {
         },
         {
           anchor: `${code}-2`,
+          code: 2,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "toiminnalliset-edellytykset-label",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
-              properties: {
-                code: 2,
-                labelStyles: {},
-                title:
-                  "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
-              }
-            }
-          ],
+          title:
+            "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi",
           categories: [
             {
               anchor: "henkilostoresurssit-field",
-              title: "Henkilöstöresurssit",
-              styleClasses: ["pl-6"],
               components: [
                 {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
+                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+                    title: "Henkilöstöresurssit"
                   }
                 }
               ]
             },
             {
               anchor: "osaaminen-field",
-              title: "Osaaminen",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -626,14 +499,14 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut)."
+                      "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
+                    title: "Osaaminen"
                   }
                 }
               ]
             },
             {
               anchor: "jarjestelyt-field",
-              title: "Pedagogiset järjestelyt",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -641,14 +514,14 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet)."
+                      "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
+                    title: "Pedagogiset järjestelyt"
                   }
                 }
               ]
             },
             {
               anchor: "sidosryhmayhteistyo-field",
-              title: "Sidosryhmäyhteistyö",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -656,7 +529,8 @@ export const getVaativaErityinenTukilomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
+                      "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+                    title: "Sidosryhmäyhteistyö"
                   }
                 }
               ]
@@ -665,20 +539,9 @@ export const getVaativaErityinenTukilomake = () => {
         },
         {
           anchor: `${code}-3`,
+          code: 3,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "suunnitelma-label",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
-              properties: {
-                code: 3,
-                labelStyles: {},
-                title:
-                  "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi"
-              }
-            }
-          ],
+          title: "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi",
           categories: [
             {
               anchor: "suunnitelma-field",
@@ -823,7 +686,6 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
     {
       anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
-      styleClasses: ["pl-6 pt-6"],
       categories: [
         {
           anchor: "A",
@@ -889,17 +751,7 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
     },
     {
       anchor: "2",
-      styleClasses: ["px-4 py-8 hover:bg-gray-100"],
-      components: [
-        {
-          anchor: "aiheuttanut-label",
-          name: "StatusTextRow",
-          styleClasses: ["text-base"],
-          properties: {
-            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
-          }
-        }
-      ],
+      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
       categories: [
         {
           anchor: "tehtavan-tarpeellisuus-field",
@@ -952,18 +804,9 @@ const opiskelijavuodet = (code, anchorNumber) => {
   const year = new Date().getFullYear();
   return {
     anchor: `${code}-${anchorNumber}`,
+    code: 4,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-    components: [
-      {
-        name: "StatusTextRow",
-        styleClasses: ["text-base"],
-        properties: {
-          labelStyles: {},
-          code: code,
-          title: "Arvio koulutukseen suunnattavista opiskelijavuosista "
-        }
-      }
-    ],
+    title: "Arvio koulutukseen suunnattavista opiskelijavuosista",
     categories: [
       {
         anchor: `${code}-${anchorNumber}`,
@@ -971,7 +814,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
           {
             anchor: "opiskelijavuodet-header",
             name: "StatusTextRow",
-            styleClasses: ["font-semibold pt-6"],
+            styleClasses: ["font-semibold"],
             properties: {
               labelStyles: {},
               title:
@@ -982,6 +825,9 @@ const opiskelijavuodet = (code, anchorNumber) => {
         categories: [
           {
             anchor: "vuodet",
+            layout: {
+              indentation: "none"
+            },
             styleClasses: ["flex sm:row"],
             components: [
               {
@@ -990,7 +836,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 styleClasses: ["mr-8"],
                 properties: {
                   withoutMargin: true,
-                  label: year + 1,
+                  label: (year + 1).toString(),
                   type: "number",
                   width: "7em"
                 }
@@ -1001,7 +847,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 styleClasses: ["mr-8"],
                 properties: {
                   withoutMargin: true,
-                  label: year + 2,
+                  label: (year + 2).toString(),
                   type: "number",
                   width: "7em"
                 }
@@ -1011,7 +857,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 name: "Input",
                 properties: {
                   withoutMargin: true,
-                  label: year + 3,
+                  label: (year + 3).toString(),
                   type: "number",
                   width: "7em"
                 }

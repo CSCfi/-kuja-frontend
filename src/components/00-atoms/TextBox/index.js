@@ -29,18 +29,21 @@ const TextBox = props => {
   return (
     <React.Fragment>
       {value !== null ? (
-        <TextareaAutosize
-          aria-label={props.ariaLabel}
-          disabled={props.isDisabled || props.isReadOnly}
-          placeholder={props.placeholder}
-          rows={props.rows}
-          rowsMax={props.rowsMax}
-          className={`${props.isHidden ? "hidden" : ""} ${
-            props.isReadOnly ? "" : "border border-solid"
-          } w-full p-2`}
-          onChange={updateValue}
-          value={value}
-        />
+        <React.Fragment>
+          {props.title && <label className="text-bold text-base block my-2">{props.title}</label>}
+          <TextareaAutosize
+            aria-label={props.ariaLabel}
+            disabled={props.isDisabled || props.isReadOnly}
+            placeholder={props.placeholder}
+            rows={props.rows}
+            rowsMax={props.rowsMax}
+            className={`${props.isHidden ? "hidden" : ""} ${
+              props.isReadOnly ? "" : "border border-solid"
+            } w-full p-2`}
+            onChange={updateValue}
+            value={value}
+          />
+        </React.Fragment>
       ) : null}
     </React.Fragment>
   );
@@ -55,7 +58,8 @@ TextBox.defaultProps = {
   placeholder: "",
   isReadOnly: false,
   rows: 3,
-  rowsMax: 100
+  rowsMax: 100,
+  title: ""
 };
 
 TextBox.propTypes = {
@@ -71,6 +75,7 @@ TextBox.propTypes = {
   isReadOnly: PropTypes.bool,
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
+  title: PropTypes.string,
   value: PropTypes.string
 };
 

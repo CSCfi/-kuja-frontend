@@ -169,7 +169,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               ),
               props.changeObjects
             );
-            const isKuntaAlreadyUnchecked = kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
+            const isKuntaAlreadyUnchecked =
+              kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
             return !!kuntaInLupa && !isKuntaAlreadyUnchecked
               ? {
                   anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
@@ -218,7 +219,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       };
       onChangesUpdate(sectionChanges);
     },
-    [onChangesUpdate, kunnatInLupa, props.changeObjects]
+    [
+      onChangesUpdate,
+      kunnatInLupa,
+      props.changeObjects,
+      props.maakuntakunnat.maakuntakunnatList
+    ]
   );
 
   const getCategories = useMemo(() => {
@@ -274,7 +280,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             }
           };
         }, maakunnatInLupa),
-        title: maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
+        title:
+          maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
       },
       /**
        * LUPAAN LISÄTTÄVÄT MAAKUNNAT

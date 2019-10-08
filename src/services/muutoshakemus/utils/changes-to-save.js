@@ -51,6 +51,8 @@ export const getChangesToSave = (
       R.split("."),
       R.prop("anchor")
     )(changeObj);
+    const anchorBase =
+      key === "opiskelijavuodet" ? R.replace(".", "_", anchorInit) : anchorInit;
     const backendMuutos = R.find(muutos => {
       return !!R.find(
         R.startsWith(anchorInit),
@@ -66,7 +68,7 @@ export const getChangesToSave = (
       );
     }, backendMuutokset);
     if (backendMuutos) {
-      const perustelutAnchorInitial = `perustelut_${anchorInit}`;
+      const perustelutAnchorInitial = `perustelut_${anchorBase}`;
       const perustelut = R.filter(
         R.compose(
           R.contains(perustelutAnchorInitial),
@@ -327,9 +329,19 @@ export const getChangesToSave = (
         ).meta;
         koodisto = meta.koodisto.koodistoUri;
       }
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
 
-      // TODO: Define the list of perustelut for opiskelijavuodet
-      const perustelut = [];
+      const perustelut = R.filter(
+        R.compose(
+          R.includes(anchorInit),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
 
       return {
         arvo: changeObj.properties.applyForValue,
