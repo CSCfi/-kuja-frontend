@@ -51,6 +51,8 @@ const categoryStyleMapping = {
   }
 };
 
+const layoutStrategies = [{ key: "default" }, { key: "groups" }];
+
 const defaultComponentStyles = {
   justification: componentStyleMapping.justification.between,
   verticalAlignment: componentStyleMapping.verticalAlignment.center
@@ -58,6 +60,7 @@ const defaultComponentStyles = {
 
 const defaultCategoryStyles = {
   indentation: categoryStyleMapping.indentations.large,
+  layoutStrategy: R.find(R.propEq("key", "default"), layoutStrategies),
   margins: {
     top: categoryStyleMapping.margins.extraSmall
   }
@@ -122,7 +125,7 @@ const CategorizedList = React.memo(props => {
   );
 
   return (
-    <div data-parentofall={true}>
+    <div>
       {_.map(props.categories, (category, i) => {
         if (category.isVisible === false) {
           return null;
@@ -141,33 +144,55 @@ const CategorizedList = React.memo(props => {
           props.changes
         );
 
-        const { indentation, margins } = category.layout || {};
+        // Category related layout styles
 
-        const { justification } =
-          R.path(["layout", "components"], category) || {};
+        const { indentation, strategy, margins } = category.layout || {};
 
-        const topMarginInteger = R.path(["margins", "top"], category)
-          ? categoryStyleMapping.margins[category.margins.top]
-          : defaultCategoryStyles.margins.top;
+        const topMarginInteger =
+          margins && margins.top && categoryStyleMapping.margins[margins.top]
+            ? categoryStyleMapping.margins[margins.top]
+            : defaultCategoryStyles.margins.top;
+
+        const layoutStrategyMapping = {
+          margins: {
+            top: {
+              default: Number(!!i) * topMarginInteger,
+              groups:
+                Number(!!i) * Math.max(10 - 2 * props.level, 0) +
+                topMarginInteger
+            }
+          }
+        };
+
+        const categoryLayout = {
+          margins: {
+            top:
+              layoutStrategyMapping.margins.top[
+                strategy
+                  ? strategy.key
+                  : defaultCategoryStyles.layoutStrategy.key
+              ]
+          }
+        };
 
         const categoryStyles = {
           classes: {
-            indentation: `pl-${
+            indentation: `pl-0 sm:pl-${
               !R.isNil(categoryStyleMapping.indentations[indentation])
                 ? categoryStyleMapping.indentations[indentation]
                 : // Number(!!props.level) returns 0 when props.level is 0 otherwise 1
                   Number(!!props.level) * defaultCategoryStyles.indentation
             }`,
             margins: {
-              top: `pt-${
-                R.prop("top", margins) &&
-                !R.isNil(categoryStyleMapping.margins[margins.top])
-                  ? categoryStyleMapping.margins[margins.top]
-                  : Number(!!props.level) * topMarginInteger
-              }`
+              top: `pt-${categoryLayout.margins.top}`
             }
           }
         };
+
+        // Component related layout styles
+
+        const { justification } =
+          R.path(["layout", "components"], category) || {};
 
         const componentStyles = {
           classes: {
@@ -199,7 +224,11 @@ const CategorizedList = React.memo(props => {
         const categoryClasses = R.values(flattenObj(categoryStyles.classes));
 
         return (
-          <div key={i} className={R.join(" ", categoryClasses)}>
+          <div
+            key={i}
+            className={R.join(" ", categoryClasses)}
+            data-level={props.level}
+          >
             {isCategoryTitleVisible && (
               <div className={categoryTitleClasses}>
                 <h4>
@@ -368,6 +397,7 @@ const CategorizedList = React.memo(props => {
                         idSuffix
                         propsObj={propsObj}
                         parentChangeObj={parentChangeObj}
+                        title={propsObj.title}
                       ></CategorizedListTextBox>
                     )}
                     {component.name === "Input"
