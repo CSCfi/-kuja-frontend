@@ -43,6 +43,7 @@ export const CategorizedListTextBox = ({
         payload={payload}
         placeholder={propsObj.placeholder}
         isReadOnly={propsObj.isReadOnly}
+        title={propsObj.title}
         value={value}
       />
     </div>
