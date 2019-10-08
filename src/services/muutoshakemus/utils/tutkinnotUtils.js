@@ -232,8 +232,7 @@ export const getCategoriesForPerustelut = (
                         : ""),
                     labelStyles: {
                       addition: isAdded,
-                      removal: isRemoved,
-                      custom: Object.assign({}, isInLupaBool ? isInLupa : {})
+                      removal: isRemoved
                     },
                     styleClasses: ["flex"],
                     statusTextStyleClasses: isAddition
