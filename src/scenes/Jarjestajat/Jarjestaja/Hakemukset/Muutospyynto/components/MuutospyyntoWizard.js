@@ -131,7 +131,7 @@ const MuutospyyntoWizard = props => {
           "Muutospyyntö tallennettu! Voit jatkaa pian dokumentin muokkaamista.",
           {
             autoClose: 2000,
-            position: toast.POSITION.BOTTOM_RIGHT,
+            position: toast.POSITION.TOP_LEFT,
             type: toast.TYPE.SUCCESS
           }
         );
@@ -145,7 +145,7 @@ const MuutospyyntoWizard = props => {
       } else {
         notify("Muutospyyntö tallennettu!", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_LEFT,
           type: toast.TYPE.SUCCESS
         });
       }
