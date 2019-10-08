@@ -6,8 +6,10 @@ import { parseLocalizedField } from "../../../../../../../modules/helpers";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import VankilaopetusPerustelulomake from "../../../../../../../components/04-forms/muut/VankilaopetusPerustelulomake";
-import { getVankilaopetusPerustelulomake } from "../../../../../../../services/lomakkeet/perustelut/muut";
+import {
+  getVankilaopetusPerustelulomake,
+  getVaativaErityinenTukilomake
+} from "../../../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
   changeObjects: {},
@@ -18,13 +20,48 @@ const defaultProps = {
   stateObject: {}
 };
 
-const getCategoriesByKeyAndCode = (key, code) => {
-  const mapping = {
-    vankila: {
-      13: getVankilaopetusPerustelulomake()
+const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
+  const koodiArvoInteger = parseInt(koodiarvo, 10);
+  const mapping = [
+    {
+      koodiarvot: [5],
+      lomake: getVankilaopetusPerustelulomake()
+    },
+    {
+      koodiarvot: [2, 16, 17, 18, 19, 20, 21],
+      lomake: getVaativaErityinenTukilomake()
     }
-  };
-  return R.path([key, code], mapping) || [];
+  ];
+  const obj = R.find(
+    R.compose(
+      R.includes(koodiArvoInteger),
+      R.prop("koodiarvot")
+    ),
+    mapping
+  );
+  return obj
+    ? obj.lomake
+    : [
+        {
+          anchor: "perustelut",
+          layout: {
+            margins: { top: "small" },
+            strategy: {
+              key: "groups"
+            }
+          },
+          components: [
+            {
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                isReadOnly,
+                placeholder: "Perustele muutokset tähän, kiitos."
+              }
+            }
+          ]
+        }
+      ];
 };
 
 const PerustelutMuut = React.memo(
@@ -64,7 +101,10 @@ const PerustelutMuut = React.memo(
               (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
           ) {
             dividedArticles[kasite] = dividedArticles[kasite] || [];
-            dividedArticles[kasite].push(article);
+            dividedArticles[kasite].push({
+              article,
+              categories: getCategoriesByKoodiarvo(article.koodiArvo)
+            });
           }
         }, articles);
         return dividedArticles;
@@ -77,7 +117,7 @@ const PerustelutMuut = React.memo(
           return {
             anchor: configObj.key,
             title: item.title,
-            categories: R.map(article => {
+            categories: R.map(({ article, categories }) => {
               const title =
                 _.find(article.metadata, m => {
                   return m.kieli === locale;
@@ -100,6 +140,10 @@ const PerustelutMuut = React.memo(
                 isInLupa: isInLupaBool
               };
               let structure = {
+                layout: {
+                  indentation: "none",
+                  margins: { top: "large" }
+                },
                 anchor: article.koodiArvo,
                 meta: {
                   isInLupa: isInLupaBool,
@@ -128,31 +172,15 @@ const PerustelutMuut = React.memo(
                       statusText: isAddition ? " LISÄYS:" : " POISTO:"
                     }
                   }
-                ]
+                ],
+                categories
               };
-              console.info(configObj);
-              structure.categories = [
-                {
-                  anchor: "perustelut",
-                  title: "Perustelut",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        isReadOnly,
-                        placeholder: "Perustele muutokset tähän, kiitos."
-                      }
-                    }
-                  ]
-                }
-              ];
               return structure;
             }, item.articles)
           };
         }, configObj.categoryData);
       };
-    }, [changeObjects.muut, isReadOnly]);
+    }, [changeObjects.muut]);
 
     const relevantCodes = useMemo(() => {
       return R.map(
@@ -200,11 +228,10 @@ const PerustelutMuut = React.memo(
           title: "Vaativan erityisen tuen tehtävä",
           categoryData: [
             {
-              articles: dividedArticles.vaativa_1 || [],
-              componentName: "StatusTextRow"
-            },
-            {
-              articles: dividedArticles.vaativa_2 || [],
+              articles: R.concat(
+                dividedArticles.vaativa_1 || [],
+                dividedArticles.vaativa_2 || []
+              ),
               componentName: "StatusTextRow"
             }
           ]
@@ -275,11 +302,12 @@ const PerustelutMuut = React.memo(
     const expandableRows = useMemo(() => {
       return !!locale.length
         ? R.addIndex(R.map)((configObj, i) => {
+            const categories = getCategories(configObj, locale, kohde);
             return {
               code: configObj.code,
               key: configObj.key,
               title: configObj.title,
-              categories: getCategories(configObj, locale, kohde),
+              categories,
               data: configObj.categoryData
             };
           }, R.filter(R.propEq("isInUse", true))(config))
@@ -312,7 +340,6 @@ const PerustelutMuut = React.memo(
         {stateObject.items ? (
           <React.Fragment>
             {R.addIndex(R.map)((row, i) => {
-              // console.info(row);
               return (
                 <ExpandableRowRoot
                   anchor={`${sectionId}_${row.code}`}
@@ -324,14 +351,9 @@ const PerustelutMuut = React.memo(
                   onChangesRemove={onChangesRemove}
                   onUpdate={onChangesUpdate}
                   sectionId={sectionId}
+                  showCategoryTitles={true}
                   title={row.title}
-                >
-                  {R.addIndex(R.map)((category, index) => {
-                    return (
-                      <VankilaopetusPerustelulomake key={`subform-${index}`} />
-                    );
-                  }, row.categories)}
-                </ExpandableRowRoot>
+                ></ExpandableRowRoot>
               );
             })(stateObject.items)}
           </React.Fragment>
