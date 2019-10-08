@@ -22,14 +22,42 @@ const defaultProps = {
 
 const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
   const koodiArvoInteger = parseInt(koodiarvo, 10);
+  const defaultAdditionForm = [
+    {
+      anchor: "perustelut",
+      layout: {
+        margins: { top: "small" },
+        strategy: {
+          key: "groups"
+        }
+      },
+      components: [
+        {
+          anchor: "A",
+          name: "TextBox",
+          properties: {
+            isReadOnly,
+            placeholder: "Perustele muutokset tähän, kiitos."
+          }
+        }
+      ]
+    }
+  ];
+  const defaultRemovalForm = _.cloneDeep(defaultAdditionForm);
   const mapping = [
     {
       koodiarvot: [5],
-      lomake: getVankilaopetusPerustelulomake()
+      lomakkeet: {
+        lisays: getVankilaopetusPerustelulomake(),
+        poisto: defaultRemovalForm
+      }
     },
     {
       koodiarvot: [2, 16, 17, 18, 19, 20, 21],
-      lomake: getVaativaErityinenTukilomake()
+      lomakkeet: {
+        lisays: getVaativaErityinenTukilomake(),
+        poisto: defaultRemovalForm
+      }
     }
   ];
   const obj = R.find(
@@ -40,28 +68,11 @@ const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
     mapping
   );
   return obj
-    ? obj.lomake
-    : [
-        {
-          anchor: "perustelut",
-          layout: {
-            margins: { top: "small" },
-            strategy: {
-              key: "groups"
-            }
-          },
-          components: [
-            {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                isReadOnly,
-                placeholder: "Perustele muutokset tähän, kiitos."
-              }
-            }
-          ]
-        }
-      ];
+    ? obj.lomakkeet
+    : {
+        lisays: defaultAdditionForm,
+        poisto: defaultRemovalForm
+      };
 };
 
 const PerustelutMuut = React.memo(
@@ -103,7 +114,7 @@ const PerustelutMuut = React.memo(
             dividedArticles[kasite] = dividedArticles[kasite] || [];
             dividedArticles[kasite].push({
               article,
-              categories: getCategoriesByKoodiarvo(article.koodiArvo)
+              lomakkeet: getCategoriesByKoodiarvo(article.koodiArvo)
             });
           }
         }, articles);
@@ -117,7 +128,7 @@ const PerustelutMuut = React.memo(
           return {
             anchor: configObj.key,
             title: item.title,
-            categories: R.map(({ article, categories }) => {
+            categories: R.map(({ article, lomakkeet }) => {
               const title =
                 _.find(article.metadata, m => {
                   return m.kieli === locale;
@@ -173,7 +184,7 @@ const PerustelutMuut = React.memo(
                     }
                   }
                 ],
-                categories
+                categories: isAddition ? lomakkeet.lisays : lomakkeet.poisto
               };
               return structure;
             }, item.articles)
