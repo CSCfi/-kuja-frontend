@@ -179,7 +179,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                     ...kuntaInLupa.properties,
                     isChecked: false,
                     meta: {
-                      koodiarvo: kunta.koodiarvo,
+                      koodiarvo: kunta.koodiArvo,
                       koodisto: { koodistoUri: kunta.koodisto }
                     }
                   }
@@ -281,6 +281,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               isChecked: true,
               labelStyles: {
                 removal: isRemoved
+              },
+              meta: {
+                koodiarvo: maakunta.meta.koodiarvo,
+                koodisto: { koodistoUri: maakunta.meta.koodisto }
               },
               title: maakunta.title
             }
