@@ -489,81 +489,46 @@ export const getOppisopimusPerusteluLomake = () => {
     {
       anchor: "oppisopimus-perustelut-lomake",
       styleClasses: ["px-10 py-10"],
-      components: [
-        {
-          anchor: "oppisopimus-perustelut-title",
-          name: "StatusTextRow",
-          properties: {
-            title: "Laajennettu oppisopimuskoulutuksen järjestämistehtävä"
-          }
-        }
-      ],
       categories: [
         {
           anchor: `${code}-1`,
+          code: 1,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          title: "Tehtävän tarpeellisuus",
           components: [
             {
-              anchor: "tehtavan-tarpeellisuus-label",
-              name: "StatusTextRow",
-              styleClasses: ["text-base"],
+              anchor: "A",
+              name: "TextBox",
               properties: {
-                code: 1,
-                title: "Tehtävän tarpeellisuus"
+                placeholder:
+                  "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
               }
-            }
-          ],
-          categories: [
-            {
-              anchor: "tehtavan-tarpeellisuus-field",
-              styleClasses: ["pl-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "TextBox",
-                  properties: {
-                    placeholder:
-                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
-                  }
-                }
-              ]
             }
           ]
         },
         {
           anchor: `${code}-2`,
+          code: 2,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-          components: [
-            {
-              anchor: "toiminnalliset-edellytykset-label",
-              name: "StatusTextRow",
-              properties: {
-                code: 2,
-                labelStyles: {},
-                title:
-                  "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi"
-              }
-            }
-          ],
+          title:
+            "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi",
           categories: [
             {
-              anchor: "henkilostoresurssit-field",
-              title: "Henkilöstöresurssit",
-              styleClasses: ["pl-6"],
+              anchor: "henkilostoresurssit-textbox",
               components: [
                 {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella."
+                      "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
+                    title: "Henkilöstöresurssit"
                   }
                 }
               ]
             },
             {
-              anchor: "osaaminen-field",
-              title: "Osaaminen",
+              anchor: "osaaminen-textbox",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -571,14 +536,14 @@ export const getOppisopimusPerusteluLomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta)."
+                      "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
+                    title: "Osaaminen"
                   }
                 }
               ]
             },
             {
-              anchor: "sidosryhmayhteistyo-field",
-              title: "Sidosryhmäyhteistyö",
+              anchor: "sidosryhmayhteistyo-textbox",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -586,7 +551,8 @@ export const getOppisopimusPerusteluLomake = () => {
                   name: "TextBox",
                   properties: {
                     placeholder:
-                      "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot)."
+                      "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
+                    title: "Sidosryhmäyhteistyö"
                   }
                 }
               ]
@@ -722,7 +688,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
   const year = new Date().getFullYear();
   return {
     anchor: `${code}-${anchorNumber}`,
-    code: 4,
+    code,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Arvio koulutukseen suunnattavista opiskelijavuosista",
     categories: [
