@@ -1,6 +1,7 @@
 import { isInLupa, isAdded, isRemoved } from "../../../css/label";
 import * as R from "ramda";
 import _ from "lodash";
+import { getAnchorPart } from "../../../utils/common";
 
 const categories = {};
 
@@ -199,7 +200,7 @@ export const getCategoriesForPerustelut = (
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: R.join(".", anchorWOLast),
+              anchor: getAnchorPart(changeObj.anchor, 2),
               meta: {
                 kohde,
                 maaraystyyppi,
