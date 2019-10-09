@@ -171,11 +171,17 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             );
             const isKuntaAlreadyUnchecked =
               kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
+
             return !!kuntaInLupa && !isKuntaAlreadyUnchecked
               ? {
                   anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
                   properties: {
-                    isChecked: false
+                    ...kuntaInLupa.properties,
+                    isChecked: false,
+                    meta: {
+                      koodiarvo: kunta.koodiArvo,
+                      koodisto: { koodistoUri: kunta.koodisto }
+                    }
                   }
                 }
               : null;
@@ -275,6 +281,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               isChecked: true,
               labelStyles: {
                 removal: isRemoved
+              },
+              meta: {
+                koodiarvo: maakunta.meta.koodiarvo,
+                koodisto: { koodistoUri: maakunta.meta.koodisto }
               },
               title: maakunta.title
             }
