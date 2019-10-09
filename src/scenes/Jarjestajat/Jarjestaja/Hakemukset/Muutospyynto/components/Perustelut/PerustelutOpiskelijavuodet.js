@@ -56,6 +56,7 @@ const PerustelutOpiskelijavuodet = props => {
               ["perustelut", "vahimmaisopiskelijavuodet"],
               props.changeObjects
             )}
+            muutosperustelut={props.muutosperustelut}
             sectionId={`${sectionId}_vahimmaisopiskelijavuodet`}
           ></OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake>
         </ExpandableRowRoot>
@@ -102,6 +103,7 @@ const PerustelutOpiskelijavuodet = props => {
 
 PerustelutOpiskelijavuodet.defaultProps = {
   changeObjects: {},
+  muutosperustelut: [],
   stateObject: {}
 };
 
@@ -109,6 +111,7 @@ PerustelutOpiskelijavuodet.propTypes = {
   changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   lomakkeet: PropTypes.object,
+  muutosperustelut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

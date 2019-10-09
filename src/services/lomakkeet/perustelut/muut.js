@@ -1,3 +1,5 @@
+import { getMuutostarveCheckboxes } from "./common";
+
 export const getVankilaopetusPerustelulomake = () => {
   const code = 4;
 
@@ -565,85 +567,30 @@ export const getOppisopimusPerusteluLomake = () => {
   ];
 };
 
-export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = () => {
+export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
+  checkboxItems,
+  locale
+) => {
+  const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale);
   return [
     {
       anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
-      categories: [
-        {
-          anchor: "A",
-          name: "CheckboxWithLabel",
-          properties: {
-            name: "CheckboxWithLabel",
-            title: "Alueen työ- ja elinkeinoelämän työvoimatarve"
-          }
-        },
-        {
-          anchor: "B",
-          components: [
-            {
-              anchor: "B",
-              name: "CheckboxWithLabel",
-              properties: {
-                name: "CheckboxWithLabel",
-                title: "Muut syyt"
-              }
-            }
-          ]
-        },
-        {
-          anchor: "C",
-          components: [
-            {
-              anchor: "C",
-              name: "CheckboxWithLabel",
-              properties: {
-                name: "CheckboxWithLabel",
-                title: "Järjestämisluvan muuhun muutosesitykseen liittyvät syyt"
-              }
-            }
-          ]
-        },
-        {
-          anchor: "D",
-          components: [
-            {
-              anchor: "D",
-              name: "CheckboxWithLabel",
-              properties: {
-                name: "CheckboxWithLabel",
-                title: "Koulutuksen järjestäjän koulutustarjonnan kysyntä"
-              }
-            }
-          ]
-        },
-        {
-          anchor: "E",
-          components: [
-            {
-              anchor: "E",
-              name: "CheckboxWithLabel",
-              properties: {
-                name: "CheckboxWithLabel",
-                title: "Alueen väestön koulutustarve"
-              }
-            }
-          ]
-        }
-      ]
+      categories: checkboxes
     },
     {
       anchor: "2",
-      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
       categories: [
         {
           anchor: "tehtavan-tarpeellisuus-field",
-          styleClasses: ["pl-6"],
           components: [
             {
               anchor: "A",
-              name: "TextBox"
+              name: "TextBox",
+              properties: {
+                placeholder:
+                  "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+              }
             }
           ]
         }

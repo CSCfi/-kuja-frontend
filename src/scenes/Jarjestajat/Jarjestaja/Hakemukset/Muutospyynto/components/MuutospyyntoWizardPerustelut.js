@@ -46,7 +46,7 @@ const MuutospyyntoWizardPerustelut = ({
   );
 
   useEffect(() => {
-    fetchMuutosperustelut()(muutosperustelutDispatch );
+    fetchMuutosperustelut()(muutosperustelutDispatch);
   }, [muutosperustelutDispatch]);
 
   useEffect(() => {
@@ -250,7 +250,7 @@ const MuutospyyntoWizardPerustelut = ({
             />
           ) : null}
 
-          {!!R.prop(["opiskelijavuodet"], changeObjects) ? (
+          {!!R.prop(["opiskelijavuodet"], changeObjects) && muutosperustelut.muutosperusteluList ? (
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
@@ -260,13 +260,21 @@ const MuutospyyntoWizardPerustelut = ({
                   {!!R.path(["opiskelijavuodet"], changeObjects) ? (
                     <PerustelutOpiskelijavuodet
                       changeObjects={{
-                        opiskelijavuodet: R.path(["opiskelijavuodet"], changeObjects),
+                        opiskelijavuodet: R.path(
+                          ["opiskelijavuodet"],
+                          changeObjects
+                        ),
                         perustelut: R.path(
                           ["perustelut", "opiskelijavuodet"],
                           changeObjects
                         )
                       }}
-                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(kohteet)}
+                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
+                        kohteet
+                      )}
+                      muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
+                        muutosperustelut.muutosperusteluList
+                      )}
                       stateObject={R.path(["perustelut", "opiskelijavuodet"])(
                         muutoshakemus
                       )}
@@ -321,20 +329,6 @@ const MuutospyyntoWizardPerustelut = ({
               headingNumber={3}
               title={kohteet[2].title}
             ></PerustelutToimintaalue>
-          ) : null}
-
-          <Section code={4} title={kohteet[3].title}></Section>
-
-          {!!R.keys(changeObjects.muut).length ? (
-            <PerustelutMuut
-              changes={changeObjects.muut}
-              handleChanges={handleChanges}
-              kohde={kohteet.muut}
-              headingNumber={lupa.kohteet[5].headingNumber}
-              maaraykset={lupa.data.maaraykset}
-              muut={muut}
-              title={kohteet[4].title}
-            />
           ) : null} */}
         </div>
       ) : null}

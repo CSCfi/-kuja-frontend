@@ -1,36 +1,16 @@
-import * as R from "ramda";
+import { getMuutostarveCheckboxes } from "./common";
 
 export const getAdditionFormStructure = (checkboxItems, locale) => {
-  const titleObj = {
-    anchor: "perustelut",
-    components: [
-      {
-        name: "StatusTextRow",
-        properties: {
-          title: "Muutospyynnön taustalla olevat syyt"
-        }
-      }
-    ]
-  };
-  const checkboxes = R.map(checkboxItem => {
-    const metadata = R.find(R.propEq("kieli", locale))(checkboxItem.metadata);
-    return {
-      anchor: checkboxItem.koodiArvo,
-      components: [
-        {
-          anchor: "A",
-          name: "CheckboxWithLabel",
-          properties: {
-            isChecked: false,
-            title: metadata.nimi
-          }
-        }
-      ]
-    };
-  }, checkboxItems);
-  return R.flatten([
-    titleObj,
-    checkboxes,
+  const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale);
+  return [
+    {
+      anchor: "perustelut",
+      layout: {
+        indentation: "none"
+      },
+      title: "Muutospyynnön taustalla olevat syyt",
+      categories: checkboxes
+    },
     {
       anchor: "vapaa-tekstikentta",
       components: [
@@ -44,7 +24,7 @@ export const getAdditionFormStructure = (checkboxItems, locale) => {
         }
       ]
     }
-  ]);
+  ];
 };
 
 export const getRemovalFormStructure = () => {

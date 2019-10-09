@@ -119,7 +119,6 @@ export const getCategories = (
 };
 
 export const getCategoriesForPerustelut = (
-  index,
   article,
   koulutustyypit,
   kohde,
@@ -195,13 +194,6 @@ export const getCategoriesForPerustelut = (
               koulutus.osaamisalat
             );
             const isAddition = changeObj.properties.isChecked;
-
-            console.info(
-              "%c Handling changes",
-              "color:green;",
-              changeObj,
-              osaamisala
-            );
 
             const nimi = obj =>
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
