@@ -83,12 +83,6 @@ const JarjestamislupaAsiatList = ({ lupahistory }) => {
               <span className="pl-2">{LUPA_TEKSTIT.ASIAT.UUSI_HAKEMUS.FI}</span>
             </Button>
           </div>
-          <Button variant="contained" color="secondary">
-            {breakpointTabletMin && <Cancel />}
-            <span className="pl-2">
-              {LUPA_TEKSTIT.ASIAT.JARJESTAMISLUVAN_PERUUTUS.FI}
-            </span>
-          </Button>
         </div>
         <Paper className={classes.root}>
           <Media
