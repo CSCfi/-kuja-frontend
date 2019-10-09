@@ -279,7 +279,8 @@ export const getChangesToSave = (
           koodiarvo: "FI1"
         };
       } else if (
-        R.equals(getAnchorPart(changeObj.anchor, 1), "valintakentat")
+        R.equals(getAnchorPart(changeObj.anchor, 1), "valintakentat") ||
+        R.includes("lupaan-lisattavat", getAnchorPart(changeObj.anchor, 1))
       ) {
         return {
           koodiarvo: changeObj.properties.meta.koodiarvo,
