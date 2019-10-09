@@ -66,6 +66,12 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
       // Alanavigaation tabivalikon routet
       var tabNavRoutes = [];
 
+      const newApplicationRouteItem = {
+        path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
+        text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
+        authenticated: authenticated
+      };
+
       if (authenticated) {
         tabNavRoutes = [
           {
@@ -89,11 +95,6 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
           {
             path: `${match.url}/jarjestamislupa-asia`,
             text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
-            authenticated: authenticated
-          },
-          {
-            path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
-            text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
             authenticated: authenticated
           }
         ];
@@ -161,6 +162,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                     <JarjestamislupaAsiat
                       lupadata={lupadata}
                       lupahistory={lupahistory}
+                      newApplicationRouteItem={newApplicationRouteItem}
                     />
                   )}
                 />
