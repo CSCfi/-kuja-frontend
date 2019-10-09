@@ -190,6 +190,7 @@ export const getCategoriesForPerustelut = (
           const toStructure = changeObj => {
             const anchorWOLast = R.init(R.split(".")(anchor(changeObj)));
             const osaamisalakoodi = R.last(anchorWOLast);
+
             const osaamisala = R.find(
               i => i.koodiArvo === osaamisalakoodi,
               koulutus.osaamisalat
@@ -200,7 +201,13 @@ export const getCategoriesForPerustelut = (
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: getAnchorPart(changeObj.anchor, 2),
+              anchor: R.join(
+                ".",
+                [
+                  getAnchorPart(changeObj.anchor, 2),
+                  osaamisala ? osaamisala.koodiArvo : null
+                ].filter(Boolean)
+              ),
               meta: {
                 kohde,
                 maaraystyyppi,
