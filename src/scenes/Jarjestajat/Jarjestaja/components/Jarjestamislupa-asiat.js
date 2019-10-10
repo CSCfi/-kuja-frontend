@@ -2,11 +2,11 @@ import React from "react";
 import JarjestamislupaAsiatList from "./JarjestamislupaAsiatList";
 import { InnerContentContainer } from "../../../../modules/elements";
 
-const JarjestamislupaAsiat = ({ lupahistory, lupadata }) => {
+const JarjestamislupaAsiat = (props) => {
   return (
     <InnerContentContainer>
       <div className="m-8">
-        <JarjestamislupaAsiatList lupahistory={lupahistory} />
+        <JarjestamislupaAsiatList {...props} />
       </div>
     </InnerContentContainer>
   );
