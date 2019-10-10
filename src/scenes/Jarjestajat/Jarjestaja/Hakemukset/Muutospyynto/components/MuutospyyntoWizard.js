@@ -33,6 +33,8 @@ import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 
+import { setAttachmentUuids } from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
+
 const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -148,6 +150,43 @@ const MuutospyyntoWizard = props => {
           position: toast.POSITION.TOP_LEFT,
           type: toast.TYPE.SUCCESS
         });
+        console.log(changeObjects); // changes: taloudelliset, yhteenveto
+        console.log(muutoshakemus.save.data.data.liitteet); // liitteet
+
+        if (
+          changeObjects.taloudelliset &&
+          changeObjects.taloudelliset.liitteet
+        ) {
+          onSectionChangesUpdate(
+            "taloudelliset_liitteet",
+            setAttachmentUuids(
+              changeObjects.taloudelliset.liitteet,
+              muutoshakemus.save.data.data
+            )
+          );
+        }
+        if (changeObjects.yhteenveto) {
+          if (changeObjects.yhteenveto.hakemuksenliitteet) {
+            onSectionChangesUpdate(
+              "yhteenveto_hakemuksenliitteet",
+              setAttachmentUuids(
+                changeObjects.yhteenveto.hakemuksenliitteet,
+                muutoshakemus.save.data.data
+              )
+            );
+          }
+          if (changeObjects.yhteenveto.yleisettiedot) {
+            onSectionChangesUpdate(
+              "yhteenveto_yleisettiedot",
+              setAttachmentUuids(
+                changeObjects.yhteenveto.yleisettiedot,
+                muutoshakemus.save.data.data
+              )
+            );
+          }
+        }
+
+        console.log(changeObjects); // changes: taloudelliset, yhteenveto
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }

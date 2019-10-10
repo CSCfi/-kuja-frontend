@@ -380,7 +380,11 @@ export function setAttachmentUuids(changes, muutospyynto) {
     R.map(attachments => {
       return R.map(savedLiite => {
         return R.map(liite => {
-          if (savedLiite.tiedostoId === liite.tiedostoId) {
+          if (
+            !savedLiite.uuid &&
+            !savedLiite.removed &&
+            savedLiite.tiedostoId === liite.tiedostoId
+          ) {
             savedLiite.uuid = liite.uuid;
             return true;
           }
