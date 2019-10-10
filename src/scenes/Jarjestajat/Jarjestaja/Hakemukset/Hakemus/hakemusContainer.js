@@ -165,8 +165,6 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
-      console.log(muutospyynnot.muutospyynto);
-
       let taloudellisetChanges =
         R.path(
           ["meta", "taloudelliset", "changeObjects"],

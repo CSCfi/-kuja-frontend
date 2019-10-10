@@ -376,10 +376,11 @@ export function getKohdeByTunniste(tunniste, kohteet) {
 }
 
 export function setAttachmentUuids(changes, muutospyynto) {
-  if (changes && changes.length > 0) {
+  if (changes && changes.length > 0 && muutospyynto.liitteet) {
     R.map(attachments => {
       return R.map(savedLiite => {
         return R.map(liite => {
+          savedLiite.new = false;
           if (
             !savedLiite.uuid &&
             !savedLiite.removed &&
