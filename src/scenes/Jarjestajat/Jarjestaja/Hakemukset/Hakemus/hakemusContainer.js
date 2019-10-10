@@ -164,6 +164,27 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
+      console.log(muutospyynnot.muutospyynto);
+
+      let yhteenvetoChanges =
+        R.path(
+          ["meta", "yhteenveto", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
+
+      // Gets uuid:s from liitteet-structure coming from backend
+      if (yhteenvetoChanges && yhteenvetoChanges.length > 0) {
+        R.map(attachments => {
+          R.map(savedLiite => {
+            R.map(liite => {
+              if (savedLiite.tiedostoId === liite.tiedostoId) {
+                savedLiite.uuid = liite.uuid;
+              }
+            }, muutospyynnot.muutospyynto.liitteet);
+          }, attachments.properties.attachments);
+        }, yhteenvetoChanges);
+      }
+
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
@@ -190,10 +211,7 @@ const HakemusContainer = props => {
           ["meta", "taloudelliset", "changeObjects"],
           muutospyynnot.muutospyynto
         ) || [],
-        R.path(
-          ["meta", "yhteenveto", "changeObjects"],
-          muutospyynnot.muutospyynto
-        ) || []
+        yhteenvetoChanges
       ]).filter(Boolean);
 
       let changesBySection = {};

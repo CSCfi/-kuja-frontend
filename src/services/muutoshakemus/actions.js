@@ -8,6 +8,7 @@ import {
   SAVE_MUUTOSPYYNTO_FAILURE,
   SET_SECTION_DATA
 } from "./actionTypes";
+import * as R from "ramda";
 
 export const setBackendChanges = changes => {
   return dispatch => {
