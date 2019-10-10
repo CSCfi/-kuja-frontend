@@ -59,7 +59,6 @@ const PerustelutTutkinnot = React.memo(
           const areaChanges = R.prop(areaCode, _changes);
           const categories = areaChanges
             ? getCategoriesForPerustelut(
-                i,
                 article,
                 koulutusala.koulutukset,
                 kohde,
@@ -114,6 +113,7 @@ const PerustelutTutkinnot = React.memo(
                 onChangesRemove={onChangesRemove}
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
+                showCategoryTitles={true}
                 title={stateItem.title}
               />
             ) : null;

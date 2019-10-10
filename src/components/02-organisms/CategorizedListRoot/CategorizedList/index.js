@@ -149,7 +149,9 @@ const CategorizedList = React.memo(props => {
         const { indentation, strategy, margins } = category.layout || {};
 
         const topMarginInteger =
-          margins && margins.top && categoryStyleMapping.margins[margins.top]
+          margins &&
+          margins.top &&
+          !R.isNil(categoryStyleMapping.margins[margins.top])
             ? categoryStyleMapping.margins[margins.top]
             : defaultCategoryStyles.margins.top;
 

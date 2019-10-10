@@ -8,7 +8,8 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 import {
   getVankilaopetusPerustelulomake,
-  getVaativaErityinenTukilomake
+  getVaativaErityinenTukilomake,
+  getOppisopimusPerusteluLomake
 } from "../../../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
@@ -58,8 +59,16 @@ const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
         lisays: getVaativaErityinenTukilomake(),
         poisto: defaultRemovalForm
       }
+    },
+    {
+      koodiarvot: [1],
+      lomakkeet: {
+        lisays: getOppisopimusPerusteluLomake(),
+        poisto: defaultRemovalForm
+      }
     }
   ];
+
   const obj = R.find(
     R.compose(
       R.includes(koodiArvoInteger),

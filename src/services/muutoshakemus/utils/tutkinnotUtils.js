@@ -1,6 +1,7 @@
 import { isInLupa, isAdded, isRemoved } from "../../../css/label";
 import * as R from "ramda";
 import _ from "lodash";
+import { getAnchorPart } from "../../../utils/common";
 
 const categories = {};
 
@@ -119,7 +120,6 @@ export const getCategories = (
 };
 
 export const getCategoriesForPerustelut = (
-  index,
   article,
   koulutustyypit,
   kohde,
@@ -190,24 +190,24 @@ export const getCategoriesForPerustelut = (
           const toStructure = changeObj => {
             const anchorWOLast = R.init(R.split(".")(anchor(changeObj)));
             const osaamisalakoodi = R.last(anchorWOLast);
+
             const osaamisala = R.find(
               i => i.koodiArvo === osaamisalakoodi,
               koulutus.osaamisalat
             );
             const isAddition = changeObj.properties.isChecked;
 
-            console.info(
-              "%c Handling changes",
-              "color:green;",
-              changeObj,
-              osaamisala
-            );
-
             const nimi = obj =>
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: R.join(".", anchorWOLast),
+              anchor: R.join(
+                ".",
+                [
+                  getAnchorPart(changeObj.anchor, 2),
+                  osaamisala ? osaamisala.koodiArvo : null
+                ].filter(Boolean)
+              ),
               meta: {
                 kohde,
                 maaraystyyppi,
