@@ -1,178 +1,108 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import FormSection from "../../../../../../../components/03-templates/FormSection";
-// import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import { isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-// import { parseLocalizedField } from "../../../../../../../modules/helpers";
 
 const defaultProps = {
-  changes: [],
+  changeObjects: {},
   kohde: {},
-  lupa: {}
+  lupa: {},
+  stateObjects: {}
 };
 
 const PerustelutToimintaalue = React.memo(
   ({
-    changes = defaultProps.changes,
-    handleChanges,
-    headingNumber,
-    intl,
-    kohde = defaultProps.kohde,
-    lupa = defaultProps.lupa,
-    title
+    changeObjects = defaultProps.changeObjects,
+    onStateUpdate,
+    onChangesUpdate,
+    sectionId,
+    stateObjects = defaultProps.stateObjects
   }) => {
-    const sectionId = "perusteluttoimintaalue";
-    const [categories, setCategories] = useState([]);
-    const [groupedChanges, setGroupedChanges] = useState({});
-
-    useEffect(() => {
-      const getCategories = muutokset => {
+    const getLomake = useMemo(() => {
+      return changeObj => {
         return {
-          additions: R.map(muutos => {
-            return {
-              anchor: muutos.koodiarvo,
-              components: [
-                {
-                  anchor: "label",
-                  name: "StatusTextRow",
-                  properties: {
-                    labelStyles: Object.assign({}, { custom: isAdded }),
-                    title: R.find(
-                      R.propEq("kieli", R.toUpper(intl.locale)),
-                      muutos.koodi.metadata
-                    ).nimi
-                  }
-                }
-              ],
-              categories: [
-                {
-                  anchor: "tekstikentta",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        placeholder: "Sana on vapaa..."
-                      }
-                    }
-                  ]
-                }
-              ]
-            };
-          }, muutokset.LISAYS),
-          removals: R.map(muutos => {
-            return {
-              anchor: muutos.koodiarvo,
-              components: [
-                {
-                  anchor: "label",
-                  name: "StatusTextRow",
-                  properties: {
-                    labelStyles: Object.assign({}, { custom: isRemoved }),
-                    title: R.find(
-                      R.propEq("kieli", R.toUpper(intl.locale)),
-                      muutos.koodi.metadata
-                    ).nimi
-                  }
-                }
-              ],
-              categories: [
-                {
-                  anchor: "tekstikentta",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        placeholder: "Sana on vapaa..."
-                      }
-                    }
-                  ]
-                }
-              ]
-            };
-          }, muutokset.POISTO)
+          anchor: R.join(".", R.tail(R.split(".", changeObj.anchor))),
+          components: [
+            {
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                placeholder: "Kirjoita perustelut tähän...",
+                title: changeObj.properties.title || R.path(["properties", "meta", "title"], changeObj)
+              }
+            }
+          ]
         };
       };
+    }, []);
 
-      const valtakunnallinenChange = !!R.find(
-        R.compose(
-          R.equals("valtakunnallinen"),
-          R.path(["properties", "name"])
-        )
-      )(changes);
+    const getCategories = useMemo(() => {
+      const lisaykset = R.filter(
+        R.pathEq(["properties", "isChecked"], true),
+        changeObjects.toimintaalue
+      );
+      const poistot = R.filter(
+        R.pathEq(["properties", "isChecked"], false),
+        changeObjects.toimintaalue
+      );
+      return () => {
+        return {
+          additions: R.map(changeObj => {
+            return getLomake(changeObj);
+          }, lisaykset),
+          removals: R.map(changeObj => {
+            return getLomake(changeObj);
+          }, poistot)
+        };
+      };
+    }, [changeObjects.toimintaalue, getLomake]);
 
-      if (!valtakunnallinenChange) {
-        // Let's form the change objects
-        const groupedMuutokset = R.groupBy(R.prop("tila"), changes);
-        const additions = R.map(muutos => {
-          return {
-            anchor: `additions.${muutos.koodiarvo}.label`,
-            properties: {
-              a: 1
-            }
-          };
-        }, groupedMuutokset.LISAYS);
-        const removals = R.map(muutos => {
-          return {
-            anchor: `removals.${muutos.koodiarvo}.label`,
-            properties: {
-              b: 1
-            }
-          };
-        }, groupedMuutokset.POISTO);
-        setGroupedChanges({ additions, removals });
-
-        // Let's create the categories
-        setCategories(getCategories(groupedMuutokset));
-      }
-    }, [changes, intl]);
+    useEffect(() => {
+      const categories = getCategories();
+      onStateUpdate({
+        categories
+      });
+    }, [getCategories, onStateUpdate]);
 
     return (
       <React.Fragment>
-        {R.compose(
-          R.not,
-          R.isEmpty
-        )(groupedChanges) ? (
-          <FormSection
-            id={sectionId}
-            sectionChanges={groupedChanges}
-            code={headingNumber}
-            title={title}
-            runOnChanges={handleChanges}
-            render={props => (
-              <React.Fragment>
-                <ExpandableRowRoot
-                  anchor="additions"
-                  key={`perustelut-toimintaalue-lisatyt`}
-                  categories={categories.additions}
-                  changes={props.sectionChanges.additions}
-                  disableReverting={true}
-                  hideAmountOfChanges={false}
-                  showCategoryTitles={true}
-                  isExpanded={true}
-                  sectionId={sectionId}
-                  title="Lisätyt"
-                  {...props}
-                />
-                <ExpandableRowRoot
-                  anchor="removals"
-                  key={`perustelut-toimintaalue-poistetut`}
-                  categories={categories.removals}
-                  changes={props.sectionChanges.removals}
-                  disableReverting={true}
-                  hideAmountOfChanges={false}
-                  showCategoryTitles={true}
-                  isExpanded={true}
-                  sectionId={sectionId}
-                  title="Poistetut"
-                  {...props}
-                />
-              </React.Fragment>
+        {R.path(["categories", "additions"], stateObjects.perustelut) &&
+        R.path(["categories", "additions"], stateObjects.perustelut).length ? (
+          <ExpandableRowRoot
+            anchor={`${sectionId}_additions`}
+            key={`perustelut-toimintaalue-lisattavat`}
+            categories={R.path(
+              ["categories", "additions"],
+              stateObjects.perustelut
             )}
+            changes={R.path(["perustelut", "additions"], changeObjects)}
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            isExpanded={true}
+            onUpdate={onChangesUpdate}
+            sectionId={sectionId}
+            showCategoryTitles={true}
+            title="Lupaan lisättävät"
+          />
+        ) : null}
+        {R.path(["categories", "removals"], stateObjects.perustelut) &&
+        R.path(["categories", "removals"], stateObjects.perustelut).length ? (
+          <ExpandableRowRoot
+            anchor={`${sectionId}_removals`}
+            key={`perustelut-toimintaalue-poistettavat`}
+            categories={R.path(
+              ["categories", "removals"],
+              stateObjects.perustelut
+            )}
+            changes={R.path(["perustelut", "removals"], changeObjects)}
+            disableReverting={true}
+            hideAmountOfChanges={false}
+            isExpanded={true}
+            onUpdate={onChangesUpdate}
+            sectionId={sectionId}
+            showCategoryTitles={true}
+            title="Luvasta poistettavat"
           />
         ) : null}
       </React.Fragment>
@@ -181,11 +111,14 @@ const PerustelutToimintaalue = React.memo(
 );
 
 PerustelutToimintaalue.propTypes = {
-  changes: PropTypes.array,
+  changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
-  lupa: PropTypes.object
+  lupa: PropTypes.object,
+  onChangesUpdate: PropTypes.func,
+  onStateUpdate: PropTypes.func,
+  statetObjects: PropTypes.object
 };
 
 export default injectIntl(PerustelutToimintaalue);

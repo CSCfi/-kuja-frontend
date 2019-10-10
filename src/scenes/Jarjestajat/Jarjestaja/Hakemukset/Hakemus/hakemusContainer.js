@@ -38,7 +38,8 @@ import { injectIntl } from "react-intl";
 import * as R from "ramda";
 import {
   getAnchorsStartingWith,
-  getAnchorPart
+  getAnchorPart,
+  replaceAnchorPartWith
 } from "../../../../../utils/common";
 
 const HakemusContainer = props => {
@@ -158,6 +159,25 @@ const HakemusContainer = props => {
         let changeObjects = R.flatten(
           R.map(R.path(["meta", "changeObjects"]))(result)
         ).filter(Boolean);
+        if (key === "toimintaalue") {
+          changeObjects = R.map(changeObj => {
+            const type = R.path(["properties", "meta", "type"], changeObj);
+            if (type === "addition") {
+              changeObj.anchor = replaceAnchorPartWith(
+                changeObj.anchor,
+                0,
+                `${getAnchorPart(changeObj.anchor, 0)}_additions`
+              );
+            } else if (type === "removal") {
+              changeObj.anchor = replaceAnchorPartWith(
+                changeObj.anchor,
+                0,
+                `${getAnchorPart(changeObj.anchor, 0)}_removals`
+              );
+            }
+            return changeObj;
+          }, changeObjects);
+        }
         if (categoryKey) {
           changeObjects = getAnchorsStartingWith(categoryKey, changeObjects);
         }

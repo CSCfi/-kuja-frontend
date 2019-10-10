@@ -38,6 +38,14 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   };
 };
 
+const getAnchorBase = (key, anchorInit) => {
+  let anchorBase = anchorInit;
+  if (key === "opiskelijavuodet") {
+    anchorBase = R.replace(".", "_", anchorInit);
+  }
+  return anchorBase;
+};
+
 export const getChangesToSave = (
   key,
   stateObject = {},
@@ -51,8 +59,7 @@ export const getChangesToSave = (
       R.split("."),
       R.prop("anchor")
     )(changeObj);
-    const anchorBase =
-      key === "opiskelijavuodet" ? R.replace(".", "_", anchorInit) : anchorInit;
+    const anchorBase = getAnchorBase(key, anchorInit);
     const backendMuutos = R.find(muutos => {
       return !!R.find(
         R.startsWith(anchorInit),
@@ -260,6 +267,13 @@ export const getChangesToSave = (
     }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "toimintaalue") {
     uudetMuutokset = R.map(changeObj => {
+      const perustelut = R.filter(
+        R.compose(
+          R.contains(changeObj.anchor),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
       if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
         const tilaVal = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
         const typeVal = changeObj.properties.isChecked ? "addition" : "removal";
@@ -267,7 +281,7 @@ export const getChangesToSave = (
           tila: tilaVal,
           type: typeVal,
           meta: {
-            changeObjects: [changeObj],
+            changeObjects: R.flatten([[changeObj], perustelut]),
             perusteluteksti: null
           },
           muutosperustelukoodiarvo: null,
@@ -289,7 +303,7 @@ export const getChangesToSave = (
           type: "addition",
           meta: {
             perusteluteksti: null,
-            changeObjects: [changeObj]
+            changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
           kohde: stateObject.kohde,
@@ -303,7 +317,7 @@ export const getChangesToSave = (
           type: "removal",
           meta: {
             perusteluteksti: null,
-            changeObjects: [changeObj]
+            changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
           kohde: stateObject.kohde,

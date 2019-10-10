@@ -79,6 +79,7 @@ export function createObjectToSave(
       }
     },
     muutokset: R.flatten([
+      // TUTKINNOT
       getChangesToSave(
         "tutkinnot",
         R.path(["tutkinnot"], muutoshakemus), // stateObject
@@ -98,6 +99,7 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
+      // KOULUTUKSET
       getChangesToSave(
         "koulutukset",
         R.path(["koulutukset"], muutoshakemus),
@@ -115,6 +117,7 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
+      // OPETUSKIELET
       getChangesOfOpetuskielet(
         R.path(["kielet", "opetuskielet"], muutoshakemus),
         R.flatten([
@@ -125,6 +128,7 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
+      // TUTKINTOKIELET
       getChangesToSave(
         "tutkintokielet",
         R.path(["kielet", "tutkintokielet"], muutoshakemus),
@@ -144,17 +148,40 @@ export function createObjectToSave(
         },
         R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
       ),
+      // TOIMINTA-ALUE
       getChangesToSave(
         "toimintaalue",
         R.path(["toimintaalue"], muutoshakemus),
         {
-          muutokset: R.path(["toimintaalue"], changeObjects) || [],
-          perustelut: R.path(["perustelut", "toimintaalue"], changeObjects) || []
+          muutokset: R.path(["toimintaalue"], changeObjects) || [],
+          perustelut: R.flatten([
+            R.map(changeObj => {
+              return {
+                ...changeObj,
+                anchor: R.replace(/_additions/, "", changeObj.anchor),
+                properties: {
+                  ...changeObj.properties,
+                  meta: { type: "addition" }
+                }
+              };
+            }, R.path(["perustelut", "toimintaalue", "additions"], changeObjects) || []),
+            R.map(changeObj => {
+              return {
+                ...changeObj,
+                anchor: R.replace(/_removals/, "", changeObj.anchor),
+                properties: {
+                  ...changeObj.properties,
+                  meta: { type: "removal" }
+                }
+              };
+            }, R.path(["perustelut", "toimintaalue", "removals"], changeObjects) || [])
+          ])
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(
           backendMuutokset
         )
       ),
+      // OPISKELIJAVUODET
       getChangesToSave(
         "opiskelijavuodet",
         {
@@ -175,6 +202,7 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
+      // MUUT
       getChangesToSave(
         "muut",
         R.path(["muut"], muutoshakemus),

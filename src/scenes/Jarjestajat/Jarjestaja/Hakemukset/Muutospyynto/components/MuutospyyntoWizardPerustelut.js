@@ -10,7 +10,7 @@ import { fetchMuutosperustelut } from "../../../../../../services/muutosperustel
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-// import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
+import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
 import { updateFormStructure } from "../../../../../../services/lomakkeet/actions";
 import {
   getAdditionFormStructure,
@@ -250,7 +250,40 @@ const MuutospyyntoWizardPerustelut = ({
             />
           ) : null}
 
-          {!!R.prop(["opiskelijavuodet"], changeObjects) && muutosperustelut.muutosperusteluList ? (
+          {!!R.prop(["toimintaalue"], changeObjects) ? (
+            <FormSection
+              code={3}
+              id="perustelut_toimintaalue"
+              muutoshakemus={muutoshakemus}
+              render={_props => (
+                <React.Fragment>
+                  {!!R.path(["toimintaalue"], changeObjects) ? (
+                    <PerustelutToimintaalue
+                      changeObjects={{
+                        toimintaalue: R.path(["toimintaalue"], changeObjects),
+                        perustelut: R.path(
+                          ["perustelut", "toimintaalue"],
+                          changeObjects
+                        )
+                      }}
+                      stateObjects={{
+                        perustelut: R.path(["perustelut", "toimintaalue"])(
+                          muutoshakemus
+                        )
+                      }}
+                      {..._props}
+                    />
+                  ) : null}
+                </React.Fragment>
+              )}
+              runOnStateUpdate={onStateUpdate}
+              runOnChanges={onChangesUpdate}
+              title={kohdetiedot[2].title}
+            />
+          ) : null}
+
+          {!!R.prop(["opiskelijavuodet"], changeObjects) &&
+          muutosperustelut.muutosperusteluList ? (
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
@@ -321,15 +354,6 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[4].title}
             />
           ) : null}
-
-          {/* {!!changeObjects.toimintaalue.length ? (
-            <PerustelutToimintaalue
-              changes={changeObjects.toimintaalue}
-              handleChanges={handleChanges}
-              headingNumber={3}
-              title={kohteet[2].title}
-            ></PerustelutToimintaalue>
-          ) : null} */}
         </div>
       ) : null}
     </React.Fragment>
