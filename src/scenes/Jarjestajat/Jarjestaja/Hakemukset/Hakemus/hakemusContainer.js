@@ -40,6 +40,7 @@ import {
   getAnchorsStartingWith,
   getAnchorPart
 } from "../../../../../utils/common";
+import { setAttachmentUuids } from "../../../../../services/muutospyynnot/muutospyyntoUtil";
 
 const HakemusContainer = props => {
   const [accessRight, setAccessRight] = useState(false);
@@ -166,24 +167,25 @@ const HakemusContainer = props => {
 
       console.log(muutospyynnot.muutospyynto);
 
+      let taloudellisetChanges =
+        R.path(
+          ["meta", "taloudelliset", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
       let yhteenvetoChanges =
         R.path(
           ["meta", "yhteenveto", "changeObjects"],
           muutospyynnot.muutospyynto
         ) || [];
-
-      // Gets uuid:s from liitteet-structure coming from backend
-      if (yhteenvetoChanges && yhteenvetoChanges.length > 0) {
-        R.map(attachments => {
-          R.map(savedLiite => {
-            R.map(liite => {
-              if (savedLiite.tiedostoId === liite.tiedostoId) {
-                savedLiite.uuid = liite.uuid;
-              }
-            }, muutospyynnot.muutospyynto.liitteet);
-          }, attachments.properties.attachments);
-        }, yhteenvetoChanges);
-      }
+      // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
+      taloudellisetChanges = setAttachmentUuids(
+        taloudellisetChanges,
+        muutospyynnot.muutospyynto
+      );
+      yhteenvetoChanges = setAttachmentUuids(
+        yhteenvetoChanges,
+        muutospyynnot.muutospyynto
+      );
 
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
@@ -207,10 +209,7 @@ const HakemusContainer = props => {
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
         getChangesOf("muut", backendMuutokset),
-        R.path(
-          ["meta", "taloudelliset", "changeObjects"],
-          muutospyynnot.muutospyynto
-        ) || [],
+        taloudellisetChanges,
         yhteenvetoChanges
       ]).filter(Boolean);
 

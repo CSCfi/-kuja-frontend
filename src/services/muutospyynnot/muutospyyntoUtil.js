@@ -5,6 +5,7 @@ import {
   MUUTOS_TYPES
 } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 import { KOHTEET } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
+import * as R from "ramda";
 
 export function formatMuutospyynto(muutospyynto) {
   const {
@@ -372,4 +373,20 @@ export function getKohdeByTunniste(tunniste, kohteet) {
       return kohde.tunniste.toLowerCase() === tunniste.toLowerCase();
     });
   }
+}
+
+export function setAttachmentUuids(changes, muutospyynto) {
+  if (changes && changes.length > 0) {
+    R.map(attachments => {
+      return R.map(savedLiite => {
+        return R.map(liite => {
+          if (savedLiite.tiedostoId === liite.tiedostoId) {
+            savedLiite.uuid = liite.uuid;
+            return true;
+          }
+        }, muutospyynto.liitteet);
+      }, attachments.properties.attachments);
+    }, changes);
+  }
+  return changes;
 }
