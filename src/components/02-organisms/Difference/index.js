@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import * as R from "ramda";
 
 const defaultValues = {
   applyForValue: 0,
@@ -20,6 +21,22 @@ const Difference = ({
 }) => {
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
+
+  const isRequired = payload.component.isRequired;
+  let isValid = true;
+  if(isRequired === true) {
+    if(initialValue > 0) {
+      //TODO: Is there an explicit way of knowing whether this component was added as new?
+      //Implied not new: initialValue already exists we do not force user to enter adjustment (existing behaviour)
+      isValid = value >= 0;
+    }
+    else {
+      //Implied new: Number must be entered when new
+      //We need this hack because the value is actually empty string when the field is empty
+      isValid = !(typeof value == 'string') && value >= 0;
+    }
+  }
+
 
   const handleChange = useCallback(
     (value, payload) => {
@@ -42,15 +59,21 @@ const Difference = ({
     setValue(applyForValue === initialValue ? "" : applyForValue);
   }, [applyForValue, initialValue]);
 
+  const containerClass = isValid ? "flex" : "flex bg-yellow-300";
+
+  const initialAreaTitle = titles[0];
+  const inputAreaTitle = isRequired ? titles[1]+'*' : titles[1];
+  const changeAreaTitle = titles[2];
+
   return (
     <React.Fragment>
-      <div className="flex">
+      <div className={containerClass}>
         <div className="flex-1 flex-col">
-          <Typography>{titles[0]}</Typography>
+          <Typography>{initialAreaTitle}</Typography>
           <div>{initialValue}</div>
         </div>
         <div className="flex-1 flex-col">
-          <Typography>{titles[1]}</Typography>
+          <Typography>{inputAreaTitle}</Typography>
           <div>
             <TextField
               type="number"
@@ -63,7 +86,7 @@ const Difference = ({
           </div>
         </div>
         <div className="flex-1 flex-col">
-          <Typography>{titles[2]}</Typography>
+          <Typography>{changeAreaTitle}</Typography>
           <div>{(value ? value : applyForValue) - initialValue}</div>
         </div>
       </div>
