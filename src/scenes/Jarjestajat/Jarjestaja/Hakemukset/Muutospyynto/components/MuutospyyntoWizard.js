@@ -110,7 +110,8 @@ const MuutospyyntoWizard = props => {
       valmentavatKoulutukset: {}
     },
     perustelut: {
-      tutkinnot: {}
+      tutkinnot: {},
+      liitteet: {}
     },
     yhteenveto: {
       yleisettiedot: [],
@@ -151,6 +152,17 @@ const MuutospyyntoWizard = props => {
           type: toast.TYPE.SUCCESS
         });
 
+        if (changeObjects.perustelut) {
+          if (changeObjects.perustelut.liitteet) {
+            onSectionChangesUpdate(
+              "perustelut_liitteeet",
+              setAttachmentUuids(
+                changeObjects.perustelut.liitteet,
+                muutoshakemus.save.data.data
+              )
+            );
+          }
+        }
         if (
           changeObjects.taloudelliset &&
           changeObjects.taloudelliset.liitteet
@@ -226,9 +238,9 @@ const MuutospyyntoWizard = props => {
       R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
     ).concat(
       (R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []).concat(
-        (
-          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || []
-        ).concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
+        (R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [])
+          .concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
+          .concat(R.path(["perustelut", "liitteet"], changeObjects) || [])
       )
     );
     // Returns only binary files

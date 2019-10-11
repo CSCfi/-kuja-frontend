@@ -24,8 +24,14 @@ export function createObjectToSave(
     ["taloudelliset", "liitteet"],
     changeObjects
   );
+  const perustelutLiitteet = R.path(["perustelut", "liitteet"], changeObjects);
 
   //get actual attachment props
+  const perustelutLiitteetList =
+    perustelutLiitteet && perustelutLiitteet[0].properties
+      ? perustelutLiitteet[0].properties.attachments
+      : [];
+
   const taloudellisetLiitteetList =
     taloudellisetLiitteet && taloudellisetLiitteet[0].properties
       ? taloudellisetLiitteet[0].properties.attachments
@@ -41,8 +47,34 @@ export function createObjectToSave(
       ? yhteenvetoLiitteet[0].properties.attachments
       : [];
 
-  const allAttachments = taloudellisetLiitteetList.concat(
-    yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
+  const allAttachments = perustelutLiitteetList.concat(
+    taloudellisetLiitteetList.concat(
+      yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
+    )
+  );
+
+  console.log(muutoshakemus);
+  console.log(changeObjects);
+  console.log(R.path(["perustelut"], changeObjects));
+
+  console.log(
+    getChangesToSave(
+      "koulutukset",
+      R.path(["koulutukset"], muutoshakemus),
+      {
+        muutokset: R.compose(
+          R.flatten,
+          R.values
+        )(R.values(R.path(["koulutukset"], changeObjects))),
+        perustelut: R.compose(
+          R.flatten,
+          R.values
+        )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))
+      },
+      R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
+        backendMuutokset
+      )
+    )
   );
 
   return {
@@ -61,8 +93,6 @@ export function createObjectToSave(
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
-      meta: {},
-      liitteet: [],
       taloudelliset: {
         changeObjects: R.flatten([
           R.path(["taloudelliset", "investoinnit"], changeObjects),
@@ -117,6 +147,13 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
+      // // LIITTEET
+      // getChangesToSave(
+      //   "liitteet",
+      //   R.path(["perustelut"], muutoshakemus),
+      //   R.path(["perustelut"], changeObjects),
+      //   R.filter(R.pathEq(["perustelut"], "liitteet"))(backendMuutokset)
+      // ),
       // OPETUSKIELET
       getChangesOfOpetuskielet(
         R.path(["kielet", "opetuskielet"], muutoshakemus),
