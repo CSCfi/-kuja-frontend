@@ -117,6 +117,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
+            isRequired: true,
             properties: {
               initialValue: initialValue,
               applyForValue: applyFor,
@@ -133,6 +134,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
+            isRequired: true,
             properties: {
               initialValue: initialValueVaativa,
               applyForValue: applyForVaativa,
@@ -149,6 +151,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
+            isRequired: true,
             properties: {
               initialValue: initialValueSisaoppilaitos,
               applyForValue: applyForSisaoppilaitos,
@@ -227,7 +230,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
             }, sisaoppilaitosState.categories[0].categories).filter(Boolean)
           );
         }
-        
+
         /**
          * Mikäli muutos löytyy ja sisäoppilaitosta koskeva kohta osiossa 5 on valittu, tulee sisäoppilaitosta
          * koskeva tietue näyttää osiossa 4.
