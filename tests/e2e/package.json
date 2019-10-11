@@ -6,6 +6,8 @@
     "test": "gauge run specs/"
   },
   "dependencies": {
+    "chai": "^4.2.0",
+    "ramda": "^0.26.1",
     "taiko": "latest"
   }
 }
