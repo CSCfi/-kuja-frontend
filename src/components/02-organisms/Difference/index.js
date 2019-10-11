@@ -39,15 +39,16 @@ const Difference = ({
 
 
   const handleChange = useCallback(
-    (value, payload) => {
-      setValue(isNaN(value) ? "" : value);
+    (actionResults, payload) => {
+      setValue(isNaN(actionResults.value) ? "" : actionResults.value);
       if (timeoutHandle) {
         clearTimeout(timeoutHandle);
       }
       setTimeoutHandle(
         setTimeout(() => {
           onChanges(payload, {
-            applyForValue: isNaN(value) ? initialValue : value
+            applyForValue: isNaN(actionResults.value) ? initialValue : actionResults.value,
+            isValid: actionResults.isValid
           });
         }, delay)
       );
@@ -79,7 +80,7 @@ const Difference = ({
               type="number"
               inputProps={{ min: "0" }}
               onChange={e =>
-                handleChange(parseInt(e.target.value, 10), payload)
+                handleChange({value: parseInt(e.target.value, 10), isValid}, payload)
               }
               value={value}
             />
