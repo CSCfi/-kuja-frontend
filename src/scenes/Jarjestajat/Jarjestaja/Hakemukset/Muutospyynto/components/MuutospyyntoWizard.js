@@ -183,8 +183,6 @@ const MuutospyyntoWizard = props => {
             );
           }
         }
-
-        console.log(changeObjects); // changes: taloudelliset, yhteenveto
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
