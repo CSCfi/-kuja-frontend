@@ -9,9 +9,11 @@ const NumberOfChanges = props => {
   return (
     <React.Fragment>
       {props.changes && props.changes.length ? (
-        <div>
+        <div id={props.id}>
           <span className="pr-1">Muutokset:</span>
-          <span color={COLORS.OIVA_PURPLE}>{props.changes.length}</span>
+          <span id={`${props.id}.number-of-changes`} color={COLORS.OIVA_PURPLE}>
+            {props.changes.length}
+          </span>
         </div>
       ) : null}
     </React.Fragment>
@@ -26,7 +28,8 @@ NumberOfChanges.propTypes = {
   /**
    * Array of any sort of values.
    */
-  changes: PropTypes.array.isRequired
+  changes: PropTypes.array.isRequired,
+  id: PropTypes.string
 };
 
 export default NumberOfChanges;
