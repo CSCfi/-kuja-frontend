@@ -150,8 +150,6 @@ const MuutospyyntoWizard = props => {
           position: toast.POSITION.TOP_LEFT,
           type: toast.TYPE.SUCCESS
         });
-        console.log(changeObjects); // changes: taloudelliset, yhteenveto
-        console.log(muutoshakemus.save.data.data.liitteet); // liitteet
 
         if (
           changeObjects.taloudelliset &&
