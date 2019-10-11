@@ -375,23 +375,25 @@ export function getKohdeByTunniste(tunniste, kohteet) {
   }
 }
 
-export function setAttachmentUuids(changes, muutospyynto) {
-  if (changes && changes.length > 0 && muutospyynto.liitteet) {
-    R.map(attachments => {
-      return R.map(savedLiite => {
-        return R.map(liite => {
-          savedLiite.new = false;
-          if (
-            !savedLiite.uuid &&
-            !savedLiite.removed &&
-            savedLiite.tiedostoId === liite.tiedostoId
-          ) {
-            savedLiite.uuid = liite.uuid;
-            return true;
-          }
-        }, muutospyynto.liitteet);
-      }, attachments.properties.attachments);
-    }, changes);
-  }
-  return changes;
+export function setAttachmentUuids(
+  changeObjects = [],
+  muutospyynto = { liitteet: [] }
+) {
+  return R.map(changeObj => {
+    return R.assocPath(
+      ["properties", "attachments"],
+      R.map(attachment => {
+        const attachmentWithUuid = R.find(
+          R.propEq("tiedostoId", attachment.tiedostoId),
+          muutospyynto.liitteet
+        );
+        return {
+          ...attachment,
+          uuid: attachmentWithUuid ? attachmentWithUuid.uuid : null,
+          new: false
+        };
+      }, changeObj.properties.attachments),
+      changeObj
+    );
+  }, changeObjects);
 }

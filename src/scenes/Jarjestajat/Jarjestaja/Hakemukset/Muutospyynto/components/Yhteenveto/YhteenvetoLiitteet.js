@@ -46,11 +46,6 @@ const YhteenvetoLiitteet = React.memo(props => {
     );
   }, [getCategories, onStateUpdate, sectionId]);
 
-  useEffect(() => {
-    console.log(sectionId);
-    console.log(props.changeObjects);
-  }, [props.changeObjects]);
-
   return (
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (

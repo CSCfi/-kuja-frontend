@@ -56,14 +56,10 @@ const Error = styled.div`
   margin-bottom: 8px;
   min-height: 20px;
 `;
-// const Message = styled.div`
-//   color: ${COLORS.OIVA_GREEN};
-//   margin-bottom: 8px;
-// `
 const Checkbox = styled.div`
   width: 20px;
   position: relative;
-  margin: 12px 10px 0 10px;
+  margin: 0.6em 0.3em 0 0.9em;
 
   label {
     width: 1.3em;

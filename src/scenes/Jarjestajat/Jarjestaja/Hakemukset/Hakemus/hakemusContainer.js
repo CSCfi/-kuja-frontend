@@ -185,6 +185,9 @@ const HakemusContainer = props => {
         muutospyynnot.muutospyynto
       );
 
+      console.log(taloudellisetChanges);
+      console.log(yhteenvetoChanges);
+
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
