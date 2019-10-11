@@ -19,10 +19,13 @@ import {
 import { getRemovalFormStructure } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import PerustelutOpiskelijavuodet from "./Perustelut/PerustelutOpiskelijavuodet";
+import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
+import wizard from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardPerustelut = ({
   changeObjects,
   intl,
+  intl: { formatMessage },
   kielet,
   kohteet = [],
   koulutukset,
@@ -44,7 +47,6 @@ const MuutospyyntoWizardPerustelut = ({
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
     LomakkeetContext
   );
-
   useEffect(() => {
     fetchMuutosperustelut()(muutosperustelutDispatch);
   }, [muutosperustelutDispatch]);
@@ -102,8 +104,14 @@ const MuutospyyntoWizardPerustelut = ({
 
   return (
     <React.Fragment>
+      <h2 className="my-6">{formatMessage(wizard.pageTitle_2)}</h2>
+
+      {(!muutosperustelut.muutosperusteluList || !changeObjects) && (
+        <p>{formatMessage(wizard.noChanges)}</p>
+      )}
+
       {muutoshakemus && koulutustyypit && kohdetiedot ? (
-        <div>
+        <React.Fragment>
           {muutosperustelut.muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
@@ -354,7 +362,34 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[4].title}
             />
           ) : null}
-        </div>
+          {muutosperustelut.muutosperusteluList &&
+            (!!R.path(["tutkinnot"], changeObjects) ||
+              !!R.path(["koulutukset"], changeObjects)) && (
+              <FormSection
+                id="yhteenveto_hakemuksenliitteet"
+                className="my-0"
+                render={_props => (
+                  <React.Fragment>
+                    <YhteenvetoLiitteet
+                      stateObject={R.path(
+                        ["yhteenveto", "hakemuksenliitteet"],
+                        muutoshakemus
+                      )}
+                      changeObjects={{
+                        yhteenveto: R.path(
+                          ["yhteenveto", "hakemuksenliitteet"],
+                          changeObjects
+                        )
+                      }}
+                      {..._props}
+                    />
+                  </React.Fragment>
+                )}
+                runOnStateUpdate={onStateUpdate}
+                runOnChanges={onChangesUpdate}
+              />
+            )}
+        </React.Fragment>
       ) : null}
     </React.Fragment>
   );

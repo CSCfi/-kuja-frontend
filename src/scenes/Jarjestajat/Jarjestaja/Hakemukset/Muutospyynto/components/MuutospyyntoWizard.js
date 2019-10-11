@@ -356,6 +356,7 @@ const MuutospyyntoWizard = props => {
             <Stepper
               activeStep={page - 1}
               orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}
+              style={{ backgroundColor: "transparent" }}
             >
               {steps.map(label => {
                 const stepProps = {};
