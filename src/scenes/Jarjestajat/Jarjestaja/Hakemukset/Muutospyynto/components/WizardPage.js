@@ -7,7 +7,7 @@ const WizardPage = props => {
   const { onSave } = props;
 
   const save = () => {
-    setIsSavingEnabled(false);
+    // setIsSavingEnabled(false); // todo: fix by enabling again when changes
     onSave();
   };
 

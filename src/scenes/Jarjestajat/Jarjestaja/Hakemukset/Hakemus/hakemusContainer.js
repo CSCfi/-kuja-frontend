@@ -41,6 +41,7 @@ import {
   getAnchorPart,
   replaceAnchorPartWith
 } from "../../../../../utils/common";
+import { setAttachmentUuids } from "../../../../../services/muutospyynnot/muutospyyntoUtil";
 
 const HakemusContainer = props => {
   const [accessRight, setAccessRight] = useState(false);
@@ -184,6 +185,26 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
+      let taloudellisetChanges =
+        R.path(
+          ["meta", "taloudelliset", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
+      let yhteenvetoChanges =
+        R.path(
+          ["meta", "yhteenveto", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
+      // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
+      taloudellisetChanges = setAttachmentUuids(
+        taloudellisetChanges,
+        muutospyynnot.muutospyynto
+      );
+      yhteenvetoChanges = setAttachmentUuids(
+        yhteenvetoChanges,
+        muutospyynnot.muutospyynto
+      );
+
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
@@ -206,14 +227,8 @@ const HakemusContainer = props => {
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
         getChangesOf("muut", backendMuutokset),
-        R.path(
-          ["meta", "taloudelliset", "changeObjects"],
-          muutospyynnot.muutospyynto
-        ) || [],
-        R.path(
-          ["meta", "yhteenveto", "changeObjects"],
-          muutospyynnot.muutospyynto
-        ) || []
+        taloudellisetChanges,
+        yhteenvetoChanges
       ]).filter(Boolean);
 
       let changesBySection = {};

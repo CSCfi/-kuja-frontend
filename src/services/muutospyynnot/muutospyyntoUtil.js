@@ -5,6 +5,7 @@ import {
   MUUTOS_TYPES
 } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 import { KOHTEET } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
+import * as R from "ramda";
 
 export function formatMuutospyynto(muutospyynto) {
   const {
@@ -73,6 +74,7 @@ export function createAttachmentArray(muutokset) {
       item.liitteet.map(liite => {
         let tulosliite = {};
         tulosliite.tiedostoId = liite.tiedostoId;
+        tulosliite.uuid = liite.uuid;
         tulosliite.tyyppi = liite.tyyppi;
         tulosliite.nimi = liite.nimi;
         tulosliite.salainen = liite.salainen;
@@ -371,4 +373,27 @@ export function getKohdeByTunniste(tunniste, kohteet) {
       return kohde.tunniste.toLowerCase() === tunniste.toLowerCase();
     });
   }
+}
+
+export function setAttachmentUuids(
+  changeObjects = [],
+  muutospyynto = { liitteet: [] }
+) {
+  return R.map(changeObj => {
+    return R.assocPath(
+      ["properties", "attachments"],
+      R.map(attachment => {
+        const attachmentWithUuid = R.find(
+          R.propEq("tiedostoId", attachment.tiedostoId),
+          muutospyynto.liitteet
+        );
+        return {
+          ...attachment,
+          uuid: attachmentWithUuid ? attachmentWithUuid.uuid : null,
+          new: false
+        };
+      }, changeObj.properties.attachments),
+      changeObj
+    );
+  }, changeObjects);
 }
