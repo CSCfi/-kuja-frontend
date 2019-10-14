@@ -10,6 +10,8 @@ const defaultValues = {
   titles: ["[Title 1]", "[Title 2]", "[Title 3]"]
 };
 
+const emptySelectionPlaceholderValue = "";
+
 const Difference = ({
   applyForValue = defaultValues.applyForValue,
   delay = defaultValues.delay,
@@ -21,16 +23,27 @@ const Difference = ({
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
 
+  const isRequired = payload.component.properties.isRequired;
+  let isValid = true;
+  if(isRequired === true) {
+      isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
+  }
+  if(value < 0) {
+    isValid = false;
+  }
+
+
   const handleChange = useCallback(
-    (value, payload) => {
-      setValue(isNaN(value) ? "" : value);
+    (actionResults, payload) => {
+      setValue(isNaN(actionResults.value) ? emptySelectionPlaceholderValue : actionResults.value);
       if (timeoutHandle) {
         clearTimeout(timeoutHandle);
       }
       setTimeoutHandle(
         setTimeout(() => {
           onChanges(payload, {
-            applyForValue: isNaN(value) ? initialValue : value
+            applyForValue: isNaN(actionResults.value) ? initialValue : actionResults.value,
+            isValid: actionResults.isValid
           });
         }, delay)
       );
@@ -39,31 +52,37 @@ const Difference = ({
   );
 
   useEffect(() => {
-    setValue(applyForValue === initialValue ? "" : applyForValue);
+    setValue(applyForValue === initialValue ? emptySelectionPlaceholderValue : applyForValue);
   }, [applyForValue, initialValue]);
+
+  const containerClass = isValid ? "flex" : "flex bg-yellow-300";
+
+  const initialAreaTitle = titles[0];
+  const inputAreaTitle = isRequired ? titles[1]+'*' : titles[1];
+  const changeAreaTitle = titles[2];
 
   return (
     <React.Fragment>
-      <div className="flex">
+      <div className={containerClass}>
         <div className="flex-1 flex-col">
-          <Typography>{titles[0]}</Typography>
+          <Typography>{initialAreaTitle}</Typography>
           <div>{initialValue}</div>
         </div>
         <div className="flex-1 flex-col">
-          <Typography>{titles[1]}</Typography>
+          <Typography>{inputAreaTitle}</Typography>
           <div>
             <TextField
               type="number"
               inputProps={{ min: "0" }}
               onChange={e =>
-                handleChange(parseInt(e.target.value, 10), payload)
+                handleChange({value: parseInt(e.target.value, 10), isValid}, payload)
               }
               value={value}
             />
           </div>
         </div>
         <div className="flex-1 flex-col">
-          <Typography>{titles[2]}</Typography>
+          <Typography>{changeAreaTitle}</Typography>
           <div>{(value ? value : applyForValue) - initialValue}</div>
         </div>
       </div>
