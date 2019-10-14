@@ -10,6 +10,8 @@ const defaultValues = {
   titles: ["[Title 1]", "[Title 2]", "[Title 3]"]
 };
 
+const emptySelectionPlaceholderValue = "";
+
 const Difference = ({
   applyForValue = defaultValues.applyForValue,
   delay = defaultValues.delay,
@@ -24,22 +26,16 @@ const Difference = ({
   const isRequired = payload.component.properties.isRequired;
   let isValid = true;
   if(isRequired === true) {
-    if(initialValue > 0) {
-      //TODO: Is there an explicit way of knowing whether this component was added as new?
-      //Implied not new: initialValue already exists we do not force user to enter adjustment (existing behaviour)
-      isValid = value >= 0;
-    }
-    else {
-      //Implied new: Number must be entered when new
-      //We need this hack because the value is actually empty string when the field is empty
-      isValid = !(typeof value == 'string') && value >= 0;
-    }
+      isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
+  }
+  if(value < 0) {
+    isValid = false;
   }
 
 
   const handleChange = useCallback(
     (actionResults, payload) => {
-      setValue(isNaN(actionResults.value) ? "" : actionResults.value);
+      setValue(isNaN(actionResults.value) ? emptySelectionPlaceholderValue : actionResults.value);
       if (timeoutHandle) {
         clearTimeout(timeoutHandle);
       }
@@ -56,7 +52,7 @@ const Difference = ({
   );
 
   useEffect(() => {
-    setValue(applyForValue === initialValue ? "" : applyForValue);
+    setValue(applyForValue === initialValue ? emptySelectionPlaceholderValue : applyForValue);
   }, [applyForValue, initialValue]);
 
   const containerClass = isValid ? "flex" : "flex bg-yellow-300";
