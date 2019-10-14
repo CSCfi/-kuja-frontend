@@ -6,7 +6,7 @@
  * 3) Määritetään styled-components komponentteja, joita voidaan käyttää applikaatiossa
  */
 
-import styled, { injectGlobal } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 import background from "static/images/palikat.png";
 import leijona from "static/images/OKM_FiSve_LM_RGB_logot.png";
@@ -69,7 +69,7 @@ export const TRANSITIONS = {
 };
 
 // Globaalit tyylit
-injectGlobal`
+createGlobalStyle`
   body {
     margin: 0;
     font-family: ${FONT_STACK.GOTHAM_NARROW};
