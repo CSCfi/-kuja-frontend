@@ -9,7 +9,7 @@ export const CategorizedListTextBox = ({
   propsObj,
   payload,
   onChanges,
-  idSuffix
+  id
 }) => {
   const [value, setValue] = useState();
   let isDisabled = false;
@@ -36,7 +36,7 @@ export const CategorizedListTextBox = ({
   return (
     <div className={`w-full ${payload.component.styleClasses}`}>
       <TextBox
-        id={`textbox-${idSuffix}`}
+        id={id}
         isDisabled={isDisabled}
         isHidden={isDisabled}
         onChanges={onChanges}

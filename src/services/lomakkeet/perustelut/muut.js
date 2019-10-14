@@ -1,6 +1,6 @@
 import { getMuutostarveCheckboxes } from "./common";
 
-export const getVankilaopetusPerustelulomake = () => {
+export const getVankilaopetusPerustelulomake = isReadOnly => {
   const code = 4;
 
   return [
@@ -30,6 +30,7 @@ export const getVankilaopetusPerustelulomake = () => {
               components: [
                 {
                   anchor: "A",
+                  isReadOnly,
                   name: "TextBox",
                   properties: {
                     placeholder:
@@ -59,6 +60,7 @@ export const getVankilaopetusPerustelulomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
                     title: "Henkilöstöresurssit"
@@ -74,6 +76,7 @@ export const getVankilaopetusPerustelulomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
                     title: "Osaaminen"
@@ -89,6 +92,7 @@ export const getVankilaopetusPerustelulomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
                     title: "Pedagogiset järjestelyt"
@@ -104,6 +108,7 @@ export const getVankilaopetusPerustelulomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
                     title: "Sidosryhmäyhteistyö"
@@ -128,6 +133,7 @@ export const getVankilaopetusPerustelulomake = () => {
                   name: "Autocomplete",
                   styleClasses: ["pb-4 text-base"],
                   properties: {
+                    isReadOnly,
                     title:
                       "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta."
                   }
@@ -136,7 +142,7 @@ export const getVankilaopetusPerustelulomake = () => {
             }
           ]
         },
-        opiskelijavuodet(4, 4)
+        opiskelijavuodet(4, 4, isReadOnly)
       ]
     }
   ];
@@ -355,7 +361,7 @@ export const getTyovoimakoulutuslomake = () => {
   ];
 };
 
-export const getVaativaErityinenTukilomake = () => {
+export const getVaativaErityinenTukilomake = isReadOnly => {
   const code = "TODO-WHAT-IS-THE-CODE";
   return [
     {
@@ -381,6 +387,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
                   }
@@ -403,6 +410,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
                     title: "Henkilöstöresurssit"
@@ -418,6 +426,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
                     title: "Osaaminen"
@@ -433,6 +442,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
                     title: "Pedagogiset järjestelyt"
@@ -448,6 +458,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
                     title: "Sidosryhmäyhteistyö"
@@ -471,6 +482,7 @@ export const getVaativaErityinenTukilomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta)."
                   }
@@ -479,13 +491,13 @@ export const getVaativaErityinenTukilomake = () => {
             }
           ]
         },
-        opiskelijavuodet(4, 4)
+        opiskelijavuodet(4, 4, isReadOnly)
       ]
     }
   ];
 };
 
-export const getOppisopimusPerusteluLomake = () => {
+export const getOppisopimusPerusteluLomake = isReadOnly => {
   const code = 4;
   return [
     {
@@ -502,6 +514,7 @@ export const getOppisopimusPerusteluLomake = () => {
               anchor: "A",
               name: "TextBox",
               properties: {
+                isReadOnly,
                 placeholder:
                   "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
               }
@@ -522,6 +535,7 @@ export const getOppisopimusPerusteluLomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
                     title: "Henkilöstöresurssit"
@@ -537,6 +551,7 @@ export const getOppisopimusPerusteluLomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
                     title: "Osaaminen"
@@ -552,6 +567,7 @@ export const getOppisopimusPerusteluLomake = () => {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
                     title: "Sidosryhmäyhteistyö"
@@ -561,7 +577,7 @@ export const getOppisopimusPerusteluLomake = () => {
             }
           ]
         },
-        opiskelijavuodet(3, 3)
+        opiskelijavuodet(3, 3, isReadOnly)
       ]
     }
   ];
@@ -631,7 +647,7 @@ export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (
   ];
 };
 
-const opiskelijavuodet = (code, anchorNumber) => {
+const opiskelijavuodet = (code, anchorNumber, isReadOnly) => {
   const year = new Date().getFullYear();
   return {
     anchor: `${code}-${anchorNumber}`,
@@ -647,6 +663,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
             name: "StatusTextRow",
             styleClasses: ["font-semibold"],
             properties: {
+              isReadOnly,
               labelStyles: {},
               title:
                 "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina."
@@ -666,6 +683,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 name: "Input",
                 styleClasses: ["mr-8"],
                 properties: {
+                  isReadOnly,
                   withoutMargin: true,
                   label: (year + 1).toString(),
                   type: "number",
@@ -677,6 +695,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 name: "Input",
                 styleClasses: ["mr-8"],
                 properties: {
+                  isReadOnly,
                   withoutMargin: true,
                   label: (year + 2).toString(),
                   type: "number",
@@ -687,6 +706,7 @@ const opiskelijavuodet = (code, anchorNumber) => {
                 anchor: "C",
                 name: "Input",
                 properties: {
+                  isReadOnly,
                   withoutMargin: true,
                   label: (year + 3).toString(),
                   type: "number",

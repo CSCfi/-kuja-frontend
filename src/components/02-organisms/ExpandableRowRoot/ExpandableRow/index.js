@@ -54,21 +54,24 @@ const ExpansionPanelDetails = withStyles(theme => ({
  * The row can be expanded and shrinked. The div marked with data-slot="content" attribute is visible when the row is expanded.
  */
 const ExpandableRow = props => {
-
   return (
-    <div>
-      <ExpansionPanel defaultExpanded={props.shouldBeExpanded} onChange={props.onToggle}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <div className="flex-1">
-            <Slot slot="title">{props.children}</Slot>
-          </div>
-          <Slot slot="info">{props.children}</Slot>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Slot slot="content">{props.children}</Slot>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-    </div>
+    <ExpansionPanel
+      defaultExpanded={props.shouldBeExpanded}
+      onChange={props.onToggle}
+    >
+      <ExpansionPanelSummary
+        expandIcon={<ExpandMoreIcon />}
+        id={`${props.id}-summary`}
+      >
+        <div className="flex-1">
+          <Slot slot="title">{props.children}</Slot>
+        </div>
+        <Slot slot="info">{props.children}</Slot>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        <Slot slot="content">{props.children}</Slot>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
   );
 };
 
@@ -77,6 +80,7 @@ ExpandableRow.defaultProps = {
 };
 
 ExpandableRow.propTypes = {
+  id: PropTypes.string,
   onToggle: PropTypes.func,
   /**
    * Shrinking and expanding works via this property.

@@ -60,7 +60,7 @@ const ExpandableRowRoot = React.memo(
     return (
       <React.Fragment>
         {categories && (
-          <ExpandableRow shouldBeExpanded={isExpanded} onToggle={onToggle}>
+          <ExpandableRow shouldBeExpanded={isExpanded} onToggle={onToggle} id={anchor}>
             <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
@@ -69,7 +69,7 @@ const ExpandableRowRoot = React.memo(
               {changes.length > 0 && (
                 <div className="flex items-center">
                   {!hideAmountOfChanges && (
-                    <NumberOfChanges changes={changes} />
+                    <NumberOfChanges changes={changes} id={anchor} />
                   )}
                   {!disableReverting && (
                     <span className="mx-6">

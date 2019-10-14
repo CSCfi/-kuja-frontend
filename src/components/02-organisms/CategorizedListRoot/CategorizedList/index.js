@@ -396,6 +396,7 @@ const CategorizedList = React.memo(props => {
                         }}
                         _props={props}
                         onChanges={handleChanges}
+                        id={anchor}
                         idSuffix
                         propsObj={propsObj}
                         parentChangeObj={parentChangeObj}
