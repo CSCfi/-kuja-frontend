@@ -117,7 +117,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
-            isRequired: true,
             properties: {
               initialValue: initialValue,
               applyForValue: applyFor,
@@ -134,8 +133,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
-            isRequired: true,
             properties: {
+              isRequired: true,
               initialValue: initialValueVaativa,
               applyForValue: applyForVaativa,
               name: `${props.sectionId}-difference-2`,
@@ -151,8 +150,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           {
             anchor: "A",
             name: "Difference",
-            isRequired: true,
             properties: {
+              isRequired: true,
               initialValue: initialValueSisaoppilaitos,
               applyForValue: applyForSisaoppilaitos,
               name: `${props.sectionId}-difference-3`,
