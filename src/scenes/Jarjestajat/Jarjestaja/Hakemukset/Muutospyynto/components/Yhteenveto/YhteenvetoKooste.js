@@ -10,7 +10,7 @@ import { fetchMuutosperustelut } from "../../../../../../../services/muutosperus
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
-// import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
+import PerustelutToimintaalue from "../Perustelut/PerustelutToimintaalue";
 import { updateFormStructure } from "../../../../../../../services/lomakkeet/actions";
 import {
   getAdditionFormStructure,
@@ -252,6 +252,39 @@ const YhteenvetoKooste = ({
               runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[1].title}
+            />
+          ) : null}
+
+          {!!R.prop(["toimintaalue"], changeObjects) ? (
+            <FormSection
+              code={3}
+              id="perustelut_toimintaalue"
+              muutoshakemus={muutoshakemus}
+              render={_props => (
+                <React.Fragment>
+                  {!!R.path(["toimintaalue"], changeObjects) ? (
+                    <PerustelutToimintaalue
+                      changeObjects={{
+                        toimintaalue: R.path(["toimintaalue"], changeObjects),
+                        perustelut: R.path(
+                          ["perustelut", "toimintaalue"],
+                          changeObjects
+                        )
+                      }}
+                      stateObjects={{
+                        perustelut: R.path(["perustelut", "toimintaalue"])(
+                          muutoshakemus
+                        )
+                      }}
+                      isReadOnly={true}
+                      {..._props}
+                    />
+                  ) : null}
+                </React.Fragment>
+              )}
+              runOnStateUpdate={onStateUpdate}
+              runOnChanges={onChangesUpdate}
+              title={kohdetiedot[2].title}
             />
           ) : null}
 
