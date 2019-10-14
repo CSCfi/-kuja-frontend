@@ -40,7 +40,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValueVaativa] = useState(0);
   const [initialValueSisaoppilaitos] = useState(0);
   const [categories, setCategories] = useState([]);
-  console.log(constraintFlags)
 
   useEffect(() => {
     const relevantChangesOfSection5 = R.concat(
