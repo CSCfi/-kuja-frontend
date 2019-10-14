@@ -33,8 +33,8 @@ step("Navigate to app", async () => {
     // await goto("https://oivadev.csc.fi/");
     await goto("http://localhost");
   } catch (e) {
-    await click("Lisäasetukset");
-    await click("Siirry sivustoon localhost (tämä ei ole turvallista)");
+    await click($("#details-button"));
+    await click($("#proceed-link"));
   }
 });
 
