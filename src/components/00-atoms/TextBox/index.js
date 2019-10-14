@@ -30,10 +30,15 @@ const TextBox = props => {
     <React.Fragment>
       {value !== null ? (
         <React.Fragment>
-          {props.title && <label className="text-bold text-base block my-2">{props.title}</label>}
+          {props.title && (
+            <label className="text-bold text-base block my-2">
+              {props.title}
+            </label>
+          )}
           <TextareaAutosize
             aria-label={props.ariaLabel}
             disabled={props.isDisabled || props.isReadOnly}
+            id={props.id}
             placeholder={props.placeholder}
             rows={props.rows}
             rowsMax={props.rowsMax}
@@ -65,6 +70,7 @@ TextBox.defaultProps = {
 TextBox.propTypes = {
   ariaLabel: PropTypes.string,
   delay: PropTypes.number,
+  id: PropTypes.string,
   isDisabled: PropTypes.bool,
   isHidden: PropTypes.bool,
   /** Is called with the payload and the value. */

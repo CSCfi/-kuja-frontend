@@ -6,6 +6,7 @@ import * as R from "ramda";
 
 const defaultProps = {
   changeObjects: {},
+  isReadOnly: false,
   kohde: {},
   lupa: {},
   stateObjects: {}
@@ -14,6 +15,7 @@ const defaultProps = {
 const PerustelutToimintaalue = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
+    isReadOnly = defaultProps.isReadOnly,
     onStateUpdate,
     onChangesUpdate,
     sectionId,
@@ -28,8 +30,11 @@ const PerustelutToimintaalue = React.memo(
               anchor: "A",
               name: "TextBox",
               properties: {
+                isReadOnly,
                 placeholder: "Kirjoita perustelut tähän...",
-                title: changeObj.properties.title || R.path(["properties", "meta", "title"], changeObj)
+                title:
+                  changeObj.properties.title ||
+                  R.path(["properties", "meta", "title"], changeObj)
               }
             }
           ]
@@ -114,6 +119,7 @@ PerustelutToimintaalue.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
   headingNumber: PropTypes.number,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   onChangesUpdate: PropTypes.func,
