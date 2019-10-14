@@ -26,8 +26,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { opiskelijavuodet } = kohteet[4];
   const { muutCombined } = kohteet[5];
 
-  const [isVaativaTukiVisible, setIsVaativaTukiVisible] = useState(true);
-  const [isSisaoppilaitosVisible, setIsSisaoppilaitosVisible] = useState(true);
+  const [constraintFlags, setConstraintFlags] = useState({
+    isVaativaTukiVisible: false,
+    isSisaoppilaitosVisible: false,
+    isVaativaTukiValueRequired: false,
+    isSisaoppilaitosValueRequired: false
+  });
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
@@ -36,6 +40,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValueVaativa] = useState(0);
   const [initialValueSisaoppilaitos] = useState(0);
   const [categories, setCategories] = useState([]);
+  console.log(constraintFlags)
 
   useEffect(() => {
     const relevantChangesOfSection5 = R.concat(
@@ -46,29 +51,30 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     setApplyForVaativa(getApplyFor("vaativa", [])); // [] = opiskelijavuosimuutoksetValue
     setApplyForSisaoppilaitos(getApplyFor("sisaoppilaitos", [])); // [] = opiskelijavuosimuutoksetValue
 
-    setIsVaativaTukiVisible(
-      !!isInLupa("2", muutCombined) ||
-        (
-          (
-            R.find(
-              R.propEq("anchor", "02.vaativat.16"),
-              relevantChangesOfSection5
-            ) || {}
-          ).properties || {}
-        ).isChecked
-    );
+    const isVaativatInLupa = !!isInLupa("2", muutCombined);
+    const isVaativatInChanges = !!(
+      (
+        R.find(
+          R.propEq("anchor", "02.vaativat.16"),
+          relevantChangesOfSection5
+        ) || {}
+      ).properties || {}
+    ).isChecked;
+    const isSisaoppilaitosInLupa = !!isInLupa("4", muutCombined);
+    const isSisaoppilaitosInChanges = !!(
+      (
+        R.find(
+          R.propEq("anchor", "03.sisaoppilaitos.4"),
+          relevantChangesOfSection5
+        ) || {}
+      ).properties || {}
+    ).isChecked;
 
-    setIsSisaoppilaitosVisible(
-      !!isInLupa("4", muutCombined) ||
-        (
-          (
-            R.find(
-              R.propEq("anchor", "03.sisaoppilaitos.4"),
-              relevantChangesOfSection5
-            ) || {}
-          ).properties || {}
-        ).isChecked
-    );
+    setConstraintFlags({
+      ...constraintFlags,
+      isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
+      isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges
+    })
   }, [muutCombined, props.lupa, props.changesOfSection5]);
 
   useEffect(() => {
@@ -134,7 +140,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
             anchor: "A",
             name: "Difference",
             properties: {
-              isRequired: true,
+              isRequired: constraintFlags.isVaativaTukiValueRequired,
               initialValue: initialValueVaativa,
               applyForValue: applyForVaativa,
               name: `${props.sectionId}-difference-2`,
@@ -151,7 +157,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
             anchor: "A",
             name: "Difference",
             properties: {
-              isRequired: true,
+              isRequired: constraintFlags.isSisaoppilaitosValueRequired,
               initialValue: initialValueSisaoppilaitos,
               applyForValue: applyForSisaoppilaitos,
               name: `${props.sectionId}-difference-3`,
@@ -165,8 +171,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     const activeCategories = R.filter(category => {
       return (
         category.anchor === "vahimmaisopiskelijavuodet" ||
-        (category.anchor === "vaativatuki" && isVaativaTukiVisible) ||
-        (category.anchor === "sisaoppilaitos" && isSisaoppilaitosVisible)
+        (category.anchor === "vaativatuki" && constraintFlags.isVaativaTukiVisible) ||
+        (category.anchor === "sisaoppilaitos" && constraintFlags.isSisaoppilaitosVisible)
       );
     }, allCategories);
     setCategories(activeCategories);
@@ -177,8 +183,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     initialValue,
     initialValueSisaoppilaitos,
     initialValueVaativa,
-    isSisaoppilaitosVisible,
-    isVaativaTukiVisible,
+    constraintFlags,
     props.intl,
     props.sectionId
   ]);
@@ -200,6 +205,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         props.stateObjects.muut.muutdata
       );
 
+      const constraintFlagChanges = {...constraintFlags};
       if (sisaoppilaitosState) {
         const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
           ? sisaoppilaitosState.categories[0].categories[0].components[0]
@@ -234,11 +240,14 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
          * Mikäli muutos löytyy ja sisäoppilaitosta koskeva kohta osiossa 5 on valittu, tulee sisäoppilaitosta
          * koskeva tietue näyttää osiossa 4.
          */
-        const shouldSisaoppilaitosBeVisible =
-          (isSisaoppilaitosCheckedByDefault && !sisaoppilaitosChange) ||
-          (sisaoppilaitosChange && sisaoppilaitosChange.properties.isChecked);
 
-        setIsSisaoppilaitosVisible(shouldSisaoppilaitosBeVisible);
+        const isCheckedByDefault = (isSisaoppilaitosCheckedByDefault && !sisaoppilaitosChange)
+        const isCheckedByChange = (!!sisaoppilaitosChange && sisaoppilaitosChange.properties.isChecked)
+
+        const shouldSisaoppilaitosBeVisible = isCheckedByDefault || isCheckedByChange;
+
+        constraintFlagChanges.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
+        constraintFlagChanges.isSisaoppilaitosValueRequired = isCheckedByChange;
       }
 
       const vaativatukiState = R.find(
@@ -289,11 +298,13 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
           )
         )(vaativatChanges).length;
 
-        const shouldVaativatBeVisible =
-          isVaativatukiCheckedByDefault || isCheckedByChange;
+        const shouldVaativatBeVisible = isVaativatukiCheckedByDefault || isCheckedByChange;
 
-        setIsVaativaTukiVisible(shouldVaativatBeVisible);
+        constraintFlagChanges.isVaativaTukiVisible = shouldVaativatBeVisible;
+        constraintFlagChanges.isVaativaTukiValueRequired = isCheckedByChange;
       }
+
+      setConstraintFlags({...constraintFlagChanges});
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
       setKoodiarvot(prevState => {
@@ -307,7 +318,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
 
   useEffect(() => {
-    if (!isSisaoppilaitosVisible && props.changeObjects.opiskelijavuodet) {
+    if (!constraintFlags.isSisaoppilaitosVisible && props.changeObjects.opiskelijavuodet) {
       const changesWithoutSisaoppilaitosChanges = R.filter(
         R.compose(
           R.not,
@@ -328,14 +339,14 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       }
     }
   }, [
-    isSisaoppilaitosVisible,
+    constraintFlags,
     onChangesUpdate,
     props.changeObjects.opiskelijavuodet,
     props.sectionId
   ]);
 
   useEffect(() => {
-    if (!isVaativaTukiVisible && props.changeObjects.opiskelijavuodet) {
+    if (!constraintFlags.isVaativaTukiVisible && props.changeObjects.opiskelijavuodet) {
       const changesWithoutVaativaTukiChanges = R.filter(
         R.compose(
           R.not,
@@ -356,7 +367,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       }
     }
   }, [
-    isVaativaTukiVisible,
+    constraintFlags,
     onChangesUpdate,
     props.changeObjects.opiskelijavuodet,
     props.sectionId
