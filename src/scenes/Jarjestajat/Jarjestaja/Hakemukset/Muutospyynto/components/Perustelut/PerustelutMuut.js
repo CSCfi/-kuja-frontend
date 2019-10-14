@@ -49,21 +49,21 @@ const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
     {
       koodiarvot: [5],
       lomakkeet: {
-        lisays: getVankilaopetusPerustelulomake(),
+        lisays: getVankilaopetusPerustelulomake(isReadOnly),
         poisto: defaultRemovalForm
       }
     },
     {
       koodiarvot: [2, 16, 17, 18, 19, 20, 21],
       lomakkeet: {
-        lisays: getVaativaErityinenTukilomake(),
+        lisays: getVaativaErityinenTukilomake(isReadOnly),
         poisto: defaultRemovalForm
       }
     },
     {
       koodiarvot: [1],
       lomakkeet: {
-        lisays: getOppisopimusPerusteluLomake(),
+        lisays: getOppisopimusPerusteluLomake(isReadOnly),
         poisto: defaultRemovalForm
       }
     }
@@ -123,7 +123,7 @@ const PerustelutMuut = React.memo(
             dividedArticles[kasite] = dividedArticles[kasite] || [];
             dividedArticles[kasite].push({
               article,
-              lomakkeet: getCategoriesByKoodiarvo(article.koodiArvo)
+              lomakkeet: getCategoriesByKoodiarvo(article.koodiArvo, isReadOnly)
             });
           }
         }, articles);
@@ -175,6 +175,7 @@ const PerustelutMuut = React.memo(
                     anchor: "A",
                     name: item.componentName,
                     properties: {
+                      isReadOnly,
                       name: item.componentName,
                       title: title,
                       labelStyles: {
@@ -363,11 +364,12 @@ const PerustelutMuut = React.memo(
               return (
                 <ExpandableRowRoot
                   anchor={`${sectionId}_${row.code}`}
-                  key={`expandable-row-root-${i}`}
                   categories={row.categories}
                   changes={R.path(["perustelut", row.code], changeObjects)}
                   code={row.code}
+                  disableReverting={isReadOnly}
                   isExpanded={true}
+                  key={`expandable-row-root-${i}`}
                   onChangesRemove={onChangesRemove}
                   onUpdate={onChangesUpdate}
                   sectionId={sectionId}

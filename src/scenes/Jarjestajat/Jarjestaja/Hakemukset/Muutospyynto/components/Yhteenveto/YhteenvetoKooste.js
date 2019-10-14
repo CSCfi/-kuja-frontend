@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import PerustelutKoulutukset from "../Perustelut/PerustelutKoulutukset";
-// import PerustelutMuut from "./Perustelut/PerustelutMuut";
+import PerustelutMuut from "../Perustelut/PerustelutMuut";
+import PerustelutOpiskelijavuodet from "../Perustelut/PerustelutOpiskelijavuodet";
 import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
 import YhteenvetoTutkinnot from "./YhteenvetoTutkinnot";
@@ -179,7 +180,6 @@ const YhteenvetoKooste = ({
                 title={"Muutokset perusteluineen"}
               />
             )}
-
           {!!R.prop(["kielet"], changeObjects) ? (
             <FormSection
               id="perustelut_kielet"
@@ -254,7 +254,6 @@ const YhteenvetoKooste = ({
               title={kohdetiedot[1].title}
             />
           ) : null}
-
           {!!R.prop(["toimintaalue"], changeObjects) ? (
             <FormSection
               code={3}
@@ -287,8 +286,47 @@ const YhteenvetoKooste = ({
               title={kohdetiedot[2].title}
             />
           ) : null}
+          {!!R.prop(["opiskelijavuodet"], changeObjects) &&
+          muutosperustelut.muutosperusteluList ? (
+            <FormSection
+              code={4}
+              id="perustelut_opiskelijavuodet"
+              muutoshakemus={muutoshakemus}
+              render={_props => (
+                <React.Fragment>
+                  {!!R.path(["opiskelijavuodet"], changeObjects) ? (
+                    <PerustelutOpiskelijavuodet
+                      changeObjects={{
+                        opiskelijavuodet: R.path(
+                          ["opiskelijavuodet"],
+                          changeObjects
+                        ),
+                        perustelut: R.path(
+                          ["perustelut", "opiskelijavuodet"],
+                          changeObjects
+                        )
+                      }}
+                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
+                        kohteet
+                      )}
+                      muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
+                        muutosperustelut.muutosperusteluList
+                      )}
+                      stateObject={R.path(["perustelut", "opiskelijavuodet"])(
+                        muutoshakemus
+                      )}
+                      {..._props}
+                    />
+                  ) : null}
+                </React.Fragment>
+              )}
+              runOnStateUpdate={onStateUpdate}
+              runOnChanges={onChangesUpdate}
+              title={kohdetiedot[3].title}
+            />
+          ) : null}
 
-          {/* {!!R.prop(["muut"], changeObjects) ? (
+          {!!R.prop(["muut"], changeObjects) ? (
             <FormSection
               code={5}
               id="perustelut_muut"
@@ -310,6 +348,7 @@ const YhteenvetoKooste = ({
                       stateObject={R.path(["perustelut", "muut"])(
                         muutoshakemus
                       )}
+                      isReadOnly={true}
                       {..._props}
                     />
                   ) : null}
@@ -319,30 +358,8 @@ const YhteenvetoKooste = ({
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[4].title}
             />
-          ) : null} */}
-
-          {/* {!!changeObjects.toimintaalue.length ? (
-            <PerustelutToimintaalue
-              changes={changeObjects.toimintaalue}
-              handleChanges={handleChanges}
-              headingNumber={3}
-              title={kohteet[2].title}
-            ></PerustelutToimintaalue>
           ) : null}
 
-          <Section code={4} title={kohteet[3].title}></Section>
-
-          {!!R.keys(changeObjects.muut).length ? (
-            <PerustelutMuut
-              changes={changeObjects.muut}
-              handleChanges={handleChanges}
-              kohde={kohteet.muut}
-              headingNumber={lupa.kohteet[5].headingNumber}
-              maaraykset={lupa.data.maaraykset}
-              muut={muut}
-              title={kohteet[4].title}
-            />
-          ) : null} */}
           {!!R.prop("taloudelliset", changeObjects) && (
             <YhteenvetoTaloudelliset
               changeObjects={changeObjects}

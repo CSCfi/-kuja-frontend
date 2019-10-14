@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 
 const TextBox = props => {
   const [value, setValue] = useState(null);
