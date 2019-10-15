@@ -99,7 +99,7 @@ class ValmisteluWizard extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.fetchMuutosperustelut();
     const { uuid } = this.props.match.params;
     console.log("UUID: " + uuid);

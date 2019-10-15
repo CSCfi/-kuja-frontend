@@ -33,7 +33,7 @@ const Separator = styled.div`
 `
 
 class Jarjestaja extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { ytunnus } = this.props.match.params
     this.props.fetchLupa(ytunnus, '?with=all')
     this.props.fetchMuutospyynnot(ytunnus)

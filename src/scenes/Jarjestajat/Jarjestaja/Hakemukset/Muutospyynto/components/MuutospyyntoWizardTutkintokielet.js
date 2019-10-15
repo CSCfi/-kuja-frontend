@@ -16,7 +16,7 @@ import {
 } from "../modules/uusiHakemusFormConstants";
 
 class MuutospyyntoWizardTutkintokielet extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { kielet } = this.props;
 
     if (kielet && !kielet.fetched) {

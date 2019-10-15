@@ -41,7 +41,7 @@ const PerusteluTopArea = styled.div`
 `
 class Perustelu extends Component {
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { muutosperustelut, vankilat, ELYkeskukset } = this.props
 
     if (muutosperustelut && !muutosperustelut.fetched) {
