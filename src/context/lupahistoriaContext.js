@@ -6,7 +6,7 @@ const initialState = {
   fetched: false,
   hasErrored: false,
   data: {}
-}
+};
 
 const LupahistoriaContext = React.createContext(initialState);
 

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
-import { MuutospyynnotContext } from "context/muutospyynnotContext";
+import { MuutospyynnotContext } from "../../../../context/muutospyynnotContext";
 import { LuvatContext } from "context/luvatContext";
 import { fetchLupa } from "../../../../services/luvat/actions";
-import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
+import { fetchMuutospyynnot } from "../../../../services/muutospyynnot/actions";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
 import { injectIntl } from "react-intl";
 import Hakemus from "../Hakemukset/Hakemus";

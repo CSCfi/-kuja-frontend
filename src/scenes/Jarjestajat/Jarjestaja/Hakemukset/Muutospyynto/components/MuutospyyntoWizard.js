@@ -326,7 +326,7 @@ const MuutospyyntoWizard = props => {
   }
 
   function handleOk() {
-    props.history.push(`/jarjestajat/${props.match.params.ytunnus}`);
+    props.history.push(`/jarjestajat/${props.match.params.ytunnus}/jarjestamislupa-asia`);
   }
 
   useEffect(() => {

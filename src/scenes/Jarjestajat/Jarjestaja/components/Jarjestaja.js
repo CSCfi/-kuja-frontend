@@ -15,7 +15,7 @@ import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
 import { fetchLupaHistory } from "services/lupahistoria/actions";
-import { LupahistoriaContext } from "context/lupahistoriaContext";
+import { LupahistoriaContext } from "../../../../context/lupahistoriaContext";
 import { KunnatProvider } from "context/kunnatContext";
 import { MaakunnatProvider } from "../../../../context/maakunnatContext";
 
@@ -160,8 +160,10 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                   exact
                   render={() => (
                     <JarjestamislupaAsiat
+                      baseurl={match.url}
                       lupadata={lupadata}
                       lupahistory={lupahistory}
+                      muutospyynnot={muutospyynnot}
                       newApplicationRouteItem={newApplicationRouteItem}
                     />
                   )}

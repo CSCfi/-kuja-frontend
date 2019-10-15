@@ -38,7 +38,7 @@ const columnTitles = [
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
 ];
 
-const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem}) => {
+const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutospyynnot, baseurl}) => {
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const classes = useStyles();
   const [state, setState] = useState({
@@ -50,12 +50,13 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem}) => {
     setState({ opened: dnro });
   };
 
-  const renderJarjestamislupaAsiatList = data => {
-    data = _.orderBy(data, ["paatospvm"], ["desc"]);
-    return _.map(data, (historyData, i) => (
+  const renderJarjestamislupaAsiatList = (muutospyynnot) => {
+    const data = _.orderBy(muutospyynnot.data, ["voimassaalkupvm"], ["desc"]);
+    return _.map(data, (historyData) => (
       <JarjestamislupaAsiatListItem
-        lupaHistoria={historyData}
-        key={`${historyData.diaarinumero}-${i}`}
+        baseurl={baseurl}
+        muutospyynto={historyData}
+        key={historyData.uuid}
         setOpened={setOpened}
       />
     ));
@@ -118,7 +119,7 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem}) => {
                     <TableCell>&nbsp;</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>{renderJarjestamislupaAsiatList(data)}</TableBody>
+                <TableBody>{renderJarjestamislupaAsiatList(muutospyynnot)}</TableBody>
               </Table>
             )}
           />
