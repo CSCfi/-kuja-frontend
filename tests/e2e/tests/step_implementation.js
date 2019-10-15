@@ -99,7 +99,7 @@ step("Tarkista, että ollaan sivulla <pageNumber>", async pageNumber => {
 
 step("Lomakeoperaatio <sectionId> valitse <item>", async (sectionId, item) => {
   try {
-    await scrollDown($(".MuiDialogContent-root"));
+    //await scrollDown($(".MuiDialogContent-root"));
     await scrollTo(item);
     await click(item);
   } catch (e) {
@@ -114,5 +114,13 @@ step("Sulje lomake", async () => {
     assert.notInclude(await currentURL(), "hakemukset-ja-paatokset");
   } catch (e) {
     console.error(e);
+  }
+});
+
+step("Assert if text exists <string>", async string => {
+  try {
+    assert.ok(await text(string).exists());
+  } catch (e) {
+    console.error(e)
   }
 });
