@@ -14,6 +14,7 @@ import { MaakuntakunnatProvider } from "../../../../../context/maakuntakunnatCon
 import { KieletProvider } from "../../../../../context/kieletContext";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
+import { VankilatProvider } from "../../../../../context/vankilatContext";
 
 const Hakemus = props => {
   return (
@@ -29,7 +30,9 @@ const Hakemus = props => {
                       <MaakuntakunnatProvider>
                         <MuutProvider>
                           <MuutoshakemusProvider>
-                            <HakemusContainer {...props} />
+                            <VankilatProvider>
+                              <HakemusContainer {...props} />
+                            </VankilatProvider>
                           </MuutoshakemusProvider>
                         </MuutProvider>
                       </MaakuntakunnatProvider>

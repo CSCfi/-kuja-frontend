@@ -33,7 +33,8 @@ const MuutospyyntoWizardPerustelut = ({
   lupa,
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate
+  onStateUpdate,
+  vankilat = []
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
@@ -344,6 +345,7 @@ const MuutospyyntoWizardPerustelut = ({
                       stateObject={R.path(["perustelut", "muut"])(
                         muutoshakemus
                       )}
+                      vankilat={vankilat}
                       {..._props}
                     />
                   ) : null}
@@ -371,7 +373,8 @@ MuutospyyntoWizardPerustelut.propTypes = {
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  vankilat: PropTypes.array
 };
 
 export default injectIntl(MuutospyyntoWizardPerustelut);
