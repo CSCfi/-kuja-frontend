@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -38,7 +38,8 @@ const columnTitles = [
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
 ];
 
-const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutospyynnot, baseurl}) => {
+const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutospyynnot, match}) => {
+  const { url } = match;
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const classes = useStyles();
   const [state, setState] = useState({
@@ -54,7 +55,7 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
     const data = _.orderBy(muutospyynnot.data, ["voimassaalkupvm"], ["desc"]);
     return _.map(data, (historyData) => (
       <JarjestamislupaAsiatListItem
-        baseurl={baseurl}
+        url={url}
         muutospyynto={historyData}
         key={historyData.uuid}
         setOpened={setOpened}
@@ -66,7 +67,7 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
     return (
       <React.Fragment>
         <Button variant="contained" color="primary" onClick={e => setOpened(0)}>
-          <ArrowBack />
+          <ArrowBack/>
           <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
         </Button>
         <Paper className={classes.root}>

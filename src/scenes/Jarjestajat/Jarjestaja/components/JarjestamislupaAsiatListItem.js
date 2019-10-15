@@ -94,7 +94,7 @@ const JarjestamislupaAsiaListItem = props => {
             <TableCell size="small">
               <div className="flex">
                 <NavLink
-                  to={`${props.baseurl}/hakemukset-ja-paatokset/${uuid}/1`}
+                  to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
                   exact={true}>
                   <Button title="Täydennä hakemusta">
                     <Edit />

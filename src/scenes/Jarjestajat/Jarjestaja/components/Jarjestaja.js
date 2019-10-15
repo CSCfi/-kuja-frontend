@@ -14,10 +14,12 @@ import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
 import { ROLE_KAYTTAJA } from "../../../../modules/constants";
-import { fetchLupaHistory } from "services/lupahistoria/actions";
+import { fetchLupaHistory } from "../../../../services/lupahistoria/actions";
 import { LupahistoriaContext } from "../../../../context/lupahistoriaContext";
 import { KunnatProvider } from "context/kunnatContext";
 import { MaakunnatProvider } from "../../../../context/maakunnatContext";
+import { MuutospyynnotContext } from "../../../../context/muutospyynnotContext";
+import { fetchMuutospyynnot } from "../../../../services/muutospyynnot/actions";
 
 const Separator = styled.div`
   &:after {
@@ -37,14 +39,20 @@ const Separator = styled.div`
 // paatoskierrokset={paatoskierrokset}
 // vankilat={vankilat}
 
-const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
-  const { state: lupahistory, dispatch } = useContext(LupahistoriaContext);
+const Jarjestaja = ({ match, lupa }) => {
+  const { state: lupahistory, dispatch: lupahistoriaDispatch } = useContext(LupahistoriaContext);
+  const { state: muutospyynnot, dispatch: muutospyynnotDispatch} = useContext(MuutospyynnotContext);
 
   useEffect(() => {
-    if (lupa && lupa.data && lupa.data.jarjestajaOid) {
-      fetchLupaHistory(lupa.data.jarjestajaOid)(dispatch);
+    if (lupa && lupa.data) {
+      if (lupa.data.jarjestajaOid) {
+        fetchLupaHistory(lupa.data.jarjestajaOid)(lupahistoriaDispatch);
+      }
+      if (lupa.data.jarjestajaYtunnus) {
+        fetchMuutospyynnot(lupa.data.jarjestajaYtunnus)(muutospyynnotDispatch);
+      }
     }
-  }, [lupa, muutospyynnot, dispatch]);
+  }, [lupa, muutospyynnotDispatch, lupahistoriaDispatch]);
 
   if (match.params) {
     if (lupa && lupa.fetched && muutospyynnot && muutospyynnot.fetched) {
@@ -160,7 +168,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                   exact
                   render={() => (
                     <JarjestamislupaAsiat
-                      baseurl={match.url}
+                      match={match}
                       lupadata={lupadata}
                       lupahistory={lupahistory}
                       muutospyynnot={muutospyynnot}
