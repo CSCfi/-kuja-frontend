@@ -5,25 +5,36 @@ import * as R from "ramda";
 const getMuutos = (stateItem, changeObj, perustelut) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
-  const code = R.last(anchorParts);
-  const meta = getMetadata(R.slice(1, 3)(anchorParts), stateItem.categories);
+  const koulutusCode = R.nth(2, anchorParts);
+  const subcodeCandidate = R.nth(3, anchorParts);
+  const subcode = subcodeCandidate && !isNaN(subcodeCandidate)
+    ? subcodeCandidate
+    : undefined;
+
+  const meta = subcode
+    ? getMetadata(R.slice(1, 4)(anchorParts), stateItem.categories)
+    : getMetadata(R.slice(1, 3)(anchorParts), stateItem.categories);
+
   const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
-  if (stateItem.article) {
+  if (stateItem.article && koulutusCode) {
     if (stateItem.article.koulutusalat[anchorParts[1]]) {
       koulutus =
         R.find(
-          R.propEq("koodi", code),
+          R.propEq("koodi", koulutusCode),
           stateItem.article.koulutusalat[anchorParts[1]].koulutukset
         ) || {};
     }
   }
-  return {
+  const maaraysUuid = R.prop('maaraysId', koulutus);
+
+  const muutos =  {
+    generatedId: R.join('.', R.init(anchorParts)),
     isInLupa: meta.isInLupa,
-    kohde: koulutus.kohde || meta.kohde,
-    koodiarvo: code,
+    kohde: meta.kohde || koulutus.kohde,
+    koodiarvo: subcode || koulutusCode,
     koodisto: meta.koodisto.koodistoUri,
     kuvaus: finnishInfo.kuvaus,
-    maaraystyyppi: koulutus.maaraystyyppi || meta.maaraystyyppi,
+    maaraystyyppi: meta.maaraystyyppi || koulutus.maaraystyyppi,
     meta: {
       changeObjects: R.flatten([[changeObj], perustelut]),
       nimi: koulutus.nimi,
@@ -36,6 +47,15 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
     tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
     type: changeObj.properties.isChecked ? "addition" : "removal"
   };
+
+  if (subcode && maaraysUuid) {
+    // in case parent maarays exists
+    muutos['maaraysUuid'] = maaraysUuid;
+  } else if (subcode) {
+    muutos['parent'] = R.compose(R.join('.'), R.dropLast(2))(anchorParts);
+  }
+
+  return muutos;
 };
 
 const getAnchorBase = (key, anchorInit) => {
