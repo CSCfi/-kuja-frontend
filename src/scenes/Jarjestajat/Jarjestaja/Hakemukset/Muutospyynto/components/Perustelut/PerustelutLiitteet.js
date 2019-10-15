@@ -14,6 +14,7 @@ const PerustelutLiitteet = React.memo(props => {
       structure = [
         {
           anchor: "liitteet",
+          meta: { kohde: { tunniste: "tutkinnotjakoulutukset" } },
           components: [
             {
               name: "StatusTextRow",

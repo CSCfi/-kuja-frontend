@@ -93,6 +93,11 @@ export function createObjectToSave(
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
+      tutkinnotjakoulutuksetLiitteet: {
+        changeObjects: R.flatten([
+          R.path(["perustelut", "liitteet"], changeObjects)
+        ]).filter(Boolean)
+      },
       taloudelliset: {
         changeObjects: R.flatten([
           R.path(["taloudelliset", "investoinnit"], changeObjects),
@@ -147,13 +152,6 @@ export function createObjectToSave(
           backendMuutokset
         )
       ),
-      // // LIITTEET
-      // getChangesToSave(
-      //   "liitteet",
-      //   R.path(["perustelut"], muutoshakemus),
-      //   R.path(["perustelut"], changeObjects),
-      //   R.filter(R.pathEq(["perustelut"], "liitteet"))(backendMuutokset)
-      // ),
       // OPETUSKIELET
       getChangesOfOpetuskielet(
         R.path(["kielet", "opetuskielet"], muutoshakemus),
