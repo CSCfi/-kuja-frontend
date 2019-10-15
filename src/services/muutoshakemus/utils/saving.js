@@ -47,35 +47,17 @@ export function createObjectToSave(
       ? yhteenvetoLiitteet[0].properties.attachments
       : [];
 
-  const allAttachments = perustelutLiitteetList.concat(
+  // Concats all attachements...
+  const allAttachmentsRaw = perustelutLiitteetList.concat(
     taloudellisetLiitteetList.concat(
       yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
     )
   );
 
-  console.log(muutoshakemus);
-  console.log(changeObjects);
-  console.log(R.path(["perustelut"], changeObjects));
-
-  console.log(
-    getChangesToSave(
-      "koulutukset",
-      R.path(["koulutukset"], muutoshakemus),
-      {
-        muutokset: R.compose(
-          R.flatten,
-          R.values
-        )(R.values(R.path(["koulutukset"], changeObjects))),
-        perustelut: R.compose(
-          R.flatten,
-          R.values
-        )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))
-      },
-      R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
-        backendMuutokset
-      )
-    )
-  );
+  // ... without tiedosto-property
+  const allAttachments = R.map(attachment => {
+    return R.dissoc("tiedosto", attachment);
+  }, allAttachmentsRaw);
 
   return {
     diaarinumero: lupa.data.diaarinumero,

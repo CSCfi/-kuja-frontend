@@ -244,8 +244,6 @@ const HakemusContainer = props => {
         yhteenvetoChanges
       ]).filter(Boolean);
 
-      console.log(perustelutLiiitteetChanges);
-
       let changesBySection = {};
 
       R.forEach(changeObj => {
