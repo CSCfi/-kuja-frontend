@@ -20,18 +20,20 @@ const isInLupa = (areaCode, items) => {
   }, items);
 };
 
+const defaultConstraintFlags = {
+  isVaativaTukiVisible: false,
+  isSisaoppilaitosVisible: false,
+  isVaativaTukiValueRequired: false,
+  isSisaoppilaitosValueRequired: false
+};
+
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
   const { kohteet } = props.lupa;
   const { opiskelijavuodet } = kohteet[4];
   const { muutCombined } = kohteet[5];
 
-  const [constraintFlags, setConstraintFlags] = useState({
-    isVaativaTukiVisible: false,
-    isSisaoppilaitosVisible: false,
-    isVaativaTukiValueRequired: false,
-    isSisaoppilaitosValueRequired: false
-  });
+  const [constraintFlags, setConstraintFlags] = useState(defaultConstraintFlags);
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
@@ -205,7 +207,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         props.stateObjects.muut.muutdata
       );
 
-      const changedConstraintFlags = {};
+      const newConstraintFlags = {};
+
       if (sisaoppilaitosState) {
         const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
           ? sisaoppilaitosState.categories[0].categories[0].components[0]
@@ -246,8 +249,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
         const shouldSisaoppilaitosBeVisible = isCheckedByDefault || isCheckedByChange;
 
-        changedConstraintFlags.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
-        changedConstraintFlags.isSisaoppilaitosValueRequired = isCheckedByChange;
+        newConstraintFlags.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
+        newConstraintFlags.isSisaoppilaitosValueRequired = isCheckedByChange;
       }
 
       const vaativatukiState = R.find(
@@ -300,11 +303,16 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
         const shouldVaativatBeVisible = isVaativatukiCheckedByDefault || isCheckedByChange;
 
-        changedConstraintFlags.isVaativaTukiVisible = shouldVaativatBeVisible;
-        changedConstraintFlags.isVaativaTukiValueRequired = isCheckedByChange;
+        newConstraintFlags.isVaativaTukiVisible = shouldVaativatBeVisible;
+        newConstraintFlags.isVaativaTukiValueRequired = isCheckedByChange;
       }
 
-      setConstraintFlags({...changedConstraintFlags});
+      setConstraintFlags(previousConstraintFlags => {
+        return {
+          ...previousConstraintFlags,
+          ...newConstraintFlags
+        }
+      });
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
       setKoodiarvot(prevState => {
