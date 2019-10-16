@@ -1,19 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
-import { MuutospyynnotContext } from "context/muutospyynnotContext";
 import { LuvatContext } from "context/luvatContext";
 import { fetchLupa } from "../../../../services/luvat/actions";
-import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
 import { injectIntl } from "react-intl";
 import Hakemus from "../Hakemukset/Hakemus";
 
 const JarjestajaSwitch = props => {
   const { state: lupa, dispatch: luvatDispatch } = useContext(LuvatContext);
-  const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
-    MuutospyynnotContext
-  );
   const { ytunnus } = props.match.params;
   const {
     intl: { formatMessage }
@@ -21,8 +16,7 @@ const JarjestajaSwitch = props => {
 
   useEffect(() => {
     fetchLupa(ytunnus, "?with=all", formatMessage)(luvatDispatch);
-    fetchMuutospyynnot(ytunnus)(muutospyynnotDispatch);
-  }, [ytunnus, luvatDispatch, muutospyynnotDispatch, formatMessage]);
+  }, [ytunnus, luvatDispatch, formatMessage]);
 
   return (
     <React.Fragment>
@@ -47,7 +41,6 @@ const JarjestajaSwitch = props => {
             <LupahistoriaProvider>
               <Jarjestaja
                 lupa={lupa}
-                muutospyynnot={muutospyynnot}
                 {...props}
               />
             </LupahistoriaProvider>
