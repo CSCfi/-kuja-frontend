@@ -132,7 +132,6 @@ const MuutospyyntoWizard = props => {
    */
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
-      console.info(id, changeObjects);
       if (id && changeObjects) {
         setChangeObjects(prevState => {
           const nextState = R.assocPath(
