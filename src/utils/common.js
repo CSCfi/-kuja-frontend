@@ -1,13 +1,10 @@
 import * as R from "ramda";
 
 export const getAnchorPart = (anchor, index) => {
-  if (anchor) {
-    return R.compose(
-      R.view(R.lensIndex(index)),
-      R.split(".")
-    )(anchor);
-  }
-  return {};
+  return R.compose(
+    R.view(R.lensIndex(index)),
+    R.split(".")
+  )(anchor || "");
 };
 
 export const removeAnchorPart = (anchor, index) => {
