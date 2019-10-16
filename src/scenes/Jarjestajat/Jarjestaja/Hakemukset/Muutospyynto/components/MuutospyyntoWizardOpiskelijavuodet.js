@@ -71,7 +71,9 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
     setConstraintFlags({
       isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
-      isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges
+      isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges,
+      isVaativaTukiValueRequired: !isVaativatInLupa && isVaativatInChanges,
+      isSisaoppilaitosValueRequired: !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
     })
   }, [muutCombined, props.lupa, props.changesOfSection5]);
 
