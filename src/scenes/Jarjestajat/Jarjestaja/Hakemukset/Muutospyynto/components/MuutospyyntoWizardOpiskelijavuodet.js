@@ -43,6 +43,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValueSisaoppilaitos] = useState(0);
   const [categories, setCategories] = useState([]);
 
+  // This effect is run depending on existing 'lupa', from props alone (run only on first render)
   useEffect(() => {
     const relevantChangesOfSection5 = R.concat(
       (props.changesOfSection5 || {})["02"] || [],
@@ -190,6 +191,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     props.sectionId
   ]);
 
+  // This effect is run depending on changes in section 5
   useEffect(() => {
     if (props.muut && props.stateObjects.muut.muutdata) {
       let sisaoppilaitosKoodiarvo = null;
