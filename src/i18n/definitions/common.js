@@ -52,5 +52,10 @@ export default defineMessages({
   dateinvalid: {
     id: "common.dateinvalid",
     defaultMessage: "Päiväys on virheellinen"
+  },
+  attachmentInfo: {
+    id: "common.attachmentInfo",
+    defaultMessage:
+      "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
   }
 });

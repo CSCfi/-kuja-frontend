@@ -192,6 +192,11 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
+      let tutkinnotjakoulutuksetLiitteetChanges =
+        R.path(
+          ["meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
       let taloudellisetChanges =
         R.path(
           ["meta", "taloudelliset", "changeObjects"],
@@ -203,6 +208,10 @@ const HakemusContainer = props => {
           muutospyynnot.muutospyynto
         ) || [];
       // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
+      tutkinnotjakoulutuksetLiitteetChanges = setAttachmentUuids(
+        tutkinnotjakoulutuksetLiitteetChanges,
+        muutospyynnot.muutospyynto
+      );
       taloudellisetChanges = setAttachmentUuids(
         taloudellisetChanges,
         muutospyynnot.muutospyynto
@@ -215,6 +224,9 @@ const HakemusContainer = props => {
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
+        }),
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+          categoryKey: "liitteet"
         }),
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "perustelut_tutkinnot"
@@ -234,6 +246,7 @@ const HakemusContainer = props => {
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
         getChangesOf("muut", backendMuutokset),
+        tutkinnotjakoulutuksetLiitteetChanges,
         taloudellisetChanges,
         yhteenvetoChanges
       ]).filter(Boolean);

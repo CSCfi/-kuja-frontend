@@ -1,5 +1,6 @@
 import { getChangesToSave } from "./changes-to-save";
 import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
+import { combineArrays } from "../../../services/muutospyynnot/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
 
@@ -24,8 +25,27 @@ export function createObjectToSave(
     ["taloudelliset", "liitteet"],
     changeObjects
   );
+  const perustelutLiitteet = R.path(["perustelut", "liitteet"], changeObjects);
+  const perustelutKuljettajankoulutuksetLiitteet = R.path(
+    ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+    changeObjects
+  );
 
   //get actual attachment props
+
+  const perustelutLiitteetList =
+    perustelutLiitteet && perustelutLiitteet[0].properties
+      ? perustelutLiitteet[0].properties.attachments
+      : [];
+  //get attachments from Perustelut/muutokset forms
+  const perustelutKuljettajankoulutuksetLiitteettList =
+    perustelutKuljettajankoulutuksetLiitteet &&
+    R.flatten(
+      R.map(subarray => {
+        return subarray.properties ? subarray.properties.attachments : [];
+      }, perustelutKuljettajankoulutuksetLiitteet)
+    );
+
   const taloudellisetLiitteetList =
     taloudellisetLiitteet && taloudellisetLiitteet[0].properties
       ? taloudellisetLiitteet[0].properties.attachments
@@ -41,9 +61,20 @@ export function createObjectToSave(
       ? yhteenvetoLiitteet[0].properties.attachments
       : [];
 
-  const allAttachments = taloudellisetLiitteetList.concat(
-    yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
-  );
+  // Concats all attachements...
+
+  const allAttachmentsRaw = combineArrays([
+    perustelutLiitteetList,
+    perustelutKuljettajankoulutuksetLiitteettList,
+    taloudellisetLiitteetList,
+    yhteenvetoYleisetLiitteetList,
+    yhteenvetoLiitteetList
+  ]);
+
+  // ... without tiedosto-property
+  const allAttachments = R.map(attachment => {
+    return R.dissoc("tiedosto", attachment);
+  }, allAttachmentsRaw);
 
   return {
     diaarinumero: lupa.data.diaarinumero,
@@ -61,8 +92,11 @@ export function createObjectToSave(
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
-      meta: {},
-      liitteet: [],
+      tutkinnotjakoulutuksetLiitteet: {
+        changeObjects: R.flatten([
+          R.path(["perustelut", "liitteet"], changeObjects)
+        ]).filter(Boolean)
+      },
       taloudelliset: {
         changeObjects: R.flatten([
           R.path(["taloudelliset", "investoinnit"], changeObjects),

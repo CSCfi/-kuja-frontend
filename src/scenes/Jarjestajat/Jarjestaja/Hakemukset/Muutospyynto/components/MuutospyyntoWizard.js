@@ -33,7 +33,10 @@ import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 
-import { setAttachmentUuids } from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
+import {
+  setAttachmentUuids,
+  combineArrays
+} from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -110,7 +113,8 @@ const MuutospyyntoWizard = props => {
       valmentavatKoulutukset: {}
     },
     perustelut: {
-      tutkinnot: {}
+      tutkinnot: {},
+      liitteet: {}
     },
     taloudelliset: {},
     yhteenveto: {
@@ -172,6 +176,17 @@ const MuutospyyntoWizard = props => {
           type: toast.TYPE.SUCCESS
         });
 
+        if (changeObjects.perustelut) {
+          if (changeObjects.perustelut.liitteet) {
+            onSectionChangesUpdate(
+              "perustelut_liitteeet",
+              setAttachmentUuids(
+                changeObjects.perustelut.liitteet,
+                muutoshakemus.save.data.data
+              )
+            );
+          }
+        }
         if (
           changeObjects.taloudelliset &&
           changeObjects.taloudelliset.liitteet
@@ -249,33 +264,35 @@ const MuutospyyntoWizard = props => {
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
-    const allAttachments = (
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
-    ).concat(
-      (R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []).concat(
-        (
-          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || []
-        ).concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
+    const allAttachments = combineArrays([
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || [],
+      R.path(["perustelut", "liitteet"], changeObjects) || [],
+      R.flatten(
+        R.path(
+          ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+          changeObjects
+        ) || []
       )
-    );
-    // Returns only binary files
-    let attachments;
+    ]);
+    // Returns only attachments
+    let attachments = [];
     if (allAttachments) {
-      attachments = R.map(obj => {
-        if (obj.properties.attachments)
-          return R.map(file => {
-            return file;
+      R.forEachObjIndexed(obj => {
+        if (obj.properties.attachments) {
+          R.forEachObjIndexed(file => {
+            attachments.push(file);
           }, obj.properties.attachments);
-        else return null;
+        }
       }, allAttachments);
       return attachments;
-    } else {
-      return null;
     }
   }, [changeObjects]);
 
   const save = useCallback(() => {
     const attachments = getFiles();
+
     if (props.match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(
@@ -372,6 +389,7 @@ const MuutospyyntoWizard = props => {
             <Stepper
               activeStep={page - 1}
               orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}
+              style={{ backgroundColor: "transparent" }}
             >
               {steps.map(label => {
                 const stepProps = {};

@@ -80,6 +80,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.attachmentInfo",
+    "defaultMessage": "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
@@ -287,6 +292,16 @@
   {
     "id": "wizard.preview",
     "defaultMessage": "Esikatsele",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.noChanges",
+    "defaultMessage": "Ei muutoksia.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.noAddedTutkinnot",
+    "defaultMessage": "Taloudelliset edellytykset ilmoitetaan vain, kun järjestämislupaan haetaan uusia tutkintoja tai koulutuksia. Jatka seuraavalle välilehdelle Seuraava-painikkeella.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
