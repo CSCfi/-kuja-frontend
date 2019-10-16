@@ -28,8 +28,6 @@ const TextPartial = styled.span`
 const JarjestamislupaAsiaListItem = props => {
   const {
     tila,
-    voimassaalkupvm,
-    voimassaloppupvm,
     uuid
   } = props.muutospyynto;
 
@@ -46,19 +44,20 @@ const JarjestamislupaAsiaListItem = props => {
           <Tr>
             <LupaText>
               <TextPartial>
-                {/*{LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI}: OKM/{diaarinumero}*/}
+                Järjestämisluvan muutos
               </TextPartial>
               <TextPartial>
-                {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI}:&nbsp;
-                <Moment format="DD.MM.YYYY">{voimassaalkupvm}</Moment>
+                {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}:&nbsp;
+                {tila}
               </TextPartial>
               <TextPartial>
-                {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI}:&nbsp;
-                <Moment format="DD.MM.YYYY">{voimassaloppupvm}</Moment>
-              </TextPartial>
-              <TextPartial>
-                {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI}:&nbsp;
-                <Moment format="DD.MM.YYYY">onko?</Moment>
+                <NavLink
+                  to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
+                  exact={true}>
+                  <Button title="Täydennä hakemusta">
+                    <Edit/>
+                  </Button>
+                </NavLink>
               </TextPartial>
             </LupaText>
           </Tr>
@@ -67,7 +66,8 @@ const JarjestamislupaAsiaListItem = props => {
       <Media
         query={MEDIA_QUERIES.TABLET_MIN}
         render={() => (
-          <TableRow onClick={e => open(e, "todo")} hover className="cursor-pointer">
+          <TableRow>
+            {/*TODO: When asiakirjat table contains real data <TableRow onClick={e => open(e, "todo")} hover className="cursor-pointer">*/}
             <TableCell size="small">
               <Typography component="span">{}</Typography>
             </TableCell>

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -63,6 +63,40 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
     ));
   };
 
+  const muutospyynnotTable =
+    <Paper className={classes.root}>
+      <Media
+      query={MEDIA_QUERIES.MOBILE}
+      render={() => (
+        <div>
+          <div>{renderJarjestamislupaAsiatList(muutospyynnot)}</div>
+        </div>
+      )}
+    />
+    <Media
+      query={MEDIA_QUERIES.TABLET_MIN}
+      render={() => (
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              {columnTitles.map((title, i) => (
+                <TableCell key={`title-${i}`}>
+                        <span className="text-white">
+                          <Typography component="span">
+                            {title}
+                          </Typography>
+                        </span>
+                </TableCell>
+              ))}
+              <TableCell>&nbsp;</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{renderJarjestamislupaAsiatList(muutospyynnot)}</TableBody>
+        </Table>
+      )}
+    />
+  </Paper>;
+
   if (state && state.opened !== 0) {
     return (
       <React.Fragment>
@@ -93,38 +127,9 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
             </Button>
           </div>
         </div>
-        <Paper className={classes.root}>
-          <Media
-            query={MEDIA_QUERIES.MOBILE}
-            render={() => (
-              <div>
-                <div>{renderJarjestamislupaAsiatList(data)}</div>
-              </div>
-            )}
-          />
-          <Media
-            query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => (
-              <Table className={classes.table}>
-                <TableHead>
-                  <TableRow>
-                    {columnTitles.map((title, i) => (
-                      <TableCell key={`title-${i}`}>
-                        <span className="text-white">
-                          <Typography component="span">
-                            {title}
-                          </Typography>
-                        </span>
-                      </TableCell>
-                    ))}
-                    <TableCell>&nbsp;</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>{renderJarjestamislupaAsiatList(muutospyynnot)}</TableBody>
-              </Table>
-            )}
-          />
-        </Paper>
+        {muutospyynnot && muutospyynnot.data && muutospyynnot.data.length > 0
+          ? muutospyynnotTable
+          : <div></div>}
       </div>
     );
   }
