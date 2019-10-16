@@ -40,7 +40,7 @@ const PerustelutToimintaalue = React.memo(
           ]
         };
       };
-    }, []);
+    }, [isReadOnly]);
 
     const getCategories = useMemo(() => {
       const lisaykset = R.filter(

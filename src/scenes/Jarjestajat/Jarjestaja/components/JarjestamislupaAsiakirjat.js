@@ -20,7 +20,7 @@ class JarjestamislupaAsiakirjat extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { jarjestajaOid } = this.props
 
     if (jarjestajaOid) {

@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 class ValmistelussaAsiat extends Component {
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.props.fetchValmistelussaAsiat()
     }
 

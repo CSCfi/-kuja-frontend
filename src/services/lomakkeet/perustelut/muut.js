@@ -1,8 +1,12 @@
 import { getMuutostarveCheckboxes } from "./common";
+import * as R from "ramda";
 
-export const getVankilaopetusPerustelulomake = isReadOnly => {
-  const code = 4;
-
+export const getVankilaopetusPerustelulomake = (
+  vankilat = [],
+  isReadOnly,
+  locale = "FI"
+) => {
+  console.info(vankilat, isReadOnly, locale);
   return [
     {
       anchor: "vankilaopetus",
@@ -15,7 +19,7 @@ export const getVankilaopetusPerustelulomake = isReadOnly => {
       title: "Vankilaopetuksen järjestämistehtävä",
       categories: [
         {
-          anchor: `${code}-1`,
+          anchor: "tehtavan-tarpeellisuus",
           code: 1,
           layout: {
             strategy: {
@@ -42,7 +46,7 @@ export const getVankilaopetusPerustelulomake = isReadOnly => {
           ]
         },
         {
-          anchor: `${code}-2`,
+          anchor: "toiminnalliset-edellytykset",
           code: 2,
           layout: {
             strategy: {
@@ -119,13 +123,13 @@ export const getVankilaopetusPerustelulomake = isReadOnly => {
           ]
         },
         {
-          anchor: `${code}-3`,
+          anchor: "vankilaopetuksen-toteuttaminen",
           code: 3,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           title: "Vankilaopetuksen toteuttaminen",
           categories: [
             {
-              anchor: "toteuttaminen-missa-select",
+              anchor: "autocomplete",
               styleClasses: ["pl-6 pt-6"],
               components: [
                 {
@@ -134,6 +138,18 @@ export const getVankilaopetusPerustelulomake = isReadOnly => {
                   styleClasses: ["pb-4 text-base"],
                   properties: {
                     isReadOnly,
+                    options: R.sortBy(
+                      R.prop("label"),
+                      R.map(vankila => {
+                        return {
+                          label: R.find(
+                            R.propEq("kieli", locale),
+                            vankila.metadata
+                          ).nimi,
+                          value: vankila.koodiArvo
+                        };
+                      }, vankilat)
+                    ),
                     title:
                       "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta."
                   }

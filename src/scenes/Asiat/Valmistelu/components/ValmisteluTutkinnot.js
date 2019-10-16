@@ -26,7 +26,7 @@ class MuutospyyntoWizardTutkinnot extends Component {
         super(props)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         if (!this.props.koulutusalat.fetched && !this.props.koulutusalat.hasErrored) {
             this.props.fetchKoulutusalat()
                 .then(() => {

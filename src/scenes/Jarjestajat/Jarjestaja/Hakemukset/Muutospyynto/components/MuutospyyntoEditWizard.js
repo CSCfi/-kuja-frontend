@@ -106,7 +106,7 @@ class MuutospyyntoEditWizard extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.fetchMuutosperustelut();
     this.props.fetchVankilat();
     this.props.fetchELYkeskukset();

@@ -53,6 +53,7 @@ const Autocomplete = React.memo(props => {
         }
       };
     },
+    menu: styles => ({ ...styles, zIndex: 999 }),
     multiValue: styles => {
       const color = chroma("#c3dafe");
       return {

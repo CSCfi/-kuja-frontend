@@ -11,9 +11,10 @@
     "@material-ui/styles": "^4.5.0",
     "axios": "^0.19.0",
     "axios-progress-bar": "^1.2.0",
+    "chai": "^4.2.0",
     "chroma-js": "^2.0.6",
     "core-js": "^2.6.9",
-    "date-fns": "^2.4.1",
+    "date-fns": "^2.1.0",
     "dateformat": "^3.0.3",
     "jest-dom": "^3.5.0",
     "moment": "^2.24.0",
@@ -34,13 +35,14 @@
     "react-resize-detector": "^4.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.2.0",
-    "react-select": "^2.4.4",
+    "react-select": "^3.0.8",
     "react-table": "^6.10.3",
     "react-test-renderer": "^16.10.2",
     "react-testing-library": "^7.0.1",
     "react-through": "^1.1.4",
     "react-toastify": "^5.4.0",
-    "styled-components": "^4.4.0"
+    "styled-components": "^4.4.0",
+    "typescript": "^3.6.4"
   },
   "scripts": {
     "tailwind:css": "tailwind build src/css/tailwind.src.pcss -c tailwind.js -o src/css/tailwind.css",
