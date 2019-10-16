@@ -185,7 +185,7 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
-      let perustelutLiiitteetChanges =
+      let tutkinnotjakoulutuksetLiitteetChanges =
         R.path(
           ["meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
           muutospyynnot.muutospyynto
@@ -201,8 +201,8 @@ const HakemusContainer = props => {
           muutospyynnot.muutospyynto
         ) || [];
       // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
-      perustelutLiiitteetChanges = setAttachmentUuids(
-        perustelutLiiitteetChanges,
+      tutkinnotjakoulutuksetLiitteetChanges = setAttachmentUuids(
+        tutkinnotjakoulutuksetLiitteetChanges,
         muutospyynnot.muutospyynto
       );
       taloudellisetChanges = setAttachmentUuids(
@@ -239,7 +239,7 @@ const HakemusContainer = props => {
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
         getChangesOf("muut", backendMuutokset),
-        perustelutLiiitteetChanges,
+        tutkinnotjakoulutuksetLiitteetChanges,
         taloudellisetChanges,
         yhteenvetoChanges
       ]).filter(Boolean);

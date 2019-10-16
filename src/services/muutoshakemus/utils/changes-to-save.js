@@ -168,18 +168,6 @@ export const getChangesToSave = (
         type: changeObj.properties.isChecked ? "addition" : "removal"
       };
     }, unhandledChangeObjects).filter(Boolean);
-    // } else if (key === "tutkinnotjakoulutuksetliitteet") {
-    //   uudetMuutokset = R.map(changeObj => {
-    //     const meta = stateObject.liitteet.categories[0].meta;
-    //     return {
-    //       kohde: meta.kohde, // object, tunniste=tutkinnotjakoulutukset
-    //       meta: {
-    //         changeObjects: [changeObj]
-    //       }
-    //       // tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
-    //       // type: changeObj.properties.isChecked ? "addition" : "removal"
-    //     };
-    //   }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "tutkintokielet") {
     uudetMuutokset = R.map(changeObj => {
       const anchorParts = changeObj.anchor.split(".");

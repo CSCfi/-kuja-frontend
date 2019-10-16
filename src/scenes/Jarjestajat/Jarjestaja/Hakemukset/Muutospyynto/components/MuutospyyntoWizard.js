@@ -239,7 +239,6 @@ const MuutospyyntoWizard = props => {
     // Gets all attachment data from changeObjects
     const allAttachments = combineArrays([
       R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
       R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
       R.path(["taloudelliset", "liitteet"], changeObjects) || [],
       R.path(["perustelut", "liitteet"], changeObjects) || [],

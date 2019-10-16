@@ -1,4 +1,5 @@
 import { HAKEMUS_OTSIKOT } from "../../../locales/uusiHakemusFormConstants";
+// import { injectIntl } from "react-intl";
 
 export const getKuljettajienJatkokoulutuslomake = (
   addPeopleFormCallback,
@@ -10,7 +11,6 @@ export const getKuljettajienJatkokoulutuslomake = (
     {
       anchor: code,
       styleClasses: ["px-10 py-10"],
-      // title: "Jatkokoulutusta antavan koulutuskeskuksen tehtävä",
       components: [
         {
           anchor: "jatkokoulutus-title",
@@ -52,7 +52,7 @@ export const getKuljettajienPeruskoulutuslomake = (
       styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "paerustaso-title",
+          anchor: "perustaso-title",
           name: "StatusTextRow",
           properties: {
             title:
@@ -709,6 +709,7 @@ const johtaja = (orderCode, isReadOnly) => {
             styleClasses: ["w-full"],
             properties: {
               title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+              // title: FormattedMessage("attachmentInfo")  <- TODO
             }
           },
           {
