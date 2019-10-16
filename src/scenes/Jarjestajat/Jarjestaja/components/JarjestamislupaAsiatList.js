@@ -1,10 +1,5 @@
 import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
@@ -14,10 +9,11 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
 import { Typography } from "@material-ui/core";
-import { MEDIA_QUERIES } from "modules/styles";
+import { MEDIA_QUERIES } from "../../../../modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Media from "react-media";
 import { NavLink } from "react-router-dom";
+import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -45,7 +41,6 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
   const [state, setState] = useState({
     opened: 0
   });
-  const { data } = lupahistory || {};
 
   const setOpened = dnro => {
     setState({ opened: dnro });
@@ -77,21 +72,21 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutosp
       query={MEDIA_QUERIES.TABLET_MIN}
       render={() => (
         <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
+          <Thead>
+            <Trn>
               {columnTitles.map((title, i) => (
-                <TableCell key={`title-${i}`}>
+                <Thn key={`title-${i}`}>
                         <span className="text-white">
                           <Typography component="span">
                             {title}
                           </Typography>
                         </span>
-                </TableCell>
+                </Thn>
               ))}
-              <TableCell>&nbsp;</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{renderJarjestamislupaAsiatList(muutospyynnot)}</TableBody>
+              <Thn>&nbsp;</Thn>
+            </Trn>
+          </Thead>
+          <Tbody>{renderJarjestamislupaAsiatList(muutospyynnot)}</Tbody>
         </Table>
       )}
     />
