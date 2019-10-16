@@ -20,18 +20,20 @@ const isInLupa = (areaCode, items) => {
   }, items);
 };
 
+const defaultConstraintFlags = {
+  isVaativaTukiVisible: false,
+  isSisaoppilaitosVisible: false,
+  isVaativaTukiValueRequired: false,
+  isSisaoppilaitosValueRequired: false
+};
+
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
   const { kohteet } = props.lupa;
   const { opiskelijavuodet } = kohteet[4];
   const { muutCombined } = kohteet[5];
 
-  const [constraintFlags, setConstraintFlags] = useState({
-    isVaativaTukiVisible: false,
-    isSisaoppilaitosVisible: false,
-    isVaativaTukiValueRequired: false,
-    isSisaoppilaitosValueRequired: false
-  });
+  const [constraintFlags, setConstraintFlags] = useState(defaultConstraintFlags);
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
@@ -41,6 +43,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [initialValueSisaoppilaitos] = useState(0);
   const [categories, setCategories] = useState([]);
 
+  // This effect is run depending on existing 'lupa', from props alone (run only on first render)
   useEffect(() => {
     const relevantChangesOfSection5 = R.concat(
       (props.changesOfSection5 || {})["02"] || [],
@@ -70,11 +73,11 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     ).isChecked;
 
     setConstraintFlags({
-      ...constraintFlags,
       isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
-      isSisaoppilaitosVisible:
-        isSisaoppilaitosInLupa || isSisaoppilaitosInChanges
-    });
+      isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges,
+      isVaativaTukiValueRequired: !isVaativatInLupa && isVaativatInChanges,
+      isSisaoppilaitosValueRequired: !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
+    })
   }, [muutCombined, props.lupa, props.changesOfSection5]);
 
   useEffect(() => {
@@ -190,6 +193,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     props.sectionId
   ]);
 
+  // This effect is run depending on changes in section 5
   useEffect(() => {
     if (props.muut && props.stateObjects.muut.muutdata) {
       let sisaoppilaitosKoodiarvo = null;
@@ -207,7 +211,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         props.stateObjects.muut.muutdata
       );
 
-      const constraintFlagChanges = { ...constraintFlags };
+      const newConstraintFlags = {};
+
       if (sisaoppilaitosState) {
         const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
           ? sisaoppilaitosState.categories[0].categories[0].components[0]
@@ -251,8 +256,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         const shouldSisaoppilaitosBeVisible =
           isCheckedByDefault || isCheckedByChange;
 
-        constraintFlagChanges.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
-        constraintFlagChanges.isSisaoppilaitosValueRequired = isCheckedByChange;
+        newConstraintFlags.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
+        newConstraintFlags.isSisaoppilaitosValueRequired = isCheckedByChange;
       }
 
       const vaativatukiState = R.find(
@@ -306,11 +311,16 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         const shouldVaativatBeVisible =
           isVaativatukiCheckedByDefault || isCheckedByChange;
 
-        constraintFlagChanges.isVaativaTukiVisible = shouldVaativatBeVisible;
-        constraintFlagChanges.isVaativaTukiValueRequired = isCheckedByChange;
+        newConstraintFlags.isVaativaTukiVisible = shouldVaativatBeVisible;
+        newConstraintFlags.isVaativaTukiValueRequired = isCheckedByChange;
       }
 
-      setConstraintFlags({ ...constraintFlagChanges });
+      setConstraintFlags(previousConstraintFlags => {
+        return {
+          ...previousConstraintFlags,
+          ...newConstraintFlags
+        }
+      });
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
       setKoodiarvot(prevState => {
