@@ -70,7 +70,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     ).isChecked;
 
     setConstraintFlags({
-      ...constraintFlags,
       isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
       isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges
     })
@@ -204,7 +203,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         props.stateObjects.muut.muutdata
       );
 
-      const constraintFlagChanges = {...constraintFlags};
+      const changedConstraintFlags = {};
       if (sisaoppilaitosState) {
         const isSisaoppilaitosCheckedByDefault = sisaoppilaitosState
           ? sisaoppilaitosState.categories[0].categories[0].components[0]
@@ -245,8 +244,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
         const shouldSisaoppilaitosBeVisible = isCheckedByDefault || isCheckedByChange;
 
-        constraintFlagChanges.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
-        constraintFlagChanges.isSisaoppilaitosValueRequired = isCheckedByChange;
+        changedConstraintFlags.isSisaoppilaitosVisible = shouldSisaoppilaitosBeVisible;
+        changedConstraintFlags.isSisaoppilaitosValueRequired = isCheckedByChange;
       }
 
       const vaativatukiState = R.find(
@@ -299,11 +298,11 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
         const shouldVaativatBeVisible = isVaativatukiCheckedByDefault || isCheckedByChange;
 
-        constraintFlagChanges.isVaativaTukiVisible = shouldVaativatBeVisible;
-        constraintFlagChanges.isVaativaTukiValueRequired = isCheckedByChange;
+        changedConstraintFlags.isVaativaTukiVisible = shouldVaativatBeVisible;
+        changedConstraintFlags.isVaativaTukiValueRequired = isCheckedByChange;
       }
 
-      setConstraintFlags({...constraintFlagChanges});
+      setConstraintFlags({...changedConstraintFlags});
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
       setKoodiarvot(prevState => {
