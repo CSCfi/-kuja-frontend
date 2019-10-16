@@ -33,7 +33,10 @@ import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 
-import { setAttachmentUuids } from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
+import {
+  setAttachmentUuids,
+  combineArrays
+} from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -234,33 +237,36 @@ const MuutospyyntoWizard = props => {
 
   const getFiles = () => {
     // Gets all attachment data from changeObjects
-    const allAttachments = (
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
-    ).concat(
-      (R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []).concat(
-        (R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [])
-          .concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
-          .concat(R.path(["perustelut", "liitteet"], changeObjects) || [])
+    const allAttachments = combineArrays([
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || [],
+      R.path(["perustelut", "liitteet"], changeObjects) || [],
+      R.flatten(
+        R.path(
+          ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+          changeObjects
+        ) || []
       )
-    );
-    // Returns only binary files
-    let attachments;
+    ]);
+    // Returns only attachments
+    let attachments = [];
     if (allAttachments) {
-      attachments = R.map(obj => {
-        if (obj.properties.attachments)
-          return R.map(file => {
-            return file;
+      R.forEachObjIndexed(obj => {
+        if (obj.properties.attachments) {
+          R.forEachObjIndexed(file => {
+            attachments.push(file);
           }, obj.properties.attachments);
-        else return null;
+        }
       }, allAttachments);
       return attachments;
-    } else {
-      return null;
     }
   };
 
   const save = () => {
     const attachments = getFiles();
+
     if (props.match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(

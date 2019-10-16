@@ -36,15 +36,13 @@ export function saveMuutospyynto(muutospyynto, attachments) {
 
   console.log(attachments);
   if (attachments) {
-    attachments.map(attach =>
-      attach.map(item => {
-        if (!item.removed && item.tiedosto instanceof Blob) {
-          data.append(item.tiedostoId, item.tiedosto, item.nimi);
-          item.tiedosto = null;
-        }
-        return null;
-      })
-    );
+    attachments.map(item => {
+      if (!item.removed && item.new && item.tiedosto instanceof Blob) {
+        data.append(item.tiedostoId, item.tiedosto, item.nimi);
+        item.tiedosto = null;
+      }
+      return null;
+    });
   }
   return dispatch => {
     dispatch({ type: SAVE_MUUTOSPYYNTO_START });

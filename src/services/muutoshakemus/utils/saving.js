@@ -1,5 +1,6 @@
 import { getChangesToSave } from "./changes-to-save";
 import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
+import { combineArrays } from "../../../services/muutospyynnot/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
 
@@ -25,12 +26,25 @@ export function createObjectToSave(
     changeObjects
   );
   const perustelutLiitteet = R.path(["perustelut", "liitteet"], changeObjects);
+  const perustelutKuljettajankoulutuksetLiitteet = R.path(
+    ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+    changeObjects
+  );
 
   //get actual attachment props
+
   const perustelutLiitteetList =
     perustelutLiitteet && perustelutLiitteet[0].properties
       ? perustelutLiitteet[0].properties.attachments
       : [];
+  //get attachments from Perustelut/muutokset forms
+  const perustelutKuljettajankoulutuksetLiitteettList =
+    perustelutKuljettajankoulutuksetLiitteet &&
+    R.flatten(
+      R.map(subarray => {
+        return subarray.properties ? subarray.properties.attachments : [];
+      }, perustelutKuljettajankoulutuksetLiitteet)
+    );
 
   const taloudellisetLiitteetList =
     taloudellisetLiitteet && taloudellisetLiitteet[0].properties
@@ -48,11 +62,14 @@ export function createObjectToSave(
       : [];
 
   // Concats all attachements...
-  const allAttachmentsRaw = perustelutLiitteetList.concat(
-    taloudellisetLiitteetList.concat(
-      yhteenvetoYleisetLiitteetList.concat(yhteenvetoLiitteetList)
-    )
-  );
+
+  const allAttachmentsRaw = combineArrays([
+    perustelutLiitteetList,
+    perustelutKuljettajankoulutuksetLiitteettList,
+    taloudellisetLiitteetList,
+    yhteenvetoYleisetLiitteetList,
+    yhteenvetoLiitteetList
+  ]);
 
   // ... without tiedosto-property
   const allAttachments = R.map(attachment => {
