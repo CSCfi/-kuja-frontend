@@ -10,6 +10,7 @@ coverage
 build
 
 # misc
+.cache
 .DS_Store
 .env.local
 .env.development.local
@@ -25,3 +26,5 @@ yarn-error.log*
 
 src/css/tailwind.css
 # src/**/*.module.css
+
+docs
