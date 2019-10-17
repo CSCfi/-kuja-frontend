@@ -15,27 +15,34 @@ import {
 const Jarjestajat = () => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
   const abortControllers = useMemo(() => {
     return fetchFromBackend([{ key: "luvat", dispatchFn: dispatch }]);
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   return () => {
-  //     abort(abortControllers);
-  //   };
-  // }, [abortControllers, dispatch]);
+  /**
+   * Ongoing XHR calls must be canceled. It's done here.
+   */
+  useEffect(() => {
+    return () => {
+      abort(abortControllers);
+    };
+  }, [abortControllers, dispatch]);
 
   const isMainViewVisible = useMemo(() => {
     return isReady(fromBackend.luvat);
-  }, [fromBackend.luvat, isReady]);
+  }, [fromBackend.luvat]);
 
   const isLoading = useMemo(() => {
     return isFetching(fromBackend.luvat);
-  }, [fromBackend.luvat, isFetching]);
+  }, [fromBackend.luvat]);
 
   const fetchingHasFailed = useMemo(() => {
     return isErroneous(fromBackend.luvat);
-  }, [fromBackend.luvat, isErroneous]);
+  }, [fromBackend.luvat]);
 
   if (isMainViewVisible) {
     return (

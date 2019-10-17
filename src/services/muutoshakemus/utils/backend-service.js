@@ -6,39 +6,119 @@ import {
 } from "./actionTypes";
 import * as R from "ramda";
 
-export const abort = abortControllers => {
-  R.forEachObjIndexed(abortController => {
-    abortController.abort();
-  }, abortControllers);
-};
+/**
+ * The main purpose of this module is to run and cancel XHR calls and to
+ * provide related information.
+ * @module BackendService
+ */
 
-export const isErroneous = backendData => {
-  console.info("error", backendData);
+/**
+ * Cancels XHR requests by calling the abort method of the given
+ * AbortController instances.
+ * @param {Object[]} abortControllers - Array of AbortController instances.
+ */
+export function abort(abortControllers = []) {
+  try {
+    R.forEachObjIndexed(abortController => {
+      abortController.abort();
+    }, abortControllers);
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * Returns true if XHR call has failed for some reason.
+ * @param {object} backendData - Format depends on the used reducer.
+ */
+export function isErroneous(backendData) {
   return backendData && R.equals(backendData.status, "erroneous");
-};
+}
 
-export const isFetching = backendData => {
-  console.info("is fetching", backendData);
+/**
+ * Returns true if XHR call is active.
+ * @param {object} backendData - Format depends on the used reducer 222.
+ * @return {boolean}
+ */
+export function isFetching(backendData) {
   return backendData && R.equals(backendData.status, "fetching");
-};
+}
 
-export const isReady = backendData => {
-  console.info("is ready", backendData);
+/**
+ * Return true if data is fetched and ready for use - otherwice false.
+ * @param {object} backendData - Format depends on the used reducer.
+ * @return {boolean}
+ */
+export function isReady(backendData) {
   return backendData && R.equals(backendData.status, "ready");
-};
+}
 
+/**
+ * The comprehensive list of the backend routes.
+ * Format: { key: url, ... }
+ * Example: { luvat: api/luvat/jarjestajilla, ... }
+ */
 const backendRoutes = {
   luvat: `${API_BASE_URL}/luvat/jarjestajilla`
 };
 
-export const fetchFromBackend = async (
+/**
+ * Runs XHR calls.
+ *
+ * @param {string} key - A key of backendRoutes object.
+ * @param {string} url - XHR call is directed to this url.
+ * @param {function} dispatchFn - A dispatch function.
+ * @param {object} abortController - An instance of AbortController.
+ */
+async function run(key, url, dispatchFn, abortController) {
+  /**
+   * It's time to fetch some data!
+   */
+  const response = await fetch(url, {
+    signal: abortController.signal
+  }).catch(err => {
+    console.log(err);
+  });
+
+  if (response && response.ok) {
+    const data = await response.json();
+
+    /**
+     * Data will be saved to the same context as what dispatchFn presents.
+     */
+    dispatchFn({
+      type: FETCH_FROM_BACKEND_SUCCESS,
+      key,
+      data
+    });
+  } else {
+    /**
+     * Fetching failed. So, let's mark it up for later use.
+     */
+    dispatchFn({
+      type: FETCH_FROM_BACKEND_FAILED,
+      key,
+      response
+    });
+  }
+}
+
+/**
+ *
+ * @param {Object[]} keysAndDispatchFuncs - [{ key: string, dispatchFn: function}, ...]
+ * @param {string} keysAndDispatchFuncs[].key - A key of the backendRoutes object.
+ * @param {string} keysAndDispatchFuncs[].dispatchFn - A dispatch function.
+ * @param {array} _abortControllers - Array of AbortController instances
+ * @param {number} index
+ */
+function recursiveFetchHandler(
   keysAndDispatchFuncs,
   _abortControllers = [],
   index = 0
-) => {
-  const setupObj = R.view(R.lensIndex(index), keysAndDispatchFuncs);
+) {
+  const { key, dispatchFn } = R.view(R.lensIndex(index), keysAndDispatchFuncs);
 
-  const url = R.prop(setupObj.key, backendRoutes);
+  const url = R.prop(key, backendRoutes);
 
   /**
    * When a user is leaving a page and the following backend call is active we can
@@ -46,52 +126,43 @@ export const fetchFromBackend = async (
    */
   const abortController = new AbortController();
 
-  const abortControllers = R.insert(-1, _abortControllers);
+  /**
+   * This is practically a push operation written with Ramda.
+   */
+  const abortControllers = R.insert(-1, abortController, _abortControllers);
 
   /**
    * Fetching is about to start. So, let's mark it up for later use.
    */
-  setupObj.dispatchFn({
+  dispatchFn({
     type: FETCH_FROM_BACKEND_IS_ON,
-    key: setupObj.key
+    key
   });
 
   /**
-   * Let's handle the next data fetching setup. We are calling the current
-   * function here again with updated parameters.
+   * Let's handle the next fetch setup. Current function is called
+   * again with updated parameters here.
    */
   if (index < keysAndDispatchFuncs.length - 1) {
-    return fetchFromBackend(keysAndDispatchFuncs, abortControllers, index + 1);
+    return recursiveFetchHandler(
+      keysAndDispatchFuncs,
+      abortControllers,
+      index + 1
+    );
   }
 
   /**
-   * It's time to fetch some data!
+   * XHR call is made by the run function.
    */
-  const response = await fetch(url, {
-    signal: abortController.signal
-  });
+  run(key, url, dispatchFn, abortController);
 
-  if (response.ok) {
-    const data = await response.json();
+  return abortControllers;
+}
 
-    /**
-     * Data will be saved to the same context as what dispatchFn presents.
-     */
-    setupObj.dispatchFn({
-      type: FETCH_FROM_BACKEND_SUCCESS,
-      key: setupObj.key,
-      data
-    });
-  } else {
-    /**
-     * Fetching failed. So, let's mark it up for later use.
-     */
-    setupObj.dispatchFn({
-      type: FETCH_FROM_BACKEND_FAILED,
-      key: setupObj.key,
-      response
-    });
-  }
-
-  return R.zipObj(abortControllers);
-};
+/**
+ * Uses recursiveFetchHandler function to loop through the given array of objects.
+ * @param {Object[]} keysAndDispatchFuncs - [{ key: string, dispatchFn: function}, ...]
+ */
+export function fetchFromBackend(keysAndDispatchFuncs) {
+  return recursiveFetchHandler(keysAndDispatchFuncs);
+}

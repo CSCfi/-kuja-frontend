@@ -1,17 +1,39 @@
 import * as R from "ramda";
 
-export const getAnchorPart = (anchor, index) => {
+/**
+ * Utility functions are listed here.
+ * @namespace utils
+ * */
+
+/**
+ * @module Utils/common
+ */
+
+/**
+ * Returns a part of the given anchor by index.
+ * @param {string} anchor
+ * @param {number} index
+ * @param {string} separator - Default value: .
+ */
+export function getAnchorPart(anchor, index, separator = ".") {
   return R.compose(
     R.view(R.lensIndex(index)),
-    R.split(".")
+    R.split(separator)
   )(anchor);
-};
+}
 
-export const removeAnchorPart = (anchor, index) => {
+/**
+ * Removes an anchor part by index.
+ *
+ * @param {string} anchor
+ * @param {number} index
+ * @param {string} separator - Default value: .
+ */
+export const removeAnchorPart = (anchor, index, separator = ".") => {
   return R.compose(
-    R.join("."),
+    R.join(separator),
     R.remove(index, 1),
-    R.split(".")
+    R.split(separator)
   )(anchor);
 };
 

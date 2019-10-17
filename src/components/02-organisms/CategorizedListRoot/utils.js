@@ -1,5 +1,15 @@
 import * as R from "ramda";
 
+/**
+ * @module CategorizedListRoot/utils 
+ **/
+
+/**
+ * Returns changes by level.
+ * 
+ * @param {number} level 
+ * @param {array} changes 
+ */
 export const getChangesByLevel = (level, changes) => {
   return changes.filter(change => {
     const categoryDepth = R.filter(v => {
@@ -311,8 +321,9 @@ const getPropertiesObject = (changeObj = {}, requestedChanges) => {
 /**
  * Main function. This will be run when a user enables a radio button.
  *
- * @param {*} node
- * @param {*} changes
+ * @param {object} nodeWithRequestedChanges
+ * @param {object} nodeWithRequestedChanges.requestedChanges - Property object.
+ * @param {array} changes - Array of change objects.
  */
 export const handleNodeMain = (
   nodeWithRequestedChanges,

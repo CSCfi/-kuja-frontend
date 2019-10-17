@@ -7,6 +7,10 @@ import { withStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Slot from "../../../00-atoms/Slot/Slot";
 
+/**
+ * @module Components/01-molecules
+ */
+
 const ExpansionPanel = withStyles({
   root: {
     border: "1px solid rgba(0,0,0,.125)",

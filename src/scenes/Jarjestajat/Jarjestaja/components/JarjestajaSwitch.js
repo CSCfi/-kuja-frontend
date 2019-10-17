@@ -45,12 +45,11 @@ const JarjestajaSwitch = props => {
           path={`${props.match.path}`}
           render={props => (
             <LupahistoriaProvider>
-              <p>testing</p>
-              {/* <Jarjestaja
+              <Jarjestaja
                 lupa={lupa}
                 muutospyynnot={muutospyynnot}
                 {...props}
-              /> */}
+              />
             </LupahistoriaProvider>
           )}
         />

@@ -17,6 +17,12 @@ import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
 import { flattenObj } from "../../../../utils/common";
 
+/** @namespace components */
+
+/**
+ * @module 02-organisms
+ */
+
 const componentContainerBaseClasses = [
   "flex",
   "flex-wrap",
@@ -67,7 +73,8 @@ const defaultCategoryStyles = {
 };
 
 /**
- *
+ * Returns a change object by the given anchor.
+ * 
  * @param {string} anchor
  * @param {array} changes
  */
@@ -76,11 +83,9 @@ const getChangeObjByAnchor = (anchor, changes) => {
 };
 
 /**
- * Tarkastellaan sekä alkuperäistä komponenttia että sille tehtyjä muutoksia.
- * Yhdistetään propertyt siten, että muutokset yliajavat alkuperäiset arvot.
- * Mikäli muutoksia ei ole, palautuu komponentin alkuperäinen properties-
- * objekti.
- * @param {string} changeObj
+ * Combines the properties of the component with the properties of the
+ * change object.
+ * @param {object} changeObj
  * @param {object} component
  */
 const getPropertiesObject = (changeObj, component) => {
