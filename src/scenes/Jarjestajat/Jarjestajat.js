@@ -1,20 +1,43 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LuvatList from "./components/LuvatList";
 import Loading from "modules/Loading";
-import { JarjestajatContext } from "../../context/jarjestajatContext";
-import { fetchLuvat } from "services/jarjestajat/actions";
+import { BackendContext } from "../../context/backendContext";
+import {
+  abort,
+  fetchFromBackend,
+  isErroneous,
+  isFetching,
+  isReady
+} from "../../services/muutoshakemus/utils/backend-service";
 
 const Jarjestajat = () => {
-  const { state, dispatch } = useContext(JarjestajatContext);
-  const { fetched, isFetching, hasErrored, data } = state;
+  const { state: fromBackend, dispatch } = useContext(BackendContext);
 
-  useEffect(() => {
-    fetchLuvat()(dispatch);
+  const abortControllers = useMemo(() => {
+    return fetchFromBackend([{ key: "luvat", dispatchFn: dispatch }]);
   }, [dispatch]);
 
-  if (fetched) {
+  // useEffect(() => {
+  //   return () => {
+  //     abort(abortControllers);
+  //   };
+  // }, [abortControllers, dispatch]);
+
+  const isMainViewVisible = useMemo(() => {
+    return isReady(fromBackend.luvat);
+  }, [fromBackend.luvat, isReady]);
+
+  const isLoading = useMemo(() => {
+    return isFetching(fromBackend.luvat);
+  }, [fromBackend.luvat, isFetching]);
+
+  const fetchingHasFailed = useMemo(() => {
+    return isErroneous(fromBackend.luvat);
+  }, [fromBackend.luvat, isErroneous]);
+
+  if (isMainViewVisible) {
     return (
       <React.Fragment>
         <Helmet>
@@ -29,16 +52,21 @@ const Jarjestajat = () => {
         <div className="mx-auto w-full sm:w-3/4 mb-16">
           <h1>Ammatillisen koulutuksen järjestäjät</h1>
           <p className="py-4">
-            Voimassa olevat järjestämisluvat ({Object.keys(data).length} kpl)
+            Voimassa olevat järjestämisluvat ({fromBackend.luvat.raw.length}{" "}
+            kpl)
           </p>
-          <LuvatList luvat={data} />
+          <LuvatList luvat={fromBackend.luvat.raw} />
         </div>
       </React.Fragment>
     );
-  } else if (isFetching) {
+  } else if (isLoading) {
     return <Loading />;
-  } else if (hasErrored) {
-    return <div>&nbsp;&nbsp;Lupia ladattaessa tapahtui virhe</div>;
+  } else if (fetchingHasFailed) {
+    return (
+      <div className="text-center">
+        <p>Lupia ladattaessa tapahtui virhe.</p>
+      </div>
+    );
   } else {
     return null;
   }
