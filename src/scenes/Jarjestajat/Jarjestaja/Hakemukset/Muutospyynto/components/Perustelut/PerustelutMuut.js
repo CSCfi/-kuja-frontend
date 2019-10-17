@@ -18,70 +18,8 @@ const defaultProps = {
   kohde: {},
   maaraykset: [],
   muut: {},
-  stateObject: {}
-};
-
-const getCategoriesByKoodiarvo = (koodiarvo, isReadOnly) => {
-  const koodiArvoInteger = parseInt(koodiarvo, 10);
-  const defaultAdditionForm = [
-    {
-      anchor: "perustelut",
-      layout: {
-        margins: { top: "small" },
-        strategy: {
-          key: "groups"
-        }
-      },
-      components: [
-        {
-          anchor: "A",
-          name: "TextBox",
-          properties: {
-            isReadOnly,
-            placeholder: "Perustele muutokset tähän, kiitos."
-          }
-        }
-      ]
-    }
-  ];
-  const defaultRemovalForm = _.cloneDeep(defaultAdditionForm);
-  const mapping = [
-    {
-      koodiarvot: [5],
-      lomakkeet: {
-        lisays: getVankilaopetusPerustelulomake(isReadOnly),
-        poisto: defaultRemovalForm
-      }
-    },
-    {
-      koodiarvot: [2, 16, 17, 18, 19, 20, 21],
-      lomakkeet: {
-        lisays: getVaativaErityinenTukilomake(isReadOnly),
-        poisto: defaultRemovalForm
-      }
-    },
-    {
-      koodiarvot: [1],
-      lomakkeet: {
-        lisays: getOppisopimusPerusteluLomake(isReadOnly),
-        poisto: defaultRemovalForm
-      }
-    }
-  ];
-
-  const obj = R.find(
-    R.compose(
-      R.includes(koodiArvoInteger),
-      R.prop("koodiarvot")
-    ),
-    mapping
-  );
-  return obj
-    ? obj.lomakkeet
-    : {
-        lisays: defaultAdditionForm,
-        poisto: defaultRemovalForm
-      };
+  stateObject: {},
+  vankilat: []
 };
 
 const PerustelutMuut = React.memo(
@@ -95,10 +33,89 @@ const PerustelutMuut = React.memo(
     onChangesRemove,
     onChangesUpdate,
     onStateUpdate,
-    stateObject = defaultProps.stateObject
+    stateObject = defaultProps.stateObject,
+    vankilat = defaultProps.vankilat
   }) => {
     const sectionId = "perustelut_muut";
     const [locale, setLocale] = useState("FI");
+
+    const defaultAdditionForm = useMemo(() => {
+      return [
+        {
+          anchor: "perustelut",
+          layout: {
+            margins: { top: "small" },
+            strategy: {
+              key: "groups"
+            }
+          },
+          components: [
+            {
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                isReadOnly,
+                placeholder: "Perustele muutokset tähän, kiitos."
+              }
+            }
+          ]
+        }
+      ];
+    }, [isReadOnly]);
+
+    const defaultRemovalForm = useMemo(() => {
+      return _.cloneDeep(defaultAdditionForm);
+    }, [defaultAdditionForm]);
+
+    const mapping = useMemo(() => {
+      return [
+        {
+          koodiarvot: [5],
+          lomakkeet: {
+            lisays: getVankilaopetusPerustelulomake(
+              vankilat,
+              isReadOnly,
+              locale
+            ),
+            poisto: defaultRemovalForm
+          }
+        },
+        {
+          koodiarvot: [2, 16, 17, 18, 19, 20, 21],
+          lomakkeet: {
+            lisays: getVaativaErityinenTukilomake(isReadOnly),
+            poisto: defaultRemovalForm
+          }
+        },
+        {
+          koodiarvot: [1],
+          lomakkeet: {
+            lisays: getOppisopimusPerusteluLomake(isReadOnly),
+            poisto: defaultRemovalForm
+          }
+        }
+      ];
+    }, [defaultRemovalForm, isReadOnly, vankilat, locale]);
+
+    const getCategoriesByKoodiarvo = useMemo(() => {
+      return koodiarvo => {
+        const koodiArvoInteger = parseInt(koodiarvo, 10);
+
+        const obj = R.find(
+          R.compose(
+            R.includes(koodiArvoInteger),
+            R.prop("koodiarvot")
+          ),
+          mapping
+        );
+        return obj
+          ? obj.lomakkeet
+          : {
+              lisays: defaultAdditionForm,
+              poisto: defaultRemovalForm
+            };
+      };
+    }, [defaultAdditionForm, defaultRemovalForm, mapping]);
 
     const divideArticles = useMemo(() => {
       return (articles, relevantCodes) => {
@@ -123,13 +140,18 @@ const PerustelutMuut = React.memo(
             dividedArticles[kasite] = dividedArticles[kasite] || [];
             dividedArticles[kasite].push({
               article,
-              lomakkeet: getCategoriesByKoodiarvo(article.koodiArvo, isReadOnly)
+              lomakkeet: getCategoriesByKoodiarvo(
+                article.koodiArvo,
+                isReadOnly,
+                vankilat,
+                locale
+              )
             });
           }
         }, articles);
         return dividedArticles;
       };
-    }, [maaraykset]);
+    }, [getCategoriesByKoodiarvo, isReadOnly, locale, maaraykset, vankilat]);
 
     const getCategories = useMemo(() => {
       return (configObj, locale) => {
@@ -201,7 +223,7 @@ const PerustelutMuut = React.memo(
           };
         }, configObj.categoryData);
       };
-    }, [changeObjects.muut]);
+    }, [changeObjects.muut, isReadOnly]);
 
     const relevantCodes = useMemo(() => {
       return R.map(
@@ -397,7 +419,8 @@ PerustelutMuut.propTypes = {
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
   title: PropTypes.string,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  vankilat: PropTypes.array
 };
 
 export default injectIntl(PerustelutMuut);

@@ -17,7 +17,7 @@ const Wrapper = styled.div`
 
 class PaatetytAsiat extends Component {
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.props.fetchPaatetytAsiat()
     }
 

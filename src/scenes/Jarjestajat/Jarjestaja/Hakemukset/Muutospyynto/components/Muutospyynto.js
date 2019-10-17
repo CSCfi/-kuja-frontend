@@ -43,7 +43,7 @@ class Muutospyynto extends Component {
     super(props)
     this.goBack = this.props.history.goBack.bind(this)
   }
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { muutospyynnot } = this.props
 
     const { ytunnus } = this.props.match.params

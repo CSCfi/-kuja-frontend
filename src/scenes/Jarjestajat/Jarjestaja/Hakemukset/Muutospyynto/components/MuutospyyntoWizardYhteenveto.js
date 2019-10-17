@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
@@ -7,10 +6,12 @@ import * as R from "ramda";
 import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
+import wizard from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
   intl,
+  intl: { formatMessage },
   kielet,
   kohteet,
   koulutukset,
@@ -41,20 +42,23 @@ const MuutospyyntoWizardYhteenveto = ({
 
     const sahkopostiosoite = {
       label: "Sähköpostiosoite",
-      value: (R.find(R.prop("email"))(lupa.data.jarjestaja.yhteystiedot) || {})
-        .email || "-"
+      value:
+        (R.find(R.prop("email"))(lupa.data.jarjestaja.yhteystiedot) || {})
+          .email || "-"
     };
 
     const www = {
       label: "WWW-osoite",
-      value: (R.find(R.prop("www"))(lupa.data.jarjestaja.yhteystiedot) || {})
-        .www || "-"
+      value:
+        (R.find(R.prop("www"))(lupa.data.jarjestaja.yhteystiedot) || {}).www ||
+        "-"
     };
-  
+
     const puhelinnumero = {
       label: "Puhelinnumero",
-      value: (R.find(R.prop("numero"))(lupa.data.jarjestaja.yhteystiedot) || {})
-        .numero || "-"
+      value:
+        (R.find(R.prop("numero"))(lupa.data.jarjestaja.yhteystiedot) || {})
+          .numero || "-"
     };
 
     return {
@@ -63,7 +67,7 @@ const MuutospyyntoWizardYhteenveto = ({
       postiosoite,
       puhelinnumero,
       sahkopostiosoite,
-      www,
+      www
     };
   }, [intl.locale, lupa.data.jarjestaja]);
 
@@ -72,9 +76,7 @@ const MuutospyyntoWizardYhteenveto = ({
       R.mapObjIndexed((obj, key) => {
         return (
           <div className="flex" key={key}>
-            <div className="w-1/2 sm:w-1/4 border-b px-6 py-2">
-              {obj.label}
-            </div>
+            <div className="w-1/2 sm:w-1/4 border-b px-6 py-2">{obj.label}</div>
             <div className="w-1/2 sm:w-3/4 bg-white px-6 py-2">{obj.value}</div>
           </div>
         );
@@ -84,7 +86,7 @@ const MuutospyyntoWizardYhteenveto = ({
 
   return (
     <React.Fragment>
-      <h2 className="my-6">{MUUTOS_WIZARD_TEKSTIT.YHTEENVETO.HEADING.FI}</h2>
+      <h2 className="my-6">{formatMessage(wizard.pageTitle_4)}</h2>
 
       <h4 className="my-6">Organisaation tiedot</h4>
 

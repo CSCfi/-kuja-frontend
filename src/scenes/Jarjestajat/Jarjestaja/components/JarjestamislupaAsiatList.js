@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
@@ -14,10 +9,11 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
 import { Typography } from "@material-ui/core";
-import { MEDIA_QUERIES } from "modules/styles";
+import { MEDIA_QUERIES } from "../../../../modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Media from "react-media";
 import { NavLink } from "react-router-dom";
+import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,34 +34,69 @@ const columnTitles = [
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
 ];
 
-const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem}) => {
+const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem, muutospyynnot, match}) => {
+  const { url } = match;
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const classes = useStyles();
   const [state, setState] = useState({
     opened: 0
   });
-  const { data } = lupahistory || {};
 
   const setOpened = dnro => {
     setState({ opened: dnro });
   };
 
-  const renderJarjestamislupaAsiatList = data => {
-    data = _.orderBy(data, ["paatospvm"], ["desc"]);
-    return _.map(data, (historyData, i) => (
+  const renderJarjestamislupaAsiatList = (muutospyynnot) => {
+    const data = _.orderBy(muutospyynnot.data, ["voimassaalkupvm"], ["desc"]);
+    return _.map(data, (historyData) => (
       <JarjestamislupaAsiatListItem
-        lupaHistoria={historyData}
-        key={`${historyData.diaarinumero}-${i}`}
+        url={url}
+        muutospyynto={historyData}
+        key={historyData.uuid}
         setOpened={setOpened}
       />
     ));
   };
 
+  const muutospyynnotTable =
+    <Paper className={classes.root}>
+      <Media
+      query={MEDIA_QUERIES.MOBILE}
+      render={() => (
+        <div>
+          <div>{renderJarjestamislupaAsiatList(muutospyynnot)}</div>
+        </div>
+      )}
+    />
+    <Media
+      query={MEDIA_QUERIES.TABLET_MIN}
+      render={() => (
+        <Table className={classes.table}>
+          <Thead>
+            <Trn>
+              {columnTitles.map((title, i) => (
+                <Thn key={`title-${i}`}>
+                        <span className="text-white">
+                          <Typography component="span">
+                            {title}
+                          </Typography>
+                        </span>
+                </Thn>
+              ))}
+              <Thn>&nbsp;</Thn>
+            </Trn>
+          </Thead>
+          <Tbody>{renderJarjestamislupaAsiatList(muutospyynnot)}</Tbody>
+        </Table>
+      )}
+    />
+  </Paper>;
+
   if (state && state.opened !== 0) {
     return (
       <React.Fragment>
         <Button variant="contained" color="primary" onClick={e => setOpened(0)}>
-          <ArrowBack />
+          <ArrowBack/>
           <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
         </Button>
         <Paper className={classes.root}>
@@ -91,38 +122,9 @@ const JarjestamislupaAsiatList = ({lupahistory, newApplicationRouteItem}) => {
             </Button>
           </div>
         </div>
-        <Paper className={classes.root}>
-          <Media
-            query={MEDIA_QUERIES.MOBILE}
-            render={() => (
-              <div>
-                <div>{renderJarjestamislupaAsiatList(data)}</div>
-              </div>
-            )}
-          />
-          <Media
-            query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => (
-              <Table className={classes.table}>
-                <TableHead>
-                  <TableRow>
-                    {columnTitles.map((title, i) => (
-                      <TableCell key={`title-${i}`}>
-                        <span className="text-white">
-                          <Typography component="span">
-                            {title}
-                          </Typography>
-                        </span>
-                      </TableCell>
-                    ))}
-                    <TableCell>&nbsp;</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>{renderJarjestamislupaAsiatList(data)}</TableBody>
-              </Table>
-            )}
-          />
-        </Paper>
+        {muutospyynnot && muutospyynnot.data && muutospyynnot.data.length > 0
+          ? muutospyynnotTable
+          : <div></div>}
       </div>
     );
   }

@@ -43,7 +43,7 @@ const RadioWrapper = styled.div`
 `
 
 class Paatos extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { muutosperustelut } = this.props
 
     if (muutosperustelut && !muutosperustelut.fetched) {

@@ -33,7 +33,10 @@ import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 
-import { setAttachmentUuids } from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
+import {
+  setAttachmentUuids,
+  combineArrays
+} from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -110,8 +113,10 @@ const MuutospyyntoWizard = props => {
       valmentavatKoulutukset: {}
     },
     perustelut: {
-      tutkinnot: {}
+      tutkinnot: {},
+      liitteet: {}
     },
+    taloudelliset: {},
     yhteenveto: {
       yleisettiedot: [],
       hakemuksenliitteet: []
@@ -124,6 +129,26 @@ const MuutospyyntoWizard = props => {
 
   const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
     MuutoshakemusContext
+  );
+
+  /**
+   * The function is mainly called by FormSection.
+   */
+  const onSectionChangesUpdate = useCallback(
+    (id, changeObjects) => {
+      if (id && changeObjects) {
+        setChangeObjects(prevState => {
+          const nextState = R.assocPath(
+            R.split("_", id),
+            changeObjects,
+            prevState
+          );
+          console.info("Next changeObjects:", nextState);
+          return nextState;
+        });
+      }
+    },
+    [setChangeObjects]
   );
 
   useEffect(() => {
@@ -151,6 +176,17 @@ const MuutospyyntoWizard = props => {
           type: toast.TYPE.SUCCESS
         });
 
+        if (changeObjects.perustelut) {
+          if (changeObjects.perustelut.liitteet) {
+            onSectionChangesUpdate(
+              "perustelut_liitteeet",
+              setAttachmentUuids(
+                changeObjects.perustelut.liitteet,
+                muutoshakemus.save.data.data
+              )
+            );
+          }
+        }
         if (
           changeObjects.taloudelliset &&
           changeObjects.taloudelliset.liitteet
@@ -186,7 +222,13 @@ const MuutospyyntoWizard = props => {
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
-  }, [muutoshakemus, props.history, props.match.params]);
+  }, [
+    muutoshakemus,
+    onSectionChangesUpdate,
+    props.history,
+    props.lupa,
+    props.match.params
+  ]);
 
   const handlePrev = pageNumber => {
     if (pageNumber !== 1) {
@@ -220,35 +262,37 @@ const MuutospyyntoWizard = props => {
     );
   }, [props.backendChanges]);
 
-  const getFiles = () => {
+  const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
-    const allAttachments = (
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []
-    ).concat(
-      (R.path(["yhteenveto", "yleisettiedot"], changeObjects) || []).concat(
-        (
-          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || []
-        ).concat(R.path(["taloudelliset", "liitteet"], changeObjects) || [])
+    const allAttachments = combineArrays([
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || [],
+      R.path(["perustelut", "liitteet"], changeObjects) || [],
+      R.flatten(
+        R.path(
+          ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+          changeObjects
+        ) || []
       )
-    );
-    // Returns only binary files
-    let attachments;
+    ]);
+    // Returns only attachments
+    let attachments = [];
     if (allAttachments) {
-      attachments = R.map(obj => {
-        if (obj.properties.attachments)
-          return R.map(file => {
-            return file;
+      R.forEachObjIndexed(obj => {
+        if (obj.properties.attachments) {
+          R.forEachObjIndexed(file => {
+            attachments.push(file);
           }, obj.properties.attachments);
-        else return null;
+        }
       }, allAttachments);
       return attachments;
-    } else {
-      return null;
     }
-  };
+  }, [changeObjects]);
 
-  const save = () => {
+  const save = useCallback(() => {
     const attachments = getFiles();
+
     if (props.match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(
@@ -272,7 +316,16 @@ const MuutospyyntoWizard = props => {
         attachments
       )(muutoshakemusDispatch);
     }
-  };
+  }, [
+    changeObjects,
+    dataBySection,
+    getFiles,
+    muutoshakemusDispatch,
+    props.backendChanges.source,
+    props.lupa,
+    props.match.params.uuid,
+    props.muutospyynnot.muutospyynto
+  ]);
 
   const setChangesBySection = useCallback(
     (sectionId, changes) => {
@@ -290,32 +343,12 @@ const MuutospyyntoWizard = props => {
   }
 
   function handleOk() {
-    props.history.push(`/jarjestajat/${props.match.params.ytunnus}`);
+    props.history.push(`/jarjestajat/${props.match.params.ytunnus}/jarjestamislupa-asia`);
   }
 
   useEffect(() => {
     setPage(parseInt(props.match.params.page, 10));
   }, [props.match.params.page]);
-
-  /**
-   * The function is called by FormSection.
-   */
-  const onSectionChangesUpdate = useCallback(
-    (id, changeObjects) => {
-      if (id && changeObjects) {
-        setChangeObjects(prevState => {
-          const nextState = R.assocPath(
-            R.split("_", id),
-            changeObjects,
-            prevState
-          );
-          console.info("Next changeObjects:", nextState);
-          return nextState;
-        });
-      }
-    },
-    [setChangeObjects]
-  );
 
   /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
@@ -356,6 +389,7 @@ const MuutospyyntoWizard = props => {
             <Stepper
               activeStep={page - 1}
               orientation={window.innerWidth >= 768 ? "horizontal" : "vertical"}
+              style={{ backgroundColor: "transparent" }}
             >
               {steps.map(label => {
                 const stepProps = {};
@@ -421,6 +455,7 @@ const MuutospyyntoWizard = props => {
                       muutoshakemus={dataBySection}
                       onChangesUpdate={onSectionChangesUpdate}
                       onStateUpdate={onSectionStateUpdate}
+                      vankilat={props.vankilat.data}
                     />
                   </LomakkeetProvider>
                 </MuutosperustelutProvider>
@@ -517,7 +552,8 @@ MuutospyyntoWizard.propTypes = {
   muutospyynnot: PropTypes.object,
   opiskelijavuodet: PropTypes.object,
   muut: PropTypes.object,
-  lupa: PropTypes.object
+  lupa: PropTypes.object,
+  vankilat: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizard);

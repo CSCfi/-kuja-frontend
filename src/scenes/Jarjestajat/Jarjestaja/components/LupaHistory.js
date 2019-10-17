@@ -7,8 +7,8 @@ import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../modules/constants";
 import LupaHistoryItem from "./LupaHistoryItem";
 import Loading from "../../../../modules/Loading";
-import { fetchLupaHistory } from "services/lupahistoria/actions";
-import { LupahistoriaContext } from "context/lupahistoriaContext";
+import { fetchLupaHistory } from "../../../../services/lupahistoria/actions";
+import { LupahistoriaContext } from "../../../../context/lupahistoriaContext";
 
 const WrapTable = styled.div``;
 

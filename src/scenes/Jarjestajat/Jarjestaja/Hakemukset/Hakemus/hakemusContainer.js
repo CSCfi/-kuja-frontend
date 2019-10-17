@@ -42,6 +42,8 @@ import {
   replaceAnchorPartWith
 } from "../../../../../utils/common";
 import { setAttachmentUuids } from "../../../../../services/muutospyynnot/muutospyyntoUtil";
+import { VankilatContext } from "../../../../../context/vankilatContext";
+import { fetchVankilat } from "../../../../../services/vankilat/actions";
 
 const HakemusContainer = props => {
   const [accessRight, setAccessRight] = useState(false);
@@ -61,6 +63,9 @@ const HakemusContainer = props => {
   );
   const { state: maaraystyypit, dispatch: maaraystyypitDispatch } = useContext(
     MaaraystyypitContext
+  );
+  const { state: vankilat, dispatch: vankilatDispatch } = useContext(
+    VankilatContext
   );
   const { state: opiskelijavuodet } = useContext(OpiskelijavuodetContext);
   const { state: muut, dispatch: muutDispatch } = useContext(MuutContext);
@@ -104,6 +109,7 @@ const HakemusContainer = props => {
     fetchKunnat()(kunnatDispatch);
     fetchMaakunnat()(maakunnatDispatch);
     fetchMaakuntakunnat()(maakuntakunnatDispatch);
+    fetchVankilat()(vankilatDispatch);
     const uuid = props.match.params.uuid;
     if (uuid) {
       fetchMuutospyynto(uuid)(muutospyynnotDispatch);
@@ -121,7 +127,8 @@ const HakemusContainer = props => {
     maakunnatDispatch,
     maakuntakunnatDispatch,
     props.intl.locale,
-    props.match.params.uuid
+    props.match.params.uuid,
+    vankilatDispatch
   ]);
 
   useEffect(() => {
@@ -185,6 +192,11 @@ const HakemusContainer = props => {
         return changeObjects;
       };
 
+      let tutkinnotjakoulutuksetLiitteetChanges =
+        R.path(
+          ["meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
+          muutospyynnot.muutospyynto
+        ) || [];
       let taloudellisetChanges =
         R.path(
           ["meta", "taloudelliset", "changeObjects"],
@@ -196,6 +208,10 @@ const HakemusContainer = props => {
           muutospyynnot.muutospyynto
         ) || [];
       // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
+      tutkinnotjakoulutuksetLiitteetChanges = setAttachmentUuids(
+        tutkinnotjakoulutuksetLiitteetChanges,
+        muutospyynnot.muutospyynto
+      );
       taloudellisetChanges = setAttachmentUuids(
         taloudellisetChanges,
         muutospyynnot.muutospyynto
@@ -208,6 +224,9 @@ const HakemusContainer = props => {
       const c = R.flatten([
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "tutkinnot"
+        }),
+        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
+          categoryKey: "liitteet"
         }),
         getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
           categoryKey: "perustelut_tutkinnot"
@@ -227,6 +246,7 @@ const HakemusContainer = props => {
         getChangesOf("opiskelijavuodet", backendMuutokset),
         getChangesOf("toimintaalue", backendMuutokset),
         getChangesOf("muut", backendMuutokset),
+        tutkinnotjakoulutuksetLiitteetChanges,
         taloudellisetChanges,
         yhteenvetoChanges
       ]).filter(Boolean);
@@ -271,9 +291,11 @@ const HakemusContainer = props => {
     kunnat.fetched &&
     maakunnat.fetched &&
     maakuntakunnat.fetched &&
+    vankilat.fetched &&
     accessRight
   ) {
     return (
+      // <div>a</div>
       <MuutospyyntoWizard
         backendChanges={backendChanges}
         kielet={kielet}
@@ -289,6 +311,7 @@ const HakemusContainer = props => {
         opiskelijavuodet={opiskelijavuodet}
         muut={muut}
         lupa={props.lupa}
+        vankilat={vankilat}
         {...props}
       />
     );

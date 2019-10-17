@@ -5,7 +5,7 @@ import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "../Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "../Taloudelliset/TaloudellisetInvestoinnit";
 import TaloudellisetTilinpaatostiedot from "../Taloudelliset/TaloudellisetTilinpaatostiedot";
-import TaloudellisetLiitteet from "../Taloudelliset/TaloudellisetLiitteet";
+// import TaloudellisetLiitteet from "../Taloudelliset/TaloudellisetLiitteet";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 

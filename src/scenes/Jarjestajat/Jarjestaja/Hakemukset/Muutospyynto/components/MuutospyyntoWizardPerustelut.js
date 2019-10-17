@@ -19,10 +19,14 @@ import {
 import { getRemovalFormStructure } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import PerustelutOpiskelijavuodet from "./Perustelut/PerustelutOpiskelijavuodet";
+import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
+import PerustelutLiitteet from "./Perustelut/PerustelutLiitteet";
+import wizard from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardPerustelut = ({
   changeObjects,
   intl,
+  intl: { formatMessage },
   kielet,
   kohteet = [],
   koulutukset,
@@ -33,7 +37,8 @@ const MuutospyyntoWizardPerustelut = ({
   lupa,
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate
+  onStateUpdate,
+  vankilat = []
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
@@ -44,7 +49,6 @@ const MuutospyyntoWizardPerustelut = ({
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
     LomakkeetContext
   );
-
   useEffect(() => {
     fetchMuutosperustelut()(muutosperustelutDispatch);
   }, [muutosperustelutDispatch]);
@@ -102,8 +106,14 @@ const MuutospyyntoWizardPerustelut = ({
 
   return (
     <React.Fragment>
+      <h2 className="my-6">{formatMessage(wizard.pageTitle_2)}</h2>
+
+      {(!muutosperustelut.muutosperusteluList || !changeObjects) && (
+        <p>{formatMessage(wizard.noChanges)}</p>
+      )}
+
       {muutoshakemus && koulutustyypit && kohdetiedot ? (
-        <div>
+        <React.Fragment>
           {muutosperustelut.muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
@@ -141,7 +151,6 @@ const MuutospyyntoWizardPerustelut = ({
                         {..._props}
                       />
                     )}
-
                     {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
                       <PerustelutKoulutukset
                         changeObjects={{
@@ -168,6 +177,34 @@ const MuutospyyntoWizardPerustelut = ({
                         {..._props}
                       />
                     ) : null}
+                    {/* Attachments for Tutkinnot ja koulutukset */}
+                    {muutosperustelut.muutosperusteluList &&
+                      (!!R.path(["tutkinnot"], changeObjects) ||
+                        !!R.path(["koulutukset"], changeObjects)) && (
+                        <FormSection
+                          id="perustelut_liitteet"
+                          className="my-0"
+                          render={_props => (
+                            <React.Fragment>
+                              <PerustelutLiitteet
+                                stateObject={R.path(
+                                  ["perustelut", "liitteet"],
+                                  muutoshakemus
+                                )}
+                                changeObjects={{
+                                  perustelut: R.path(
+                                    ["perustelut", "liitteet"],
+                                    changeObjects
+                                  )
+                                }}
+                                {..._props}
+                              />
+                            </React.Fragment>
+                          )}
+                          runOnStateUpdate={onStateUpdate}
+                          runOnChanges={onChangesUpdate}
+                        />
+                      )}
                   </React.Fragment>
                 )}
                 runOnStateUpdate={onStateUpdate}
@@ -175,7 +212,6 @@ const MuutospyyntoWizardPerustelut = ({
                 title={kohdetiedot[0].title}
               />
             )}
-
           {!!R.prop(["kielet"], changeObjects) ? (
             <FormSection
               code={2}
@@ -249,7 +285,6 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[1].title}
             />
           ) : null}
-
           {!!R.prop(["toimintaalue"], changeObjects) ? (
             <FormSection
               code={3}
@@ -281,7 +316,6 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[2].title}
             />
           ) : null}
-
           {!!R.prop(["opiskelijavuodet"], changeObjects) &&
           muutosperustelut.muutosperusteluList ? (
             <FormSection
@@ -321,7 +355,6 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[3].title}
             />
           ) : null}
-
           {!!R.prop(["muut"], changeObjects) ? (
             <FormSection
               code={5}
@@ -344,6 +377,7 @@ const MuutospyyntoWizardPerustelut = ({
                       stateObject={R.path(["perustelut", "muut"])(
                         muutoshakemus
                       )}
+                      vankilat={vankilat}
                       {..._props}
                     />
                   ) : null}
@@ -354,7 +388,35 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[4].title}
             />
           ) : null}
-        </div>
+          {/* Common attachments, the same also in Yhteenveto */}
+          {muutosperustelut.muutosperusteluList &&
+            (!!R.path(["tutkinnot"], changeObjects) ||
+              !!R.path(["koulutukset"], changeObjects)) && (
+              <FormSection
+                id="yhteenveto_hakemuksenliitteet"
+                className="my-0"
+                render={_props => (
+                  <React.Fragment>
+                    <YhteenvetoLiitteet
+                      stateObject={R.path(
+                        ["yhteenveto", "hakemuksenliitteet"],
+                        muutoshakemus
+                      )}
+                      changeObjects={{
+                        yhteenveto: R.path(
+                          ["yhteenveto", "hakemuksenliitteet"],
+                          changeObjects
+                        )
+                      }}
+                      {..._props}
+                    />
+                  </React.Fragment>
+                )}
+                runOnStateUpdate={onStateUpdate}
+                runOnChanges={onChangesUpdate}
+              />
+            )}
+        </React.Fragment>
       ) : null}
     </React.Fragment>
   );
@@ -371,7 +433,8 @@ MuutospyyntoWizardPerustelut.propTypes = {
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  vankilat: PropTypes.array
 };
 
 export default injectIntl(MuutospyyntoWizardPerustelut);

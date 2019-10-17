@@ -397,3 +397,13 @@ export function setAttachmentUuids(
     );
   }, changeObjects);
 }
+
+// Combine arrays recursively
+export function combineArrays(arrays) {
+  if (arrays && arrays.length > 0) {
+    const currentArray = arrays.pop();
+    if (currentArray) {
+      return currentArray.concat(combineArrays(arrays));
+    } else return [];
+  } else return [];
+}
