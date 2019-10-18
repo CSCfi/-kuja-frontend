@@ -370,23 +370,21 @@ const MuutospyyntoWizardPerustelut = ({
               muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
-                  {!!R.path(["toimintaalue"], changeObjects) ? (
-                    <PerustelutToimintaalue
-                      changeObjects={{
-                        toimintaalue: R.path(["toimintaalue"], changeObjects),
-                        perustelut: R.path(
-                          ["perustelut", "toimintaalue"],
-                          changeObjects
-                        )
-                      }}
-                      stateObjects={{
-                        perustelut: R.path(["perustelut", "toimintaalue"])(
-                          muutoshakemus
-                        )
-                      }}
-                      {..._props}
-                    />
-                  ) : null}
+                  <PerustelutToimintaalue
+                    changeObjects={{
+                      toimintaalue: R.path(["toimintaalue"], changeObjects),
+                      perustelut: R.path(
+                        ["perustelut", "toimintaalue"],
+                        changeObjects
+                      )
+                    }}
+                    stateObjects={{
+                      perustelut: R.path(["perustelut", "toimintaalue"])(
+                        muutoshakemus
+                      )
+                    }}
+                    {..._props}
+                  />
                 </React.Fragment>
               )}
               runOnStateUpdate={onStateUpdate}
@@ -401,30 +399,28 @@ const MuutospyyntoWizardPerustelut = ({
               muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
-                  {!!R.path(["opiskelijavuodet"], changeObjects) ? (
-                    <PerustelutOpiskelijavuodet
-                      changeObjects={{
-                        opiskelijavuodet: R.path(
-                          ["opiskelijavuodet"],
-                          changeObjects
-                        ),
-                        perustelut: R.path(
-                          ["perustelut", "opiskelijavuodet"],
-                          changeObjects
-                        )
-                      }}
-                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
-                        kohteet
-                      )}
-                      muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
-                        muutosperustelut.muutosperusteluList
-                      )}
-                      stateObject={R.path(["perustelut", "opiskelijavuodet"])(
-                        muutoshakemus
-                      )}
-                      {..._props}
-                    />
-                  ) : null}
+                  <PerustelutOpiskelijavuodet
+                    changeObjects={{
+                      opiskelijavuodet: R.path(
+                        ["opiskelijavuodet"],
+                        changeObjects
+                      ),
+                      perustelut: R.path(
+                        ["perustelut", "opiskelijavuodet"],
+                        changeObjects
+                      )
+                    }}
+                    kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
+                      kohteet
+                    )}
+                    muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
+                      muutosperustelut.muutosperusteluList
+                    )}
+                    stateObject={R.path(["perustelut", "opiskelijavuodet"])(
+                      muutoshakemus
+                    )}
+                    {..._props}
+                  />
                 </React.Fragment>
               )}
               runOnStateUpdate={onStateUpdate}
@@ -439,25 +435,18 @@ const MuutospyyntoWizardPerustelut = ({
               muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
-                  {!!R.path(["muut"], changeObjects) ? (
-                    <PerustelutMuut
-                      changeObjects={{
-                        muut: R.path(["muut"], changeObjects),
-                        perustelut: R.path(
-                          ["perustelut", "muut"],
-                          changeObjects
-                        )
-                      }}
-                      kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
-                      maaraykset={lupa.data.maaraykset}
-                      muut={muut}
-                      stateObject={R.path(["perustelut", "muut"])(
-                        muutoshakemus
-                      )}
-                      vankilat={vankilat}
-                      {..._props}
-                    />
-                  ) : null}
+                  <PerustelutMuut
+                    changeObjects={{
+                      muut: R.path(["muut"], changeObjects),
+                      perustelut: R.path(["perustelut", "muut"], changeObjects)
+                    }}
+                    kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
+                    maaraykset={lupa.data.maaraykset}
+                    muut={muut}
+                    stateObject={R.path(["perustelut", "muut"])(muutoshakemus)}
+                    vankilat={vankilat}
+                    {..._props}
+                  />
                 </React.Fragment>
               )}
               runOnStateUpdate={onStateUpdate}

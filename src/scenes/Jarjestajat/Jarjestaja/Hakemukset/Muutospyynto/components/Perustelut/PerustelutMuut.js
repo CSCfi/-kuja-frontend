@@ -383,22 +383,23 @@ const PerustelutMuut = React.memo(
         {stateObject.items ? (
           <React.Fragment>
             {R.addIndex(R.map)((row, i) => {
-              return (
-                <ExpandableRowRoot
-                  anchor={`${sectionId}_${row.code}`}
-                  categories={row.categories}
-                  changes={R.path(["perustelut", row.code], changeObjects)}
-                  code={row.code}
-                  disableReverting={isReadOnly}
-                  isExpanded={true}
-                  key={`expandable-row-root-${i}`}
-                  onChangesRemove={onChangesRemove}
-                  onUpdate={onChangesUpdate}
-                  sectionId={sectionId}
-                  showCategoryTitles={true}
-                  title={row.title}
-                ></ExpandableRowRoot>
-              );
+              if (!R.isEmpty(R.path(["perustelut", row.code], changeObjects)))
+                return (
+                  <ExpandableRowRoot
+                    anchor={`${sectionId}_${row.code}`}
+                    categories={row.categories}
+                    changes={R.path(["perustelut", row.code], changeObjects)}
+                    code={row.code}
+                    disableReverting={isReadOnly}
+                    isExpanded={true}
+                    key={`expandable-row-root-${i}`}
+                    onChangesRemove={onChangesRemove}
+                    onUpdate={onChangesUpdate}
+                    sectionId={sectionId}
+                    showCategoryTitles={true}
+                    title={row.title}
+                  />
+                );
             })(stateObject.items)}
           </React.Fragment>
         ) : null}
