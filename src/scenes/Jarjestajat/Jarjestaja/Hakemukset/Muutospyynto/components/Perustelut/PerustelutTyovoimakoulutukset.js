@@ -94,9 +94,14 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
     props.maaraystyyppi
   ]);
 
+  const changes = R.path(
+    ["koulutukset", "tyovoimakoulutukset"],
+    props.changeObjects
+  );
+
   return (
     <React.Fragment>
-      {props.stateObject.categories ? (
+      {changes && !R.isEmpty(changes) && (
         <ExpandableRowRoot
           anchor={sectionId}
           key={`expandable-row-root`}
@@ -111,7 +116,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
           onChangesRemove={onChangesRemove}
           title={props.intl.formatMessage(wizardMessages.workforceTraining)}
         />
-      ) : null}
+      )}
     </React.Fragment>
   );
 });

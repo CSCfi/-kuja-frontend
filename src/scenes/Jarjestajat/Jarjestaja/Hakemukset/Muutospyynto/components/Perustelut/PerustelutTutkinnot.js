@@ -95,28 +95,34 @@ const PerustelutTutkinnot = React.memo(
       <React.Fragment>
         {stateObject.items &&
           R.addIndex(R.map)((stateItem, i) => {
-            const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
-            return stateItem.categories.length ? (
-              <ExpandableRowRoot
-                anchor={anchorInitial}
-                key={`expandable-row-root-${i}`}
-                categories={stateItem.categories}
-                changes={R.path(
-                  ["perustelut", "tutkinnot", stateItem.areaCode],
-                  changeObjects
-                )}
-                code={stateItem.areaCode}
-                disableReverting={false}
-                hideAmountOfChanges={false}
-                index={i}
-                isExpanded={true}
-                onChangesRemove={onChangesRemove}
-                onUpdate={onChangesUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={true}
-                title={stateItem.title}
-              />
-            ) : null;
+            const changes = R.path(
+              ["tutkinnot", stateItem.areaCode],
+              changeObjects
+            );
+            if (changes && !R.isEmpty(changes)) {
+              const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
+              return (
+                <ExpandableRowRoot
+                  anchor={anchorInitial}
+                  key={`expandable-row-root-${i}`}
+                  categories={stateItem.categories}
+                  changes={R.path(
+                    ["perustelut", "tutkinnot", stateItem.areaCode],
+                    changeObjects
+                  )}
+                  code={stateItem.areaCode}
+                  disableReverting={false}
+                  hideAmountOfChanges={false}
+                  index={i}
+                  isExpanded={true}
+                  onChangesRemove={onChangesRemove}
+                  onUpdate={onChangesUpdate}
+                  sectionId={sectionId}
+                  showCategoryTitles={true}
+                  title={stateItem.title}
+                />
+              );
+            }
           }, stateObject.items)}
       </React.Fragment>
     );

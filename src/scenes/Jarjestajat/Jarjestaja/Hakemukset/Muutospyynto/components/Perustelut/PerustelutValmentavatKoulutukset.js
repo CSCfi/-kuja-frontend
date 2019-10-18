@@ -67,7 +67,10 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
       }, koulutusData.items);
       return categories.filter(Boolean);
     };
-  }, [props.isReadOnly, props.changeObjects.koulutukset.valmentavatKoulutukset]);
+  }, [
+    props.isReadOnly,
+    props.changeObjects.koulutukset.valmentavatKoulutukset
+  ]);
 
   useEffect(() => {
     const categories = getCategories(
@@ -92,28 +95,34 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
     props.intl.locale,
     props.maaraystyyppi
   ]);
-
-  return (
-    <React.Fragment>
-      {props.stateObject.categories ? (
-        <ExpandableRowRoot
-          anchor={sectionId}
-          key={`expandable-row-root`}
-          categories={props.stateObject.categories}
-          changes={
-            props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset
-          }
-          disableReverting={props.isReadOnly}
-          hideAmountOfChanges={false}
-          isExpanded={true}
-          onChangesRemove={onChangesRemove}
-          onUpdate={onChangesUpdate}
-          sectionId={sectionId}
-          title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
-        />
-      ) : null}
-    </React.Fragment>
+  const changes = R.path(
+    ["koulutukset", "valmentavatKoulutukset"],
+    props.changeObjects
   );
+  if (changes && !R.isEmpty(changes)) {
+    return (
+      <React.Fragment>
+        {props.stateObject.categories ? (
+          <ExpandableRowRoot
+            anchor={sectionId}
+            key={`expandable-row-root`}
+            categories={props.stateObject.categories}
+            changes={
+              props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset
+            }
+            disableReverting={props.isReadOnly}
+            hideAmountOfChanges={false}
+            isExpanded={true}
+            onChangesRemove={onChangesRemove}
+            onUpdate={onChangesUpdate}
+            sectionId={sectionId}
+            title={props.intl.formatMessage(wizardMessages.preparatoryTraining)}
+          />
+        ) : null}
+      </React.Fragment>
+    );
+  }
+  return <React.Fragment />;
 });
 
 PerustelutValmentavatKoulutukset.defaultProps = {

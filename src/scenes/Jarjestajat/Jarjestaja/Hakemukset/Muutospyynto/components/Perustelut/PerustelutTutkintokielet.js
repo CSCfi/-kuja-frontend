@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
@@ -7,6 +7,7 @@ import * as R from "ramda";
 const PerustelutTutkintokielet = React.memo(props => {
   const sectionId = "perustelut_kielet_tutkintokielet";
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+  const [isChanges, setIsChanges] = useState(false);
 
   useEffect(() => {
     const getCategories = () => {
@@ -134,34 +135,54 @@ const PerustelutTutkintokielet = React.memo(props => {
     props.stateObjects.tutkintokielet
   ]);
 
-  return (
-    <React.Fragment>
-      {!!R.path(["perustelut", "categories"], props.stateObjects) ? (
-        <div>
-          <h2 className="py-4">Tutkintokielet</h2>
-          {R.addIndex(R.map)((categories, index) => {
-            const areaCode = R.path([0, "metadata", "areaCode"], categories);
-            return areaCode ? (
-              <ExpandableRowRoot
-                anchor={`${sectionId}_${areaCode}`}
-                key={`expandable-row-root-${index}`}
-                categories={categories}
-                changes={R.path(["perustelut", areaCode], props.changeObjects)}
-                disableReverting={props.isReadOnly}
-                onChangesRemove={onChangesRemove}
-                onUpdate={onChangesUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={true}
-                code={areaCode}
-                title={categories[0].metadata.title}
-                isExpanded={true}
-              />
-            ) : null;
-          }, R.values(R.path(["perustelut", "categories"], props.stateObjects)))}
-        </div>
-      ) : null}
-    </React.Fragment>
-  );
+  useEffect(() => {
+    R.forEachObjIndexed(item => {
+      if (!R.isEmpty(item)) {
+        setIsChanges(true);
+      }
+    }, props.changeObjects.tutkintokielet || []);
+  });
+
+  if (isChanges) {
+    return (
+      <React.Fragment>
+        {!!R.path(["perustelut", "categories"], props.stateObjects) ? (
+          <div>
+            <h2 className="py-4">Tutkintokielet</h2>
+            {R.addIndex(R.map)((categories, index) => {
+              const areaCode = R.path([0, "metadata", "areaCode"], categories);
+              const changes = R.path(
+                ["tutkintokielet", areaCode],
+                props.changeObjects
+              );
+              if (changes && !R.isEmpty(changes)) {
+                return areaCode ? (
+                  <ExpandableRowRoot
+                    anchor={`${sectionId}_${areaCode}`}
+                    key={`expandable-row-root-${index}`}
+                    categories={categories}
+                    changes={R.path(
+                      ["perustelut", areaCode],
+                      props.changeObjects
+                    )}
+                    disableReverting={props.isReadOnly}
+                    onChangesRemove={onChangesRemove}
+                    onUpdate={onChangesUpdate}
+                    sectionId={sectionId}
+                    showCategoryTitles={true}
+                    code={areaCode}
+                    title={categories[0].metadata.title}
+                    isExpanded={true}
+                  />
+                ) : null;
+              }
+            }, R.values(R.path(["perustelut", "categories"], props.stateObjects)))}
+          </div>
+        ) : null}
+      </React.Fragment>
+    );
+  }
+  return <React.Fragment />;
 });
 
 PerustelutTutkintokielet.defaultValues = {
