@@ -99,9 +99,9 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
     props.changeObjects
   );
 
-  if (changes && !R.isEmpty(changes)) {
-    return (
-      <React.Fragment>
+  return (
+    <React.Fragment>
+      {changes && !R.isEmpty(changes) && (
         <ExpandableRowRoot
           anchor={sectionId}
           key={`expandable-row-root`}
@@ -116,11 +116,9 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
           onChangesRemove={onChangesRemove}
           title={props.intl.formatMessage(wizardMessages.workforceTraining)}
         />
-      </React.Fragment>
-    );
-  } else {
-    return <React.Fragment />;
-  }
+      )}
+    </React.Fragment>
+  );
 });
 
 PerustelutTyovoimakoulutukset.defaultProps = {
