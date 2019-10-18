@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../modules/constants";
+import { API_BASE_URL } from "../../modules/constants";
 import {
   FETCH_FROM_BACKEND_FAILED,
   FETCH_FROM_BACKEND_IS_ON,
@@ -59,7 +59,13 @@ export function isReady(backendData) {
  * Example: { luvat: api/luvat/jarjestajilla, ... }
  */
 const backendRoutes = {
-  luvat: `${API_BASE_URL}/luvat/jarjestajilla`
+  kunnat: `${API_BASE_URL}/koodistot/kunnat`,
+  lupa: `${API_BASE_URL}/luvat/jarjestaja/`,
+  luvat: `${API_BASE_URL}/luvat/jarjestajilla`,
+  maakunnat: `${API_BASE_URL}/koodistot/maakunnat`,
+  muutospyynnot: `${API_BASE_URL}/muutospyynnot/`,
+  organisaatio: `${API_BASE_URL}/organisaatiot/`,
+  kayttaja: `${API_BASE_URL}/auth/me`
 };
 
 /**
@@ -70,11 +76,13 @@ const backendRoutes = {
  * @param {function} dispatchFn - A dispatch function.
  * @param {object} abortController - An instance of AbortController.
  */
-async function run(key, url, dispatchFn, abortController) {
+async function run(key, url, options, dispatchFn, abortController) {
   /**
    * It's time to fetch some data!
    */
+
   const response = await fetch(url, {
+    ...options,
     signal: abortController.signal
   }).catch(err => {
     console.log(err);
@@ -116,9 +124,12 @@ function recursiveFetchHandler(
   _abortControllers = [],
   index = 0
 ) {
-  const { key, dispatchFn } = R.view(R.lensIndex(index), keysAndDispatchFuncs);
+  const { key, dispatchFn, options = {}, urlEnding = "" } = R.view(
+    R.lensIndex(index),
+    keysAndDispatchFuncs
+  );
 
-  const url = R.prop(key, backendRoutes);
+  const url = R.join("", [R.prop(key, backendRoutes), urlEnding]);
 
   /**
    * When a user is leaving a page and the following backend call is active we can
@@ -140,6 +151,11 @@ function recursiveFetchHandler(
   });
 
   /**
+   * XHR call is made by the run function.
+   */
+  run(key, url, options, dispatchFn, abortController);
+
+  /**
    * Let's handle the next fetch setup. Current function is called
    * again with updated parameters here.
    */
@@ -151,11 +167,6 @@ function recursiveFetchHandler(
     );
   }
 
-  /**
-   * XHR call is made by the run function.
-   */
-  run(key, url, dispatchFn, abortController);
-
   return abortControllers;
 }
 
@@ -163,6 +174,6 @@ function recursiveFetchHandler(
  * Uses recursiveFetchHandler function to loop through the given array of objects.
  * @param {Object[]} keysAndDispatchFuncs - [{ key: string, dispatchFn: function}, ...]
  */
-export function fetchFromBackend(keysAndDispatchFuncs) {
+export function fetchFromBackend(keysAndDispatchFuncs = []) {
   return recursiveFetchHandler(keysAndDispatchFuncs);
 }

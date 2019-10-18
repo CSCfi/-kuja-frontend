@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react";
+import { injectIntl } from "react-intl";
 import styled from "styled-components";
 import { Route } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -208,8 +209,4 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
   }
 };
 
-export default Jarjestaja;
-// {jarjestajaNimi}
-
-// import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
-// import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
+export default injectIntl(Jarjestaja);

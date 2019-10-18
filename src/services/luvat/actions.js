@@ -6,14 +6,12 @@ import {
   FETCH_LUPA_FAILURE
 } from "./actionTypes";
 
-export function fetchLupa(ytunnus, query, formatMessage) {
+export function fetchLupa(ytunnus, query = "", formatMessage) {
   return dispatch => {
     dispatch({ type: FETCH_LUPA_START });
 
     const request = fetch(
-      `${API_BASE_URL}/luvat/jarjestaja/${ytunnus}${(query = query
-        ? query
-        : "")}`
+      `${API_BASE_URL}/luvat/jarjestaja/${ytunnus}${query}`
     );
 
     request

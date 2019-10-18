@@ -1,28 +1,37 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
-import { MuutospyynnotContext } from "context/muutospyynnotContext";
-import { LuvatContext } from "context/luvatContext";
-import { fetchLupa } from "../../../../services/luvat/actions";
-import { fetchMuutospyynnot } from "services/muutospyynnot/actions";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
-import { injectIntl } from "react-intl";
 import Hakemus from "../Hakemukset/Hakemus";
+import { BackendContext } from "../../../../context/backendContext";
+import {
+  abort,
+  fetchFromBackend
+} from "../../../../services/backendService";
 
 const JarjestajaSwitch = props => {
-  const { state: lupa, dispatch: luvatDispatch } = useContext(LuvatContext);
-  const { state: muutospyynnot, dispatch: muutospyynnotDispatch } = useContext(
-    MuutospyynnotContext
-  );
+  const { state: fromBackend, dispatch } = useContext(BackendContext);
   const { ytunnus } = props.match.params;
-  const {
-    intl: { formatMessage }
-  } = props;
 
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers = useMemo(() => {
+    return fetchFromBackend([
+      { key: "lupa", dispatchFn: dispatch, urlEnding: `${ytunnus}?with=all` },
+      { key: "muutospyynnot", dispatchFn: dispatch, urlEnding: ytunnus }
+    ]);
+  }, [dispatch, ytunnus]);
+
+  /**
+   * Ongoing XHR calls must be canceled. It's done here.
+   */
   useEffect(() => {
-    fetchLupa(ytunnus, "?with=all", formatMessage)(luvatDispatch);
-    fetchMuutospyynnot(ytunnus)(muutospyynnotDispatch);
-  }, [ytunnus, luvatDispatch, muutospyynnotDispatch, formatMessage]);
+    return () => {
+      abort(abortControllers);
+    };
+  }, [abortControllers, dispatch]);
 
   return (
     <React.Fragment>
@@ -31,14 +40,14 @@ const JarjestajaSwitch = props => {
           exact
           path={`${props.match.path}/hakemukset-ja-paatokset/uusi/:page`}
           render={props => {
-            return <Hakemus lupa={lupa} {...props} />;
+            return <Hakemus lupa={fromBackend.lupa} {...props} />;
           }}
         />
         <Route
           exact
           path={`${props.match.path}/hakemukset-ja-paatokset/:uuid/:page`}
           render={props => {
-            return <Hakemus lupa={lupa} {...props} />;
+            return <Hakemus lupa={fromBackend.lupa} {...props} />;
           }}
         />
         <Route
@@ -46,8 +55,8 @@ const JarjestajaSwitch = props => {
           render={props => (
             <LupahistoriaProvider>
               <Jarjestaja
-                lupa={lupa}
-                muutospyynnot={muutospyynnot}
+                lupa={fromBackend.lupa}
+                muutospyynnot={fromBackend.muutospyynnot}
                 {...props}
               />
             </LupahistoriaProvider>
@@ -58,4 +67,4 @@ const JarjestajaSwitch = props => {
   );
 };
 
-export default injectIntl(JarjestajaSwitch);
+export default JarjestajaSwitch;

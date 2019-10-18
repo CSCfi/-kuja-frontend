@@ -3,8 +3,8 @@ import { IntlProvider, addLocaleData } from "react-intl";
 import fiLocaleData from "react-intl/locale-data/fi";
 import svLocaleData from "react-intl/locale-data/sv";
 import translations from "./i18n/locales";
-import App from "./App";
 import { AppContext } from "./context/appContext";
+import App from "./App";
 
 addLocaleData(fiLocaleData);
 addLocaleData(svLocaleData);

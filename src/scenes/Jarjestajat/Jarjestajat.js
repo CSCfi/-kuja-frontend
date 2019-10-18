@@ -10,7 +10,7 @@ import {
   isErroneous,
   isFetching,
   isReady
-} from "../../services/muutoshakemus/utils/backend-service";
+} from "../../services/backendService";
 
 const Jarjestajat = () => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);

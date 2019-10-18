@@ -24,14 +24,17 @@ export default function(state, action) {
         }
       };
     case FETCH_FROM_BACKEND_SUCCESS:
-      return {
+      const nextState = {
         ...state,
         [action.key]: {
           ...state[action.key],
           raw: action.data,
-          status: "ready"
+          status: "ready",
+          fetched: new Date().toUTCString()
         }
       };
+      console.info(nextState);
+      return nextState;
     default:
       return state;
   }

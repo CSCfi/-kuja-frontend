@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import { logoutUser } from "services/kayttajat/actions";
+import React, { useContext, useEffect, useMemo } from "react";
+import { logoutUser } from "../../services/backendService/actions";
 import styled from "styled-components";
-import { UserContext} from '../../context/userContext'
+import { BackendContext } from "../../context/backendContext";
 
 const LogoutText = styled.div`
   padding: 14px 20px;
@@ -11,10 +11,20 @@ const LogoutText = styled.div`
 `;
 
 const Logout = () => {
-  const { ...context } = useContext(UserContext)
+  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const loggedOutUser = useMemo(() => {
+    return logoutUser(dispatch);
+  }, [dispatch]);
+
   useEffect(() => {
-    logoutUser()(context.dispatch);
-  }, [context]);
+    console.info("logataan ulos");
+    logoutUser(dispatch);
+  }, [dispatch]);
 
   return (
     <LogoutText>

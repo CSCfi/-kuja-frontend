@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -8,7 +8,6 @@ import LinkItemUpper from "../../../scenes/Header/components/LinkItemUpper";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import { getOrganization } from "services/kayttajat/actions";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -22,6 +21,7 @@ import { injectIntl } from "react-intl";
 import authMessages from "../../../i18n/definitions/auth";
 import langMessages from "../../../i18n/definitions/languages";
 import css from "./button-app-bar.module.css";
+import * as R from "ramda";
 
 const styles = () => ({
   appBar: {
@@ -38,28 +38,17 @@ const styles = () => ({
 
 const ButtonAppBar = ({
   classes,
+  intl,
   ytunnus,
-  user = {},
-  oppilaitos,
-  pageLinks,
-  dispatch,
-  ...props
+  user = null,
+  organisaatio,
+  pageLinks
 }) => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const [state, setState] = useState({
     isSideNavigationVisible: false
   });
-
-  const {
-    intl: { formatMessage }
-  } = props;
-
-  useEffect(() => {
-    if (user && user.oid) {
-      getOrganization(user.oid)(dispatch);
-    }
-  }, [user, dispatch]);
 
   const handleMenuButtonClick = () => {
     setState({
@@ -81,7 +70,6 @@ const ButtonAppBar = ({
       <CssBaseline />
       <SideNavigation
         user={user}
-        oppilaitos={oppilaitos}
         ytunnus={ytunnus}
         position="left"
         shouldBeVisible={state.isSideNavigationVisible}
@@ -113,7 +101,7 @@ const ButtonAppBar = ({
               </Typography>
             </NavLink>
           </div>
-          {breakpointTabletMin && !sessionStorage.getItem("role") ? (
+          {breakpointTabletMin && !user ? (
             <LinkItemUpper
               to="/cas-auth"
               className="has-separator pull-right"
@@ -121,7 +109,7 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              {formatMessage(authMessages.logIn)}
+              {intl.formatMessage(authMessages.logIn)}
             </LinkItemUpper>
           ) : null}
           {breakpointTabletMin && user && user.username && (
@@ -132,7 +120,8 @@ const ButtonAppBar = ({
                 backgroundColor: "transparent"
               }}
             >
-              {formatMessage(authMessages.logOut)} ({user.username})
+              {intl.formatMessage(authMessages.logOut)} ({user.username}) <br />{" "}
+              <span className="text-gray-600">{R.path(["nimi", "fi"], organisaatio)}</span>
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (
@@ -152,7 +141,7 @@ const ButtonAppBar = ({
                     sizeSmall: css["locale-button"]
                   }}
                 >
-                  {formatMessage(langMessages.inFinnish)}
+                  {intl.formatMessage(langMessages.inFinnish)}
                 </ToggleButton>
                 <ToggleButton
                   key={2}
@@ -163,7 +152,7 @@ const ButtonAppBar = ({
                     sizeSmall: css["locale-button"]
                   }}
                 >
-                  {formatMessage(langMessages.inSwedish)}
+                  {intl.formatMessage(langMessages.inSwedish)}
                 </ToggleButton>
               </ToggleButtonGroup>
             </React.Fragment>
@@ -175,7 +164,9 @@ const ButtonAppBar = ({
 };
 
 ButtonAppBar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  organisaatio: PropTypes.object,
+  user: PropTypes.object
 };
 
 export default withStyles(styles)(injectIntl(ButtonAppBar));

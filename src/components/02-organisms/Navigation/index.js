@@ -43,9 +43,6 @@ const useStyles = makeStyles(theme => ({
 
 const Navigation = props => {
   const classes = useStyles();
-  const {
-    intl: { formatMessage }
-  } = props;
 
   return (
     <div className={classes.root} data-testid="navigation">
@@ -76,7 +73,7 @@ const Navigation = props => {
               }}
               exact
             >
-              {formatMessage(userMessages.ownOrganization)}
+              {props.intl.formatMessage(userMessages.ownOrganization)}
             </LinkItem>
           )}
 
@@ -87,6 +84,10 @@ const Navigation = props => {
       </AppBar>
     </div>
   );
+};
+
+Navigation.propTypes = {
+  ytunnus: PropTypes.string
 };
 
 export default injectIntl(Navigation);

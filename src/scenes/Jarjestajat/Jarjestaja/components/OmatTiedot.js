@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Loading from "../../../../modules/Loading";
 import {
@@ -6,24 +6,39 @@ import {
   InnerContentWrapper
 } from "../../../../modules/elements";
 import { getToimialueByKoodiArvo } from "services/toimialueet/toimialueUtil";
-import { fetchKunnat } from "../../../../services/kunnat/actions";
-import { fetchMaakunnat } from "../../../../services/maakunnat/actions";
 import { UserContext } from "context/userContext";
-import { KunnatContext } from "context/kunnatContext";
-import { MaakunnatContext } from "context/maakunnatContext";
 import { Typography } from "@material-ui/core";
+import { BackendContext } from "../../../../context/backendContext";
+import {
+  abort,
+  fetchFromBackend
+} from "../../../../services/backendService";
 
 const OmatTiedot = () => {
   const { state: user } = useContext(UserContext);
-  const { state: kunnat, dispatch: kunnatDispatch } = useContext(KunnatContext);
-  const { state: maakunnat, dispatch: maakunnatDispatch } = useContext(
-    MaakunnatContext
-  );
+  const { state: fromBackend, dispatch } = useContext(BackendContext);
+  const { kunnat, maakunnat } = fromBackend;
 
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers = useMemo(() => {
+    return fetchFromBackend([
+      { key: "kunnat", dispatchFn: dispatch },
+      { key: "maakunnat", dispatchFn: dispatch }
+    ]);
+  }, [dispatch]);
+
+  /**
+   * Ongoing XHR calls must be canceled. It's done here.
+   */
   useEffect(() => {
-    fetchKunnat()(kunnatDispatch);
-    fetchMaakunnat()(maakunnatDispatch);
-  }, [kunnatDispatch, maakunnatDispatch]);
+    return () => {
+      abort(abortControllers);
+    };
+  }, [abortControllers, dispatch]);
+
   const { oppilaitos } = user || {};
   let postinumero = undefined;
   let ppostinumero = undefined;

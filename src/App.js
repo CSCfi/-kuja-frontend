@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "scenes/Login/Login";
 import Logout from "scenes/Logout/Logout";
@@ -8,8 +8,8 @@ import { COLORS } from "./modules/styles";
 import Home from "scenes/Home/components/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
-import RequireCasAuth from "scenes/Login/services/RequireCasAuth";
-import DestroyCasAuth from "scenes/Logout/services/DestroyCasAuth";
+import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
+import DestroyCasAuth from "./scenes/Logout/services/DestroyCasAuth";
 import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
 import EsiJaPerusopetus from "scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
@@ -17,23 +17,33 @@ import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistys
 import JarjestajaSwitch from "scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
-import { UserContext } from "./context/userContext";
-import { getRoles } from "services/kayttajat/actions";
 import { JarjestajatProvider } from "./context/jarjestajatContext";
 import { LuvatProvider } from "./context/luvatContext";
 import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
-import { BackendProvider } from "./context/backendContext";
+import { BackendContext } from "./context/backendContext";
 import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
 import Navigation from "./components/02-organisms/Navigation";
 import { MEDIA_QUERIES } from "./modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { ROLE_ESITTELIJA } from "./modules/constants";
 import ReactResizeDetector from "react-resize-detector";
 import { loadProgressBar } from "axios-progress-bar";
 import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import { ToastContainer } from "react-toastify";
+import {
+  abort,
+  fetchFromBackend
+} from "./services/backendService";
+import {
+  ROLE_ESITTELIJA,
+  ROLE_KATSELIJA,
+  ROLE_KAYTTAJA,
+  ROLE_NIMENKIRJOITTAJA,
+  ROLE_YLLAPITAJA
+} from "./modules/constants";
+import * as R from "ramda";
+import _ from "lodash"; // TODO: Get rid of this.
 
 import "axios-progress-bar/dist/nprogress.css";
 
@@ -41,34 +51,29 @@ loadProgressBar();
 
 const history = createBrowserHistory();
 
-const App = props => {
-  const { state, dispatch } = useContext(UserContext);
+const App = ({ intl }) => {
+  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
-  const ytunnus =
-    state.oppilaitos && state.oppilaitos.organisaatio
-      ? state.oppilaitos.organisaatio.ytunnus
-      : false;
   const [headerHeight, setHeaderHeight] = useState(0);
-  const {
-    intl: { formatMessage }
-  } = props;
+
   const pageLinks = [
     // { path: "/", text: "Etusivu", isExact: true },
     {
       path: "/esi-ja-perusopetus",
-      text: formatMessage(educationMessages.preAndBasicEducation),
+      text: intl.formatMessage(educationMessages.preAndBasicEducation),
       isExact: false
     },
     {
       path: "/lukiokoulutus",
-      text: formatMessage(educationMessages.highSchoolEducation)
+      text: intl.formatMessage(educationMessages.highSchoolEducation)
     },
     {
       path: "/jarjestajat",
-      text: formatMessage(educationMessages.vocationalEducation)
+      text: intl.formatMessage(educationMessages.vocationalEducation)
     },
     { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
-    { path: "/tilastot", text: formatMessage(commonMessages.statistics) }
+    { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
 
   if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
@@ -78,113 +83,150 @@ const App = props => {
     });
   }
 
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers1 = useMemo(() => {
+    return fetchFromBackend([
+      {
+        key: "kayttaja",
+        dispatchFn: dispatch,
+        options: { withCredentials: true }
+      }
+    ]);
+  }, [dispatch]);
+
+  const abortControllers2 = useMemo(() => {
+    const user = R.path(["kayttaja", "raw"], fromBackend) || {};
+    return user.oid
+      ? fetchFromBackend([
+          { key: "organisaatio", dispatchFn: dispatch, urlEnding: user.oid }
+        ])
+      : [];
+  }, [dispatch, fromBackend.user]);
+
+  /**
+   * Ongoing XHR calls must be canceled. It's done here.
+   */
+  useEffect(() => {
+    return () => {
+      abort(R.concat(abortControllers1, abortControllers2));
+    };
+  }, [abortControllers1, abortControllers2]);
+
+  const ytunnus = useMemo(() => {
+    return R.path(["organisaatio", "raw", "ytunnus"], fromBackend);
+  }, [fromBackend.organisaatio]);
+
   const onHeaderResize = (width, height) => {
     setHeaderHeight(height);
   };
 
+  /**
+   * If user has authenticated save some of his/her information into
+   * session storage.
+   */
   useEffect(() => {
-    getRoles()(dispatch);
-  }, [dispatch]);
+    const user = R.path(["kayttaja", "raw"], fromBackend);
+    console.info(user);
+    if (user && user.username !== sessionStorage.getItem("username")) {
+      sessionStorage.setItem("username", user.username);
+      sessionStorage.setItem("oid", user.oid);
+      const role = [
+        ROLE_YLLAPITAJA,
+        ROLE_ESITTELIJA,
+        ROLE_KAYTTAJA,
+        ROLE_NIMENKIRJOITTAJA,
+        ROLE_KATSELIJA
+      ].find(role => _.indexOf(user.roles, role) > -1);
+      sessionStorage.setItem("role", role || "");
+    }
+  }, [fromBackend]);
 
   return (
     <Router history={history}>
-      <BackendProvider>
-        <div className="flex flex-col min-h-screen">
-          <header className="fixed w-full z-50">
-            <ButtonAppBar
-              ytunnus={ytunnus}
-              user={state.user}
-              oppilaitos={state.oppilaitos}
-              dispatch={dispatch}
-              pageLinks={pageLinks}
-              props={props}
-            />
-            {breakpointTabletMin && (
-              <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
-            )}
-            <ReactResizeDetector handleHeight onResize={onHeaderResize} />
-          </header>
-          <main
-            className="flex flex-1 flex-col justify-between"
-            style={{ marginTop: headerHeight }}
-          >
-            <div className="flex flex-col flex-1 bg-white">
-              <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
-                <Breadcrumbs
-                  separator={<b> / </b>}
-                  item={NavLink}
-                  finalItem={"b"}
-                  finalProps={{
-                    style: {
-                      color: COLORS.BLACK
-                    }
-                  }}
-                />
-              </div>
-              <div className="flex-1 flex flex-col">
-                <Switch>
-                  {<Route exact path="/" component={Home} />}
-                  {<Route path="/logout" component={Logout} />}
-                  {<Route path="/kirjaudu" component={Login} />}
-                  {<Route exact path="/tilastot" component={Tilastot} />}
-                  {<Route path="/cas-auth" component={RequireCasAuth} />}
-                  {<Route path="/cas-logout" component={DestroyCasAuth} />}
-                  {<Route path="/cas-ready" component={CasAuthenticated} />}
-                  {
-                    <Route
-                      exact
-                      path="/jarjestajat"
-                      render={() => (
-                        <JarjestajatProvider>
-                          <Jarjestajat />
-                        </JarjestajatProvider>
-                      )}
-                    />
+      <div className="flex flex-col min-h-screen">
+        <header className="fixed w-full z-50">
+          <ButtonAppBar
+            ytunnus={ytunnus}
+            user={R.path(["kayttaja", "raw"], fromBackend)}
+            organisaatio={R.path(["organisaatio", "raw"], fromBackend)}
+            dispatch={dispatch}
+            pageLinks={pageLinks}
+          />
+          {breakpointTabletMin && (
+            <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
+          )}
+          <ReactResizeDetector handleHeight onResize={onHeaderResize} />
+        </header>
+        <main
+          className="flex flex-1 flex-col justify-between"
+          style={{ marginTop: headerHeight }}
+        >
+          <div className="flex flex-col flex-1 bg-white">
+            <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
+              <Breadcrumbs
+                separator={<b> / </b>}
+                item={NavLink}
+                finalItem={"b"}
+                finalProps={{
+                  style: {
+                    color: COLORS.BLACK
                   }
-                  {
-                    <Route
-                      exact
-                      path="/lukiokoulutus"
-                      component={Lukiokoulutus}
-                    />
-                  }
-                  {
-                    <Route
-                      exact
-                      path="/vapaa-sivistystyo"
-                      component={VapaaSivistystyo}
-                    />
-                  }
-                  {
-                    <Route
-                      exact
-                      path="/esi-ja-perusopetus"
-                      component={EsiJaPerusopetus}
-                    />
-                  }
-                  {
-                    <Route
-                      path="/jarjestajat/:ytunnus"
-                      render={props => (
-                        <LuvatProvider>
-                          <MuutospyynnotProvider>
-                            {/* <div>MuutospyynnotProvider is the parent of this div.</div> */}
-                            <JarjestajaSwitch {...props} />
-                          </MuutospyynnotProvider>
-                        </LuvatProvider>
-                      )}
-                    />
-                  }
-                </Switch>
-              </div>
+                }}
+              />
             </div>
-          </main>
-          <footer>
-            <Footer props={props} />
-            <ToastContainer />
-          </footer>
-        </div>
-      </BackendProvider>
+            <div className="flex-1 flex flex-col">
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path="/logout" component={Logout} />
+                <Route path="/kirjaudu" component={Login} />
+                <Route exact path="/tilastot" component={Tilastot} />
+                <Route path="/cas-auth" component={RequireCasAuth} />
+                <Route path="/cas-logout" component={DestroyCasAuth} />
+                <Route path="/cas-ready" component={CasAuthenticated} />
+                <Route
+                  exact
+                  path="/jarjestajat"
+                  render={() => (
+                    <JarjestajatProvider>
+                      <Jarjestajat />
+                    </JarjestajatProvider>
+                  )}
+                />
+                <Route exact path="/lukiokoulutus" component={Lukiokoulutus} />
+                <Route
+                  exact
+                  path="/vapaa-sivistystyo"
+                  component={VapaaSivistystyo}
+                />
+                <Route
+                  exact
+                  path="/esi-ja-perusopetus"
+                  component={EsiJaPerusopetus}
+                />
+                <Route
+                  path="/jarjestajat/:ytunnus"
+                  render={props => (
+                    <LuvatProvider>
+                      <MuutospyynnotProvider>
+                        <JarjestajaSwitch {...props} />
+                      </MuutospyynnotProvider>
+                    </LuvatProvider>
+                  )}
+                />
+              </Switch>
+            </div>
+          </div>
+        </main>
+        <footer>
+          <Footer
+          // props={props}
+          />
+          <ToastContainer />
+        </footer>
+      </div>
     </Router>
   );
 };

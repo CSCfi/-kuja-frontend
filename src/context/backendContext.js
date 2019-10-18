@@ -1,5 +1,5 @@
 import React, { useReducer } from "react";
-import reducer from "services/muutoshakemus/utils/reducer";
+import reducer from "../services/backendService/reducer";
 
 const initialState = {};
 
