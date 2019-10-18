@@ -140,7 +140,6 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
       {
         anchor: node.fullAnchor,
         properties: {
-          ...node.properties,
           isChecked: false
         }
       },
@@ -173,7 +172,6 @@ export const checkLeafNode = (node, changes) => {
       {
         anchor: node.fullAnchor,
         properties: {
-          ...node.properties,
           isChecked: true
         }
       },
@@ -233,7 +231,6 @@ const runActivationProcedure = (
       {
         anchor: node.fullAnchor,
         properties: {
-          ...node.properties,
           isChecked: true
         }
       },
@@ -287,7 +284,6 @@ const runDeactivationProcedure = (
       {
         anchor: node.fullAnchor,
         properties: {
-          ...node.properties,
           isChecked: false
         }
       },
