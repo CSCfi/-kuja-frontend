@@ -28,6 +28,17 @@
 * Seuraava sivu
 * Assert if text exists "Jatkokoulutusta antavan koulutuskeskuksen tehtävä"
 
+### Muutokset työvoimakoulutus
+
+* Edellinen sivu
+* Avaa ExpandableRow "koulutukset_tyovoimakoulutukset"
+* Lomakeoperaatio "Työvoimakoulutukset" valitse "Työvoimakoulutus"
+
+### Perustelut työvoimakoulutus
+
+* Seuraava sivu
+* Assert if text exists "Työvoimakoulutukset"
+
 ___
 * Sulje lomake
 

@@ -17,8 +17,10 @@ const {
   write
 } = require("taiko");
 const chai = require("chai");
+require('dotenv').config()
 const assert = chai.assert;
 const headless = process.env.headless_chrome.toLowerCase() === "true";
+const users = require("../users/users")
 
 beforeSuite(async () => {
   await openBrowser({ headless: headless });
@@ -42,7 +44,7 @@ step("Log in as <username>", async username => {
   await click(link({ href: "/cas-auth" }));
   await write(username);
   await focus(inputField({ type: "password" }));
-  await write("oiva-sanni");
+  await write(process.env[username]);
   await click(button({ type: "submit" }));
   assert.ok(await text("Kirjaudu ulos").exists());
 });
