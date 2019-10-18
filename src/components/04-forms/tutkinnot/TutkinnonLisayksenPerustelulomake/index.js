@@ -7,18 +7,26 @@ import * as R from "ramda";
 
 const defaultProps = {
   changes: [],
-  checkboxItems: []
+  checkboxItems: [],
+  isReadOnly: false
 };
 
 const TutkinnonLisayksenPerustelulomake = ({
   changes = defaultProps.changes,
   checkboxItems = defaultProps.checkboxItems,
-  intl
+  intl,
+  isReadOnly = defaultProps.checkboxItems
 }) => {
   const [lomake, setLomake] = useState();
 
   useEffect(() => {
-    setLomake(getAdditionFormStructure(checkboxItems, R.toUpper(intl.locale)));
+    setLomake(
+      getAdditionFormStructure(
+        checkboxItems,
+        R.toUpper(intl.locale),
+        isReadOnly
+      )
+    );
   }, [checkboxItems, intl.locale]);
 
   return (
@@ -38,7 +46,8 @@ const TutkinnonLisayksenPerustelulomake = ({
 
 TutkinnonLisayksenPerustelulomake.propTypes = {
   changes: PropTypes.array,
-  checkboxItems: PropTypes.array
+  checkboxItems: PropTypes.array,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(TutkinnonLisayksenPerustelulomake);

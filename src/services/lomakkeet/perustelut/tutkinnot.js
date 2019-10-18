@@ -1,7 +1,15 @@
 import { getMuutostarveCheckboxes } from "./common";
 
-export const getAdditionFormStructure = (checkboxItems, locale) => {
-  const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale);
+export const getAdditionFormStructure = (
+  checkboxItems,
+  locale,
+  isReadOnly = false
+) => {
+  const checkboxes = getMuutostarveCheckboxes(
+    checkboxItems,
+    locale,
+    isReadOnly
+  );
   return [
     {
       anchor: "perustelut",
@@ -18,6 +26,7 @@ export const getAdditionFormStructure = (checkboxItems, locale) => {
           anchor: "A",
           name: "TextBox",
           properties: {
+            isReadOnly,
             placeholder:
               "Perustele lyhyesti miksi tutkintoon johtavaa koulutusta halutaan järjestää"
           }

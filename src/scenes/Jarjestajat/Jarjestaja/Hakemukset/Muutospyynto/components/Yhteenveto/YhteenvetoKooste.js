@@ -4,7 +4,7 @@ import PerustelutMuut from "../Perustelut/PerustelutMuut";
 import PerustelutOpiskelijavuodet from "../Perustelut/PerustelutOpiskelijavuodet";
 import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
-import YhteenvetoTutkinnot from "./YhteenvetoTutkinnot";
+import PerustelutTutkinnot from "../Perustelut/PerustelutTutkinnot";
 import { MuutosperustelutContext } from "../../../../../../../context/muutosperustelutContext";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
 import { fetchMuutosperustelut } from "../../../../../../../services/muutosperustelut/actions";
@@ -58,7 +58,8 @@ const YhteenvetoKooste = ({
     if (muutosperustelut.data.length) {
       const additionFormStructure = getAdditionFormStructure(
         R.sortBy(R.prop("koodiArvo"))(muutosperustelut.muutosperusteluList),
-        R.toUpper(intl.locale)
+        R.toUpper(intl.locale),
+        true // isReadOnly
       );
       updateFormStructure(
         ["perustelut", "tutkinnot", "addition"],
@@ -115,7 +116,7 @@ const YhteenvetoKooste = ({
                   <React.Fragment>
                     <p>Tähän tarvittaessa ohjeteksti...</p>
                     {!!R.prop("tutkinnot", changeObjects) && (
-                      <YhteenvetoTutkinnot
+                      <PerustelutTutkinnot
                         changeObjects={{
                           tutkinnot: R.prop("tutkinnot", changeObjects) || {},
                           perustelut: {
@@ -136,14 +137,10 @@ const YhteenvetoKooste = ({
                         maaraystyyppi={maaraystyypitState.OIKEUS}
                         muutosperustelut={muutosperustelut}
                         lomakkeet={lomakkeet.perustelut.tutkinnot}
-                        stateObjects={{
-                          perustelut: R.path(["perustelut", "tutkinnot"])(
-                            muutoshakemus
-                          ),
-                          yhteenveto: R.path(["yhteenveto", "tutkinnot"])(
-                            muutoshakemus
-                          )
-                        }}
+                        stateObject={R.path(["perustelut", "tutkinnot"])(
+                          muutoshakemus
+                        )}
+                        isReadOnly={true}
                         {..._props}
                       />
                     )}
