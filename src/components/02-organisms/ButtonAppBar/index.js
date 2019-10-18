@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -121,7 +121,9 @@ const ButtonAppBar = ({
               }}
             >
               {intl.formatMessage(authMessages.logOut)} ({user.username}) <br />{" "}
-              <span className="text-gray-600">{R.path(["nimi", "fi"], organisaatio)}</span>
+              <span className="text-gray-600">
+                {R.path(["nimi", "fi"], organisaatio)}
+              </span>
             </LinkItemUpper>
           )}
           {breakpointTabletMin && (

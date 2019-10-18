@@ -13,6 +13,16 @@ import * as R from "ramda";
  */
 
 /**
+ * Keys of statusMap are: erroneous, fetching, ready and unknown.
+ */
+export const statusMap = {
+  erroneous: "erroneous",
+  fetching: "fetching",
+  ready: "ready",
+  unknown: "unknown"
+};
+
+/**
  * Cancels XHR requests by calling the abort method of the given
  * AbortController instances.
  * @param {Object[]} abortControllers - Array of AbortController instances.
@@ -32,7 +42,7 @@ export function abort(abortControllers = []) {
  * @param {object} backendData - Format depends on the used reducer.
  */
 export function isErroneous(backendData) {
-  return backendData && R.equals(backendData.status, "erroneous");
+  return backendData && R.equals(backendData.status, statusMap.erroneous);
 }
 
 /**
@@ -41,7 +51,7 @@ export function isErroneous(backendData) {
  * @return {boolean}
  */
 export function isFetching(backendData) {
-  return backendData && R.equals(backendData.status, "fetching");
+  return backendData && R.equals(backendData.status, statusMap.fetching);
 }
 
 /**
@@ -50,7 +60,30 @@ export function isFetching(backendData) {
  * @return {boolean}
  */
 export function isReady(backendData) {
-  return backendData && R.equals(backendData.status, "ready");
+  return backendData && R.equals(backendData.status, statusMap.ready);
+}
+
+export function getFetchState(backendDataArr = []) {
+  let result = "unknown";
+  const statuses = R.map(R.prop("status"), backendDataArr);
+  if (R.includes(statusMap.erroneous, statuses)) {
+    result = statusMap.erroneous;
+  } else if (R.includes(statusMap.fetching, statuses)) {
+    result = statusMap.fetching;
+  } else if (
+    // If the 'statuses' array is full of "ready" values and nothing else.
+    R.and(
+      R.compose(
+        R.equals(1),
+        R.length,
+        R.uniq
+      )(statuses),
+      R.includes("ready", statuses)
+    )
+  ) {
+    result = statusMap.ready;
+  }
+  return result;
 }
 
 /**
@@ -59,13 +92,14 @@ export function isReady(backendData) {
  * Example: { luvat: api/luvat/jarjestajilla, ... }
  */
 const backendRoutes = {
+  kayttaja: `${API_BASE_URL}/auth/me`,
   kunnat: `${API_BASE_URL}/koodistot/kunnat`,
   lupa: `${API_BASE_URL}/luvat/jarjestaja/`,
+  lupahistoria: `${API_BASE_URL}/luvat/historia/`,
   luvat: `${API_BASE_URL}/luvat/jarjestajilla`,
   maakunnat: `${API_BASE_URL}/koodistot/maakunnat`,
   muutospyynnot: `${API_BASE_URL}/muutospyynnot/`,
-  organisaatio: `${API_BASE_URL}/organisaatiot/`,
-  kayttaja: `${API_BASE_URL}/auth/me`
+  organisaatio: `${API_BASE_URL}/organisaatiot/`
 };
 
 /**

@@ -33,7 +33,6 @@ export default function(state, action) {
           fetched: new Date().toUTCString()
         }
       };
-      console.info(nextState);
       return nextState;
     default:
       return state;

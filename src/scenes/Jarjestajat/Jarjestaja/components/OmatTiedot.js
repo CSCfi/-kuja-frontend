@@ -5,17 +5,19 @@ import {
   InnerContentContainer,
   InnerContentWrapper
 } from "../../../../modules/elements";
-import { getToimialueByKoodiArvo } from "services/toimialueet/toimialueUtil";
-import { UserContext } from "context/userContext";
 import { Typography } from "@material-ui/core";
 import { BackendContext } from "../../../../context/backendContext";
 import {
   abort,
-  fetchFromBackend
+  fetchFromBackend,
+  getFetchState,
+  statusMap
 } from "../../../../services/backendService";
+import PropTypes from "prop-types";
+import { injectIntl } from "react-intl";
+import * as R from "ramda";
 
-const OmatTiedot = () => {
-  const { state: user } = useContext(UserContext);
+const OmatTiedot = ({ intl, organisaatio, user }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
   const { kunnat, maakunnat } = fromBackend;
 
@@ -39,129 +41,135 @@ const OmatTiedot = () => {
     };
   }, [abortControllers, dispatch]);
 
-  const { oppilaitos } = user || {};
-  let postinumero = undefined;
-  let ppostinumero = undefined;
-  let numero = undefined;
-  let www = undefined;
-  let email = undefined;
-  let kotipaikka = undefined;
-  if (oppilaitos) {
-    if (oppilaitos.organisaatio) {
-      if (oppilaitos.organisaatio.kayntiosoite.postinumeroUri)
-        postinumero = oppilaitos.organisaatio.kayntiosoite.postinumeroUri.substr(
-          6
-        );
-      if (oppilaitos.organisaatio.postiosoite.postinumeroUri)
-        ppostinumero = oppilaitos.organisaatio.postiosoite.postinumeroUri.substr(
-          6
-        );
-      if (kunnat && kunnat.fetched && oppilaitos.organisaatio.kotipaikkaUri)
-        kotipaikka = getToimialueByKoodiArvo(
-          oppilaitos.organisaatio.kotipaikkaUri.substr(6),
-          maakunnat,
-          kunnat
-        ).label;
-      // jos tietoja enemmän, ottaa jälkimmäisen arvon (yleiset yhteystiedot)
-      if (oppilaitos.organisaatio.yhteystiedot)
-        oppilaitos.organisaatio.yhteystiedot.map(item => {
-          if (item.www) www = item.www;
-          if (item.numero) numero = item.numero;
-          if (item.email) email = item.email;
-          return true;
-        });
-    }
-  }
+  const fetchState = useMemo(() => {
+    return getFetchState([fromBackend.kunnat, fromBackend.maakunnat]);
+  }, [fromBackend.kunnat, fromBackend.maakunnat]);
 
-  if (oppilaitos && oppilaitos.organisaatio) {
-    return (
-      <InnerContentContainer>
-        <InnerContentWrapper>
-          <Typography component="h2" variant="h5" className="pb-4">
-            {LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}
-          </Typography>
-          <Typography component="h3" variant="h6">
-            {LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}
-          </Typography>
-          <p className="pb-4">
-            {oppilaitos.organisaatio.kayntiosoite.osoite}
-            {postinumero && <span>,&nbsp;</span>}
-            {postinumero}
-            {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka && (
-              <span>&nbsp;</span>
+  const view = useMemo(() => {
+    let jsx = <React.Fragment></React.Fragment>;
+    let kotipaikka = null;
+    if (fetchState === statusMap.fetching) {
+      jsx = <Loading />;
+    } else if (organisaatio) {
+      const postinumero = organisaatio.kayntiosoite.postinumeroUri
+        ? organisaatio.kayntiosoite.postinumeroUri.substr(6)
+        : null;
+      const ppostinumero = organisaatio.postiosoite.postinumeroUri
+        ? organisaatio.postiosoite.postinumeroUri.substr(6)
+        : null;
+      const email = R.prop("email", organisaatio.yhteystiedot);
+      const numero = R.prop("numero", organisaatio.yhteystiedot);
+      const www = R.prop("www", organisaatio.yhteystiedot);
+      if (fetchState === statusMap.ready) {
+        const koodiarvo = organisaatio.kotipaikkaUri.substr(6);
+        const source = koodiarvo.length === 3 ? kunnat.raw : maakunnat.raw;
+        const kotipaikkaObj = R.find(R.propEq("koodiArvo", koodiarvo), source);
+        kotipaikka = (kotipaikkaObj
+          ? R.find(
+              R.propEq("kieli", R.toUpper(intl.locale)),
+              kotipaikkaObj.metadata
+            )
+          : {}
+        ).nimi;
+      }
+      jsx = (
+        <InnerContentContainer>
+          <InnerContentWrapper>
+            <Typography component="h2" variant="h5" className="pb-4">
+              {LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}
+            </Typography>
+            <Typography component="h3" variant="h6">
+              {LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}
+            </Typography>
+            <p className="pb-4">
+              {organisaatio.kayntiosoite.osoite}
+              {postinumero && <span>,&nbsp;</span>}
+              {postinumero}
+              {organisaatio.kayntiosoite.postitoimipaikka && (
+                <span>&nbsp;</span>
+              )}
+              {organisaatio.kayntiosoite.postitoimipaikka}
+            </p>
+            <Typography component="h3" variant="h6">
+              {LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}
+            </Typography>
+            <p className="pb-4">
+              {organisaatio.postiosoite.osoite &&
+                organisaatio.postiosoite.osoite}
+              {ppostinumero && <span>,&nbsp;</span>}
+              {ppostinumero && ppostinumero}&nbsp;
+              {organisaatio.postiosoite.postitoimipaikka && <span>&nbsp;</span>}
+              {organisaatio.postiosoite.postitoimipaikka}
+            </p>
+            <Typography component="h3" variant="h6">
+              {LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}
+            </Typography>
+            <p className="pb-4">
+              {numero && kotipaikka && <span>{numero}</span>}
+              {kotipaikka && <span>{kotipaikka}</span>}
+            </p>
+            <Typography component="h3" variant="h6">
+              {LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}
+            </Typography>
+            {numero && (
+              <div className="flex border-b">
+                <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
+                  <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}</p>
+                </div>
+                <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
+                  <p>
+                    <a
+                      title={`Call to number ${numero}`}
+                      href={`tel:${numero}`}
+                    >
+                      {numero}
+                    </a>
+                  </p>
+                </div>
+              </div>
             )}
-            {oppilaitos.organisaatio.kayntiosoite.postitoimipaikka}
-          </p>
-          <Typography component="h3" variant="h6">
-            {LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}
-          </Typography>
-          <p className="pb-4">
-            {oppilaitos.organisaatio.postiosoite.osoite &&
-              oppilaitos.organisaatio.postiosoite.osoite}
-            {ppostinumero && <span>,&nbsp;</span>}
-            {ppostinumero && ppostinumero}&nbsp;
-            {oppilaitos.organisaatio.postiosoite.postitoimipaikka && (
-              <span>&nbsp;</span>
+            {www && (
+              <div className="flex border-b">
+                <div className="w-1/2 sm:w-auto md:w-1/4  bg-gray-200 p-2 h-10">
+                  <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</p>
+                </div>
+                <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
+                  <p>
+                    <a title={`Link to ${www}`} href={www}>
+                      {www}
+                    </a>
+                  </p>
+                </div>
+              </div>
             )}
-            {oppilaitos.organisaatio.postiosoite.postitoimipaikka}
-          </p>
-          <Typography component="h3" variant="h6">
-            {LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}
-          </Typography>
-          <p className="pb-4">{numero && <span>{kotipaikka}</span>}</p>
-          <Typography component="h3" variant="h6">
-            {LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}
-          </Typography>
-          {numero && (
-            <div className="flex border-b">
-              <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}</p>
+            {email && (
+              <div className="flex border-b">
+                <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
+                  <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}</p>
+                </div>
+                <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
+                  <p>
+                    <a title={`Mail to ${email}`} href={`mailto: ${email}`}>
+                      {email}
+                    </a>
+                  </p>
+                </div>
               </div>
-              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
-                <p>
-                  <a title={`Call to number ${numero}`} href={`tel:${numero}`}>
-                    {numero}
-                  </a>
-                </p>
-              </div>
-            </div>
-          )}
-          {www && (
-            <div className="flex border-b">
-              <div className="w-1/2 sm:w-auto md:w-1/4  bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</p>
-              </div>
-              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
-                <p>
-                  <a title={`Link to ${www}`} href={www}>
-                    {www}
-                  </a>
-                </p>
-              </div>
-            </div>
-          )}
-          {email && (
-            <div className="flex border-b">
-              <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}</p>
-              </div>
-              <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
-                <p>
-                  <a title={`Mail to ${email}`} href={`mailto: ${email}`}>
-                    {email}
-                  </a>
-                </p>
-              </div>
-            </div>
-          )}
-          <br />
-          <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
-        </InnerContentWrapper>
-      </InnerContentContainer>
-    );
-  } else {
-    return <Loading />;
-  }
+            )}
+            <br />
+            <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
+          </InnerContentWrapper>
+        </InnerContentContainer>
+      );
+    }
+    return jsx;
+  }, [fetchState, kunnat, intl.locale, maakunnat, organisaatio]);
+  return view;
 };
 
-export default OmatTiedot;
+OmatTiedot.propTypes = {
+  organisaatio: PropTypes.object,
+  user: PropTypes.object
+};
+
+export default injectIntl(OmatTiedot);

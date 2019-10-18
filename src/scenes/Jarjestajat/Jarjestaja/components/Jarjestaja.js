@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { injectIntl } from "react-intl";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Route } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -14,11 +15,16 @@ import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
-import { ROLE_KAYTTAJA } from "../../../../modules/constants";
-import { fetchLupaHistory } from "services/lupahistoria/actions";
-import { LupahistoriaContext } from "context/lupahistoriaContext";
 import { KunnatProvider } from "context/kunnatContext";
 import { MaakunnatProvider } from "../../../../context/maakunnatContext";
+import { BackendContext } from "../../../../context/backendContext";
+import {
+  abort,
+  fetchFromBackend,
+  getFetchState,
+  statusMap
+} from "../../../../services/backendService";
+import * as R from "ramda";
 
 const Separator = styled.div`
   &:after {
@@ -31,76 +37,75 @@ const Separator = styled.div`
   }
 `;
 
-// ELYkeskukset={ELYkeskukset}
-// lupa={lupa}
-// muutospyynnot={muutospyynnot}
-// muutosperustelut={muutosperustelut}
-// paatoskierrokset={paatoskierrokset}
-// vankilat={vankilat}
+const Jarjestaja = ({
+  intl,
+  lupa = {},
+  match,
+  muutospyynnot,
+  organisaatio = {},
+  user,
+  ytunnus
+}) => {
+  const { state: fromBackend, dispatch } = useContext(BackendContext);
 
-const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
-  const { state: lupahistory, dispatch } = useContext(LupahistoriaContext);
+  const jarjestaja = useMemo(() => {
+    return lupa ? {
+      ...lupa.jarjestaja,
+      nimi: R.prop(intl.locale, lupa.jarjestaja.nimi)
+    } : {};
+  }, [intl.locale, lupa]);
 
+  const breadcrumb = useMemo(() => {
+    return jarjestaja ? `/jarjestajat/${jarjestaja.oid}` : "";
+  }, [jarjestaja]);
+
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers = useMemo(() => {
+    return jarjestaja
+      ? fetchFromBackend([
+          {
+            key: "lupahistoria",
+            dispatchFn: dispatch,
+            urlEnding: jarjestaja.oid
+          }
+        ])
+      : [];
+  }, [dispatch, jarjestaja]);
+
+  /**
+   * Ongoing XHR calls must be canceled. It's done here.
+   */
   useEffect(() => {
-    if (lupa && lupa.data && lupa.data.jarjestajaOid) {
-      fetchLupaHistory(lupa.data.jarjestajaOid)(dispatch);
-    }
-  }, [lupa, muutospyynnot, dispatch]);
+    return () => {
+      abort(abortControllers);
+    };
+  }, [abortControllers, dispatch]);
 
-  if (match.params) {
-    if (lupa && lupa.fetched && muutospyynnot && muutospyynnot.fetched) {
-      const lupadata = lupa.data;
-      const { jarjestaja } = lupadata;
-      const breadcrumb = `/jarjestajat/${match.params.id}`;
-      const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || "";
+  const fetchState = useMemo(() => {
+    return getFetchState([fromBackend.lupahistoria]);
+  }, [fromBackend.lupahistoria]);
 
-      // check the rights
-      // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-      let authenticated = false;
-      if (
-        sessionStorage.getItem("role") === ROLE_KAYTTAJA &&
-        sessionStorage.getItem("oid") === jarjestaja.oid
-      ) {
-        authenticated = true;
+  const tabNavRoutes = useMemo(() => {
+    // Basic routes (no authentication needed)
+    const basicRoutes = [
+      {
+        path: `${match.url}/omattiedot`,
+        exact: true,
+        text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
+        authenticated: !!user
+      },
+      {
+        path: `${match.url}/jarjestamislupa-asia`,
+        text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
+        authenticated: !!user
       }
-
-      // Alanavigaation tabivalikon routet
-      var tabNavRoutes = [];
-
-      const newApplicationRouteItem = {
-        path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
-        text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
-        authenticated: authenticated
-      };
-
-      if (authenticated) {
-        tabNavRoutes = [
-          {
-            path: `${match.url}/omattiedot`,
-            exact: true,
-            text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
-            authenticated: authenticated
-          },
-          {
-            path: `${match.url}/jarjestamislupa`,
-            exact: true,
-            text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}`,
-            exact: true,
-            text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}/jarjestamislupa-asia`,
-            text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
-            authenticated: authenticated
-          }
-        ];
-      } else {
-        tabNavRoutes = [
+    ];
+    // If user is logged in we are going to show her/him these additional routes.
+    const additionalRoutes = user
+      ? [
           {
             path: `${match.url}/jarjestamislupa`,
             text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
@@ -112,17 +117,32 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
             text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
             authenticated: true
           }
-        ];
-      }
+        ]
+      : [];
+    return R.flatten(R.insert(1, additionalRoutes, basicRoutes));
+  }, [match.url, user]);
 
-      return (
+  const newApplicationRouteItem = useMemo(() => {
+    return {
+      path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
+      text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
+      authenticated: !!user
+    };
+  }, [match, user]);
+
+  const view = useMemo(() => {
+    let jsx = <React.Fragment></React.Fragment>;
+    if (fetchState === statusMap.fetching) {
+      jsx = <Loading />;
+    } else if (fetchState === statusMap.ready) {
+      jsx = (
         <React.Fragment>
           <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
             <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
             <BreadcrumbsItem to="/jarjestajat">
               Ammatillinen koulutus
             </BreadcrumbsItem>
-            <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
+            <BreadcrumbsItem to={breadcrumb}>{jarjestaja.nimi}</BreadcrumbsItem>
 
             <JarjestajaBasicInfo jarjestaja={jarjestaja} />
 
@@ -131,7 +151,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
             <ProfileMenu routes={tabNavRoutes} />
           </div>
           <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
-            {authenticated ? (
+            {!!user ? (
               <div className="mx-auto w-11/12 lg:w-3/4 pb-8 py-8">
                 <Route
                   path={`${match.path}/omattiedot`}
@@ -139,7 +159,7 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                   render={props => (
                     <MaakunnatProvider>
                       <KunnatProvider>
-                        <OmatTiedot {...props} />
+                        <OmatTiedot organisaatio={organisaatio} user={user} />
                       </KunnatProvider>
                     </MaakunnatProvider>
                   )}
@@ -147,22 +167,20 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                 <Route
                   path={`${match.url}/jarjestamislupa`}
                   exact
-                  render={() => (
-                    <Jarjestamislupa ytunnus={match.params.ytunnus} />
-                  )}
+                  render={() => <Jarjestamislupa ytunnus={ytunnus} />}
                 />
                 <Route
                   path={`${match.url}`}
                   exact
-                  render={() => <JulkisetTiedot lupadata={lupadata} />}
+                  render={() => <JulkisetTiedot lupadata={lupa.data} />}
                 />
                 <Route
                   path={`${match.url}/jarjestamislupa-asia`}
                   exact
                   render={() => (
                     <JarjestamislupaAsiat
-                      lupadata={lupadata}
-                      lupahistory={lupahistory}
+                      lupadata={lupa.data}
+                      lupahistory={R.path(["lupahistoria", "raw"], fromBackend)}
                       newApplicationRouteItem={newApplicationRouteItem}
                     />
                   )}
@@ -187,26 +205,41 @@ const Jarjestaja = ({ match, lupa, muutospyynnot }) => {
                 <Route
                   path={`${match.url}`}
                   exact
-                  render={() => <JulkisetTiedot lupadata={lupadata} />}
+                  render={() => <JulkisetTiedot lupadata={lupa.data} />}
                 />
               </div>
             )}
           </FullWidthWrapper>
         </React.Fragment>
       );
-    } else if (
-      (lupa && lupa.isFetching) ||
-      (muutospyynnot && muutospyynnot.isFetching)
-    ) {
-      return <Loading />;
-    } else if (lupa && lupa.hasErrored) {
-      return <h2>Luvan lataamisessa tapahtui virhe</h2>;
-    } else {
-      return <div>Määrittelemätön tila.</div>;
     }
-  } else {
-    return null;
-  }
+    return jsx;
+  }, [
+    breadcrumb,
+    fetchState,
+    fromBackend,
+    jarjestaja,
+    lupa.data,
+    match.path,
+    match.url,
+    muutospyynnot,
+    newApplicationRouteItem,
+    organisaatio,
+    tabNavRoutes,
+    user,
+    ytunnus
+  ]);
+
+  return view;
+};
+
+Jarjestaja.propTypes = {
+  lupa: PropTypes.object,
+  match: PropTypes.object,
+  muutospyynnot: PropTypes.array,
+  organisaatio: PropTypes.object,
+  user: PropTypes.object,
+  ytunnus: PropTypes.string
 };
 
 export default injectIntl(Jarjestaja);

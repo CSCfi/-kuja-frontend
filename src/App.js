@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import Login from "scenes/Login/Login";
+import PropTypes from "prop-types";
 import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
 import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
@@ -12,9 +13,9 @@ import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
 import DestroyCasAuth from "./scenes/Logout/services/DestroyCasAuth";
 import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
-import EsiJaPerusopetus from "scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
+import EsiJaPerusopetus from "./scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
 import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
-import JarjestajaSwitch from "scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
+import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { JarjestajatProvider } from "./context/jarjestajatContext";
@@ -31,10 +32,7 @@ import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import { ToastContainer } from "react-toastify";
-import {
-  abort,
-  fetchFromBackend
-} from "./services/backendService";
+import { abort, fetchFromBackend } from "./services/backendService";
 import {
   ROLE_ESITTELIJA,
   ROLE_KATSELIJA,
@@ -51,14 +49,13 @@ loadProgressBar();
 
 const history = createBrowserHistory();
 
-const App = ({ intl }) => {
+const App = ({ intl, user }) => {
   const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
 
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const pageLinks = [
-    // { path: "/", text: "Etusivu", isExact: true },
     {
       path: "/esi-ja-perusopetus",
       text: intl.formatMessage(educationMessages.preAndBasicEducation),
@@ -83,40 +80,25 @@ const App = ({ intl }) => {
     });
   }
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers1 = useMemo(() => {
-    return fetchFromBackend([
-      {
-        key: "kayttaja",
-        dispatchFn: dispatch,
-        options: { withCredentials: true }
-      }
-    ]);
-  }, [dispatch]);
-
-  const abortControllers2 = useMemo(() => {
-    const user = R.path(["kayttaja", "raw"], fromBackend) || {};
-    return user.oid
+  const abortControllers = useMemo(() => {
+    return user && user.oid
       ? fetchFromBackend([
           { key: "organisaatio", dispatchFn: dispatch, urlEnding: user.oid }
         ])
       : [];
-  }, [dispatch, fromBackend.user]);
+  }, [dispatch, user]);
 
   /**
    * Ongoing XHR calls must be canceled. It's done here.
    */
   useEffect(() => {
     return () => {
-      abort(R.concat(abortControllers1, abortControllers2));
+      abort(abortControllers);
     };
-  }, [abortControllers1, abortControllers2]);
+  }, [abortControllers]);
 
   const ytunnus = useMemo(() => {
-    return R.path(["organisaatio", "raw", "ytunnus"], fromBackend);
+    return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
   }, [fromBackend.organisaatio]);
 
   const onHeaderResize = (width, height) => {
@@ -128,8 +110,6 @@ const App = ({ intl }) => {
    * session storage.
    */
   useEffect(() => {
-    const user = R.path(["kayttaja", "raw"], fromBackend);
-    console.info(user);
     if (user && user.username !== sessionStorage.getItem("username")) {
       sessionStorage.setItem("username", user.username);
       sessionStorage.setItem("oid", user.oid);
@@ -142,7 +122,7 @@ const App = ({ intl }) => {
       ].find(role => _.indexOf(user.roles, role) > -1);
       sessionStorage.setItem("role", role || "");
     }
-  }, [fromBackend]);
+  }, [user]);
 
   return (
     <Router history={history}>
@@ -211,7 +191,15 @@ const App = ({ intl }) => {
                   render={props => (
                     <LuvatProvider>
                       <MuutospyynnotProvider>
-                        <JarjestajaSwitch {...props} />
+                        <JarjestajaSwitch
+                          match={props.match}
+                          organisaatio={R.path(
+                            ["organisaatio", "raw"],
+                            fromBackend
+                          )}
+                          user={user}
+                          ytunnus={ytunnus}
+                        />
                       </MuutospyynnotProvider>
                     </LuvatProvider>
                   )}
@@ -229,6 +217,10 @@ const App = ({ intl }) => {
       </div>
     </Router>
   );
+};
+
+App.propTypes = {
+  user: PropTypes.object
 };
 
 export default injectIntl(App);
