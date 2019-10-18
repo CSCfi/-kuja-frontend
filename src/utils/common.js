@@ -4,7 +4,7 @@ export const getAnchorPart = (anchor, index) => {
   return R.compose(
     R.view(R.lensIndex(index)),
     R.split(".")
-  )(anchor);
+  )(anchor || "");
 };
 
 export const removeAnchorPart = (anchor, index) => {
