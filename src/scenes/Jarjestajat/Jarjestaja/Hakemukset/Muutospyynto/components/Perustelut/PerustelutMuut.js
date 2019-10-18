@@ -383,7 +383,7 @@ const PerustelutMuut = React.memo(
         {stateObject.items ? (
           <React.Fragment>
             {R.addIndex(R.map)((row, i) => {
-              if (!R.isEmpty(R.path(["perustelut", row.code], changeObjects)))
+              if (!R.isEmpty(R.path(["muut", row.code], changeObjects)))
                 return (
                   <ExpandableRowRoot
                     anchor={`${sectionId}_${row.code}`}

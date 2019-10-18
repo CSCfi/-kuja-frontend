@@ -144,9 +144,11 @@ const MuutospyyntoWizardPerustelut = ({
     );
 
     tutkintokieletChanges = R.path(["kielet", "tutkintokielet"], changeObjects);
-    setIsTutkintokieletChanges(
-      tutkintokieletChanges && !R.isEmpty(tutkintokieletChanges)
-    );
+    R.forEachObjIndexed(item => {
+      if (!R.isEmpty(item)) {
+        setIsTutkintokieletChanges(true);
+      }
+    }, tutkintokieletChanges || []);
 
     toimintaalueChanges = R.path(["toimintaalue"], changeObjects);
     setIsToimintaalueChanges(
