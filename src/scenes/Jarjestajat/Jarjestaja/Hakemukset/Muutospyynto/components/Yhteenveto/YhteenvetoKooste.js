@@ -314,6 +314,7 @@ const YhteenvetoKooste = ({
                         muutoshakemus
                       )}
                       {..._props}
+                      isReadOnly={true}
                     />
                   ) : null}
                 </React.Fragment>

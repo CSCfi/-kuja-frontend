@@ -4,15 +4,17 @@ import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import { getOpiskelijavuodetVaativaKoulutusPerustelulomake } from "../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
-  changeObjects: []
+  changeObjects: [],
+  isReadOnly: false
 };
 
 const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
   changeObjects = defaultProps.changeObjects,
   onChangesUpdate,
-  sectionId
+  sectionId,
+  isReadOnly = defaultProps.isReadOnly
 }) => {
-  const lomake = getOpiskelijavuodetVaativaKoulutusPerustelulomake();
+  const lomake = getOpiskelijavuodetVaativaKoulutusPerustelulomake(isReadOnly);
 
   return (
     <div className="p-8">
@@ -30,7 +32,8 @@ const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
 };
 
 OpiskelijavuodetVaativaKoulutusPerustelulomake.propTypes = {
-  changeObjects: PropTypes.array
+  changeObjects: PropTypes.array,
+  isReadOnly: PropTypes.bool
 };
 
 export default OpiskelijavuodetVaativaKoulutusPerustelulomake;
