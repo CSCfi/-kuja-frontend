@@ -24,16 +24,29 @@
 * Sulje lomake
 * Log out
 * Navigate to app
-* Log in as "oiva-sanni"
+* Log in as "oiva-mikki"
 * Avaa uusi muutospyyntolomake
 
-### Muutokset sisäoppilaitosmuotoinen koulutus
+### Muutokset oppisopimuskoulutus
 
-* Lomakeoperaatio "Sisäoppilaitosmuotoinen koulutus" valitse "Koulutuksen järjestäjällä on oikeus järjestää kohdassa 1 mainittuja tutkinto- ja valmentavaa koulutusta sisäoppilaitosmuotoisena koulutuksena."
+* Avaa ExpandableRow "muut_01"
+* Lomakeoperaatio "Laajennettu oppisopimuskoulutuksen järjestämistehtävä" valitse "Koulutuksen järjestäjällä on oikeus järjestää ammatillisesta koulutuksesta annetun lain (531/2017) 30 §:ssä tarkoitetun koulutuksen hankinnan kautta oppisopimuskoulutuksena kaikkia em. lain 6 §:ssä tarkoitettuun tutkintorakenteeseen kuuluvia tutkintoja sekä em. lain 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
 
-### Perustelut sisäoppilaitosmuotoinen koulutus
+### Perustelut oppisopimuskoulutus
 
+* Seuraava sivu
+* Assert if text exists "Koulutuksen järjestäjällä on oikeus järjestää ammatillisesta koulutuksesta annetun lain (531/2017) 30 §:ssä tarkoitetun koulutuksen hankinnan kautta oppisopimuskoulutuksena kaikkia em. lain 6 §:ssä tarkoitettuun tutkintorakenteeseen kuuluvia tutkintoja sekä em. lain 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
 
+### Muutokset vaativan erityisen tuen tehtävä
+
+* Edellinen sivu
+* Avaa ExpandableRow "muut_02"
+* Lomakeoperaatio "Vaativan erityisen tuen tehtävä" valitse "Koulutuksen järjestäjällä on velvollisuus järjestää järjestämisluvan kohdassa 1 mainittuja tutkintoja vaativaan erityiseen tukeen oikeutetuille opiskelijoille."
+
+### Perustelut vaativan erityisen tuen tehtävä
+
+* Seuraava sivu
+* Assert if text exists "Koulutuksen järjestäjällä on velvollisuus järjestää järjestämisluvan kohdassa 1 mainittuja tutkintoja vaativaan erityiseen tukeen oikeutetuille opiskelijoille."
 
 ___
 * Sulje lomake
