@@ -6,7 +6,6 @@ export const getVankilaopetusPerustelulomake = (
   isReadOnly,
   locale = "FI"
 ) => {
-  console.info(vankilat, isReadOnly, locale);
   return [
     {
       anchor: "vankilaopetus",
