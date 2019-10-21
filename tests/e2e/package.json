@@ -6,9 +6,11 @@
     "test": "gauge run specs/"
   },
   "dependencies": {
+    "@getgauge/cli": "^1.0.6",
     "chai": "^4.2.0",
+    "dotenv": "^8.1.0",
     "gauge": "^2.7.4",
     "ramda": "^0.26.1",
-    "taiko": "latest"
+    "taiko": "1.0.0"
   }
 }
