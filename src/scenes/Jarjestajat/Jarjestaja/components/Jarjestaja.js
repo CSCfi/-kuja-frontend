@@ -39,6 +39,7 @@ const Separator = styled.div`
 
 const Jarjestaja = ({
   intl,
+  kohteet = [],
   lupa = {},
   match,
   muutospyynnot,
@@ -49,10 +50,12 @@ const Jarjestaja = ({
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const jarjestaja = useMemo(() => {
-    return lupa ? {
-      ...lupa.jarjestaja,
-      nimi: R.prop(intl.locale, lupa.jarjestaja.nimi)
-    } : {};
+    return lupa
+      ? {
+          ...lupa.jarjestaja,
+          nimi: R.prop(intl.locale, lupa.jarjestaja.nimi)
+        }
+      : {};
   }, [intl.locale, lupa]);
 
   const breadcrumb = useMemo(() => {
@@ -167,20 +170,30 @@ const Jarjestaja = ({
                 <Route
                   path={`${match.url}/jarjestamislupa`}
                   exact
-                  render={() => <Jarjestamislupa ytunnus={ytunnus} />}
+                  render={() => (
+                    <Jarjestamislupa
+                      kohteet={kohteet}
+                      lupa={lupa}
+                      ytunnus={ytunnus}
+                    />
+                  )}
                 />
                 <Route
                   path={`${match.url}`}
                   exact
-                  render={() => <JulkisetTiedot lupadata={lupa.data} />}
+                  render={() => (
+                    <JulkisetTiedot jarjestaja={jarjestaja} lupa={lupa} />
+                  )}
                 />
                 <Route
                   path={`${match.url}/jarjestamislupa-asia`}
                   exact
-                  render={() => (
+                  render={props => (
                     <JarjestamislupaAsiat
-                      lupadata={lupa.data}
+                      kohteet={kohteet}
+                      lupa={lupa}
                       lupahistory={R.path(["lupahistoria", "raw"], fromBackend)}
+                      match={props.match}
                       newApplicationRouteItem={newApplicationRouteItem}
                     />
                   )}
@@ -205,7 +218,7 @@ const Jarjestaja = ({
                 <Route
                   path={`${match.url}`}
                   exact
-                  render={() => <JulkisetTiedot lupadata={lupa.data} />}
+                  render={() => <JulkisetTiedot lupa={lupa} />}
                 />
               </div>
             )}
@@ -219,7 +232,7 @@ const Jarjestaja = ({
     fetchState,
     fromBackend,
     jarjestaja,
-    lupa.data,
+    lupa,
     match.path,
     match.url,
     muutospyynnot,
@@ -234,6 +247,7 @@ const Jarjestaja = ({
 };
 
 Jarjestaja.propTypes = {
+  kohteet: PropTypes.object,
   lupa: PropTypes.object,
   match: PropTypes.object,
   muutospyynnot: PropTypes.array,

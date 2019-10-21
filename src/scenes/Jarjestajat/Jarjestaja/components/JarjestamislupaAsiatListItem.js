@@ -28,11 +28,6 @@ const JarjestamislupaAsiaListItem = props => {
     uuid
   } = props.muutospyynto;
 
-  const open = (e, nro) => {
-    e.stopPropagation();
-    props.setOpened(nro);
-  };
-
   return (
     <React.Fragment>
       <Media

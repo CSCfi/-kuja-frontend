@@ -57,9 +57,11 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
       const ppostinumero = organisaatio.postiosoite.postinumeroUri
         ? organisaatio.postiosoite.postinumeroUri.substr(6)
         : null;
-      const email = R.prop("email", organisaatio.yhteystiedot);
-      const numero = R.prop("numero", organisaatio.yhteystiedot);
-      const www = R.prop("www", organisaatio.yhteystiedot);
+      const email = (R.find(R.prop("email"), organisaatio.yhteystiedot) || {})
+        .email;
+      const numero = (R.find(R.prop("numero"), organisaatio.yhteystiedot) || {})
+        .numero;
+      const www = (R.find(R.prop("www"), organisaatio.yhteystiedot) || {}).www;
       if (fetchState === statusMap.ready) {
         const koodiarvo = organisaatio.kotipaikkaUri.substr(6);
         const source = koodiarvo.length === 3 ? kunnat.raw : maakunnat.raw;
@@ -104,10 +106,7 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
             <Typography component="h3" variant="h6">
               {LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}
             </Typography>
-            <p className="pb-4">
-              {numero && kotipaikka && <span>{numero}</span>}
-              {kotipaikka && <span>{kotipaikka}</span>}
-            </p>
+            <p className="pb-4">{kotipaikka && <span>{kotipaikka}</span>}</p>
             <Typography component="h3" variant="h6">
               {LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}
             </Typography>

@@ -85,7 +85,7 @@ const HakemusContainer = props => {
 
   useEffect(() => {
     // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-    if (sessionStorage.getItem("oid") === props.lupa.data.jarjestajaOid) {
+    if (sessionStorage.getItem("oid") === props.lupa.jarjestajaOid) {
       setAccessRight(true);
     }
   }, [props.lupa]);

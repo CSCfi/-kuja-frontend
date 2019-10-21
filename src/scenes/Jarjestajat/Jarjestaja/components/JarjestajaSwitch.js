@@ -5,16 +5,19 @@ import PropTypes from "prop-types";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
 import Hakemus from "../Hakemukset/Hakemus";
 import { BackendContext } from "../../../../context/backendContext";
+import { injectIntl } from "react-intl";
 import {
   abort,
   fetchFromBackend,
   getFetchState,
-  statusMap
+  statusMap,
+  isReady
 } from "../../../../services/backendService";
 import * as R from "ramda";
 import Loading from "../../../../modules/Loading";
+import { parseLupa } from "../../../../services/luvat/lupaParser";
 
-const JarjestajaSwitch = ({ match, organisaatio, user, ytunnus }) => {
+const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   /**
@@ -42,6 +45,12 @@ const JarjestajaSwitch = ({ match, organisaatio, user, ytunnus }) => {
       abort(abortControllers);
     };
   }, [abortControllers, dispatch]);
+
+  const kohteet = useMemo(() => {
+    return isReady(fromBackend.lupa)
+      ? parseLupa(fromBackend.lupa.raw, intl.formatMessage)
+      : [];
+  }, [fromBackend.lupa, intl.formatMessage]);
 
   const fetchState = useMemo(() => {
     return getFetchState([fromBackend.lupa, fromBackend.muutospyynnot]);
@@ -74,6 +83,7 @@ const JarjestajaSwitch = ({ match, organisaatio, user, ytunnus }) => {
               render={() => (
                 <LupahistoriaProvider>
                   <Jarjestaja
+                    kohteet={kohteet}
                     lupa={R.path(["lupa", "raw"], fromBackend)}
                     match={match}
                     muutospyynnot={fromBackend.muutospyynnot.raw}
@@ -88,7 +98,7 @@ const JarjestajaSwitch = ({ match, organisaatio, user, ytunnus }) => {
       );
     }
     return jsx;
-  }, [fetchState, fromBackend, match, organisaatio, user]);
+  }, [fetchState, fromBackend, kohteet, match, organisaatio, user]);
 
   return view;
 };
@@ -100,4 +110,4 @@ JarjestajaSwitch.propTypes = {
   ytunnus: PropTypes.string
 };
 
-export default JarjestajaSwitch;
+export default injectIntl(JarjestajaSwitch);
