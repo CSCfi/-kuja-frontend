@@ -7,7 +7,8 @@ import * as R from "ramda";
 
 const defaultProps = {
   changeObjects: [],
-  muutosperustelut: []
+  muutosperustelut: [],
+  isReadOnly: false
 };
 
 const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
@@ -15,11 +16,13 @@ const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
   intl,
   muutosperustelut = defaultProps.muutosperustelut,
   onChangesUpdate,
-  sectionId
+  sectionId,
+  isReadOnly = defaultProps.isReadOnly
 }) => {
   const lomake = getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake(
     muutosperustelut,
-    R.toUpper(intl.locale)
+    R.toUpper(intl.locale),
+    isReadOnly
   );
 
   return (
@@ -39,7 +42,8 @@ const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
 
 OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake.propTypes = {
   changeObjects: PropTypes.array,
-  muutosperustelut: PropTypes.array
+  muutosperustelut: PropTypes.array,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(

@@ -9,6 +9,7 @@ import _ from "lodash";
 
 const defaultProps = {
   changeObjects: {},
+  isReadOnly: false,
   kohde: {},
   koulutukset: {},
   lomakkeet: {},
@@ -22,6 +23,7 @@ const PerustelutTutkinnot = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
     intl,
+    isReadOnly = defaultProps.isReadOnly,
     kohde = defaultProps.kohde,
     koulutukset = defaultProps.koulutukset,
     lomakkeet = defaultProps.lomakkeet,
@@ -66,14 +68,15 @@ const PerustelutTutkinnot = React.memo(
                 locale,
                 areaChanges,
                 anchorInitial,
-                lomakkeet
+                lomakkeet,
+                isReadOnly
               )
             : [];
           const title = parseLocalizedField(koulutusala.metadata, locale);
           return { areaCode, article, categories, title };
         }, _.cloneDeep(koulutusdata));
       };
-    }, [locale, kohde, lomakkeet, lupa.kohteet, maaraystyyppi]);
+    }, [isReadOnly, kohde, locale, lomakkeet, lupa.kohteet, maaraystyyppi]);
 
     useEffect(() => {
       if (koulutusdata.length) {
@@ -111,7 +114,7 @@ const PerustelutTutkinnot = React.memo(
                     changeObjects
                   )}
                   code={stateItem.areaCode}
-                  disableReverting={false}
+                  disableReverting={isReadOnly}
                   hideAmountOfChanges={false}
                   index={i}
                   isExpanded={true}
@@ -131,6 +134,7 @@ const PerustelutTutkinnot = React.memo(
 
 PerustelutTutkinnot.propTypes = {
   changeObjects: PropTypes.object,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,
