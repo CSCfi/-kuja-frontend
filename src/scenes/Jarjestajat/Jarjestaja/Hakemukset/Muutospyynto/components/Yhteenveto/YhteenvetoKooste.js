@@ -110,11 +110,11 @@ const YhteenvetoKooste = ({
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
               <FormSection
+                code={1}
                 id="yhteenveto_muutokset_perusteluineen"
                 muutoshakemus={muutoshakemus}
                 render={_props => (
                   <React.Fragment>
-                    <p>Tähän tarvittaessa ohjeteksti...</p>
                     {!!R.prop("tutkinnot", changeObjects) && (
                       <PerustelutTutkinnot
                         changeObjects={{
@@ -174,11 +174,12 @@ const YhteenvetoKooste = ({
                 )}
                 runOnStateUpdate={onStateUpdate}
                 runOnChanges={onChangesUpdate}
-                title={"Muutokset perusteluineen"}
+                title={kohdetiedot[0].title}
               />
             )}
           {!!R.prop(["kielet"], changeObjects) ? (
             <FormSection
+              code={2}
               id="perustelut_kielet"
               muutoshakemus={muutoshakemus}
               render={_props => (
