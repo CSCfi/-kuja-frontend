@@ -96,7 +96,6 @@ const YhteenvetoTutkinnot = React.memo(
           const areaChanges = R.prop(areaCode, _changes);
           const categories = areaChanges
             ? getCategoriesForPerustelut(
-                i,
                 article,
                 koulutusala.koulutukset,
                 kohde,

@@ -30,9 +30,9 @@ export function fetchMuutospyynto(uuid) {
 
 export function fetchMuutospyynnot(ytunnus, query) {
   return (dispatch) => {
-    dispatch({ type: FETCH_MUUTOSPYYNNOT_START })
+    dispatch({ type: FETCH_MUUTOSPYYNNOT_START });
 
-    const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`)
+    const request = fetch(`${API_BASE_URL}/muutospyynnot/${ytunnus}${query ? query : ''}`);
 
     request
       .then((response) => response.json())

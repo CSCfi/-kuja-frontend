@@ -372,8 +372,40 @@ export const LUPA_TEKSTIT = {
             FI: 'Tiedot tulevat Opetushallituksen organisaatiotietopalvelusta, joka päivittää ne yritys- ja yhteisötietojärjestelmästä (YTJ). Muutokset tietoihin tulee tehdä sitä kautta.',
             SV: 'INFO'
         }
+    },
+    MUUTOSPYYNTO: {
+        MUUTOS: {
+            FI: 'Järjestämisluvan muutos',
+            SV: 'Järjestämisluvan muutos'
+        },
+        TILA: {
+            LUONNOS: {
+                FI: 'Luonnos',
+                SV: 'Luonnos'
+            },
+            AVOIN: {
+                FI: 'Avoin',
+                SV: 'Avoin'
+            },
+            VALMISTELUSSA: {
+                FI: 'Valmistelussa',
+                SV: 'Valmistelussa'
+            },
+            TAYDENNETTAVA: {
+                FI: 'Täydennettävänä',
+                SV: 'Täydennettävänä'
+            },
+            PAATETTY: {
+                FI: 'Päätetty',
+                SV: 'Päätetty'
+            },
+            PASSIVOITU: {
+                FI: 'Passivoitu',
+                SV: 'Passivoitu'
+            }
+        }
     }
-}
+};
 
 export const TUTKINTO_TEKSTIT = {
   otsikkoKaikkiLuvat: {

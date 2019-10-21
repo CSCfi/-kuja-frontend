@@ -1,11 +1,11 @@
 import React from "react";
-import { MUUTOS_WIZARD_TEKSTIT } from "../modules/constants";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit";
 import TaloudellisetTilinpaatostiedot from "./Taloudelliset/TaloudellisetTilinpaatostiedot";
 import TaloudellisetLiitteet from "./Taloudelliset/TaloudellisetLiitteet";
+import wizard from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -13,17 +13,14 @@ const MuutospyyntoWizardTaloudelliset = ({
   changeObjects,
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate
+  onStateUpdate,
+  intl: { formatMessage }
 }) => {
   return (
     <React.Fragment>
-      <h2 className="my-6">
-        {MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.PAAOTSIKKO.FI}
-      </h2>
+      <h2 className="my-6">{formatMessage(wizard.pageTitle_3)}</h2>
 
-      {!changeObjects && (
-        <p>{MUUTOS_WIZARD_TEKSTIT.TALOUDELLISET.EI_LISATTYJA_TUTKINTOJA.FI}</p>
-      )}
+      {!changeObjects && <p>{formatMessage(wizard.noAddedTutkinnot)}</p>}
       {changeObjects && (
         <React.Fragment>
           <FormSection

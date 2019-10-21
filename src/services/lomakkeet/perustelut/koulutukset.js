@@ -1,4 +1,5 @@
 import { HAKEMUS_OTSIKOT } from "../../../locales/uusiHakemusFormConstants";
+// import { injectIntl } from "react-intl";
 
 export const getKuljettajienJatkokoulutuslomake = (
   addPeopleFormCallback,
@@ -10,7 +11,15 @@ export const getKuljettajienJatkokoulutuslomake = (
     {
       anchor: code,
       styleClasses: ["px-10 py-10"],
-      title: "Jatkokoulutusta antavan koulutuskeskuksen tehtävä",
+      components: [
+        {
+          anchor: "jatkokoulutus-title",
+          name: "StatusTextRow",
+          properties: {
+            title: "Jatkokoulutusta antavan koulutuskeskuksen tehtävä"
+          }
+        }
+      ],
       categories: [
         tehtavanTarpeellisuus(1, isReadOnly),
         voimassaOlo(2, isReadOnly),
@@ -43,7 +52,7 @@ export const getKuljettajienPeruskoulutuslomake = (
       styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "tehtavan-tarpeellisuus-title",
+          anchor: "perustaso-title",
           name: "StatusTextRow",
           properties: {
             title:
@@ -301,6 +310,26 @@ export const getAddPeopleForm = (orderNumber, isReadOnly) => {
                 }
               }
             ]
+          }
+        ]
+      },
+      {
+        anchor: "liitteet",
+        styleClasses: ["pl-6 pt-6"],
+        title: "Liitteet",
+        components: [
+          {
+            anchor: "info",
+            name: "StatusTextRow",
+            styleClasses: ["w-full"],
+            properties: {
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+            }
+          },
+          {
+            anchor: "A",
+            styleClasses: ["w-full"],
+            name: "Attachments"
           }
         ]
       }
@@ -673,27 +702,20 @@ const johtaja = (orderCode, isReadOnly) => {
         anchor: "liitteet",
         styleClasses: ["pl-6 pt-6"],
         title: "Liitteet",
-        categories: [
+        components: [
           {
             anchor: "info",
-            components: [
-              {
-                anchor: "A",
-                name: "StatusTextRow",
-                properties: {
-                  title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
-                }
-              }
-            ]
+            name: "StatusTextRow",
+            styleClasses: ["w-full"],
+            properties: {
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+              // title: FormattedMessage("attachmentInfo")  <- TODO
+            }
           },
           {
-            components: [
-              {
-                anchor: "A",
-                name: "Attachments",
-                properties: {}
-              }
-            ]
+            anchor: "A",
+            styleClasses: ["w-full"],
+            name: "Attachments"
           }
         ]
       }
@@ -803,6 +825,26 @@ const ajoneuvoKanta = (orderCode, isReadOnly) => {
               placeholder: "Perävaunuja",
               type: "number"
             }
+          }
+        ]
+      },
+      {
+        anchor: "liitteet",
+        styleClasses: ["pl-6 pt-6"],
+        title: "Liitteet",
+        components: [
+          {
+            anchor: "info",
+            name: "StatusTextRow",
+            styleClasses: ["w-full"],
+            properties: {
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+            }
+          },
+          {
+            anchor: "A",
+            styleClasses: ["w-full"],
+            name: "Attachments"
           }
         ]
       }

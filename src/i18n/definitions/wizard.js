@@ -108,57 +108,55 @@ export default defineMessages({
   },
   areasInfo1: {
     id: "wizard.areasInfo1",
-    defaultMessage:
-      "Tähän lyhyt ohjeteksti kohteen täyttämisestä"
+    defaultMessage: "Tähän lyhyt ohjeteksti kohteen täyttämisestä"
   },
   areasInfo2: {
     id: "wizard.areasInfo2",
-    defaultMessage:
-      "Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen"
+    defaultMessage: "Tähän lyhyt ohjeteksti toimialueiden valintaan liittyen"
   },
   areasInfo3: {
     id: "wizard.areasInfo3",
-    defaultMessage:
-      "Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen"
+    defaultMessage: "Tähän lyhyt ohjeteksti valtakunnallisen valintaan liittyen"
   },
   noArea: {
     id: "wizard.noArea",
-    defaultMessage:
-      "Toiminta-aluetta ei määritetty"
+    defaultMessage: "Toiminta-aluetta ei määritetty"
   },
   municipalities: {
     id: "wizard.municipalities",
-    defaultMessage:
-      "Kunnat"
+    defaultMessage: "Kunnat"
   },
   counties: {
     id: "wizard.counties",
-    defaultMessage:
-      "Maakunnat"
+    defaultMessage: "Maakunnat"
   },
   previous: {
     id: "wizard.previous",
-    defaultMessage:
-      "Edellinen"
+    defaultMessage: "Edellinen"
   },
   next: {
     id: "wizard.next",
-    defaultMessage:
-      "Seuraava"
+    defaultMessage: "Seuraava"
   },
   saveDraft: {
     id: "wizard.saveDraft",
-    defaultMessage:
-      "Tallenna luonnos"
+    defaultMessage: "Tallenna luonnos"
   },
   send: {
     id: "wizard.send",
-    defaultMessage:
-      "Lähetä hakemus"
+    defaultMessage: "Lähetä hakemus"
   },
   preview: {
     id: "wizard.preview",
+    defaultMessage: "Esikatsele"
+  },
+  noChanges: {
+    id: "wizard.noChanges",
+    defaultMessage: "Ei muutoksia."
+  },
+  noAddedTutkinnot: {
+    id: "wizard.noAddedTutkinnot",
     defaultMessage:
-      "Esikatsele"
+      "Taloudelliset edellytykset ilmoitetaan vain, kun järjestämislupaan haetaan uusia tutkintoja tai koulutuksia. Jatka seuraavalle välilehdelle Seuraava-painikkeella."
   }
 });
