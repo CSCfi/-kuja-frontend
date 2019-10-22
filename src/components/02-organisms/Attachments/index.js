@@ -353,7 +353,7 @@ const Attachments = React.memo(props => {
   };
 
   const showFile = (e, file) => {
-    if (file.tiedosto) {
+    if (file.tiedosto && file.tiedosto instanceof Blob) {
       const reader = new FileReader();
       reader.readAsDataURL(file.tiedosto);
       reader.onload = function() {
@@ -364,6 +364,9 @@ const Attachments = React.memo(props => {
         a.download = file.nimi + "." + file.tyyppi;
         a.click();
       };
+    } else {
+      console.log(file.tiedosto);
+      console.log(typeof file.tiedosto);
     }
   };
 
@@ -376,7 +379,6 @@ const Attachments = React.memo(props => {
           !liite.removed &&
           (!props.placement || liite.paikka === props.placement)
         ) {
-          console.log(liite.tiedosto);
           return (
             <div
               key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
