@@ -353,8 +353,8 @@ const Attachments = React.memo(props => {
   };
 
   const showFile = (e, file) => {
+    const reader = new FileReader();
     if (file.tiedosto && file.tiedosto instanceof Blob) {
-      const reader = new FileReader();
       reader.readAsDataURL(file.tiedosto);
       reader.onload = function() {
         const blob = reader.result;
@@ -365,6 +365,14 @@ const Attachments = React.memo(props => {
         a.click();
       };
     } else {
+      // props.downloadAttachment(file.uuid).then(response => {
+      //   const blob = reader.result;
+      //   let url = blob;
+      //   let a = document.createElement("a");
+      //   a.href = url;
+      //   a.download = response.nimi + "." + response.tyyppi;
+      //   a.click();
+      // });
       console.log(file.tiedosto);
       console.log(typeof file.tiedosto);
     }
@@ -533,7 +541,8 @@ Attachments.propTypes = {
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
   showListOnly: PropTypes.bool,
-  listHidden: PropTypes.bool
+  listHidden: PropTypes.bool,
+  downloadAttachment: PropTypes.func
 };
 
 export default injectIntl(Attachments);

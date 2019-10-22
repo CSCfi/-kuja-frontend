@@ -106,6 +106,10 @@ const CategorizedList = React.memo(props => {
     [onChangesUpdate]
   );
 
+  const downloadAttachment = (payload, changeProps) => {
+    // payload.component.downloadAttachment(payload, changeProps);
+  };
+
   const handleButtonClick = (payload, changeProps) => {
     payload.component.onClick(payload, changeProps);
   };
@@ -489,6 +493,7 @@ const CategorizedList = React.memo(props => {
                                 id={`attachments-${idSuffix}`}
                                 isDisabled={isDisabled}
                                 onUpdate={handleAttachmentChanges}
+                                downloadAttachment={downloadAttachment}
                                 payload={{
                                   anchor,
                                   categories: category.categories,
@@ -704,7 +709,8 @@ CategorizedList.propTypes = {
   path: PropTypes.array,
   runRootOperations: PropTypes.func,
   showCategoryTitles: PropTypes.bool,
-  onChangesUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func,
+  downloadAttachment: PropTypes.func
 };
 
 export default CategorizedList;
