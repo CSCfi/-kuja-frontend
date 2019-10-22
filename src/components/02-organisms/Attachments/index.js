@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { injectIntl } from "react-intl";
 import { COLORS } from "../../../modules/styles";
 import Attachment from "../Attachment/index";
-import { FaRegFile, FaFile, FaTimes, FaLock } from "react-icons/fa";
+import { FaRegFile, FaFile, FaTimes, FaLock, FaDownload } from "react-icons/fa";
 import {
   HAKEMUS_VIRHE,
   HAKEMUS_OTSIKOT,
@@ -352,6 +352,21 @@ const Attachments = React.memo(props => {
     else return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
   };
 
+  const showFile = (e, file) => {
+    if (file.tiedosto) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.tiedosto);
+      reader.onload = function() {
+        const blob = reader.result;
+        let url = blob;
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = file.nimi + "." + file.tyyppi;
+        a.click();
+      };
+    }
+  };
+
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
     if (attachments && attachments.length > 0)
@@ -361,6 +376,7 @@ const Attachments = React.memo(props => {
           !liite.removed &&
           (!props.placement || liite.paikka === props.placement)
         ) {
+          console.log(liite.tiedosto);
           return (
             <div
               key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
@@ -380,6 +396,13 @@ const Attachments = React.memo(props => {
                 />
                 <span className="type">{liite.tyyppi}</span>
                 <span className="size">{bytesToSize(liite.koko)}</span>
+                <button
+                  title="Näytä"
+                  onClick={e => showFile(e, liite)}
+                  className="ml-2"
+                >
+                  <FaDownload />
+                </button>
                 <Checkbox
                   title={
                     liite.salainen
