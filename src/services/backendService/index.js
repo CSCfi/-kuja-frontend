@@ -63,13 +63,21 @@ export function isReady(backendData) {
   return backendData && R.equals(backendData.status, statusMap.ready);
 }
 
-export function getFetchState(backendDataArr = []) {
-  let result = "unknown";
-  const statuses = R.map(R.prop("status"), backendDataArr);
+export function getFetchState(fetchSetup, fromBackend = []) {
+  let conclusion = "unknown";
+  const statuses = R.map(setupObj => {
+    const path = [setupObj.key, setupObj.subKey].filter(Boolean);
+    const backendData = R.path(path, fromBackend);
+    return backendData ? backendData.status : null;
+  }, fetchSetup).filter(Boolean);
+  const percentage = {
+    ready:
+      100 * (R.filter(R.equals("ready"), statuses).length / R.length(statuses))
+  };
   if (R.includes(statusMap.erroneous, statuses)) {
-    result = statusMap.erroneous;
+    conclusion = statusMap.erroneous;
   } else if (R.includes(statusMap.fetching, statuses)) {
-    result = statusMap.fetching;
+    conclusion = statusMap.fetching;
   } else if (
     // If the 'statuses' array is full of "ready" values and nothing else.
     R.and(
@@ -81,9 +89,12 @@ export function getFetchState(backendDataArr = []) {
       R.includes("ready", statuses)
     )
   ) {
-    result = statusMap.ready;
+    conclusion = statusMap.ready;
   }
-  return result;
+  return {
+    conclusion,
+    percentage
+  };
 }
 
 /**
@@ -93,13 +104,28 @@ export function getFetchState(backendDataArr = []) {
  */
 const backendRoutes = {
   kayttaja: `${API_BASE_URL}/auth/me`,
+  kielet: `${API_BASE_URL}/koodistot/kielet`,
+  kohteet: `${API_BASE_URL}/kohteet`,
+  tutkinnot: `${API_BASE_URL}/koodistot/ammatillinen/tutkinnot`,
+  koulutuksetMuut: `${API_BASE_URL}/koodistot/koodit/`,
+  koulutus: `${API_BASE_URL}/koodistot/koodi/koulutus/`,
+  koulutusalat: `${API_BASE_URL}/koodistot/koulutusalat/`,
+  koulutustyypit: `${API_BASE_URL}/koodistot/koulutustyypit/`,
   kunnat: `${API_BASE_URL}/koodistot/kunnat`,
   lupa: `${API_BASE_URL}/luvat/jarjestaja/`,
   lupahistoria: `${API_BASE_URL}/luvat/historia/`,
   luvat: `${API_BASE_URL}/luvat/jarjestajilla`,
   maakunnat: `${API_BASE_URL}/koodistot/maakunnat`,
+  maakuntakunnat: `${API_BASE_URL}/koodistot/maakuntakunta`,
+  maaraystyypit: `${API_BASE_URL}/maaraykset/maaraystyypit`,
+  muut: `${API_BASE_URL}/koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`,
   muutospyynnot: `${API_BASE_URL}/muutospyynnot/`,
-  organisaatio: `${API_BASE_URL}/organisaatiot/`
+  muutospyynto: `${API_BASE_URL}/muutospyynnot/id/`,
+  oivamuutoikeudetvelvollisuudetehdotjatehtavat: `${API_BASE_URL}/koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`,
+  opetuskielet: `${API_BASE_URL}/koodistot/opetuskielet`,
+  organisaatio: `${API_BASE_URL}/organisaatiot/`,
+  vankilat: `${API_BASE_URL}/koodistot/koodit/vankilat`,
+  liitteet: `${API_BASE_URL}/liitteet/`
 };
 
 /**
@@ -110,11 +136,11 @@ const backendRoutes = {
  * @param {function} dispatchFn - A dispatch function.
  * @param {object} abortController - An instance of AbortController.
  */
-async function run(key, url, options, dispatchFn, abortController) {
+async function run(key, url, options, dispatchFn, abortController, subKey) {
   /**
    * It's time to fetch some data!
    */
-
+  console.info("fetching...", key, url);
   const response = await fetch(url, {
     ...options,
     signal: abortController.signal
@@ -123,24 +149,27 @@ async function run(key, url, options, dispatchFn, abortController) {
   });
 
   if (response && response.ok) {
+    console.info("Ready...", key, url);
     const data = await response.json();
 
     /**
      * Data will be saved to the same context as what dispatchFn presents.
      */
     dispatchFn({
-      type: FETCH_FROM_BACKEND_SUCCESS,
+      data,
       key,
-      data
+      subKey,
+      type: FETCH_FROM_BACKEND_SUCCESS
     });
   } else {
     /**
      * Fetching failed. So, let's mark it up for later use.
      */
     dispatchFn({
-      type: FETCH_FROM_BACKEND_FAILED,
       key,
-      response
+      response,
+      subKey,
+      type: FETCH_FROM_BACKEND_FAILED
     });
   }
 }
@@ -158,7 +187,7 @@ function recursiveFetchHandler(
   _abortControllers = [],
   index = 0
 ) {
-  const { key, dispatchFn, options = {}, urlEnding = "" } = R.view(
+  const { key, dispatchFn, options = {}, urlEnding = "", subKey } = R.view(
     R.lensIndex(index),
     keysAndDispatchFuncs
   );
@@ -180,14 +209,15 @@ function recursiveFetchHandler(
    * Fetching is about to start. So, let's mark it up for later use.
    */
   dispatchFn({
-    type: FETCH_FROM_BACKEND_IS_ON,
-    key
+    key,
+    subKey,
+    type: FETCH_FROM_BACKEND_IS_ON
   });
 
   /**
    * XHR call is made by the run function.
    */
-  run(key, url, options, dispatchFn, abortController);
+  run(key, url, options, dispatchFn, abortController, subKey);
 
   /**
    * Let's handle the next fetch setup. Current function is called

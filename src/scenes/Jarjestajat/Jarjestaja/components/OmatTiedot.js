@@ -21,16 +21,20 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
   const { kunnat, maakunnat } = fromBackend;
 
+  const fetchSetup = useMemo(() => {
+    return [
+      { key: "kunnat", dispatchFn: dispatch },
+      { key: "maakunnat", dispatchFn: dispatch }
+    ];
+  }, [dispatch]);
+
   /**
    * Abort controller instances are used for cancelling the related
    * XHR calls later.
    */
   const abortControllers = useMemo(() => {
-    return fetchFromBackend([
-      { key: "kunnat", dispatchFn: dispatch },
-      { key: "maakunnat", dispatchFn: dispatch }
-    ]);
-  }, [dispatch]);
+    return fetchFromBackend(fetchSetup);
+  }, [fetchSetup]);
 
   /**
    * Ongoing XHR calls must be canceled. It's done here.
@@ -42,14 +46,14 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
   }, [abortControllers, dispatch]);
 
   const fetchState = useMemo(() => {
-    return getFetchState([fromBackend.kunnat, fromBackend.maakunnat]);
-  }, [fromBackend.kunnat, fromBackend.maakunnat]);
+    return getFetchState(fetchSetup, fromBackend);
+  }, [fetchSetup, fromBackend]);
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
     let kotipaikka = null;
-    if (fetchState === statusMap.fetching) {
-      jsx = <Loading />;
+    if (fetchState.conclusion === statusMap.fetching) {
+      jsx = <Loading percentage={fetchState.percentage.ready} />;
     } else if (organisaatio) {
       const postinumero = organisaatio.kayntiosoite.postinumeroUri
         ? organisaatio.kayntiosoite.postinumeroUri.substr(6)
@@ -62,7 +66,7 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
       const numero = (R.find(R.prop("numero"), organisaatio.yhteystiedot) || {})
         .numero;
       const www = (R.find(R.prop("www"), organisaatio.yhteystiedot) || {}).www;
-      if (fetchState === statusMap.ready) {
+      if (fetchState.conclusion === statusMap.ready) {
         const koodiarvo = organisaatio.kotipaikkaUri.substr(6);
         const source = koodiarvo.length === 3 ? kunnat.raw : maakunnat.raw;
         const kotipaikkaObj = R.find(R.propEq("koodiArvo", koodiarvo), source);

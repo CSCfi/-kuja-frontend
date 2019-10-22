@@ -3,7 +3,6 @@ import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
 import PropTypes from "prop-types";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
-import Hakemus from "../Hakemukset/Hakemus";
 import { BackendContext } from "../../../../context/backendContext";
 import { injectIntl } from "react-intl";
 import {
@@ -16,26 +15,31 @@ import {
 import * as R from "ramda";
 import Loading from "../../../../modules/Loading";
 import { parseLupa } from "../../../../services/luvat/lupaParser";
+import HakemusContainer from "../Hakemukset/HakemusContainer";
 
 const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
+  const fetchSetup = useMemo(() => {
     return ytunnus
-      ? fetchFromBackend([
+      ? [
           {
             key: "lupa",
             dispatchFn: dispatch,
             urlEnding: `${ytunnus}?with=all`
           },
           { key: "muutospyynnot", dispatchFn: dispatch, urlEnding: ytunnus }
-        ])
+        ]
       : [];
   }, [dispatch, ytunnus]);
+
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers = useMemo(() => {
+    return R.isEmpty(fetchSetup) ? [] : fetchFromBackend(fetchSetup);
+  }, [fetchSetup]);
 
   /**
    * Ongoing XHR calls must be canceled. It's done here.
@@ -53,14 +57,14 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
   }, [fromBackend.lupa, intl.formatMessage]);
 
   const fetchState = useMemo(() => {
-    return getFetchState([fromBackend.lupa, fromBackend.muutospyynnot]);
-  }, [fromBackend.lupa, fromBackend.muutospyynnot]);
+    return getFetchState(fetchSetup, fromBackend);
+  }, [fetchSetup, fromBackend]);
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
-    if (fetchState === statusMap.fetching) {
-      jsx = <Loading />;
-    } else if (fetchState === statusMap.ready) {
+    if (fetchState.conclusion === statusMap.fetching) {
+      jsx = <Loading percentage={fetchState.percentage.ready} />;
+    } else if (fetchState.conclusion === statusMap.ready) {
       return (
         <React.Fragment>
           <Switch>
@@ -68,14 +72,24 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               exact
               path={`${match.path}/hakemukset-ja-paatokset/uusi/:page`}
               render={props => {
-                return <Hakemus lupa={fromBackend.lupa} {...props} />;
+                return (
+                  <HakemusContainer
+                    lupa={fromBackend.lupa}
+                    match={props.match}
+                  />
+                );
               }}
             />
             <Route
               exact
               path={`${match.path}/hakemukset-ja-paatokset/:uuid/:page`}
               render={props => {
-                return <Hakemus lupa={fromBackend.lupa} {...props} />;
+                return (
+                  <HakemusContainer
+                    lupa={fromBackend.lupa}
+                    match={props.match}
+                  />
+                );
               }}
             />
             <Route

@@ -62,21 +62,25 @@ const Jarjestaja = ({
     return jarjestaja ? `/jarjestajat/${jarjestaja.oid}` : "";
   }, [jarjestaja]);
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
+  const fetchSetup = useMemo(() => {
     return jarjestaja
-      ? fetchFromBackend([
+      ? [
           {
             key: "lupahistoria",
             dispatchFn: dispatch,
             urlEnding: jarjestaja.oid
           }
-        ])
+        ]
       : [];
   }, [dispatch, jarjestaja]);
+
+  /**
+   * Abort controller instances are used for cancelling the related
+   * XHR calls later.
+   */
+  const abortControllers = useMemo(() => {
+    return fetchFromBackend(fetchSetup);
+  }, [fetchSetup]);
 
   /**
    * Ongoing XHR calls must be canceled. It's done here.
@@ -88,8 +92,8 @@ const Jarjestaja = ({
   }, [abortControllers, dispatch]);
 
   const fetchState = useMemo(() => {
-    return getFetchState([fromBackend.lupahistoria]);
-  }, [fromBackend.lupahistoria]);
+    return getFetchState(fetchSetup, fromBackend);
+  }, [fetchSetup, fromBackend]);
 
   const tabNavRoutes = useMemo(() => {
     // Basic routes (no authentication needed)
@@ -135,9 +139,9 @@ const Jarjestaja = ({
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
-    if (fetchState === statusMap.fetching) {
-      jsx = <Loading />;
-    } else if (fetchState === statusMap.ready) {
+    if (fetchState.conclusion === statusMap.fetching) {
+      jsx = <Loading percentage={fetchState.percentage.ready} />;
+    } else if (fetchState.conclusion === statusMap.ready) {
       jsx = (
         <React.Fragment>
           <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
@@ -232,6 +236,7 @@ const Jarjestaja = ({
     fetchState,
     fromBackend,
     jarjestaja,
+    kohteet,
     lupa,
     match.path,
     match.url,
