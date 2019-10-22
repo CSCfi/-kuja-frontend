@@ -6,7 +6,6 @@ export const getVankilaopetusPerustelulomake = (
   isReadOnly,
   locale = "FI"
 ) => {
-  console.info(vankilat, isReadOnly, locale);
   return [
     {
       anchor: "vankilaopetus",
@@ -601,9 +600,10 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
 
 export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
   checkboxItems,
-  locale
+  locale,
+  isReadOnly = false
 ) => {
-  const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale);
+  const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale, isReadOnly);
   return [
     {
       anchor: "perustelut",
@@ -620,6 +620,7 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
               anchor: "A",
               name: "TextBox",
               properties: {
+                isReadOnly,
                 placeholder:
                   "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
               }
@@ -631,32 +632,42 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
   ];
 };
 
-export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = () => {
+export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = false) => {
   return [
     {
       anchor: "vaativatuki",
-      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+      title: "Mikä on aiheuttanut muutostarpeen?",
       styleClasses: ["px-10 py-10"],
       components: [
         {
           anchor: "A",
-          name: "TextBox"
+          name: "TextBox",
+          properties: {
+            isReadOnly,
+            placeholder:
+              "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+          }
         }
       ]
     }
   ];
 };
 
-export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = () => {
+export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false) => {
   return [
     {
       anchor: "sisaoppilaitos",
-      title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+      title: "Mikä on aiheuttanut muutostarpeen?",
       styleClasses: ["px-10 py-10"],
       components: [
         {
           anchor: "A",
-          name: "TextBox"
+          name: "TextBox",
+          properties: {
+            isReadOnly,
+            placeholder:
+              "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+          }
         }
       ]
     }

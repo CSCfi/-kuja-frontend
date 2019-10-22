@@ -9,6 +9,7 @@ import _ from "lodash";
 
 const defaultProps = {
   changeObjects: {},
+  isReadOnly: false,
   kohde: {},
   koulutukset: {},
   lomakkeet: {},
@@ -22,6 +23,7 @@ const PerustelutTutkinnot = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
     intl,
+    isReadOnly = defaultProps.isReadOnly,
     kohde = defaultProps.kohde,
     koulutukset = defaultProps.koulutukset,
     lomakkeet = defaultProps.lomakkeet,
@@ -66,14 +68,15 @@ const PerustelutTutkinnot = React.memo(
                 locale,
                 areaChanges,
                 anchorInitial,
-                lomakkeet
+                lomakkeet,
+                isReadOnly
               )
             : [];
           const title = parseLocalizedField(koulutusala.metadata, locale);
           return { areaCode, article, categories, title };
         }, _.cloneDeep(koulutusdata));
       };
-    }, [locale, kohde, lomakkeet, lupa.kohteet, maaraystyyppi]);
+    }, [isReadOnly, kohde, locale, lomakkeet, lupa.kohteet, maaraystyyppi]);
 
     useEffect(() => {
       if (koulutusdata.length) {
@@ -95,28 +98,34 @@ const PerustelutTutkinnot = React.memo(
       <React.Fragment>
         {stateObject.items &&
           R.addIndex(R.map)((stateItem, i) => {
-            const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
-            return stateItem.categories.length ? (
-              <ExpandableRowRoot
-                anchor={anchorInitial}
-                key={`expandable-row-root-${i}`}
-                categories={stateItem.categories}
-                changes={R.path(
-                  ["perustelut", "tutkinnot", stateItem.areaCode],
-                  changeObjects
-                )}
-                code={stateItem.areaCode}
-                disableReverting={false}
-                hideAmountOfChanges={false}
-                index={i}
-                isExpanded={true}
-                onChangesRemove={onChangesRemove}
-                onUpdate={onChangesUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={true}
-                title={stateItem.title}
-              />
-            ) : null;
+            const changes = R.path(
+              ["tutkinnot", stateItem.areaCode],
+              changeObjects
+            );
+            if (changes && !R.isEmpty(changes)) {
+              const anchorInitial = `${sectionId}_${stateItem.areaCode}`;
+              return (
+                <ExpandableRowRoot
+                  anchor={anchorInitial}
+                  key={`expandable-row-root-${i}`}
+                  categories={stateItem.categories}
+                  changes={R.path(
+                    ["perustelut", "tutkinnot", stateItem.areaCode],
+                    changeObjects
+                  )}
+                  code={stateItem.areaCode}
+                  disableReverting={isReadOnly}
+                  hideAmountOfChanges={false}
+                  index={i}
+                  isExpanded={true}
+                  onChangesRemove={onChangesRemove}
+                  onUpdate={onChangesUpdate}
+                  sectionId={sectionId}
+                  showCategoryTitles={true}
+                  title={stateItem.title}
+                />
+              );
+            }
           }, stateObject.items)}
       </React.Fragment>
     );
@@ -125,6 +134,7 @@ const PerustelutTutkinnot = React.memo(
 
 PerustelutTutkinnot.propTypes = {
   changeObjects: PropTypes.object,
+  isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.object,

@@ -17,8 +17,10 @@ const {
   write
 } = require("taiko");
 const chai = require("chai");
+require('dotenv').config()
 const assert = chai.assert;
 const headless = process.env.headless_chrome.toLowerCase() === "true";
+const users = require("../users/users")
 
 beforeSuite(async () => {
   await openBrowser({ headless: headless });
@@ -33,8 +35,8 @@ step("Navigate to app", async () => {
     // await goto("https://oivadev.csc.fi/");
     await goto("http://localhost");
   } catch (e) {
-    await click("Lisäasetukset");
-    await click("Siirry sivustoon localhost (tämä ei ole turvallista)");
+    await click($("#details-button"));
+    await click($("#proceed-link"));
   }
 });
 
@@ -42,7 +44,7 @@ step("Log in as <username>", async username => {
   await click(link({ href: "/cas-auth" }));
   await write(username);
   await focus(inputField({ type: "password" }));
-  await write("oiva-sanni");
+  await write(process.env[username]);
   await click(button({ type: "submit" }));
   assert.ok(await text("Kirjaudu ulos").exists());
 });
@@ -99,7 +101,7 @@ step("Tarkista, että ollaan sivulla <pageNumber>", async pageNumber => {
 
 step("Lomakeoperaatio <sectionId> valitse <item>", async (sectionId, item) => {
   try {
-    await scrollDown($(".MuiDialogContent-root"));
+    //await scrollDown($(".MuiDialogContent-root"));
     await scrollTo(item);
     await click(item);
   } catch (e) {
@@ -114,5 +116,13 @@ step("Sulje lomake", async () => {
     assert.notInclude(await currentURL(), "hakemukset-ja-paatokset");
   } catch (e) {
     console.error(e);
+  }
+});
+
+step("Assert if text exists <string>", async string => {
+  try {
+    assert.ok(await text(string).exists());
+  } catch (e) {
+    console.error(e)
   }
 });

@@ -282,7 +282,7 @@ const CategorizedList = React.memo(props => {
                   (props.debug
                     ? props.rootPath.concat([i, "components", ii])
                     : "");
-                component.name === "ActionList" && console.info(propsObj);
+
                 return (
                   <React.Fragment key={`item-${ii}`}>
                     {component.name === "CheckboxWithLabel" && (

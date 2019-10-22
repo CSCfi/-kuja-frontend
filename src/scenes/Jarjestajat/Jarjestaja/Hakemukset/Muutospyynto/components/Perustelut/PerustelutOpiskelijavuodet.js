@@ -16,7 +16,7 @@ const filterChanges = (anchor, changeObjects = []) => {
 
 const PerustelutOpiskelijavuodet = props => {
   const sectionId = "perustelut_opiskelijavuodet";
-  const { onChangesRemove, onChangesUpdate } = props;
+  const { onChangesRemove, onChangesUpdate, isReadOnly } = props;
 
   const changesByLimitations = useMemo(() => {
     return {
@@ -58,6 +58,7 @@ const PerustelutOpiskelijavuodet = props => {
             )}
             muutosperustelut={props.muutosperustelut}
             sectionId={`${sectionId}_vahimmaisopiskelijavuodet`}
+            isReadOnly={isReadOnly}
           ></OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake>
         </ExpandableRowRoot>
       )}
@@ -76,6 +77,7 @@ const PerustelutOpiskelijavuodet = props => {
             onChangesUpdate={onChangesUpdate}
             changeObjects={changesByLimitations.sisaoppilaitos}
             sectionId={`${sectionId}_sisaoppilaitos`}
+            isReadOnly={isReadOnly}
           ></OpiskelijavuodetsisaoppilaitosPerustelulomake>
         </ExpandableRowRoot>
       )}
@@ -94,6 +96,7 @@ const PerustelutOpiskelijavuodet = props => {
             onChangesUpdate={onChangesUpdate}
             changeObjects={changesByLimitations.vaativatuki}
             sectionId={`${sectionId}_vaativatuki`}
+            isReadOnly={isReadOnly}
           ></OpiskelijavuodetvaativatukiPerustelulomake>
         </ExpandableRowRoot>
       )}
@@ -104,7 +107,8 @@ const PerustelutOpiskelijavuodet = props => {
 PerustelutOpiskelijavuodet.defaultProps = {
   changeObjects: {},
   muutosperustelut: [],
-  stateObject: {}
+  stateObject: {},
+  isReadOnly: false
 };
 
 PerustelutOpiskelijavuodet.propTypes = {
@@ -115,7 +119,8 @@ PerustelutOpiskelijavuodet.propTypes = {
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(PerustelutOpiskelijavuodet);

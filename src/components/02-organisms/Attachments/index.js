@@ -354,7 +354,6 @@ const Attachments = React.memo(props => {
 
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
-    console.log(attachments);
     if (attachments && attachments.length > 0)
       return attachments.map(liite => {
         if (
@@ -426,7 +425,6 @@ const Attachments = React.memo(props => {
     else return null;
   };
 
-  console.log(isNameModalOpen);
   return (
     <React.Fragment>
       {/* {!props.listHidden && (

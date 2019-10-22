@@ -4,15 +4,17 @@ import CategorizedListRoot from "../../../../02-organisms/CategorizedListRoot";
 import { getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake } from "../../../../../services/lomakkeet/perustelut/muut";
 
 const defaultProps = {
-  changeObjects: []
+  changeObjects: [],
+  isReadOnly: false
 };
 
 const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
   changeObjects = defaultProps.changeObjects,
   onChangesUpdate,
-  sectionId
+  sectionId,
+  isReadOnly = defaultProps.isReadOnly
 }) => {
-  const lomake = getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake();
+  const lomake = getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake(isReadOnly);
 
   return (
     <div className="p-8">
@@ -30,7 +32,8 @@ const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
 };
 
 OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake.propTypes = {
-  changeObjects: PropTypes.array
+  changeObjects: PropTypes.array,
+  isReadOnly: PropTypes.bool
 };
 
 export default OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake;

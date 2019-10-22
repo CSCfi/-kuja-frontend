@@ -108,7 +108,12 @@ const PerustelutATVKoulutukset = props => {
 
   return (
     <React.Fragment>
-      {props.stateObject.categories ? (
+      {!R.isEmpty(
+        R.path(
+          ["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"],
+          props.changeObjects
+        )
+      ) && props.stateObject.categories ? (
         <ExpandableRowRoot
           anchor={sectionId}
           key={`expandable-row-root`}
