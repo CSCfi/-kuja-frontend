@@ -26,7 +26,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
         stateObject={props.stateObjects.valmentavatKoulutukset}
       />
 
-      {/* <AmmatilliseenTehtavaanValmistavatKoulutukset
+      <AmmatilliseenTehtavaanValmistavatKoulutukset
         changeObjects={R.prop(
           "ammatilliseenTehtavaanValmistavatKoulutukset",
           props.changeObjects
@@ -64,7 +64,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
         onChangesUpdate={props.onChangesUpdate}
         onStateUpdate={props.onStateUpdate}
         stateObject={props.stateObjects.kuljettajakoulutukset}
-      /> */}
+      />
     </div>
   );
 });

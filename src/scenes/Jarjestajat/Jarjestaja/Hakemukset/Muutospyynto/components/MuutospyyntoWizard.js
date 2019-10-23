@@ -45,7 +45,8 @@ import {
 import { sortLanguages } from "../../../../../../services/kielet/kieliUtil";
 import {
   parseKoulutuksetAll,
-  parseKoulutusalat
+  parseKoulutusalat,
+  parseMuut
 } from "../../../../../../services/koulutukset/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../services/toimialueet/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
@@ -98,7 +99,6 @@ const MuutospyyntoWizard = ({
   backendChanges = {},
   intl,
   kohteet = [],
-  koulutukset = {},
   koulutustyypit = [],
   kunnat = [],
   lupa = {},
@@ -152,9 +152,22 @@ const MuutospyyntoWizard = ({
     );
   }, [fromBackend.tutkinnot, koulutusalat, fromBackend.koulutustyypit]);
 
+  const koulutukset = useMemo(() => {
+    return {
+      muut: R.map(
+        R.compose(
+          R.sortBy(R.prop("koodiArvo")),
+          R.prop("raw")
+        ),
+        fromBackend.koulutukset.muut
+      ),
+      poikkeukset: R.map(R.prop("raw"), fromBackend.koulutukset.poikkeukset)
+    };
+  }, [fromBackend.koulutukset]);
+
   const maakuntakunnatList = useMemo(() => {
     return getMaakuntakunnatList(maakuntakunnat, R.toUpper(intl.locale));
-  }, [maakuntakunnat]);
+  }, [intl.locale, maakuntakunnat]);
 
   /**
    * The wizard is splitted in to multiple sections. dataBySection contains
@@ -659,7 +672,6 @@ const MuutospyyntoWizard = ({
 
 MuutospyyntoWizard.propTypes = {
   backendChanges: PropTypes.object,
-  koulutukset: PropTypes.object,
   koulutustyypit: PropTypes.array,
   kunnat: PropTypes.array,
   lupa: PropTypes.object,

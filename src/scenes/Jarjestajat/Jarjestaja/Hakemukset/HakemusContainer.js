@@ -259,8 +259,7 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
         <MuutoshakemusProvider>
           <MuutospyyntoWizard
             backendChanges={backendChanges}
-            kohteet={R.path(["kohteet", "raw"], fromBackend)}
-            koulutukset={fromBackend.koulutukset.raw}
+            kohteet={fromBackend.kohteet.raw}
             koulutustyypit={fromBackend.koulutustyypit.raw}
             kunnat={fromBackend.kunnat.raw}
             lupa={lupa.raw}
@@ -279,21 +278,19 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
     return jsx;
   }, [
     fetchState,
-    fromBackend.kielet,
     backendChanges,
     fromBackend.kohteet,
-    fromBackend.koulutusalat,
     fromBackend.koulutustyypit,
     fromBackend.kunnat,
     fromBackend.maakunnat,
     fromBackend.maakuntakunnat,
     fromBackend.maaraystyypit,
     fromBackend.muut,
-    fromBackend.muutospyynnot,
-    fromBackend.oivamuutoikeudetvelvollisuudetehdotjatehtavat,
-    fromBackend.tutkinnot,
+    fromBackend.muutospyynto,
     fromBackend.vankilat,
-    lupa
+    lupa,
+    lupaKohteet,
+    match
   ]);
 
   return view;

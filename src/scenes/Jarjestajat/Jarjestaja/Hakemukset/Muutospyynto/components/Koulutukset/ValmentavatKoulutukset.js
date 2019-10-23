@@ -48,11 +48,10 @@ const ValmentavatKoulutukset = React.memo(props => {
 
   useEffect(() => {
     console.info(props.koulutukset);
-    const poikkeukset = []; // R.map(R.props("raw"), props.koulutukset.poikkeukset);
     onStateUpdate(
       {
         categories: getCategories(
-          getDataForKoulutusList(poikkeukset, R.toUpper(props.intl.locale)),
+          getDataForKoulutusList(props.koulutukset.poikkeukset, R.toUpper(props.intl.locale)),
           props.kohde,
           props.maaraystyyppi
         )
