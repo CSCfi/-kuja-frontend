@@ -144,10 +144,11 @@ const HakemusContainer = props => {
    */
   useEffect(() => {
     if (muutospyynnot.fetched) {
-      const backendMuutokset = R.path(
-        ["muutospyynto", "muutokset"],
-        muutospyynnot
-      );
+      const backendMuutokset = R.compose(
+        R.reject(R.isNil),
+        R.chain(muutos => R.concat([muutos], R.prop("aliMaaraykset", muutos))),
+        R.path(["muutospyynto", "muutokset"]))(muutospyynnot);
+
       const getChangesOf = (
         key,
         changes,
