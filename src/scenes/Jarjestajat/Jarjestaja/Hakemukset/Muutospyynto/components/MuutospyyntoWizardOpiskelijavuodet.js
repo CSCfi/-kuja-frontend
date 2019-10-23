@@ -461,7 +461,7 @@ MuutospyyntoWizardOpiskelijavuodet.propTypes = {
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
