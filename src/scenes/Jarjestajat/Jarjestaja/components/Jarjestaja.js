@@ -15,8 +15,6 @@ import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
-import { KunnatProvider } from "context/kunnatContext";
-import { MaakunnatProvider } from "../../../../context/maakunnatContext";
 import { BackendContext } from "../../../../context/backendContext";
 import {
   abort,
@@ -39,7 +37,7 @@ const Separator = styled.div`
 
 const Jarjestaja = ({
   intl,
-  kohteet = [],
+  lupaKohteet = [],
   lupa = {},
   match,
   muutospyynnot,
@@ -163,12 +161,8 @@ const Jarjestaja = ({
                 <Route
                   path={`${match.path}/omattiedot`}
                   exact
-                  render={props => (
-                    <MaakunnatProvider>
-                      <KunnatProvider>
-                        <OmatTiedot organisaatio={organisaatio} user={user} />
-                      </KunnatProvider>
-                    </MaakunnatProvider>
+                  render={() => (
+                    <OmatTiedot organisaatio={organisaatio} user={user} />
                   )}
                 />
                 <Route
@@ -176,7 +170,7 @@ const Jarjestaja = ({
                   exact
                   render={() => (
                     <Jarjestamislupa
-                      kohteet={kohteet}
+                      lupaKohteet={lupaKohteet}
                       lupa={lupa}
                       ytunnus={ytunnus}
                     />
@@ -194,7 +188,6 @@ const Jarjestaja = ({
                   exact
                   render={props => (
                     <JarjestamislupaAsiat
-                      kohteet={kohteet}
                       lupa={lupa}
                       lupahistory={R.path(["lupahistoria", "raw"], fromBackend)}
                       match={props.match}
@@ -236,7 +229,7 @@ const Jarjestaja = ({
     fetchState,
     fromBackend,
     jarjestaja,
-    kohteet,
+    lupaKohteet,
     lupa,
     match.path,
     match.url,
@@ -252,7 +245,7 @@ const Jarjestaja = ({
 };
 
 Jarjestaja.propTypes = {
-  kohteet: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   lupa: PropTypes.object,
   match: PropTypes.object,
   muutospyynnot: PropTypes.array,

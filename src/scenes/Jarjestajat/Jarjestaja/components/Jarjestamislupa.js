@@ -13,7 +13,7 @@ const TopSectionWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `;
 
-const Jarjestamislupa = ({ kohteet, lupa }) => {
+const Jarjestamislupa = ({ lupaKohteet, lupa }) => {
   // Luvan poikkeuskäsittely erikoisluville (17kpl)
   const lupaException = LUPA_LISAKOULUTTAJAT[lupa.jarjestajaYtunnus];
   return (
@@ -40,7 +40,7 @@ const Jarjestamislupa = ({ kohteet, lupa }) => {
             {Object.keys(LUPA_SECTIONS).map((k, i) => (
               <LupaSection
                 key={i}
-                kohde={kohteet[k]}
+                kohde={lupaKohteet[k]}
                 ytunnus={lupa.jarjestajaYtunnus}
               />
             ))}
@@ -52,7 +52,7 @@ const Jarjestamislupa = ({ kohteet, lupa }) => {
 };
 
 Jarjestamislupa.propTypes = {
-  kohteet: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   lupa: PropTypes.object
 };
 

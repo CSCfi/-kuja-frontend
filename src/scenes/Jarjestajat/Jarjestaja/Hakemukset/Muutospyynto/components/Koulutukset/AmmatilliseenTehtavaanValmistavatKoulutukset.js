@@ -47,6 +47,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   }, []);
 
   useEffect(() => {
+    console.info(props.koulutukset);
     if (
       R.includes(
         "ammatilliseentehtavaanvalmistavakoulutus",

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useMemo } from "react";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
+import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 import { MessageWrapper } from "../../../../modules/elements";
 import Loading from "../../../../modules/Loading";
@@ -21,7 +22,7 @@ import {
   isReady
 } from "../../../../services/backendService";
 
-const HakemusContainer = ({ lupa, match }) => {
+const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
@@ -31,13 +32,13 @@ const HakemusContainer = ({ lupa, match }) => {
         key: "koulutus",
         dispatchFn: dispatch,
         urlEnding: "999901",
-        subKey: "999901"
+        path: ["koulutukset", "poikkeukset", "999901"]
       },
       {
         key: "koulutus",
         dispatchFn: dispatch,
         urlEnding: "999903",
-        subKey: "999903"
+        path: ["koulutukset", "poikkeukset", "999903"]
       },
       { key: "koulutusalat", dispatchFn: dispatch },
       { key: "koulutustyypit", dispatchFn: dispatch },
@@ -45,19 +46,19 @@ const HakemusContainer = ({ lupa, match }) => {
         key: "koulutuksetMuut",
         dispatchFn: dispatch,
         urlEnding: MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS,
-        subKey: MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS
+        path: ["koulutukset", "muut", MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS]
       },
       {
         key: "koulutuksetMuut",
         dispatchFn: dispatch,
         urlEnding: MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS,
-        subKey: MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS
+        path: ["koulutukset", "muut", MUUT_KEYS.OIVA_TYOVOIMAKOULUTUS]
       },
       {
         key: "koulutuksetMuut",
         dispatchFn: dispatch,
         urlEnding: MUUT_KEYS.KULJETTAJAKOULUTUS,
-        subKey: MUUT_KEYS.KULJETTAJAKOULUTUS
+        path: ["koulutukset", "muut", MUUT_KEYS.KULJETTAJAKOULUTUS]
       },
       { key: "kielet", dispatchFn: dispatch },
       { key: "opetuskielet", dispatchFn: dispatch },
@@ -108,14 +109,6 @@ const HakemusContainer = ({ lupa, match }) => {
   }, [fetchSetup, fromBackend]);
 
   const [backendChanges, setBackendChanges] = useState({});
-
-  // useEffect(() => {
-  //   if (koulutusalat.fetched && koulutustyypit.fetched) {
-  //     fetchKoulutuksetAll(koulutusalat.data, koulutustyypit.data)(
-  //       koulutuksetDispatch
-  //     );
-  //   }
-  // }, [koulutusalat, koulutustyypit, koulutuksetDispatch]);
 
   /**
    * Let's walk through all the changes from the backend and update the muutoshakemus.
@@ -245,7 +238,6 @@ const HakemusContainer = ({ lupa, match }) => {
           changesBySection
         );
       }, c);
-
       setBackendChanges({
         changeObjects: changesBySection,
         source: backendMuutokset,
@@ -264,26 +256,24 @@ const HakemusContainer = ({ lupa, match }) => {
       );
     } else if (fetchState.conclusion === statusMap.ready) {
       jsx = (
-        <MuutospyyntoWizard
-          backendChanges={backendChanges}
-          kielet={fromBackend.kielet.raw}
-          kohteet={fromBackend.kohteet.raw}
-          koulutukset={fromBackend.tutkinnot.raw}
-          koulutusalat={fromBackend.koulutusalat.raw}
-          koulutustyypit={fromBackend.koulutustyypit.raw}
-          kunnat={fromBackend.kunnat.raw}
-          maakuntakunnat={fromBackend.maakuntakunnat.raw}
-          maakunnat={fromBackend.maakunnat.raw}
-          maaraystyypit={fromBackend.maaraystyypit.raw}
-          muutospyynnot={fromBackend.muutospyynnot.raw}
-          opiskelijavuodet={
-            fromBackend.oivamuutoikeudetvelvollisuudetehdotjatehtavat.raw
-          }
-          muut={fromBackend.muut.raw}
-          lupa={lupa}
-          vankilat={fromBackend.vankilat.raw}
-          // {...props}
-        />
+        <MuutoshakemusProvider>
+          <MuutospyyntoWizard
+            backendChanges={backendChanges}
+            kohteet={R.path(["kohteet", "raw"], fromBackend)}
+            koulutukset={fromBackend.koulutukset.raw}
+            koulutustyypit={fromBackend.koulutustyypit.raw}
+            kunnat={fromBackend.kunnat.raw}
+            lupa={lupa.raw}
+            lupaKohteet={lupaKohteet}
+            maakunnat={fromBackend.maakunnat.raw}
+            maakuntakunnat={fromBackend.maakuntakunnat.raw}
+            maaraystyypit={fromBackend.maaraystyypit.raw}
+            match={match}
+            muut={fromBackend.muut.raw}
+            muutospyynto={fromBackend.muutospyynto}
+            vankilat={fromBackend.vankilat.raw}
+          />
+        </MuutoshakemusProvider>
       );
     }
     return jsx;
@@ -310,6 +300,7 @@ const HakemusContainer = ({ lupa, match }) => {
 };
 
 HakemusContainer.propTypes = {
+  lupaKohteet: PropTypes.object,
   lupa: PropTypes.object,
   match: PropTypes.object
 };

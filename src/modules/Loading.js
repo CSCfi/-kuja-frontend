@@ -21,7 +21,7 @@ const Loading = props => {
 
   return (
     <div className="flex items-center mx-auto">
-      <span className="mr-6">
+      <span className="relative mr-6">
         {!R.isNil(props.percentage) && (
           <span className="absolute mt-8 ml-4">
             {Math.round(props.percentage)}%

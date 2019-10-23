@@ -66,7 +66,7 @@ export function isReady(backendData) {
 export function getFetchState(fetchSetup, fromBackend = []) {
   let conclusion = "unknown";
   const statuses = R.map(setupObj => {
-    const path = [setupObj.key, setupObj.subKey].filter(Boolean);
+    const path = setupObj.path || [setupObj.key, setupObj.subKey].filter(Boolean);
     const backendData = R.path(path, fromBackend);
     return backendData ? backendData.status : null;
   }, fetchSetup).filter(Boolean);
@@ -136,7 +136,15 @@ const backendRoutes = {
  * @param {function} dispatchFn - A dispatch function.
  * @param {object} abortController - An instance of AbortController.
  */
-async function run(key, url, options, dispatchFn, abortController, subKey) {
+async function run(
+  key,
+  url,
+  options,
+  dispatchFn,
+  abortController,
+  subKey,
+  path
+) {
   /**
    * It's time to fetch some data!
    */
@@ -159,6 +167,7 @@ async function run(key, url, options, dispatchFn, abortController, subKey) {
       data,
       key,
       subKey,
+      path,
       type: FETCH_FROM_BACKEND_SUCCESS
     });
   } else {
@@ -169,6 +178,7 @@ async function run(key, url, options, dispatchFn, abortController, subKey) {
       key,
       response,
       subKey,
+      path,
       type: FETCH_FROM_BACKEND_FAILED
     });
   }
@@ -187,10 +197,14 @@ function recursiveFetchHandler(
   _abortControllers = [],
   index = 0
 ) {
-  const { key, dispatchFn, options = {}, urlEnding = "", subKey } = R.view(
-    R.lensIndex(index),
-    keysAndDispatchFuncs
-  );
+  const {
+    key,
+    dispatchFn,
+    options = {},
+    urlEnding = "",
+    subKey,
+    path
+  } = R.view(R.lensIndex(index), keysAndDispatchFuncs);
 
   const url = R.join("", [R.prop(key, backendRoutes), urlEnding]);
 
@@ -211,13 +225,14 @@ function recursiveFetchHandler(
   dispatchFn({
     key,
     subKey,
+    path,
     type: FETCH_FROM_BACKEND_IS_ON
   });
 
   /**
    * XHR call is made by the run function.
    */
-  run(key, url, options, dispatchFn, abortController, subKey);
+  run(key, url, options, dispatchFn, abortController, subKey, path);
 
   /**
    * Let's handle the next fetch setup. Current function is called

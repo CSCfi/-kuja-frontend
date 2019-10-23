@@ -48,7 +48,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       <Opetuskielet
         changeObjects={R.path(["kielet", "opetuskielet"], props.changeObjects)}
         opetuskielet={props.kielet.opetuskielet}
-        kohde={props.lupa.kohteet[2]}
+        kohde={props.lupaKohteet[2]}
         lupa={lupa}
         maaraystyyppi={props.maaraystyyppi}
         onChangesRemove={props.onChangesRemove}
@@ -69,7 +69,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
             tutkinnot: R.path(["tutkinnot"], props.changeObjects)
           }}
           kielet={props.kielet.kielet}
-          kohde={props.lupa.kohteet[1]}
+          kohde={props.lupaKohteet[1]}
           locale={R.toUpper(props.intl.locale)}
           lupa={lupa}
           onChangesRemove={props.onChangesRemove}
@@ -97,6 +97,7 @@ MuutospyyntoWizardKielet.propTypes = {
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   stateObjects: PropTypes.object
 };
 

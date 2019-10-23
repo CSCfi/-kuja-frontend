@@ -40,10 +40,10 @@ const MuutospyyntoWizardMuut = React.memo(props => {
           group[kasite] = group[kasite] || [];
           group[kasite].push(article);
         }
-      }, props.muut.data);
+      }, props.muut);
       return group;
     };
-  }, [osiota5koskevatMaaraykset, props.muut.data]);
+  }, [osiota5koskevatMaaraykset, props.muut]);
 
   const getCategories = useMemo(() => {
     return (configObj, locale) => {
@@ -291,7 +291,7 @@ MuutospyyntoWizardMuut.propTypes = {
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,
   maaraystyyppi: PropTypes.object,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

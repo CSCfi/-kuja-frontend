@@ -50,7 +50,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
     };
   }, [abortControllers, dispatch]);
 
-  const kohteet = useMemo(() => {
+  const lupaKohteet = useMemo(() => {
     return isReady(fromBackend.lupa)
       ? parseLupa(fromBackend.lupa.raw, intl.formatMessage)
       : [];
@@ -74,6 +74,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               render={props => {
                 return (
                   <HakemusContainer
+                    lupaKohteet={lupaKohteet}
                     lupa={fromBackend.lupa}
                     match={props.match}
                   />
@@ -86,6 +87,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               render={props => {
                 return (
                   <HakemusContainer
+                    lupaKohteet={lupaKohteet}
                     lupa={fromBackend.lupa}
                     match={props.match}
                   />
@@ -97,7 +99,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               render={() => (
                 <LupahistoriaProvider>
                   <Jarjestaja
-                    kohteet={kohteet}
+                    lupaKohteet={lupaKohteet}
                     lupa={R.path(["lupa", "raw"], fromBackend)}
                     match={match}
                     muutospyynnot={fromBackend.muutospyynnot.raw}
@@ -112,7 +114,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
       );
     }
     return jsx;
-  }, [fetchState, fromBackend, kohteet, match, organisaatio, user]);
+  }, [fetchState, fromBackend, lupaKohteet, match, organisaatio, user]);
 
   return view;
 };

@@ -29,9 +29,8 @@ const defaultConstraintFlags = {
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
-  const { kohteet } = props.lupa;
-  const { opiskelijavuodet } = kohteet[4];
-  const { muutCombined } = kohteet[5];
+  const { opiskelijavuodet } = props.lupaKohteet[4];
+  const { muutCombined } = props.lupaKohteet[5];
 
   const [constraintFlags, setConstraintFlags] = useState(defaultConstraintFlags);
   const [applyFor, setApplyFor] = useState(0);
@@ -78,7 +77,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       isVaativaTukiValueRequired: !isVaativatInLupa && isVaativatInChanges,
       isSisaoppilaitosValueRequired: !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
     })
-  }, [muutCombined, props.lupa, props.changesOfSection5]);
+  }, [muutCombined, props.changesOfSection5]);
 
   useEffect(() => {
     setInitialValue(
@@ -100,7 +99,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.data.maaraykset
+      props.lupa.maaraykset
     );
     if (maarays) {
       setKoodiarvot(prevState => {
@@ -110,7 +109,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.lupa.data.maaraykset]);
+  }, [props.lupa.maaraykset]);
 
   useEffect(() => {
     const titles = [
@@ -397,7 +396,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.data.maaraykset
+      props.lupa.maaraykset
     );
     if (maarays) {
       setKoodiarvot(prevState => {
@@ -407,7 +406,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.lupa.data.maaraykset]);
+  }, [props.lupa.maaraykset]);
 
   useEffect(() => {
     if (props.kohde && props.maaraystyyppi && props.muut) {
@@ -460,6 +459,7 @@ MuutospyyntoWizardOpiskelijavuodet.propTypes = {
   changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   muut: PropTypes.object,
   onChangesRemove: PropTypes.func,

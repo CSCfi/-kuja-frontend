@@ -5,8 +5,8 @@ import {
 } from "./actionTypes";
 import * as R from "ramda";
 
-function getNextState(key, subKey, data, state) {
-  const path = [key, subKey].filter(Boolean);
+function getNextState(key, subKey, _path, data, state) {
+  const path = _path || [key, subKey].filter(Boolean);
   return R.assocPath(path, data, state);
 }
 
@@ -16,6 +16,7 @@ export default function(state, action) {
       return getNextState(
         action.key,
         action.subKey,
+        action.path,
         {
           status: "erroneous"
         },
@@ -25,6 +26,7 @@ export default function(state, action) {
       return getNextState(
         action.key,
         action.subKey,
+        action.path,
         {
           status: "fetching"
         },
@@ -34,6 +36,7 @@ export default function(state, action) {
       const nextState = getNextState(
         action.key,
         action.subKey,
+        action.path,
         {
           raw: action.data,
           status: "ready",

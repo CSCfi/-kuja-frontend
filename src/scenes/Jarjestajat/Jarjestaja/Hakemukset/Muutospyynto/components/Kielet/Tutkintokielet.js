@@ -22,7 +22,7 @@ const Tutkintokielet = React.memo(props => {
            * */
           const maarays = R.find(
             R.propEq("koodiarvo", subCategory.anchor),
-            props.lupa.data.maaraykset
+            props.lupa.maaraykset
           );
           const alimaaraykset = maarays ? maarays.aliMaaraykset : [];
 
@@ -118,7 +118,7 @@ const Tutkintokielet = React.memo(props => {
     props.intl.locale,
     props.kielet,
     props.locale,
-    props.lupa.data.maaraykset,
+    props.lupa.maaraykset,
     props.stateObjects.tutkinnot.items
   ]);
 

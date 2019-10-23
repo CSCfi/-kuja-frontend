@@ -495,7 +495,7 @@ MuutospyyntoWizardPerustelut.propTypes = {
   koulutusalat: PropTypes.object,
   koulutustyypit: PropTypes.object,
   maaraystyypit: PropTypes.array,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,

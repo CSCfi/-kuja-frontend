@@ -47,21 +47,18 @@ const ValmentavatKoulutukset = React.memo(props => {
   }, []);
 
   useEffect(() => {
-    if (props.koulutukset.poikkeukset.fetched.length === 2) {
-      onStateUpdate(
-        {
-          categories: getCategories(
-            getDataForKoulutusList(
-              props.koulutukset.poikkeukset.data,
-              R.toUpper(props.intl.locale)
-            ),
-            props.kohde,
-            props.maaraystyyppi
-          )
-        },
-        sectionId
-      );
-    }
+    console.info(props.koulutukset);
+    const poikkeukset = []; // R.map(R.props("raw"), props.koulutukset.poikkeukset);
+    onStateUpdate(
+      {
+        categories: getCategories(
+          getDataForKoulutusList(poikkeukset, R.toUpper(props.intl.locale)),
+          props.kohde,
+          props.maaraystyyppi
+        )
+      },
+      sectionId
+    );
   }, [
     getCategories,
     onStateUpdate,
