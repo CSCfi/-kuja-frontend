@@ -44,7 +44,6 @@ export default function(state, action) {
         },
         state
       );
-      console.info(nextState);
       return nextState;
     default:
       return state;

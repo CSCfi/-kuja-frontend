@@ -46,7 +46,11 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
         key: "koulutuksetMuut",
         dispatchFn: dispatch,
         urlEnding: MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS,
-        path: ["koulutukset", "muut", MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS]
+        path: [
+          "koulutukset",
+          "muut",
+          MUUT_KEYS.AMMATILLISEEN_TEHTAVAAN_VALMISTAVA_KOULUTUS
+        ]
       },
       {
         key: "koulutuksetMuut",
@@ -251,7 +255,10 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
     if (fetchState.conclusion === statusMap.fetching) {
       jsx = (
         <MessageWrapper>
-          <Loading percentage={fetchState.percentage.ready} />
+          <Loading
+            notReadyList={fetchState.notReadyList}
+            percentage={fetchState.percentage.ready}
+          />
         </MessageWrapper>
       );
     } else if (fetchState.conclusion === statusMap.ready) {

@@ -65,11 +65,24 @@ export function isReady(backendData) {
 
 export function getFetchState(fetchSetup, fromBackend = []) {
   let conclusion = "unknown";
-  const statuses = R.map(setupObj => {
-    const path = setupObj.path || [setupObj.key, setupObj.subKey].filter(Boolean);
+  const keyData = R.map(setupObj => {
+    const path =
+      setupObj.path || [setupObj.key, setupObj.subKey].filter(Boolean);
     const backendData = R.path(path, fromBackend);
-    return backendData ? backendData.status : null;
+    return backendData ? { key: setupObj.key, data: backendData } : null;
   }, fetchSetup).filter(Boolean);
+  const statuses = R.map(R.path(["data", "status"]), keyData);
+  const notReadyList = R.map(
+    R.prop("key"),
+    R.filter(
+      R.compose(
+        R.not,
+        R.equals("ready"),
+        R.path(["data", "status"])
+      ),
+      keyData
+    )
+  ).filter(Boolean);
   const percentage = {
     ready:
       100 * (R.filter(R.equals("ready"), statuses).length / R.length(statuses))
@@ -93,6 +106,7 @@ export function getFetchState(fetchSetup, fromBackend = []) {
   }
   return {
     conclusion,
+    notReadyList,
     percentage
   };
 }
@@ -148,7 +162,6 @@ async function run(
   /**
    * It's time to fetch some data!
    */
-  console.info("fetching...", key, url);
   const response = await fetch(url, {
     ...options,
     signal: abortController.signal
@@ -157,7 +170,6 @@ async function run(
   });
 
   if (response && response.ok) {
-    console.info("Ready...", key, url);
     const data = await response.json();
 
     /**

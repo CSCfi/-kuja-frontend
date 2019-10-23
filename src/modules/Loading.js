@@ -5,36 +5,29 @@ import common from "../i18n/definitions/common";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const Loading = props => {
-  const { text } = props;
-
-  const {
-    intl: { formatMessage }
-  } = props;
-
-  let loadingtext;
-  if (text) {
-    loadingtext = text;
-  } else {
-    loadingtext = formatMessage(common.loading);
-  }
+const Loading = ({ intl, notReadyList = [], percentage, text }) => {
+  const loadingtext = text || intl.formatMessage(common.loading);
 
   return (
     <div className="flex items-center mx-auto">
       <span className="relative mr-6">
-        {!R.isNil(props.percentage) && (
-          <span className="absolute mt-8 ml-4">
-            {Math.round(props.percentage)}%
-          </span>
+        {!R.isNil(percentage) && (
+          <span className="absolute mt-8 ml-4">{Math.round(percentage)}%</span>
         )}
-        <CircularProgress size={80} value={props.percentage} />
+        <CircularProgress size={80} value={percentage} />
       </span>
       <h3 className="ml-4">{loadingtext}...</h3>
+      <ul className="ml-10">
+        {R.addIndex(R.map)((item, i) => {
+          return <li key={`${item}-${i}`}>{item}</li>;
+        }, notReadyList)}
+      </ul>
     </div>
   );
 };
 
 Loading.propTypes = {
+  notReadyList: PropTypes.array,
   percentage: PropTypes.number
 };
 

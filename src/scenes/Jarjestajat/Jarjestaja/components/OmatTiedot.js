@@ -3,7 +3,8 @@ import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import Loading from "../../../../modules/Loading";
 import {
   InnerContentContainer,
-  InnerContentWrapper
+  InnerContentWrapper,
+  MessageWrapper
 } from "../../../../modules/elements";
 import { Typography } from "@material-ui/core";
 import { BackendContext } from "../../../../context/backendContext";
@@ -53,7 +54,14 @@ const OmatTiedot = ({ intl, organisaatio, user }) => {
     let jsx = <React.Fragment></React.Fragment>;
     let kotipaikka = null;
     if (fetchState.conclusion === statusMap.fetching) {
-      jsx = <Loading percentage={fetchState.percentage.ready} />;
+      jsx = (
+        <MessageWrapper>
+          <Loading
+            notReadyList={fetchState.notReadyList}
+            percentage={fetchState.percentage.ready}
+          />
+        </MessageWrapper>
+      );
     } else if (organisaatio) {
       const postinumero = organisaatio.kayntiosoite.postinumeroUri
         ? organisaatio.kayntiosoite.postinumeroUri.substr(6)

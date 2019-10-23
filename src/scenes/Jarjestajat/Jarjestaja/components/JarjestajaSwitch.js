@@ -16,6 +16,7 @@ import * as R from "ramda";
 import Loading from "../../../../modules/Loading";
 import { parseLupa } from "../../../../services/luvat/lupaParser";
 import HakemusContainer from "../Hakemukset/HakemusContainer";
+import { MessageWrapper } from "../../../../modules/elements";
 
 const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
@@ -63,7 +64,14 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
     if (fetchState.conclusion === statusMap.fetching) {
-      jsx = <Loading percentage={fetchState.percentage.ready} />;
+      jsx = (
+        <MessageWrapper>
+          <Loading
+            notReadyList={fetchState.notReadyList}
+            percentage={fetchState.percentage.ready}
+          />
+        </MessageWrapper>
+      );
     } else if (fetchState.conclusion === statusMap.ready) {
       return (
         <React.Fragment>
