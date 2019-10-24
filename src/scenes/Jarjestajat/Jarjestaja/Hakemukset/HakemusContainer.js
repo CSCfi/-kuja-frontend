@@ -118,7 +118,7 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
    * Let's walk through all the changes from the backend and update the muutoshakemus.
    */
   useEffect(() => {
-    if (isReady(fromBackend.muutospyynto)) {
+    if (isReady(fromBackend.muutospyynto) && match.params.uuid) {
       const backendMuutokset = R.path(
         ["raw", "muutokset"],
         fromBackend.muutospyynto
@@ -262,7 +262,6 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
         </MessageWrapper>
       );
     } else if (fetchState.conclusion === statusMap.ready) {
-      console.info(fromBackend.kohteet);
       jsx = (
         <MuutoshakemusProvider>
           <MuutospyyntoWizard
