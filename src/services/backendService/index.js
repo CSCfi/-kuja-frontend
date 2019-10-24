@@ -63,8 +63,8 @@ export function isReady(backendData) {
   return backendData && R.equals(backendData.status, statusMap.ready);
 }
 
-export function getFetchState(fetchSetup, fromBackend = []) {
-  let conclusion = "unknown";
+export function getFetchState(fetchSetup = [], fromBackend = []) {
+  let conclusion = R.length(fetchSetup) > 0 ? "unknown" : "ready";
   const keyData = R.map(setupObj => {
     const path =
       setupObj.path || [setupObj.key, setupObj.subKey].filter(Boolean);

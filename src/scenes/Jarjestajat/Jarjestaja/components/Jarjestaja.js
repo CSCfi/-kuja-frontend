@@ -14,7 +14,7 @@ import HakemuksetJaPaatokset from "../Hakemukset/components/HakemuksetJaPaatokse
 import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
-import { FullWidthWrapper } from "../../../../modules/elements";
+import { FullWidthWrapper, MessageWrapper } from "../../../../modules/elements";
 import { BackendContext } from "../../../../context/backendContext";
 import {
   abort,
@@ -138,7 +138,14 @@ const Jarjestaja = ({
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
     if (fetchState.conclusion === statusMap.fetching) {
-      jsx = <Loading percentage={fetchState.percentage.ready} />;
+      jsx = (
+        <MessageWrapper>
+          <Loading
+            notReadyList={fetchState.notReadyList}
+            percentage={fetchState.percentage.ready}
+          />
+        </MessageWrapper>
+      );
     } else if (fetchState.conclusion === statusMap.ready) {
       jsx = (
         <React.Fragment>

@@ -7,21 +7,25 @@ import { BackendContext } from "../../context/backendContext";
 import {
   abort,
   fetchFromBackend,
-  isErroneous,
-  isFetching,
-  isReady
+  statusMap,
+  getFetchState
 } from "../../services/backendService";
+import { MessageWrapper } from "../../modules/elements";
 
 const Jarjestajat = () => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
+
+  const fetchSetup = useMemo(() => {
+    return [{ key: "luvat", dispatchFn: dispatch }];
+  }, [dispatch]);
 
   /**
    * Abort controller instances are used for cancelling the related
    * XHR calls later.
    */
   const abortControllers = useMemo(() => {
-    return fetchFromBackend([{ key: "luvat", dispatchFn: dispatch }]);
-  }, [dispatch]);
+    return fetchFromBackend(fetchSetup);
+  }, [fetchSetup]);
 
   /**
    * Ongoing XHR calls must be canceled. It's done here.
@@ -32,19 +36,11 @@ const Jarjestajat = () => {
     };
   }, [abortControllers, dispatch]);
 
-  const isMainViewVisible = useMemo(() => {
-    return isReady(fromBackend.luvat);
-  }, [fromBackend.luvat]);
+  const fetchState = useMemo(() => {
+    return getFetchState(fetchSetup, fromBackend);
+  }, [fetchSetup, fromBackend]);
 
-  const isLoading = useMemo(() => {
-    return isFetching(fromBackend.luvat);
-  }, [fromBackend.luvat]);
-
-  const fetchingHasFailed = useMemo(() => {
-    return isErroneous(fromBackend.luvat);
-  }, [fromBackend.luvat]);
-
-  if (isMainViewVisible) {
+  if (fetchState.conclusion === statusMap.ready) {
     return (
       <React.Fragment>
         <Helmet>
@@ -66,9 +62,16 @@ const Jarjestajat = () => {
         </div>
       </React.Fragment>
     );
-  } else if (isLoading) {
-    return <Loading />;
-  } else if (fetchingHasFailed) {
+  } else if (fetchState.conclusion === statusMap.fetching) {
+    return (
+      <MessageWrapper>
+        <Loading
+          notReadyList={fetchState.notReadyList}
+          percentage={fetchState.percentage.ready}
+        />
+      </MessageWrapper>
+    );
+  } else if (fetchState.conclusion === statusMap.erroneous) {
     return (
       <div className="text-center">
         <p>Lupia ladattaessa tapahtui virhe.</p>
