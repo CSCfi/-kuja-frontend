@@ -248,7 +248,7 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
         handled: true
       });
     }
-  }, [fromBackend.muutospyynto]);
+  }, [fromBackend.muutospyynto, match.params.uuid]);
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;

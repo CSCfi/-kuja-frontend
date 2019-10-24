@@ -23,10 +23,13 @@ const JarjestajaSwitch = ({
   intl,
   match,
   organisaatio,
-  user,
-  ytunnus
+  user
 }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
+
+  const ytunnus = useMemo(() => {
+    return match.params.ytunnus;
+  }, [match]);
 
   const fetchSetup = useMemo(() => {
     return ytunnus
@@ -115,14 +118,16 @@ const JarjestajaSwitch = ({
               path={`${match.path}`}
               render={() => (
                 <LupahistoriaProvider>
-                  <Jarjestaja
-                    lupaKohteet={lupaKohteet}
-                    lupa={R.path(["lupa", "raw"], fromBackend)}
-                    match={match}
-                    muutospyynnot={fromBackend.muutospyynnot.raw}
-                    organisaatio={organisaatio}
-                    user={user}
-                  />
+                  {ytunnus && (
+                    <Jarjestaja
+                      lupaKohteet={lupaKohteet}
+                      lupa={R.path(["lupa", "raw"], fromBackend)}
+                      match={match}
+                      muutospyynnot={fromBackend.muutospyynnot.raw}
+                      organisaatio={organisaatio}
+                      user={user}
+                    />
+                  )}
                 </LupahistoriaProvider>
               )}
             />
@@ -138,7 +143,8 @@ const JarjestajaSwitch = ({
     lupaKohteet,
     match,
     organisaatio,
-    user
+    user,
+    ytunnus
   ]);
 
   return view;
@@ -148,8 +154,7 @@ JarjestajaSwitch.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   organisaatio: PropTypes.object,
-  user: PropTypes.object,
-  ytunnus: PropTypes.string
+  user: PropTypes.object
 };
 
 export default injectIntl(JarjestajaSwitch);

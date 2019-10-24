@@ -241,17 +241,21 @@ const MuutospyyntoWizard = ({
     [setChangeObjects]
   );
 
-  const handlePrev = pageNumber => {
-    if (pageNumber !== 1) {
-      history.push(String(pageNumber - 1));
-    }
-  };
+  const handlePrev = useCallback(() => {
+    return pageNumber => {
+      if (pageNumber !== 1) {
+        history.push(String(pageNumber - 1));
+      }
+    };
+  }, [history]);
 
-  const handleNext = pageNumber => {
-    if (pageNumber !== 4) {
-      history.push(String(pageNumber + 1));
-    }
-  };
+  const handleNext = useCallback(() => {
+    return pageNumber => {
+      if (pageNumber !== 4) {
+        history.push(String(pageNumber + 1));
+      }
+    };
+  }, [history]);
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
@@ -436,9 +440,11 @@ const MuutospyyntoWizard = ({
   /**
    * User is redirected to the following path when the form is closed.
    */
-  function handleOk() {
-    history.push(`/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`);
-  }
+  const handleOk = useCallback(() => {
+    return history.push(
+      `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
+    );
+  }, [history, match.params.ytunnus]);
 
   useEffect(() => {
     setPage(parseInt(match.params.page, 10));
@@ -642,8 +648,6 @@ const MuutospyyntoWizard = ({
     kielet,
     kohteet,
     koulutukset,
-    koulutusalat,
-    koulutustyypit,
     kunnat,
     lupa,
     lupaKohteet,

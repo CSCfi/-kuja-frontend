@@ -228,7 +228,6 @@ const App = ({ intl, user }) => {
                                 fromBackend
                               )}
                               user={user}
-                              ytunnus={ytunnus}
                             />
                           </MuutospyynnotProvider>
                         </LuvatProvider>

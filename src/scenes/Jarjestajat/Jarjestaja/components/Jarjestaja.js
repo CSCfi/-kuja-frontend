@@ -109,21 +109,22 @@ const Jarjestaja = ({
       }
     ];
     // If user is logged in we are going to show her/him these additional routes.
-    const additionalRoutes = user
-      ? [
-          {
-            path: `${match.url}/jarjestamislupa`,
-            text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}`,
-            exact: true,
-            text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
-            authenticated: true
-          }
-        ]
-      : [];
+    const additionalRoutes =
+      user && R.equals(user.oid, lupa.jarjestaja.oid)
+        ? [
+            {
+              path: `${match.url}/jarjestamislupa`,
+              text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+              authenticated: true
+            },
+            {
+              path: `${match.url}`,
+              exact: true,
+              text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
+              authenticated: true
+            }
+          ]
+        : [];
     return R.flatten(R.insert(1, additionalRoutes, basicRoutes));
   }, [match.url, user]);
 
