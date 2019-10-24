@@ -30,11 +30,10 @@ const MuutospyyntoWizardPerustelut = ({
   kielet,
   kohteet = [],
   koulutukset,
-  koulutusalat,
-  koulutustyypit,
   maaraystyypit,
   muut,
   lupa,
+  lupaKohteet,
   muutoshakemus,
   onChangesUpdate,
   onStateUpdate,
@@ -95,11 +94,12 @@ const MuutospyyntoWizardPerustelut = ({
     const kohdeTiedot = R.map(kohde => {
       return {
         title: R.path(["meta", "otsikko", [intl.locale]], kohde),
-        code: R.find(R.propEq("tunniste", kohde.tunniste))(lupa.kohteet)
+
+        code: R.find(R.propEq("tunniste", kohde.tunniste))(lupaKohteet)
       };
     }, kohteet);
     setKohdetiedot(kohdeTiedot);
-  }, [intl.locale, kohteet, lupa.kohteet]);
+  }, [intl.locale, kohteet, lupaKohteet]);
 
   useEffect(() => {
     setMaaraystyypitState(
@@ -197,7 +197,6 @@ const MuutospyyntoWizardPerustelut = ({
       {isAnyChanges &&
       muutosperustelut.muutosperusteluList &&
       muutoshakemus &&
-      koulutustyypit &&
       kohdetiedot ? (
         <React.Fragment>
           {(isTutkinnotChanges || isKoulutuksetChanges) && (
@@ -223,8 +222,6 @@ const MuutospyyntoWizardPerustelut = ({
                         R.propEq("tunniste", "tutkinnotjakoulutukset")
                       )(kohteet)}
                       koulutukset={koulutukset}
-                      koulutusalat={koulutusalat}
-                      koulutustyypit={koulutustyypit.data}
                       lupa={lupa}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       muutosperustelut={muutosperustelut}
@@ -492,11 +489,10 @@ MuutospyyntoWizardPerustelut.propTypes = {
   changeObjects: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
-  koulutusalat: PropTypes.object,
-  koulutustyypit: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
   lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

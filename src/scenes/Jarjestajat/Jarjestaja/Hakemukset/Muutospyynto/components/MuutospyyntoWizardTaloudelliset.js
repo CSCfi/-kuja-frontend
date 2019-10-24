@@ -120,13 +120,6 @@ const MuutospyyntoWizardTaloudelliset = ({
 
 MuutospyyntoWizardTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
-  kohteet: PropTypes.array,
-  koulutukset: PropTypes.object,
-  koulutusalat: PropTypes.object,
-  koulutustyypit: PropTypes.object,
-  maaraystyypit: PropTypes.array,
-  muut: PropTypes.object,
-  lupa: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func

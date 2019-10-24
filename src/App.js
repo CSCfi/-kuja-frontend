@@ -221,6 +221,7 @@ const App = ({ intl, user }) => {
                         <LuvatProvider>
                           <MuutospyynnotProvider>
                             <JarjestajaSwitch
+                              history={props.history}
                               match={props.match}
                               organisaatio={R.path(
                                 ["organisaatio", "raw"],
@@ -248,7 +249,16 @@ const App = ({ intl, user }) => {
       );
     }
     return jsx;
-  }, [fetchState]);
+  }, [
+    fetchState,
+    breakpointTabletMin,
+    dispatch,
+    fromBackend,
+    headerHeight,
+    pageLinks,
+    user,
+    ytunnus
+  ]);
 
   return view;
 };

@@ -77,18 +77,18 @@ export function createObjectToSave(
   }, allAttachmentsRaw);
 
   return {
-    diaarinumero: lupa.data.diaarinumero,
-    jarjestajaOid: lupa.data.jarjestajaOid,
-    jarjestajaYtunnus: lupa.data.jarjestajaYtunnus,
+    diaarinumero: lupa.diaarinumero,
+    jarjestajaOid: lupa.jarjestajaOid,
+    jarjestajaYtunnus: lupa.jarjestajaYtunnus,
     luoja: sessionStorage.getItem("username"),
     // luontipvm: moment().valueOf(),
     luontipvm: moment().format("YYYY-MM-DD"),
-    lupaUuid: lupa.data.uuid,
-    // uuid: lupa.data.asiatyyppi.uuid,
+    lupaUuid: lupa.uuid,
+    // uuid: lupa.asiatyyppi.uuid,
     tila: "LUONNOS",
     paivittaja: "string",
     paivityspvm: null,
-    voimassaalkupvm: lupa.data.alkupvm,
+    voimassaalkupvm: lupa.alkupvm,
     voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {

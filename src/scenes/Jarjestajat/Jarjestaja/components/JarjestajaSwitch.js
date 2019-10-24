@@ -18,7 +18,14 @@ import { parseLupa } from "../../../../services/luvat/lupaParser";
 import HakemusContainer from "../Hakemukset/HakemusContainer";
 import { MessageWrapper } from "../../../../modules/elements";
 
-const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
+const JarjestajaSwitch = ({
+  history,
+  intl,
+  match,
+  organisaatio,
+  user,
+  ytunnus
+}) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
@@ -49,7 +56,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
     return () => {
       abort(abortControllers);
     };
-  }, [abortControllers, dispatch]);
+  }, [abortControllers, dispatch, history]);
 
   const lupaKohteet = useMemo(() => {
     return isReady(fromBackend.lupa)
@@ -82,6 +89,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               render={props => {
                 return (
                   <HakemusContainer
+                    history={history}
                     lupaKohteet={lupaKohteet}
                     lupa={fromBackend.lupa}
                     match={props.match}
@@ -95,6 +103,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
               render={props => {
                 return (
                   <HakemusContainer
+                    history={history}
                     lupaKohteet={lupaKohteet}
                     lupa={fromBackend.lupa}
                     match={props.match}
@@ -128,6 +137,7 @@ const JarjestajaSwitch = ({ intl, match, organisaatio, user, ytunnus }) => {
 };
 
 JarjestajaSwitch.propTypes = {
+  history: PropTypes.object,
   match: PropTypes.object,
   organisaatio: PropTypes.object,
   user: PropTypes.object,

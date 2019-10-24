@@ -15,9 +15,8 @@ const MuutospyyntoWizardYhteenveto = ({
   kielet,
   kohteet,
   koulutukset,
-  koulutusalat,
-  koulutustyypit,
   lupa,
+  lupaKohteet,
   maaraystyypit,
   muut,
   muutoshakemus,
@@ -27,37 +26,37 @@ const MuutospyyntoWizardYhteenveto = ({
   const jarjestaja = useMemo(() => {
     const nimi = {
       label: "Nimi",
-      value: lupa.data.jarjestaja.nimi[intl.locale]
+      value: lupa.jarjestaja.nimi[intl.locale]
     };
 
     const kayntiosoite = {
       label: "Käyntiosoite",
-      value: `${lupa.data.jarjestaja.kayntiosoite.osoite} ${lupa.data.jarjestaja.kayntiosoite.postitoimipaikka}`
+      value: `${lupa.jarjestaja.kayntiosoite.osoite} ${lupa.jarjestaja.kayntiosoite.postitoimipaikka}`
     };
 
     const postiosoite = {
       label: "Postiosoite",
-      value: `${lupa.data.jarjestaja.postiosoite.osoite} ${lupa.data.jarjestaja.postiosoite.postitoimipaikka}`
+      value: `${lupa.jarjestaja.postiosoite.osoite} ${lupa.jarjestaja.postiosoite.postitoimipaikka}`
     };
 
     const sahkopostiosoite = {
       label: "Sähköpostiosoite",
       value:
-        (R.find(R.prop("email"))(lupa.data.jarjestaja.yhteystiedot) || {})
+        (R.find(R.prop("email"))(lupa.jarjestaja.yhteystiedot) || {})
           .email || "-"
     };
 
     const www = {
       label: "WWW-osoite",
       value:
-        (R.find(R.prop("www"))(lupa.data.jarjestaja.yhteystiedot) || {}).www ||
+        (R.find(R.prop("www"))(lupa.jarjestaja.yhteystiedot) || {}).www ||
         "-"
     };
 
     const puhelinnumero = {
       label: "Puhelinnumero",
       value:
-        (R.find(R.prop("numero"))(lupa.data.jarjestaja.yhteystiedot) || {})
+        (R.find(R.prop("numero"))(lupa.jarjestaja.yhteystiedot) || {})
           .numero || "-"
     };
 
@@ -69,7 +68,7 @@ const MuutospyyntoWizardYhteenveto = ({
       sahkopostiosoite,
       www
     };
-  }, [intl.locale, lupa.data.jarjestaja]);
+  }, [intl.locale, lupa.jarjestaja]);
 
   const jarjestajaLayout = useMemo(() => {
     return R.values(
@@ -115,9 +114,8 @@ const MuutospyyntoWizardYhteenveto = ({
               kielet={kielet}
               kohteet={kohteet}
               koulutukset={koulutukset}
-              koulutusalat={koulutusalat}
-              koulutustyypit={koulutustyypit}
               lupa={lupa}
+              lupaKohteet={lupaKohteet}
               maaraystyypit={maaraystyypit}
               muut={muut}
               muutoshakemus={muutoshakemus}
@@ -160,11 +158,10 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   changeObjects: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
-  koulutusalat: PropTypes.object,
-  koulutustyypit: PropTypes.object,
   maaraystyypit: PropTypes.array,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func

@@ -45,8 +45,7 @@ import {
 import { sortLanguages } from "../../../../../../services/kielet/kieliUtil";
 import {
   parseKoulutuksetAll,
-  parseKoulutusalat,
-  parseMuut
+  parseKoulutusalat
 } from "../../../../../../services/koulutukset/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../services/toimialueet/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
@@ -97,6 +96,7 @@ const FormDialog = withStyles(() => ({
  */
 const MuutospyyntoWizard = ({
   backendChanges = {},
+  history = {},
   intl,
   kohteet = [],
   koulutustyypit = [],
@@ -257,7 +257,7 @@ const MuutospyyntoWizard = ({
         const uuid = muutoshakemus.save.data.data.uuid;
         let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
         setTimeout(() => {
-          // props.history.replace(newurl);
+          history.replace(newurl);
         });
       } else {
         notify("Muutospyyntö tallennettu!", {
@@ -312,23 +312,17 @@ const MuutospyyntoWizard = ({
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
-  }, [
-    muutoshakemus,
-    onSectionChangesUpdate,
-    // props.history,
-    lupa,
-    match.params
-  ]);
+  }, [muutoshakemus, onSectionChangesUpdate, history, lupa, match.params]);
 
   const handlePrev = pageNumber => {
     if (pageNumber !== 1) {
-      // props.history.push(String(pageNumber - 1));
+      history.push(String(pageNumber - 1));
     }
   };
 
   const handleNext = pageNumber => {
     if (pageNumber !== 4) {
-      // props.history.push(String(pageNumber + 1));
+      history.push(String(pageNumber + 1));
     }
   };
 
@@ -339,7 +333,7 @@ const MuutospyyntoWizard = ({
       intl.formatMessage(wizardMessages.pageTitle_3),
       intl.formatMessage(wizardMessages.pageTitle_4)
     ]);
-  }, [intl.formatMessage]);
+  }, [intl]);
 
   useEffect(() => {
     console.info("Backend changes: ", backendChanges);
@@ -432,10 +426,11 @@ const MuutospyyntoWizard = ({
     setIsConfirmDialogVisible(false);
   }
 
+  /**
+   * User is redirected to the following path when the form is closed.
+   */
   function handleOk() {
-    // props.history.push(
-    //   `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
-    // );
+    history.push(`/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`);
   }
 
   useEffect(() => {
@@ -535,9 +530,8 @@ const MuutospyyntoWizard = ({
                           kielet={kielet}
                           kohteet={kohteet}
                           koulutukset={koulutukset}
-                          koulutusalat={koulutusalat}
-                          koulutustyypit={koulutustyypit}
                           lupa={lupa}
+                          lupaKohteet={lupaKohteet}
                           maaraystyypit={maaraystyypit}
                           muut={muut}
                           muutoshakemus={dataBySection}
@@ -561,13 +555,6 @@ const MuutospyyntoWizard = ({
                   >
                     <MuutospyyntoWizardTaloudelliset
                       changeObjects={changeObjects}
-                      kohteet={kohteet}
-                      koulutukset={koulutukset}
-                      koulutusalat={koulutusalat}
-                      koulutustyypit={koulutustyypit}
-                      lupa={lupa}
-                      maaraystyypit={maaraystyypit}
-                      muut={muut}
                       muutoshakemus={dataBySection}
                       onChangesUpdate={onSectionChangesUpdate}
                       onStateUpdate={onSectionStateUpdate}
@@ -589,9 +576,8 @@ const MuutospyyntoWizard = ({
                           kielet={kielet}
                           kohteet={kohteet}
                           koulutukset={koulutukset}
-                          koulutusalat={koulutusalat}
-                          koulutustyypit={koulutustyypit}
                           lupa={lupa}
+                          lupaKohteet={lupaKohteet}
                           maaraystyypit={maaraystyypit}
                           muut={muut}
                           muutoshakemus={dataBySection}
@@ -672,6 +658,7 @@ const MuutospyyntoWizard = ({
 
 MuutospyyntoWizard.propTypes = {
   backendChanges: PropTypes.object,
+  history: PropTypes.object,
   koulutustyypit: PropTypes.array,
   kunnat: PropTypes.array,
   lupa: PropTypes.object,

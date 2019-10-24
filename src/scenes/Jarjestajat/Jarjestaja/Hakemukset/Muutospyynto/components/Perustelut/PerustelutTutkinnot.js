@@ -137,8 +137,6 @@ PerustelutTutkinnot.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  koulutusalat: PropTypes.object,
-  koulutustyypit: PropTypes.array,
   lomakkeet: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,

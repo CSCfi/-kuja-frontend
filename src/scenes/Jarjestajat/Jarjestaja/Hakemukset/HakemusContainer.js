@@ -22,7 +22,7 @@ import {
   isReady
 } from "../../../../services/backendService";
 
-const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
+const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
@@ -120,8 +120,8 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
   useEffect(() => {
     if (isReady(fromBackend.muutospyynto)) {
       const backendMuutokset = R.path(
-        ["muutospyynto", "muutokset"],
-        fromBackend.muutospyynto.raw
+        ["raw", "muutokset"],
+        fromBackend.muutospyynto
       );
       const getChangesOf = (
         key,
@@ -262,10 +262,12 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
         </MessageWrapper>
       );
     } else if (fetchState.conclusion === statusMap.ready) {
+      console.info(fromBackend.kohteet);
       jsx = (
         <MuutoshakemusProvider>
           <MuutospyyntoWizard
             backendChanges={backendChanges}
+            history={history}
             kohteet={fromBackend.kohteet.raw}
             koulutustyypit={fromBackend.koulutustyypit.raw}
             kunnat={fromBackend.kunnat.raw}
@@ -304,6 +306,7 @@ const HakemusContainer = ({ lupa, lupaKohteet, match }) => {
 };
 
 HakemusContainer.propTypes = {
+  history: PropTypes.object,
   lupaKohteet: PropTypes.object,
   lupa: PropTypes.object,
   match: PropTypes.object

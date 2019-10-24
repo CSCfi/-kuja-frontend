@@ -47,7 +47,6 @@ const ValmentavatKoulutukset = React.memo(props => {
   }, []);
 
   useEffect(() => {
-    console.info(props.koulutukset);
     onStateUpdate(
       {
         categories: getCategories(
