@@ -33,12 +33,6 @@ import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import { ToastContainer } from "react-toastify";
 import {
-  abort,
-  fetchFromBackend,
-  getFetchState,
-  statusMap
-} from "./services/backendService";
-import {
   ROLE_ESITTELIJA,
   ROLE_KATSELIJA,
   ROLE_KAYTTAJA,
@@ -49,8 +43,7 @@ import * as R from "ramda";
 import _ from "lodash"; // TODO: Get rid of this.
 
 import "axios-progress-bar/dist/nprogress.css";
-import { MessageWrapper } from "./modules/elements";
-import Loading from "./modules/Loading";
+import FetchHandler from "./FetchHandler";
 
 loadProgressBar();
 
@@ -93,23 +86,6 @@ const App = ({ intl, user }) => {
       : [];
   }, [dispatch, user]);
 
-  const abortControllers = useMemo(() => {
-    return R.isEmpty(fetchSetup) ? [] : fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
-
-  /**
-   * Ongoing XHR calls must be canceled. It's done here.
-   */
-  useEffect(() => {
-    return () => {
-      abort(abortControllers);
-    };
-  }, [abortControllers]);
-
-  const fetchState = useMemo(() => {
-    return getFetchState(fetchSetup, fromBackend);
-  }, [fetchSetup, fromBackend]);
-
   const ytunnus = useMemo(() => {
     return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
   }, [fromBackend.organisaatio]);
@@ -137,129 +113,110 @@ const App = ({ intl, user }) => {
     }
   }, [user]);
 
-  const view = useMemo(() => {
-    let jsx = <React.Fragment></React.Fragment>;
-    if (fetchState.conclusion === statusMap.fetching) {
-      jsx = (
-        <MessageWrapper>
-          <Loading
-            notReadyList={fetchState.notReadyList}
-            percentage={fetchState.percentage.ready}
-          />
-        </MessageWrapper>
-      );
-    } else if (fetchState.conclusion === statusMap.ready) {
-      jsx = (
-        <Router history={history}>
-          <div className="flex flex-col min-h-screen">
-            <header className="fixed w-full z-50">
-              <ButtonAppBar
-                ytunnus={ytunnus}
-                user={R.path(["kayttaja", "raw"], fromBackend)}
-                organisaatio={R.path(["organisaatio", "raw"], fromBackend)}
-                dispatch={dispatch}
-                pageLinks={pageLinks}
-              />
-              {breakpointTabletMin && (
-                <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
-              )}
-              <ReactResizeDetector handleHeight onResize={onHeaderResize} />
-            </header>
-            <main
-              className="flex flex-1 flex-col justify-between"
-              style={{ marginTop: headerHeight }}
-            >
-              <div className="flex flex-col flex-1 bg-white">
-                <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
-                  <Breadcrumbs
-                    separator={<b> / </b>}
-                    item={NavLink}
-                    finalItem={"b"}
-                    finalProps={{
-                      style: {
-                        color: COLORS.BLACK
-                      }
-                    }}
-                  />
+  return (
+    <React.Fragment>
+      <FetchHandler
+        fetchSetup={fetchSetup}
+        ready={
+          <Router history={history}>
+            <div className="flex flex-col min-h-screen">
+              <header className="fixed w-full z-50">
+                <ButtonAppBar
+                  ytunnus={ytunnus}
+                  user={R.path(["kayttaja", "raw"], fromBackend)}
+                  organisaatio={R.path(["organisaatio", "raw"], fromBackend)}
+                  dispatch={dispatch}
+                  pageLinks={pageLinks}
+                />
+                {breakpointTabletMin && (
+                  <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
+                )}
+                <ReactResizeDetector handleHeight onResize={onHeaderResize} />
+              </header>
+              <main
+                className="flex flex-1 flex-col justify-between"
+                style={{ marginTop: headerHeight }}
+              >
+                <div className="flex flex-col flex-1 bg-white">
+                  <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
+                    <Breadcrumbs
+                      separator={<b> / </b>}
+                      item={NavLink}
+                      finalItem={"b"}
+                      finalProps={{
+                        style: {
+                          color: COLORS.BLACK
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <Switch>
+                      <Route exact path="/" component={Home} />
+                      <Route path="/logout" component={Logout} />
+                      <Route path="/kirjaudu" component={Login} />
+                      <Route exact path="/tilastot" component={Tilastot} />
+                      <Route path="/cas-auth" component={RequireCasAuth} />
+                      <Route path="/cas-logout" component={DestroyCasAuth} />
+                      <Route path="/cas-ready" component={CasAuthenticated} />
+                      <Route
+                        exact
+                        path="/jarjestajat"
+                        render={() => (
+                          <JarjestajatProvider>
+                            <Jarjestajat />
+                          </JarjestajatProvider>
+                        )}
+                      />
+                      <Route
+                        exact
+                        path="/lukiokoulutus"
+                        component={Lukiokoulutus}
+                      />
+                      <Route
+                        exact
+                        path="/vapaa-sivistystyo"
+                        component={VapaaSivistystyo}
+                      />
+                      <Route
+                        exact
+                        path="/esi-ja-perusopetus"
+                        component={EsiJaPerusopetus}
+                      />
+                      <Route
+                        path="/jarjestajat/:ytunnus"
+                        render={props => (
+                          <LuvatProvider>
+                            <MuutospyynnotProvider>
+                              <JarjestajaSwitch
+                                history={props.history}
+                                match={props.match}
+                                organisaatio={R.prop(
+                                  "raw",
+                                  fromBackend.organisaatio
+                                )}
+                                user={user}
+                              />
+                            </MuutospyynnotProvider>
+                          </LuvatProvider>
+                        )}
+                      />
+                    </Switch>
+                  </div>
                 </div>
-                <div className="flex-1 flex flex-col">
-                  <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route path="/logout" component={Logout} />
-                    <Route path="/kirjaudu" component={Login} />
-                    <Route exact path="/tilastot" component={Tilastot} />
-                    <Route path="/cas-auth" component={RequireCasAuth} />
-                    <Route path="/cas-logout" component={DestroyCasAuth} />
-                    <Route path="/cas-ready" component={CasAuthenticated} />
-                    <Route
-                      exact
-                      path="/jarjestajat"
-                      render={() => (
-                        <JarjestajatProvider>
-                          <Jarjestajat />
-                        </JarjestajatProvider>
-                      )}
-                    />
-                    <Route
-                      exact
-                      path="/lukiokoulutus"
-                      component={Lukiokoulutus}
-                    />
-                    <Route
-                      exact
-                      path="/vapaa-sivistystyo"
-                      component={VapaaSivistystyo}
-                    />
-                    <Route
-                      exact
-                      path="/esi-ja-perusopetus"
-                      component={EsiJaPerusopetus}
-                    />
-                    <Route
-                      path="/jarjestajat/:ytunnus"
-                      render={props => (
-                        <LuvatProvider>
-                          <MuutospyynnotProvider>
-                            <JarjestajaSwitch
-                              history={props.history}
-                              match={props.match}
-                              organisaatio={R.path(
-                                ["organisaatio", "raw"],
-                                fromBackend
-                              )}
-                              user={user}
-                            />
-                          </MuutospyynnotProvider>
-                        </LuvatProvider>
-                      )}
-                    />
-                  </Switch>
-                </div>
-              </div>
-            </main>
-            <footer>
-              <Footer
-              // props={props}
-              />
-              <ToastContainer />
-            </footer>
-          </div>
-        </Router>
-      );
-    }
-    return jsx;
-  }, [
-    fetchState,
-    breakpointTabletMin,
-    dispatch,
-    fromBackend,
-    headerHeight,
-    pageLinks,
-    user,
-    ytunnus
-  ]);
-
-  return view;
+              </main>
+              <footer>
+                <Footer
+                // props={props}
+                />
+                <ToastContainer />
+              </footer>
+            </div>
+          </Router>
+        }
+      ></FetchHandler>
+    </React.Fragment>
+  );
 };
 
 App.propTypes = {

@@ -1,19 +1,13 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { IntlProvider, addLocaleData } from "react-intl";
 import fiLocaleData from "react-intl/locale-data/fi";
 import svLocaleData from "react-intl/locale-data/sv";
 import translations from "./i18n/locales";
 import { AppContext } from "./context/appContext";
 import { BackendContext } from "./context/backendContext";
-import {
-  abort,
-  fetchFromBackend,
-  statusMap,
-  getFetchState
-} from "./services/backendService";
+import FetchHandler from "./FetchHandler";
 import App from "./App";
-import { MessageWrapper } from "./modules/elements";
-import Loading from "./modules/Loading";
+import * as R from "ramda";
 
 addLocaleData(fiLocaleData);
 addLocaleData(svLocaleData);
@@ -36,55 +30,14 @@ const AppWrapper = () => {
     ];
   }, [dispatch]);
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
-    return fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
-
-  const fetchState = useMemo(() => {
-    return getFetchState(fetchSetup, fromBackend);
-  }, [fetchSetup, fromBackend]);
-
-  /**
-   * Ongoing XHR calls must be canceled. It's done here.
-   */
-  useEffect(() => {
-    return () => {
-      abort(abortControllers);
-    };
-  }, [abortControllers]);
-
-  const view = useMemo(() => {
-    let jsx = <React.Fragment></React.Fragment>;
-    if (
-      fetchState.conclusion === statusMap.ready ||
-      fetchState.conclusion === statusMap.erroneous
-    ) {
-      jsx = <App user={fromBackend.kayttaja.raw} />;
-    } else if (fetchState.conclusion === statusMap.fetching) {
-      jsx = (
-        <MessageWrapper>
-          <Loading
-            notReadyList={fetchState.notReadyList}
-            percentage={fetchState.percentage.ready}
-          />
-        </MessageWrapper>
-      );
-    }
-    return jsx;
-  }, [
-    fetchState.conclusion,
-    fetchState.notReadyList,
-    fetchState.percentage.ready,
-    fromBackend.kayttaja
-  ]);
-
   return (
     <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
-      {view}
+      <React.Fragment>
+        <FetchHandler
+          fetchSetup={fetchSetup}
+          ready={<App user={R.prop("raw", fromBackend.kayttaja)} />}
+        ></FetchHandler>
+      </React.Fragment>
     </IntlProvider>
   );
 };

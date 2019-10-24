@@ -87,6 +87,7 @@ export function getFetchState(fetchSetup = [], fromBackend = []) {
     ready:
       100 * (R.filter(R.equals("ready"), statuses).length / R.length(statuses))
   };
+  // console.info(keyData);
   if (R.includes(statusMap.erroneous, statuses)) {
     conclusion = statusMap.erroneous;
   } else if (R.includes(statusMap.fetching, statuses)) {
@@ -104,6 +105,7 @@ export function getFetchState(fetchSetup = [], fromBackend = []) {
   ) {
     conclusion = statusMap.ready;
   }
+  // console.info(statuses, percentage);
   return {
     conclusion,
     notReadyList,
@@ -194,6 +196,8 @@ async function run(
       type: FETCH_FROM_BACKEND_FAILED
     });
   }
+
+  return response;
 }
 
 /**
@@ -207,6 +211,7 @@ async function run(
 function recursiveFetchHandler(
   keysAndDispatchFuncs,
   _abortControllers = [],
+  _responses = [],
   index = 0
 ) {
   const {
@@ -244,7 +249,11 @@ function recursiveFetchHandler(
   /**
    * XHR call is made by the run function.
    */
-  run(key, url, options, dispatchFn, abortController, subKey, path);
+  const responses = R.insert(
+    -1,
+    run(key, url, options, dispatchFn, abortController, subKey, path),
+    _responses
+  );
 
   /**
    * Let's handle the next fetch setup. Current function is called
@@ -254,11 +263,12 @@ function recursiveFetchHandler(
     return recursiveFetchHandler(
       keysAndDispatchFuncs,
       abortControllers,
+      responses,
       index + 1
     );
   }
 
-  return abortControllers;
+  return { abortControllers, responses };
 }
 
 /**
