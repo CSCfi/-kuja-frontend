@@ -440,7 +440,7 @@ const MuutospyyntoWizardPerustelut = ({
                       perustelut: R.path(["perustelut", "muut"], changeObjects)
                     }}
                     kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
-                    maaraykset={lupa.data.maaraykset}
+                    maaraykset={lupa.maaraykset}
                     muut={muut}
                     stateObject={R.path(["perustelut", "muut"])(muutoshakemus)}
                     vankilat={vankilat}

@@ -21,8 +21,8 @@ const isInLupa = (areaCode, items) => {
 };
 
 const defaultConstraintFlags = {
-  isVaativaTukiVisible: false,
-  isSisaoppilaitosVisible: false,
+  isVaativaTukiVisible: true,
+  isSisaoppilaitosVisible: true,
   isVaativaTukiValueRequired: false,
   isSisaoppilaitosValueRequired: false
 };
@@ -32,7 +32,9 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { opiskelijavuodet } = props.lupaKohteet[4];
   const { muutCombined } = props.lupaKohteet[5];
 
-  const [constraintFlags, setConstraintFlags] = useState(defaultConstraintFlags);
+  const [constraintFlags, setConstraintFlags] = useState(
+    defaultConstraintFlags
+  );
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
@@ -73,10 +75,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
     setConstraintFlags({
       isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
-      isSisaoppilaitosVisible: isSisaoppilaitosInLupa || isSisaoppilaitosInChanges,
+      isSisaoppilaitosVisible:
+        isSisaoppilaitosInLupa || isSisaoppilaitosInChanges,
       isVaativaTukiValueRequired: !isVaativatInLupa && isVaativatInChanges,
-      isSisaoppilaitosValueRequired: !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
-    })
+      isSisaoppilaitosValueRequired:
+        !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
+    });
   }, [muutCombined, props.changesOfSection5]);
 
   useEffect(() => {
@@ -318,7 +322,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         return {
           ...previousConstraintFlags,
           ...newConstraintFlags
-        }
+        };
       });
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.

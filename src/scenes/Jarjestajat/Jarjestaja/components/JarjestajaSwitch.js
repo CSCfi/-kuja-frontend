@@ -131,7 +131,15 @@ const JarjestajaSwitch = ({
       );
     }
     return jsx;
-  }, [fetchState, fromBackend, lupaKohteet, match, organisaatio, user]);
+  }, [
+    fetchState,
+    fromBackend,
+    history,
+    lupaKohteet,
+    match,
+    organisaatio,
+    user
+  ]);
 
   return view;
 };

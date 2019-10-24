@@ -241,6 +241,18 @@ const MuutospyyntoWizard = ({
     [setChangeObjects]
   );
 
+  const handlePrev = pageNumber => {
+    if (pageNumber !== 1) {
+      history.push(String(pageNumber - 1));
+    }
+  };
+
+  const handleNext = pageNumber => {
+    if (pageNumber !== 4) {
+      history.push(String(pageNumber + 1));
+    }
+  };
+
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       if (!match.params.uuid) {
@@ -312,19 +324,14 @@ const MuutospyyntoWizard = ({
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
-  }, [muutoshakemus, onSectionChangesUpdate, history, lupa, match.params]);
-
-  const handlePrev = pageNumber => {
-    if (pageNumber !== 1) {
-      history.push(String(pageNumber - 1));
-    }
-  };
-
-  const handleNext = pageNumber => {
-    if (pageNumber !== 4) {
-      history.push(String(pageNumber + 1));
-    }
-  };
+  }, [
+    muutoshakemus,
+    onSectionChangesUpdate,
+    handleNext,
+    history,
+    lupa,
+    match.params
+  ]);
 
   useEffect(() => {
     setSteps([
@@ -627,6 +634,9 @@ const MuutospyyntoWizard = ({
   }, [
     changeObjects,
     dataBySection,
+    handleNext,
+    handleOk,
+    handlePrev,
     intl,
     isConfirmDialogVisible,
     kielet,

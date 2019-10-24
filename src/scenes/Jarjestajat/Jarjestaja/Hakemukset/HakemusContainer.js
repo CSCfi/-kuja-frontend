@@ -286,8 +286,8 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
     }
     return jsx;
   }, [
-    fetchState,
     backendChanges,
+    fetchState,
     fromBackend.kohteet,
     fromBackend.koulutustyypit,
     fromBackend.kunnat,
@@ -297,6 +297,7 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
     fromBackend.muut,
     fromBackend.muutospyynto,
     fromBackend.vankilat,
+    history,
     lupa,
     lupaKohteet,
     match
