@@ -20,7 +20,8 @@ const PerustelutLiitteet = React.memo(props => {
               styleClasses: ["w-full"],
               properties: {
                 title:
-                  "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet."
+                  "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet.",
+                isHidden: props.isReadOnly
               }
             },
             {
@@ -31,6 +32,7 @@ const PerustelutLiitteet = React.memo(props => {
           ]
         }
       ];
+
       return structure;
     };
   }, []);
@@ -49,20 +51,23 @@ const PerustelutLiitteet = React.memo(props => {
   return (
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (
-        <ExpandableRowRoot
-          title={"Liitteet"}
-          anchor={sectionId}
-          key={`perustelut-liitteet`}
-          categories={props.stateObject.categories}
-          changes={R.path(["perustelut"], props.changeObjects)}
-          disableReverting={true}
-          showCategoryTitles={true}
-          isExpanded={true}
-          sectionId={sectionId}
-          onUpdate={props.onChangesUpdate}
-          hideAmountOfChanges={true}
-          {...props}
-        />
+        <div className="mt-4">
+          <ExpandableRowRoot
+            title={"Liitteet"}
+            anchor={sectionId}
+            key={`perustelut-liitteet`}
+            categories={props.stateObject.categories}
+            changes={R.path(["perustelut"], props.changeObjects)}
+            disableReverting={true}
+            showCategoryTitles={true}
+            isExpanded={true}
+            sectionId={sectionId}
+            onUpdate={props.onChangesUpdate}
+            hideAmountOfChanges={true}
+            isReadOnly={props.isReadOnly}
+            {...props}
+          />
+        </div>
       )}
     </React.Fragment>
   );
@@ -75,6 +80,7 @@ PerustelutLiitteet.propTypes = {
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  isReadOnly: PropTypes.bool
 };
 export default injectIntl(PerustelutLiitteet);

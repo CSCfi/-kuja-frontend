@@ -25,7 +25,8 @@ const CategorizedListRoot = React.memo(
     onUpdate,
     showCategoryTitles = defaultProps.showCategoryTitles,
     nodeIndex = defaultProps.nodeIndex,
-    updateNodeIndex
+    updateNodeIndex,
+    isReadOnly
   }) => {
     const changesRef = useRef(null);
 
@@ -77,6 +78,7 @@ const CategorizedListRoot = React.memo(
                   rootPath={[]}
                   showCategoryTitles={showCategoryTitles}
                   onChangesUpdate={onChangesUpdate}
+                  isReadOnly={isReadOnly}
                 />
               );
             })()
@@ -94,7 +96,8 @@ CategorizedListRoot.propTypes = {
   onUpdate: PropTypes.func.isRequired,
   sectionId: PropTypes.string,
   showCategoryTitles: PropTypes.bool,
-  debug: PropTypes.bool
+  debug: PropTypes.bool,
+  isReadOnly: PropTypes.bool
 };
 
 export default CategorizedListRoot;

@@ -505,6 +505,9 @@ const CategorizedList = React.memo(props => {
                                   attachments: attachments
                                 }}
                                 placement={props.placement}
+                                isReadOnly={
+                                  propsObj.isReadOnly || props.isReadOnly
+                                }
                               />
                             </div>
                           );
@@ -524,6 +527,7 @@ const CategorizedList = React.memo(props => {
                                 statusTextStyleClasses={
                                   propsObj.statusTextStyleClasses
                                 }
+                                isHidden={propsObj.isHidden}
                               >
                                 <div className="flex">
                                   <div className="flex-1">

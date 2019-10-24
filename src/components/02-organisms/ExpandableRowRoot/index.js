@@ -10,6 +10,7 @@ import * as R from "ramda";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import commonMessages from "../../../i18n/definitions/common";
+import { prototype } from "stream";
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -48,7 +49,8 @@ const ExpandableRowRoot = React.memo(
     onUpdate,
     sectionId,
     showCategoryTitles = defaultProps.showCategoryTitles,
-    title
+    title,
+    isReadOnly
   }) => {
     const classes = useStyles();
     const [isToggledOpen, setIsToggleOpen] = useState(false);
@@ -60,7 +62,11 @@ const ExpandableRowRoot = React.memo(
     return (
       <React.Fragment>
         {categories && (
-          <ExpandableRow shouldBeExpanded={isExpanded} onToggle={onToggle} id={anchor}>
+          <ExpandableRow
+            shouldBeExpanded={isExpanded}
+            onToggle={onToggle}
+            id={anchor}
+          >
             <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
@@ -104,6 +110,7 @@ const ExpandableRowRoot = React.memo(
                   onUpdate={onUpdate}
                   sectionId={sectionId}
                   showCategoryTitles={showCategoryTitles}
+                  isReadOnly={isReadOnly}
                 />
               ) : (
                 children
@@ -130,7 +137,8 @@ ExpandableRowRoot.propTypes = {
   onUpdate: PropTypes.func,
   sectionId: PropTypes.string,
   showCategoryTitles: PropTypes.bool,
-  title: PropTypes.string
+  title: PropTypes.string,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(ExpandableRowRoot);

@@ -323,13 +323,17 @@ export const getAddPeopleForm = (orderNumber, isReadOnly) => {
             name: "StatusTextRow",
             styleClasses: ["w-full"],
             properties: {
-              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+              isHidden: isReadOnly
             }
           },
           {
             anchor: "A",
             styleClasses: ["w-full"],
-            name: "Attachments"
+            name: "Attachments",
+            properties: {
+              isReadOnly
+            }
           }
         ]
       }
@@ -708,14 +712,17 @@ const johtaja = (orderCode, isReadOnly) => {
             name: "StatusTextRow",
             styleClasses: ["w-full"],
             properties: {
-              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
-              // title: FormattedMessage("attachmentInfo")  <- TODO
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+              isHidden: isReadOnly
             }
           },
           {
             anchor: "A",
             styleClasses: ["w-full"],
-            name: "Attachments"
+            name: "Attachments",
+            properties: {
+              isReadOnly
+            }
           }
         ]
       }
@@ -838,13 +845,17 @@ const ajoneuvoKanta = (orderCode, isReadOnly) => {
             name: "StatusTextRow",
             styleClasses: ["w-full"],
             properties: {
-              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI
+              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+              isHidden: isReadOnly
             }
           },
           {
             anchor: "A",
             styleClasses: ["w-full"],
-            name: "Attachments"
+            name: "Attachments",
+            properties: {
+              isReadOnly
+            }
           }
         ]
       }

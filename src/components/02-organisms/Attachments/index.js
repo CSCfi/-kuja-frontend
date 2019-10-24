@@ -388,7 +388,7 @@ const Attachments = React.memo(props => {
           (!props.placement || liite.paikka === props.placement)
         ) {
           return (
-            <div
+            <React.Fragment
               key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
             >
               <LiiteListItem>
@@ -451,31 +451,75 @@ const Attachments = React.memo(props => {
                   <FaTimes />
                 </button>
               </LiiteListItem>
-            </div>
+            </React.Fragment>
           );
         } else return null;
       });
     else return null;
   };
 
+  // Lists all attachments based on placement parameter given in read only state
+  const LiiteListReadOnly = () => {
+    if (attachments && attachments.length > 0)
+      return attachments.map(liite => {
+        if (
+          (liite.tiedostoId || liite.uuid) &&
+          !liite.removed &&
+          (!props.placement || liite.paikka === props.placement)
+        ) {
+          return (
+            <React.Fragment
+              key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
+            >
+              <LiiteListItem>
+                {liite.new ? <FaFile /> : <FaRegFile />}
+                <span className="w-full ml-1">{liite.nimi}</span>
+                <span className="type">{liite.tyyppi}</span>
+                <span className="size">{bytesToSize(liite.koko)}</span>
+                <button
+                  title="Näytä"
+                  onClick={e => showFile(e, liite)}
+                  className="ml-2"
+                >
+                  <FaDownload />
+                </button>
+                <span
+                  title={
+                    liite.salainen
+                      ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI
+                      : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI
+                  }
+                >
+                  {liite.salainen && <FaLock />}
+                </span>
+              </LiiteListItem>
+            </React.Fragment>
+          );
+        } else return null;
+      });
+    else {
+      return (
+        <p>
+          <i>Ei lisättyjä liitteitä</i>
+        </p>
+      );
+    }
+  };
+  console.log(props.isReadOnly);
   return (
     <React.Fragment>
-      {/* {!props.listHidden && (
-        <h4>{props.header ? props.header : HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
-      )}
-      {props.listHidden && <br />} */}
-      {!props.showListOnly && (
+      {!props.showListOnly && !props.isReadOnly && (
         <Attachment
           setAttachment={setAttachment}
           setAttachmentName={setAttachmentName}
         />
       )}
       {fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error>}
-      {/* { this.state.fileAdded !=="" && 
-          <Message>{HAKEMUS_VIESTI.LIITE_LISATTY.FI}: {this.state.fileAdded}</Message> 
-        } */}
-      {!props.listHidden && (
+      {!props.listHidden && !props.isReadOnly && (
         <LiiteList key={props.placement + props.id + Math.random()} />
+      )}
+      {!props.listHidden && props.isReadOnly && (
+        <LiiteListReadOnly key={props.placement + props.id + Math.random()} />
       )}
       <Dialog
         open={isNameModalOpen}
@@ -541,6 +585,7 @@ Attachments.propTypes = {
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
   showListOnly: PropTypes.bool,
+  isReadOnly: PropTypes.bool,
   listHidden: PropTypes.bool,
   downloadAttachment: PropTypes.func
 };

@@ -39,14 +39,20 @@ const TextBox = props => {
             aria-label={props.ariaLabel}
             disabled={props.isDisabled || props.isReadOnly}
             id={props.id}
-            placeholder={props.placeholder}
+            placeholder={
+              props.isDisabled || props.isReadOnly ? "" : props.placeholder
+            }
             rows={props.rows}
             rowsMax={props.rowsMax}
-            className={`${props.isHidden ? "hidden" : ""} ${
-              props.isReadOnly ? "" : "border border-solid"
-            } w-full p-2`}
+            className={`${props.isHidden ? "hidden" : ""}
+             ${
+               props.isReadOnly ? "color: text-black" : "border border-solid"
+             } w-full p-2`}
             onChange={updateValue}
             value={value}
+            inputprops={{
+              readOnly: props.isReadOnly
+            }}
           />
         </React.Fragment>
       ) : null}
