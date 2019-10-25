@@ -21,7 +21,7 @@ const filterOpiskelijavuodet = (opiskelijavuodet, categoryKey) => {
   const filteredChanges = R.filter(
     R.compose(
       R.not,
-      R.contains(categoryKey),
+      R.includes(categoryKey),
       R.prop("anchor")
     )
   )(opiskelijavuodet);
@@ -299,7 +299,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       });
     }
   }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
-  
+
   // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
   useEffect(() => {
     let filteredChanges = props.changeObjects.opiskelijavuodet;
