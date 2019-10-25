@@ -47,9 +47,9 @@ const TextBox = props => {
             className={`${props.isHidden ? "hidden" : ""}
              ${
                props.isReadOnly
-                 ? "color: text-black resize-none"
-                 : "border border-solid"
-             } w-full p-2`}
+                 ? "color: text-black"
+                 : "border border-solid border-gray-500 rounded"
+             } w-full p-2 resize-none`}
             onChange={updateValue}
             value={value}
             inputprops={{
