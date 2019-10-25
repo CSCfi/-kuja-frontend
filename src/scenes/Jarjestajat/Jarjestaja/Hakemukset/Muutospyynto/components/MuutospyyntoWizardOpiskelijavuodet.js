@@ -15,7 +15,18 @@ const getArvoFromKohdeArray = (tyyppi, kohde) => {
     ).arvo || "0",
     10
   )
-}
+};
+
+const filterOpiskelijavuodet = (opiskelijavuodet, categoryKey) => {
+  const filteredChanges = R.filter(
+    R.compose(
+      R.not,
+      R.contains(categoryKey),
+      R.prop("anchor")
+    )
+  )(opiskelijavuodet);
+  return filteredChanges;
+};
 
 const defaultConstraintFlags = {
   isVaativaTukiVisible: true,
@@ -288,63 +299,31 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       });
     }
   }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
-
-  // When sisaoppilaitos is not visible, exclude it from the collection of changes updates
+  
+  // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
   useEffect(() => {
+    let filteredChanges = props.changeObjects.opiskelijavuodet;
     if (
       !constraintFlags.isSisaoppilaitosVisible &&
       props.changeObjects.opiskelijavuodet
     ) {
-      const changesWithoutSisaoppilaitosChanges = R.filter(
-        R.compose(
-          R.not,
-          R.contains("sisaoppilaitos"),
-          R.prop("anchor")
-        )
-      )(props.changeObjects.opiskelijavuodet);
-      if (
-        !R.equals(
-          changesWithoutSisaoppilaitosChanges,
-          props.changeObjects.opiskelijavuodet
-        )
-      ) {
-        onChangesUpdate({
-          anchor: props.sectionId,
-          changes: changesWithoutSisaoppilaitosChanges
-        });
-      }
+      filteredChanges = filterOpiskelijavuodet(filteredChanges, "sisaoppilaitos")
     }
-  }, [
-    constraintFlags,
-    onChangesUpdate,
-    props.changeObjects.opiskelijavuodet,
-    props.sectionId
-  ]);
-
-  // When vaativatuki is not visible, exclude its changes from the collection of changes updates
-  useEffect(() => {
     if (
       !constraintFlags.isVaativaTukiVisible &&
       props.changeObjects.opiskelijavuodet
     ) {
-      const changesWithoutVaativaTukiChanges = R.filter(
-        R.compose(
-          R.not,
-          R.contains("vaativatuki"),
-          R.prop("anchor")
-        )
-      )(props.changeObjects.opiskelijavuodet);
-      if (
-        !R.equals(
-          changesWithoutVaativaTukiChanges,
-          props.changeObjects.opiskelijavuodet
-        )
-      ) {
-        onChangesUpdate({
-          anchor: props.sectionId,
-          changes: changesWithoutVaativaTukiChanges
-        });
-      }
+      filteredChanges = filterOpiskelijavuodet(filteredChanges, "vaativatuki");
+    }
+
+    if (!R.equals(
+      filteredChanges,
+      props.changeObjects.opiskelijavuodet
+    )) {
+      onChangesUpdate({
+        anchor: props.sectionId,
+        changes: filteredChanges
+      });
     }
   }, [
     constraintFlags,
