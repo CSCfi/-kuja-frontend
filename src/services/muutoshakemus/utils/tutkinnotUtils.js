@@ -72,10 +72,12 @@ export const getCategories = (
               categories: (koulutus.osaamisalat || []).map(osaamisala => {
                 const isInLupaBool = article
                   ? !!_.find(article.koulutusalat, koulutusala => {
-                      return !!_.find(koulutusala.koulutukset, {
+                    return !!_.find(koulutusala.koulutukset, koulutus => {
+                      return !!_.find(koulutus.rajoitteet, {
                         koodi: osaamisala.koodiArvo
                       });
-                    })
+                    });
+                  })
                   : false;
                 const isAddedBool = false;
                 const isRemovedBool = false;
@@ -101,7 +103,8 @@ export const getCategories = (
                           }).nimi || "[Osaamisalan otsikko tähän]",
                         labelStyles: {
                           addition: isAdded,
-                          removal: isRemoved
+                          removal: isRemoved,
+                          custom: Object.assign({}, isInLupaBool ? isInLupa : {})
                         },
                         isChecked:
                           (isInLupaBool && !isRemovedBool) || isAddedBool

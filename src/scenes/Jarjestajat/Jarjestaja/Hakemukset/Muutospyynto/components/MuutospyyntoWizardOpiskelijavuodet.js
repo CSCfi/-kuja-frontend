@@ -6,18 +6,26 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const getApplyFor = (categoryName, items) => {
-  return (
-    R.find(value => {
-      return value.kategoria === categoryName;
-    }, items || []) || {}
-  ).arvo;
+const getArvoFromKohdeArray = (tyyppi, kohde) => {
+  return parseInt(
+    (
+      R.find(obj => {
+        return obj.tyyppi === tyyppi;
+      }, kohde || []) || {}
+    ).arvo || "0",
+    10
+  )
 };
 
-const isInLupa = (areaCode, items) => {
-  return !!R.find(obj => {
-    return obj.koodiarvo === areaCode;
-  }, items);
+const filterOpiskelijavuodet = (opiskelijavuodet, categoryKey) => {
+  const filteredChanges = R.filter(
+    R.compose(
+      R.not,
+      R.includes(categoryKey),
+      R.prop("anchor")
+    )
+  )(opiskelijavuodet);
+  return filteredChanges;
 };
 
 const defaultConstraintFlags = {
@@ -39,67 +47,25 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
   const [initialValue, setInitialValue] = useState(0);
+  const [initialValueVaativa, setInitialValueVaativa] = useState(0);
+  const [initialValueSisaoppilaitos, setInitialValueSisaoppilaitos] = useState(0);
   const [koodiarvot, setKoodiarvot] = useState({});
-  const [initialValueVaativa] = useState(0);
-  const [initialValueSisaoppilaitos] = useState(0);
   const [categories, setCategories] = useState([]);
 
-  // This effect is run depending on existing 'lupa', from props alone (run only on first render)
   useEffect(() => {
-    const relevantChangesOfSection5 = R.concat(
-      (props.changesOfSection5 || {})["02"] || [],
-      (props.changesOfSection5 || {})["03"] || []
-    );
-
-    setApplyForVaativa(getApplyFor("vaativa", [])); // [] = opiskelijavuosimuutoksetValue
-    setApplyForSisaoppilaitos(getApplyFor("sisaoppilaitos", [])); // [] = opiskelijavuosimuutoksetValue
-
-    const isVaativatInLupa = !!isInLupa("2", muutCombined);
-    const isVaativatInChanges = !!(
-      (
-        R.find(
-          R.propEq("anchor", "02.vaativat.16"),
-          relevantChangesOfSection5
-        ) || {}
-      ).properties || {}
-    ).isChecked;
-    const isSisaoppilaitosInLupa = !!isInLupa("4", muutCombined);
-    const isSisaoppilaitosInChanges = !!(
-      (
-        R.find(
-          R.propEq("anchor", "03.sisaoppilaitos.4"),
-          relevantChangesOfSection5
-        ) || {}
-      ).properties || {}
-    ).isChecked;
-
-    setConstraintFlags({
-      isVaativaTukiVisible: isVaativatInLupa || isVaativatInChanges,
-      isSisaoppilaitosVisible:
-        isSisaoppilaitosInLupa || isSisaoppilaitosInChanges,
-      isVaativaTukiValueRequired: !isVaativatInLupa && isVaativatInChanges,
-      isSisaoppilaitosValueRequired:
-        !isSisaoppilaitosInLupa && isSisaoppilaitosInChanges
-    });
-  }, [muutCombined, props.changesOfSection5]);
-
-  useEffect(() => {
-    setInitialValue(
-      parseInt(
-        (
-          R.find(obj => {
-            return obj.tyyppi === "Ammatillinen koulutus";
-          }, opiskelijavuodet || []) || {}
-        ).arvo || "0",
-        10
-      )
-    );
+    const vuodetValue = getArvoFromKohdeArray("Ammatillinen koulutus", opiskelijavuodet);
+    setInitialValue(vuodetValue);
+    setApplyFor(vuodetValue);
   }, [opiskelijavuodet]);
 
   useEffect(() => {
-    const tmpApplyFor = getApplyFor("vahimmaisopiskelijavuodet", []);
-    setApplyFor(tmpApplyFor || initialValue); // [] = opiskelijavuosimuutoksetValue
-  }, [initialValue]);
+    const sisaoppilaitosValue = getArvoFromKohdeArray("Sisäoppilaitosmuotoinen koulutus", rajoitukset)
+    const vaativaValue = getArvoFromKohdeArray("Vaativan erityisen tuen tehtävä", rajoitukset);
+    setInitialValueSisaoppilaitos(sisaoppilaitosValue);
+    setApplyForSisaoppilaitos(sisaoppilaitosValue);
+    setInitialValueVaativa(vaativaValue);
+    setApplyForVaativa(vaativaValue);
+  }, [rajoitukset]);
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
@@ -336,60 +302,30 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     }
   }, [props.changeObjects.muut, props.muut, props.stateObjects.muut]);
 
+  // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
   useEffect(() => {
+    let filteredChanges = props.changeObjects.opiskelijavuodet;
     if (
       !constraintFlags.isSisaoppilaitosVisible &&
       props.changeObjects.opiskelijavuodet
     ) {
-      const changesWithoutSisaoppilaitosChanges = R.filter(
-        R.compose(
-          R.not,
-          R.contains("sisaoppilaitos"),
-          R.prop("anchor")
-        )
-      )(props.changeObjects.opiskelijavuodet);
-      if (
-        !R.equals(
-          changesWithoutSisaoppilaitosChanges,
-          props.changeObjects.opiskelijavuodet
-        )
-      ) {
-        onChangesUpdate({
-          anchor: props.sectionId,
-          changes: changesWithoutSisaoppilaitosChanges
-        });
-      }
+      filteredChanges = filterOpiskelijavuodet(filteredChanges, "sisaoppilaitos")
     }
-  }, [
-    constraintFlags,
-    onChangesUpdate,
-    props.changeObjects.opiskelijavuodet,
-    props.sectionId
-  ]);
-
-  useEffect(() => {
     if (
       !constraintFlags.isVaativaTukiVisible &&
       props.changeObjects.opiskelijavuodet
     ) {
-      const changesWithoutVaativaTukiChanges = R.filter(
-        R.compose(
-          R.not,
-          R.contains("vaativatuki"),
-          R.prop("anchor")
-        )
-      )(props.changeObjects.opiskelijavuodet);
-      if (
-        !R.equals(
-          changesWithoutVaativaTukiChanges,
-          props.changeObjects.opiskelijavuodet
-        )
-      ) {
-        onChangesUpdate({
-          anchor: props.sectionId,
-          changes: changesWithoutVaativaTukiChanges
-        });
-      }
+      filteredChanges = filterOpiskelijavuodet(filteredChanges, "vaativatuki");
+    }
+
+    if (!R.equals(
+      filteredChanges,
+      props.changeObjects.opiskelijavuodet
+    )) {
+      onChangesUpdate({
+        anchor: props.sectionId,
+        changes: filteredChanges
+      });
     }
   }, [
     constraintFlags,
