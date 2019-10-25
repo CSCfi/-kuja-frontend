@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState, useMemo } from "react";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
-import { MessageWrapper } from "../../../../modules/elements";
-import Loading from "../../../../modules/Loading";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -14,13 +12,8 @@ import {
 } from "../../../../utils/common";
 import { setAttachmentUuids } from "../../../../services/muutospyynnot/muutospyyntoUtil";
 import { BackendContext } from "../../../../context/backendContext";
-import {
-  abort,
-  fetchFromBackend,
-  getFetchState,
-  statusMap,
-  isReady
-} from "../../../../services/backendService";
+import { isReady } from "../../../../services/backendService";
+import FetchHandler from "../../../../FetchHandler";
 
 const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
@@ -90,27 +83,6 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
       : [];
     return R.concat(arr1, arr2);
   }, [dispatch, match.params.uuid]);
-
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
-    fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
-
-  /**
-   * Ongoing XHR calls must be canceled. It's done here.
-   */
-  useEffect(() => {
-    return () => {
-      abort(abortControllers);
-    };
-  }, [abortControllers, dispatch]);
-
-  const fetchState = useMemo(() => {
-    return getFetchState(fetchSetup, fromBackend);
-  }, [fetchSetup, fromBackend]);
 
   const [backendChanges, setBackendChanges] = useState({});
 
@@ -250,59 +222,63 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
     }
   }, [fromBackend.muutospyynto, match.params.uuid]);
 
-  const view = useMemo(() => {
-    let jsx = <React.Fragment></React.Fragment>;
-    if (fetchState.conclusion === statusMap.fetching) {
-      jsx = (
-        <MessageWrapper>
-          <Loading
-            notReadyList={fetchState.notReadyList}
-            percentage={fetchState.percentage.ready}
-          />
-        </MessageWrapper>
-      );
-    } else if (fetchState.conclusion === statusMap.ready) {
-      jsx = (
+  const kohteet = useMemo(() => {
+    return fromBackend.kohteet ? fromBackend.kohteet.raw : [];
+  }, [fromBackend.kohteet]);
+
+  const koulutustyypit = useMemo(() => {
+    return fromBackend.koulutustyypit ? fromBackend.koulutustyypit.raw : [];
+  }, [fromBackend.koulutustyypit]);
+
+  const kunnat = useMemo(() => {
+    return fromBackend.kunnat ? fromBackend.kunnat.raw : [];
+  }, [fromBackend.kunnat]);
+
+  const maakunnat = useMemo(() => {
+    return fromBackend.maakunnat ? fromBackend.maakunnat.raw : [];
+  }, [fromBackend.maakunnat]);
+
+  const maakuntakunnat = useMemo(() => {
+    return fromBackend.maakuntakunnat ? fromBackend.maakuntakunnat.raw : [];
+  }, [fromBackend.maakuntakunnat]);
+
+  const maaraystyypit = useMemo(() => {
+    return fromBackend.maaraystyypit ? fromBackend.maaraystyypit.raw : [];
+  }, [fromBackend.maaraystyypit]);
+
+  const muut = useMemo(() => {
+    return fromBackend.muut ? fromBackend.muut.raw : [];
+  }, [fromBackend.muut]);
+
+  const vankilat = useMemo(() => {
+    return fromBackend.vankilat ? fromBackend.vankilat.raw : [];
+  }, [fromBackend.vankilat]);
+
+  return (
+    <FetchHandler
+      fetchSetup={fetchSetup}
+      ready={
         <MuutoshakemusProvider>
           <MuutospyyntoWizard
             backendChanges={backendChanges}
             history={history}
-            kohteet={fromBackend.kohteet.raw}
-            koulutustyypit={fromBackend.koulutustyypit.raw}
-            kunnat={fromBackend.kunnat.raw}
-            lupa={lupa.raw}
+            kohteet={kohteet}
+            koulutustyypit={koulutustyypit}
+            kunnat={kunnat}
+            lupa={lupa}
             lupaKohteet={lupaKohteet}
-            maakunnat={fromBackend.maakunnat.raw}
-            maakuntakunnat={fromBackend.maakuntakunnat.raw}
-            maaraystyypit={fromBackend.maaraystyypit.raw}
+            maakunnat={maakunnat}
+            maakuntakunnat={maakuntakunnat}
+            maaraystyypit={maaraystyypit}
             match={match}
-            muut={fromBackend.muut.raw}
+            muut={muut}
             muutospyynto={fromBackend.muutospyynto}
-            vankilat={fromBackend.vankilat.raw}
+            vankilat={vankilat}
           />
         </MuutoshakemusProvider>
-      );
-    }
-    return jsx;
-  }, [
-    backendChanges,
-    fetchState,
-    fromBackend.kohteet,
-    fromBackend.koulutustyypit,
-    fromBackend.kunnat,
-    fromBackend.maakunnat,
-    fromBackend.maakuntakunnat,
-    fromBackend.maaraystyypit,
-    fromBackend.muut,
-    fromBackend.muutospyynto,
-    fromBackend.vankilat,
-    history,
-    lupa,
-    lupaKohteet,
-    match
-  ]);
-
-  return view;
+      }
+    ></FetchHandler>
+  );
 };
 
 HakemusContainer.propTypes = {

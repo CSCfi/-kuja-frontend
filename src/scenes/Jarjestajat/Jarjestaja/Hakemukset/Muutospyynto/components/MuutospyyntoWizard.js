@@ -148,9 +148,9 @@ const MuutospyyntoWizard = ({
     return parseKoulutuksetAll(
       fromBackend.tutkinnot.raw,
       koulutusalat,
-      fromBackend.koulutustyypit.raw
+      koulutustyypit
     );
-  }, [fromBackend.tutkinnot, koulutusalat, fromBackend.koulutustyypit]);
+  }, [fromBackend.tutkinnot, koulutusalat, koulutustyypit]);
 
   const koulutukset = useMemo(() => {
     return {
