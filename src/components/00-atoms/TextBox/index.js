@@ -70,7 +70,7 @@ TextBox.defaultProps = {
   payload: {},
   placeholder: "",
   isReadOnly: false,
-  rows: 3,
+  rows: 2,
   rowsMax: 100,
   title: ""
 };
