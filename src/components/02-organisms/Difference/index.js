@@ -23,16 +23,6 @@ const Difference = ({
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
 
-  const isRequired = payload.component.properties.isRequired;
-  let isValid = true;
-  if(isRequired === true) {
-      isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
-  }
-  if(value < 0) {
-    isValid = false;
-  }
-
-
   const handleChange = useCallback(
     (actionResults, payload) => {
       setValue(isNaN(actionResults.value) ? emptySelectionPlaceholderValue : actionResults.value);
@@ -54,6 +44,15 @@ const Difference = ({
   useEffect(() => {
     setValue(applyForValue === initialValue ? emptySelectionPlaceholderValue : applyForValue);
   }, [applyForValue, initialValue]);
+
+  const isRequired = payload.component.properties.isRequired;
+  let isValid = true;
+  if(isRequired === true) {
+    isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
+  }
+  if(value < 0) {
+    isValid = false;
+  }
 
   const containerClass = isValid ? "flex" : "flex bg-yellow-300";
 
