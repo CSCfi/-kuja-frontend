@@ -37,7 +37,7 @@ const defaultConstraintFlags = {
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
-  const { opiskelijavuodet } = props.lupaKohteet[4];
+  const { opiskelijavuodet, rajoitukset } = props.lupaKohteet[4];
   const { muutCombined } = props.lupaKohteet[5];
 
   const [constraintFlags, setConstraintFlags] = useState(
