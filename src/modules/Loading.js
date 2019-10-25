@@ -12,7 +12,7 @@ const Loading = ({ intl, notReadyList = [], percentage, text }) => {
     <div className="flex items-center mx-auto">
       <span className="relative mr-6">
         {!R.isNil(percentage) && (
-          <span className="absolute mt-8 ml-4">{Math.round(percentage)}%</span>
+          <span className="absolute mt-6 ml-6">{Math.round(percentage)}%</span>
         )}
         <CircularProgress size={80} value={percentage} />
       </span>
