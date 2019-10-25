@@ -1,16 +1,10 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LuvatList from "./components/LuvatList";
-import Loading from "modules/Loading";
 import { BackendContext } from "../../context/backendContext";
-import {
-  abort,
-  fetchFromBackend,
-  statusMap,
-  getFetchState
-} from "../../services/backendService";
-import { MessageWrapper } from "../../modules/elements";
+import FetchHandler from "../../FetchHandler";
+import * as R from "ramda";
 
 const Jarjestajat = () => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
@@ -19,67 +13,41 @@ const Jarjestajat = () => {
     return [{ key: "luvat", dispatchFn: dispatch }];
   }, [dispatch]);
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
-    return fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
-
-  /**
-   * Ongoing XHR calls must be canceled. It's done here.
-   */
-  useEffect(() => {
-    return () => {
-      abort(abortControllers);
+  const { luvat, fetchedAt } = useMemo(() => {
+    return {
+      luvat: R.prop("raw", fromBackend.luvat),
+      fetchedAt: R.prop("fetchedAt", fromBackend.luvat)
     };
-  }, [abortControllers, dispatch]);
+  }, [fromBackend.luvat]);
 
-  const fetchState = useMemo(() => {
-    return getFetchState(fetchSetup, fromBackend);
-  }, [fetchSetup, fromBackend]);
+  return (
+    <React.Fragment>
+      <FetchHandler
+        fetchSetup={fetchSetup}
+        ready={
+          <React.Fragment>
+            <Helmet>
+              <title>Oiva | Ammatillinen koulutus</title>
+            </Helmet>
 
-  if (fetchState.conclusion === statusMap.ready) {
-    return (
-      <React.Fragment>
-        <Helmet>
-          <title>Oiva | Ammatillinen koulutus</title>
-        </Helmet>
+            <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
+            <BreadcrumbsItem to="/jarjestajat">
+              Ammatillinen koulutus
+            </BreadcrumbsItem>
 
-        <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
-        <BreadcrumbsItem to="/jarjestajat">
-          Ammatillinen koulutus
-        </BreadcrumbsItem>
-
-        <div className="mx-auto w-full sm:w-3/4 mb-16">
-          <h1>Ammatillisen koulutuksen järjestäjät</h1>
-          <p className="py-4">
-            Voimassa olevat järjestämisluvat ({fromBackend.luvat.raw.length}{" "}
-            kpl)
-          </p>
-          <LuvatList luvat={fromBackend.luvat.raw} />
-        </div>
-      </React.Fragment>
-    );
-  } else if (fetchState.conclusion === statusMap.fetching) {
-    return (
-      <MessageWrapper>
-        <Loading
-          notReadyList={fetchState.notReadyList}
-          percentage={fetchState.percentage.ready}
-        />
-      </MessageWrapper>
-    );
-  } else if (fetchState.conclusion === statusMap.erroneous) {
-    return (
-      <div className="text-center">
-        <p>Lupia ladattaessa tapahtui virhe.</p>
-      </div>
-    );
-  } else {
-    return null;
-  }
+            <div className="mx-auto w-full sm:w-3/4 mb-16">
+              <h1>Ammatillisen koulutuksen järjestäjät</h1>
+              <p className="my-4">
+                Voimassa olevat järjestämisluvat ({R.length(luvat)} kpl) Lista
+                päivitetty: {fetchedAt}
+              </p>
+              <LuvatList luvat={R.prop("raw", fromBackend.luvat)} />
+            </div>
+          </React.Fragment>
+        }
+      ></FetchHandler>
+    </React.Fragment>
+  );
 };
 
 export default Jarjestajat;

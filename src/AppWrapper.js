@@ -20,6 +20,10 @@ const AppWrapper = () => {
     return translations[state.locale];
   }, [state]);
 
+  /**
+   * This setup is passed on to the FetchHandler that uses BackendService
+   * for running the defined XHR calls.
+   */
   const fetchSetup = useMemo(() => {
     return [
       {
@@ -30,12 +34,18 @@ const AppWrapper = () => {
     ];
   }, [dispatch]);
 
+  const appView = useMemo(() => {
+    return <App user={R.prop("raw", fromBackend.kayttaja)} />;
+  }, [fromBackend.kayttaja]);
+
   return (
     <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
       <React.Fragment>
         <FetchHandler
           fetchSetup={fetchSetup}
-          ready={<App user={R.prop("raw", fromBackend.kayttaja)} />}
+          ready={appView}
+          // App view is shown even if there isn't logged in user.
+          erroneous={appView}
         ></FetchHandler>
       </React.Fragment>
     </IntlProvider>

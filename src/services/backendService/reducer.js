@@ -4,6 +4,7 @@ import {
   FETCH_FROM_BACKEND_SUCCESS
 } from "./actionTypes";
 import * as R from "ramda";
+import moment from "moment";
 
 function getNextState(key, subKey, _path, data, state) {
   const path = _path || [key, subKey].filter(Boolean);
@@ -40,7 +41,7 @@ export default function(state, action) {
         {
           raw: action.data,
           status: "ready",
-          fetched: new Date().toUTCString()
+          fetchedAt: moment().format("DD.MM.YYYY HH:mm:ss")
         },
         state
       );

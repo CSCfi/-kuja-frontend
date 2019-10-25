@@ -1,30 +1,17 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
 import PropTypes from "prop-types";
 import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
 import { BackendContext } from "../../../../context/backendContext";
 import { injectIntl } from "react-intl";
-import {
-  abort,
-  fetchFromBackend,
-  getFetchState,
-  statusMap,
-  isReady
-} from "../../../../services/backendService";
+import { isReady } from "../../../../services/backendService";
 import * as R from "ramda";
-import Loading from "../../../../modules/Loading";
 import { parseLupa } from "../../../../services/luvat/lupaParser";
 import HakemusContainer from "../Hakemukset/HakemusContainer";
-import { MessageWrapper } from "../../../../modules/elements";
+import FetchHandler from "../../../../FetchHandler";
 
-const JarjestajaSwitch = ({
-  history,
-  intl,
-  match,
-  organisaatio,
-  user
-}) => {
+const JarjestajaSwitch = ({ history, intl, match, organisaatio, user }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const ytunnus = useMemo(() => {
@@ -36,6 +23,7 @@ const JarjestajaSwitch = ({
       ? [
           {
             key: "lupa",
+            subKey: ytunnus,
             dispatchFn: dispatch,
             urlEnding: `${ytunnus}?with=all`
           },
@@ -44,110 +32,74 @@ const JarjestajaSwitch = ({
       : [];
   }, [dispatch, ytunnus]);
 
-  /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
-   */
-  const abortControllers = useMemo(() => {
-    return R.isEmpty(fetchSetup) ? [] : fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
-
-  /**
-   * Ongoing XHR calls must be canceled. It's done here.
-   */
-  useEffect(() => {
-    return () => {
-      abort(abortControllers);
-    };
-  }, [abortControllers, dispatch, history]);
+  const lupa = useMemo(() => {
+    return fromBackend.lupa && isReady(fromBackend.lupa[ytunnus])
+      ? fromBackend.lupa[ytunnus].raw
+      : {};
+  }, [fromBackend.lupa, ytunnus]);
 
   const lupaKohteet = useMemo(() => {
-    return isReady(fromBackend.lupa)
-      ? parseLupa(fromBackend.lupa.raw, intl.formatMessage)
-      : [];
-  }, [fromBackend.lupa, intl.formatMessage]);
+    return R.isEmpty(lupa) ? {} : parseLupa(lupa, intl.formatMessage);
+  }, [lupa, intl.formatMessage]);
 
-  const fetchState = useMemo(() => {
-    return getFetchState(fetchSetup, fromBackend);
-  }, [fetchSetup, fromBackend]);
-
-  const view = useMemo(() => {
-    let jsx = <React.Fragment></React.Fragment>;
-    if (fetchState.conclusion === statusMap.fetching) {
-      jsx = (
-        <MessageWrapper>
-          <Loading
-            notReadyList={fetchState.notReadyList}
-            percentage={fetchState.percentage.ready}
-          />
-        </MessageWrapper>
-      );
-    } else if (fetchState.conclusion === statusMap.ready) {
-      return (
-        <React.Fragment>
-          <Switch>
-            <Route
-              exact
-              path={`${match.path}/hakemukset-ja-paatokset/uusi/:page`}
-              render={props => {
-                return (
-                  <HakemusContainer
-                    history={history}
-                    lupaKohteet={lupaKohteet}
-                    lupa={fromBackend.lupa}
-                    match={props.match}
-                  />
-                );
-              }}
-            />
-            <Route
-              exact
-              path={`${match.path}/hakemukset-ja-paatokset/:uuid/:page`}
-              render={props => {
-                return (
-                  <HakemusContainer
-                    history={history}
-                    lupaKohteet={lupaKohteet}
-                    lupa={fromBackend.lupa}
-                    match={props.match}
-                  />
-                );
-              }}
-            />
-            <Route
-              path={`${match.path}`}
-              render={() => (
-                <LupahistoriaProvider>
-                  {ytunnus && (
-                    <Jarjestaja
+  return (
+    <React.Fragment>
+      <FetchHandler
+        fetchSetup={fetchSetup}
+        ready={
+          <React.Fragment>
+            <Switch>
+              <Route
+                exact
+                path={`${match.path}/hakemukset-ja-paatokset/uusi/:page`}
+                render={props => {
+                  return (
+                    <HakemusContainer
+                      history={history}
                       lupaKohteet={lupaKohteet}
-                      lupa={R.path(["lupa", "raw"], fromBackend)}
-                      match={match}
-                      muutospyynnot={fromBackend.muutospyynnot.raw}
-                      organisaatio={organisaatio}
-                      user={user}
+                      lupa={lupa}
+                      match={props.match}
                     />
-                  )}
-                </LupahistoriaProvider>
-              )}
-            />
-          </Switch>
-        </React.Fragment>
-      );
-    }
-    return jsx;
-  }, [
-    fetchState,
-    fromBackend,
-    history,
-    lupaKohteet,
-    match,
-    organisaatio,
-    user,
-    ytunnus
-  ]);
-
-  return view;
+                  );
+                }}
+              />
+              <Route
+                exact
+                path={`${match.path}/hakemukset-ja-paatokset/:uuid/:page`}
+                render={props => {
+                  return (
+                    <HakemusContainer
+                      history={history}
+                      lupaKohteet={lupaKohteet}
+                      lupa={lupa}
+                      match={props.match}
+                    />
+                  );
+                }}
+              />
+              <Route
+                path={`${match.path}`}
+                render={() => (
+                  <LupahistoriaProvider>
+                    {ytunnus && (
+                      <Jarjestaja
+                        lupaKohteet={lupaKohteet}
+                        lupa={lupa}
+                        match={match}
+                        muutospyynnot={fromBackend.muutospyynnot.raw}
+                        organisaatio={organisaatio}
+                        user={user}
+                      />
+                    )}
+                  </LupahistoriaProvider>
+                )}
+              />
+            </Switch>
+          </React.Fragment>
+        }
+      ></FetchHandler>
+    </React.Fragment>
+  );
 };
 
 JarjestajaSwitch.propTypes = {

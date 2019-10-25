@@ -276,5 +276,7 @@ function recursiveFetchHandler(
  * @param {Object[]} keysAndDispatchFuncs - [{ key: string, dispatchFn: function}, ...]
  */
 export function fetchFromBackend(keysAndDispatchFuncs = []) {
-  return recursiveFetchHandler(keysAndDispatchFuncs);
+  return keysAndDispatchFuncs.length > 0
+    ? recursiveFetchHandler(keysAndDispatchFuncs)
+    : { abortControllers: [], responses: [] };
 }

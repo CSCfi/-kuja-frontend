@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { logoutUser } from "../../services/backendService/actions";
 import styled from "styled-components";
 import { BackendContext } from "../../context/backendContext";
+import { MessageWrapper } from "../../modules/elements";
 
 const LogoutText = styled.div`
   padding: 14px 20px;
@@ -19,7 +20,7 @@ const Logout = () => {
 
   return (
     <LogoutText>
-      <p>Olet kirjautunut ulos.</p>
+      <MessageWrapper>Olet kirjautunut ulos.</MessageWrapper>
     </LogoutText>
   );
 };
