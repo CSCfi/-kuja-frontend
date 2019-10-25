@@ -42,11 +42,13 @@ const TextBox = props => {
             placeholder={
               props.isDisabled || props.isReadOnly ? "" : props.placeholder
             }
-            rows={props.rows}
-            rowsMax={props.rowsMax}
+            rows={props.isReadOnly ? 1 : props.rows}
+            rowsMax={props.isReadOnly ? 10000 : props.rows}
             className={`${props.isHidden ? "hidden" : ""}
              ${
-               props.isReadOnly ? "color: text-black" : "border border-solid"
+               props.isReadOnly
+                 ? "color: text-black resize-none"
+                 : "border border-solid"
              } w-full p-2`}
             onChange={updateValue}
             value={value}
