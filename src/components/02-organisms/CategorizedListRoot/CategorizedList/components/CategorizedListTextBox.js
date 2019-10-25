@@ -9,7 +9,9 @@ export const CategorizedListTextBox = ({
   propsObj,
   payload,
   onChanges,
-  id
+  id,
+  rows,
+  rowsMax
 }) => {
   const [value, setValue] = useState();
   let isDisabled = false;
@@ -45,6 +47,8 @@ export const CategorizedListTextBox = ({
         isReadOnly={propsObj.isReadOnly}
         title={propsObj.title}
         value={value}
+        rows={rows}
+        rowsMax={rowsMax}
       />
     </div>
   );

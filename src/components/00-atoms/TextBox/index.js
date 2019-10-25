@@ -43,7 +43,7 @@ const TextBox = props => {
               props.isDisabled || props.isReadOnly ? "" : props.placeholder
             }
             rows={props.isReadOnly ? 1 : props.rows}
-            rowsMax={props.isReadOnly ? 10000 : props.rows}
+            rowsMax={props.isReadOnly ? Infinity : props.rowsMax}
             className={`${props.isHidden ? "hidden" : ""}
              ${
                props.isReadOnly
