@@ -16,15 +16,14 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
     : getMetadata(R.slice(1, 3)(anchorParts), stateItem.categories);
 
   const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
-  if (stateItem.article && koulutusCode) {
-    if (stateItem.article.koulutusalat[anchorParts[1]]) {
-      koulutus =
-        R.find(
-          R.propEq("koodi", koulutusCode),
-          stateItem.article.koulutusalat[anchorParts[1]].koulutukset
-        ) || {};
-    }
+  if (koulutusCode) {
+    koulutus = R.compose(
+      R.find(R.propEq("koodi", "" + koulutusCode)),
+      R.chain(R.prop("koulutukset")),
+      R.values,
+      R.path(["article", "koulutusalat"]))(stateItem) || {};
   }
+
   const maaraysUuid = R.prop('maaraysId', koulutus);
 
   const muutos =  {
