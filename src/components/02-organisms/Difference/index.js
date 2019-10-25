@@ -12,6 +12,17 @@ const defaultValues = {
 
 const emptySelectionPlaceholderValue = "";
 
+function isValueValid(isRequired, value) {
+  let isValid = true;
+  if (isRequired === true) {
+    isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
+  }
+  if (value < 0) {
+    isValid = false;
+  }
+  return isValid;
+}
+
 const Difference = ({
   applyForValue = defaultValues.applyForValue,
   delay = defaultValues.delay,
@@ -22,18 +33,25 @@ const Difference = ({
 }) => {
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
+  const isRequired = payload.component.properties.isRequired;
+  const isValid = isValueValid(isRequired, value)
 
   const handleChange = useCallback(
     (actionResults, payload) => {
-      setValue(isNaN(actionResults.value) ? emptySelectionPlaceholderValue : actionResults.value);
+      const resultIsNaN = isNaN(actionResults.value);
+      const result = resultIsNaN ? emptySelectionPlaceholderValue : actionResults.value;
+
+      const resultIsValid = isValueValid(isRequired, result);
+
+      setValue(result);
       if (timeoutHandle) {
         clearTimeout(timeoutHandle);
       }
       setTimeoutHandle(
         setTimeout(() => {
           onChanges(payload, {
-            applyForValue: isNaN(actionResults.value) ? initialValue : actionResults.value,
-            isValid: actionResults.isValid
+            applyForValue: resultIsNaN ? initialValue : actionResults.value,
+            isValid: resultIsValid
           });
         }, delay)
       );
@@ -44,15 +62,6 @@ const Difference = ({
   useEffect(() => {
     setValue(applyForValue === initialValue ? emptySelectionPlaceholderValue : applyForValue);
   }, [applyForValue, initialValue]);
-
-  const isRequired = payload.component.properties.isRequired;
-  let isValid = true;
-  if(isRequired === true) {
-    isValid = !(value === emptySelectionPlaceholderValue) && value >= 0;
-  }
-  if(value < 0) {
-    isValid = false;
-  }
 
   const containerClass = isValid ? "flex" : "flex bg-yellow-300";
 
@@ -74,7 +83,7 @@ const Difference = ({
               type="number"
               inputProps={{ min: "0" }}
               onChange={e =>
-                handleChange({value: parseInt(e.target.value, 10), isValid}, payload)
+                handleChange({value: parseInt(e.target.value, 10)}, payload)
               }
               value={value}
             />
