@@ -167,6 +167,7 @@ const Jarjestaja = ({
                           fromBackend
                         )}
                         match={props.match}
+                        muutospyynnot={muutospyynnot}
                         newApplicationRouteItem={newApplicationRouteItem}
                       />
                     )}

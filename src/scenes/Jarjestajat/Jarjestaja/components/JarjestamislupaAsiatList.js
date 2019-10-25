@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
@@ -52,17 +52,19 @@ const JarjestamislupaAsiatList = ({
     setState({ opened: dnro });
   };
 
-  const renderJarjestamislupaAsiatList = muutospyynnot => {
-    const data = _.orderBy(muutospyynnot.data, ["voimassaalkupvm"], ["desc"]);
-    return _.map(data, historyData => (
-      <JarjestamislupaAsiatListItem
-        url={url}
-        muutospyynto={historyData}
-        key={historyData.uuid}
-        setOpened={setOpened}
-      />
-    ));
-  };
+  const renderJarjestamislupaAsiatList = useMemo(() => {
+    return muutospyynnot => {
+      const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
+      return _.map(data, historyData => (
+        <JarjestamislupaAsiatListItem
+          url={url}
+          muutospyynto={historyData}
+          key={historyData.uuid}
+          setOpened={setOpened}
+        />
+      ));
+    };
+  }, [muutospyynnot, url]);
 
   const muutospyynnotTable = (
     <Paper className={classes.root}>
@@ -127,9 +129,7 @@ const JarjestamislupaAsiatList = ({
             </Button>
           </div>
         </div>
-        {muutospyynnot &&
-        muutospyynnot.data &&
-        muutospyynnot.data.length > 0 ? (
+        {muutospyynnot && muutospyynnot.length > 0 ? (
           muutospyynnotTable
         ) : (
           <div></div>
