@@ -9,7 +9,8 @@ const defaultValues = {
   delay: 300,
   initialValue: 100,
   titles: ["[Title 1]", "[Title 2]", "[Title 3]"],
-  isReadOnly: false
+  isReadOnly: false,
+  isRequired: false
 };
 
 const emptySelectionPlaceholderValue = "";
@@ -32,19 +33,22 @@ const Difference = ({
   onChanges,
   payload = {},
   titles = defaultValues.titles,
-  isReadOnly = defaultValues.isReadOnly
+  isReadOnly = defaultValues.isReadOnly,
+  isRequired = defaultValues.isRequired
 }) => {
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
-  const isRequired = R.path(["component","properties","isRequired"],payload) || false;
-  const isValid = isValueValid(isRequired, value)
+  const required = R.path(["component","properties","isRequired"],payload) || isRequired;
+  const readonly = R.path(["component","properties","isReadOnly"],payload) || isReadOnly;
+
+  const isValid = isValueValid(required, value)
 
   const handleChange = useCallback(
     (actionResults, payload) => {
       const resultIsNaN = isNaN(actionResults.value);
       const result = resultIsNaN ? emptySelectionPlaceholderValue : actionResults.value;
 
-      const resultIsValid = isValueValid(isRequired, result);
+      const resultIsValid = isValueValid(required, result);
 
       setValue(result);
       if (timeoutHandle) {
@@ -53,6 +57,7 @@ const Difference = ({
       setTimeoutHandle(
         setTimeout(() => {
           onChanges(payload, {
+            initialValue: initialValue,
             applyForValue: resultIsNaN ? initialValue : actionResults.value,
             isValid: resultIsValid
           });
@@ -69,7 +74,7 @@ const Difference = ({
   const containerClass = isValid ? "flex" : "flex bg-yellow-300";
 
   const initialAreaTitle = titles[0];
-  const inputAreaTitle = isRequired ? titles[1]+'*' : titles[1];
+  const inputAreaTitle = required ? titles[1]+'*' : titles[1];
   const changeAreaTitle = titles[2];
 
   return (
@@ -81,7 +86,7 @@ const Difference = ({
         </div>
         <div className="flex-1 flex-col">
           <Typography>{inputAreaTitle}</Typography>
-          {!isReadOnly &&<div>
+          {!readonly && <div>
             <TextField
               type="number"
               inputProps={{ min: "0" }}
@@ -91,7 +96,7 @@ const Difference = ({
               value={value}
             />
           </div>}
-          {isReadOnly && <div>
+          {readonly && <div>
             {applyForValue}
           </div>}
         </div>
@@ -110,7 +115,8 @@ Difference.propTypes = {
   initialValue: PropTypes.number,
   onChanges: PropTypes.func.isRequired,
   titles: PropTypes.array,
-  isReadOnly: PropTypes.bool
+  isReadOnly: PropTypes.bool,
+  isRequired: PropTypes.bool
 };
 
 export default Difference;
