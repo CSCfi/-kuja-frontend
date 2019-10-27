@@ -108,6 +108,8 @@ const PerustelutOpiskelijavuodet = props => {
           <OpiskelijavuodetsisaoppilaitosPerustelulomake
             onChangesUpdate={onChangesUpdate}
             changeObjects={perustelutChanges.sisaoppilaitos}
+            differenceTitles={differenceTitles}
+            valueChangeObject={valueChanges.sisaoppilaitos[0].properties}
             sectionId={`${sectionId}_sisaoppilaitos`}
             isReadOnly={isReadOnly}
           ></OpiskelijavuodetsisaoppilaitosPerustelulomake>

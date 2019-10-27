@@ -690,8 +690,15 @@ export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = f
   ];
 };
 
-export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false) => {
+export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false, changeObject, differenceComponentTitles) => {
   return [
+    {
+      anchor: "vaativatuki",
+      title: "Haettava määrä",
+      components: [
+        generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
+      ]
+    },
     {
       anchor: "sisaoppilaitos",
       title: "Mikä on aiheuttanut muutostarpeen?",
