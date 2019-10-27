@@ -13,16 +13,21 @@ const defaultProps = {
 
 const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
   changeObjects = defaultProps.changeObjects,
+  valueChangeObject,
   intl,
   muutosperustelut = defaultProps.muutosperustelut,
   onChangesUpdate,
   sectionId,
-  isReadOnly = defaultProps.isReadOnly
+  isReadOnly = defaultProps.isReadOnly,
+  differenceTitles
 }) => {
+
   const lomake = getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake(
     muutosperustelut,
     R.toUpper(intl.locale),
-    isReadOnly
+    isReadOnly,
+    valueChangeObject,
+    differenceTitles
   );
 
   return (
@@ -43,7 +48,9 @@ const OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = ({
 OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake.propTypes = {
   changeObjects: PropTypes.array,
   muutosperustelut: PropTypes.array,
-  isReadOnly: PropTypes.bool
+  isReadOnly: PropTypes.bool,
+  valueChangeObject: PropTypes.object,
+  differenceTitles: PropTypes.array
 };
 
 export default injectIntl(

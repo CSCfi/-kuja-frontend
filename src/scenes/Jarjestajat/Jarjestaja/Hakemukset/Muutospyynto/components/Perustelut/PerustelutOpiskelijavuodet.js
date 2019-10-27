@@ -7,6 +7,7 @@ import OpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake from "../../
 import OpiskelijavuodetsisaoppilaitosPerustelulomake from "../../../../../../../components/04-forms/muut/OpiskelijavuodetLomake/SisamuotoinenOpetus";
 import OpiskelijavuodetvaativatukiPerustelulomake from "../../../../../../../components/04-forms/muut/OpiskelijavuodetLomake/VaativaKoulutus";
 import { getAnchorPart } from "../../../../../../../utils/common";
+import commonMessages from "../../../../../../../i18n/definitions/common";
 
 const filterChangesByPartialAnchor = (anchor, changeObjects = []) => {
   return R.filter(changeObj => {
@@ -16,7 +17,7 @@ const filterChangesByPartialAnchor = (anchor, changeObjects = []) => {
 
 const PerustelutOpiskelijavuodet = props => {
   const sectionId = "perustelut_opiskelijavuodet";
-  const { onChangesRemove, onChangesUpdate, isReadOnly } = props;
+  const { onChangesRemove, onChangesUpdate, isReadOnly, intl } = props;
 
   const perustelutChanges = useMemo(() => {
     return {
@@ -59,6 +60,11 @@ const PerustelutOpiskelijavuodet = props => {
     !R.isNil(valueChanges.vaativatuki) &&
     !R.isEmpty(valueChanges.vaativatuki);
 
+  const differenceTitles = [
+    intl.formatMessage(commonMessages.current),
+    intl.formatMessage(commonMessages.applyFor),
+    intl.formatMessage(commonMessages.difference)
+  ];
   return (
     <React.Fragment>
       {haveOpiskelijavuodetValueChanges && (
@@ -80,6 +86,8 @@ const PerustelutOpiskelijavuodet = props => {
               ["perustelut", "vahimmaisopiskelijavuodet"],
               props.changeObjects
             )}
+            differenceTitles={differenceTitles}
+            valueChangeObject={valueChanges.vahimmaisopiskelijavuosimaara[0].properties}
             muutosperustelut={props.muutosperustelut}
             sectionId={`${sectionId}_vahimmaisopiskelijavuodet`}
             isReadOnly={isReadOnly}
