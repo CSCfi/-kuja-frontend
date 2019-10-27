@@ -693,7 +693,7 @@ export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = f
 export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false, changeObject, differenceComponentTitles) => {
   return [
     {
-      anchor: "vaativatuki",
+      anchor: "sisäoppilaitos",
       title: "Haettava määrä",
       components: [
         generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
