@@ -6,12 +6,13 @@ import { story1 } from "./storyData/story1";
 
 storiesOf("Difference", module)
   .addDecorator(withInfo)
-  .add("Example 1", () => {
+  .add("Modifiable and not required", () => {
     return (
       <Difference
         initialValue={story1.initialValue}
         value={story1.value}
         titles={story1.titles}
+        payload={{component: {properties: {isRequired: false}}}}
       />
     );
   });
