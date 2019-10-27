@@ -12,7 +12,25 @@ storiesOf("Difference", module)
         initialValue={story1.initialValue}
         value={story1.value}
         titles={story1.titles}
-        payload={{component: {properties: {isRequired: false}}}}
       />
     );
+  })
+  .add("Modifiable and required", () => {
+    return (
+      <Difference
+        initialValue={0}
+        applyForValue={0}
+        titles={story1.titles}
+      />
+    )
+  })
+  .add("Read-only", () => {
+    return (
+      <Difference
+        initialValue={123}
+        applyForValue={4235}
+        titles={story1.titles}
+        isReadOnly={true}
+      />
+    )
   });

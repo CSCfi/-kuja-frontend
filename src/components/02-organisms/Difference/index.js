@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import * as R from "ramda";
 
 const defaultValues = {
   applyForValue: 0,
@@ -35,7 +36,7 @@ const Difference = ({
 }) => {
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
-  const isRequired = payload.component.properties.isRequired;
+  const isRequired = R.path(["component","properties","isRequired"],payload) || false;
   const isValid = isValueValid(isRequired, value)
 
   const handleChange = useCallback(
