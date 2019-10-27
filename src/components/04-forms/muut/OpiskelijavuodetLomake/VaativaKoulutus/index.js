@@ -10,17 +10,20 @@ const defaultProps = {
 
 const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
   changeObjects = defaultProps.changeObjects,
+  valueChangeObject,
   onChangesUpdate,
   sectionId,
-  isReadOnly = defaultProps.isReadOnly
+  isReadOnly = defaultProps.isReadOnly,
+  differenceTitles
 }) => {
-  const lomake = getOpiskelijavuodetVaativaKoulutusPerustelulomake(isReadOnly);
+  const lomake = getOpiskelijavuodetVaativaKoulutusPerustelulomake(isReadOnly, valueChangeObject, differenceTitles);
 
   return (
     <div className="p-8">
       {changeObjects ? (
         <CategorizedListRoot
           anchor={sectionId}
+
           categories={lomake}
           changes={changeObjects}
           onUpdate={onChangesUpdate}
@@ -33,7 +36,9 @@ const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
 
 OpiskelijavuodetVaativaKoulutusPerustelulomake.propTypes = {
   changeObjects: PropTypes.array,
-  isReadOnly: PropTypes.bool
+  isReadOnly: PropTypes.bool,
+  valueChangeObject: PropTypes.object,
+  differenceTitles: PropTypes.array
 };
 
 export default OpiskelijavuodetVaativaKoulutusPerustelulomake;

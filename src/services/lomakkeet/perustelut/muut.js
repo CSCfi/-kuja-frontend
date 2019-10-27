@@ -662,8 +662,15 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
   ];
 };
 
-export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = false) => {
+export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = false, changeObject, differenceComponentTitles) => {
   return [
+    {
+      anchor: "vaativatuki",
+      title: "Haettava määrä",
+      components: [
+        generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
+      ]
+    },
     {
       anchor: "vaativatuki",
       title: "Mikä on aiheuttanut muutostarpeen?",
