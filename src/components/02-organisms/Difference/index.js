@@ -7,7 +7,8 @@ const defaultValues = {
   applyForValue: 0,
   delay: 300,
   initialValue: 100,
-  titles: ["[Title 1]", "[Title 2]", "[Title 3]"]
+  titles: ["[Title 1]", "[Title 2]", "[Title 3]"],
+  isReadOnly: false
 };
 
 const emptySelectionPlaceholderValue = "";
@@ -29,7 +30,8 @@ const Difference = ({
   initialValue = defaultValues.initialValue,
   onChanges,
   payload = {},
-  titles = defaultValues.titles
+  titles = defaultValues.titles,
+  isReadOnly = defaultValues.isReadOnly
 }) => {
   const [timeoutHandle, setTimeoutHandle] = useState(null);
   const [value, setValue] = useState(initialValue);
@@ -78,7 +80,7 @@ const Difference = ({
         </div>
         <div className="flex-1 flex-col">
           <Typography>{inputAreaTitle}</Typography>
-          <div>
+          {!isReadOnly &&<div>
             <TextField
               type="number"
               inputProps={{ min: "0" }}
@@ -87,7 +89,10 @@ const Difference = ({
               }
               value={value}
             />
-          </div>
+          </div>}
+          {isReadOnly && <div>
+            {applyForValue}
+          </div>}
         </div>
         <div className="flex-1 flex-col">
           <Typography>{changeAreaTitle}</Typography>
@@ -103,7 +108,8 @@ Difference.propTypes = {
   delay: PropTypes.number,
   initialValue: PropTypes.number,
   onChanges: PropTypes.func.isRequired,
-  titles: PropTypes.array
+  titles: PropTypes.array,
+  isReadOnly: PropTypes.bool
 };
 
 export default Difference;
