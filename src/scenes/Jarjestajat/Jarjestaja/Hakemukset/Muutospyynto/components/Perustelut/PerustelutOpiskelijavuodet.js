@@ -35,9 +35,33 @@ const PerustelutOpiskelijavuodet = props => {
     };
   },[props.changeObjects.perustelut]);
 
+  const valueChanges = useMemo(() => {
+    return {
+      vahimmaisopiskelijavuosimaara: filterChangesByPartialAnchor(
+        "vahimmaisopiskelijavuodet",
+        props.changeObjects.opiskelijavuodet),
+      sisaoppilaitos: filterChangesByPartialAnchor(
+        "sisaoppilaitos",
+        props.changeObjects.opiskelijavuodet),
+      vaativatuki: filterChangesByPartialAnchor(
+        "vaativatuki",
+        props.changeObjects.opiskelijavuodet)
+    };
+  }, [props.changeObjects.opiskelijavuodet]);
+
+  const haveOpiskelijavuodetValueChanges =
+    !R.isNil(valueChanges.vahimmaisopiskelijavuosimaara) &&
+    !R.isEmpty(valueChanges.vahimmaisopiskelijavuosimaara);
+  const haveSisaoppilaitosValueChanges =
+    !R.isNil(valueChanges.sisaoppilaitos) &&
+    !R.isEmpty(valueChanges.sisaoppilaitos);
+  const haveVaativatukiValueChanges =
+    !R.isNil(valueChanges.vaativatuki) &&
+    !R.isEmpty(valueChanges.vaativatuki);
+
   return (
     <React.Fragment>
-      {perustelutChanges.vahimmaisopiskelijavuosimaara && (
+      {haveOpiskelijavuodetValueChanges && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
           key={`expandable-row-root-vahimmaisopiskelijavuodet`}
@@ -63,7 +87,7 @@ const PerustelutOpiskelijavuodet = props => {
         </ExpandableRowRoot>
       )}
 
-      {perustelutChanges.sisaoppilaitos && (
+      {haveSisaoppilaitosValueChanges && (
         <ExpandableRowRoot
           anchor={`${sectionId}_sisaoppilaitos`}
           key={`expandable-row-root-sisaoppilaitos`}
@@ -82,7 +106,7 @@ const PerustelutOpiskelijavuodet = props => {
         </ExpandableRowRoot>
       )}
 
-      {perustelutChanges.vaativatuki && (
+      {haveVaativatukiValueChanges && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vaativatuki`}
           key={`expandable-row-root-vaativatuki`}
