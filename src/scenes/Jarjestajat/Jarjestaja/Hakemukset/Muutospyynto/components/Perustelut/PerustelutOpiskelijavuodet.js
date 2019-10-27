@@ -8,7 +8,7 @@ import OpiskelijavuodetsisaoppilaitosPerustelulomake from "../../../../../../../
 import OpiskelijavuodetvaativatukiPerustelulomake from "../../../../../../../components/04-forms/muut/OpiskelijavuodetLomake/VaativaKoulutus";
 import { getAnchorPart } from "../../../../../../../utils/common";
 
-const filterChanges = (anchor, changeObjects = []) => {
+const filterChangesByPartialAnchor = (anchor, changeObjects = []) => {
   return R.filter(changeObj => {
     return R.equals(getAnchorPart(changeObj.anchor, 1), anchor);
   })(changeObjects);
@@ -18,26 +18,26 @@ const PerustelutOpiskelijavuodet = props => {
   const sectionId = "perustelut_opiskelijavuodet";
   const { onChangesRemove, onChangesUpdate, isReadOnly } = props;
 
-  const changesByLimitations = useMemo(() => {
+  const perustelutChanges = useMemo(() => {
     return {
-      vahimmaisopiskelijavuosimaara: filterChanges(
+      vahimmaisopiskelijavuosimaara: filterChangesByPartialAnchor(
         "vahimmaisopiskelijavuodet",
         R.path(["vahimmaisopiskelijavuodet"], props.changeObjects.perustelut)
       ),
-      sisaoppilaitos: filterChanges(
+      sisaoppilaitos: filterChangesByPartialAnchor(
         "sisaoppilaitos",
         R.path(["sisaoppilaitos"], props.changeObjects.perustelut)
       ),
-      vaativatuki: filterChanges(
+      vaativatuki: filterChangesByPartialAnchor(
         "vaativatuki",
         R.path(["vaativatuki"], props.changeObjects.perustelut)
       )
     };
-  }, [props.changeObjects.perustelut]);
+  },[props.changeObjects.perustelut]);
 
   return (
     <React.Fragment>
-      {changesByLimitations.vahimmaisopiskelijavuosimaara && (
+      {perustelutChanges.vahimmaisopiskelijavuosimaara && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
           key={`expandable-row-root-vahimmaisopiskelijavuodet`}
@@ -63,11 +63,11 @@ const PerustelutOpiskelijavuodet = props => {
         </ExpandableRowRoot>
       )}
 
-      {changesByLimitations.sisaoppilaitos && (
+      {perustelutChanges.sisaoppilaitos && (
         <ExpandableRowRoot
           anchor={`${sectionId}_sisaoppilaitos`}
           key={`expandable-row-root-sisaoppilaitos`}
-          changes={changesByLimitations.sisaoppilaitos}
+          changes={perustelutChanges.sisaoppilaitos}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -75,18 +75,18 @@ const PerustelutOpiskelijavuodet = props => {
         >
           <OpiskelijavuodetsisaoppilaitosPerustelulomake
             onChangesUpdate={onChangesUpdate}
-            changeObjects={changesByLimitations.sisaoppilaitos}
+            changeObjects={perustelutChanges.sisaoppilaitos}
             sectionId={`${sectionId}_sisaoppilaitos`}
             isReadOnly={isReadOnly}
           ></OpiskelijavuodetsisaoppilaitosPerustelulomake>
         </ExpandableRowRoot>
       )}
 
-      {changesByLimitations.vaativatuki && (
+      {perustelutChanges.vaativatuki && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vaativatuki`}
           key={`expandable-row-root-vaativatuki`}
-          changes={changesByLimitations.vaativatuki}
+          changes={perustelutChanges.vaativatuki}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -94,7 +94,7 @@ const PerustelutOpiskelijavuodet = props => {
         >
           <OpiskelijavuodetvaativatukiPerustelulomake
             onChangesUpdate={onChangesUpdate}
-            changeObjects={changesByLimitations.vaativatuki}
+            changeObjects={perustelutChanges.vaativatuki}
             sectionId={`${sectionId}_vaativatuki`}
             isReadOnly={isReadOnly}
           ></OpiskelijavuodetvaativatukiPerustelulomake>
