@@ -35,7 +35,7 @@ const PerustelutLiitteet = React.memo(props => {
 
       return structure;
     };
-  }, []);
+  }, [props.isReadOnly]);
 
   useEffect(() => {
     const array = getCategories();

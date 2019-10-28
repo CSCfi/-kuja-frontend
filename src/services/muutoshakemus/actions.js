@@ -37,7 +37,6 @@ export function saveMuutospyynto(muutospyynto, attachments) {
   });
   data.append("muutospyynto", muutos, "muutospyynnön json-data");
 
-  console.log(attachments);
   if (attachments) {
     attachments.map(item => {
       if (!item.removed && item.new && item.tiedosto instanceof Blob) {

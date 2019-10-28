@@ -9,7 +9,6 @@ const TaloudellisetYleisettiedot = React.memo(props => {
   const getCategories = useMemo(() => {
     return () => {
       let structure = null;
-      console.info(props.isReadOnly);
       structure = [
         {
           anchor: "edellytykset-tekstikentta",

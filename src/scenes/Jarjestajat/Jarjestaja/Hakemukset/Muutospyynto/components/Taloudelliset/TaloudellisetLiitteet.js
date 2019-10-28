@@ -34,7 +34,7 @@ const TaloudellisetLiitteet = React.memo(props => {
       ];
       return structure;
     };
-  }, []);
+  }, [props.isReadOnly]);
 
   useEffect(() => {
     const array = getCategories();

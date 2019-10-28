@@ -116,7 +116,12 @@ const MuutospyyntoWizard = props => {
       tutkinnot: {},
       liitteet: {}
     },
-    taloudelliset: {},
+    taloudelliset: {
+      yleisettiedot: {},
+      investoinnit: {},
+      tilinpaatostiedot: {},
+      liitteet: {}
+    },
     yhteenveto: {
       yleisettiedot: [],
       hakemuksenliitteet: []
@@ -228,6 +233,10 @@ const MuutospyyntoWizard = props => {
     props.history,
     props.lupa,
     props.match.params
+    // cannot add these, as some might be empty
+    // changeObjects.perustelut,
+    // changeObjects.taloudelliset,
+    // changeObjects.yhteenveto
   ]);
 
   const handlePrev = pageNumber => {
@@ -343,7 +352,9 @@ const MuutospyyntoWizard = props => {
   }
 
   function handleOk() {
-    props.history.push(`/jarjestajat/${props.match.params.ytunnus}/jarjestamislupa-asia`);
+    props.history.push(
+      `/jarjestajat/${props.match.params.ytunnus}/jarjestamislupa-asia`
+    );
   }
 
   useEffect(() => {
@@ -371,6 +382,7 @@ const MuutospyyntoWizard = props => {
       </MessageWrapper>
     );
   }
+  console.log(changeObjects);
 
   return (
     <MuutoshakemusProvider>
