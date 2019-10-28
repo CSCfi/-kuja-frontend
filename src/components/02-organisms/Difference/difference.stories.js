@@ -6,7 +6,7 @@ import { story1 } from "./storyData/story1";
 
 storiesOf("Difference", module)
   .addDecorator(withInfo)
-  .add("Example 1", () => {
+  .add("Modifiable and not required", () => {
     return (
       <Difference
         initialValue={story1.initialValue}
@@ -14,4 +14,23 @@ storiesOf("Difference", module)
         titles={story1.titles}
       />
     );
+  })
+  .add("Modifiable and required", () => {
+    return (
+      <Difference
+        initialValue={0}
+        applyForValue={0}
+        titles={story1.titles}
+      />
+    )
+  })
+  .add("Read-only", () => {
+    return (
+      <Difference
+        initialValue={123}
+        applyForValue={4235}
+        titles={story1.titles}
+        isReadOnly={true}
+      />
+    )
   });

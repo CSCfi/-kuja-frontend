@@ -10,7 +10,8 @@ export const getMuutostarveCheckboxes = (
     return {
       anchor: checkboxItem.koodiArvo,
       layout: {
-        margins: { top: "none" }
+        margins: { top: "none" },
+        indentation: "none"
       },
       components: [
         {
