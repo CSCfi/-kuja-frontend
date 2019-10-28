@@ -104,7 +104,7 @@ const YhteenvetoKooste = ({
 
   return (
     <React.Fragment>
-      {muutoshakemus && koulutustyypit && kohdetiedot && kohdetiedot.length ? (
+      {muutoshakemus && kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
           {muutosperustelut.muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
