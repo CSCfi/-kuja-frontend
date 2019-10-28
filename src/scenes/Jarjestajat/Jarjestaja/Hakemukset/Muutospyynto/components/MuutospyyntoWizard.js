@@ -246,21 +246,23 @@ const MuutospyyntoWizard = ({
     [setChangeObjects]
   );
 
-  const handlePrev = useCallback(() => {
-    return pageNumber => {
+  const handlePrev = useCallback(
+    pageNumber => {
       if (pageNumber !== 1) {
         history.push(String(pageNumber - 1));
       }
-    };
-  }, [history]);
+    },
+    [history]
+  );
 
-  const handleNext = useCallback(() => {
-    return pageNumber => {
+  const handleNext = useCallback(
+    pageNumber => {
       if (pageNumber !== 4) {
         history.push(String(pageNumber + 1));
       }
-    };
-  }, [history]);
+    },
+    [history]
+  );
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
@@ -336,9 +338,9 @@ const MuutospyyntoWizard = ({
   }, [
     muutoshakemus,
     onSectionChangesUpdate,
-    props.history,
-    props.lupa,
-    props.match.params
+    history,
+    lupa,
+    match.params
     // cannot add these, as some might be empty
     // changeObjects.perustelut,
     // changeObjects.taloudelliset,
