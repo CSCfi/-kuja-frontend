@@ -51,7 +51,7 @@ const CheckboxWithLabel = React.memo(
                   checked={props.isChecked}
                   value="1"
                   onChange={handleChanges}
-                  readonly={props.isReadOnly}
+                  readOnly={props.isReadOnly}
                   classes={{
                     checked: styles.checked,
                     root: styles.root

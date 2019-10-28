@@ -210,7 +210,12 @@ const MuutospyyntoWizard = ({
       tutkinnot: {},
       liitteet: {}
     },
-    taloudelliset: {},
+    taloudelliset: {
+      yleisettiedot: {},
+      investoinnit: {},
+      tilinpaatostiedot: {},
+      liitteet: {}
+    },
     yhteenveto: {
       yleisettiedot: [],
       hakemuksenliitteet: []
@@ -331,10 +336,13 @@ const MuutospyyntoWizard = ({
   }, [
     muutoshakemus,
     onSectionChangesUpdate,
-    handleNext,
-    history,
-    lupa,
-    match.params
+    props.history,
+    props.lupa,
+    props.match.params
+    // cannot add these, as some might be empty
+    // changeObjects.perustelut,
+    // changeObjects.taloudelliset,
+    // changeObjects.yhteenveto
   ]);
 
   useEffect(() => {
