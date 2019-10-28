@@ -380,21 +380,23 @@ export function setAttachmentUuids(
   muutospyynto = { liitteet: [] }
 ) {
   return R.map(changeObj => {
-    return R.assocPath(
-      ["properties", "attachments"],
-      R.map(attachment => {
-        const attachmentWithUuid = R.find(
-          R.propEq("tiedostoId", attachment.tiedostoId),
-          muutospyynto.liitteet
-        );
-        return {
-          ...attachment,
-          uuid: attachmentWithUuid ? attachmentWithUuid.uuid : null,
-          new: false
-        };
-      }, changeObj.properties.attachments),
-      changeObj
-    );
+    if (changeObj.properties.attachments) {
+      return R.assocPath(
+        ["properties", "attachments"],
+        R.map(attachment => {
+          const attachmentWithUuid = R.find(
+            R.propEq("tiedostoId", attachment.tiedostoId),
+            muutospyynto.liitteet
+          );
+          return {
+            ...attachment,
+            uuid: attachmentWithUuid ? attachmentWithUuid.uuid : null,
+            new: false
+          };
+        }, changeObj.properties.attachments),
+        changeObj
+      );
+    } else return null;
   }, changeObjects);
 }
 

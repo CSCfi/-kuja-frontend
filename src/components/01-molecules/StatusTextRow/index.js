@@ -12,7 +12,8 @@ const StatusTextRow = React.memo(
     labelStyles,
     statusText,
     statusTextStyleClasses,
-    styleClasses
+    styleClasses,
+    isHidden
   }) => {
     const [classNames, setClassNames] = useState(defaultProps.styleClasses);
 
@@ -22,21 +23,20 @@ const StatusTextRow = React.memo(
       }
     }, [styleClasses]);
 
-    return (
-      <div className={R.join(" ", classNames)} style={labelStyles}>
-        <div className="flex">
-          {statusText && (
-            <div
-              className={R.join(" ", statusTextStyleClasses)}
-              // style={{ transform: "rotate(-50deg)" }}
-            >
-              {statusText}
-            </div>
-          )}
-          {children}
+    if (!isHidden) {
+      return (
+        <div className={R.join(" ", classNames)} style={labelStyles}>
+          <div className="flex">
+            {statusText && (
+              <div className={R.join(" ", statusTextStyleClasses)}>
+                {statusText}
+              </div>
+            )}
+            {children}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 );
 
@@ -44,7 +44,8 @@ StatusTextRow.propTypes = {
   labelStyles: PropTypes.object,
   styleClasses: PropTypes.array,
   statusText: PropTypes.string,
-  statusTextStyleClasses: PropTypes.array
+  statusTextStyleClasses: PropTypes.array,
+  isHidden: PropTypes.bool
 };
 
 export default StatusTextRow;

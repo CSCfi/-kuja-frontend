@@ -12,52 +12,47 @@ const TaloudellisetYleisettiedot = React.memo(props => {
       console.info(props.isReadOnly);
       structure = [
         {
-          anchor: "yleisettiedot",
-          categories: [
+          anchor: "edellytykset-tekstikentta",
+          title: "Taloudelliset edellytykset",
+          styleClasses: ["mb-6"],
+          components: [
             {
-              anchor: "edellytykset-tekstikentta",
-              title: "Taloudelliset edellytykset",
-              styleClasses: ["mb-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "TextBox",
-                  properties: {
-                    isReadOnly: props.isReadOnly,
-                    placeholder: ""
-                  }
-                }
-              ]
-            },
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                isReadOnly: props.isReadOnly,
+                placeholder: ""
+              }
+            }
+          ]
+        },
+        {
+          anchor: "Vaikutukset-tekstikentta",
+          title: "Vaikutukset taloudellisten resurssien kohdentamiseen",
+          styleClasses: ["mb-6"],
+          components: [
             {
-              anchor: "Vaikutukset-tekstikentta",
-              title: "Vaikutukset taloudellisten resurssien kohdentamiseen",
-              styleClasses: ["mb-6"],
-              components: [
-                {
-                  anchor: "A",
-                  name: "TextBox",
-                  properties: {
-                    isReadOnly: props.isReadOnly,
-                    placeholder: ""
-                  }
-                }
-              ]
-            },
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                isReadOnly: props.isReadOnly,
+                placeholder: ""
+              }
+            }
+          ]
+        },
+        {
+          anchor: "sopeuttaminen-tekstikentta",
+          title: "Toiminnan ja talouden sopeuttaminen",
+          styleClasses: [""],
+          components: [
             {
-              anchor: "sopeuttaminen-tekstikentta",
-              title: "Toiminnan ja talouden sopeuttaminen",
-              styleClasses: [""],
-              components: [
-                {
-                  anchor: "A",
-                  name: "TextBox",
-                  properties: {
-                    isReadOnly: props.isReadOnly,
-                    placeholder: ""
-                  }
-                }
-              ]
+              anchor: "A",
+              name: "TextBox",
+              properties: {
+                isReadOnly: props.isReadOnly,
+                placeholder: ""
+              }
             }
           ]
         }

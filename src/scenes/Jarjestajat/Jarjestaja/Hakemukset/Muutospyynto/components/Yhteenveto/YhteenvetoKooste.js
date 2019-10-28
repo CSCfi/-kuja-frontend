@@ -5,6 +5,7 @@ import PerustelutOpiskelijavuodet from "../Perustelut/PerustelutOpiskelijavuodet
 import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
 import PerustelutTutkinnot from "../Perustelut/PerustelutTutkinnot";
+import PerustelutLiitteet from "../Perustelut/PerustelutLiitteet";
 import { MuutosperustelutContext } from "../../../../../../../context/muutosperustelutContext";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
 import { fetchMuutosperustelut } from "../../../../../../../services/muutosperustelut/actions";
@@ -103,8 +104,8 @@ const YhteenvetoKooste = ({
 
   return (
     <React.Fragment>
-      {muutoshakemus && kohdetiedot && kohdetiedot.length ? (
-        <div>
+      {muutoshakemus && koulutustyypit && kohdetiedot && kohdetiedot.length ? (
+        <React.Fragment>
           {muutosperustelut.muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
@@ -167,6 +168,29 @@ const YhteenvetoKooste = ({
                         {..._props}
                       />
                     ) : null}
+                    {/* Attachments for Tutkinnot ja koulutukset */}
+                    <FormSection
+                      id="perustelut_liitteet"
+                      className="my-0"
+                      render={_props => (
+                        <PerustelutLiitteet
+                          stateObject={R.path(
+                            ["perustelut", "liitteet"],
+                            muutoshakemus
+                          )}
+                          changeObjects={{
+                            perustelut: R.path(
+                              ["perustelut", "liitteet"],
+                              changeObjects
+                            )
+                          }}
+                          isReadOnly={true}
+                          {..._props}
+                        />
+                      )}
+                      runOnStateUpdate={onStateUpdate}
+                      runOnChanges={onChangesUpdate}
+                    />
                   </React.Fragment>
                 )}
                 runOnStateUpdate={onStateUpdate}
@@ -370,7 +394,7 @@ const YhteenvetoKooste = ({
               }}
             />
           )}
-        </div>
+        </React.Fragment>
       ) : null}
     </React.Fragment>
   );

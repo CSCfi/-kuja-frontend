@@ -5,7 +5,7 @@ import { injectIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "../Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "../Taloudelliset/TaloudellisetInvestoinnit";
 import TaloudellisetTilinpaatostiedot from "../Taloudelliset/TaloudellisetTilinpaatostiedot";
-// import TaloudellisetLiitteet from "../Taloudelliset/TaloudellisetLiitteet";
+import TaloudellisetLiitteet from "../Taloudelliset/TaloudellisetLiitteet";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -96,13 +96,13 @@ const YhteenvetoTaloudelliset = ({
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
-          {/* <FormSection
-            id="yhteenveto_taloudelliset_liitteet"
+          <FormSection
+            id="taloudelliset_liitteet"
             render={_props => (
               <React.Fragment>
                 <TaloudellisetLiitteet
                   stateObject={R.path(
-                    ["yhteenveto", "taloudelliset", "liitteet"],
+                    ["taloudelliset", "liitteet"],
                     muutoshakemus
                   )}
                   changeObjects={{
@@ -112,12 +112,13 @@ const YhteenvetoTaloudelliset = ({
                     )
                   }}
                   {..._props}
+                  isReadOnly={true}
                 />
               </React.Fragment>
             )}
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
-          /> */}
+          />
         </React.Fragment>
       )}
     </React.Fragment>

@@ -6,6 +6,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { withStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
+import Check from "@material-ui/icons/CheckBoxOutlined";
 
 const RadioButtonWithLabel = React.memo(props => {
   const styles = makeStyles({
@@ -27,13 +28,13 @@ const RadioButtonWithLabel = React.memo(props => {
 
   return (
     <React.Fragment>
-      {!props.isReadOnly || (props.isReadOnly && props.isChecked) ? (
+      {!props.isReadOnly ? (
         <FormGroup row>
           <FormControlLabel
             classes={{
               label: styles.label
             }}
-            disabled={props.isDisabled || props.isReadOnly}
+            disabled={props.isDisabled}
             control={
               <GreenRadio
                 checked={props.isChecked}
@@ -44,7 +45,14 @@ const RadioButtonWithLabel = React.memo(props => {
             label={props.children}
           />
         </FormGroup>
-      ) : null}
+      ) : (
+        props.isChecked && (
+          <div className="flex flex-row text-base mb-2">
+            <Check />
+            <span className="my-auto">{props.children}</span>
+          </div>
+        )
+      )}
     </React.Fragment>
   );
 });

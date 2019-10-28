@@ -6,7 +6,10 @@ import {
   SAVE_MUUTOSPYYNTO_START,
   SAVE_MUUTOSPYYNTO_SUCCESS,
   SAVE_MUUTOSPYYNTO_FAILURE,
-  SET_SECTION_DATA
+  SET_SECTION_DATA,
+  DOWNLOAD_ATTACHMENT_START,
+  DOWNLOAD_ATTACHMENT_SUCCESS,
+  DOWNLOAD_ATTACHMENT_FAILURE
 } from "./actionTypes";
 
 export const setBackendChanges = changes => {
@@ -56,6 +59,20 @@ export function saveMuutospyynto(muutospyynto, attachments) {
       })
       .catch(err => {
         dispatch({ type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err });
+      });
+  };
+}
+
+export function downloadAttachment(uuid) {
+  return dispatch => {
+    dispatch({ type: DOWNLOAD_ATTACHMENT_START });
+    return axios
+      .post(`${API_BASE_URL}/liitteet/${uuid}`)
+      .then(response => {
+        dispatch({ type: DOWNLOAD_ATTACHMENT_SUCCESS, payload: response });
+      })
+      .catch(err => {
+        dispatch({ type: DOWNLOAD_ATTACHMENT_FAILURE, payload: err });
       });
   };
 }
