@@ -64,7 +64,7 @@ const JarjestamislupaAsiatList = ({
         />
       ));
     };
-  }, [muutospyynnot, url]);
+  }, [url]);
 
   const muutospyynnotTable = (
     <Paper className={classes.root}>

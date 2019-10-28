@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useMemo } from "react";
 import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
@@ -37,6 +37,7 @@ const MuutospyyntoWizardPerustelut = ({
   muutoshakemus,
   onChangesUpdate,
   onStateUpdate,
+  tutkinnot,
   vankilat = []
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
@@ -48,16 +49,6 @@ const MuutospyyntoWizardPerustelut = ({
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
     LomakkeetContext
   );
-  const [isTutkinnotChanges, setIsTutkinnotChanges] = useState(false);
-  const [isKoulutuksetChanges, setIsKoulutuksetChanges] = useState(false);
-  const [isOpetuskieletChanges, setIsOpetuskieletChanges] = useState(false);
-  const [isTutkintokieletChanges, setIsTutkintokieletChanges] = useState(false);
-  const [isToimintaalueChanges, setIsToimintaalueChanges] = useState(false);
-  const [isOpiskelijavuodetChanges, setIsOpiskelijavuodetChanges] = useState(
-    false
-  );
-  const [isMuutChanges, setIsMuutChanges] = useState(false);
-  const [isAnyChanges, setIsAnyChanges] = useState(false);
 
   useEffect(() => {
     fetchMuutosperustelut()(muutosperustelutDispatch);
@@ -115,78 +106,106 @@ const MuutospyyntoWizardPerustelut = ({
     );
   }, [maaraystyypit]);
 
-  useEffect(() => {
-    let tutkinnotChanges;
-    let koulutuksetChanges;
-    let opetuskieletChanges;
-    let tutkintokieletChanges;
-    let toimintaalueChanges;
-    let opiskelijavuodetChanges;
-    let muutChanges;
+  const isTutkinnotChanges = useMemo(() => {
+    return R.not(R.isEmpty(changeObjects.tutkinnot));
+  }, [changeObjects.tutkinnot]);
 
-    tutkinnotChanges = R.path(["tutkinnot"], changeObjects);
-    R.forEachObjIndexed(item => {
-      if (!R.isEmpty(item)) {
-        setIsTutkinnotChanges(true);
-      }
-    }, tutkinnotChanges || []);
+  const isToimintaalueChanges = useMemo(() => {
+    return false;
+  }, [changeObjects.toimintaalue]);
 
-    koulutuksetChanges = R.path(["koulutukset"], changeObjects);
-    R.forEachObjIndexed(item => {
-      if (!R.isEmpty(item)) {
-        setIsKoulutuksetChanges(true);
-      }
-    }, koulutuksetChanges || []);
+  const isKoulutuksetChanges = useMemo(() => {
+    return R.not(R.isEmpty(changeObjects.koulutukset));
+  }, [changeObjects.koulutukset]);
 
-    opetuskieletChanges = R.path(["kielet", "opetuskielet"], changeObjects);
-    setIsOpetuskieletChanges(
-      opetuskieletChanges && !R.isEmpty(opetuskieletChanges)
-    );
+  const { isTutkintokieletChanges, isOpetuskieletChanges } = useMemo(() => {
+    return {
+      isOpetuskieletChanges: R.not(
+        R.isEmpty(R.prop("opetuskielet", changeObjects.kielet))
+      ),
+      isTutkintokieletChanges: R.not(
+        R.isEmpty(changeObjects.kielet.tutkintokielet || {})
+      )
+    };
+  }, [changeObjects.kielet]);
 
-    tutkintokieletChanges = R.path(["kielet", "tutkintokielet"], changeObjects);
-    R.forEachObjIndexed(item => {
-      if (!R.isEmpty(item)) {
-        setIsTutkintokieletChanges(true);
-      }
-    }, tutkintokieletChanges || []);
+  const isOpiskelijavuodetChanges = useMemo(() => {
+    return false;
+  }, [changeObjects.opiskelijavuodet]);
 
-    toimintaalueChanges = R.path(["toimintaalue"], changeObjects);
-    setIsToimintaalueChanges(
-      toimintaalueChanges && !R.isEmpty(toimintaalueChanges)
-    );
+  const isMuutChanges = useMemo(() => {
+    return false;
+  }, [changeObjects.muut]);
 
-    opiskelijavuodetChanges = R.path(["opiskelijavuodet"], changeObjects);
-    setIsOpiskelijavuodetChanges(
-      opiskelijavuodetChanges && !R.isEmpty(opiskelijavuodetChanges)
-    );
+  const isAnyChanges = useMemo(() => {
+    console.info(isTutkinnotChanges);
+    return isTutkinnotChanges;
+  }, [isTutkinnotChanges]);
 
-    muutChanges = R.path(["muut"], changeObjects);
-    R.forEachObjIndexed(item => {
-      if (!R.isEmpty(item)) {
-        setIsMuutChanges(true);
-      }
-    }, muutChanges || []);
+  // useEffect(() => {
+  //   let tutkinnotChanges;
+  //   let koulutuksetChanges;
+  //   let opetuskieletChanges;
+  //   let tutkintokieletChanges;
+  //   let toimintaalueChanges;
+  //   let opiskelijavuodetChanges;
+  //   let muutChanges;
 
-    setIsAnyChanges(
-      isTutkinnotChanges ||
-        isKoulutuksetChanges ||
-        isOpetuskieletChanges ||
-        isTutkintokieletChanges ||
-        isToimintaalueChanges ||
-        isOpiskelijavuodetChanges ||
-        isMuutChanges
-    );
-  }, [
-    isTutkinnotChanges,
-    isKoulutuksetChanges,
-    isOpetuskieletChanges,
-    isTutkintokieletChanges,
-    isToimintaalueChanges,
-    isOpiskelijavuodetChanges,
-    isMuutChanges,
-    isAnyChanges,
-    changeObjects
-  ]);
+  //   tutkinnotChanges = R.path(["tutkinnot"], changeObjects);
+  //   R.forEachObjIndexed(item => {
+  //     if (!R.isEmpty(item)) {
+  //       setIsTutkinnotChanges(true);
+  //     }
+  //   }, tutkinnotChanges || []);
+
+  //   koulutuksetChanges = R.path(["koulutukset"], changeObjects);
+  //   R.forEachObjIndexed(item => {
+  //     if (!R.isEmpty(item)) {
+  //       setIsKoulutuksetChanges(true);
+  //     }
+  //   }, koulutuksetChanges || []);
+
+  //   opetuskieletChanges = R.path(["kielet", "opetuskielet"], changeObjects);
+  //   setIsOpetuskieletChanges(
+  //     opetuskieletChanges && !R.isEmpty(opetuskieletChanges)
+  //   );
+
+  //   tutkintokieletChanges = R.path(["kielet", "tutkintokielet"], changeObjects);
+  //   R.forEachObjIndexed(item => {
+  //     if (!R.isEmpty(item)) {
+  //       setIsTutkintokieletChanges(true);
+  //     }
+  //   }, tutkintokieletChanges || []);
+
+  //   toimintaalueChanges = R.path(["toimintaalue"], changeObjects);
+  //   setIsToimintaalueChanges(
+  //     toimintaalueChanges && !R.isEmpty(toimintaalueChanges)
+  //   );
+
+  //   opiskelijavuodetChanges = R.path(["opiskelijavuodet"], changeObjects);
+  //   setIsOpiskelijavuodetChanges(
+  //     opiskelijavuodetChanges && !R.isEmpty(opiskelijavuodetChanges)
+  //   );
+
+  //   muutChanges = R.path(["muut"], changeObjects);
+  //   R.forEachObjIndexed(item => {
+  //     if (!R.isEmpty(item)) {
+  //       setIsMuutChanges(true);
+  //     }
+  //   }, muutChanges || []);
+
+  //   setIsAnyChanges(
+  //     isTutkinnotChanges ||
+  //       isKoulutuksetChanges ||
+  //       isOpetuskieletChanges ||
+  //       isTutkintokieletChanges ||
+  //       isToimintaalueChanges ||
+  //       isOpiskelijavuodetChanges ||
+  //       isMuutChanges
+  //   );
+  // }, [
+  //   changeObjects.tutkinnot
+  // ]);
 
   return (
     <React.Fragment>
@@ -221,8 +240,9 @@ const MuutospyyntoWizardPerustelut = ({
                       kohde={R.find(
                         R.propEq("tunniste", "tutkinnotjakoulutukset")
                       )(kohteet)}
-                      koulutukset={koulutukset}
+                      tutkinnot={tutkinnot}
                       lupa={lupa}
+                      lupaKohteet={lupaKohteet}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       muutosperustelut={muutosperustelut}
                       lomakkeet={lomakkeet.perustelut.tutkinnot}
@@ -248,7 +268,7 @@ const MuutospyyntoWizardPerustelut = ({
                       )(kohteet)}
                       koulutukset={koulutukset}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
-                      maaraykset={lupa.data.maaraykset}
+                      maaraykset={lupa.maaraykset}
                       lomakkeet={lomakkeet.perustelut.koulutukset}
                       stateObject={R.path([
                         "perustelut",
@@ -338,9 +358,9 @@ const MuutospyyntoWizardPerustelut = ({
                       kohde={R.find(
                         R.propEq("tunniste", "opetusjatutkintokieli")
                       )(kohteet)}
-                      koulutukset={koulutukset}
+                      tutkinnot={tutkinnot}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
-                      maaraykset={lupa.data.maaraykset}
+                      maaraykset={lupa.maaraykset}
                       opetuskielet={kielet.opetuskielet}
                       stateObjects={{
                         tutkintokielet: R.path(["kielet", "tutkintokielet"])(
@@ -487,6 +507,7 @@ const MuutospyyntoWizardPerustelut = ({
 
 MuutospyyntoWizardPerustelut.propTypes = {
   changeObjects: PropTypes.object,
+  kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   maaraystyypit: PropTypes.array,
@@ -496,6 +517,7 @@ MuutospyyntoWizardPerustelut.propTypes = {
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
+  tutkinnot: PropTypes.object,
   vankilat: PropTypes.array
 };
 

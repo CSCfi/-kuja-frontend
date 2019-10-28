@@ -145,6 +145,7 @@ const MuutospyyntoWizard = ({
   }, [fromBackend.koulutusalat]);
 
   const tutkinnot = useMemo(() => {
+    console.info(fromBackend.tutkinnot.raw, koulutusalat, koulutustyypit);
     return parseKoulutuksetAll(
       fromBackend.tutkinnot.raw,
       koulutusalat,
@@ -232,6 +233,7 @@ const MuutospyyntoWizard = ({
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
       if (id && changeObjects) {
+        console.info(id);
         setChangeObjects(prevState => {
           const nextState = R.assocPath(
             R.split("_", id),
@@ -466,7 +468,7 @@ const MuutospyyntoWizard = ({
       if (id && state) {
         setDataBySection(prevData => {
           const nextData = R.assocPath(R.split("_", id), state, prevData);
-          console.info("Next state objects: ", nextData);
+          console.info(id, state, "Next state objects: ", nextData);
           return nextData;
         });
       }
@@ -560,6 +562,7 @@ const MuutospyyntoWizard = ({
                           muutoshakemus={dataBySection}
                           onChangesUpdate={onSectionChangesUpdate}
                           onStateUpdate={onSectionStateUpdate}
+                          tutkinnot={tutkinnot}
                           vankilat={vankilat}
                         />
                       </LomakkeetProvider>

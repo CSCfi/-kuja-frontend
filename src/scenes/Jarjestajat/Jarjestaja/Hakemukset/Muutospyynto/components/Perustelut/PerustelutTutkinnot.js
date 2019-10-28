@@ -11,12 +11,13 @@ const defaultProps = {
   changeObjects: {},
   isReadOnly: false,
   kohde: {},
-  koulutukset: {},
   lomakkeet: {},
   lupa: {},
+  lupaKohteet: {},
   maaraystyyppi: {},
   muutosperustelut: {},
-  stateObject: {}
+  stateObject: {},
+  tutkinnot: {}
 };
 
 const PerustelutTutkinnot = React.memo(
@@ -25,9 +26,10 @@ const PerustelutTutkinnot = React.memo(
     intl,
     isReadOnly = defaultProps.isReadOnly,
     kohde = defaultProps.kohde,
-    koulutukset = defaultProps.koulutukset,
+    tutkinnot = defaultProps.tutkinnot,
     lomakkeet = defaultProps.lomakkeet,
     lupa = defaultProps.lupa,
+    lupaKohteet = defaultProps.lupaKohteet,
     maaraystyyppi = defaultProps.maaraystyyppi,
     onChangesRemove,
     onChangesUpdate,
@@ -41,10 +43,10 @@ const PerustelutTutkinnot = React.memo(
     useEffect(() => {
       const sortedKoulutusData = R.sortBy(
         R.prop("koodiArvo"),
-        R.values(koulutukset.koulutusdata)
+        R.values(tutkinnot)
       );
       setKoulutusdata(sortedKoulutusData);
-    }, [koulutukset]);
+    }, [tutkinnot]);
 
     const getItems = useMemo(() => {
       const getArticle = (areaCode, articles = []) => {
@@ -57,7 +59,7 @@ const PerustelutTutkinnot = React.memo(
         return R.addIndex(R.map)((koulutusala, i) => {
           const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
           const anchorInitial = `tutkinnot_${areaCode}`;
-          const article = getArticle(areaCode, lupa.kohteet[1].maaraykset);
+          const article = getArticle(areaCode, lupaKohteet[1].maaraykset);
           const areaChanges = R.prop(areaCode, _changes);
           const categories = areaChanges
             ? getCategoriesForPerustelut(
@@ -76,11 +78,12 @@ const PerustelutTutkinnot = React.memo(
           return { areaCode, article, categories, title };
         }, _.cloneDeep(koulutusdata));
       };
-    }, [isReadOnly, kohde, locale, lomakkeet, lupa.kohteet, maaraystyyppi]);
+    }, [isReadOnly, kohde, locale, lomakkeet, lupaKohteet, maaraystyyppi]);
 
     useEffect(() => {
       if (koulutusdata.length) {
         const items = getItems(koulutusdata, changeObjects.tutkinnot);
+        console.info(items);
         onStateUpdate(
           {
             items
@@ -136,7 +139,7 @@ PerustelutTutkinnot.propTypes = {
   changeObjects: PropTypes.object,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
-  koulutukset: PropTypes.object,
+  tutkinnot: PropTypes.object,
   lomakkeet: PropTypes.object,
   lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,

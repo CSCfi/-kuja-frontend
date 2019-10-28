@@ -18,12 +18,11 @@ const PerustelutTutkintokielet = React.memo(props => {
           const anchorParts = R.split(".", changeObj.anchor);
           const item = R.find(
             R.propEq("koodiArvo", anchorParts[2]),
-            props.koulutukset.koulutusdata[areaCode].koulutukset[anchorParts[1]]
-              .koulutukset
+            props.tutkinnot[areaCode].koulutukset[anchorParts[1]].koulutukset
           );
           const koulutusalaMetadata = R.find(
             R.propEq("kieli", R.toUpper(props.intl.locale)),
-            props.koulutukset.koulutusdata[areaCode].metadata
+            props.tutkinnot[areaCode].metadata
           );
           const metadata = R.find(
             R.propEq("kieli", R.toUpper(props.intl.locale)),
@@ -75,7 +74,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                 isSelectedByDefault &&
                 !!!R.find(
                   R.propEq("value", language.value),
-                  changeObj.properties.value
+                  changeObj.properties.value || []
                 );
               return isAdded || isRemoved
                 ? {
@@ -114,7 +113,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                     ]
                   }
                 : [];
-            }, R.flatten([selectedByDefault, changeObj.properties.value])),
+            }, R.flatten([selectedByDefault, changeObj.properties.value].filter(Boolean))),
             metadata: {
               areaCode,
               title: koulutusalaMetadata.nimi
@@ -194,7 +193,7 @@ PerustelutTutkintokielet.defaultValues = {
 
 PerustelutTutkintokielet.propTypes = {
   changeObjects: PropTypes.object,
-  koulutukset: PropTypes.object,
+  tutkinnot: PropTypes.object,
   maaraykset: PropTypes.array,
   stateObjects: PropTypes.object,
   onChangesRemove: PropTypes.func,
