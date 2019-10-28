@@ -73,7 +73,7 @@ class JarjestamislupaAsiakirjat extends Component {
   }
 
   renderJarjestamislupaAsiatList = data => {
-    data = _.orderBy(data, ['paatospvm'], ['desc']);
+    data = _.orderBy(data, ['paatospvm', 'uuid'], ['desc', 'desc']);
     return _.map(data, historyData => <JarjestamislupaAsiakirjatItem lupaHistoria={historyData} key={historyData.diaarinumero} setOpened={this.setOpened}/>)
 
   }

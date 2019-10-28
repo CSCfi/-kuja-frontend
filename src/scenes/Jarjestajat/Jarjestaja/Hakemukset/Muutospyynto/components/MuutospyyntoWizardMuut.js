@@ -35,7 +35,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
           (kuvaus || article.koodiArvo === "22") &&
           kasite &&
           (isInLupa ||
-            (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
+            (article.koodiArvo !== "15"))
         ) {
           group[kasite] = group[kasite] || [];
           group[kasite].push(article);

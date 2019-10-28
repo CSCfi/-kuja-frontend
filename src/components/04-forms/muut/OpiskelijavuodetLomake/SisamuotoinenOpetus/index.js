@@ -12,9 +12,11 @@ const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
   changeObjects = defaultProps.changeObjects,
   onChangesUpdate,
   sectionId,
-  isReadOnly = defaultProps.isReadOnly
+  isReadOnly = defaultProps.isReadOnly,
+  valueChangeObject,
+  differenceTitles
 }) => {
-  const lomake = getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake(isReadOnly);
+  const lomake = getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake(isReadOnly, valueChangeObject, differenceTitles);
 
   return (
     <div className="p-8">
@@ -33,7 +35,9 @@ const OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = ({
 
 OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake.propTypes = {
   changeObjects: PropTypes.array,
-  isReadOnly: PropTypes.bool
+  isReadOnly: PropTypes.bool,
+  valueChangeObject: PropTypes.object,
+  differenceTitles: PropTypes.array
 };
 
 export default OpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake;

@@ -598,13 +598,43 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
   ];
 };
 
+export const generateDifferenceComponent = ({
+  titles,
+  changeObject = {},
+  isReadOnly = false,
+  isRequired = false,
+  name = ''
+}) => {
+  return {
+    anchor: "A",
+    name: "Difference",
+    properties: {
+      initialValue: changeObject.initialValue || 0,
+      applyForValue: changeObject.applyForValue || 0,
+      titles,
+      isReadOnly,
+      isRequired,
+      name
+    }
+  }
+};
+
 export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
   checkboxItems,
   locale,
-  isReadOnly = false
+  isReadOnly = false,
+  changeObject,
+  differenceComponentTitles
 ) => {
   const checkboxes = getMuutostarveCheckboxes(checkboxItems, locale, isReadOnly);
   return [
+    {
+      anchor: "vahimmaisopiskelijavuodet",
+      title: "Haettava määrä",
+      components: [
+        generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
+      ]
+    },
     {
       anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
@@ -614,6 +644,9 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
       anchor: "2",
       categories: [
         {
+          layout: {
+            indentation: "none"
+          },
           anchor: "tehtavan-tarpeellisuus-field",
           components: [
             {
@@ -632,8 +665,15 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
   ];
 };
 
-export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = false) => {
+export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = false, changeObject, differenceComponentTitles) => {
   return [
+    {
+      anchor: "vaativatuki",
+      title: "Haettava määrä",
+      components: [
+        generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
+      ]
+    },
     {
       anchor: "vaativatuki",
       title: "Mikä on aiheuttanut muutostarpeen?",
@@ -653,8 +693,15 @@ export const getOpiskelijavuodetVaativaKoulutusPerustelulomake = (isReadOnly = f
   ];
 };
 
-export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false) => {
+export const getOpiskelijavuodetSisaoppilaitosmuotoinenOpetusPerustelulomake = (isReadOnly = false, changeObject, differenceComponentTitles) => {
   return [
+    {
+      anchor: "sisaoppilaitos",
+      title: "Haettava määrä",
+      components: [
+        generateDifferenceComponent({changeObject, titles: differenceComponentTitles, isReadOnly: true })
+      ]
+    },
     {
       anchor: "sisaoppilaitos",
       title: "Mikä on aiheuttanut muutostarpeen?",
