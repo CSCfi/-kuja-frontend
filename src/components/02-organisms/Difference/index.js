@@ -82,11 +82,11 @@ const Difference = ({
       <div className={containerClass}>
         <div className="flex-1 flex-col">
           <Typography>{initialAreaTitle}</Typography>
-          <div>{initialValue}</div>
+          {initialValue}
         </div>
         <div className="flex-1 flex-col">
           <Typography>{inputAreaTitle}</Typography>
-          {!readonly && <div>
+          {!readonly &&
             <TextField
               type="number"
               inputProps={{ min: "0" }}
@@ -95,14 +95,12 @@ const Difference = ({
               }
               value={value}
             />
-          </div>}
-          {readonly && <div>
-            {applyForValue}
-          </div>}
+          }
+          {readonly && applyForValue}
         </div>
         <div className="flex-1 flex-col">
           <Typography>{changeAreaTitle}</Typography>
-          <div>{(value ? value : applyForValue) - initialValue}</div>
+          {(value ? value : applyForValue) - initialValue}
         </div>
       </div>
     </React.Fragment>
