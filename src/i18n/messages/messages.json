@@ -85,6 +85,51 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.attachmentNone",
+    "defaultMessage": "Ei lisättyjä liitteitä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentError",
+    "defaultMessage": "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentAdd",
+    "defaultMessage": "Lisää liite",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentRemove",
+    "defaultMessage": "Poista liite",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentSecret",
+    "defaultMessage": "Salainen liite",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentSecretSelect",
+    "defaultMessage": "Merkitse liite salaiseksi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentSecretUnselect",
+    "defaultMessage": "Merkitse liite julkiseksi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentName",
+    "defaultMessage": "Liitteen nimi *",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.attachmentErrorName",
+    "defaultMessage": "Nimi on pakollinen",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"

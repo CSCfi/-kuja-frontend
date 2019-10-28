@@ -3,7 +3,10 @@ import {
   SAVE_MUUTOSPYYNTO_START,
   SAVE_MUUTOSPYYNTO_SUCCESS,
   SAVE_MUUTOSPYYNTO_FAILURE,
-  SET_SECTION_DATA
+  SET_SECTION_DATA,
+  DOWNLOAD_ATTACHMENT_START,
+  DOWNLOAD_ATTACHMENT_SUCCESS,
+  DOWNLOAD_ATTACHMENT_FAILURE
 } from "./actionTypes";
 
 export default function(state, action) {
@@ -48,6 +51,27 @@ export default function(state, action) {
           saved: false,
           hasErrored: true
         }
+      };
+    case DOWNLOAD_ATTACHMENT_START:
+      return {
+        ...state,
+        isDownloading: true,
+        hasErrored: false
+      };
+
+    case DOWNLOAD_ATTACHMENT_SUCCESS:
+      return {
+        ...state,
+        isDownloading: false,
+        hasErrored: false,
+        tiedosto: action.payload
+      };
+    case DOWNLOAD_ATTACHMENT_FAILURE:
+      return {
+        ...state,
+        isDownloading: false,
+        updated: false,
+        hasErrored: true
       };
     default:
       return state;

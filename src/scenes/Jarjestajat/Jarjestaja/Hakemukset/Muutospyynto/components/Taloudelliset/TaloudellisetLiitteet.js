@@ -20,7 +20,8 @@ const TaloudellisetLiitteet = React.memo(props => {
               styleClasses: ["w-full"],
               properties: {
                 title:
-                  "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet."
+                  "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet.",
+                isHidden: props.isReadOnly
               }
             },
             {
@@ -74,6 +75,7 @@ TaloudellisetLiitteet.propTypes = {
   kohde: PropTypes.object,
   lupa: PropTypes.object,
   onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  isReadOnly: PropTypes.bool
 };
 export default injectIntl(TaloudellisetLiitteet);

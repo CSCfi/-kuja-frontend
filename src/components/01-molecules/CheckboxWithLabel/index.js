@@ -6,7 +6,7 @@ import green from "@material-ui/core/colors/green";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import * as R from "ramda";
-
+import Check from "@material-ui/icons/CheckBoxOutlined";
 /**
  * Label and checkbox united.
  */
@@ -29,18 +29,19 @@ const CheckboxWithLabel = React.memo(
 
     return (
       <React.Fragment>
-        {!props.isReadOnly || (props.isReadOnly && props.isChecked) ? (
+        {!props.isReadOnly ? (
           <FormGroup row>
             <FormControlLabel
               classes={{
                 label: styles.label
               }}
-              disabled={props.isDisabled || props.isReadOnly}
+              disabled={props.isDisabled}
               control={
                 <Checkbox
                   checked={props.isChecked}
                   value="1"
                   onChange={handleChanges}
+                  readonly={props.isReadOnly}
                   classes={{
                     checked: styles.checked,
                     root: styles.root
@@ -50,7 +51,14 @@ const CheckboxWithLabel = React.memo(
               label={props.children}
             />
           </FormGroup>
-        ) : null}
+        ) : (
+          props.isChecked && (
+            <div className="flex flex-row text-base mb-2">
+              <Check />
+              <span className="my-auto">{props.children}</span>
+            </div>
+          )
+        )}
       </React.Fragment>
     );
   },

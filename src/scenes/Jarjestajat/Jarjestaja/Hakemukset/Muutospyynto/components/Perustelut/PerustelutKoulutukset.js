@@ -11,7 +11,7 @@ const PerustelutKoulutukset = React.memo(props => {
   return (
     <React.Fragment>
       {props.kohde && props.maaraystyyppi && props.muutoshakemus ? (
-        <div className="py-16">
+        <div className="py-4">
           {!!R.path(
             ["koulutukset", "valmentavatKoulutukset"],
             props.changeObjects

@@ -4,12 +4,7 @@ import styled from "styled-components";
 import { injectIntl } from "react-intl";
 import { COLORS } from "../../../modules/styles";
 import Attachment from "../Attachment/index";
-import { FaRegFile, FaFile, FaTimes, FaLock } from "react-icons/fa";
-import {
-  HAKEMUS_VIRHE,
-  HAKEMUS_OTSIKOT,
-  HAKEMUS_VIESTI
-} from "../../../locales/uusiHakemusFormConstants";
+import { FaRegFile, FaFile, FaTimes, FaLock, FaDownload } from "react-icons/fa";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -19,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import common from "../../../i18n/definitions/common";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -182,6 +178,10 @@ const Attachments = React.memo(props => {
   const [fileError, setFileError] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
+
+  const {
+    intl: { formatMessage }
+  } = props;
 
   const openNameModal = () => {
     setNameMissing(false);
@@ -352,6 +352,32 @@ const Attachments = React.memo(props => {
     else return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
   };
 
+  const showFile = (e, file) => {
+    const reader = new FileReader();
+    if (file.tiedosto && file.tiedosto instanceof Blob) {
+      reader.readAsDataURL(file.tiedosto);
+      reader.onload = function() {
+        const blob = reader.result;
+        let url = blob;
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = file.nimi + "." + file.tyyppi;
+        a.click();
+      };
+    } else {
+      // props.downloadAttachment(file.uuid).then(response => {
+      //   const blob = reader.result;
+      //   let url = blob;
+      //   let a = document.createElement("a");
+      //   a.href = url;
+      //   a.download = response.nimi + "." + response.tyyppi;
+      //   a.click();
+      // });
+      console.log(file.tiedosto);
+      console.log(typeof file.tiedosto);
+    }
+  };
+
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
     if (attachments && attachments.length > 0)
@@ -362,7 +388,7 @@ const Attachments = React.memo(props => {
           (!props.placement || liite.paikka === props.placement)
         ) {
           return (
-            <div
+            <React.Fragment
               key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
             >
               <LiiteListItem>
@@ -380,11 +406,18 @@ const Attachments = React.memo(props => {
                 />
                 <span className="type">{liite.tyyppi}</span>
                 <span className="size">{bytesToSize(liite.koko)}</span>
+                <button
+                  title="Näytä"
+                  onClick={e => showFile(e, liite)}
+                  className="ml-2"
+                >
+                  <FaDownload />
+                </button>
                 <Checkbox
                   title={
                     liite.salainen
-                      ? HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA_POISTA.FI
-                      : HAKEMUS_OTSIKOT.SALAINEN_LIITE_VALINTA.FI
+                      ? formatMessage(common.attachmentSecretUnselect)
+                      : formatMessage(common.attachmentSecretSelect)
                   }
                 >
                   <input
@@ -410,7 +443,7 @@ const Attachments = React.memo(props => {
                   </label>
                 </Checkbox>
                 <button
-                  title={HAKEMUS_OTSIKOT.POISTA_LIITE.FI}
+                  title={formatMessage(common.attachmentRemove)}
                   onClick={e =>
                     removeAttachment(e, liite.tiedostoId, liite.uuid)
                   }
@@ -418,31 +451,73 @@ const Attachments = React.memo(props => {
                   <FaTimes />
                 </button>
               </LiiteListItem>
-            </div>
+            </React.Fragment>
           );
         } else return null;
       });
     else return null;
   };
 
+  // Lists all attachments based on placement parameter given in read only state
+  const LiiteListReadOnly = () => {
+    if (attachments && attachments.length > 0)
+      return attachments.map(liite => {
+        if (
+          (liite.tiedostoId || liite.uuid) &&
+          !liite.removed &&
+          (!props.placement || liite.paikka === props.placement)
+        ) {
+          return (
+            <React.Fragment
+              key={props.id + liite.tiedostoId ? liite.tiedostoId : liite.uuid}
+            >
+              <LiiteListItem>
+                {liite.new ? <FaFile /> : <FaRegFile />}
+                <span className="w-full ml-1">{liite.nimi}</span>
+                <span className="type">{liite.tyyppi}</span>
+                <span className="size">{bytesToSize(liite.koko)}</span>
+                <button
+                  title="Näytä"
+                  onClick={e => showFile(e, liite)}
+                  className="ml-2"
+                >
+                  <FaDownload />
+                </button>
+                <span
+                  title={
+                    liite.salainen ? formatMessage(common.attachmentSecret) : ""
+                  }
+                >
+                  {liite.salainen && <FaLock />}
+                </span>
+              </LiiteListItem>
+            </React.Fragment>
+          );
+        } else return null;
+      });
+    else {
+      return (
+        <p>
+          <i>{formatMessage(common.attachmentNone)}</i>
+        </p>
+      );
+    }
+  };
+  console.log(props.isReadOnly);
   return (
     <React.Fragment>
-      {/* {!props.listHidden && (
-        <h4>{props.header ? props.header : HAKEMUS_OTSIKOT.LIITE_HEADER.FI}</h4>
-      )}
-      {props.listHidden && <br />} */}
-      {!props.showListOnly && (
+      {!props.showListOnly && !props.isReadOnly && (
         <Attachment
           setAttachment={setAttachment}
           setAttachmentName={setAttachmentName}
         />
       )}
-      {fileError && <Error>{HAKEMUS_VIRHE.LIITE.FI}</Error>}
-      {/* { this.state.fileAdded !=="" && 
-          <Message>{HAKEMUS_VIESTI.LIITE_LISATTY.FI}: {this.state.fileAdded}</Message> 
-        } */}
-      {!props.listHidden && (
+      {fileError && <Error>{formatMessage(common.attachmentError)}</Error>}
+      {!props.listHidden && !props.isReadOnly && (
         <LiiteList key={props.placement + props.id + Math.random()} />
+      )}
+      {!props.listHidden && props.isReadOnly && (
+        <LiiteListReadOnly key={props.placement + props.id + Math.random()} />
       )}
       <Dialog
         open={isNameModalOpen}
@@ -451,7 +526,7 @@ const Attachments = React.memo(props => {
         maxWidth="sm"
       >
         <DialogTitle id="name-dialog">
-          {HAKEMUS_VIESTI.TIEDOSTON_NIMI.FI}
+          {formatMessage(common.attachmentName)}
         </DialogTitle>
         <DialogContent>
           <Input
@@ -480,18 +555,20 @@ const Attachments = React.memo(props => {
               }
             }}
           />
-          <Error>{nameMissing && HAKEMUS_VIESTI.TIEDOSTO_NIMI_ERROR.FI}</Error>
+          <Error>
+            {nameMissing && formatMessage(common.attachmentErrorName)}
+          </Error>
         </DialogContent>
         <DialogActions>
           <Button onClick={addAttachment} color="primary" variant="contained">
-            {HAKEMUS_VIESTI.OK.FI}
+            {formatMessage(common.ok)}
           </Button>
           <Button
             onClick={cancelAttachment}
             color="secondary"
             variant="outlined"
           >
-            {HAKEMUS_VIESTI.PERUUTA.FI}
+            {formatMessage(common.cancel)}
           </Button>
         </DialogActions>
       </Dialog>
@@ -508,7 +585,9 @@ Attachments.propTypes = {
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
   showListOnly: PropTypes.bool,
-  listHidden: PropTypes.bool
+  isReadOnly: PropTypes.bool,
+  listHidden: PropTypes.bool,
+  downloadAttachment: PropTypes.func
 };
 
 export default injectIntl(Attachments);

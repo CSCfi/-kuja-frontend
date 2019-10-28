@@ -290,6 +290,7 @@ class MuutospyyntoEditWizard extends Component {
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
                     save={this.save}
+                    preview={this.preview}
                     update={this.update}
                     lupa={lupa}
                     initialValues={initialValues}
@@ -306,6 +307,7 @@ class MuutospyyntoEditWizard extends Component {
                     onSubmit={this.nextPage}
                     onCancel={this.onCancel}
                     save={this.save}
+                    preview={this.preview}
                     muutosperustelut={this.props.muutosperustelut.data}
                     vankilat={this.props.vankilat.data}
                     ELYkeskukset={this.props.ELYkeskukset.data}
@@ -317,6 +319,7 @@ class MuutospyyntoEditWizard extends Component {
                     onCancel={this.onCancel}
                     onSubmit={this.nextPage}
                     save={this.save}
+                    preview={this.preview}
                     initialValues={initialValues}
                   />
                 )}

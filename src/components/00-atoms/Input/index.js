@@ -39,15 +39,25 @@ const Input = props => {
       defaultValue={props.value}
       label={props.label}
       disabled={props.isDisabled || props.isReadOnly}
-      placeholder={props.placeholder}
+      inputprops={{
+        readOnly: props.isReadOnly
+      }}
+      placeholder={
+        props.isDisabled || props.isReadOnly ? "" : props.placeholder
+      }
       rows={props.rows}
       margin="dense"
       rowsMax={props.rowsMax}
-      className={`${props.isHidden ? "hidden" : ""} p-2`}
+      className={`
+        ${props.isHidden ? "hidden" : ""}
+        ${props.isReadOnly ? "color: text-black border-collapse" : ""} p-2`}
       onChange={e =>
         changesOutDelayed(props.payload, { value: e.target.value })
       }
       error={props.error}
+      InputLabelProps={
+        props.isReadOnly ? { shrink: true, color: "text-black" } : {}
+      }
       variant="outlined"
       style={
         props.fullWidth

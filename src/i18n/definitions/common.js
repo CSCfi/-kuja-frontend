@@ -57,5 +57,42 @@ export default defineMessages({
     id: "common.attachmentInfo",
     defaultMessage:
       "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
+  },
+  attachmentNone: {
+    id: "common.attachmentNone",
+    defaultMessage: "Ei lisättyjä liitteitä"
+  },
+  attachmentError: {
+    id: "common.attachmentError",
+    defaultMessage:
+      "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
+  },
+  attachmentAdd: {
+    id: "common.attachmentAdd",
+    defaultMessage: "Lisää liite"
+  },
+  attachmentRemove: {
+    id: "common.attachmentRemove",
+    defaultMessage: "Poista liite"
+  },
+  attachmentSecret: {
+    id: "common.attachmentSecret",
+    defaultMessage: "Salainen liite"
+  },
+  attachmentSecretSelect: {
+    id: "common.attachmentSecretSelect",
+    defaultMessage: "Merkitse liite salaiseksi"
+  },
+  attachmentSecretUnselect: {
+    id: "common.attachmentSecretUnselect",
+    defaultMessage: "Merkitse liite julkiseksi"
+  },
+  attachmentName: {
+    id: "common.attachmentName",
+    defaultMessage: "Liitteen nimi *"
+  },
+  attachmentErrorName: {
+    id: "common.attachmentErrorName",
+    defaultMessage: "Nimi on pakollinen"
   }
 });
