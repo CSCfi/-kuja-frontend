@@ -644,6 +644,9 @@ export const getOpiskelijavuodetVahimmaisopiskelijavuosimaaraPerustelulomake = (
       anchor: "2",
       categories: [
         {
+          layout: {
+            indentation: "none"
+          },
           anchor: "tehtavan-tarpeellisuus-field",
           components: [
             {
