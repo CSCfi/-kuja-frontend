@@ -24,7 +24,6 @@ const MuutospyyntoWizardTaloudelliset = ({
       {changeObjects && (
         <React.Fragment>
           <FormSection
-            className="my-0"
             id="taloudelliset_yleisettiedot"
             render={_props => (
               <React.Fragment>
