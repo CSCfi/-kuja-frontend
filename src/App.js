@@ -19,8 +19,6 @@ import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/Jarjest
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { JarjestajatProvider } from "./context/jarjestajatContext";
-import { LuvatProvider } from "./context/luvatContext";
-import { MuutospyynnotProvider } from "./context/muutospyynnotContext";
 import { BackendContext } from "./context/backendContext";
 import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
 import Navigation from "./components/02-organisms/Navigation";
@@ -186,19 +184,15 @@ const App = ({ intl, user }) => {
                       <Route
                         path="/jarjestajat/:ytunnus"
                         render={props => (
-                          <LuvatProvider>
-                            <MuutospyynnotProvider>
-                              <JarjestajaSwitch
-                                history={props.history}
-                                match={props.match}
-                                organisaatio={R.prop(
-                                  "raw",
-                                  fromBackend.organisaatio
-                                )}
-                                user={user}
-                              />
-                            </MuutospyynnotProvider>
-                          </LuvatProvider>
+                          <JarjestajaSwitch
+                            history={props.history}
+                            match={props.match}
+                            organisaatio={R.prop(
+                              "raw",
+                              fromBackend.organisaatio
+                            )}
+                            user={user}
+                          />
                         )}
                       />
                     </Switch>
@@ -214,6 +208,7 @@ const App = ({ intl, user }) => {
             </div>
           </Router>
         }
+        user={user}
       ></FetchHandler>
     </React.Fragment>
   );
