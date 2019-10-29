@@ -87,7 +87,7 @@ export function getFetchState(fetchSetup = [], fromBackend = []) {
     ready:
       100 * (R.filter(R.equals("ready"), statuses).length / R.length(statuses))
   };
-  // console.info(keyData);
+
   if (R.includes(statusMap.erroneous, statuses)) {
     conclusion = statusMap.erroneous;
   } else if (R.includes(statusMap.fetching, statuses)) {
@@ -105,7 +105,7 @@ export function getFetchState(fetchSetup = [], fromBackend = []) {
   ) {
     conclusion = statusMap.ready;
   }
-  // console.info(statuses, percentage);
+
   return {
     conclusion,
     notReadyList,
@@ -195,10 +195,18 @@ async function run(
         type: FETCH_FROM_BACKEND_FAILED
       });
     }
-
     return response;
   } catch (err) {
-    console.log(err);
+    /**
+     * Fetching failed. So, let's mark it up for later use.
+     */
+    dispatchFn({
+      key,
+      err,
+      subKey,
+      path,
+      type: FETCH_FROM_BACKEND_FAILED
+    });
   }
 }
 
@@ -269,8 +277,7 @@ function recursiveFetchHandler(
       index + 1
     );
   }
-
-  return { abortControllers, responses };
+  return { abortControllers, promises: responses };
 }
 
 /**
@@ -280,5 +287,5 @@ function recursiveFetchHandler(
 export function fetchFromBackend(keysAndDispatchFuncs = []) {
   return keysAndDispatchFuncs.length > 0
     ? recursiveFetchHandler(keysAndDispatchFuncs)
-    : { abortControllers: [], responses: [] };
+    : { abortControllers: [], promises: [] };
 }
