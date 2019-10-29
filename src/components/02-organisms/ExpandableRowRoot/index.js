@@ -10,7 +10,6 @@ import * as R from "ramda";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import commonMessages from "../../../i18n/definitions/common";
-import { prototype } from "stream";
 
 const useStyles = makeStyles(() => ({
   button: {
