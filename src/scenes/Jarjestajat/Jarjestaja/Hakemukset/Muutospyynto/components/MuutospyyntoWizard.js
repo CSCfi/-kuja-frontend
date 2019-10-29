@@ -382,7 +382,6 @@ const MuutospyyntoWizard = props => {
       </MessageWrapper>
     );
   }
-  console.log(changeObjects);
 
   return (
     <MuutoshakemusProvider>
