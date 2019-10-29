@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { Redirect } from "react-router-dom";
-import { UserContext } from "../../context/userContext"
+import { BackendContext } from "../../context/backendContext";
 
 import { ROLE_ESITTELIJA } from "modules/constants";
 
@@ -12,23 +12,21 @@ const Successful = styled.div`
 `;
 
 const CasAuthenticated = () => {
-  const { state } = useContext(UserContext);
+  const { state } = useContext(BackendContext);
 
-  let organisaatio = undefined;
   let ytunnus = undefined;
-  if (state.oppilaitos && state.oppilaitos.organisaatio) {
-    organisaatio = state.oppilaitos.organisaatio;
-    if (organisaatio) {
-      if (organisaatio.ytunnus) {
-        ytunnus = organisaatio.ytunnus;
-      }
-    }
+  if (state.organisaatio) {
+    ytunnus = state.organisaatio.raw.ytunnus;
   }
 
-  if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
+  // TODO: Different roles routing here when applicable
+  if (
+    state.kauttaja &&
+    state.kayttaja.raw.roles.length > 1 &&
+    state.kayttaja.raw.roles[1] === ROLE_ESITTELIJA
+  ) {
     return <Redirect to="/asiat" />;
   }
-
   return (
     <div>
       {state.hasErrored ? (
