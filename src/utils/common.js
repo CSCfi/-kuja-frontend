@@ -31,13 +31,13 @@ const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
 }
 
 /**
- * Returns the form component object found from given anchor in a state object. We expect that the anchor is
- * a . delimited path with starting elements being category anchors and the last element being a component anchor
+ * Returns the element found from given anchor in a category hierarchy. We expect that the anchor is
+ * a . delimited path with elementes being categories and optionally the last element being a component
  *
  * @param anchor The path for scanning the component from stateObject (e.g. vahimmaisopiskelijavuodet.A)
  * @param stateObject
  */
-export const findComponentFromCategoryHierarchyWithAnchor = (anchor, rootObject) => {
+export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => {
   if(!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
   const anchorParts = anchor.split('.');
   let currentElement = rootObject;

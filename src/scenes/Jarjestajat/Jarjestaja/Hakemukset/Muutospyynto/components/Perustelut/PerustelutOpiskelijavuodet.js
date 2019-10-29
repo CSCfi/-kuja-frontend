@@ -8,7 +8,7 @@ import OpiskelijavuodetsisaoppilaitosPerustelulomake from "../../../../../../../
 import OpiskelijavuodetvaativatukiPerustelulomake from "../../../../../../../components/04-forms/muut/OpiskelijavuodetLomake/VaativaKoulutus";
 import {
   findAnchoredElement,
-  findComponentFromCategoryHierarchyWithAnchor,
+  findAnchoredElementFromCategoryHierarchy,
   getAnchorPart
 } from "../../../../../../../utils/common";
 import commonMessages from "../../../../../../../i18n/definitions/common";
@@ -59,15 +59,15 @@ const PerustelutOpiskelijavuodet = props => {
 
   const initialValues = useMemo(() => {
     return {
-      vahimmaisopiskelijavuosimaara: findComponentFromCategoryHierarchyWithAnchor(
+      vahimmaisopiskelijavuosimaara: findAnchoredElementFromCategoryHierarchy(
         "vahimmaisopiskelijavuodet.A",
         props.stateObject.opiskelijavuodet
       ),
-      sisaoppilaitos: findComponentFromCategoryHierarchyWithAnchor(
+      sisaoppilaitos: findAnchoredElementFromCategoryHierarchy(
         "sisaoppilaitos.A",
         props.stateObject.opiskelijavuodet
       ),
-      vaativatuki: findComponentFromCategoryHierarchyWithAnchor(
+      vaativatuki: findAnchoredElementFromCategoryHierarchy(
         "vaativatuki.A",
         props.stateObject.opiskelijavuodet
       )
