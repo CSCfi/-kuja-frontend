@@ -63,56 +63,6 @@ export function isReady(backendData) {
   return backendData && R.equals(backendData.status, statusMap.ready);
 }
 
-export function getFetchState(fetchSetup = [], fromBackend = []) {
-  let conclusion = R.length(fetchSetup) > 0 ? "unknown" : "ready";
-  const keyData = R.map(setupObj => {
-    const path =
-      setupObj.path || [setupObj.key, setupObj.subKey].filter(Boolean);
-    const backendData = R.path(path, fromBackend);
-    return backendData ? { key: setupObj.key, data: backendData } : null;
-  }, fetchSetup).filter(Boolean);
-  const statuses = R.map(R.path(["data", "status"]), keyData);
-  const notReadyList = R.map(
-    R.prop("key"),
-    R.filter(
-      R.compose(
-        R.not,
-        R.equals("ready"),
-        R.path(["data", "status"])
-      ),
-      keyData
-    )
-  ).filter(Boolean);
-  const percentage = {
-    ready:
-      100 * (R.filter(R.equals("ready"), statuses).length / R.length(statuses))
-  };
-
-  if (R.includes(statusMap.erroneous, statuses)) {
-    conclusion = statusMap.erroneous;
-  } else if (R.includes(statusMap.fetching, statuses)) {
-    conclusion = statusMap.fetching;
-  } else if (
-    // If the 'statuses' array is full of "ready" values and nothing else.
-    R.and(
-      R.compose(
-        R.equals(1),
-        R.length,
-        R.uniq
-      )(statuses),
-      R.includes("ready", statuses)
-    )
-  ) {
-    conclusion = statusMap.ready;
-  }
-
-  return {
-    conclusion,
-    notReadyList,
-    percentage
-  };
-}
-
 /**
  * The comprehensive list of the backend routes.
  * Format: { key: url, ... }
