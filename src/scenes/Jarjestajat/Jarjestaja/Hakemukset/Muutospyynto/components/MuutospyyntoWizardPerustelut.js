@@ -130,7 +130,7 @@ const MuutospyyntoWizardPerustelut = ({
   }, [changeObjects.kielet]);
 
   const isOpiskelijavuodetChanges = useMemo(() => {
-    return R.not(R.isEmpty(changeObjects.opiskelijavuodet || {}));
+    return R.not(R.isEmpty(changeObjects.opiskelijavuodet || {}));
   }, [changeObjects.opiskelijavuodet]);
 
   const isMuutChanges = useMemo(() => {
@@ -147,7 +147,15 @@ const MuutospyyntoWizardPerustelut = ({
       isOpiskelijavuodetChanges ||
       isMuutChanges
     );
-  }, [isTutkinnotChanges]);
+  }, [
+    isTutkinnotChanges,
+    isKoulutuksetChanges,
+    isOpetuskieletChanges,
+    isTutkintokieletChanges,
+    isToimintaalueChanges,
+    isOpiskelijavuodetChanges,
+    isMuutChanges
+  ]);
 
   return (
     <React.Fragment>
@@ -378,7 +386,10 @@ const MuutospyyntoWizardPerustelut = ({
                       muutosperustelut.muutosperusteluList
                     )}
                     stateObject={{
-                      opiskelijavuodet: R.path(["opiskelijavuodet"], muutoshakemus)
+                      opiskelijavuodet: R.path(
+                        ["opiskelijavuodet"],
+                        muutoshakemus
+                      )
                     }}
                     {..._props}
                   />
