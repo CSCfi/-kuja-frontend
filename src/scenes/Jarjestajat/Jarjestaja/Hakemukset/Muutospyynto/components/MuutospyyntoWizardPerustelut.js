@@ -377,9 +377,9 @@ const MuutospyyntoWizardPerustelut = ({
                     muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                       muutosperustelut.muutosperusteluList
                     )}
-                    stateObject={R.path(["perustelut", "opiskelijavuodet"])(
-                      muutoshakemus
-                    )}
+                    stateObject={{
+                      opiskelijavuodet: R.path(["opiskelijavuodet"], muutoshakemus)
+                    }}
                     {..._props}
                   />
                 </React.Fragment>

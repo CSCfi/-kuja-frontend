@@ -23,13 +23,52 @@ export function getAnchorPart(anchor, index, separator = ".") {
 }
 
 /**
- * Removes an anchor part by index.
- *
- * @param {string} anchor
- * @param {number} index
- * @param {string} separator - Default value: .
+ * Returns the element with the given anchor from the array of elements
+ * @param anchor
+ * @param scanArray
  */
-export const removeAnchorPart = (anchor, index, separator = ".") => {
+export const findAnchoredElement = (anchor, scanArray) => {
+  return R.find(R.propEq("anchor", anchor), scanArray || []);
+};
+
+export const findAnchoredCategoryFromElement = (anchor, elementObject) => {
+  return findAnchoredElement(anchor, elementObject.categories);
+};
+
+export const findAnchoredComponentFromElement = (anchor, elementObject) => {
+  return findAnchoredElement(anchor, elementObject.components);
+};
+
+const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
+  let retval = findAnchoredCategoryFromElement(anchor, elementObject);
+  if(!retval) retval = findAnchoredComponentFromElement(anchor, elementObject);
+  return retval;
+}
+
+/**
+ * Returns the element found from given anchor in a category hierarchy. We expect that the anchor is
+ * a . delimited path with elementes being categories and optionally the last element being a component
+ *
+ * @param anchor The path for scanning the component from stateObject (e.g. vahimmaisopiskelijavuodet.A)
+ * @param stateObject
+ */
+export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => {
+  if(!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
+  const anchorParts = anchor.split('.');
+  let currentElement = rootObject;
+
+  for(const anchorPart of anchorParts) {
+    currentElement = findAnchoredCategoryOrComponentFromElement(anchorPart, currentElement);
+
+    if(!currentElement) {
+      return undefined;
+    }
+  }
+
+  return currentElement;
+};
+
+export const removeAnchorPart = (anchor, index) => {
   return R.compose(
     R.join(separator),
     R.remove(index, 1),

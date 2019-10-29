@@ -57,7 +57,6 @@ const Difference = ({
       setTimeoutHandle(
         setTimeout(() => {
           onChanges(payload, {
-            initialValue: initialValue,
             applyForValue: resultIsNaN ? initialValue : actionResults.value,
             isValid: resultIsValid
           });
