@@ -19,9 +19,10 @@ const CasAuthenticated = () => {
     ytunnus = state.organisaatio.raw.ytunnus;
   }
 
+  console.log(state.kayttaja.raw.roles);
   // TODO: Different roles routing here when applicable
   if (
-    state.kauttaja &&
+    state.kayttaja &&
     state.kayttaja.raw.roles.length > 1 &&
     state.kayttaja.raw.roles[1] === ROLE_ESITTELIJA
   ) {
