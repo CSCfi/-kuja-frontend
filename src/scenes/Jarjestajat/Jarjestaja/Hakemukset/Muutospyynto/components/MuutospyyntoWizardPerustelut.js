@@ -419,8 +419,7 @@ const MuutospyyntoWizardPerustelut = ({
                       muutosperustelut.muutosperusteluList
                     )}
                     stateObject={{
-                      opiskelijavuodet: R.path(["opiskelijavuodet"], muutoshakemus),
-                      perustelut: R.path(["perustelut"],muutoshakemus)
+                      opiskelijavuodet: R.path(["opiskelijavuodet"], muutoshakemus)
                     }}
                     {..._props}
                   />
