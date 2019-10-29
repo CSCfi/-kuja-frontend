@@ -23,6 +23,10 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
   );
   const [handledXhrCalls, setHandledXhrCalls] = useState([]);
 
+  const abortIdentifier = useMemo(() => {
+    return `aborting-${R.join("_", R.map(R.prop("key"), fetchSetup))}`;
+  }, [fetchSetup]);
+
   /**
    * Percentage is shown when XHR calls are in progress. It tells
    * how many calls are done.
@@ -70,7 +74,7 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
    */
   useEffect(() => {
     // aborting = user is leaving the current page
-    localForage.setItem("aborting", false);
+    localForage.removeItem(abortIdentifier);
     // This helps us to show the percentage to a user.
     R.forEach(response => {
       response.then(result => {
@@ -85,11 +89,11 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
       // Property 'aborting' is set to figure out if the status should
       // be erroneous when some of the XHR calls are failing because
       // of the user is leaving the current page.
-      localForage.setItem("aborting", true).then(() => {
+      localForage.setItem(abortIdentifier, true).then(() => {
         abort(abortControllers);
       });
     };
-  }, [abortControllers, responses]);
+  }, [abortControllers, abortIdentifier, responses]);
 
   /**
    * When all the backend calls are ready it's time to calculate
@@ -104,7 +108,7 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
         if (isAllOK) {
           setFetchStatus("ready");
         } else {
-          localForage.getItem("aborting").then(value => {
+          localForage.getItem(abortIdentifier).then(value => {
             // If user is NOT leaving the page during an XHR call
             if (!value) {
               // There's at least one unsuccessful XHR call at this point so
@@ -125,3 +129,5 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
 };
 
 export default FetchHandler;
+
+// https://localhost/jarjestajat/2064886-7/hakemukset-ja-paatokset/eea5dbec-f990-11e9-adf7-02420a141703/1

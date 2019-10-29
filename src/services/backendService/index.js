@@ -29,7 +29,7 @@ export const statusMap = {
  */
 export function abort(abortControllers = []) {
   try {
-    R.forEachObjIndexed(abortController => {
+    R.forEach(abortController => {
       abortController.abort();
     }, abortControllers);
   } catch (err) {
@@ -164,40 +164,42 @@ async function run(
   /**
    * It's time to fetch some data!
    */
-  const response = await fetch(url, {
-    ...options,
-    signal: abortController.signal
-  }).catch(err => {
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: abortController.signal
+    });
+
+    if (response && response.ok) {
+      const data = await response.json();
+
+      /**
+       * Data will be saved to the same context as what dispatchFn presents.
+       */
+      dispatchFn({
+        data,
+        key,
+        subKey,
+        path,
+        type: FETCH_FROM_BACKEND_SUCCESS
+      });
+    } else {
+      /**
+       * Fetching failed. So, let's mark it up for later use.
+       */
+      dispatchFn({
+        key,
+        response,
+        subKey,
+        path,
+        type: FETCH_FROM_BACKEND_FAILED
+      });
+    }
+
+    return response;
+  } catch (err) {
     console.log(err);
-  });
-
-  if (response && response.ok) {
-    const data = await response.json();
-
-    /**
-     * Data will be saved to the same context as what dispatchFn presents.
-     */
-    dispatchFn({
-      data,
-      key,
-      subKey,
-      path,
-      type: FETCH_FROM_BACKEND_SUCCESS
-    });
-  } else {
-    /**
-     * Fetching failed. So, let's mark it up for later use.
-     */
-    dispatchFn({
-      key,
-      response,
-      subKey,
-      path,
-      type: FETCH_FROM_BACKEND_FAILED
-    });
   }
-
-  return response;
 }
 
 /**
