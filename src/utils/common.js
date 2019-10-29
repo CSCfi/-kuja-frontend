@@ -68,7 +68,7 @@ export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => 
   return currentElement;
 };
 
-export const removeAnchorPart = (anchor, index) => {
+export const removeAnchorPart = (anchor, index, separator = ".") => {
   return R.compose(
     R.join(separator),
     R.remove(index, 1),
