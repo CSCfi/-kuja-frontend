@@ -24,7 +24,7 @@ import PerustelutLiitteet from "./Perustelut/PerustelutLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardPerustelut = ({
-  changeObjects,
+  changeObjects = {},
   intl,
   intl: { formatMessage },
   kielet,
@@ -107,105 +107,47 @@ const MuutospyyntoWizardPerustelut = ({
   }, [maaraystyypit]);
 
   const isTutkinnotChanges = useMemo(() => {
-    return R.not(R.isEmpty(changeObjects.tutkinnot));
+    return R.not(R.isEmpty(changeObjects.tutkinnot || {}));
   }, [changeObjects.tutkinnot]);
 
-  const isToimintaalueChanges = useMemo(() => {
-    return false;
-  }, [changeObjects.toimintaalue]);
-
   const isKoulutuksetChanges = useMemo(() => {
-    return R.not(R.isEmpty(changeObjects.koulutukset));
+    return R.not(R.isEmpty(changeObjects.koulutukset || {}));
   }, [changeObjects.koulutukset]);
+
+  const isToimintaalueChanges = useMemo(() => {
+    return R.not(R.isEmpty(changeObjects.toimintaalue || {}));
+  }, [changeObjects.toimintaalue]);
 
   const { isTutkintokieletChanges, isOpetuskieletChanges } = useMemo(() => {
     return {
       isOpetuskieletChanges: R.not(
-        R.isEmpty(R.prop("opetuskielet", changeObjects.kielet))
+        R.isEmpty(R.prop("opetuskielet", changeObjects.kielet) || {})
       ),
       isTutkintokieletChanges: R.not(
-        R.isEmpty(changeObjects.kielet.tutkintokielet || {})
+        R.isEmpty(R.prop("tutkintokielet", changeObjects.kielet) || {})
       )
     };
   }, [changeObjects.kielet]);
 
   const isOpiskelijavuodetChanges = useMemo(() => {
-    return false;
+    return R.not(R.isEmpty(changeObjects.opiskelijavuodet || {}));
   }, [changeObjects.opiskelijavuodet]);
 
   const isMuutChanges = useMemo(() => {
-    return false;
+    return R.not(R.isEmpty(changeObjects.muut || {}));
   }, [changeObjects.muut]);
 
   const isAnyChanges = useMemo(() => {
-    console.info(isTutkinnotChanges);
-    return isTutkinnotChanges;
+    return (
+      isTutkinnotChanges ||
+      isKoulutuksetChanges ||
+      isOpetuskieletChanges ||
+      isTutkintokieletChanges ||
+      isToimintaalueChanges ||
+      isOpiskelijavuodetChanges ||
+      isMuutChanges
+    );
   }, [isTutkinnotChanges]);
-
-  // useEffect(() => {
-  //   let tutkinnotChanges;
-  //   let koulutuksetChanges;
-  //   let opetuskieletChanges;
-  //   let tutkintokieletChanges;
-  //   let toimintaalueChanges;
-  //   let opiskelijavuodetChanges;
-  //   let muutChanges;
-
-  //   tutkinnotChanges = R.path(["tutkinnot"], changeObjects);
-  //   R.forEachObjIndexed(item => {
-  //     if (!R.isEmpty(item)) {
-  //       setIsTutkinnotChanges(true);
-  //     }
-  //   }, tutkinnotChanges || []);
-
-  //   koulutuksetChanges = R.path(["koulutukset"], changeObjects);
-  //   R.forEachObjIndexed(item => {
-  //     if (!R.isEmpty(item)) {
-  //       setIsKoulutuksetChanges(true);
-  //     }
-  //   }, koulutuksetChanges || []);
-
-  //   opetuskieletChanges = R.path(["kielet", "opetuskielet"], changeObjects);
-  //   setIsOpetuskieletChanges(
-  //     opetuskieletChanges && !R.isEmpty(opetuskieletChanges)
-  //   );
-
-  //   tutkintokieletChanges = R.path(["kielet", "tutkintokielet"], changeObjects);
-  //   R.forEachObjIndexed(item => {
-  //     if (!R.isEmpty(item)) {
-  //       setIsTutkintokieletChanges(true);
-  //     }
-  //   }, tutkintokieletChanges || []);
-
-  //   toimintaalueChanges = R.path(["toimintaalue"], changeObjects);
-  //   setIsToimintaalueChanges(
-  //     toimintaalueChanges && !R.isEmpty(toimintaalueChanges)
-  //   );
-
-  //   opiskelijavuodetChanges = R.path(["opiskelijavuodet"], changeObjects);
-  //   setIsOpiskelijavuodetChanges(
-  //     opiskelijavuodetChanges && !R.isEmpty(opiskelijavuodetChanges)
-  //   );
-
-  //   muutChanges = R.path(["muut"], changeObjects);
-  //   R.forEachObjIndexed(item => {
-  //     if (!R.isEmpty(item)) {
-  //       setIsMuutChanges(true);
-  //     }
-  //   }, muutChanges || []);
-
-  //   setIsAnyChanges(
-  //     isTutkinnotChanges ||
-  //       isKoulutuksetChanges ||
-  //       isOpetuskieletChanges ||
-  //       isTutkintokieletChanges ||
-  //       isToimintaalueChanges ||
-  //       isOpiskelijavuodetChanges ||
-  //       isMuutChanges
-  //   );
-  // }, [
-  //   changeObjects.tutkinnot
-  // ]);
 
   return (
     <React.Fragment>
