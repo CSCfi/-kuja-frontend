@@ -48,7 +48,8 @@ const CasAuthenticated = props => {
   return (
     <Successful>
       <h2>
-        {formatMessage(commonMessages.welcome)},{" "}
+        {formatMessage(commonMessages.welcome)}
+        {", "}
         {sessionStorage.getItem("username")}
       </h2>
     </Successful>
