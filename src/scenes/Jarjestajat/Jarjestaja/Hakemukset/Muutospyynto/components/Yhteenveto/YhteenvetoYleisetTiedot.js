@@ -8,9 +8,7 @@ const YhteenvetoYleisettiedot = React.memo(props => {
   const { sectionId, onStateUpdate } = props;
   const getCategories = useMemo(() => {
     return () => {
-      let structure = null;
-
-      structure = [
+      const structure = [
         {
           anchor: "yhteyshenkilo",
           title: "Yhteyshenkilön tiedot",
@@ -61,7 +59,7 @@ const YhteenvetoYleisettiedot = React.memo(props => {
           components: [
             {
               anchor: "ajankohta",
-              name: "Input",
+              name: "Datepicker",
               styleClasses: ["w-full sm:pr-2 sm:w-1/2 md:w-1/4"],
               properties: {
                 fullWidth: true,
