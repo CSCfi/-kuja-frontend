@@ -76,10 +76,6 @@ const Navigation = props => {
               {props.intl.formatMessage(userMessages.ownOrganization)}
             </LinkItem>
           )}
-
-          {sessionStorage.getItem("role") === ROLE_ESITTELIJA ? (
-            <LinkItem to="/asiat">Asiat</LinkItem>
-          ) : null}
         </HeaderBarLower>
       </AppBar>
     </div>
