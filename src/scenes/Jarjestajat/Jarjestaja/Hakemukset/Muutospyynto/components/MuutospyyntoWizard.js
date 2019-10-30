@@ -233,14 +233,12 @@ const MuutospyyntoWizard = ({
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
       if (id && changeObjects) {
-        console.info(id);
         setChangeObjects(prevState => {
-          const nextState = R.assocPath(
-            R.split("_", id),
-            changeObjects,
-            prevState
-          );
-          console.info("Next changeObjects:", nextState);
+          const nextState =
+            changeObjects.length > 0
+              ? R.assocPath(R.split("_", id), changeObjects, prevState)
+              : R.dissocPath(R.split("_", id), prevState);
+          console.info("Next changeObjects:", id, nextState);
           return nextState;
         });
       }
