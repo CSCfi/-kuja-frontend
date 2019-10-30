@@ -109,6 +109,7 @@ const MuutospyyntoWizard = ({
   match,
   muut = [],
   muutospyynto = {},
+  onNewDocSave,
   vankilat = []
 }) => {
   /**
@@ -145,11 +146,10 @@ const MuutospyyntoWizard = ({
   }, [fromBackend.koulutusalat]);
 
   const tutkinnot = useMemo(() => {
-    console.info(fromBackend.tutkinnot.raw, koulutusalat, koulutustyypit);
     return parseKoulutuksetAll(
-      fromBackend.tutkinnot.raw,
-      koulutusalat,
-      koulutustyypit
+      R.prop("raw", fromBackend.tutkinnot) || [],
+      koulutusalat || [],
+      koulutustyypit || []
     );
   }, [fromBackend.tutkinnot, koulutusalat, koulutustyypit]);
 
@@ -269,21 +269,7 @@ const MuutospyyntoWizard = ({
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       if (!match.params.uuid) {
-        notify(
-          "Muutospyyntö tallennettu! Voit jatkaa pian dokumentin muokkaamista.",
-          {
-            autoClose: 2000,
-            position: toast.POSITION.TOP_LEFT,
-            type: toast.TYPE.SUCCESS
-          }
-        );
-        const page = parseInt(match.params.page, 10);
-        const url = `/jarjestajat/${match.params.ytunnus}`;
-        const uuid = muutoshakemus.save.data.data.uuid;
-        let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
-        setTimeout(() => {
-          history.replace(newurl);
-        });
+        onNewDocSave(muutoshakemus);
       } else {
         notify("Muutospyyntö tallennettu!", {
           autoClose: 2000,
@@ -342,7 +328,8 @@ const MuutospyyntoWizard = ({
     onSectionChangesUpdate,
     history,
     lupa,
-    match.params
+    match.params,
+    onNewDocSave
     // cannot add these, as some might be empty
     // changeObjects.perustelut,
     // changeObjects.taloudelliset,
@@ -696,6 +683,7 @@ MuutospyyntoWizard.propTypes = {
   match: PropTypes.object,
   muut: PropTypes.array,
   muutospyynto: PropTypes.object,
+  onNewDocSave: PropTypes.func,
   vankilat: PropTypes.array
 };
 

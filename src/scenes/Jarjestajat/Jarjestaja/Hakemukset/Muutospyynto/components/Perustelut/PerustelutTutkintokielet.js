@@ -131,6 +131,7 @@ const PerustelutTutkintokielet = React.memo(props => {
     props.isReadOnly,
     props.koulutukset,
     props.maaraykset,
+    props.tutkinnot,
     props.stateObjects.tutkintokielet
   ]);
 

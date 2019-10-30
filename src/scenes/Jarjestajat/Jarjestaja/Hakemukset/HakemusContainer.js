@@ -1,10 +1,16 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback
+} from "react";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
 import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
+import { toast } from "react-toastify";
 import {
   getAnchorsStartingWith,
   getAnchorPart,
@@ -14,9 +20,14 @@ import { setAttachmentUuids } from "../../../../services/muutospyynnot/muutospyy
 import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
+import * as R from "ramda";
 
 const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
+
+  const notify = (title, options) => {
+    toast.success(title, options);
+  };
 
   const fetchSetup = useMemo(() => {
     const arr1 = [
@@ -223,36 +234,59 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
   }, [fromBackend.muutospyynto, match.params.uuid]);
 
   const kohteet = useMemo(() => {
-    return fromBackend.kohteet ? fromBackend.kohteet.raw : [];
+    return R.prop("raw", fromBackend.kohteet) || [];
   }, [fromBackend.kohteet]);
 
   const koulutustyypit = useMemo(() => {
-    return fromBackend.koulutustyypit ? fromBackend.koulutustyypit.raw : [];
+    return R.prop("raw", fromBackend.koulutustyypit) || [];
   }, [fromBackend.koulutustyypit]);
 
   const kunnat = useMemo(() => {
-    return fromBackend.kunnat ? fromBackend.kunnat.raw : [];
+    return R.prop("raw", fromBackend.kunnat) || [];
   }, [fromBackend.kunnat]);
 
   const maakunnat = useMemo(() => {
-    return fromBackend.maakunnat ? fromBackend.maakunnat.raw : [];
+    return R.prop("raw", fromBackend.maakunnat) || [];
   }, [fromBackend.maakunnat]);
 
   const maakuntakunnat = useMemo(() => {
-    return fromBackend.maakuntakunnat ? fromBackend.maakuntakunnat.raw : [];
+    return R.prop("raw", fromBackend.maakuntakunnat) || [];
   }, [fromBackend.maakuntakunnat]);
 
   const maaraystyypit = useMemo(() => {
-    return fromBackend.maaraystyypit ? fromBackend.maaraystyypit.raw : [];
+    return R.prop("raw", fromBackend.maaraystyypit) || [];
   }, [fromBackend.maaraystyypit]);
 
   const muut = useMemo(() => {
-    return fromBackend.muut ? fromBackend.muut.raw : [];
+    return R.prop("raw", fromBackend.muut) || [];
   }, [fromBackend.muut]);
 
   const vankilat = useMemo(() => {
-    return fromBackend.vankilat ? fromBackend.vankilat.raw : [];
+    return R.prop("raw", fromBackend.vankilat) || [];
   }, [fromBackend.vankilat]);
+
+  const onNewDocSave = useCallback(
+    muutoshakemus => {
+      notify(
+        "Muutospyyntö tallennettu! Voit jatkaa pian dokumentin muokkaamista.",
+        {
+          autoClose: 2000,
+          position: toast.POSITION.TOP_LEFT,
+          type: toast.TYPE.SUCCESS
+        }
+      );
+      const page = parseInt(match.params.page, 10);
+      const url = `/jarjestajat/${match.params.ytunnus}`;
+      const uuid = muutoshakemus.save.data.data.uuid;
+      let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
+
+      /**
+       * User is redirected to the url of the saved document.
+       */
+      history.push(newurl);
+    },
+    [history, match.params.page, match.params.ytunnus]
+  );
 
   return (
     <FetchHandler
@@ -274,6 +308,7 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
             muut={muut}
             muutospyynto={fromBackend.muutospyynto}
             vankilat={vankilat}
+            onNewDocSave={onNewDocSave}
           />
         </MuutoshakemusProvider>
       }
