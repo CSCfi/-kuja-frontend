@@ -92,6 +92,10 @@ const Datepicker = props => {
           maxDateMessage={formatMessage(common.datemax)}
           minDateMessage={formatMessage(common.datemin)}
           invalidDateMessage={formatMessage(common.dateinvalid)}
+          minDate={props.minDate}
+          maxDate={props.maxDate}
+          disablePast={props.disablePast}
+          disableFuture={props.disableFuture}
         />
       </MuiPickersUtilsProvider>
     </ThemeProvider>
@@ -110,7 +114,9 @@ Datepicker.defaultProps = {
   width: "12em",
   fullWidth: false,
   clearable: false,
-  showTodayButton: true
+  showTodayButton: true,
+  disablePast: false,
+  disableFuture: false
 };
 
 Datepicker.propTypes = {
@@ -129,7 +135,11 @@ Datepicker.propTypes = {
   fullWidth: PropTypes.bool,
   value: PropTypes.instanceOf(Date),
   clearable: PropTypes.bool,
-  showTodayButton: PropTypes.bool
+  showTodayButton: PropTypes.bool,
+  disablePast: PropTypes.bool,
+  disableFuture: PropTypes.bool,
+  minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date)
 };
 
 export default withStyles(styles)(injectIntl(Datepicker));
