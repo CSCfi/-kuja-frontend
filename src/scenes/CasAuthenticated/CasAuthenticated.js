@@ -5,6 +5,7 @@ import { BackendContext } from "../../context/backendContext";
 import { injectIntl } from "react-intl";
 import { ROLE_ESITTELIJA } from "modules/constants";
 import commonMessages from "../../i18n/definitions/common";
+import * as R from "ramda";
 
 const Successful = styled.div`
   padding-left: 20px;
@@ -20,13 +21,13 @@ const CasAuthenticated = props => {
 
   let ytunnus = undefined;
   if (state.organisaatio) {
-    ytunnus = state.organisaatio.raw.ytunnus;
+    ytunnus = R.path(["organisaatio", "raw", "ytunnus"], state);
   }
 
   if (state.hasErrored) {
     return <p>{formatMessage(commonMessages.loginError)}</p>;
   } else if (state.kayttaja && state.kayttaja.raw.roles.length > 1) {
-    const role = state.kayttaja.raw.roles[1];
+    const role = R.path(["kayttaja", "raw", "roles", 1], state);
     // TODO: Different roles routing here when applicable
     switch (role) {
       case ROLE_ESITTELIJA: {
