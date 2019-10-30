@@ -95,6 +95,14 @@ export default defineMessages({
     id: "common.attachmentErrorName",
     defaultMessage: "Nimi on pakollinen"
   },
+  loginError: {
+    id: "common.loginError",
+    defaultMessage: "Kirjautumisessa tapahtui virhe"
+  },
+  welcome: {
+    id: "common.welcome",
+    defaultMessage: "Tervetuloa Oiva-palveluun"
+  },
   fetchFailure: {
     id: "common.fetchFailure",
     defaultMessage: "Tietoja ei voitu noutaa."
