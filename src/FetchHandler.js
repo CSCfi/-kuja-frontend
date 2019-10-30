@@ -5,6 +5,7 @@ import Loading from "./modules/Loading";
 import { injectIntl } from "react-intl";
 import auth from "./i18n/definitions/auth";
 import common from "./i18n/definitions/common";
+import PropTypes from "prop-types";
 import * as R from "ramda";
 
 /**
@@ -30,6 +31,7 @@ const FetchHandler = ({
   const [fetchStatus, setFetchStatus] = useState(
     fetchSetup.length > 0 ? "fetching" : "ready"
   );
+
   const [handledXhrCalls, setHandledXhrCalls] = useState([]);
 
   /**
@@ -83,6 +85,8 @@ const FetchHandler = ({
       setFetchStatus("erroneous");
     } else if (R.equals(R.length(handledXhrCalls), R.length(fetchSetup))) {
       setFetchStatus("ready");
+    } else {
+      setFetchStatus("fetching");
     }
   }, [fetchSetup, handledXhrCalls]);
 
@@ -94,8 +98,15 @@ const FetchHandler = ({
    */
   useEffect(() => {
     let isAborting = false;
-    // Backend queries are done by fetchFromBackend. It returns an array of
-    // AbortController instances and list of promises.
+
+    /**
+     * Before we fetch data it's importan to empty the array of handled calls.
+     */
+    setHandledXhrCalls([]);
+    /**
+     * Backend queries are done by fetchFromBackend. It returns an array of
+     * AbortController instances and list of promises.
+     **/
     const { abortControllers, promises } = fetchFromBackend(fetchSetup);
 
     R.forEach(promise => {
@@ -104,7 +115,8 @@ const FetchHandler = ({
         // to prevent errors.
         if (!isAborting) {
           setHandledXhrCalls(prevCalls => {
-            return R.insert(-1, response ? response.url : "failed", prevCalls);
+            const token = response ? response.url : "failed";
+            return R.insert(-1, token, prevCalls);
           });
         }
       });
@@ -123,6 +135,14 @@ const FetchHandler = ({
    * successfully.
    */
   return <React.Fragment>{markupSetup[fetchStatus]}</React.Fragment>;
+};
+
+FetchHandler.propTypes = {
+  erroneous: PropTypes.object,
+  fetching: PropTypes.object,
+  fetchSetup: PropTypes.array,
+  ready: PropTypes.object,
+  user: PropTypes.object
 };
 
 export default injectIntl(FetchHandler);
