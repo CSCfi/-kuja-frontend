@@ -102,5 +102,13 @@ export default defineMessages({
   welcome: {
     id: "common.welcome",
     defaultMessage: "Tervetuloa Oiva-palveluun"
+  },
+  fetchFailure: {
+    id: "common.fetchFailure",
+    defaultMessage: "Tietoja ei voitu noutaa."
+  },
+  fetchFailureAuthInfo: {
+    id: "common.fetchFailureAuthInfo",
+    defaultMessage: "Tämä voi johtua siitä, ettet ole kirjautunut sisään."
   }
 });

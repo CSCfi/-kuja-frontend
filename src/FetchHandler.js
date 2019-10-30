@@ -2,7 +2,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { fetchFromBackend, abort } from "./services/backendService";
 import { MessageWrapper } from "./modules/elements";
 import Loading from "./modules/Loading";
-import localForage from "localforage";
+import { injectIntl } from "react-intl";
+import auth from "./i18n/definitions/auth";
+import common from "./i18n/definitions/common";
 import * as R from "ramda";
 
 /**
@@ -17,15 +19,18 @@ import * as R from "ramda";
  * @param {String[]} fetchSetup[].path - Explicit location of the search results.
  * @param {jsx} ready - Markup to show when all the XHR calls are done successfully.
  */
-const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
+const FetchHandler = ({
+  erroneous,
+  fetching,
+  fetchSetup,
+  intl,
+  ready,
+  user
+}) => {
   const [fetchStatus, setFetchStatus] = useState(
     fetchSetup.length > 0 ? "fetching" : "ready"
   );
   const [handledXhrCalls, setHandledXhrCalls] = useState([]);
-
-  const abortIdentifier = useMemo(() => {
-    return `aborting-${R.join("_", R.map(R.prop("key"), fetchSetup))}`;
-  }, [fetchSetup]);
 
   /**
    * Percentage is shown when XHR calls are in progress. It tells
@@ -42,9 +47,18 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
    */
   const markupSetup = useMemo(() => {
     return {
+      nosetup: null,
       erroneous: erroneous || (
         <React.Fragment>
-          <MessageWrapper>Tietoja ei voitu noutaa.</MessageWrapper>
+          <MessageWrapper>
+            <p>{intl.formatMessage(common.fetchFailure)}</p>
+            {!user ? (
+              <React.Fragment>
+                <p>{intl.formatMessage(common.fetchFailureAuthInfo)}</p>
+                <a href="/cas-auth">{intl.formatMessage(auth.logIn)}</a>
+              </React.Fragment>
+            ) : null}
+          </MessageWrapper>
         </React.Fragment>
       ),
       fetching: fetching || (
@@ -56,15 +70,21 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
       ),
       ready: ready || <React.Fragment>&nbsp;</React.Fragment>
     };
-  }, [erroneous, fetching, percentage, ready]);
+  }, [erroneous, fetching, intl, percentage, ready, user]);
 
   /**
-   * Abort controller instances are used for cancelling the related
-   * XHR calls later.
+   * handledXhrCalls can include both - erroneous and successful queries
+   * With this logic it's possible to show the correct view to a user.
    */
-  const { abortControllers, responses } = useMemo(() => {
-    return fetchFromBackend(fetchSetup);
-  }, [fetchSetup]);
+  useEffect(() => {
+    if (R.isEmpty(fetchSetup)) {
+      setFetchStatus("ready");
+    } else if (R.includes("failed", handledXhrCalls)) {
+      setFetchStatus("erroneous");
+    } else if (R.equals(R.length(handledXhrCalls), R.length(fetchSetup))) {
+      setFetchStatus("ready");
+    }
+  }, [fetchSetup, handledXhrCalls]);
 
   /**
    * When a call is done successfully it will be added on the list
@@ -73,53 +93,30 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
    * data fething is still in progress.
    */
   useEffect(() => {
-    // aborting = user is leaving the current page
-    localForage.removeItem(abortIdentifier);
-    // This helps us to show the percentage to a user.
-    R.forEach(response => {
-      response.then(result => {
-        if (result) {
-          setHandledXhrCalls(prevCalls => {
-            return R.insert(-1, result.url, prevCalls);
-          });
-        }
-      });
-    }, responses);
-    return () => {
-      // Property 'aborting' is set to figure out if the status should
-      // be erroneous when some of the XHR calls are failing because
-      // of the user is leaving the current page.
-      localForage.setItem(abortIdentifier, true).then(() => {
-        abort(abortControllers);
-      });
-    };
-  }, [abortControllers, abortIdentifier, responses]);
+    let isAborting = false;
+    // Backend queries are done by fetchFromBackend. It returns an array of
+    // AbortController instances and list of promises.
+    const { abortControllers, promises } = fetchFromBackend(fetchSetup);
 
-  /**
-   * When all the backend calls are ready it's time to calculate
-   * the outcome.
-   */
-  useEffect(() => {
-    if (R.length(responses) > 0) {
-      Promise.all(responses).then(values => {
-        const okValues = R.map(R.prop("url"), values).filter(Boolean);
-        const isAllOK = R.equals(okValues.length / fetchSetup.length, 1);
-        // If everything went well we are going to show the 'ready' markup.
-        if (isAllOK) {
-          setFetchStatus("ready");
-        } else {
-          localForage.getItem(abortIdentifier).then(value => {
-            // If user is NOT leaving the page during an XHR call
-            if (!value) {
-              // There's at least one unsuccessful XHR call at this point so
-              // let's set the status to erroneous.
-              setFetchStatus("erroneous");
-            }
+    R.forEach(promise => {
+      promise.then(response => {
+        // If aborting is in progress any states shouldn't be set
+        // to prevent errors.
+        if (!isAborting) {
+          setHandledXhrCalls(prevCalls => {
+            return R.insert(-1, response ? response.url : "failed", prevCalls);
           });
         }
       });
-    }
-  }, [fetchSetup.length, responses]);
+    }, promises);
+
+    return () => {
+      // isAborting flag is set to true so that the logic above can use it.
+      // If aborting is in progress it's useless to set any state.
+      isAborting = true;
+      abort(abortControllers);
+    };
+  }, [fetchSetup]);
 
   /**
    * Return values is ready if all calls to backend have been done
@@ -128,6 +125,4 @@ const FetchHandler = ({ erroneous, fetching, fetchSetup, ready }) => {
   return <React.Fragment>{markupSetup[fetchStatus]}</React.Fragment>;
 };
 
-export default FetchHandler;
-
-// https://localhost/jarjestajat/2064886-7/hakemukset-ja-paatokset/eea5dbec-f990-11e9-adf7-02420a141703/1
+export default injectIntl(FetchHandler);

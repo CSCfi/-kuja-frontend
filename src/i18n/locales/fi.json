@@ -22,6 +22,8 @@
   "common.datemax": "Päiväys on liian suuri",
   "common.datemin": "Päiväys on liian pieni",
   "common.difference": "Muutos",
+  "common.fetchFailure": "Tietoja ei voitu noutaa.",
+  "common.fetchFailureAuthInfo": "Tämä voi johtua siitä, ettet ole kirjautunut sisään.",
   "common.loading": "Ladataan",
   "common.loginError": "Kirjautumisessa tapahtui virhe",
   "common.ok": "Ok",
