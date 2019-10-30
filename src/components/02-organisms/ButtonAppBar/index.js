@@ -122,7 +122,7 @@ const ButtonAppBar = ({
             >
               {intl.formatMessage(authMessages.logOut)} ({user.username}) <br />{" "}
               <span className="text-gray-600">
-                {R.path(["nimi", "fi"], organisaatio)}
+                {R.path(["nimi", intl.locale], organisaatio)}
               </span>
             </LinkItemUpper>
           )}

@@ -5,6 +5,7 @@ import {
 } from "./actionTypes";
 import * as R from "ramda";
 import moment from "moment";
+import { statusMap } from ".";
 
 function getNextState(key, subKey, _path, data, state) {
   const path = _path || [key, subKey].filter(Boolean);
@@ -19,7 +20,7 @@ export default function(state, action) {
         action.subKey,
         action.path,
         {
-          status: "erroneous"
+          status: statusMap.erroneous
         },
         state
       );
@@ -29,7 +30,7 @@ export default function(state, action) {
         action.subKey,
         action.path,
         {
-          status: "fetching"
+          status: statusMap.fetching
         },
         state
       );
@@ -40,7 +41,7 @@ export default function(state, action) {
         action.path,
         {
           raw: action.data,
-          status: "ready",
+          status: statusMap.ready,
           fetchedAt: moment().format("DD.MM.YYYY HH:mm:ss")
         },
         state

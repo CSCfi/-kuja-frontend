@@ -194,7 +194,7 @@ function recursiveFetchHandler(
   /**
    * This is practically a push operation written with Ramda.
    */
-  const abortControllers = R.insert(-1, abortController, _abortControllers);
+  const abortControllers = R.append(abortController, _abortControllers);
 
   /**
    * Fetching is about to start. So, let's mark it up for later use.
@@ -209,8 +209,7 @@ function recursiveFetchHandler(
   /**
    * XHR call is made by the run function.
    */
-  const responses = R.insert(
-    -1,
+  const responses = R.append(
     run(key, url, options, dispatchFn, abortController, subKey, path),
     _responses
   );
