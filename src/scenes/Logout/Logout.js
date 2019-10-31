@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from "react";
-import { logoutUser } from "services/kayttajat/actions";
+import { logoutUser } from "../../services/backendService/actions";
 import styled from "styled-components";
-import { UserContext} from '../../context/userContext'
+import { BackendContext } from "../../context/backendContext";
+import { MessageWrapper } from "../../modules/elements";
 
 const LogoutText = styled.div`
   padding: 14px 20px;
@@ -11,14 +12,15 @@ const LogoutText = styled.div`
 `;
 
 const Logout = () => {
-  const { ...context } = useContext(UserContext)
+  const { ...context } = useContext(BackendContext);
+
   useEffect(() => {
-    logoutUser()(context.dispatch);
-  }, [context]);
+    logoutUser(context.dispatch);
+  }, [context.dispatch]);
 
   return (
     <LogoutText>
-      <p>Olet kirjautunut ulos.</p>
+      <MessageWrapper>Olet kirjautunut ulos.</MessageWrapper>
     </LogoutText>
   );
 };

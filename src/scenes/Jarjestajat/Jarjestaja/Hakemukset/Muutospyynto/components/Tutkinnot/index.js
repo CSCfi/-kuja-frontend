@@ -11,11 +11,8 @@ const Tutkinnot = React.memo(props => {
   const { onStateUpdate } = props;
 
   const koulutusdata = useMemo(() => {
-    return R.sortBy(
-      R.prop("koodiArvo"),
-      R.values(props.koulutukset.koulutusdata)
-    );
-  }, [props.koulutukset.koulutusdata]);
+    return R.sortBy(R.prop("koodiArvo"), R.values(props.tutkinnot));
+  }, [props.tutkinnot]);
 
   const getItems = useMemo(() => {
     const locale = R.toUpper(props.intl.locale);
@@ -25,11 +22,10 @@ const Tutkinnot = React.memo(props => {
         return article.koodi === areaCode;
       }, articles);
     };
-
     const handleKoulutusdata = koulutusdata => {
       return R.addIndex(R.map)((koulutusala, i) => {
         const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
-        const article = getArticle(areaCode, props.lupa.kohteet[1].maaraykset);
+        const article = getArticle(areaCode, props.lupaKohteet[1].maaraykset);
         const categories = getCategories(
           i,
           article,
@@ -44,7 +40,7 @@ const Tutkinnot = React.memo(props => {
     };
 
     return handleKoulutusdata;
-  }, [props.intl.locale, props.kohde, props.lupa.kohteet, props.maaraystyyppi]);
+  }, [props.intl.locale, props.kohde, props.lupaKohteet, props.maaraystyyppi]);
 
   useEffect(() => {
     const items = getItems(koulutusdata);
@@ -86,14 +82,12 @@ Tutkinnot.defaultProps = {
 Tutkinnot.propTypes = {
   changeObjects: PropTypes.object,
   kohde: PropTypes.object,
-  koulutukset: PropTypes.object,
-  koulutusalat: PropTypes.object,
-  koulutustyypit: PropTypes.array,
-  lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  tutkinnot: PropTypes.object
 };
 
 export default injectIntl(Tutkinnot);

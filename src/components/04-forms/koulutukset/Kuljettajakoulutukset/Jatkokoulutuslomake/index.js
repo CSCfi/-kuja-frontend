@@ -89,7 +89,7 @@ const KuljettajienJatkokoulutuslomake = ({
   }, [changes, changeObjects, isReadOnly]);
 
   return (
-    <React.Fragment>
+    <div className="p-8">
       {changes ? (
         <CategorizedListRoot
           anchor={sectionId}
@@ -99,7 +99,7 @@ const KuljettajienJatkokoulutuslomake = ({
           showCategoryTitles={true}
         />
       ) : null}
-    </React.Fragment>
+    </div>
   );
 };
 

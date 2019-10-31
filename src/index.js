@@ -6,6 +6,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { COLORS } from "./modules/styles";
 import AppWrapper from "./AppWrapper";
 import { AppProvider } from "./context/appContext";
+import { BackendProvider } from "./context/backendContext";
 
 import "./css/tailwind.css";
 import "./css/common.css";
@@ -34,9 +35,11 @@ render(
   <Store>
     <ThroughProvider>
       <MuiThemeProvider theme={theme}>
-        <AppProvider>
-          <AppWrapper />
-        </AppProvider>
+        <BackendProvider>
+          <AppProvider>
+            <AppWrapper />
+          </AppProvider>
+        </BackendProvider>
       </MuiThemeProvider>
     </ThroughProvider>
   </Store>,

@@ -32,7 +32,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
                 }
               }
             }
-          ], 
+          ],
           meta: {
             kohde,
             maaraystyyppi,
@@ -47,27 +47,20 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
   }, []);
 
   useEffect(() => {
-    if (
-      R.includes(
-        "ammatilliseentehtavaanvalmistavakoulutus",
-        props.koulutukset.muut.fetched
-      )
-    ) {
-      onStateUpdate(
-        {
-          categories: getCategories(
-            getDataForKoulutusList(
-              props.koulutukset.muut.muudata
-                .ammatilliseentehtavaanvalmistavakoulutus,
-              R.toUpper(props.intl.locale)
-            ),
-            props.kohde,
-            props.maaraystyyppi
-          )
-        },
-        sectionId
-      );
-    }
+    onStateUpdate(
+      {
+        categories: getCategories(
+          getDataForKoulutusList(
+            props.koulutukset.muut
+              .ammatilliseentehtavaanvalmistavakoulutus,
+            R.toUpper(props.intl.locale)
+          ),
+          props.kohde,
+          props.maaraystyyppi
+        )
+      },
+      sectionId
+    );
   }, [
     getCategories,
     onStateUpdate,

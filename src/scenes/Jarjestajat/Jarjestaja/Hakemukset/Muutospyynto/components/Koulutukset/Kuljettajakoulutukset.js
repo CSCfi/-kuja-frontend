@@ -48,21 +48,19 @@ const Kuljettajakoulutukset = React.memo(props => {
   }, []);
 
   useEffect(() => {
-    if (R.includes(koodisto, props.koulutukset.muut.fetched)) {
-      onStateUpdate(
-        {
-          categories: getCategories(
-            getDataForKoulutusList(
-              props.koulutukset.muut.muudata[koodisto],
-              R.toUpper(props.intl.locale)
-            ),
-            props.kohde,
-            props.maaraystyyppi
-          )
-        },
-        sectionId
-      );
-    }
+    onStateUpdate(
+      {
+        categories: getCategories(
+          getDataForKoulutusList(
+            props.koulutukset.muut[koodisto],
+            R.toUpper(props.intl.locale)
+          ),
+          props.kohde,
+          props.maaraystyyppi
+        )
+      },
+      sectionId
+    );
   }, [
     getCategories,
     onStateUpdate,

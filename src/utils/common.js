@@ -1,11 +1,26 @@
 import * as R from "ramda";
 
-export const getAnchorPart = (anchor, index) => {
+/**
+ * Utility functions are listed here.
+ * @namespace utils
+ * */
+
+/**
+ * @module Utils/common
+ */
+
+/**
+ * Returns a part of the given anchor by index.
+ * @param {string} anchor
+ * @param {number} index
+ * @param {string} separator - Default value: .
+ */
+export function getAnchorPart(anchor, index, separator = ".") {
   return R.compose(
     R.view(R.lensIndex(index)),
-    R.split(".")
-  )(anchor || "");
-};
+    R.split(separator)
+  )(anchor);
+}
 
 /**
  * Returns the element with the given anchor from the array of elements
@@ -53,11 +68,11 @@ export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => 
   return currentElement;
 };
 
-export const removeAnchorPart = (anchor, index) => {
+export const removeAnchorPart = (anchor, index, separator = ".") => {
   return R.compose(
-    R.join("."),
+    R.join(separator),
     R.remove(index, 1),
-    R.split(".")
+    R.split(separator)
   )(anchor);
 };
 

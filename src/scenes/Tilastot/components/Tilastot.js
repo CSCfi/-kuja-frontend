@@ -2,20 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 
-import { MEDIA_QUERIES } from 'modules/styles'
 import { ContentContainer } from '../../../modules/elements'
-
-const Title = styled.h1`
-  color: #555;
-  margin: 60px 0 0 20px;
-  position: relative;
-  top: 20px;
-  
-  @media ${MEDIA_QUERIES.MOBILE} {
-    margin: 15px;
-    top: 0;
-  }
-`
 
 const Linkki = styled.div`
     margin-top:15px;  
@@ -26,7 +13,7 @@ class Tilastot extends Component {
     return (
       <ContentContainer>
         <Helmet height="50px">
-           <Title>Oiva | Tilastot</Title>
+           <title>Oiva | Tilastot</title>
         </Helmet>
           <p>
             Linkkejä tilastodataan (beta-versio):
