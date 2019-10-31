@@ -74,5 +74,7 @@
   "wizard.send": "Lähetä hakemus",
   "wizard.teachingLanguages": "Opetuskielet",
   "wizard.vocationalTraining": "Ammatilliseen tehtävään valmistavat koulutukset",
-  "wizard.workforceTraining": "Työvoimakoulutukset"
+  "wizard.workforceTraining": "Työvoimakoulutukset",
+  "wizard.except": "lukuun ottamatta:",
+  "wizard.osaamisalarajoitus": "Rajoitus"
 }

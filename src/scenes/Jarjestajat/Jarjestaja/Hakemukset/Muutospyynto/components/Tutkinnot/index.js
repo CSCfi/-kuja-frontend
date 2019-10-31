@@ -32,7 +32,7 @@ const Tutkinnot = React.memo(props => {
           koulutusala.koulutukset,
           props.kohde,
           props.maaraystyyppi,
-          locale
+          props.intl
         );
         const title = parseLocalizedField(koulutusala.metadata, locale);
         return { areaCode, article, categories, title };

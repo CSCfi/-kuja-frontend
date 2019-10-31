@@ -378,5 +378,15 @@
     "id": "app.valtioneuvosto",
     "defaultMessage": "Valtioneuvosto",
     "filepath": "src/scenes/Footer/Footer.js"
+  },
+  {
+    "id": "wizard.except",
+    "defaultMessage": "lukuun ottamatta:",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.osaamisalarajoitus",
+    "defaultMessage": "Rajoitus",
+    "filepath": "src/i18n/definitions/wizard.js"
   }
 ]
