@@ -24,7 +24,6 @@ import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import { saveMuutospyynto } from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
-import { MuutosperustelutProvider } from "../../../../../../context/muutosperustelutContext";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
@@ -108,6 +107,7 @@ const MuutospyyntoWizard = ({
   maaraystyypit = [],
   match,
   muut = [],
+  muutosperusteluList = [],
   muutospyynto = {},
   onNewDocSave,
   vankilat = []
@@ -453,7 +453,7 @@ const MuutospyyntoWizard = ({
       if (id && state) {
         setDataBySection(prevData => {
           const nextData = R.assocPath(R.split("_", id), state, prevData);
-          console.info(id, state, "Next state objects: ", nextData);
+          console.info("Next state objects: ", nextData);
           return nextData;
         });
       }
@@ -533,25 +533,24 @@ const MuutospyyntoWizard = ({
                     lupa={lupa}
                     changeObjects={changeObjects}
                   >
-                    <MuutosperustelutProvider>
-                      <LomakkeetProvider>
-                        <MuutospyyntoWizardPerustelut
-                          changeObjects={changeObjects}
-                          kielet={kielet}
-                          kohteet={kohteet}
-                          koulutukset={koulutukset}
-                          lupa={lupa}
-                          lupaKohteet={lupaKohteet}
-                          maaraystyypit={maaraystyypit}
-                          muut={muut}
-                          muutoshakemus={dataBySection}
-                          onChangesUpdate={onSectionChangesUpdate}
-                          onStateUpdate={onSectionStateUpdate}
-                          tutkinnot={tutkinnot}
-                          vankilat={vankilat}
-                        />
-                      </LomakkeetProvider>
-                    </MuutosperustelutProvider>
+                    <LomakkeetProvider>
+                      <MuutospyyntoWizardPerustelut
+                        changeObjects={changeObjects}
+                        kielet={kielet}
+                        kohteet={kohteet}
+                        koulutukset={koulutukset}
+                        lupa={lupa}
+                        lupaKohteet={lupaKohteet}
+                        maaraystyypit={maaraystyypit}
+                        muut={muut}
+                        muutoshakemus={dataBySection}
+                        muutosperusteluList={muutosperusteluList}
+                        onChangesUpdate={onSectionChangesUpdate}
+                        onStateUpdate={onSectionStateUpdate}
+                        tutkinnot={tutkinnot}
+                        vankilat={vankilat}
+                      />
+                    </LomakkeetProvider>
                   </WizardPage>
                 )}
                 {page === 3 && (
@@ -580,23 +579,22 @@ const MuutospyyntoWizard = ({
                     lupa={lupa}
                     muutoshakemus={dataBySection}
                   >
-                    <MuutosperustelutProvider>
-                      <LomakkeetProvider>
-                        <MuutospyyntoWizardYhteenveto
-                          changeObjects={changeObjects}
-                          kielet={kielet}
-                          kohteet={kohteet}
-                          koulutukset={koulutukset}
-                          lupa={lupa}
-                          lupaKohteet={lupaKohteet}
-                          maaraystyypit={maaraystyypit}
-                          muut={muut}
-                          muutoshakemus={dataBySection}
-                          onChangesUpdate={onSectionChangesUpdate}
-                          onStateUpdate={onSectionStateUpdate}
-                        />
-                      </LomakkeetProvider>
-                    </MuutosperustelutProvider>
+                    <LomakkeetProvider>
+                      <MuutospyyntoWizardYhteenveto
+                        changeObjects={changeObjects}
+                        kielet={kielet}
+                        kohteet={kohteet}
+                        koulutukset={koulutukset}
+                        lupa={lupa}
+                        lupaKohteet={lupaKohteet}
+                        maaraystyypit={maaraystyypit}
+                        muut={muut}
+                        muutoshakemus={dataBySection}
+                        muutosperusteluList={muutosperusteluList}
+                        onChangesUpdate={onSectionChangesUpdate}
+                        onStateUpdate={onSectionStateUpdate}
+                      />
+                    </LomakkeetProvider>
                   </WizardPage>
                 )}
               </div>
@@ -653,6 +651,7 @@ const MuutospyyntoWizard = ({
     maakuntakunnatList,
     maaraystyypit,
     muut,
+    muutosperusteluList,
     onSectionChangesUpdate,
     onSectionStateUpdate,
     page,
@@ -680,6 +679,7 @@ MuutospyyntoWizard.propTypes = {
   maaraystyypit: PropTypes.array,
   match: PropTypes.object,
   muut: PropTypes.array,
+  muutosperusteluList: PropTypes.array,
   muutospyynto: PropTypes.object,
   onNewDocSave: PropTypes.func,
   vankilat: PropTypes.array

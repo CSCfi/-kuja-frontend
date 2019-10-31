@@ -4,9 +4,7 @@ import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "./Perustelut/PerustelutTutkintokielet";
 import PerustelutTutkinnot from "./Perustelut/PerustelutTutkinnot";
-import { MuutosperustelutContext } from "../../../../../../context/muutosperustelutContext";
 import { LomakkeetContext } from "../../../../../../context/lomakkeetContext";
-import { fetchMuutosperustelut } from "../../../../../../services/muutosperustelut/actions";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
@@ -35,6 +33,7 @@ const MuutospyyntoWizardPerustelut = ({
   lupa,
   lupaKohteet,
   muutoshakemus,
+  muutosperusteluList = [],
   onChangesUpdate,
   onStateUpdate,
   tutkinnot,
@@ -42,44 +41,35 @@ const MuutospyyntoWizardPerustelut = ({
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
-  const {
-    state: muutosperustelut,
-    dispatch: muutosperustelutDispatch
-  } = useContext(MuutosperustelutContext);
+
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
     LomakkeetContext
   );
-
-  useEffect(() => {
-    fetchMuutosperustelut()(muutosperustelutDispatch);
-  }, [muutosperustelutDispatch]);
 
   useEffect(() => {
     /**
      * Let's get the structures of different tutkinto based reasoning forms and update the context.
      * These will be needed later.
      */
-    if (muutosperustelut.data.length) {
-      const additionFormStructure = getAdditionFormStructure(
-        R.sortBy(R.prop("koodiArvo"))(muutosperustelut.muutosperusteluList),
-        R.toUpper(intl.locale)
-      );
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "addition"],
-        additionFormStructure
-      )(lomakkeetDispatch);
-      const removalFormStructure = getRemovalFormStructure();
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "removal"],
-        removalFormStructure
-      )(lomakkeetDispatch);
-      const osaamisalaFormStructure = getOsaamisalaFormStructure();
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "osaamisala"],
-        osaamisalaFormStructure
-      )(lomakkeetDispatch);
-    }
-  }, [lomakkeetDispatch, muutosperustelut, intl.locale]);
+    const additionFormStructure = getAdditionFormStructure(
+      R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
+      R.toUpper(intl.locale)
+    );
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "addition"],
+      additionFormStructure
+    )(lomakkeetDispatch);
+    const removalFormStructure = getRemovalFormStructure();
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "removal"],
+      removalFormStructure
+    )(lomakkeetDispatch);
+    const osaamisalaFormStructure = getOsaamisalaFormStructure();
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "osaamisala"],
+      osaamisalaFormStructure
+    )(lomakkeetDispatch);
+  }, [lomakkeetDispatch, muutosperusteluList, intl.locale]);
 
   useEffect(() => {
     const kohdeTiedot = R.map(kohde => {
@@ -163,10 +153,7 @@ const MuutospyyntoWizardPerustelut = ({
 
       {!isAnyChanges && <p>{formatMessage(wizard.noChanges)}</p>}
 
-      {isAnyChanges &&
-      muutosperustelut.muutosperusteluList &&
-      muutoshakemus &&
-      kohdetiedot ? (
+      {isAnyChanges && muutosperusteluList && muutoshakemus && kohdetiedot ? (
         <React.Fragment>
           {(isTutkinnotChanges || isKoulutuksetChanges) && (
             <FormSection
@@ -194,7 +181,6 @@ const MuutospyyntoWizardPerustelut = ({
                       lupa={lupa}
                       lupaKohteet={lupaKohteet}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
-                      muutosperustelut={muutosperustelut}
                       lomakkeet={lomakkeet.perustelut.tutkinnot}
                       stateObject={R.path(["perustelut", "tutkinnot"])(
                         muutoshakemus
@@ -383,7 +369,7 @@ const MuutospyyntoWizardPerustelut = ({
                       kohteet
                     )}
                     muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
-                      muutosperustelut.muutosperusteluList
+                      muutosperusteluList
                     )}
                     stateObject={{
                       opiskelijavuodet: R.path(
@@ -468,6 +454,7 @@ MuutospyyntoWizardPerustelut.propTypes = {
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
+  muutosperusteluList: PropTypes.array,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
   tutkinnot: PropTypes.object,

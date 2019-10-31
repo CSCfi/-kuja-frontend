@@ -21,8 +21,9 @@ import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
 import * as R from "ramda";
+import { getMuutosperusteluList } from "../../../../services/muutosperustelut/muutosperusteluUtil";
 
-const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
+const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const notify = (title, options) => {
@@ -80,7 +81,8 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
       {
         key: "oivamuutoikeudetvelvollisuudetehdotjatehtavat",
         dispatchFn: dispatch
-      }
+      },
+      { key: "oivaperustelut", dispatchFn: dispatch }
     ];
     // Existing muutospyynto will be fetched if we have the UUID to use.
     const arr2 = match.params.uuid
@@ -265,6 +267,15 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
     return R.prop("raw", fromBackend.vankilat) || [];
   }, [fromBackend.vankilat]);
 
+  const muutosperusteluList = useMemo(() => {
+    return isReady(fromBackend.oivaperustelut)
+      ? getMuutosperusteluList(
+          R.prop("raw", fromBackend.oivaperustelut),
+          R.toUpper(intl.locale)
+        )
+      : [];
+  }, [fromBackend.oivaperustelut, intl.locale]);
+
   const onNewDocSave = useCallback(
     muutoshakemus => {
       notify(
@@ -306,6 +317,7 @@ const HakemusContainer = ({ history, lupa, lupaKohteet, match }) => {
             maaraystyypit={maaraystyypit}
             match={match}
             muut={muut}
+            muutosperusteluList={muutosperusteluList}
             muutospyynto={fromBackend.muutospyynto}
             vankilat={vankilat}
             onNewDocSave={onNewDocSave}

@@ -20,6 +20,7 @@ const MuutospyyntoWizardYhteenveto = ({
   maaraystyypit,
   muut,
   muutoshakemus,
+  muutosperusteluList,
   onChangesUpdate,
   onStateUpdate
 }) => {
@@ -117,6 +118,7 @@ const MuutospyyntoWizardYhteenveto = ({
               lupa={lupa}
               lupaKohteet={lupaKohteet}
               maaraystyypit={maaraystyypit}
+              muutosperusteluList={muutosperusteluList}
               muut={muut}
               muutoshakemus={muutoshakemus}
               onChangesUpdate={onChangesUpdate}
@@ -163,6 +165,7 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
+  muutosperusteluList: PropTypes.array,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func
 };

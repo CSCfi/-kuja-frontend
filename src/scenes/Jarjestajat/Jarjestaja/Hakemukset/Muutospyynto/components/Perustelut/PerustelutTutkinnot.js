@@ -12,10 +12,8 @@ const defaultProps = {
   isReadOnly: false,
   kohde: {},
   lomakkeet: {},
-  lupa: {},
   lupaKohteet: {},
   maaraystyyppi: {},
-  muutosperustelut: {},
   stateObject: {},
   tutkinnot: {}
 };
@@ -28,7 +26,6 @@ const PerustelutTutkinnot = React.memo(
     kohde = defaultProps.kohde,
     tutkinnot = defaultProps.tutkinnot,
     lomakkeet = defaultProps.lomakkeet,
-    lupa = defaultProps.lupa,
     lupaKohteet = defaultProps.lupaKohteet,
     maaraystyyppi = defaultProps.maaraystyyppi,
     onChangesRemove,
@@ -141,9 +138,7 @@ PerustelutTutkinnot.propTypes = {
   kohde: PropTypes.object,
   tutkinnot: PropTypes.object,
   lomakkeet: PropTypes.object,
-  lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  muutosperustelut: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

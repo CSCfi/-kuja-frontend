@@ -6,9 +6,7 @@ import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
 import PerustelutTutkinnot from "../Perustelut/PerustelutTutkinnot";
 import PerustelutLiitteet from "../Perustelut/PerustelutLiitteet";
-import { MuutosperustelutContext } from "../../../../../../../context/muutosperustelutContext";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
-import { fetchMuutosperustelut } from "../../../../../../../services/muutosperustelut/actions";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import * as R from "ramda";
@@ -30,6 +28,7 @@ const YhteenvetoKooste = ({
   koulutukset,
   maaraystyypit,
   muut,
+  muutosperusteluList = [],
   lupa,
   lupaKohteet,
   muutoshakemus,
@@ -38,26 +37,20 @@ const YhteenvetoKooste = ({
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
-  const {
-    state: muutosperustelut,
-    dispatch: muutosperustelutDispatch
-  } = useContext(MuutosperustelutContext);
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
     LomakkeetContext
   );
-
-  useEffect(() => {
-    fetchMuutosperustelut()(muutosperustelutDispatch);
-  }, [muutosperustelutDispatch]);
 
   useEffect(() => {
     /**
      * Let's get the structures of different tutkinto based reasoning forms and update the context.
      * These will be needed later.
      */
-    if (muutosperustelut.data.length) {
+    // console.info(muutosperusteluList);
+    const muutosperusteluList = [];
+    if (muutosperusteluList) {
       const additionFormStructure = getAdditionFormStructure(
-        R.sortBy(R.prop("koodiArvo"))(muutosperustelut.muutosperusteluList),
+        R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
         R.toUpper(intl.locale),
         true // isReadOnly
       );
@@ -76,7 +69,7 @@ const YhteenvetoKooste = ({
         osaamisalaFormStructure
       )(lomakkeetDispatch);
     }
-  }, [lomakkeetDispatch, muutosperustelut, intl.locale]);
+  }, [lomakkeetDispatch, muutosperusteluList, intl.locale]);
 
   useEffect(() => {
     const kohdeTiedot = R.map(kohde => {
@@ -106,7 +99,7 @@ const YhteenvetoKooste = ({
     <React.Fragment>
       {muutoshakemus && kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
-          {muutosperustelut.muutosperusteluList &&
+          {muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
               <FormSection
@@ -133,7 +126,6 @@ const YhteenvetoKooste = ({
                         koulutukset={koulutukset}
                         lupa={lupa}
                         maaraystyyppi={maaraystyypitState.OIKEUS}
-                        muutosperustelut={muutosperustelut}
                         lomakkeet={lomakkeet.perustelut.tutkinnot}
                         stateObject={R.path(["perustelut", "tutkinnot"])(
                           muutoshakemus
@@ -250,7 +242,7 @@ const YhteenvetoKooste = ({
                       )(kohteet)}
                       koulutukset={koulutukset}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
-                      maaraykset={lupa.data.maaraykset}
+                      maaraykset={lupa.maaraykset}
                       opetuskielet={kielet.opetuskielet}
                       stateObjects={{
                         tutkintokielet: R.path(["kielet", "tutkintokielet"])(
@@ -306,7 +298,7 @@ const YhteenvetoKooste = ({
             />
           ) : null}
           {!!R.prop(["opiskelijavuodet"], changeObjects) &&
-          muutosperustelut.muutosperusteluList ? (
+          muutosperusteluList ? (
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
@@ -329,7 +321,7 @@ const YhteenvetoKooste = ({
                         kohteet
                       )}
                       muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
-                        muutosperustelut.muutosperusteluList
+                        muutosperusteluList
                       )}
                       stateObject={R.path(["perustelut", "opiskelijavuodet"])(
                         muutoshakemus
@@ -363,7 +355,7 @@ const YhteenvetoKooste = ({
                         )
                       }}
                       kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
-                      maaraykset={lupa.data.maaraykset}
+                      maaraykset={lupa.maaraykset}
                       muut={muut}
                       stateObject={R.path(["perustelut", "muut"])(
                         muutoshakemus
@@ -406,6 +398,7 @@ YhteenvetoKooste.propTypes = {
   koulutukset: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
+  muutosperusteluList: PropTypes.array,
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
