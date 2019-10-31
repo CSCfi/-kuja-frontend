@@ -88,6 +88,7 @@ const backendRoutes = {
   muutospyynnot: `${API_BASE_URL}/muutospyynnot/`,
   muutospyynto: `${API_BASE_URL}/muutospyynnot/id/`,
   oivamuutoikeudetvelvollisuudetehdotjatehtavat: `${API_BASE_URL}/koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`,
+  oivaperustelut: `${API_BASE_URL}/koodistot/koodit/oivaperustelut`,
   opetuskielet: `${API_BASE_URL}/koodistot/opetuskielet`,
   organisaatio: `${API_BASE_URL}/organisaatiot/`,
   vankilat: `${API_BASE_URL}/koodistot/koodit/vankilat`,
