@@ -64,7 +64,7 @@ const PerustelutTutkinnot = React.memo(
                 koulutusala.koulutukset,
                 kohde,
                 maaraystyyppi,
-                locale,
+                intl,
                 areaChanges,
                 anchorInitial,
                 lomakkeet,
