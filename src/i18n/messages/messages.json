@@ -130,6 +130,26 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.loginError",
+    "defaultMessage": "Kirjautumisessa tapahtui virhe",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.welcome",
+    "defaultMessage": "Tervetuloa Oiva-palveluun",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.fetchFailure",
+    "defaultMessage": "Tietoja ei voitu noutaa.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.fetchFailureAuthInfo",
+    "defaultMessage": "Tämä voi johtua siitä, ettet ole kirjautunut sisään.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"

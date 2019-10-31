@@ -28,7 +28,7 @@ export function getKieliList(kielet, locale) {
 }
 
 // Sort languages: promote some common languages, sort others alphabetically
-export function sortLanguages(languages, locale) {
+export function sortLanguages(languages = [], locale) {
   return R.sort((a, b) => {
     const aLabel = parseLocalizedField(a.metadata, locale);
     const bLabel = parseLocalizedField(b.metadata, locale);

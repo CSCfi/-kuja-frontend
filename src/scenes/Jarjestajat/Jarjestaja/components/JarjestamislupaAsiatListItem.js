@@ -23,15 +23,7 @@ const TextPartial = styled.span`
 `;
 
 const JarjestamislupaAsiaListItem = props => {
-  const {
-    tila,
-    uuid
-  } = props.muutospyynto;
-
-  const open = (e, nro) => {
-    e.stopPropagation();
-    props.setOpened(nro);
-  };
+  const { tila, uuid } = props.muutospyynto;
 
   return (
     <React.Fragment>
@@ -41,9 +33,7 @@ const JarjestamislupaAsiaListItem = props => {
           <Trn>
             <Td>
               <LupaText>
-                <TextPartial>
-                  {LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}
-                </TextPartial>
+                <TextPartial>{LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}</TextPartial>
                 <TextPartial>
                   {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}:&nbsp;
                   {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
@@ -52,9 +42,10 @@ const JarjestamislupaAsiaListItem = props => {
               <LupaText>
                 <NavLink
                   to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
-                  exact={true}>
+                  exact={true}
+                >
                   <Button title="Täydennä hakemusta">
-                    <Edit/>
+                    <Edit />
                   </Button>
                 </NavLink>
               </LupaText>
@@ -81,20 +72,16 @@ const JarjestamislupaAsiaListItem = props => {
               </Typography>
             </Td>
             <Td size="small">
-              <Typography component="span" noWrap={true}>
-              </Typography>
+              <Typography component="span" noWrap={true}></Typography>
             </Td>
             <Td size="small">
-              <Typography component="span" noWrap={true}>
-              </Typography>
+              <Typography component="span" noWrap={true}></Typography>
             </Td>
             <Td size="small">
               <div className="flex">
-                <NavLink
-                  to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
-                  exact={true}>
+                <NavLink to={`hakemukset-ja-paatokset/${uuid}/1`} exact={true}>
                   <Button title="Täydennä hakemusta">
-                    <Edit />
+                    <Edit /> {uuid}
                   </Button>
                 </NavLink>
               </div>

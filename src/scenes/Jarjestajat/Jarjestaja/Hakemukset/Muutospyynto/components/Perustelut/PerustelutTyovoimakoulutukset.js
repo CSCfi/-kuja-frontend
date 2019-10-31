@@ -76,7 +76,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       {
         categories: getCategories(
           getDataForKoulutusList(
-            props.koulutukset.muut.muudata[koodisto],
+            props.koulutukset.muut[koodisto],
             R.toUpper(props.intl.locale)
           ),
           props.kohde,

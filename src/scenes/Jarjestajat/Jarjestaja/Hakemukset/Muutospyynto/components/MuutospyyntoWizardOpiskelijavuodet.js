@@ -11,10 +11,10 @@ const getArvoFromKohdeArray = (tyyppi, kohde) => {
     (
       R.find(obj => {
         return obj.tyyppi === tyyppi;
-      }, kohde || []) || {}
+      }, kohde || []) || {}
     ).arvo || "0",
     10
-  )
+  );
 };
 
 const filterOpiskelijavuodet = (opiskelijavuodet, categoryKey) => {
@@ -37,28 +37,40 @@ const defaultConstraintFlags = {
 
 const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
-  const { kohteet } = props.lupa;
-  const { opiskelijavuodet, rajoitukset } = kohteet[4];
+  const { opiskelijavuodet, rajoitukset } = props.lupaKohteet[4];
 
-  const [constraintFlags, setConstraintFlags] = useState(defaultConstraintFlags);
+  const [constraintFlags, setConstraintFlags] = useState(
+    defaultConstraintFlags
+  );
   const [applyFor, setApplyFor] = useState(0);
   const [applyForVaativa, setApplyForVaativa] = useState(0);
   const [applyForSisaoppilaitos, setApplyForSisaoppilaitos] = useState(0);
   const [initialValue, setInitialValue] = useState(0);
   const [initialValueVaativa, setInitialValueVaativa] = useState(0);
-  const [initialValueSisaoppilaitos, setInitialValueSisaoppilaitos] = useState(0);
+  const [initialValueSisaoppilaitos, setInitialValueSisaoppilaitos] = useState(
+    0
+  );
   const [koodiarvot, setKoodiarvot] = useState({});
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const vuodetValue = getArvoFromKohdeArray("Ammatillinen koulutus", opiskelijavuodet);
+    const vuodetValue = getArvoFromKohdeArray(
+      "Ammatillinen koulutus",
+      opiskelijavuodet
+    );
     setInitialValue(vuodetValue);
     setApplyFor(vuodetValue);
   }, [opiskelijavuodet]);
 
   useEffect(() => {
-    const sisaoppilaitosValue = getArvoFromKohdeArray("Sisäoppilaitosmuotoinen koulutus", rajoitukset)
-    const vaativaValue = getArvoFromKohdeArray("Vaativan erityisen tuen tehtävä", rajoitukset);
+    const sisaoppilaitosValue = getArvoFromKohdeArray(
+      "Sisäoppilaitosmuotoinen koulutus",
+      rajoitukset
+    );
+    const vaativaValue = getArvoFromKohdeArray(
+      "Vaativan erityisen tuen tehtävä",
+      rajoitukset
+    );
     setInitialValueSisaoppilaitos(sisaoppilaitosValue);
     setApplyForSisaoppilaitos(sisaoppilaitosValue);
     setInitialValueVaativa(vaativaValue);
@@ -67,7 +79,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.data.maaraykset
+      props.lupa.maaraykset
     );
     if (maarays) {
       setKoodiarvot(prevState => {
@@ -77,7 +89,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.lupa.data.maaraykset]);
+  }, [props.lupa.maaraykset]);
 
   useEffect(() => {
     const titles = [
@@ -286,7 +298,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         return {
           ...previousConstraintFlags,
           ...newConstraintFlags
-        }
+        };
       });
 
       // Let's set koodiarvot so that they can be used when saving the muutoshakemus.
@@ -307,7 +319,10 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       !constraintFlags.isSisaoppilaitosVisible &&
       props.changeObjects.opiskelijavuodet
     ) {
-      filteredChanges = filterOpiskelijavuodet(filteredChanges, "sisaoppilaitos")
+      filteredChanges = filterOpiskelijavuodet(
+        filteredChanges,
+        "sisaoppilaitos"
+      );
     }
     if (
       !constraintFlags.isVaativaTukiVisible &&
@@ -316,10 +331,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       filteredChanges = filterOpiskelijavuodet(filteredChanges, "vaativatuki");
     }
 
-    if (!R.equals(
-      filteredChanges,
-      props.changeObjects.opiskelijavuodet
-    )) {
+    if (!R.equals(filteredChanges, props.changeObjects.opiskelijavuodet)) {
       onChangesUpdate({
         anchor: props.sectionId,
         changes: filteredChanges
@@ -334,7 +346,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.data.maaraykset
+      props.lupa.maaraykset
     );
     if (maarays) {
       setKoodiarvot(prevState => {
@@ -344,7 +356,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.lupa.data.maaraykset]);
+  }, [props.lupa.maaraykset]);
 
   useEffect(() => {
     if (props.kohde && props.maaraystyyppi && props.muut) {
@@ -397,8 +409,9 @@ MuutospyyntoWizardOpiskelijavuodet.propTypes = {
   changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

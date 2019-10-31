@@ -8,7 +8,17 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import * as R from "ramda";
 import Check from "@material-ui/icons/CheckBoxOutlined";
 /**
+ * @module Components/01-molecules
+ */
+
+/**
  * Label and checkbox united.
+ * @example
+ * const size = 12
+ * const text = 'I am documented!'
+ * return (
+ *   <Documented size={size} text={text} />
+ * )
  */
 const CheckboxWithLabel = React.memo(
   props => {

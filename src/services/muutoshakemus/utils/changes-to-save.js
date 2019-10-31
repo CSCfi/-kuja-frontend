@@ -7,9 +7,8 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   const anchorParts = changeObj.anchor.split(".");
   const koulutusCode = R.nth(2, anchorParts);
   const subcodeCandidate = R.nth(3, anchorParts);
-  const subcode = subcodeCandidate && !isNaN(subcodeCandidate)
-    ? subcodeCandidate
-    : undefined;
+  const subcode =
+    subcodeCandidate && !isNaN(subcodeCandidate) ? subcodeCandidate : undefined;
 
   const meta = subcode
     ? getMetadata(R.slice(1, 4)(anchorParts), stateItem.categories)
@@ -17,17 +16,19 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
 
   const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
   if (koulutusCode) {
-    koulutus = R.compose(
-      R.find(R.propEq("koodi", "" + koulutusCode)),
-      R.chain(R.prop("koulutukset")),
-      R.values,
-      R.path(["article", "koulutusalat"]))(stateItem) || {};
+    koulutus =
+      R.compose(
+        R.find(R.propEq("koodi", "" + koulutusCode)),
+        R.chain(R.prop("koulutukset")),
+        R.values,
+        R.path(["article", "koulutusalat"])
+      )(stateItem) || {};
   }
 
-  const maaraysUuid = R.prop('maaraysId', koulutus);
+  const maaraysUuid = R.prop("maaraysId", koulutus);
 
-  const muutos =  {
-    generatedId: R.join('.', R.init(anchorParts)),
+  const muutos = {
+    generatedId: R.join(".", R.init(anchorParts)),
     isInLupa: meta.isInLupa,
     kohde: meta.kohde || koulutus.kohde,
     koodiarvo: subcode || koulutusCode,
@@ -49,9 +50,12 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
 
   if (subcode && maaraysUuid) {
     // in case parent maarays exists
-    muutos['maaraysUuid'] = maaraysUuid;
+    muutos["maaraysUuid"] = maaraysUuid;
   } else if (subcode) {
-    muutos['parent'] = R.compose(R.join('.'), R.dropLast(2))(anchorParts);
+    muutos["parent"] = R.compose(
+      R.join("."),
+      R.dropLast(2)
+    )(anchorParts);
   }
 
   return muutos;
@@ -329,6 +333,7 @@ export const getChangesToSave = (
           maaraystyyppi: stateObject.maaraystyyppi
         };
       } else {
+        console.info(changeObj);
         return {
           koodiarvo: changeObj.properties.meta.koodiarvo,
           koodisto: changeObj.properties.meta.koodisto.koodistoUri,

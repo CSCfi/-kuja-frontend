@@ -3,6 +3,17 @@ import PropTypes from "prop-types";
 import { COLORS } from "modules/styles";
 
 /**
+ * Components
+ * @namespace components
+ * @property {module:00-atoms}
+ */
+
+/**
+ * @module 00-atoms
+ * @instance
+ * */
+
+/**
  * The component is able to show the number of changes. If there aren't any changes it renders nothing.
  */
 const NumberOfChanges = props => {

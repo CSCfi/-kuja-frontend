@@ -9,6 +9,7 @@ import {
 export default function(state, action) {
   switch (action.type) {
     case FETCH_LUVAT_START:
+        console.info("start");
       return {
         ...state,
         isFetching: true,
@@ -16,6 +17,7 @@ export default function(state, action) {
         hasErrored: false
       };
     case FETCH_LUVAT_SUCCESS:
+        console.info("success");
       return {
         ...state,
         isFetching: false,
@@ -24,6 +26,7 @@ export default function(state, action) {
         data: _.mapKeys(action.payload, "uuid")
       };
     case FETCH_LUVAT_FAILURE:
+      console.info("failure", state, action);
       return {
         ...state,
         isFetching: false,
