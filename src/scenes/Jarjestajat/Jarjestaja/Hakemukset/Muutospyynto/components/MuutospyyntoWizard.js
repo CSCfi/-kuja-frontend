@@ -593,6 +593,7 @@ const MuutospyyntoWizard = ({
                         muutosperusteluList={muutosperusteluList}
                         onChangesUpdate={onSectionChangesUpdate}
                         onStateUpdate={onSectionStateUpdate}
+                        tutkinnot={tutkinnot}
                       />
                     </LomakkeetProvider>
                   </WizardPage>

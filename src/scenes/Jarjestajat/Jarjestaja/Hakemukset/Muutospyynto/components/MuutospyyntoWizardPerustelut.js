@@ -177,7 +177,6 @@ const MuutospyyntoWizardPerustelut = ({
                       kohde={R.find(
                         R.propEq("tunniste", "tutkinnotjakoulutukset")
                       )(kohteet)}
-                      tutkinnot={tutkinnot}
                       lupa={lupa}
                       lupaKohteet={lupaKohteet}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
@@ -185,6 +184,7 @@ const MuutospyyntoWizardPerustelut = ({
                       stateObject={R.path(["perustelut", "tutkinnot"])(
                         muutoshakemus
                       )}
+                      tutkinnot={tutkinnot}
                       {..._props}
                     />
                   )}

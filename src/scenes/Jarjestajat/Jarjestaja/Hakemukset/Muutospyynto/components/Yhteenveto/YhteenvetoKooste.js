@@ -33,7 +33,8 @@ const YhteenvetoKooste = ({
   lupaKohteet,
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate
+  onStateUpdate,
+  tutkinnot
 }) => {
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
@@ -46,29 +47,25 @@ const YhteenvetoKooste = ({
      * Let's get the structures of different tutkinto based reasoning forms and update the context.
      * These will be needed later.
      */
-    // console.info(muutosperusteluList);
-    const muutosperusteluList = [];
-    if (muutosperusteluList) {
-      const additionFormStructure = getAdditionFormStructure(
-        R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
-        R.toUpper(intl.locale),
-        true // isReadOnly
-      );
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "addition"],
-        additionFormStructure
-      )(lomakkeetDispatch);
-      const removalFormStructure = getRemovalFormStructure();
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "removal"],
-        removalFormStructure
-      )(lomakkeetDispatch);
-      const osaamisalaFormStructure = getOsaamisalaFormStructure();
-      updateFormStructure(
-        ["perustelut", "tutkinnot", "osaamisala"],
-        osaamisalaFormStructure
-      )(lomakkeetDispatch);
-    }
+    const additionFormStructure = getAdditionFormStructure(
+      R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
+      R.toUpper(intl.locale),
+      true // isReadOnly
+    );
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "addition"],
+      additionFormStructure
+    )(lomakkeetDispatch);
+    const removalFormStructure = getRemovalFormStructure();
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "removal"],
+      removalFormStructure
+    )(lomakkeetDispatch);
+    const osaamisalaFormStructure = getOsaamisalaFormStructure();
+    updateFormStructure(
+      ["perustelut", "tutkinnot", "osaamisala"],
+      osaamisalaFormStructure
+    )(lomakkeetDispatch);
   }, [lomakkeetDispatch, muutosperusteluList, intl.locale]);
 
   useEffect(() => {
@@ -111,7 +108,7 @@ const YhteenvetoKooste = ({
                     {!!R.prop("tutkinnot", changeObjects) && (
                       <PerustelutTutkinnot
                         changeObjects={{
-                          tutkinnot: R.prop("tutkinnot", changeObjects) || {},
+                          tutkinnot: R.prop("tutkinnot", changeObjects),
                           perustelut: {
                             tutkinnot:
                               R.path(
@@ -120,17 +117,19 @@ const YhteenvetoKooste = ({
                               ) || {}
                           }
                         }}
+                        isReadOnly={true}
                         kohde={R.find(
                           R.propEq("tunniste", "tutkinnotjakoulutukset")
                         )(kohteet)}
                         koulutukset={koulutukset}
-                        lupa={lupa}
-                        maaraystyyppi={maaraystyypitState.OIKEUS}
                         lomakkeet={lomakkeet.perustelut.tutkinnot}
+                        lupa={lupa}
+                        lupaKohteet={lupaKohteet}
+                        maaraystyyppi={maaraystyypitState.OIKEUS}
                         stateObject={R.path(["perustelut", "tutkinnot"])(
                           muutoshakemus
                         )}
-                        isReadOnly={true}
+                        tutkinnot={tutkinnot}
                         {..._props}
                       />
                     )}
@@ -403,7 +402,8 @@ YhteenvetoKooste.propTypes = {
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  tutkinnot: PropTypes.object
 };
 
 export default injectIntl(YhteenvetoKooste);

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { parseLocalizedField } from "modules/helpers";
 
 export function getMuutosperusteluList(muutosperustelut, locale) {

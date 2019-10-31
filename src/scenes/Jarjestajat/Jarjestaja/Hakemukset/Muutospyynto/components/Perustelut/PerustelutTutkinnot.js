@@ -80,7 +80,6 @@ const PerustelutTutkinnot = React.memo(
     useEffect(() => {
       if (koulutusdata.length) {
         const items = getItems(koulutusdata, changeObjects.tutkinnot);
-        console.info(items);
         onStateUpdate(
           {
             items
@@ -136,14 +135,15 @@ PerustelutTutkinnot.propTypes = {
   changeObjects: PropTypes.object,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
-  tutkinnot: PropTypes.object,
   lomakkeet: PropTypes.object,
+  lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
   sectionId: PropTypes.string,
-  stateObject: PropTypes.object
+  stateObject: PropTypes.object,
+  tutkinnot: PropTypes.object
 };
 
 export default injectIntl(PerustelutTutkinnot);

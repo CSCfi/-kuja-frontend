@@ -22,7 +22,8 @@ const MuutospyyntoWizardYhteenveto = ({
   muutoshakemus,
   muutosperusteluList,
   onChangesUpdate,
-  onStateUpdate
+  onStateUpdate,
+  tutkinnot
 }) => {
   const jarjestaja = useMemo(() => {
     const nimi = {
@@ -123,6 +124,7 @@ const MuutospyyntoWizardYhteenveto = ({
               muutoshakemus={muutoshakemus}
               onChangesUpdate={onChangesUpdate}
               onStateUpdate={onStateUpdate}
+              tutkinnot={tutkinnot}
             ></YhteenvetoKooste>
           </React.Fragment>
         )}
@@ -167,7 +169,8 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   muutoshakemus: PropTypes.object,
   muutosperusteluList: PropTypes.array,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  tutkinnot: PropTypes.object
 };
 
 export default injectIntl(MuutospyyntoWizardYhteenveto);
