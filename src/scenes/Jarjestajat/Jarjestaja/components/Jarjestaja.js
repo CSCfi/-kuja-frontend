@@ -178,7 +178,9 @@ const Jarjestaja = ({
                     render={props => (
                       <HakemuksetJaPaatokset
                         muutospyynnot={muutospyynnot}
-                        {...props}
+                        match={props.match}
+                        organisaatio={organisaatio}
+                        user={user}
                       />
                     )}
                   />
