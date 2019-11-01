@@ -58,7 +58,6 @@ const Datepicker = props => {
       setSelectedDate(props.value);
     }
   }, [props.value]);
-
   return (
     <ThemeProvider theme={materialTheme}>
       <MuiPickersUtilsProvider
@@ -81,7 +80,7 @@ const Datepicker = props => {
           InputProps={{
             className: classes.input
           }}
-          value={selectedDate}
+          value={selectedDate || null}
           inputVariant="outlined"
           showTodayButton={props.showTodayButton}
           okLabel={formatMessage(common.ok)}
@@ -113,7 +112,7 @@ Datepicker.defaultProps = {
   error: false,
   width: "12em",
   fullWidth: false,
-  clearable: false,
+  clearable: true,
   showTodayButton: true,
   disablePast: false,
   disableFuture: false

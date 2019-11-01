@@ -63,7 +63,8 @@ const YhteenvetoYleisettiedot = React.memo(props => {
               styleClasses: ["w-full sm:pr-2 sm:w-1/2 md:w-1/4"],
               properties: {
                 fullWidth: true,
-                label: "Ajankohta",
+                label: "Päivämäärä",
+                placeholder: "Päivämäärä",
                 disablePast: true
               }
             }
@@ -142,6 +143,7 @@ const YhteenvetoYleisettiedot = React.memo(props => {
       sectionId
     );
   }, [getCategories, onStateUpdate, sectionId]);
+
   return (
     <React.Fragment>
       <p></p>
