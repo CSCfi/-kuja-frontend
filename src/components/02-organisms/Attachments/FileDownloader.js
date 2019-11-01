@@ -1,31 +1,35 @@
 import React, { useContext, useMemo } from "react";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
-import FetchHandler from "../../../../FetchHandler";
-import { BackendContext } from "../../../../context/backendContext";
-import { BackendContext } from "./context/backendContext";
+import FetchHandler from "../../../FetchHandler";
+import { BackendContext } from "../../../context/backendContext";
+// import { BackendContext } from "./context/backendContext";
 
-const FileDownloader = ({ file }) => {
+const FileDownloader = props => {
   const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
-    return [
-      {
-        key: "liitteet",
-        dispatchFn: dispatch,
-        urlEnding: file.oid
-      }
-    ];
-  }, [dispatch, file]);
+    console.log(props.uuid);
+    if (props.uuid)
+      return [
+        {
+          key: "liitteet",
+          dispatchFn: dispatch,
+          urlEnding: props.uuid
+        }
+      ];
+    else return [];
+  }, [dispatch, props.file]);
 
   const OpenFile = () => {
-    const blob = reader.result;
-    let url = blob;
-    let a = document.createElement("a");
-    a.href = url;
-    a.download = response.nimi + "." + response.tyyppi;
-    a.click();
+    console.log(fromBackend);
+    // const blob = reader.result;
+    // let url = blob;
+    // let a = document.createElement("a");
+    // a.href = url;
+    // a.download = response.nimi + "." + response.tyyppi;
+    // a.click();
+    return <React.Fragment />;
   };
 
   return (
@@ -42,14 +46,8 @@ const FileDownloader = ({ file }) => {
   );
 };
 
-Jarjestaja.propTypes = {
-  lupaKohteet: PropTypes.object,
-  lupa: PropTypes.object,
-  match: PropTypes.object,
-  muutospyynnot: PropTypes.array,
-  organisaatio: PropTypes.object,
-  user: PropTypes.object,
-  ytunnus: PropTypes.string
+FileDownloader.propTypes = {
+  uuid: PropTypes.string
 };
 
 export default injectIntl(FileDownloader);

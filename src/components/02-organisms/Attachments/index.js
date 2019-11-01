@@ -15,6 +15,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
+import FileDownloader from "./FileDownloader";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -178,6 +179,7 @@ const Attachments = React.memo(props => {
   const [fileError, setFileError] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
+  const [showFileDownloader, setFileDownloader] = useState(false);
 
   const {
     intl: { formatMessage }
@@ -365,6 +367,7 @@ const Attachments = React.memo(props => {
         a.click();
       };
     } else {
+      setFileDownloader(true);
       // props.downloadAttachment(file.uuid).then(response => {
       //   const blob = reader.result;
       //   let url = blob;
@@ -373,8 +376,6 @@ const Attachments = React.memo(props => {
       //   a.download = response.nimi + "." + response.tyyppi;
       //   a.click();
       // });
-      console.log(file.tiedosto);
-      console.log(typeof file.tiedosto);
     }
   };
 
@@ -451,6 +452,7 @@ const Attachments = React.memo(props => {
                   <FaTimes />
                 </button>
               </LiiteListItem>
+              {showFileDownloader && <FileDownloader file={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;
@@ -491,6 +493,7 @@ const Attachments = React.memo(props => {
                   {liite.salainen && <FaLock />}
                 </span>
               </LiiteListItem>
+              {showFileDownloader && <FileDownloader file={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;
