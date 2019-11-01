@@ -19,7 +19,7 @@ const FileDownloader = props => {
         }
       ];
     else return [];
-  }, [dispatch, props.file]);
+  }, [dispatch, props.uuid]);
 
   const OpenFile = () => {
     console.log(fromBackend);
