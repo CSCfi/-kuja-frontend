@@ -643,6 +643,10 @@ const CategorizedList = React.memo(props => {
                           error={propsObj.error}
                           placeholder={propsObj.placeholder}
                           fullWidth={propsObj.fullWidth}
+                          minDate={propsObj.minDate}
+                          maxDate={propsObj.maxDate}
+                          disablePast={propsObj.disablePast}
+                          disableFuture={propsObj.disableFuture}
                           payload={{
                             anchor,
                             categories: category.categories,
