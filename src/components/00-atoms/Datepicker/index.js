@@ -16,6 +16,7 @@ import svLocale from "date-fns/locale/sv";
 import enLocale from "date-fns/locale/en-GB";
 import format from "date-fns/format";
 import common from "../../../i18n/definitions/common";
+import {Moment as moment} from "moment";
 
 const styles = createStyles(theme => ({
   dense: {
@@ -132,7 +133,7 @@ Datepicker.propTypes = {
   error: PropTypes.bool,
   width: PropTypes.string,
   fullWidth: PropTypes.bool,
-  value: PropTypes.instanceOf(Date),
+  value: PropTypes.any,
   clearable: PropTypes.bool,
   showTodayButton: PropTypes.bool,
   disablePast: PropTypes.bool,
