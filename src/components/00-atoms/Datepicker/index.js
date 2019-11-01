@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  DatePicker
 } from "@material-ui/pickers";
 import { createStyles } from "@material-ui/styles";
 import green from "@material-ui/core/colors/green";
@@ -66,7 +66,7 @@ const Datepicker = props => {
         locale={localeMap[locale]}
         theme={materialTheme}
       >
-        <KeyboardDatePicker
+        <DatePicker
           format="d.M.yyyy" // Always is Finnish format
           aria-label={props.ariaLabel}
           label={props.label}
