@@ -115,6 +115,9 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         { path = ["kohde", "tunniste"], categoryKey } = {}
       ) => {
         let result = R.filter(R.pathEq(path, key))(changes);
+        result = R.concat(
+          R.reject(R.isNil, R.chain(R.propOr([], 'aliMaaraykset'), result)),
+          result);
         if (key === "tutkinnotjakoulutukset") {
           result = R.filter(
             R.compose(
