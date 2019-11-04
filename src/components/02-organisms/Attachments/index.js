@@ -408,7 +408,7 @@ const Attachments = React.memo(props => {
                 <span className="type">{liite.tyyppi}</span>
                 <span className="size">{bytesToSize(liite.koko)}</span>
                 <button
-                  title={FormattedMessage(common.attachmentDownload)}
+                  title={formatMessage(common.attachmentDownload)}
                   onClick={e => showFile(e, liite)}
                   className="ml-2"
                 >
