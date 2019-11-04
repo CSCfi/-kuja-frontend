@@ -98,6 +98,7 @@ export default defineMessages({
   attachmentDownload: {
     id: "common.attachmentDownload",
     defaultMessage: "Lataa liite tietokoneelle"
+  },
   loginError: {
     id: "common.loginError",
     defaultMessage: "Kirjautumisessa tapahtui virhe"
