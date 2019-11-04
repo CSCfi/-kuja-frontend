@@ -20,6 +20,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
                     title:
@@ -43,6 +44,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
                     title: "Henkilöstöresurssit"
@@ -57,6 +59,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
                     title: "Osaaminen"
@@ -71,6 +74,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
                     title: "Pedagogiset järjestelyt"
@@ -85,6 +89,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
                     title: "Sidosryhmäyhteistyö"
@@ -107,6 +112,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                   anchor: "textbox",
                   name: "TextBox",
                   properties: {
+                    isReadOnly,
                     placeholder:
                       "mm. koulutusalat, joille työvoimakoulutusta aiotaan järjestää",
                     title:
