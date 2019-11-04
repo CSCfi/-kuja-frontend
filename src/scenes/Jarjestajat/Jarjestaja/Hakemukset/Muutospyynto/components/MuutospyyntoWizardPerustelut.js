@@ -23,6 +23,7 @@ import wizard from "../../../../../../i18n/definitions/wizard";
 
 const MuutospyyntoWizardPerustelut = ({
   changeObjects = {},
+  elykeskukset = [],
   intl,
   intl: { formatMessage },
   kielet,
@@ -199,6 +200,7 @@ const MuutospyyntoWizardPerustelut = ({
                           )
                         }
                       }}
+                      elykeskukset={elykeskukset}
                       kohde={R.find(
                         R.propEq("tunniste", "tutkinnotjakoulutukset")
                       )(kohteet)}
@@ -446,6 +448,7 @@ const MuutospyyntoWizardPerustelut = ({
 
 MuutospyyntoWizardPerustelut.propTypes = {
   changeObjects: PropTypes.object,
+  elykeskukset: PropTypes.array,
   kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,

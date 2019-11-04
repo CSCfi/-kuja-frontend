@@ -104,7 +104,7 @@ const Autocomplete = React.memo(props => {
 
   return (
     <React.Fragment>
-      {props.title && <h4 className="py-2">{props.title}</h4>}
+      {props.title && <label className="block py-2">{props.title}</label>}
       <Select
         autosize={false}
         name={props.name}

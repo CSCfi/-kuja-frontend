@@ -32,6 +32,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
 
   const fetchSetup = useMemo(() => {
     const arr1 = [
+      { key: "elykeskukset", dispatchFn: dispatch },
       { key: "kohteet", dispatchFn: dispatch },
       {
         key: "koulutus",

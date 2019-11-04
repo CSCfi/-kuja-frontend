@@ -2,11 +2,15 @@ import React, { useEffect, useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import { curriedGetAnchorPartsByIndex } from "../../../../../../../utils/common";
+import {
+  curriedGetAnchorPartsByIndex,
+  getAnchorPart
+} from "../../../../../../../utils/common";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import Lomake from "../../../../../../../components/02-organisms/Lomake";
 
 const PerustelutTyovoimakoulutukset = React.memo(props => {
   const sectionId = "perustelut_koulutukset_tyovoimakoulutukset";
@@ -94,28 +98,68 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
     props.maaraystyyppi
   ]);
 
-  const changes = R.path(
-    ["koulutukset", "tyovoimakoulutukset"],
-    props.changeObjects
-  );
+  const lomakkeet = useMemo(() => {
+    return (
+      <React.Fragment>
+        {R.map(changeObj => {
+          const code = getAnchorPart(changeObj.anchor, 1);
+          const lomake = changeObj.properties.isChecked ? (
+            <Lomake
+              anchor={"perustelut_koulutukset_tyovoimakoulutukset"}
+              changeObjects={
+                props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
+              }
+              data={{
+                code,
+                elykeskukset: props.elykeskukset
+              }}
+              key={code}
+              isReadOnly={props.isReadOnly}
+              onChangesUpdate={onChangesUpdate}
+              path={["koulutukset", "tyovoimakoulutukset"]}
+            ></Lomake>
+          ) : (
+            <Lomake
+              action="removal"
+              anchor={"perustelut_koulutukset_tyovoimakoulutukset"}
+              changeObjects={
+                props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
+              }
+              isReadOnly={props.isReadOnly}
+              key={code}
+              onChangesUpdate={onChangesUpdate}
+              path={["koulutukset", "tyovoimakoulutukset"]}
+            ></Lomake>
+          );
+          return lomake;
+        }, props.changeObjects.koulutukset.tyovoimakoulutukset || [])}
+      </React.Fragment>
+    );
+  }, [
+    onChangesUpdate,
+    props.elykeskukset,
+    props.isReadOnly,
+    props.changeObjects.koulutukset.tyovoimakoulutukset,
+    props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
+  ]);
 
   return (
     <React.Fragment>
-      {changes && !R.isEmpty(changes) && (
+      {props.stateObjects.perustelut && lomakkeet && (
         <ExpandableRowRoot
           anchor={sectionId}
           key={`expandable-row-root`}
-          categories={props.stateObject.categories}
           changes={
             props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
           }
           disableReverting={props.isReadOnly}
           hideAmountOfChanges={false}
           isExpanded={true}
-          onUpdate={onChangesUpdate}
           onChangesRemove={onChangesRemove}
           title={props.intl.formatMessage(wizardMessages.workforceTraining)}
-        />
+        >
+          {lomakkeet}
+        </ExpandableRowRoot>
       )}
     </React.Fragment>
   );
@@ -124,14 +168,16 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
 PerustelutTyovoimakoulutukset.defaultProps = {
   changeObjects: {},
   isReadOnly: false,
-  stateObject: {}
+  stateObjects: {}
 };
 
 PerustelutTyovoimakoulutukset.propTypes = {
   changeObjects: PropTypes.object,
+  code: PropTypes.string,
+  elykeskukset: PropTypes.array,
   isReadOnly: PropTypes.bool,
   koulutukset: PropTypes.object,
-  stateObject: PropTypes.object
+  stateObjects: PropTypes.object
 };
 
 export default injectIntl(PerustelutTyovoimakoulutukset);
