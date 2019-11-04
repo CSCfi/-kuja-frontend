@@ -114,6 +114,9 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         { path = ["kohde", "tunniste"], categoryKey } = {}
       ) => {
         let result = R.filter(R.pathEq(path, key))(changes);
+        result = R.concat(
+          R.reject(R.isNil, R.chain(R.propOr([], 'aliMaaraykset'), result)),
+          result);
         if (key === "tutkinnotjakoulutukset") {
           result = R.filter(
             R.compose(
@@ -154,31 +157,31 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
 
       let tutkinnotjakoulutuksetLiitteetChanges =
         R.path(
-          ["meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
+          ["raw", "meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
           fromBackend.muutospyynto
         ) || [];
       let taloudellisetChanges =
         R.path(
-          ["meta", "taloudelliset", "changeObjects"],
+          ["raw", "meta", "taloudelliset", "changeObjects"],
           fromBackend.muutospyynto
         ) || [];
       let yhteenvetoChanges =
         R.path(
-          ["meta", "yhteenveto", "changeObjects"],
+          ["raw", "meta", "yhteenveto", "changeObjects"],
           fromBackend.muutospyynto
         ) || [];
       // Gets uuid:s from liitteet-structure coming from backend and sets them to changeObject
       tutkinnotjakoulutuksetLiitteetChanges = setAttachmentUuids(
         tutkinnotjakoulutuksetLiitteetChanges,
-        fromBackend.muutospyynto
+        fromBackend.muutospyynto.raw
       );
       taloudellisetChanges = setAttachmentUuids(
         taloudellisetChanges,
-        fromBackend.muutospyynto
+        fromBackend.muutospyynto.raw
       );
       yhteenvetoChanges = setAttachmentUuids(
         yhteenvetoChanges,
-        fromBackend.muutospyynto
+        fromBackend.muutospyynto.raw
       );
 
       const c = R.flatten([
@@ -234,6 +237,10 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
       });
     }
   }, [fromBackend.muutospyynto, match.params.uuid]);
+
+  const elykeskukset = useMemo(() => {
+    return R.prop("raw", fromBackend.elykeskukset) || [];
+  }, [fromBackend.elykeskukset]);
 
   const kohteet = useMemo(() => {
     return R.prop("raw", fromBackend.kohteet) || [];
@@ -306,6 +313,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         <MuutoshakemusProvider>
           <MuutospyyntoWizard
             backendChanges={backendChanges}
+            elykeskukset={elykeskukset}
             history={history}
             kohteet={kohteet}
             koulutustyypit={koulutustyypit}
