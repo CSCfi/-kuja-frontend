@@ -95,6 +95,7 @@ const FormDialog = withStyles(() => ({
  */
 const MuutospyyntoWizard = ({
   backendChanges = {},
+  elykeskukset = [],
   history = {},
   intl,
   kohteet = [],
@@ -536,6 +537,7 @@ const MuutospyyntoWizard = ({
                     <LomakkeetProvider>
                       <MuutospyyntoWizardPerustelut
                         changeObjects={changeObjects}
+                        elykeskukset={elykeskukset}
                         kielet={kielet}
                         kohteet={kohteet}
                         koulutukset={koulutukset}
@@ -637,6 +639,7 @@ const MuutospyyntoWizard = ({
   }, [
     changeObjects,
     dataBySection,
+    elykeskukset,
     handleNext,
     handleOk,
     handlePrev,
@@ -670,6 +673,7 @@ const MuutospyyntoWizard = ({
 
 MuutospyyntoWizard.propTypes = {
   backendChanges: PropTypes.object,
+  elykeskukset: PropTypes.array,
   history: PropTypes.object,
   koulutustyypit: PropTypes.array,
   kunnat: PropTypes.array,

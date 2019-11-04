@@ -110,16 +110,19 @@ const PerustelutKoulutukset = React.memo(props => {
                   }
                 }
               }}
+              elykeskukset={props.elykeskukset}
               isReadOnly={props.isReadOnly}
               kohde={props.kohde}
               koulutukset={props.koulutukset}
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              stateObject={R.path(
-                ["perustelut", "koulutukset", "tyovoimakoulutukset"],
-                props.muutoshakemus
-              )}
+              stateObjects={{
+                perustelut: R.path(
+                  ["perustelut", "koulutukset", "tyovoimakoulutukset"],
+                  props.muutoshakemus
+                )
+              }}
               onStateUpdate={props.onStateUpdate}
             />
           ) : null}
@@ -169,6 +172,7 @@ PerustelutKoulutukset.defaultProps = {
 
 PerustelutKoulutukset.propTypes = {
   changeObjects: PropTypes.object,
+  elykeskukset: PropTypes.array,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,

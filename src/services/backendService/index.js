@@ -69,6 +69,7 @@ export function isReady(backendData) {
  * Example: { luvat: api/luvat/jarjestajilla, ... }
  */
 const backendRoutes = {
+  elykeskukset: `${API_BASE_URL}/koodistot/koodit/elykeskukset`,
   kayttaja: `${API_BASE_URL}/auth/me`,
   kielet: `${API_BASE_URL}/koodistot/kielet`,
   kohteet: `${API_BASE_URL}/kohteet`,
