@@ -94,5 +94,9 @@ export default defineMessages({
   attachmentErrorName: {
     id: "common.attachmentErrorName",
     defaultMessage: "Nimi on pakollinen"
+  },
+  attachmentDownload: {
+    id: "common.attachmentDownload",
+    defaultMessage: "Lataa liite tietokoneelle"
   }
 });

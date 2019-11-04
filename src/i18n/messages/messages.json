@@ -130,6 +130,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.attachmentDownload",
+    "defaultMessage": "Lataa liite tietokoneelle",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"

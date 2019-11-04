@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { injectIntl } from "react-intl";
+import { injectIntl, FormattedMessage } from "react-intl";
 import { COLORS } from "../../../modules/styles";
 import Attachment from "../Attachment/index";
 import { FaRegFile, FaFile, FaTimes, FaLock, FaDownload } from "react-icons/fa";
@@ -407,7 +407,7 @@ const Attachments = React.memo(props => {
                 <span className="type">{liite.tyyppi}</span>
                 <span className="size">{bytesToSize(liite.koko)}</span>
                 <button
-                  title="Näytä"
+                  title={FormattedMessage(common.attachmentDownload)}
                   onClick={e => showFile(e, liite)}
                   className="ml-2"
                 >
