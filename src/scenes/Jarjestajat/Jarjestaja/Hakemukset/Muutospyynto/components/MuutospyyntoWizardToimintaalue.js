@@ -151,7 +151,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         if (isMaakunta) {
           const relatedKunnatParentObject = R.find(
             R.propEq("koodiArvo", changeObj.properties.value.meta.koodiarvo),
-            props.maakuntakunnat.maakuntakunnatList
+            props.maakuntakunnatList
           );
           const kunnat = relatedKunnatParentObject
             ? relatedKunnatParentObject.kunta
@@ -230,7 +230,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       onChangesUpdate,
       kunnatInLupa,
       props.changeObjects,
-      props.maakuntakunnat.maakuntakunnatList
+      props.maakuntakunnatList
     ]
   );
 
@@ -478,7 +478,7 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
   kunnat: [],
   lupakohde: {},
   maakunnat: [],
-  maakuntakunnat: {},
+  maakuntakunnatList: [],
   maaraystyyppi: {},
   stateObjects: {
     toimintaalue: {}
@@ -492,7 +492,7 @@ MuutospyyntoWizardToimintaalue.propTypes = {
   kunnat: PropTypes.array,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.array,
-  maakuntakunnat: PropTypes.object,
+  maakuntakunnatList: PropTypes.array,
   maaraystyyppi: PropTypes.object,
   onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,

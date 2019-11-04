@@ -75,7 +75,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
   useEffect(() => {
     const categories = getCategories(
       getDataForKoulutusList(
-        props.koulutukset.poikkeukset.data,
+        props.koulutukset.poikkeukset,
         R.toUpper(props.intl.locale)
       ),
       props.kohde,
@@ -91,7 +91,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
     getCategories,
     onStateUpdate,
     props.kohde,
-    props.koulutukset.poikkeukset.data,
+    props.koulutukset.poikkeukset,
     props.intl.locale,
     props.maaraystyyppi
   ]);

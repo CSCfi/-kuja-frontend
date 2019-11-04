@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  DatePicker
 } from "@material-ui/pickers";
 import { createStyles } from "@material-ui/styles";
 import green from "@material-ui/core/colors/green";
@@ -16,6 +16,7 @@ import svLocale from "date-fns/locale/sv";
 import enLocale from "date-fns/locale/en-GB";
 import format from "date-fns/format";
 import common from "../../../i18n/definitions/common";
+import {Moment as moment} from "moment";
 
 const styles = createStyles(theme => ({
   dense: {
@@ -58,7 +59,6 @@ const Datepicker = props => {
       setSelectedDate(props.value);
     }
   }, [props.value]);
-
   return (
     <ThemeProvider theme={materialTheme}>
       <MuiPickersUtilsProvider
@@ -66,7 +66,7 @@ const Datepicker = props => {
         locale={localeMap[locale]}
         theme={materialTheme}
       >
-        <KeyboardDatePicker
+        <DatePicker
           format="d.M.yyyy" // Always is Finnish format
           aria-label={props.ariaLabel}
           label={props.label}
@@ -81,7 +81,7 @@ const Datepicker = props => {
           InputProps={{
             className: classes.input
           }}
-          value={selectedDate}
+          value={selectedDate || null}
           inputVariant="outlined"
           showTodayButton={props.showTodayButton}
           okLabel={formatMessage(common.ok)}
@@ -92,6 +92,10 @@ const Datepicker = props => {
           maxDateMessage={formatMessage(common.datemax)}
           minDateMessage={formatMessage(common.datemin)}
           invalidDateMessage={formatMessage(common.dateinvalid)}
+          minDate={props.minDate}
+          maxDate={props.maxDate}
+          disablePast={props.disablePast}
+          disableFuture={props.disableFuture}
         />
       </MuiPickersUtilsProvider>
     </ThemeProvider>
@@ -109,8 +113,10 @@ Datepicker.defaultProps = {
   error: false,
   width: "12em",
   fullWidth: false,
-  clearable: false,
-  showTodayButton: true
+  clearable: true,
+  showTodayButton: true,
+  disablePast: false,
+  disableFuture: false
 };
 
 Datepicker.propTypes = {
@@ -127,9 +133,13 @@ Datepicker.propTypes = {
   error: PropTypes.bool,
   width: PropTypes.string,
   fullWidth: PropTypes.bool,
-  value: PropTypes.instanceOf(Date),
+  value: PropTypes.any,
   clearable: PropTypes.bool,
-  showTodayButton: PropTypes.bool
+  showTodayButton: PropTypes.bool,
+  disablePast: PropTypes.bool,
+  disableFuture: PropTypes.bool,
+  minDate: PropTypes.instanceOf(Date),
+  maxDate: PropTypes.instanceOf(Date)
 };
 
 export default withStyles(styles)(injectIntl(Datepicker));

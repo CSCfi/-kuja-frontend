@@ -396,7 +396,7 @@ export function setAttachmentUuids(
         }, changeObj.properties.attachments),
         changeObj
       );
-    } else return null;
+    } else return changeObj;
   }, changeObjects);
 }
 

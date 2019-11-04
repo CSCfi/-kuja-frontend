@@ -1,11 +1,15 @@
 import * as R from "ramda";
 
 /**
+ * @module Muutoshakemus
+ */
+
+/**
  * Function calculates the current state of changes by using the changes from
  * backend and changes which are not saved yet.
- * @param {*} muutoshakemus
+ * @param {Object} muutoshakemus - Contains all the section related configuration.
  */
-export const getChangeObjects = muutoshakemus => {
+export function getChangeObjects(muutoshakemus) {
   /**
    * Function finds out all the anchors with a numeric value as their first
    * part. It's curried because of a need to call it with negation.
@@ -118,4 +122,4 @@ export const getChangeObjects = muutoshakemus => {
 
   console.info(changeObjects);
   return changeObjects;
-};
+}

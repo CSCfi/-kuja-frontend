@@ -30,9 +30,9 @@ export const parseKoulutukset = (koulutusdata, koodiarvo, metadata) => {
 };
 
 export const parseKoulutuksetAll = (
-  koulutusdata,
-  koulutusalat,
-  koulutustyypit
+  koulutusdata = [],
+  koulutusalat = [],
+  koulutustyypit = []
 ) => {
   let koulutukset = {};
   let tyyppilista = {};

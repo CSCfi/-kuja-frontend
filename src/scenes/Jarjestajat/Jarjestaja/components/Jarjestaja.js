@@ -1,4 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useMemo } from "react";
+import { injectIntl } from "react-intl";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Route } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
@@ -9,17 +11,12 @@ import OmatTiedot from "./OmatTiedot";
 import JarjestamislupaAsiat from "./Jarjestamislupa-asiat";
 import Jarjestamislupa from "./Jarjestamislupa";
 import HakemuksetJaPaatokset from "../Hakemukset/components/HakemuksetJaPaatokset";
-import Loading from "../../../../modules/Loading";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
-import { ROLE_KAYTTAJA } from "../../../../modules/constants";
-import { fetchLupaHistory } from "../../../../services/lupahistoria/actions";
-import { LupahistoriaContext } from "../../../../context/lupahistoriaContext";
-import { KunnatProvider } from "context/kunnatContext";
-import { MaakunnatProvider } from "../../../../context/maakunnatContext";
-import { MuutospyynnotContext } from "../../../../context/muutospyynnotContext";
-import { fetchMuutospyynnot } from "../../../../services/muutospyynnot/actions";
+import { BackendContext } from "../../../../context/backendContext";
+import * as R from "ramda";
+import FetchHandler from "../../../../FetchHandler";
 
 const Separator = styled.div`
   &:after {
@@ -32,194 +29,191 @@ const Separator = styled.div`
   }
 `;
 
-// ELYkeskukset={ELYkeskukset}
-// lupa={lupa}
-// muutospyynnot={muutospyynnot}
-// muutosperustelut={muutosperustelut}
-// paatoskierrokset={paatoskierrokset}
-// vankilat={vankilat}
+const Jarjestaja = ({
+  intl,
+  lupaKohteet = [],
+  lupa = {},
+  match,
+  muutospyynnot,
+  organisaatio = {},
+  user,
+  ytunnus
+}) => {
+  const { state: fromBackend, dispatch } = useContext(BackendContext);
 
-const Jarjestaja = ({ match, lupa }) => {
-  const { state: lupahistory, dispatch: lupahistoriaDispatch } = useContext(LupahistoriaContext);
-  const { state: muutospyynnot, dispatch: muutospyynnotDispatch} = useContext(MuutospyynnotContext);
+  const jarjestaja = useMemo(() => {
+    return lupa && lupa.jarjestaja
+      ? {
+          ...lupa.jarjestaja,
+          nimi: R.prop(intl.locale, lupa.jarjestaja.nimi)
+        }
+      : {};
+  }, [intl.locale, lupa]);
 
-  useEffect(() => {
-    if (lupa && lupa.data) {
-      if (lupa.data.jarjestajaOid) {
-        fetchLupaHistory(lupa.data.jarjestajaOid)(lupahistoriaDispatch);
-      }
-      if (lupa.data.jarjestajaYtunnus) {
-        fetchMuutospyynnot(lupa.data.jarjestajaYtunnus)(muutospyynnotDispatch);
-      }
-    }
-  }, [lupa, muutospyynnotDispatch, lupahistoriaDispatch]);
+  const breadcrumb = useMemo(() => {
+    return jarjestaja ? `/jarjestajat/${jarjestaja.oid}` : "";
+  }, [jarjestaja]);
 
-  if (match.params) {
-    if (lupa && lupa.fetched && muutospyynnot && muutospyynnot.fetched) {
-      const lupadata = lupa.data;
-      const { jarjestaja } = lupadata;
-      const breadcrumb = `/jarjestajat/${match.params.id}`;
-      const jarjestajaNimi = jarjestaja.nimi.fi || jarjestaja.nimi.sv || "";
-
-      // check the rights
-      // TODO: organisaation oid pitää tarkastaa jotain muuta kautta kuin voimassaolevasta luvasta
-      let authenticated = false;
-      if (
-        sessionStorage.getItem("role") === ROLE_KAYTTAJA &&
-        sessionStorage.getItem("oid") === jarjestaja.oid
-      ) {
-        authenticated = true;
-      }
-
-      // Alanavigaation tabivalikon routet
-      var tabNavRoutes = [];
-
-      const newApplicationRouteItem = {
-        path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
-        text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
-        authenticated: authenticated
-      };
-
-      if (authenticated) {
-        tabNavRoutes = [
+  const fetchSetup = useMemo(() => {
+    return jarjestaja && jarjestaja.oid
+      ? [
           {
-            path: `${match.url}/omattiedot`,
-            exact: true,
-            text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
-            authenticated: authenticated
-          },
-          {
-            path: `${match.url}/jarjestamislupa`,
-            exact: true,
-            text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}`,
-            exact: true,
-            text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}/jarjestamislupa-asia`,
-            text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
-            authenticated: authenticated
+            key: "lupahistoria",
+            dispatchFn: dispatch,
+            urlEnding: jarjestaja.oid
           }
-        ];
-      } else {
-        tabNavRoutes = [
-          {
-            path: `${match.url}/jarjestamislupa`,
-            text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
-            authenticated: true
-          },
-          {
-            path: `${match.url}`,
-            exact: true,
-            text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
-            authenticated: true
-          }
-        ];
+        ]
+      : [];
+  }, [dispatch, jarjestaja]);
+
+  const tabNavRoutes = useMemo(() => {
+    // Basic routes (no authentication needed)
+    const basicRoutes = [
+      {
+        path: `${match.url}/jarjestamislupa`,
+        text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+        authenticated: true
+      },
+      {
+        path: `${match.url}`,
+        exact: true,
+        text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
+        authenticated: true
       }
+    ];
+    // If user is logged in we are going to show her/him these additional routes.
+    const additionalRoutes =
+      user && R.equals(user.oid, R.prop("oid", lupa.jarjestaja))
+        ? [
+            {
+              path: `${match.url}/omattiedot`,
+              exact: true,
+              text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
+              authenticated: !!user
+            },
+            {
+              path: `${match.url}/jarjestamislupa-asia`,
+              text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
+              authenticated: !!user
+            }
+          ]
+        : [];
+    return R.flatten(R.insert(1, basicRoutes, additionalRoutes));
+  }, [lupa.jarjestaja, match.url, user]);
 
-      return (
-        <React.Fragment>
-          <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
-            <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
-            <BreadcrumbsItem to="/jarjestajat">
-              Ammatillinen koulutus
-            </BreadcrumbsItem>
-            <BreadcrumbsItem to={breadcrumb}>{jarjestajaNimi}</BreadcrumbsItem>
+  const newApplicationRouteItem = useMemo(() => {
+    return {
+      path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
+      text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
+      authenticated: !!user
+    };
+  }, [match, user]);
 
-            <JarjestajaBasicInfo jarjestaja={jarjestaja} />
+  return (
+    <React.Fragment>
+      <FetchHandler
+        fetchSetup={fetchSetup}
+        ready={
+          <React.Fragment>
+            <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
+              <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
+              <BreadcrumbsItem to="/jarjestajat">
+                Ammatillinen koulutus
+              </BreadcrumbsItem>
+              <BreadcrumbsItem to={breadcrumb}>
+                {jarjestaja.nimi}
+              </BreadcrumbsItem>
 
-            <Separator />
+              <JarjestajaBasicInfo jarjestaja={jarjestaja} />
 
-            <ProfileMenu routes={tabNavRoutes} />
-          </div>
-          <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
-            {authenticated ? (
-              <div className="mx-auto w-11/12 lg:w-3/4 pb-8 py-8">
-                <Route
-                  path={`${match.path}/omattiedot`}
-                  exact
-                  render={props => (
-                    <MaakunnatProvider>
-                      <KunnatProvider>
-                        <OmatTiedot {...props} />
-                      </KunnatProvider>
-                    </MaakunnatProvider>
-                  )}
-                />
-                <Route
-                  path={`${match.url}/jarjestamislupa`}
-                  exact
-                  render={() => (
-                    <Jarjestamislupa ytunnus={match.params.ytunnus} />
-                  )}
-                />
-                <Route
-                  path={`${match.url}`}
-                  exact
-                  render={() => <JulkisetTiedot lupadata={lupadata} />}
-                />
-                <Route
-                  path={`${match.url}/jarjestamislupa-asia`}
-                  exact
-                  render={() => (
-                    <JarjestamislupaAsiat
-                      match={match}
-                      lupadata={lupadata}
-                      lupahistory={lupahistory}
-                      muutospyynnot={muutospyynnot}
-                      newApplicationRouteItem={newApplicationRouteItem}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${match.path}/hakemukset-ja-paatokset`}
-                  exact
-                  render={props => (
-                    <HakemuksetJaPaatokset
-                      muutospyynnot={muutospyynnot}
-                      {...props}
-                    />
-                  )}
-                />
-              </div>
-            ) : (
-              <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
-                <Route
-                  path={`${match.url}/jarjestamislupa`}
-                  render={() => <Jarjestamislupa />}
-                />
-                <Route
-                  path={`${match.url}`}
-                  exact
-                  render={() => <JulkisetTiedot lupadata={lupadata} />}
-                />
-              </div>
-            )}
-          </FullWidthWrapper>
-        </React.Fragment>
-      );
-    } else if (
-      (lupa && lupa.isFetching) ||
-      (muutospyynnot && muutospyynnot.isFetching)
-    ) {
-      return <Loading />;
-    } else if (lupa && lupa.hasErrored) {
-      return <h2>Luvan lataamisessa tapahtui virhe</h2>;
-    } else {
-      return <div>Määrittelemätön tila.</div>;
-    }
-  } else {
-    return null;
-  }
+              <Separator />
+
+              <ProfileMenu routes={tabNavRoutes} />
+            </div>
+            <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
+              {!!user ? (
+                <div className="mx-auto w-11/12 lg:w-3/4 pb-8 py-8">
+                  <Route
+                    path={`${match.path}/omattiedot`}
+                    exact
+                    render={() => <OmatTiedot organisaatio={organisaatio} />}
+                  />
+                  <Route
+                    path={`${match.url}/jarjestamislupa`}
+                    exact
+                    render={() => (
+                      <Jarjestamislupa
+                        lupaKohteet={lupaKohteet}
+                        lupa={lupa}
+                        ytunnus={ytunnus}
+                      />
+                    )}
+                  />
+                  <Route
+                    path={`${match.url}`}
+                    exact
+                    render={() => (
+                      <JulkisetTiedot jarjestaja={jarjestaja} lupa={lupa} />
+                    )}
+                  />
+                  <Route
+                    path={`${match.url}/jarjestamislupa-asia`}
+                    exact
+                    render={props => (
+                      <JarjestamislupaAsiat
+                        lupa={lupa}
+                        lupahistory={R.path(
+                          ["lupahistoria", "raw"],
+                          fromBackend
+                        )}
+                        match={props.match}
+                        muutospyynnot={muutospyynnot}
+                        newApplicationRouteItem={newApplicationRouteItem}
+                      />
+                    )}
+                  />
+                  <Route
+                    path={`${match.path}/hakemukset-ja-paatokset`}
+                    exact
+                    render={props => (
+                      <HakemuksetJaPaatokset
+                        muutospyynnot={muutospyynnot}
+                        match={props.match}
+                        organisaatio={organisaatio}
+                        user={user}
+                      />
+                    )}
+                  />
+                </div>
+              ) : (
+                <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
+                  <Route
+                    path={`${match.url}/jarjestamislupa`}
+                    render={() => <Jarjestamislupa />}
+                  />
+                  <Route
+                    path={`${match.url}`}
+                    exact
+                    render={() => <JulkisetTiedot lupa={lupa} />}
+                  />
+                </div>
+              )}
+            </FullWidthWrapper>
+          </React.Fragment>
+        }
+      ></FetchHandler>
+    </React.Fragment>
+  );
 };
 
-export default Jarjestaja;
-// {jarjestajaNimi}
+Jarjestaja.propTypes = {
+  lupaKohteet: PropTypes.object,
+  lupa: PropTypes.object,
+  match: PropTypes.object,
+  muutospyynnot: PropTypes.array,
+  organisaatio: PropTypes.object,
+  user: PropTypes.object,
+  ytunnus: PropTypes.string
+};
 
-// import MuutospyyntoContainer from "../Hakemukset/Muutospyynto/containers/MuutospyyntoContainer"
-// import MuutospyyntoWizard from '../Hakemukset/Muutospyynto/components/MuutospyyntoWizard'
+export default injectIntl(Jarjestaja);

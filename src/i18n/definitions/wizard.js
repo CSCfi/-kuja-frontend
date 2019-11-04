@@ -158,5 +158,13 @@ export default defineMessages({
     id: "wizard.noAddedTutkinnot",
     defaultMessage:
       "Taloudelliset edellytykset ilmoitetaan vain, kun järjestämislupaan haetaan uusia tutkintoja tai koulutuksia. Jatka seuraavalle välilehdelle Seuraava-painikkeella."
+  },
+  except: {
+    id: "wizard.except",
+    defaultMessage: "lukuun ottamatta:"
+  },
+  osaamisalarajoitus: {
+    id: "wizard.osaamisalarajoitus",
+    defaultMessage: "Rajoitus"
   }
 });

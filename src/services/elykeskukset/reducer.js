@@ -1,4 +1,4 @@
-import { getELYkeskusList } from "scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/ELYkeskusUtil"
+import { getELYkeskusList } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/ELYkeskusUtil"
 
 import {
   FETCH_ELYKESKUKSET_START,

@@ -17,7 +17,7 @@ const defaultProps = {
   isReadOnly: false,
   kohde: {},
   maaraykset: [],
-  muut: {},
+  muut: [],
   stateObject: {},
   vankilat: []
 };
@@ -243,8 +243,8 @@ const PerustelutMuut = React.memo(
     }, [changeObjects.muut]);
 
     const dividedArticles = useMemo(() => {
-      return divideArticles(muut.data, relevantCodes);
-    }, [divideArticles, muut.data, relevantCodes]);
+      return divideArticles(muut, relevantCodes);
+    }, [divideArticles, muut, relevantCodes]);
 
     const config = useMemo(() => {
       return [
@@ -369,7 +369,7 @@ const PerustelutMuut = React.memo(
       kohde,
       locale,
       maaraykset,
-      muut.data,
+      muut,
       onStateUpdate,
       relevantCodes
     ]);
@@ -415,7 +415,7 @@ PerustelutMuut.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   maaraykset: PropTypes.array,
-  muut: PropTypes.object,
+  muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,

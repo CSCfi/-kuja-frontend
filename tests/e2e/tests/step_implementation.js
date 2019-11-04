@@ -20,7 +20,6 @@ const chai = require("chai");
 require('dotenv').config()
 const assert = chai.assert;
 const headless = process.env.headless_chrome.toLowerCase() === "true";
-const users = require("../users/users")
 
 beforeSuite(async () => {
   await openBrowser({ headless: headless });
@@ -68,6 +67,7 @@ step("Jarjestamislupa", async () => {
 
 step("Avaa uusi muutospyyntolomake", async () => {
   try {
+    await click(link("Oma organisaatio"));
     await click(link("Järjestämislupa-asiat"));
     await click(link("Uusi hakemus"));
   } catch (e) {
