@@ -180,7 +180,6 @@ const Attachments = React.memo(props => {
   const [fileError, setFileError] = useState(false);
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
-  const [showFileDownloader, setFileDownloader] = useState(false);
   const [isFileDownloaderVisible, setIsFileDownloaderVisible] = useState(false);
   const { state: fromBackend } = useContext(BackendContext);
 
@@ -390,7 +389,7 @@ const Attachments = React.memo(props => {
     // a.href = url;
     // a.download = response.nimi + "." + response.tyyppi;
     // a.click();
-    setFileDownloader(false);
+    setIsFileDownloaderVisible(false);
     // return R.path(["raw", "ytunnus"], fromBackend.liitteet || {});
   }, [fromBackend.liitteet]);
 
