@@ -40,13 +40,13 @@ import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
 import {
   setAttachmentUuids,
   combineArrays
-} from "../../../../../../services/muutospyynnot/muutospyyntoUtil";
-import { sortLanguages } from "../../../../../../services/kielet/kieliUtil";
+} from "../../../../../../utils/muutospyyntoUtil";
+import { sortLanguages } from "../../../../../../utils/kieliUtil";
 import {
   parseKoulutuksetAll,
   parseKoulutusalat
 } from "../../../../../../services/koulutukset/koulutusParser";
-import { getMaakuntakunnatList } from "../../../../../../services/toimialueet/toimialueUtil";
+import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
 
 const DialogTitle = withStyles(theme => ({

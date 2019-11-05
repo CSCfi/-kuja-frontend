@@ -5,10 +5,6 @@ import {
   KOODISTOT,
   MAARAYSTYYPIT
 } from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
-import {
-  getKohdeByTunniste,
-  getMaaraystyyppiByTunniste
-} from "services/muutospyynnot/muutospyyntoUtil";
 import { MUUTOS_TYPES } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 import {
   meta_kuljettaja_jatko,
@@ -18,6 +14,7 @@ import {
   meta_vaativa,
   meta_vankila
 } from "../../scenes/Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/lisaperusteluUtil";
+import { getKohdeByTunniste, getMaaraystyyppiByTunniste } from "../../utils/muutospyyntoUtil";
 
 export function getDataForKoulutusList(koulutukset, locale) {
   return {

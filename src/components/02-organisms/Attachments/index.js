@@ -181,6 +181,7 @@ const Attachments = React.memo(props => {
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
   const [showFileDownloader, setFileDownloader] = useState(false);
+  const [isFileDownloaderVisible, setIsFileDownloaderVisible] = useState(false);
   const { state: fromBackend } = useContext(BackendContext);
 
   const {
@@ -369,7 +370,7 @@ const Attachments = React.memo(props => {
         a.click();
       };
     } else {
-      setFileDownloader(true);
+      setIsFileDownloaderVisible(true);
       // props.downloadAttachment(file.uuid).then(response => {
       //   const blob = reader.result;
       //   let url = blob;
@@ -397,6 +398,7 @@ const Attachments = React.memo(props => {
   const LiiteList = () => {
     if (attachments && attachments.length > 0)
       return attachments.map(liite => {
+        console.info(liite);
         if (
           (liite.tiedostoId || liite.uuid) &&
           !liite.removed &&
@@ -466,7 +468,7 @@ const Attachments = React.memo(props => {
                   <FaTimes />
                 </button>
               </LiiteListItem>
-              {showFileDownloader && <FileDownloader uuid={liite.uuid} />}
+              {isFileDownloaderVisible && <FileDownloader uuid={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;
@@ -507,7 +509,7 @@ const Attachments = React.memo(props => {
                   {liite.salainen && <FaLock />}
                 </span>
               </LiiteListItem>
-              {showFileDownloader && <FileDownloader uuid={liite.uuid} />}
+              {isFileDownloaderVisible && <FileDownloader uuid={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;

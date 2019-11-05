@@ -4,7 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import LinkItemUpper from "../../../scenes/Header/components/LinkItemUpper";
+import LinkItemUpper from "./LinkItemUpper";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";

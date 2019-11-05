@@ -1,12 +1,12 @@
 import React from "react";
 import { render } from "react-dom";
-import Store from "context/store";
 import { ThroughProvider } from "react-through";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { COLORS } from "./modules/styles";
 import AppWrapper from "./AppWrapper";
 import { AppProvider } from "./context/appContext";
 import { BackendProvider } from "./context/backendContext";
+// import * as serviceWorker from "./registerServiceWorker";
 
 import "./css/tailwind.css";
 import "./css/common.css";
@@ -32,16 +32,19 @@ const theme = createMuiTheme({
 });
 
 render(
-  <Store>
-    <ThroughProvider>
-      <MuiThemeProvider theme={theme}>
-        <BackendProvider>
-          <AppProvider>
-            <AppWrapper />
-          </AppProvider>
-        </BackendProvider>
-      </MuiThemeProvider>
-    </ThroughProvider>
-  </Store>,
+  <ThroughProvider>
+    <MuiThemeProvider theme={theme}>
+      <BackendProvider>
+        <AppProvider>
+          <AppWrapper />
+        </AppProvider>
+      </BackendProvider>
+    </MuiThemeProvider>
+  </ThroughProvider>,
   document.getElementById("root")
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+// serviceWorker.unregister();
