@@ -6,7 +6,7 @@ import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
 import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
-import Home from "scenes/Home/components/Home";
+import Home from "scenes/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
 import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
