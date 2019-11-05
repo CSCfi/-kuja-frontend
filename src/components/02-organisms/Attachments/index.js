@@ -507,7 +507,7 @@ const Attachments = React.memo(props => {
                   {liite.salainen && <FaLock />}
                 </span>
               </LiiteListItem>
-              {showFileDownloader && <FileDownloader file={liite.uuid} />}
+              {showFileDownloader && <FileDownloader uuid={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;
