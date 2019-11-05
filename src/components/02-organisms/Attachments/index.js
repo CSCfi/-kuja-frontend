@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { injectIntl, FormattedMessage } from "react-intl";
+import { injectIntl } from "react-intl";
 import { COLORS } from "../../../modules/styles";
 import Attachment from "../Attachment/index";
 import { FaRegFile, FaFile, FaTimes, FaLock, FaDownload } from "react-icons/fa";
@@ -16,6 +16,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
 import FileDownloader from "./FileDownloader";
+import { BackendContext } from "../../../context/backendContext";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -180,6 +181,7 @@ const Attachments = React.memo(props => {
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [nameMissing, setNameMissing] = useState(false);
   const [showFileDownloader, setFileDownloader] = useState(false);
+  const { state: fromBackend } = useContext(BackendContext);
 
   const {
     intl: { formatMessage }
@@ -379,6 +381,18 @@ const Attachments = React.memo(props => {
     }
   };
 
+  const binary = useMemo(() => {
+    console.log(fromBackend);
+    // const blob = reader.result;
+    // let url = blob;
+    // let a = document.createElement("a");
+    // a.href = url;
+    // a.download = response.nimi + "." + response.tyyppi;
+    // a.click();
+    setFileDownloader(false);
+    // return R.path(["raw", "ytunnus"], fromBackend.liitteet || {});
+  }, [fromBackend.liitteet]);
+
   // Lists all attachments based on placement parameter given
   const LiiteList = () => {
     if (attachments && attachments.length > 0)
@@ -452,7 +466,7 @@ const Attachments = React.memo(props => {
                   <FaTimes />
                 </button>
               </LiiteListItem>
-              {showFileDownloader && <FileDownloader file={liite.uuid} />}
+              {showFileDownloader && <FileDownloader uuid={liite.uuid} />}
             </React.Fragment>
           );
         } else return null;
@@ -506,7 +520,6 @@ const Attachments = React.memo(props => {
       );
     }
   };
-  console.log(props.isReadOnly);
   return (
     <React.Fragment>
       {!props.showListOnly && !props.isReadOnly && (
