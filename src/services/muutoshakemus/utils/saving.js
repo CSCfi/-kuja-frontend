@@ -1,6 +1,6 @@
 import { getChangesToSave } from "./changes-to-save";
 import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
-import { combineArrays } from "../../../services/muutospyynnot/muutospyyntoUtil";
+import { combineArrays } from "../../../utils/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
 

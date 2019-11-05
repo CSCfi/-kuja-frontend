@@ -1,29 +1,37 @@
-import _ from "lodash";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useMemo } from "react";
 import Media from "react-media";
 import styled from "styled-components";
 import { Table, Thead, Tbody, Thn, Trn } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../modules/constants";
 import LupaHistoryItem from "./LupaHistoryItem";
-import Loading from "../../../../modules/Loading";
-import { fetchLupaHistory } from "../../../../services/lupahistoria/actions";
-import { LupahistoriaContext } from "../../../../context/lupahistoriaContext";
+import FetchHandler from "../../../../FetchHandler";
+import { BackendContext } from "../../../../context/backendContext";
+import * as R from "ramda";
+import _ from "lodash";
 
 const WrapTable = styled.div``;
 
 const LupaHistory = props => {
   const { jarjestajaOid } = props;
-  const { state: lupaHistory, dispatch } = useContext(LupahistoriaContext);
+  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
 
-  useEffect(() => {
-    if (jarjestajaOid) {
-      fetchLupaHistory(jarjestajaOid)(dispatch);
-    }
+  const fetchSetup = useMemo(() => {
+    return jarjestajaOid
+      ? [
+          {
+            key: "lupahistoria",
+            dispatchFn: dispatch,
+            urlEnding: jarjestajaOid
+          }
+        ]
+      : [];
   }, [jarjestajaOid, dispatch]);
 
-  const { fetched, isFetching, hasErrored, data } = lupaHistory;
-  
+  const data = useMemo(() => {
+    return R.prop("raw", fromBackend.lupahistoria) || [];
+  }, [fromBackend.lupahistoria]);
+
   const renderLupaHistoryList = data => {
     data = _.orderBy(data, ["paatospvm"], ["desc"]);
     return _.map(data, (historyData, index) => (
@@ -34,53 +42,54 @@ const LupaHistory = props => {
     ));
   };
 
-  if (fetched) {
-    return (
-      <WrapTable>
-        <Media
-          query={MEDIA_QUERIES.MOBILE}
-          render={() => (
-            <Table>
-              <Tbody>{renderLupaHistoryList(data)}</Tbody>
-            </Table>
-          )}
-        />
-        <Media
-          query={MEDIA_QUERIES.TABLET_MIN}
-          render={() => (
-            <Table>
-              <Thead>
-                <Trn>
-                  <Thn>
-                    {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.DIAARINUMERO.FI}
-                  </Thn>
-                  <Thn>
-                    {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATOSPVM.FI}
-                  </Thn>
-                  <Thn>
-                    {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.VOIMAANTULOPVM.FI}
-                  </Thn>
-                  <Thn>
-                    {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATTAMISPVM.FI}
-                  </Thn>
-                  <Thn>
-                    {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.KUMOTTU.FI}
-                  </Thn>
-                </Trn>
-              </Thead>
-              <Tbody>{renderLupaHistoryList(data)}</Tbody>
-            </Table>
-          )}
-        />
-      </WrapTable>
-    );
-  } else if (isFetching) {
-    return <Loading />;
-  } else if (hasErrored) {
-    return <h2>{LUPA_TEKSTIT.PAATOKSET.VIRHE.FI}</h2>;
-  } else {
-    return null;
-  }
+  return (
+    <FetchHandler
+      fetchSetup={fetchSetup}
+      ready={
+        <WrapTable>
+          <Media
+            query={MEDIA_QUERIES.MOBILE}
+            render={() => (
+              <Table>
+                <Tbody>{renderLupaHistoryList(data)}</Tbody>
+              </Table>
+            )}
+          />
+          <Media
+            query={MEDIA_QUERIES.TABLET_MIN}
+            render={() => (
+              <Table>
+                <Thead>
+                  <Trn>
+                    <Thn>
+                      {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.DIAARINUMERO.FI}
+                    </Thn>
+                    <Thn>
+                      {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATOSPVM.FI}
+                    </Thn>
+                    <Thn>
+                      {
+                        LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.VOIMAANTULOPVM
+                          .FI
+                      }
+                    </Thn>
+                    <Thn>
+                      {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATTAMISPVM.FI}
+                    </Thn>
+                    <Thn>
+                      {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.KUMOTTU.FI}
+                    </Thn>
+                  </Trn>
+                </Thead>
+                <Tbody>{renderLupaHistoryList(data)}</Tbody>
+              </Table>
+            )}
+          />
+        </WrapTable>
+      }
+      erroneous={<h2>{LUPA_TEKSTIT.PAATOKSET.VIRHE.FI}</h2>}
+    ></FetchHandler>
+  );
 };
 
 export default LupaHistory;

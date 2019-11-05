@@ -2,12 +2,11 @@ import React, { useContext, useMemo } from "react";
 import { Switch, Route } from "react-router-dom";
 import Jarjestaja from "../components/Jarjestaja";
 import PropTypes from "prop-types";
-import { LupahistoriaProvider } from "../../../../context/lupahistoriaContext";
 import { BackendContext } from "../../../../context/backendContext";
 import { injectIntl } from "react-intl";
 import { isReady } from "../../../../services/backendService";
 import * as R from "ramda";
-import { parseLupa } from "../../../../services/luvat/lupaParser";
+import { parseLupa } from "../../../../utils/lupaParser";
 import HakemusContainer from "../Hakemukset/HakemusContainer";
 import FetchHandler from "../../../../FetchHandler";
 
@@ -80,7 +79,7 @@ const JarjestajaSwitch = ({ history, intl, match, organisaatio, user }) => {
               <Route
                 path={`${match.path}`}
                 render={() => (
-                  <LupahistoriaProvider>
+                  <React.Fragment>
                     {ytunnus && (
                       <Jarjestaja
                         lupaKohteet={lupaKohteet}
@@ -91,7 +90,7 @@ const JarjestajaSwitch = ({ history, intl, match, organisaatio, user }) => {
                         user={user}
                       />
                     )}
-                  </LupahistoriaProvider>
+                  </React.Fragment>
                 )}
               />
             </Switch>

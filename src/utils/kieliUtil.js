@@ -1,4 +1,4 @@
-import { parseLocalizedField } from "../../modules/helpers";
+import { parseLocalizedField } from "../modules/helpers";
 import _ from "lodash";
 import * as R from "ramda";
 

@@ -16,12 +16,12 @@ import {
   getAnchorPart,
   replaceAnchorPartWith
 } from "../../../../utils/common";
-import { setAttachmentUuids } from "../../../../services/muutospyynnot/muutospyyntoUtil";
 import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
 import * as R from "ramda";
-import { getMuutosperusteluList } from "../../../../services/muutosperustelut/muutosperusteluUtil";
+import { getMuutosperusteluList } from "../../../../utils/muutosperusteluUtil";
+import { setAttachmentUuids } from "../../../../utils/muutospyyntoUtil";
 
 const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);

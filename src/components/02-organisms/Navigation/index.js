@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
-import LinkItem from "../../../scenes/Header/components/LinkItem";
+import LinkItem from "./LinkItem";
 import { COLORS } from "modules/styles";
 import { ROLE_ESITTELIJA } from "modules/constants";
 import { injectIntl } from "react-intl";
