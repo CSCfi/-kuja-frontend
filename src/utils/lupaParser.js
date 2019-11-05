@@ -1,4 +1,4 @@
-import wizardMessages from "../../i18n/definitions/wizard";
+import wizardMessages from "../i18n/definitions/wizard";
 import _ from "lodash";
 import {
   KOHTEET,
@@ -6,8 +6,8 @@ import {
   TUTKINTO_TEKSTIT,
   LUPA_SECTIONS,
   LUPA_TEKSTIT
-} from "../../scenes/Jarjestajat/Jarjestaja/modules/constants";
-import { parseLocalizedField } from "../../modules/helpers";
+} from "../scenes/Jarjestajat/Jarjestaja/modules/constants";
+import { parseLocalizedField } from "../modules/helpers";
 
 export const parseLupa = (lupa, formatMessage) => {
   if (lupa) {

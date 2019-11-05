@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { getDataForOpetuskieletList } from "../../../../../../../services/kielet/opetuskieletUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
 
 const Opetuskielet = React.memo(props => {
   const sectionId = "kielet_opetuskielet";
