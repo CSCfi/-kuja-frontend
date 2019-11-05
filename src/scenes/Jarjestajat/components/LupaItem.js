@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { parseLocalizedField } from "../../../modules/helpers"
 import { Td, Tr } from "../../../modules/Table"
 
-const Lupa = (props) => {
+const LupaItem = (props) => {
   const { lupa } = props
   const { jarjestajaYtunnus } = lupa
   const maakunta = parseLocalizedField(lupa.jarjestaja.maakuntaKoodi.metadata)
@@ -20,4 +20,4 @@ const Lupa = (props) => {
   )
 }
 
-export default Lupa
+export default LupaItem

@@ -1,23 +1,3 @@
-// Järjestäjän y-tunnukset, joiden luvat poistetaan näkyvistä
-export const LUPA_EXCEPTIONS = [
-    '0763403-0',
-    '0986820-1',
-    '0108023-3',
-    '0188756-3',
-    '0950895-1',
-    '0206976-5',
-    '0151534-8',
-    '0112038-9',
-    '0201789-3',
-    '0210311-8',
-    '1524361-1',
-    '1099221-8',
-    '0215382-8',
-    '1041090-0',
-    '0195032-3',
-    '0773744-3'
-  ]
-
 export const LUPA_LISAKOULUTTAJAT = {
     '0763403-0' : { 'nimi' : 'ABB Oy', 'diaarinumero' : '38/530/2007', 'pvm' : '2007-02-21', 'pdflink' : 'ABB.pdf' },
     '0986820-1' : { 'nimi' : 'Cargotec Finland Oy', 'diaarinumero' : '1/530/2007', 'pvm' : '2007-01-09', 'pdflink' : 'Cargotec.pdf' },
