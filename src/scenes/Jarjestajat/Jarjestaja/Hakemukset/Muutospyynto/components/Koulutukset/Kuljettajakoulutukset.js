@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo } from "react";
-import { getDataForKoulutusList } from "services/koulutukset/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 
 const Kuljettajakoulutukset = React.memo(props => {
   const sectionId = "koulutukset_kuljettajakoulutukset";

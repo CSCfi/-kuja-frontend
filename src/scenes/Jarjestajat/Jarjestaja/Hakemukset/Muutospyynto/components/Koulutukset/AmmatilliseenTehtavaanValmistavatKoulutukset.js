@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import { getDataForKoulutusList } from "../../../../../../../services/koulutukset/koulutusUtil";
+import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
