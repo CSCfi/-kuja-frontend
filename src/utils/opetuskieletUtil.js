@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { parseLocalizedField } from "../../modules/helpers";
+import { parseLocalizedField } from "../modules/helpers";
 import * as R from "ramda";
 
 export function sortOpetuskielet(kielet) {

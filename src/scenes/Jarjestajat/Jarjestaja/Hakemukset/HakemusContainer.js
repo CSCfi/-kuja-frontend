@@ -16,13 +16,24 @@ import {
   getAnchorPart,
   replaceAnchorPartWith
 } from "../../../../utils/common";
-import { setAttachmentUuids } from "../../../../services/muutospyynnot/muutospyyntoUtil";
 import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
 import * as R from "ramda";
-import { getMuutosperusteluList } from "../../../../services/muutosperustelut/muutosperusteluUtil";
+import { getMuutosperusteluList } from "../../../../utils/muutosperusteluUtil";
+import { setAttachmentUuids } from "../../../../utils/muutospyyntoUtil";
 
+/**
+ * HakemusContainer gathers all the required data for the MuutospyyntoWizard by
+ * executing several backend searches using FetchHandler.
+ *
+ * @param {Object} props - Props object.
+ * @param {Object} props.history - Router's history object.
+ * @param {Object} props.intl - Object of react-intl library.
+ * @param {Object} props.lupa - Permission information of the current organisation.
+ * @param {Object} props.lupaKohteet - The result of parsed props.lupa object.
+ * @param {Object} props.match - Router's match object.
+ */
 const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
@@ -30,6 +41,9 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
     toast.success(title, options);
   };
 
+  /**
+   * Configuration for backend searches to run.
+   */
   const fetchSetup = useMemo(() => {
     const arr1 = [
       { key: "elykeskukset", dispatchFn: dispatch },
@@ -116,8 +130,9 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
       ) => {
         let result = R.filter(R.pathEq(path, key))(changes);
         result = R.concat(
-          R.reject(R.isNil, R.chain(R.propOr([], 'aliMaaraykset'), result)),
-          result);
+          R.reject(R.isNil, R.chain(R.propOr([], "aliMaaraykset"), result)),
+          result
+        );
         if (key === "tutkinnotjakoulutukset") {
           result = R.filter(
             R.compose(
@@ -231,6 +246,9 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
           changesBySection
         );
       }, c);
+      /**
+       * At this point the backend data is handled and change objects are formed.
+       */
       setBackendChanges({
         changeObjects: changesBySection,
         source: backendMuutokset,

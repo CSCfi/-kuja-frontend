@@ -1,33 +1,4 @@
 import _ from "lodash";
-import { parseLocalizedField } from "../../modules/helpers";
-
-export const parseKoulutukset = (koulutusdata, koodiarvo, metadata) => {
-  if (koulutusdata && koodiarvo && metadata) {
-    const name = parseLocalizedField(metadata);
-
-    let koulutusArray = [];
-    let kouluksetObj = {};
-
-    kouluksetObj.koodiarvo = koodiarvo;
-    kouluksetObj.metadata = metadata;
-    kouluksetObj.nimi = name;
-
-    _.forEach(koulutusdata, data => {
-      const { koodiArvo, metadata, versio } = data;
-      // toistaiseksi käytetään vain koulutuksia versiolla 8
-      if (versio && versio === 8) {
-        koulutusArray.push({
-          koodiarvo: koodiArvo,
-          nimi: parseLocalizedField(metadata)
-        });
-      }
-    });
-
-    kouluksetObj.koulutukset = koulutusArray;
-
-    return kouluksetObj;
-  }
-};
 
 export const parseKoulutuksetAll = (
   koulutusdata = [],

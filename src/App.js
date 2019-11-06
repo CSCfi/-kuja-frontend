@@ -6,7 +6,7 @@ import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
 import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
-import Home from "scenes/Home/components/Home";
+import Home from "scenes/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
 import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
@@ -18,7 +18,6 @@ import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistys
 import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
-import { JarjestajatProvider } from "./context/jarjestajatContext";
 import { BackendContext } from "./context/backendContext";
 import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
 import Navigation from "./components/02-organisms/Navigation";
@@ -160,11 +159,7 @@ const App = ({ intl, user }) => {
                       <Route
                         exact
                         path="/jarjestajat"
-                        render={() => (
-                          <JarjestajatProvider>
-                            <Jarjestajat />
-                          </JarjestajatProvider>
-                        )}
+                        render={() => <Jarjestajat />}
                       />
                       <Route
                         exact

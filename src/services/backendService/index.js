@@ -92,6 +92,7 @@ const backendRoutes = {
   oivaperustelut: `${API_BASE_URL}/koodistot/koodit/oivaperustelut`,
   opetuskielet: `${API_BASE_URL}/koodistot/opetuskielet`,
   organisaatio: `${API_BASE_URL}/organisaatiot/`,
+  paatoskierrokset: `${API_BASE_URL}/paatoskierrokset/open`,
   vankilat: `${API_BASE_URL}/koodistot/koodit/vankilat`,
   liitteet: `${API_BASE_URL}/liitteet/`
 };

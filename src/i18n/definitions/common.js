@@ -95,6 +95,10 @@ export default defineMessages({
     id: "common.attachmentErrorName",
     defaultMessage: "Nimi on pakollinen"
   },
+  attachmentDownload: {
+    id: "common.attachmentDownload",
+    defaultMessage: "Lataa liite tietokoneelle"
+  },
   loginError: {
     id: "common.loginError",
     defaultMessage: "Kirjautumisessa tapahtui virhe"
