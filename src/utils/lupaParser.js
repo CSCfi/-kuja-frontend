@@ -9,6 +9,11 @@ import {
 } from "../scenes/Jarjestajat/Jarjestaja/modules/constants";
 import { parseLocalizedField } from "../modules/helpers";
 
+/**
+ * 
+ * @param {object} lupa 
+ * @param {func} formatMessage 
+ */
 export const parseLupa = (lupa, formatMessage) => {
   if (lupa) {
     let lupaObj = {};
