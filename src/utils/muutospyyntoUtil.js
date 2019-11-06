@@ -404,8 +404,9 @@ export function setAttachmentUuids(
 export function combineArrays(arrays) {
   if (arrays && arrays.length > 0) {
     const currentArray = arrays.pop();
-    if (currentArray) {
+    if (!currentArray) return combineArrays(arrays);
+    else if (arrays) {
       return currentArray.concat(combineArrays(arrays));
-    } else return [];
+    } else return currentArray;
   } else return [];
 }

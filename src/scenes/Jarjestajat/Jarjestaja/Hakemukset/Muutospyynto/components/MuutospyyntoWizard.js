@@ -367,7 +367,7 @@ const MuutospyyntoWizard = ({
           ["perustelut", "koulutukset", "kuljettajakoulutukset"],
           changeObjects
         ) || []
-      )
+      ) || []
     ]);
     // Returns only attachments
     let attachments = [];
