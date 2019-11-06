@@ -41,7 +41,7 @@ export function abort(abortControllers = []) {
  * Returns true if XHR call has failed for some reason.
  * @param {object} backendData - Format depends on the used reducer.
  */
-export function isErroneous(backendData) {
+export function isErroneous(backendData = {}) {
   return backendData && R.equals(backendData.status, statusMap.erroneous);
 }
 
@@ -50,7 +50,7 @@ export function isErroneous(backendData) {
  * @param {object} backendData - Format depends on the used reducer 222.
  * @return {boolean}
  */
-export function isFetching(backendData) {
+export function isFetching(backendData = {}) {
   return backendData && R.equals(backendData.status, statusMap.fetching);
 }
 
@@ -59,7 +59,7 @@ export function isFetching(backendData) {
  * @param {object} backendData - Format depends on the used reducer.
  * @return {boolean}
  */
-export function isReady(backendData) {
+export function isReady(backendData = {}) {
   return backendData && R.equals(backendData.status, statusMap.ready);
 }
 
@@ -69,36 +69,36 @@ export function isReady(backendData) {
  * Example: { luvat: api/luvat/jarjestajilla, ... }
  */
 const backendRoutes = {
-  elykeskukset: { path: `/koodistot/koodit/elykeskukset` },
-  kayttaja: { path: `/auth/me` },
-  kielet: { path: `/koodistot/kielet` },
-  kohteet: { path: `/kohteet` },
-  tutkinnot: { path: `/koodistot/ammatillinen/tutkinnot` },
-  koulutuksetMuut: { path: `/koodistot/koodit/` },
-  koulutus: { path: `/koodistot/koodi/koulutus/` },
-  koulutusalat: { path: `/koodistot/koulutusalat/` },
-  koulutustyypit: { path: `/koodistot/koulutustyypit/` },
-  kunnat: { path: `/koodistot/kunnat` },
-  lupa: { path: `/luvat/jarjestaja/` },
-  lupahistoria: { path: `/luvat/historia/` },
-  luvat: { path: `/luvat/jarjestajilla` },
-  maakunnat: { path: `/koodistot/maakunnat` },
-  maakuntakunnat: { path: `/koodistot/maakuntakunta` },
-  maaraystyypit: { path: `/maaraykset/maaraystyypit` },
+  elykeskukset: { path: `koodistot/koodit/elykeskukset` },
+  kayttaja: { path: `auth/me` },
+  kielet: { path: `koodistot/kielet` },
+  kohteet: { path: `kohteet` },
+  tutkinnot: { path: `koodistot/ammatillinen/tutkinnot` },
+  koulutuksetMuut: { path: `koodistot/koodit/` },
+  koulutus: { path: `koodistot/koodi/koulutus/` },
+  koulutusalat: { path: `koodistot/koulutusalat/` },
+  koulutustyypit: { path: `koodistot/koulutustyypit/` },
+  kunnat: { path: `koodistot/kunnat` },
+  lupa: { path: `luvat/jarjestaja/` },
+  lupahistoria: { path: `luvat/historia/` },
+  luvat: { path: `luvat/jarjestajilla` },
+  maakunnat: { path: `koodistot/maakunnat` },
+  maakuntakunnat: { path: `koodistot/maakuntakunta` },
+  maaraystyypit: { path: `maaraykset/maaraystyypit` },
   muut: {
-    path: `/koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`
+    path: `koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`
   },
-  muutospyynnot: { path: `/muutospyynnot/` },
-  muutospyynto: { path: `/muutospyynnot/id/` },
+  muutospyynnot: { path: `muutospyynnot/` },
+  muutospyynto: { path: `muutospyynnot/id/` },
   oivamuutoikeudetvelvollisuudetehdotjatehtavat: {
-    path: `/koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`
+    path: `koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`
   },
-  oivaperustelut: { path: `/koodistot/koodit/oivaperustelut` },
-  opetuskielet: { path: `/koodistot/opetuskielet` },
-  organisaatio: { path: `/organisaatiot/` },
-  paatoskierrokset: { path: `/paatoskierrokset/open` },
-  vankilat: { path: `/koodistot/koodit/vankilat` },
-  liitteet: { path: `/liitteet/`, abortController: false }
+  oivaperustelut: { path: `koodistot/koodit/oivaperustelut` },
+  opetuskielet: { path: `koodistot/opetuskielet` },
+  organisaatio: { path: `organisaatiot/` },
+  paatoskierrokset: { path: `paatoskierrokset/open` },
+  vankilat: { path: `koodistot/koodit/vankilat` },
+  liitteet: { path: `liitteet/`, abortController: false }
 };
 
 /**
@@ -132,7 +132,18 @@ async function run(
     );
 
     if (response && response.ok) {
-      const data = await response.json();
+      const contentType = response.headers.get("content-type");
+      let data = "";
+      if (R.includes("application/json", contentType)) {
+        data = await response.json();
+      } else if (contentType === "application/octet-stream") {
+        console.info("Tiedoston parsinta...");
+        const blob = await response.blob();
+        data = new Blob([new Buffer(data, "base64")], {
+          type: "application/octet-stream"
+        });
+        console.info(data);
+      }
 
       /**
        * Data will be saved to the same context as what dispatchFn presents.
@@ -209,7 +220,7 @@ function recursiveFetchHandler(
    */
   const abortControllers = abortController
     ? R.append(abortController, _abortControllers)
-    : abortControllers;
+    : _abortControllers;
 
   /**
    * Fetching is about to start. So, let's mark it up for later use.
