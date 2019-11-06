@@ -139,7 +139,7 @@ async function run(
       } else if (contentType === "application/octet-stream") {
         console.info("Tiedoston parsinta...");
         const blob = await response.blob();
-        data = new Blob([new Buffer(data, "base64")], {
+        data = new Blob([new Buffer(blob, "base64")], {
           type: "application/octet-stream"
         });
         console.info(data);
