@@ -18,6 +18,7 @@ const saveData = (function() {
       blob = new Blob([json], { type: "octet/stream" }),
       url = window.URL.createObjectURL(blob);
     a.href = url;
+    // a.target = "_blank";
     a.download = fileName;
     a.click();
     console.info(url, data, fileName);
@@ -43,10 +44,10 @@ const FileDownloader = React.memo(props => {
   }, [dispatch, props.filename, props.uuid]);
 
   useEffect(() => {
-    // if (isReady(R.prop(props.filename, fromBackend.liitteet))) {
-    //   console.info(fromBackend.liitteet[props.filename].raw, props.filename);
-    //   saveData(fromBackend.liitteet[props.filename].raw, props.filename);
-    // }
+    if (isReady(R.prop(props.filename, fromBackend.liitteet))) {
+      console.info(fromBackend.liitteet[props.filename].raw, props.filename);
+      saveData(fromBackend.liitteet[props.filename].raw, props.filename);
+    }
   }, [fromBackend.liitteet, props.filename]);
 
   return (

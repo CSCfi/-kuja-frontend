@@ -16,7 +16,9 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
 import FileDownloader from "./FileDownloader";
+import Link from "@material-ui/core/Link";
 import * as R from "ramda";
+import { API_BASE_URL } from "../../../modules/constants";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
 whyDidYouRender(React);
@@ -424,6 +426,14 @@ const Attachments = React.memo(
                   />
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
+                  <span className="ml-2">
+                    <Link
+                      href={`${API_BASE_URL}/liitteet/${liite.uuid}/raw`}
+                      target="_blank"
+                    >
+                      <FaDownload />
+                    </Link>
+                  </span>
                   <button
                     title={formatMessage(common.attachmentDownload)}
                     onClick={e => showFile(e, liite)}
@@ -498,13 +508,16 @@ const Attachments = React.memo(
                   <span className="w-full ml-1">{liite.nimi}</span>
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
-                  <button
+                  <Link href="http://www.google.com" target="_blank">
+                    Link
+                  </Link>
+                  {/* <button
                     title="Näytä"
                     onClick={e => showFile(e, liite)}
                     className="ml-2"
                   >
                     <FaDownload />
-                  </button>
+                  </button> */}
                   <span
                     title={
                       liite.salainen
