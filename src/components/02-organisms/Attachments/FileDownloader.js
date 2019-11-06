@@ -8,15 +8,15 @@ const FileDownloader = props => {
   const { dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
-    if (props.uuid)
-      return [
-        {
-          key: "liitteet",
-          dispatchFn: dispatch,
-          urlEnding: props.uuid
-        }
-      ];
-    else return [];
+    return props.uuid
+      ? [
+          {
+            key: "liitteet",
+            dispatchFn: dispatch,
+            urlEnding: `${props.uuid}/raw`
+          }
+        ]
+      : [];
   }, [dispatch, props.uuid]);
 
   return (
