@@ -203,6 +203,7 @@ const Attachments = React.memo(
       }, [props.payload.attachments]);
     }
 
+    // Adds attachment into attachment list
     const addAttachment = () => {
       if (selectedAttachment.nimi) {
         setNameMissing(false);
@@ -304,6 +305,7 @@ const Attachments = React.memo(
       });
     };
 
+    // Sen name of attachment
     const setAttachmentName = (e, tiedostoId, uuid) => {
       e.preventDefault();
       setFileError(false);
@@ -325,6 +327,7 @@ const Attachments = React.memo(
       });
     };
 
+    // set if attachment is secret
     const setAttachmentVisibility = (e, tiedostoId, uuid) => {
       e.preventDefault();
       setFileError(false);
@@ -346,6 +349,7 @@ const Attachments = React.memo(
       });
     };
 
+    // Checks if file limits are met
     const bytesToSize = bytes => {
       if (!bytes || bytes === 0) return "";
 
@@ -358,33 +362,28 @@ const Attachments = React.memo(
       else return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
     };
 
+    // Creates a link to download file in browser
     const showFile = (e, file) => {
+      let a = document.createElement("a");
+      a.setAttribute("type", "hidden");
+      document.body.appendChild(a); // Needed for Firefox
       if (file.tiedosto && file.tiedosto instanceof Blob) {
         const reader = new FileReader();
         reader.readAsDataURL(file.tiedosto);
         reader.onload = function() {
-          const blob = reader.result;
-          let url = blob;
-          let a = document.createElement("a");
-          a.setAttribute("type", "hidden");
-          a.href = url;
-          document.body.appendChild(a);
+          a.href = reader.result;
           a.download = file.filename;
           a.click();
           a.remove();
         };
       } else {
-        let a = document.createElement("a");
-        let url = API_BASE_URL + "/liitteet/" + file.uuid + "/raw";
-        a.setAttribute("type", "hidden");
-        a.href = url;
-        document.body.appendChild(a);
+        a.href = API_BASE_URL + "/liitteet/" + file.uuid + "/raw";
         a.click();
         a.remove();
       }
     };
 
-    // Lists all attachments based on placement parameter given
+    // Lists all attachments
     const LiiteList = () => {
       if (attachments && attachments.length > 0)
         return attachments.map(liite => {
@@ -467,7 +466,7 @@ const Attachments = React.memo(
       else return null;
     };
 
-    // Lists all attachments based on placement parameter given in read only state
+    // Lists all attachments in read only state
     const LiiteListReadOnly = () => {
       if (attachments && attachments.length > 0)
         return attachments.map(liite => {
