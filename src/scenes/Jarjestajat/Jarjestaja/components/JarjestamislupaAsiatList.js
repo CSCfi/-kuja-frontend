@@ -57,18 +57,16 @@ const JarjestamislupaAsiatList = ({
   }, [muutospyynto]);
 
 
-  const renderJarjestamislupaAsiatList = useMemo(() => {
-    return muutospyynnot => {
-      const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
-      return _.map(data, historyData => (
-        <JarjestamislupaAsiatListItem
-          url={url}
-          muutospyynto={historyData}
-          key={historyData.uuid}
-          setOpened={() => setMuutospyynto(historyData)}
-        />
-      ));
-    };
+  const jarjestamislupaAsiatList = useMemo(() => {
+    const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
+    return _.map(data, historyData => (
+      <JarjestamislupaAsiatListItem
+        url={url}
+        muutospyynto={historyData}
+        key={historyData.uuid}
+        setOpened={() => setMuutospyynto(historyData)}
+      />
+    ));
   }, [url, muutospyynnot]);
 
   const muutospyynnotTable = (
@@ -77,7 +75,7 @@ const JarjestamislupaAsiatList = ({
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
           <div>
-            <div>{renderJarjestamislupaAsiatList(muutospyynnot)}</div>
+            <div>{jarjestamislupaAsiatList}</div>
           </div>
         )}
       />
@@ -97,7 +95,7 @@ const JarjestamislupaAsiatList = ({
                 <Thn>&nbsp;</Thn>
               </Trn>
             </Thead>
-            <Tbody>{renderJarjestamislupaAsiatList(muutospyynnot)}</Tbody>
+            <Tbody>{jarjestamislupaAsiatList}</Tbody>
           </Table>
         )}
       />

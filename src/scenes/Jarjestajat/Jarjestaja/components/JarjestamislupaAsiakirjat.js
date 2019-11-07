@@ -30,23 +30,24 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, asiakirjat, organisaatio, intl
       items: R.prepend(
         intl.formatMessage(liite.salainen ? common.secretAttachment : common.attachment) + " " + R.prop("nimi", liite),
         baseRow),
-      tiedostoId: R.prop("tiedostoId", liite)
+      fileLink: `/api/liitteet/${liite.uuid}/raw`
     }), asiakirjat);
 
   const getMuutospyyntoRowItems = {
-    tiedostoId: muutospyynto.uuid,
+    fileLink: `/api/pdf/esikatsele/muutospyynto/${muutospyynto.uuid}`,
     items: R.prepend(
       intl.formatMessage(common.application),
       baseRow)
   };
 
-  const renderJarjestamislupaAsiatList = () => {
+  const jarjestamislupaAsiakirjatList = () => {
     return R.addIndex(R.map)((row, idx) => (
-      <JarjestamislupaAsiakirjatItem
-        onClick = {() => {console.log("TODO: Download document " + row.tiedostoId)} }
-        rowItems = { row.items }
-        key = { idx }
-      />
+      <a href={row.fileLink} target="_blank" rel="noopener noreferrer">
+        <JarjestamislupaAsiakirjatItem
+          rowItems = { row.items }
+          key = { idx }
+        />
+      </a>
     ), R.prepend(getMuutospyyntoRowItems, getLiitteetRowItems));
   };
 
@@ -56,7 +57,7 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, asiakirjat, organisaatio, intl
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
           <Table>
-            <Tbody>{renderJarjestamislupaAsiatList()}</Tbody>
+            <Tbody>{jarjestamislupaAsiakirjatList()}</Tbody>
           </Table>
         )}
       />
@@ -75,7 +76,7 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, asiakirjat, organisaatio, intl
                 }
               </Trn>
             </Thead>
-            <Tbody>{renderJarjestamislupaAsiatList()}</Tbody>
+            <Tbody>{jarjestamislupaAsiakirjatList()}</Tbody>
           </Table>
         )}
       />
