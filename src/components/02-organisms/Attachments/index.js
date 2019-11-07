@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { injectIntl } from "react-intl";
@@ -15,7 +15,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
-import FileDownloader from "./FileDownloader";
 import * as R from "ramda";
 import { API_BASE_URL } from "../../../modules/constants";
 
@@ -109,7 +108,7 @@ const Checkbox = styled.div`
   }
 `;
 const LiiteListItem = styled.div`
-  font-size: 0.9em;
+  font-size: 1em;
   display: flex;
   justify-content: stretch;
   align-items: center;
@@ -144,10 +143,9 @@ const LiiteListItem = styled.div`
   input {
     width: auto;
     height: 2em;
-    font-size: 0.9em;
     flex: 1;
     margin: 0 0.1em 0 0.1em;
-    padding: 0 0.2em 0 0.1em;
+    padding: 0 0.2em 0 0.5em;
   }
   .name {
     flex: 1;
@@ -185,9 +183,6 @@ const Attachments = React.memo(
     const [fileError, setFileError] = useState(false);
     const [isNameModalOpen, setIsNameModalOpen] = useState(false);
     const [nameMissing, setNameMissing] = useState(false);
-    const [isFileDownloaderVisible, setIsFileDownloaderVisible] = useState(
-      false
-    );
 
     const {
       intl: { formatMessage }
@@ -373,26 +368,17 @@ const Attachments = React.memo(
           let a = document.createElement("a");
           a.visible = "collapse";
           a.href = url;
-          a.download = file.nimi + "." + file.tyyppi;
+          a.download = file.filename;
           a.click();
         };
       } else {
         let a = document.createElement("a");
         let url = API_BASE_URL + "/liitteet/" + file.uuid + "/raw";
-        console.log(url);
         a.visible = "collapse";
         a.href = url;
-        // a.download = file.nimi + "." + file.tyyppi;
-        a.target = "_blank";
         a.click();
       }
     };
-
-    const getFileDownloader = useMemo(() => {
-      return (filename, uuid) => {
-        return <FileDownloader filename={filename} uuid={uuid} />;
-      };
-    }, []);
 
     // Lists all attachments based on placement parameter given
     const LiiteList = () => {
@@ -425,14 +411,6 @@ const Attachments = React.memo(
                   />
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
-                  {/* <span className="ml-2">
-                    <Link
-                      href={`${API_BASE_URL}/liitteet/${liite.uuid}/raw`}
-                      target="_blank"
-                    >
-                      <FaDownload />
-                    </Link>
-                  </span> */}
                   <button
                     title={formatMessage(common.attachmentDownload)}
                     onClick={e => showFile(e, liite)}
@@ -478,8 +456,6 @@ const Attachments = React.memo(
                     <FaTimes />
                   </button>
                 </LiiteListItem>
-                {isFileDownloaderVisible &&
-                  getFileDownloader(liite.tiedostoId, liite.uuid)}
               </React.Fragment>
             );
           } else return null;
@@ -504,16 +480,16 @@ const Attachments = React.memo(
               >
                 <LiiteListItem>
                   {liite.new ? <FaFile /> : <FaRegFile />}
-                  <span className="w-full ml-1">{liite.nimi}</span>
+                  <span className="w-full pl-2">{liite.nimi}</span>
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
-                  {/* <button
-                    title="Näytä"
+                  <button
+                    title={formatMessage(common.attachmentDownload)}
                     onClick={e => showFile(e, liite)}
                     className="ml-2"
                   >
                     <FaDownload />
-                  </button> */}
+                  </button>
                   <span
                     title={
                       liite.salainen
@@ -524,9 +500,6 @@ const Attachments = React.memo(
                     {liite.salainen && <FaLock />}
                   </span>
                 </LiiteListItem>
-                {isFileDownloaderVisible && (
-                  <FileDownloader uuid={liite.uuid} />
-                )}
               </React.Fragment>
             );
           } else return null;
@@ -548,13 +521,8 @@ const Attachments = React.memo(
           />
         )}
         {fileError && <Error>{formatMessage(common.attachmentError)}</Error>}
-        {!props.listHidden && !props.isReadOnly && (
-          // <LiiteList key={props.placement + props.id + Math.random()} />
-          <LiiteList />
-        )}
-        {/* {!props.listHidden && props.isReadOnly && (
-        <LiiteListReadOnly key={props.placement + props.id + Math.random()} />
-      )} */}
+        {!props.listHidden && !props.isReadOnly && <LiiteList />}
+        {!props.listHidden && props.isReadOnly && <LiiteListReadOnly />}
         <Dialog
           open={isNameModalOpen}
           aria-labelledby="name-dialog"
@@ -613,8 +581,6 @@ const Attachments = React.memo(
   },
   (prevState, nextState) => {
     return R.equals(prevState.payload, nextState.payload);
-    // console.info(prevState, nextState);
-    // return false;
   }
 );
 
