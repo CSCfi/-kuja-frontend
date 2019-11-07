@@ -69,47 +69,32 @@ const JarjestamislupaAsiatList = ({
     ));
   }, [url, muutospyynnot]);
 
-  const muutospyynnotTable = (
-    <Paper className={classes.root}>
-      <Media
-        query={MEDIA_QUERIES.MOBILE}
-        render={() => (
-          <div>
-            <div>{jarjestamislupaAsiatList}</div>
-          </div>
-        )}
-      />
-      <Media
-        query={MEDIA_QUERIES.TABLET_MIN}
-        render={() => (
-          <Table className={classes.table}>
-            <Thead>
-              <Trn>
-                {columnTitles.map((title, i) => (
-                  <Thn key={`title-${i}`}>
-                    <span className="text-white">
-                      <Typography component="span">{title}</Typography>
-                    </span>
-                  </Thn>
-                ))}
-                <Thn>&nbsp;</Thn>
-              </Trn>
-            </Thead>
-            <Tbody>{jarjestamislupaAsiatList}</Tbody>
-          </Table>
-        )}
-      />
-    </Paper>
-  );
 
-  if (muutospyynto) {
-    // back button & asiakirjat
-    return (
-      <React.Fragment>
-        <Button variant="contained" color="primary" onClick={() => setMuutospyynto(null)}>
-          <ArrowBack />
-          <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
-        </Button>
+  return (
+    <React.Fragment>
+      {muutospyynto
+        ? (
+          <Button variant="contained" color="primary" onClick={() => setMuutospyynto(null)}>
+            <ArrowBack/>
+            <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
+          </Button>
+        )
+        : (
+          <NavLink
+            to={newApplicationRouteItem.path}
+            exact={newApplicationRouteItem.exact}
+            className="pl-2"
+            style={{textDecoration: "none", color: "inherit"}}
+          >
+            <Button variant="contained" color="primary">
+              {breakpointTabletMin && <Add/>}
+
+              <span className="pl-2">{newApplicationRouteItem.text}</span>
+            </Button>
+          </NavLink>
+        )}
+
+      {muutospyynto && (
         <Paper className={classes.root}>
           <JarjestamislupaAsiakirjat
             organisaatio={organisaatio}
@@ -117,35 +102,42 @@ const JarjestamislupaAsiatList = ({
             asiakirjat={liitteet}
             intl={intl}
           />
-        </Paper>
-      </React.Fragment>
-    );
-  } else {
-    // new application button & asiat
-    return (
-      <React.Fragment>
-        <div className="flex">
-          <div className="mr-4">
-            <NavLink
-              to={newApplicationRouteItem.path}
-              exact={newApplicationRouteItem.exact}
-              className="pl-2"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Button variant="contained" color="primary">
-                {breakpointTabletMin && <Add />}
+        </Paper>)}
 
-                <span className="pl-2">{newApplicationRouteItem.text}</span>
-              </Button>
-            </NavLink>
-          </div>
-        </div>
-        {muutospyynnot && muutospyynnot.length > 0 && (
-          muutospyynnotTable
-        )}
-      </React.Fragment>
-    );
-  }
+      {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (
+        <Paper className={classes.root}>
+          <Media
+            query={MEDIA_QUERIES.MOBILE}
+            render={() => (
+              <div>
+                <div>{jarjestamislupaAsiatList}</div>
+              </div>
+            )}
+          />
+          <Media
+            query={MEDIA_QUERIES.TABLET_MIN}
+            render={() => (
+              <Table className={classes.table}>
+                <Thead>
+                  <Trn>
+                    {columnTitles.map((title, i) => (
+                      <Thn key={`title-${i}`}>
+                    <span className="text-white">
+                      <Typography component="span">{title}</Typography>
+                    </span>
+                      </Thn>
+                    ))}
+                    <Thn>&nbsp;</Thn>
+                  </Trn>
+                </Thead>
+                <Tbody>{jarjestamislupaAsiatList}</Tbody>
+              </Table>
+            )}
+          />
+        </Paper>
+      )}
+    </React.Fragment>
+  );
 };
 
 JarjestamislupaAsiatList.propTypes = {
