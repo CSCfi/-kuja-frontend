@@ -16,7 +16,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
 import FileDownloader from "./FileDownloader";
-import Link from "@material-ui/core/Link";
 import * as R from "ramda";
 import { API_BASE_URL } from "../../../modules/constants";
 
@@ -264,6 +263,7 @@ const Attachments = React.memo(
       ) {
         let liite = {};
         liite.tiedostoId = Math.random() + "-" + e.target.files[0].name;
+        liite.filename = e.target.files[0].name;
         liite.kieli = "fi";
         liite.tyyppi = type;
         liite.nimi = e.target.files[0].name.split(".")[0].toLowerCase();
@@ -364,28 +364,27 @@ const Attachments = React.memo(
     };
 
     const showFile = (e, file) => {
-      const reader = new FileReader();
       if (file.tiedosto && file.tiedosto instanceof Blob) {
+        const reader = new FileReader();
         reader.readAsDataURL(file.tiedosto);
         reader.onload = function() {
           const blob = reader.result;
           let url = blob;
           let a = document.createElement("a");
+          a.visible = "collapse";
           a.href = url;
           a.download = file.nimi + "." + file.tyyppi;
           a.click();
         };
       } else {
-        console.info("visible...");
-        setIsFileDownloaderVisible(true);
-        // props.downloadAttachment(file.uuid).then(response => {
-        //   const blob = reader.result;
-        //   let url = blob;
-        //   let a = document.createElement("a");
-        //   a.href = url;
-        //   a.download = response.nimi + "." + response.tyyppi;
-        //   a.click();
-        // });
+        let a = document.createElement("a");
+        let url = API_BASE_URL + "/liitteet/" + file.uuid + "/raw";
+        console.log(url);
+        a.visible = "collapse";
+        a.href = url;
+        // a.download = file.nimi + "." + file.tyyppi;
+        a.target = "_blank";
+        a.click();
       }
     };
 
@@ -426,14 +425,14 @@ const Attachments = React.memo(
                   />
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
-                  <span className="ml-2">
+                  {/* <span className="ml-2">
                     <Link
                       href={`${API_BASE_URL}/liitteet/${liite.uuid}/raw`}
                       target="_blank"
                     >
                       <FaDownload />
                     </Link>
-                  </span>
+                  </span> */}
                   <button
                     title={formatMessage(common.attachmentDownload)}
                     onClick={e => showFile(e, liite)}
@@ -508,9 +507,6 @@ const Attachments = React.memo(
                   <span className="w-full ml-1">{liite.nimi}</span>
                   <span className="type">{liite.tyyppi}</span>
                   <span className="size">{bytesToSize(liite.koko)}</span>
-                  <Link href="http://www.google.com" target="_blank">
-                    Link
-                  </Link>
                   {/* <button
                     title="Näytä"
                     onClick={e => showFile(e, liite)}

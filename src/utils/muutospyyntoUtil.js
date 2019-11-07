@@ -80,6 +80,7 @@ export function createAttachmentArray(muutokset) {
         tulosliite.salainen = liite.salainen;
         tulosliite.removed = liite.removed;
         tulosliite.paikka = liite.paikka;
+        tulosliite.filename = liite.filename;
         if (liite.tiedosto && !liite.removed) {
           tulosliite.tiedosto = new Blob([liite.tiedosto]);
           liite.tiedosto = null;
