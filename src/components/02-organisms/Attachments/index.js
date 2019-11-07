@@ -366,17 +366,21 @@ const Attachments = React.memo(
           const blob = reader.result;
           let url = blob;
           let a = document.createElement("a");
-          a.visible = "collapse";
+          a.setAttribute("type", "hidden");
           a.href = url;
+          document.body.appendChild(a);
           a.download = file.filename;
           a.click();
+          a.remove();
         };
       } else {
         let a = document.createElement("a");
         let url = API_BASE_URL + "/liitteet/" + file.uuid + "/raw";
-        a.visible = "collapse";
+        a.setAttribute("type", "hidden");
         a.href = url;
+        document.body.appendChild(a);
         a.click();
+        a.remove();
       }
     };
 
