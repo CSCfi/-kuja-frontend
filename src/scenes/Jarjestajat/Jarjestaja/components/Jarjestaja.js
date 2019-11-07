@@ -34,10 +34,8 @@ const Jarjestaja = ({
   lupaKohteet = [],
   lupa = {},
   match,
-  muutospyynnot,
   organisaatio = {},
-  user,
-  ytunnus
+  user
 }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
@@ -61,6 +59,11 @@ const Jarjestaja = ({
             key: "lupahistoria",
             dispatchFn: dispatch,
             urlEnding: jarjestaja.oid
+          },
+          {
+            key: "muutospyynnot",
+            dispatchFn: dispatch,
+            urlEnding: jarjestaja.ytunnus
           }
         ]
       : [];
@@ -145,7 +148,7 @@ const Jarjestaja = ({
                       <Jarjestamislupa
                         lupaKohteet={lupaKohteet}
                         lupa={lupa}
-                        ytunnus={ytunnus}
+                        ytunnus={jarjestaja.ytunnus}
                       />
                     )}
                   />
@@ -163,7 +166,7 @@ const Jarjestaja = ({
                       <JarjestamislupaAsiat
                         intl={intl}
                         match={props.match}
-                        muutospyynnot={muutospyynnot}
+                        muutospyynnot={fromBackend.muutospyynnot.raw}
                         newApplicationRouteItem={newApplicationRouteItem}
                         organisaatio={organisaatio}
                       />
@@ -174,7 +177,7 @@ const Jarjestaja = ({
                     exact
                     render={props => (
                       <HakemuksetJaPaatokset
-                        muutospyynnot={muutospyynnot}
+                        muutospyynnot={fromBackend.muutospyynnot.raw}
                         match={props.match}
                         organisaatio={organisaatio}
                         user={user}
@@ -207,10 +210,8 @@ Jarjestaja.propTypes = {
   lupaKohteet: PropTypes.object,
   lupa: PropTypes.object,
   match: PropTypes.object,
-  muutospyynnot: PropTypes.array,
   organisaatio: PropTypes.object,
-  user: PropTypes.object,
-  ytunnus: PropTypes.string
+  user: PropTypes.object
 };
 
 export default injectIntl(Jarjestaja);
