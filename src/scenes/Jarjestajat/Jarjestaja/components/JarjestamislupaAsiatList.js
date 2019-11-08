@@ -48,15 +48,6 @@ const JarjestamislupaAsiatList = ({
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
 
-  const liitteet = useMemo(() => {
-    // find "attachment" properties recursively
-    const findAttachments = (obj) =>
-      R.prop("attachments", obj) || R.chain(findAttachments, R.values(obj));
-
-    return (muutospyynto && findAttachments(muutospyynto)) || [];
-  }, [muutospyynto]);
-
-
   const jarjestamislupaAsiatList = useMemo(() => {
     const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
     return _.map(data, historyData => (
@@ -99,7 +90,6 @@ const JarjestamislupaAsiatList = ({
           <JarjestamislupaAsiakirjat
             organisaatio={organisaatio}
             muutospyynto={muutospyynto}
-            asiakirjat={liitteet}
             intl={intl}
           />
         </Paper>)}

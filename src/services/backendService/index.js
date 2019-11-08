@@ -90,6 +90,7 @@ const backendRoutes = {
   },
   muutospyynnot: { path: `muutospyynnot/` },
   muutospyynto: { path: `muutospyynnot/id/` },
+  muutospyynnonLiitteet: { path: 'muutospyynnot/', postfix: '/liitteet/' },
   oivamuutoikeudetvelvollisuudetehdotjatehtavat: {
     path: `koodistot/koodit/oivamuutoikeudetvelvollisuudetehdotjatehtavat`
   },
@@ -126,9 +127,8 @@ async function run(
     if (abortController) {
       options.signal = abortController.signal;
     }
-    options.headers = {}
     const response = await fetch(
-      `${API_BASE_URL}/${R.join("", [routeObj.path, urlEnding])}`,
+      `${API_BASE_URL}/${R.join("", [routeObj.path, urlEnding, routeObj.postfix])}`,
       // add 'accept' header if it does not exist
       R.mergeDeepLeft(options, {headers: {"Accept": "application/json"}}),
     );
