@@ -17,6 +17,9 @@ import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
 import { flattenObj } from "../../../../utils/common";
 
+const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
+whyDidYouRender(React);
+
 /** @namespace components */
 
 /**
@@ -74,7 +77,7 @@ const defaultCategoryStyles = {
 
 /**
  * Returns a change object by the given anchor.
- * 
+ *
  * @param {string} anchor
  * @param {array} changes
  */
@@ -94,26 +97,6 @@ const getPropertiesObject = (changeObj, component) => {
 
 const CategorizedList = React.memo(props => {
   const { onChangesUpdate } = props;
-
-  const handleAttachmentChanges = useCallback(
-    (payload, changeProps) => {
-      return onChangesUpdate({
-        anchor: `${R.compose(
-          R.join("."),
-          R.tail(),
-          R.split(".")
-        )(payload.anchor)}.${payload.component.anchor}`,
-        properties: {
-          attachments: changeProps.attachments
-        }
-      });
-    },
-    [onChangesUpdate]
-  );
-
-  const downloadAttachment = (payload, changeProps) => {
-    // payload.component.downloadAttachment(payload, changeProps);
-  };
 
   const handleButtonClick = (payload, changeProps) => {
     payload.component.onClick(payload, changeProps);
@@ -492,13 +475,16 @@ const CategorizedList = React.memo(props => {
                               change.properties.isChecked
                             );
                           let attachments = propsObj.attachments || [];
+                          console.info(
+                            "renderöidään attachments uudestaan...",
+                            attachments
+                          );
                           return (
                             <div className={component.styleClasses}>
                               <Attachments
                                 id={`attachments-${idSuffix}`}
                                 isDisabled={isDisabled}
-                                onUpdate={handleAttachmentChanges}
-                                downloadAttachment={downloadAttachment}
+                                onUpdate={handleChanges}
                                 payload={{
                                   anchor,
                                   categories: category.categories,
@@ -722,8 +708,12 @@ CategorizedList.propTypes = {
   path: PropTypes.array,
   runRootOperations: PropTypes.func,
   showCategoryTitles: PropTypes.bool,
-  onChangesUpdate: PropTypes.func,
-  downloadAttachment: PropTypes.func
+  onChangesUpdate: PropTypes.func
+};
+
+CategorizedList.whyDidYouRender = {
+  logOnDifferentValues: true,
+  customName: "CategorizedList"
 };
 
 export default CategorizedList;

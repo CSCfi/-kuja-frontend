@@ -279,7 +279,7 @@ const MuutospyyntoWizard = ({
         if (changeObjects.perustelut) {
           if (changeObjects.perustelut.liitteet) {
             onSectionChangesUpdate(
-              "perustelut_liitteeet",
+              "perustelut_liitteet",
               setAttachmentUuids(
                 changeObjects.perustelut.liitteet,
                 muutoshakemus.save.data.data
@@ -367,7 +367,7 @@ const MuutospyyntoWizard = ({
           ["perustelut", "koulutukset", "kuljettajakoulutukset"],
           changeObjects
         ) || []
-      )
+      ) || []
     ]);
     // Returns only attachments
     let attachments = [];
