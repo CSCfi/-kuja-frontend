@@ -376,29 +376,37 @@ export function getKohdeByTunniste(tunniste, kohteet) {
   }
 }
 
+/**
+ * Sets attachment uuids from liitteet structure to muutokset.
+ * @param backendMuutokset
+ * @param attachments
+ */
 export function setAttachmentUuids(
-  changeObjects = [],
-  muutospyynto = { liitteet: [] }
+  attachments,
+  backendMuutokset
 ) {
-  return R.map(changeObj => {
-    if (changeObj.properties.attachments) {
-      return R.assocPath(
-        ["properties", "attachments"],
-        R.map(attachment => {
-          const attachmentWithUuid = R.find(
-            R.propEq("tiedostoId", attachment.tiedostoId),
-            muutospyynto.liitteet
-          );
-          return {
-            ...attachment,
-            uuid: attachmentWithUuid ? attachmentWithUuid.uuid : null,
-            new: false
-          };
-        }, changeObj.properties.attachments),
-        changeObj
-      );
-    } else return changeObj;
-  }, changeObjects);
+  const setUuids = (obj) => {
+    if (obj instanceof Array) {
+      obj = R.map(setUuids, obj);
+    }
+    else if (obj instanceof Object) {
+      const tiedostoId = R.prop("tiedostoId", obj);
+      if (tiedostoId && !R.prop("uuid", obj)) {
+        const uuid = R.prop("uuid", R.find(R.propEq("tiedostoId", tiedostoId), attachments));
+        obj = R.assoc('uuid', uuid, obj);
+      }
+
+      obj = R.compose(
+        R.fromPairs,
+        R.map(([k, v]) => [k, setUuids(v)]),
+        R.toPairs
+      )(obj);
+    }
+
+    return obj;
+  };
+
+  return setUuids(backendMuutokset);
 }
 
 // Combine arrays recursively
