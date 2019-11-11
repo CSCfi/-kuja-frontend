@@ -6,9 +6,9 @@ const WizardPage = props => {
   const [isSavingEnabled, setIsSavingEnabled] = useState(false);
   const { onSave } = props;
 
-  const save = () => {
+  const save = (triggerPreview) => {
     // setIsSavingEnabled(false); // todo: fix by enabling again when changes
-    onSave();
+    onSave(triggerPreview);
   };
 
   useEffect(() => {
@@ -24,7 +24,6 @@ const WizardPage = props => {
         onNext={props.onNext}
         onSave={save}
         isSavingEnabled={isSavingEnabled}
-        hakemusUUID={props.hakemusUUID}
       />
     </div>
   );
@@ -40,8 +39,7 @@ WizardPage.propTypes = {
   onNext: PropTypes.func,
   onPrev: PropTypes.func,
   onSave: PropTypes.func,
-  pageNumber: PropTypes.number,
-  hakemusUUID: PropTypes.string
+  pageNumber: PropTypes.number
 };
 
 export default WizardPage;

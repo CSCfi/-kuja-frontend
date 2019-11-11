@@ -17,13 +17,12 @@ const WizardActions = props => {
   };
 
   const onSaveClick = () => {
-    props.onSave();
+    props.onSave(false);
   };
 
   const onPreviewClick  = () => {
-    props.onPreviewClick();
-
-  }
+    props.onSave(true);
+  };
 
   const {
     intl: { formatMessage }
@@ -55,9 +54,8 @@ const WizardActions = props => {
           <Button
             color="secondary"
             onClick={onPreviewClick}
-            disabled={!props.hakemusUUID}
           >
-            <a href={`/api/pdf/esikatsele/muutospyynto/${props.hakemusUUID}`}>{formatMessage(wizardMessages.preview)}</a>
+            {formatMessage(wizardMessages.preview)}
           </Button>
         </div>
         <div className="flex flex-col md:w-48 md:flex-row-reverse">
@@ -96,8 +94,7 @@ WizardActions.propTypes = {
   onPrev: PropTypes.func,
   pageNumber: PropTypes.number,
   isSavingEnabled: PropTypes.bool,
-  save: PropTypes.func,
-  hakemusUUID: PropTypes.string
+  save: PropTypes.func
 };
 
 export default injectIntl(WizardActions);

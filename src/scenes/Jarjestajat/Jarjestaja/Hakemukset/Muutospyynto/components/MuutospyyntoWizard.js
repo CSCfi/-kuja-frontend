@@ -36,6 +36,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
+import * as axios from 'axios'
 
 import {
   setAttachmentUuids,
@@ -48,8 +49,6 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
-import {AxiosInstance as axios} from "axios";
-
 const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -268,6 +267,9 @@ const MuutospyyntoWizard = ({
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
+      if(muutoshakemus.save.triggerPreview) {
+        window.location=`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`;
+      }
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
@@ -384,7 +386,7 @@ const MuutospyyntoWizard = ({
     }
   }, [changeObjects]);
 
-  const save = useCallback(() => {
+  const save = useCallback((triggerPreview) => {
     const attachments = getFiles();
 
     if (match.params.uuid) {
@@ -397,7 +399,8 @@ const MuutospyyntoWizard = ({
           match.params.uuid,
           muutospyynto
         ),
-        attachments
+        attachments,
+        triggerPreview
       )(muutoshakemusDispatch);
     } else {
       saveMuutospyynto(
@@ -407,7 +410,8 @@ const MuutospyyntoWizard = ({
           backendChanges.source,
           dataBySection
         ),
-        attachments
+        attachments,
+        triggerPreview
       )(muutoshakemusDispatch);
     }
   }, [
@@ -504,7 +508,6 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     changeObjects={changeObjects}
-                    hakemusUUID={match.params.uuid}
                   >
                     <MuutospyyntoWizardMuutokset
                       changeObjects={changeObjects}
@@ -535,7 +538,6 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     changeObjects={changeObjects}
-                    hakemusUUID={match.params.uuid}
                   >
                     <LomakkeetProvider>
                       <MuutospyyntoWizardPerustelut
@@ -567,7 +569,6 @@ const MuutospyyntoWizard = ({
                     lupa={lupa}
                     muutoshakemus={dataBySection}
                     changeObjects={changeObjects}
-                    hakemusUUID={match.params.uuid}
                   >
                     <MuutospyyntoWizardTaloudelliset
                       changeObjects={changeObjects}
@@ -584,7 +585,6 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     muutoshakemus={dataBySection}
-                    hakemusUUID={match.params.uuid}
                   >
                     <LomakkeetProvider>
                       <MuutospyyntoWizardYhteenveto
