@@ -15,7 +15,6 @@ import Media from "react-media";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
-import * as R from "ramda";
 
 const useStyles = makeStyles(theme => ({
   root: {

@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import FetchHandler from "../../../../FetchHandler";
 import { BackendContext } from "../../../../context/backendContext";
 import Moment from "react-moment";
+import { downloadFileFn } from "../../../../components/02-organisms/Attachments";
 
 const WrapTable = styled.div``;
 
@@ -50,12 +51,13 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
             ? (<Moment format="D.M.YYYY">{liite.luontipvm}</Moment>)
             : ""
         ],
-      fileLink: `/api/liitteet/${liite.uuid}/raw`
-    }), R.pathOr([], ['muutospyynnonLiitteet', 'raw'], fromBackend)
-  ), [fromBackend.muutospyynnonLiitteet]);
+      fileLink: `/liitteet/${liite.uuid}/raw`
+    }), R.sortBy(R.prop("nimi"), R.pathOr([], ['muutospyynnonLiitteet', 'raw'], fromBackend))
+  ), [intl, fromBackend, baseRow]);
 
   const muutospyyntoRowItem = {
-    fileLink: `/api/pdf/esikatsele/muutospyynto/${muutospyynto.uuid}`,
+    fileLink: `/pdf/esikatsele/muutospyynto/${muutospyynto.uuid}`,
+    openInNewWindow: true,
     items: [
       intl.formatMessage(common.application),
       ...baseRow,
@@ -65,11 +67,11 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
 
   const jarjestamislupaAsiakirjatList = () => {
     return R.addIndex(R.map)((row, idx) => (
-      <a href={row.fileLink} target="_blank" rel="noopener noreferrer" key = { idx }>
-        <JarjestamislupaAsiakirjatItem
-          rowItems = { row.items }
-        />
-      </a>
+      <JarjestamislupaAsiakirjatItem
+        onClick = { downloadFileFn({ url: row.fileLink, openInNewWindow: row.openInNewWindow }) }
+        rowItems = { row.items }
+        key = { idx }
+      />
     ), [muutospyyntoRowItem, ...liitteetRowItems]);
   };
 
