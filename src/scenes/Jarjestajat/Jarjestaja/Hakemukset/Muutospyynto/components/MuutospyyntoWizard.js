@@ -48,7 +48,6 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
-
 const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -265,8 +264,20 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
+  const showPreviewFile = (url) => {
+    let a = document.createElement("a");
+    a.setAttribute("type", "hidden");
+    a.href = url;
+    a.download = true;
+    a.click();
+    a.remove();
+  };
+
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
+      if(muutoshakemus.save.triggerPreview) {
+        showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
+      }
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
@@ -383,7 +394,7 @@ const MuutospyyntoWizard = ({
     }
   }, [changeObjects]);
 
-  const save = useCallback(() => {
+  const save = useCallback((triggerPreview) => {
     const attachments = getFiles();
 
     if (match.params.uuid) {
@@ -396,7 +407,8 @@ const MuutospyyntoWizard = ({
           match.params.uuid,
           muutospyynto
         ),
-        attachments
+        attachments,
+        triggerPreview
       )(muutoshakemusDispatch);
     } else {
       saveMuutospyynto(
@@ -406,7 +418,8 @@ const MuutospyyntoWizard = ({
           backendChanges.source,
           dataBySection
         ),
-        attachments
+        attachments,
+        triggerPreview
       )(muutoshakemusDispatch);
     }
   }, [
