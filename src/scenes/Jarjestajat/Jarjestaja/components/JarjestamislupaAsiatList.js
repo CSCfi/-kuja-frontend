@@ -37,7 +37,7 @@ const columnTitles = [
 
 const JarjestamislupaAsiatList = ({
   match,
-  muutospyynnot,
+  muutospyynnot = [],
   newApplicationRouteItem,
   organisaatio,
   intl

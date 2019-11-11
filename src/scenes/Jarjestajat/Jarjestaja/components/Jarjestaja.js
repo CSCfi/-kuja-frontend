@@ -112,6 +112,8 @@ const Jarjestaja = ({
     };
   }, [match, user]);
 
+  const muutospyynnot = R.path(["muutospyynnot", "raw"], fromBackend);
+
   return (
     <React.Fragment>
       <FetchHandler
@@ -166,7 +168,7 @@ const Jarjestaja = ({
                       <JarjestamislupaAsiat
                         intl={intl}
                         match={props.match}
-                        muutospyynnot={fromBackend.muutospyynnot.raw}
+                        muutospyynnot={muutospyynnot}
                         newApplicationRouteItem={newApplicationRouteItem}
                         organisaatio={organisaatio}
                       />
@@ -177,7 +179,7 @@ const Jarjestaja = ({
                     exact
                     render={props => (
                       <HakemuksetJaPaatokset
-                        muutospyynnot={fromBackend.muutospyynnot.raw}
+                        muutospyynnot={muutospyynnot}
                         match={props.match}
                         organisaatio={organisaatio}
                         user={user}
