@@ -36,7 +36,6 @@ import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
-import * as axios from 'axios'
 
 import {
   setAttachmentUuids,
@@ -265,10 +264,19 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
+  const showPreviewFile = (url) => {
+    let a = document.createElement("a");
+    a.setAttribute("type", "hidden");
+    a.href = url;
+    a.download = true;
+    a.click();
+    a.remove();
+  };
+
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       if(muutoshakemus.save.triggerPreview) {
-        window.location=`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`;
+        showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
       }
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
