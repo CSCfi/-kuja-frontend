@@ -378,8 +378,8 @@ export function getKohdeByTunniste(tunniste, kohteet) {
 
 /**
  * Sets attachment uuids from liitteet structure to muutokset.
- * @param backendMuutokset
- * @param attachments
+ * @param attachments List of objects from which uuid is copied to destination object based on property tiedostoId
+ * @param backendMuutokset Object structure to set uuids to
  */
 export function setAttachmentUuids(
   attachments,
