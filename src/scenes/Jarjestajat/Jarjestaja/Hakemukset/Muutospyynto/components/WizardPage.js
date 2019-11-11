@@ -24,6 +24,7 @@ const WizardPage = props => {
         onNext={props.onNext}
         onSave={save}
         isSavingEnabled={isSavingEnabled}
+        hakemusUUID={props.hakemusUUID}
       />
     </div>
   );
@@ -39,7 +40,8 @@ WizardPage.propTypes = {
   onNext: PropTypes.func,
   onPrev: PropTypes.func,
   onSave: PropTypes.func,
-  pageNumber: PropTypes.number
+  pageNumber: PropTypes.number,
+  hakemusUUID: PropTypes.string
 };
 
 export default WizardPage;

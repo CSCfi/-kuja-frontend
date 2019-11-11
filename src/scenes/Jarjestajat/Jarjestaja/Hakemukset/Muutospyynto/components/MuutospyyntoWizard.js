@@ -48,6 +48,7 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
+import {AxiosInstance as axios} from "axios";
 
 const DialogTitle = withStyles(theme => ({
   root: {
@@ -503,6 +504,7 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     changeObjects={changeObjects}
+                    hakemusUUID={match.params.uuid}
                   >
                     <MuutospyyntoWizardMuutokset
                       changeObjects={changeObjects}
@@ -533,6 +535,7 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     changeObjects={changeObjects}
+                    hakemusUUID={match.params.uuid}
                   >
                     <LomakkeetProvider>
                       <MuutospyyntoWizardPerustelut
@@ -564,6 +567,7 @@ const MuutospyyntoWizard = ({
                     lupa={lupa}
                     muutoshakemus={dataBySection}
                     changeObjects={changeObjects}
+                    hakemusUUID={match.params.uuid}
                   >
                     <MuutospyyntoWizardTaloudelliset
                       changeObjects={changeObjects}
@@ -580,6 +584,7 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     muutoshakemus={dataBySection}
+                    hakemusUUID={match.params.uuid}
                   >
                     <LomakkeetProvider>
                       <MuutospyyntoWizardYhteenveto
