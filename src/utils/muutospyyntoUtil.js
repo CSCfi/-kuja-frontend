@@ -377,13 +377,13 @@ export function getKohdeByTunniste(tunniste, kohteet) {
 }
 
 /**
- * Sets attachment uuids from liitteet structure to muutokset.
- * @param attachments List of objects from which uuid is copied to destination object based on property tiedostoId
- * @param backendMuutokset Object structure to set uuids to
+ * Finds tiedostoId properties from changeObj structure and sets uuids based on attachment list.
+ * @param attachments List of objects from which uuid is copied to destination object based on matching tiedostoId
+ * @param changeObj Object structure to set uuids to
  */
 export function setAttachmentUuids(
   attachments,
-  backendMuutokset
+  changeObj
 ) {
   const setUuids = (obj) => {
     if (obj instanceof Array) {
@@ -406,7 +406,7 @@ export function setAttachmentUuids(
     return obj;
   };
 
-  return setUuids(backendMuutokset);
+  return setUuids(changeObj);
 }
 
 // Combine arrays recursively
