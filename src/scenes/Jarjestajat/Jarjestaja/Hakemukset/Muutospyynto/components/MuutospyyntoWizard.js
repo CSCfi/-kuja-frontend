@@ -223,10 +223,6 @@ const MuutospyyntoWizard = ({
     }
   });
 
-  const notify = (title, options) => {
-    toast.success(title, options);
-  };
-
   /**
    * The function is mainly called by FormSection.
    */
@@ -274,6 +270,21 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
+    if(R.path(["save","hasErrored"], muutoshakemus) === true) {
+      toast.error("Virhe muutospyynnön käsittelyssä", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_LEFT
+      });
+    }
+    else if(R.path(["save","saved"],muutoshakemus) === true) {
+      toast.success("Muutospyyntö tallennettu!", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_LEFT
+      });
+    }
+  },[muutoshakemus.save])
+
+  useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       if(muutoshakemus.save.triggerPreview) {
         showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
@@ -281,12 +292,6 @@ const MuutospyyntoWizard = ({
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
-        notify("Muutospyyntö tallennettu!", {
-          autoClose: 2000,
-          position: toast.POSITION.TOP_LEFT,
-          type: toast.TYPE.SUCCESS
-        });
-
         const setAttachments =
           R.curry(setAttachmentUuids)(R.path(["save", "data", "data", "liitteet"], muutoshakemus));
 
@@ -412,7 +417,7 @@ const MuutospyyntoWizard = ({
   /**
    * User is redirected to the following path when the form is closed.
    */
-  const handleOk = useCallback(() => {
+  const closeWizard = useCallback(() => {
     return history.push(
       `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
     );
@@ -421,6 +426,12 @@ const MuutospyyntoWizard = ({
   useEffect(() => {
     setPage(parseInt(match.params.page, 10));
   }, [match.params.page]);
+
+  useEffect(() => {
+    if(muutoshakemus.readyToCloseWizard === true) {
+      setTimeout(closeWizard,2000);
+    }
+  },[muutoshakemus.readyToCloseWizard])
 
   /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
@@ -586,7 +597,7 @@ const MuutospyyntoWizard = ({
             <DialogTitle id="confirm-dialog">Poistutaanko?</DialogTitle>
             <DialogContent>{HAKEMUS_VIESTI.VARMISTUS.FI}</DialogContent>
             <DialogActions>
-              <Button onClick={handleOk} color="primary" variant="contained">
+              <Button onClick={closeWizard} color="primary" variant="contained">
                 {HAKEMUS_VIESTI.KYLLA.FI}
               </Button>
               <Button
@@ -615,7 +626,7 @@ const MuutospyyntoWizard = ({
     dataBySection,
     elykeskukset,
     handleNext,
-    handleOk,
+    closeWizard,
     handlePrev,
     intl,
     isConfirmDialogVisible,

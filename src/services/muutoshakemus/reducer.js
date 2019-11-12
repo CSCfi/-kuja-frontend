@@ -6,7 +6,8 @@ import {
   SET_SECTION_DATA,
   DOWNLOAD_ATTACHMENT_START,
   DOWNLOAD_ATTACHMENT_SUCCESS,
-  DOWNLOAD_ATTACHMENT_FAILURE
+  DOWNLOAD_ATTACHMENT_FAILURE,
+  SEND_MUUTOSPYYNTO_SUCCESS
 } from "./actionTypes";
 
 export default function(state, action) {
@@ -73,6 +74,11 @@ export default function(state, action) {
         isDownloading: false,
         updated: false,
         hasErrored: true
+      };
+    case SEND_MUUTOSPYYNTO_SUCCESS:
+      return {
+        ...state,
+        readyToCloseWizard: true
       };
     default:
       return state;

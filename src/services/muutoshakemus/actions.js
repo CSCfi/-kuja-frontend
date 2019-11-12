@@ -80,10 +80,10 @@ export const saveMuutospyynto = (muutospyynto, attachments, triggerPreview = fal
 
 export const saveAndSendMuutospyynto = (muutospyynto, attachments) => async (dispatch) => {
   const data = createMuutospyyntoOutput(muutospyynto, attachments);
-  dispatch({ type: SEND_MUUTOSPYYNTO_START});
 
   try {
     const intermediateResponse = await save(data);
+    dispatch({type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: { response: intermediateResponse, triggerPreview: false }});
     await send(intermediateResponse.data.uuid);
     dispatch({type: SEND_MUUTOSPYYNTO_SUCCESS})
   }
