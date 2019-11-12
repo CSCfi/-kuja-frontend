@@ -21,7 +21,7 @@ import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
-import { saveMuutospyynto } from "../../../../../../services/muutoshakemus/actions";
+import {saveAndSendMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
@@ -366,34 +366,23 @@ const MuutospyyntoWizard = ({
     }
   }, [changeObjects]);
 
-  const save = useCallback((triggerPreview) => {
+  const save = useCallback((options) => {
+    let saveFunction = saveMuutospyynto;
+    if(options.setAsSent === true) {
+      saveFunction = saveAndSendMuutospyynto;
+    }
     const attachments = getFiles();
-
-    if (match.params.uuid) {
-      saveMuutospyynto(
+      saveFunction(
         createObjectToSave(
           lupa,
           changeObjects,
           backendChanges.source,
           dataBySection,
-          match.params.uuid,
-          muutospyynto
+          match.params.uuid
         ),
         attachments,
-        triggerPreview
+        options.triggerPreview
       )(muutoshakemusDispatch);
-    } else {
-      saveMuutospyynto(
-        createObjectToSave(
-          lupa,
-          changeObjects,
-          backendChanges.source,
-          dataBySection
-        ),
-        attachments,
-        triggerPreview
-      )(muutoshakemusDispatch);
-    }
   }, [
     changeObjects,
     dataBySection,
