@@ -17,12 +17,16 @@ const WizardActions = props => {
   };
 
   const onSaveClick = () => {
-    props.onSave({triggerPreview: false});
+    props.onSave({triggerPreview: false, setAsSent: false});
   };
 
   const onPreviewClick  = () => {
-    props.onSave({triggerPreview: true});
+    props.onSave({triggerPreview: true, setAsSent: false});
   };
+
+  const onSendClick = () => {
+    props.onSave({triggerPreview: false, setAsSent: true})
+  }
 
   const {
     intl: { formatMessage }
@@ -74,7 +78,7 @@ const WizardActions = props => {
             onClick={props.onNext ?
               onNextClick
               :
-              onSaveClick // todo: Lähetä
+              onSendClick
             }
           >
             {props.onNext ?
