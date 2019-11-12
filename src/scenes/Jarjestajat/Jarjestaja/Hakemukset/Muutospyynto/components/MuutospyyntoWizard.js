@@ -394,7 +394,7 @@ const MuutospyyntoWizard = ({
     }
   }, [changeObjects]);
 
-  const save = useCallback((triggerPreview) => {
+  const save = useCallback((options) => {
     const attachments = getFiles();
       saveMuutospyynto(
         createObjectToSave(
@@ -405,7 +405,7 @@ const MuutospyyntoWizard = ({
           match.params.uuid
         ),
         attachments,
-        triggerPreview
+        options.triggerPreview
       )(muutoshakemusDispatch);
   }, [
     changeObjects,

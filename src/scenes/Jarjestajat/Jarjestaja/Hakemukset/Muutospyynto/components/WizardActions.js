@@ -17,11 +17,11 @@ const WizardActions = props => {
   };
 
   const onSaveClick = () => {
-    props.onSave(false);
+    props.onSave({triggerPreview: false});
   };
 
   const onPreviewClick  = () => {
-    props.onSave(true);
+    props.onSave({triggerPreview: true});
   };
 
   const {
