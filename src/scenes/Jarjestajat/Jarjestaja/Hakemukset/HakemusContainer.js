@@ -124,8 +124,10 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         fromBackend.muutospyynto
       );
 
+      fromBackend.muutospyynto.raw =
+        setAttachmentUuids(attachments, fromBackend.muutospyynto.raw);
+
       const backendMuutokset = R.compose(
-        R.curry(setAttachmentUuids)(attachments),
         R.path(["raw", "muutokset"]),
       )(fromBackend.muutospyynto);
 

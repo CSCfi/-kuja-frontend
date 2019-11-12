@@ -393,7 +393,7 @@ export function setAttachmentUuids(
       const tiedostoId = R.prop("tiedostoId", obj);
       if (tiedostoId && !R.prop("uuid", obj)) {
         const uuid = R.prop("uuid", R.find(R.propEq("tiedostoId", tiedostoId), attachments));
-        obj = R.assoc('uuid', uuid, obj);
+        obj = Object.assign({}, obj, {"uuid": uuid, "new": false});
       }
 
       obj = R.compose(
