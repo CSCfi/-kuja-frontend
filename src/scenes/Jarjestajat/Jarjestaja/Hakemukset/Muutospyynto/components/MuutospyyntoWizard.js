@@ -396,32 +396,17 @@ const MuutospyyntoWizard = ({
 
   const save = useCallback((triggerPreview) => {
     const attachments = getFiles();
-
-    if (match.params.uuid) {
       saveMuutospyynto(
         createObjectToSave(
           lupa,
           changeObjects,
           backendChanges.source,
           dataBySection,
-          match.params.uuid,
-          muutospyynto
+          match.params.uuid
         ),
         attachments,
         triggerPreview
       )(muutoshakemusDispatch);
-    } else {
-      saveMuutospyynto(
-        createObjectToSave(
-          lupa,
-          changeObjects,
-          backendChanges.source,
-          dataBySection
-        ),
-        attachments,
-        triggerPreview
-      )(muutoshakemusDispatch);
-    }
   }, [
     changeObjects,
     dataBySection,
