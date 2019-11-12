@@ -292,49 +292,21 @@ const MuutospyyntoWizard = ({
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
-        if (changeObjects.perustelut) {
-          if (changeObjects.perustelut.liitteet) {
-            onSectionChangesUpdate(
-              "perustelut_liitteet",
-              setAttachmentUuids(
-                changeObjects.perustelut.liitteet,
-                muutoshakemus.save.data.data
-              )
-            );
+        const setAttachments =
+          R.curry(setAttachmentUuids)(R.path(["save", "data", "data", "liitteet"], muutoshakemus));
+
+        const selectionChanged = (path, key) => {
+          const objs = R.path(path, changeObjects);
+          if (objs) {
+            onSectionChangesUpdate(key, setAttachments(objs));
           }
-        }
-        if (
-          changeObjects.taloudelliset &&
-          changeObjects.taloudelliset.liitteet
-        ) {
-          onSectionChangesUpdate(
-            "taloudelliset_liitteet",
-            setAttachmentUuids(
-              changeObjects.taloudelliset.liitteet,
-              muutoshakemus.save.data.data
-            )
-          );
-        }
-        if (changeObjects.yhteenveto) {
-          if (changeObjects.yhteenveto.hakemuksenliitteet) {
-            onSectionChangesUpdate(
-              "yhteenveto_hakemuksenliitteet",
-              setAttachmentUuids(
-                changeObjects.yhteenveto.hakemuksenliitteet,
-                muutoshakemus.save.data.data
-              )
-            );
-          }
-          if (changeObjects.yhteenveto.yleisettiedot) {
-            onSectionChangesUpdate(
-              "yhteenveto_yleisettiedot",
-              setAttachmentUuids(
-                changeObjects.yhteenveto.yleisettiedot,
-                muutoshakemus.save.data.data
-              )
-            );
-          }
-        }
+        };
+
+        selectionChanged(["perustelut", "liitteet"], "perustelut_liitteet");
+        selectionChanged(["taloudelliset", "liitteet"], "taloudelliset_liitteet");
+        selectionChanged(["yhteenveto", "hakemuksenliitteet"], "yhteenveto_hakemuksenliitteet");
+        selectionChanged(["yhteenveto", "yleisetliitteet"], "yhteenveto_yleisettiedot");
+
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
