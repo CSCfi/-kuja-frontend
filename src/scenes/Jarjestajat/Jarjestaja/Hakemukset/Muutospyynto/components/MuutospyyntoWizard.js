@@ -223,10 +223,6 @@ const MuutospyyntoWizard = ({
     }
   });
 
-  const notify = (title, options) => {
-    toast.success(title, options);
-  };
-
   /**
    * The function is mainly called by FormSection.
    */
@@ -274,6 +270,21 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
+    if(R.path(["save","hasErrored"], muutoshakemus) === true) {
+      toast.error("Virhe muutospyynnön käsittelyssä", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_LEFT
+      });
+    }
+    else if(R.path(["save","saved"],muutoshakemus) === true) {
+      toast.success("Muutospyyntö tallennettu!", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_LEFT
+      });
+    }
+  },[muutoshakemus.save])
+
+  useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
       if(muutoshakemus.save.triggerPreview) {
         showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
@@ -281,12 +292,6 @@ const MuutospyyntoWizard = ({
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
-        notify("Muutospyyntö tallennettu!", {
-          autoClose: 2000,
-          position: toast.POSITION.TOP_LEFT,
-          type: toast.TYPE.SUCCESS
-        });
-
         if (changeObjects.perustelut) {
           if (changeObjects.perustelut.liitteet) {
             onSectionChangesUpdate(
