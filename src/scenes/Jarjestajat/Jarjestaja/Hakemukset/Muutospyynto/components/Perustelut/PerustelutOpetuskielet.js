@@ -106,6 +106,7 @@ const PerustelutOpetuskielet = React.memo(props => {
           sectionId={sectionId}
           title={props.intl.formatMessage(wizardMessages.teachingLanguages)}
           isExpanded={true}
+          hideAmountOfChanges={true}
         />
       ) : null}
     </React.Fragment>

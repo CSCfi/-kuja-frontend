@@ -55,7 +55,7 @@ const TaloudellisetLiitteet = React.memo(props => {
           key={`taloudelliset-liitteet`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
-          disableReverting={true}
+          disableReverting={props.isReadOnly}
           hideAmountOfChanges={true}
           showCategoryTitles={true}
           isExpanded={true}

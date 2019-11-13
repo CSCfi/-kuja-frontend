@@ -153,7 +153,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
             props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
           }
           disableReverting={props.isReadOnly}
-          hideAmountOfChanges={false}
+          hideAmountOfChanges={true}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           title={props.intl.formatMessage(wizardMessages.workforceTraining)}
