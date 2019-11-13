@@ -191,7 +191,7 @@ const Jarjestaja = ({
                 <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
                   <Route
                     path={`${match.url}/jarjestamislupa`}
-                    render={() => <Jarjestamislupa />}
+                    render={() => <Jarjestamislupa lupa={lupa} lupaKohteet={lupaKohteet}/>}
                   />
                   <Route
                     path={`${match.url}`}
