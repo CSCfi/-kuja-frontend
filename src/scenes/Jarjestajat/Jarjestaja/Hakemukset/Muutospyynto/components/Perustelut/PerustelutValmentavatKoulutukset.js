@@ -111,7 +111,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
               props.changeObjects.perustelut.koulutukset.valmentavatKoulutukset
             }
             disableReverting={props.isReadOnly}
-            hideAmountOfChanges={false}
+            hideAmountOfChanges={true}
             isExpanded={true}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}
