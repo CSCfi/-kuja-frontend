@@ -25,7 +25,6 @@ const TextPartial = styled.span`
 
 const JarjestamislupaAsiaListItem = props => {
   const { tila, uuid } = props.muutospyynto;
-  console.log(tila);
   return (
     <React.Fragment>
       <Media
