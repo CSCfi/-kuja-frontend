@@ -94,7 +94,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
           disableReverting={true}
-          hideAmountOfChanges={false}
+          hideAmountOfChanges={true}
           showCategoryTitles={true}
           isExpanded={true}
           sectionId={sectionId}
