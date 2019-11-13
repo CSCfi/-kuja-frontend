@@ -398,6 +398,7 @@ const PerustelutMuut = React.memo(
                     sectionId={sectionId}
                     showCategoryTitles={true}
                     title={row.title}
+                    hideAmountOfChanges={true}
                   />
                 );
             })(stateObject.items)}

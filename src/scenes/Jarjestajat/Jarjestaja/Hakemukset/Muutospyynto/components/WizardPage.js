@@ -6,9 +6,9 @@ const WizardPage = props => {
   const [isSavingEnabled, setIsSavingEnabled] = useState(false);
   const { onSave } = props;
 
-  const save = (triggerPreview) => {
+  const save = (options) => {
     // setIsSavingEnabled(false); // todo: fix by enabling again when changes
-    onSave(triggerPreview);
+    onSave(options);
   };
 
   useEffect(() => {
