@@ -9,8 +9,7 @@ export function createObjectToSave(
   changeObjects,
   backendMuutokset = [],
   muutoshakemus,
-  uuid,
-  muutospyynto
+  uuid
 ) {
   // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
