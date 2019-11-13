@@ -4,8 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import React from "react";
+import PropTypes from "prop-types";
 
-export const DialogTitle = withStyles(theme => ({
+const DialogTitle = withStyles(theme => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
     margin: 0,
@@ -35,3 +36,13 @@ export const DialogTitle = withStyles(theme => ({
     </MuiDialogTitle>
   );
 });
+
+DialogTitle.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
+};
+
+
+export default DialogTitle;

@@ -47,6 +47,7 @@ import {
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
 import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
+import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
 
 const FormDialog = withStyles(() => ({
   paper: {
