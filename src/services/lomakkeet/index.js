@@ -1,6 +1,9 @@
 import * as R from "ramda";
 import getTyovoimakoulutuslomake from "./perustelut/tyovoimakoulutus";
-import getKuljettajienJatkokoulutuslomake from "./perustelut/kuljettajakoulutukset";
+import {
+  getKuljettajienJatkokoulutuslomake,
+  getKuljettajienPeruskoulutuslomake
+} from "./perustelut/kuljettajakoulutukset";
 
 const lomakkeet = {
   koulutukset: {
@@ -14,13 +17,28 @@ const lomakkeet = {
             locale
           ),
         removal: (data, isReadOnly, locale) =>
-          getTyovoimakoulutuslomake("removal", data, isReadOnly, locale)
+          getKuljettajienJatkokoulutuslomake(
+            "removal",
+            data,
+            isReadOnly,
+            locale
+          )
       },
-      perustasonAmmattipatevyysJaJatkokoulutus: {
+      peruskoulutus: {
         addition: (data, isReadOnly, locale) =>
-          getTyovoimakoulutuslomake("addition", data, isReadOnly, locale),
+          getKuljettajienPeruskoulutuslomake(
+            "addition",
+            data,
+            isReadOnly,
+            locale
+          ),
         removal: (data, isReadOnly, locale) =>
-          getTyovoimakoulutuslomake("removal", data, isReadOnly, locale)
+          getKuljettajienPeruskoulutuslomake(
+            "removal",
+            data,
+            isReadOnly,
+            locale
+          )
       }
     },
     tyovoimakoulutukset: {

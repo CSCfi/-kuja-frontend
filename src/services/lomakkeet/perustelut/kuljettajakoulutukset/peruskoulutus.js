@@ -1,37 +1,91 @@
-export function getAdditionForm(
-  addPeopleFormCallback,
-  isReadOnly,
-  peopleForms
-) {
-  const code = 5;
+import {
+  tehtavanTarpeellisuus,
+  voimassaOlo,
+  opettajien,
+  ajoneuvoKanta,
+  muutOpetusvalineet,
+  johtajienKelpoisuusJaTyokokemus
+} from "../lomakeosiot/kuljettajakoulutukset";
+import opiskelijavuodet from "../lomakeosiot/opiskelijavuodet";
+
+export function getAdditionForm(isReadOnly) {
   return [
     {
-      anchor: code,
+      anchor: "kuljettajien-jatkokoulutuslomake",
       styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "perustaso-title",
+          anchor: "jatkokoulutus-title",
           name: "StatusTextRow",
           properties: {
             title:
-              "Perustason ammattipätevyyskoulutusta antavan koulutuskeskuksen tehtävä "
+              "Perustason ammattipätevyyskoulutusta antavan koulutuskeskuksen tehtävä"
           }
         }
       ],
       categories: [
         tehtavanTarpeellisuus(1, isReadOnly),
         voimassaOlo(2, isReadOnly),
-        suunnitelma(3, isReadOnly),
-        johtaja(4, isReadOnly),
-        opettajien(
-          addPeopleFormCallback,
-          peopleForms,
-          5,
-          "Selvitys perustason ammattipätevyyskoulutusen opettajien kelpoisuuksista ja työkokemuksista",
+        {
+          anchor: "suunnitelma",
+          code: 3,
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          title: "Suunnitelma ammattipätevyyskoulutuksen järjestämiseksi",
+          categories: [
+            {
+              anchor: "suunnitelma-field",
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    isReadOnly,
+                    title:
+                      "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          anchor: "ammattipatevyyskoulutuksen-jarjestamispaikat",
+          code: 4,
+          styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+          title: "Suunnitelma ammattipätevyyskoulutuksen järjestämiseksi",
+          categories: [
+            {
+              anchor: "suunnitelma-field",
+              styleClasses: ["pl-6"],
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    isReadOnly,
+                    placeholder:
+                      "Esittäkää selvitys koulutuksen järjestämispaikoista",
+                    title: "Ammattipätevyyskoulutuksen järjestämispaikat"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        opiskelijavuodet(5, 4, isReadOnly),
+        johtajienKelpoisuusJaTyokokemus(
+          6,
+          "Merkitse opetuksesta vastaavien johtajien lukumäärä, joilla on alla olevien kohtien mukainen kelpoisuus ja työkokemus.",
           isReadOnly
         ),
-        ajoneuvoKanta(6, isReadOnly),
-        muutOpetusvalineet(7, isReadOnly)
+        opettajien(
+          7,
+          "Merkitse niiden opettajien lukumäärä, joilla on alla olevien kohtien mukainen kelpoisuus ja työkokemus.",
+          isReadOnly
+        ),
+        ajoneuvoKanta(8, isReadOnly),
+        muutOpetusvalineet(9, isReadOnly)
       ]
     }
   ];

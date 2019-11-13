@@ -1,5 +1,339 @@
 import { HAKEMUS_OTSIKOT } from "../../../../locales/uusiHakemusFormConstants";
 
+function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
+  return [
+    {
+      anchor: `kelpoisuus-ja-tyokokemus-lakiteksti`,
+      code: "!",
+      title:
+        "Valtioneuvoston asetuksen 434/2018 10 §:ssä on säädetty opettajien ja opetuksesta vastaavan johtajan pätevyydestä.",
+      styleClasses: ["pl-6"]
+    },
+    {
+      anchor: `kelpoisuus-ja-tyokokemus-info`,
+      styleClasses: ["pl-6"],
+      components: [
+        {
+          anchor: "A",
+          name: "StatusTextRow",
+          styleClasses: ["pt-4 text-base"],
+          properties: {
+            title: helpText
+          }
+        }
+      ]
+    },
+    {
+      anchor: "lupien-ja-tutkintojen-maarat",
+      categories: [
+        {
+          anchor: "liikenneopettajalupa",
+          styleClasses: ["pl-6"],
+          components: [
+            {
+              anchor: "label",
+              name: "StatusTextRow",
+              styleClasses: ["pt-4 text-base"],
+              properties: {
+                title: "Liikenneopettajalupa (pakollinen)"
+              }
+            },
+            {
+              anchor: "lkm",
+              name: "Input",
+              properties: {
+                fullWidth: true,
+                isReadOnly,
+                placeholder: "Lukumäärä",
+                type: "number"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "kuorma-autonkuljettajan-ammattipatevyys",
+          styleClasses: ["pl-6"],
+          components: [
+            {
+              anchor: "label",
+              name: "StatusTextRow",
+              styleClasses: ["pt-4 text-base"],
+              properties: {
+                title: "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
+              }
+            },
+            {
+              anchor: "lkm",
+              name: "Input",
+              properties: {
+                fullWidth: true,
+                isReadOnly,
+                placeholder: "Lukumäärä",
+                type: "number"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "linja-autonkuljettajan-ammattipatevyys",
+          styleClasses: ["pl-6"],
+          components: [
+            {
+              anchor: "label",
+              name: "StatusTextRow",
+              styleClasses: ["pt-4 text-base"],
+              properties: {
+                title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
+              }
+            },
+            {
+              anchor: "lkm",
+              name: "Input",
+              properties: {
+                fullWidth: true,
+                isReadOnly,
+                placeholder: "Lukumäärä",
+                type: "number"
+              }
+            }
+          ]
+        },
+        {
+          anchor: "vahintaan-1-vuoden-kokemus",
+          title:
+            "a) vähintään 1 vuoden kokemus johonkin seuraavista luokista kuuluvan ajoneuvon päätoimisena kuljettajana:",
+          categories: [
+            {
+              anchor: "c-luokka",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "C-luokka"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "ce-luokka",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "CE-luokka"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "d-luokka",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "D-luokka"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          anchor: "vahintaan-1-vuoden-kokemus",
+          title: "b) jokin seuraavista tutkinnoista:",
+          categories: [
+            {
+              anchor: "kuljetusalan-ammattitutkinto",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "Kuljetusalan ammattitutkinto"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "linja-autonkuljettajan-ammattitutkinto",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "Linja-autonkuljettajan ammattitutkinto"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "yhdistelma-ajoneuvonkuljettajan-ammattitutkinto",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor: "puutavaran-autonkuljetuksen-ammattitutkinto",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title: "Puutavaran autonkuljetuksen ammattitutkinto"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            },
+            {
+              anchor:
+                "kuljetuspalvelujen-osaamisalalla-suoritettu-logistiikan-perustutkinto",
+              layout: { indentation: "none" },
+              components: [
+                {
+                  anchor: "label",
+                  name: "StatusTextRow",
+                  styleClasses: ["pt-4 text-base"],
+                  properties: {
+                    title:
+                      "Kuljetuspalvelujen osaamisalalla suoritettu logistiikan perustutkinto"
+                  }
+                },
+                {
+                  anchor: "lkm",
+                  name: "Input",
+                  properties: {
+                    fullWidth: true,
+                    isReadOnly,
+                    placeholder: "Lukumäärä",
+                    type: "number"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      anchor: "liitteet",
+      styleClasses: ["pl-6 pt-6"],
+      title: "Liitteet",
+      components: [
+        {
+          anchor: "info",
+          name: "StatusTextRow",
+          styleClasses: ["w-full"],
+          properties: {
+            title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+            isHidden: isReadOnly
+          }
+        },
+        {
+          anchor: "A",
+          styleClasses: ["w-full"],
+          name: "Attachments",
+          properties: {
+            isReadOnly
+          }
+        }
+      ]
+    }
+  ];
+}
+
 export function tehtavanTarpeellisuus(orderCode, isReadOnly) {
   return {
     anchor: "tehtavan-tarpeellisuus",
@@ -182,320 +516,23 @@ export function johtaja(orderCode, isReadOnly) {
   };
 }
 
+export function johtajienKelpoisuusJaTyokokemus(orderCode, helpText, isReadOnly) {
+  return {
+    anchor: "johtajien-kelpoisuus-ja-tyokokemus",
+    code: orderCode,
+    styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+    title: "Opetuksesta vastaavan johtajan tai johtajien kelpoisuus ja työkokemus",
+    categories: kelpoisuusJaTyokokemusCategories(helpText, isReadOnly)
+  };
+}
+
 export function opettajien(orderCode, helpText, isReadOnly) {
   return {
     anchor: "opettajien-kelpoisuus-ja-tyokokemus",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
     title: "Opettajien kelpoisuus ja työkokemus",
-    categories: [
-      {
-        anchor: `opettajien-kelpoisuus-ja-tyokokemus-lakiteksti`,
-        code: "!",
-        title:
-          "Valtioneuvoston asetuksen 434/2018 10 §:ssä on säädetty opettajien ja opetuksesta vastaavan johtajan pätevyydestä.",
-        styleClasses: ["pl-6"]
-      },
-      {
-        anchor: `opettajien-kelpoisuus-ja-tyokokemus-info`,
-        styleClasses: ["pl-6"],
-        components: [
-          {
-            anchor: "A",
-            name: "StatusTextRow",
-            styleClasses: ["pt-4 text-base"],
-            properties: {
-              title: helpText
-            }
-          }
-        ]
-      },
-      {
-        anchor: "lupien-ja-tutkintojen-maarat",
-        categories: [
-          {
-            anchor: "liikenneopettajalupa (pakollinen)",
-            styleClasses: ["pl-6"],
-            components: [
-              {
-                anchor: "label",
-                name: "StatusTextRow",
-                styleClasses: ["pt-4 text-base"],
-                properties: {
-                  title: "Liikenneopettajalupa"
-                }
-              },
-              {
-                anchor: "lkm",
-                name: "Input",
-                properties: {
-                  fullWidth: true,
-                  isReadOnly,
-                  placeholder: "Lukumäärä",
-                  type: "number"
-                }
-              }
-            ]
-          },
-          {
-            anchor: "kuorma-autonkuljettajan-ammattipatevyys",
-            styleClasses: ["pl-6"],
-            components: [
-              {
-                anchor: "label",
-                name: "StatusTextRow",
-                styleClasses: ["pt-4 text-base"],
-                properties: {
-                  title:
-                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
-                }
-              },
-              {
-                anchor: "lkm",
-                name: "Input",
-                properties: {
-                  fullWidth: true,
-                  isReadOnly,
-                  placeholder: "Lukumäärä",
-                  type: "number"
-                }
-              }
-            ]
-          },
-          {
-            anchor: "linja-autonkuljettajan-ammattipatevyys",
-            styleClasses: ["pl-6"],
-            components: [
-              {
-                anchor: "label",
-                name: "StatusTextRow",
-                styleClasses: ["pt-4 text-base"],
-                properties: {
-                  title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
-                }
-              },
-              {
-                anchor: "lkm",
-                name: "Input",
-                properties: {
-                  fullWidth: true,
-                  isReadOnly,
-                  placeholder: "Lukumäärä",
-                  type: "number"
-                }
-              }
-            ]
-          },
-          {
-            anchor: "vahintaan-1-vuoden-kokemus",
-            title:
-              "a) vähintään 1 vuoden kokemus johonkin seuraavista luokista kuuluvan ajoneuvon päätoimisena kuljettajana:",
-            categories: [
-              {
-                anchor: "c-luokka",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "C-luokka"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor: "ce-luokka",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "CE-luokka"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor: "d-luokka",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "D-luokka"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            anchor: "vahintaan-1-vuoden-kokemus",
-            title: "b) jokin seuraavista tutkinnoista:",
-            categories: [
-              {
-                anchor: "kuljetusalan-ammattitutkinto",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "Kuljetusalan ammattitutkinto"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor: "linja-autonkuljettajan-ammattitutkinto",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "Linja-autonkuljettajan ammattitutkinto"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor: "yhdistelma-ajoneuvonkuljettajan-ammattitutkinto",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor: "puutavaran-autonkuljetuksen-ammattitutkinto",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title: "Puutavaran autonkuljetuksen ammattitutkinto"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              },
-              {
-                anchor:
-                  "kuljetuspalvelujen-osaamisalalla-suoritettu-logistiikan-perustutkinto",
-                layout: { indentation: "none" },
-                components: [
-                  {
-                    anchor: "label",
-                    name: "StatusTextRow",
-                    styleClasses: ["pt-4 text-base"],
-                    properties: {
-                      title:
-                        "Kuljetuspalvelujen osaamisalalla suoritettu logistiikan perustutkinto"
-                    }
-                  },
-                  {
-                    anchor: "lkm",
-                    name: "Input",
-                    properties: {
-                      fullWidth: true,
-                      isReadOnly,
-                      placeholder: "Lukumäärä",
-                      type: "number"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    categories: kelpoisuusJaTyokokemusCategories(helpText, isReadOnly)
   };
 }
 
