@@ -12,11 +12,6 @@ import WizardPage from "./WizardPage";
 import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
 import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -24,7 +19,6 @@ import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import {saveAndSendMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
 import { injectIntl } from "react-intl";
@@ -48,36 +42,8 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
-const DialogTitle = withStyles(theme => ({
-  root: {
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    margin: 0,
-    padding: theme.spacing(2),
-    background: "#c7dcc3"
-  },
-  closeButton: {
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500]
-  }
-}))(props => {
-  const { children, classes, onClose } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="Close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
+import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
+import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
 
 const FormDialog = withStyles(() => ({
   paper: {
@@ -588,27 +554,13 @@ const MuutospyyntoWizard = ({
               </div>
             </DialogContent>
           </FormDialog>
-          <Dialog
-            open={isConfirmDialogVisible}
-            fullWidth={true}
-            aria-labelledby="confirm-dialog"
-            maxWidth="sm"
-          >
-            <DialogTitle id="confirm-dialog">Poistutaanko?</DialogTitle>
-            <DialogContent>{HAKEMUS_VIESTI.VARMISTUS.FI}</DialogContent>
-            <DialogActions>
-              <Button onClick={closeWizard} color="primary" variant="contained">
-                {HAKEMUS_VIESTI.KYLLA.FI}
-              </Button>
-              <Button
-                onClick={handleCancel}
-                color="secondary"
-                variant="outlined"
-              >
-                {HAKEMUS_VIESTI.EI.FI}
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <ConfirmDialog
+            isConfirmDialogVisible={isConfirmDialogVisible}
+            title={"Poistutaanko?"}
+            content={HAKEMUS_VIESTI.VARMISTUS.FI}
+            handleOk={closeWizard}
+            handleCancel={handleCancel}
+          />
         </React.Fragment>
       );
     } else if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
