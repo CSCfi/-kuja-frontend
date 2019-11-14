@@ -23,7 +23,6 @@ const OpiskelijavuodetVaativaKoulutusPerustelulomake = ({
       {changeObjects ? (
         <CategorizedListRoot
           anchor={sectionId}
-
           categories={lomake}
           changes={changeObjects}
           onUpdate={onChangesUpdate}

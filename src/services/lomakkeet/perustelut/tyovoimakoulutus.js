@@ -1,6 +1,6 @@
 import opiskelijavuodet from "./lomakeosiot/opiskelijavuodet";
-import * as R from "ramda";
 import getDefaultRemovalForm from "./lomakeosiot/poistolomake";
+import * as R from "ramda";
 
 function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
   return [
@@ -172,7 +172,12 @@ export default function getTyovoimakoulutuslomake(
   console.info(action, data, isReadOnly, locale);
   switch (action) {
     case "addition":
-      return getAdditionForm(data.code, data.elykeskukset, isReadOnly, locale);
+      return getAdditionForm(
+        data.code,
+        data.elykeskukset,
+        isReadOnly,
+        R.toUpper(locale)
+      );
     case "removal":
       return getDefaultRemovalForm();
     default:

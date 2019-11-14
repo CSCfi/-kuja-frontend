@@ -4,9 +4,9 @@ import ExpandableRowRoot from "../../../../../../../components/02-organisms/Expa
 import { getAnchorPart } from "../../../../../../../utils/common";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
+import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
-import KuljettajienJatkokoulutuslomake from "../../../../../../../components/04-forms/koulutukset/Kuljettajakoulutukset/Jatkokoulutuslomake";
-import KuljettajienPeruskoulutuslomake from "../../../../../../../components/04-forms/koulutukset/Kuljettajakoulutukset/Peruskoulutuslomake";
+
 const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const { onChangesRemove, onChangesUpdate } = props;
@@ -36,17 +36,23 @@ const PerustelutKuljettajakoulutukset = props => {
         title={props.intl.formatMessage(wizardMessages.driverTraining)}
       >
         {code === "5" ? (
-          <KuljettajienPeruskoulutuslomake
+          <Lomake
+            anchor={"perustelut_koulutukset_kuljettajakoulutukset"}
+            changeObjects={props.changeObjects.perustelut}
             isReadOnly={props.isReadOnly}
             onChangesUpdate={onChangesUpdate}
-            changeObjects={R.path(["perustelut"], props.changeObjects)}
-          ></KuljettajienPeruskoulutuslomake>
+            path={["koulutukset", "kuljettajakoulutukset", "peruskoulutus"]}
+            showCategoryTitles={true}
+          ></Lomake>
         ) : (
-          <KuljettajienJatkokoulutuslomake
+          <Lomake
+            anchor={"perustelut_koulutukset_kuljettajakoulutukset"}
+            changeObjects={props.changeObjects.perustelut}
             isReadOnly={props.isReadOnly}
             onChangesUpdate={onChangesUpdate}
-            changeObjects={R.path(["perustelut"], props.changeObjects)}
-          ></KuljettajienJatkokoulutuslomake>
+            path={["koulutukset", "kuljettajakoulutukset", "jatkokoulutus"]}
+            showCategoryTitles={true}
+          ></Lomake>
         )}
       </ExpandableRowRoot>
     </React.Fragment>

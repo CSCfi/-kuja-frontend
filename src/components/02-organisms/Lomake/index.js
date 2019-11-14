@@ -4,14 +4,18 @@ import { injectIntl } from "react-intl";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
 
+const defaultProps = {
+  changeObjects: []
+};
+
 const Lomake = React.memo(
   ({
     action,
     anchor,
-    changeObjects = [],
+    changeObjects = defaultProps.changeObjects,
     data,
     isReadOnly,
-    locale,
+    locale = "fi",
     onChangesUpdate,
     path,
     showCategoryTitles = true
