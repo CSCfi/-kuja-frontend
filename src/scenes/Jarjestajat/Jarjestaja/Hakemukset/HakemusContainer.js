@@ -10,7 +10,6 @@ import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import { toast } from "react-toastify";
 import {
   getAnchorsStartingWith,
   getAnchorPart,

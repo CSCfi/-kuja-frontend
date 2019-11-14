@@ -282,7 +282,7 @@ const MuutospyyntoWizard = ({
         position: toast.POSITION.TOP_LEFT
       });
     }
-  },[muutoshakemus.save])
+  },[muutoshakemus])
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
@@ -316,7 +316,8 @@ const MuutospyyntoWizard = ({
     history,
     lupa,
     match.params,
-    onNewDocSave
+    onNewDocSave,
+    changeObjects
     // cannot add these, as some might be empty
     // changeObjects.perustelut,
     // changeObjects.taloudelliset,
@@ -395,8 +396,7 @@ const MuutospyyntoWizard = ({
     muutoshakemusDispatch,
     backendChanges.source,
     lupa,
-    match.params.uuid,
-    muutospyynto
+    match.params.uuid
   ]);
 
   const setChangesBySection = useCallback(
@@ -431,7 +431,7 @@ const MuutospyyntoWizard = ({
     if(muutoshakemus.readyToCloseWizard === true) {
       setTimeout(closeWizard,2000);
     }
-  },[muutoshakemus.readyToCloseWizard])
+  },[muutoshakemus.readyToCloseWizard, closeWizard])
 
   /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
