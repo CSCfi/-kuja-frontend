@@ -138,8 +138,6 @@ async function run(
       let data = "";
       if (R.includes("application/json", contentType)) {
         data = await response.json();
-      } else if (contentType === "application/octet-stream") {
-        const data = await response.blob();
       }
 
       /**

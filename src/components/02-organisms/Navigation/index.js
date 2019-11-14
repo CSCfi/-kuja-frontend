@@ -6,7 +6,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import LinkItem from "./LinkItem";
 import { COLORS } from "modules/styles";
-import { ROLE_ESITTELIJA } from "modules/constants";
 import { injectIntl } from "react-intl";
 import userMessages from "../../../i18n/definitions/user";
 

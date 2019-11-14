@@ -63,7 +63,7 @@ const Difference = ({
         }, delay)
       );
     },
-    [delay, initialValue, onChanges, timeoutHandle]
+    [delay, initialValue, onChanges, timeoutHandle, required]
   );
 
   useEffect(() => {

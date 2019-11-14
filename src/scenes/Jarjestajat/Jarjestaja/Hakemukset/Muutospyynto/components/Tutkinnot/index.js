@@ -40,7 +40,7 @@ const Tutkinnot = React.memo(props => {
     };
 
     return handleKoulutusdata;
-  }, [props.intl.locale, props.kohde, props.lupaKohteet, props.maaraystyyppi]);
+  }, [props.intl, props.kohde, props.lupaKohteet, props.maaraystyyppi]);
 
   useEffect(() => {
     const items = getItems(koulutusdata);
