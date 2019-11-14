@@ -115,7 +115,7 @@ const FetchHandler = ({
         // to prevent errors.
         if (!isAborting) {
           setHandledXhrCalls(prevCalls => {
-            const token = response ? response.url : "failed";
+            const token = R.prop("ok", response) ? response.url : "failed";
             return R.insert(-1, token, prevCalls);
           });
         }
