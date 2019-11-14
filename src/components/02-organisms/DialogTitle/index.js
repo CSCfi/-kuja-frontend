@@ -2,7 +2,7 @@ import {withStyles} from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import CloseIcon from "@material-ui/icons/Close";
 import React from "react";
 import PropTypes from "prop-types";
 
