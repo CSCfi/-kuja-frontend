@@ -37,7 +37,7 @@ const WizardActions = props => {
   }
 
   const handleOk = () => {
-    onSaveClick();
+    onSendClick();
     setConfirmDialogVisible(false);
   }
 
@@ -51,7 +51,7 @@ const WizardActions = props => {
         isConfirmDialogVisible={isConfirmDialogVisible}
         title={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI}
         content={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI}
-        handleOk={onSendClick}
+        handleOk={handleOk}
         handleCancel={handleCancel}
       />
       <div className="flex flex-col md:flex-row justify-between w-full max-w-5xl p-4 mx-auto">
