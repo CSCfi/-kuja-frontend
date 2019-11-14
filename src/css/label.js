@@ -13,4 +13,4 @@ export const isRemoved = {
 
 export const isAdded = {
   color: isChanged.color
-}
+};

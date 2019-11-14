@@ -381,19 +381,18 @@ export function getKohdeByTunniste(tunniste, kohteet) {
  * @param attachments List of objects from which uuid is copied to destination object based on matching tiedostoId
  * @param changeObj Object structure to set uuids to
  */
-export function setAttachmentUuids(
-  attachments,
-  changeObj
-) {
-  const setUuids = (obj) => {
+export function setAttachmentUuids(attachments, changeObj) {
+  const setUuids = obj => {
     if (obj instanceof Array) {
       obj = R.map(setUuids, obj);
-    }
-    else if (obj instanceof Object) {
+    } else if (obj instanceof Object) {
       const tiedostoId = R.prop("tiedostoId", obj);
       if (tiedostoId && !R.prop("uuid", obj)) {
-        const uuid = R.prop("uuid", R.find(R.propEq("tiedostoId", tiedostoId), attachments));
-        obj = Object.assign({}, obj, {"uuid": uuid, "new": false});
+        const uuid = R.prop(
+          "uuid",
+          R.find(R.propEq("tiedostoId", tiedostoId), attachments)
+        );
+        obj = Object.assign({}, obj, { uuid: uuid, new: false });
       }
 
       obj = R.compose(

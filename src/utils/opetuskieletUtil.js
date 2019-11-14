@@ -3,14 +3,12 @@ import { parseLocalizedField } from "../modules/helpers";
 import * as R from "ramda";
 
 export function sortOpetuskielet(kielet) {
-  return kielet.sort((a, b) => {return a.koodiArvo - b.koodiArvo});
+  return kielet.sort((a, b) => {
+    return a.koodiArvo - b.koodiArvo;
+  });
 }
 
-export function getDataForOpetuskieletList(
-  opetuskielet,
-  kohde,
-  locale
-) {
+export function getDataForOpetuskieletList(opetuskielet, kohde, locale) {
   return {
     items: _.map(opetuskielet, opetuskieli => {
       const { koodiArvo, metadata } = opetuskieli;

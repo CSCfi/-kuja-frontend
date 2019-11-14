@@ -10,9 +10,9 @@ import {
 import { parseLocalizedField } from "../modules/helpers";
 
 /**
- * 
- * @param {object} lupa 
- * @param {func} formatMessage 
+ *
+ * @param {object} lupa
+ * @param {func} formatMessage
  */
 export const parseLupa = (lupa, formatMessage) => {
   if (lupa) {
