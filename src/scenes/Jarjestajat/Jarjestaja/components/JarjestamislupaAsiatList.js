@@ -14,7 +14,15 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Media from "react-media";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
+import {
+  Table,
+  Tbody,
+  Thead,
+  Thn,
+  Trn,
+  ThButton,
+  Thn2
+} from "../../../../modules/Table";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -111,16 +119,26 @@ const JarjestamislupaAsiatList = ({
               <Table className={classes.table}>
                 <Thead role="rowgroup">
                   <Trn role="row">
-                    {columnTitles.map((title, i) => (
-                      <Thn role="cell" width="*" key={`title-${i}`}>
-                        <span className="text-white">
-                          <Typography component="span">{title}</Typography>
-                        </span>
-                      </Thn>
-                    ))}
-                    <Thn role="cell" width="auto">
-                      Toiminnot
-                    </Thn>
+                    {columnTitles.map((title, i) =>
+                      i === 1 ? (
+                        <Thn2 role="cell" key={`title-${i}`}>
+                          <span className="text-white">
+                            <Typography component="span">{title}</Typography>
+                          </span>
+                        </Thn2>
+                      ) : (
+                        <Thn role="cell" key={`title-${i}`}>
+                          <span className="text-white">
+                            <Typography component="span">{title}</Typography>
+                          </span>
+                        </Thn>
+                      )
+                    )}
+                    <ThButton role="cell">
+                      <span className="text-white">
+                        <Typography component="span">Toiminnot</Typography>
+                      </span>
+                    </ThButton>
                   </Trn>
                 </Thead>
                 <Tbody>{jarjestamislupaAsiatList}</Tbody>

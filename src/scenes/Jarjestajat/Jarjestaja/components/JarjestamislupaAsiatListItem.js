@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Media from "react-media";
-import { Td, Tr } from "../../../../modules/Table";
+import { Td, Tr, TdButton, Td2 } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Button from "@material-ui/core/Button";
@@ -62,11 +62,11 @@ const JarjestamislupaAsiaListItem = props => {
             <Td role="cell" size="small">
               <Typography component="span">{}</Typography>
             </Td>
-            <Td role="cell" width="*">
+            <Td2 role="cell">
               <Typography component="span">
                 {LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}
               </Typography>
-            </Td>
+            </Td2>
             <Td role="cell" size="small">
               <Typography component="span">
                 {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
@@ -78,7 +78,7 @@ const JarjestamislupaAsiaListItem = props => {
             <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <Td role="cell" width="auto">
+            <TdButton role="cell">
               {tila === FIELDS.TILA.VALUES.LUONNOS && (
                 <div className="flex">
                   <NavLink
@@ -91,7 +91,7 @@ const JarjestamislupaAsiaListItem = props => {
                   </NavLink>
                 </div>
               )}
-            </Td>
+            </TdButton>
           </Tr>
         )}
       />

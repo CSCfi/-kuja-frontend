@@ -7,6 +7,8 @@ export const Table = styled.div`
   flex-direction: column;
   border: 1px solid #d5d5d5;
   border-bottom: none;
+  overflow-x: hidden;
+  max-width: 90%;
 `;
 
 export const Thead = styled.div`
@@ -41,6 +43,7 @@ export const Tr = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-around;
 
   border-bottom: 1px solid #d5d5d5;
 
@@ -80,6 +83,7 @@ export const Trn = styled(Tr)`
 `;
 export const Th = styled.div`
   display: flex;
+  width: ${props => (props.width ? props.width : "auto")};
   flex: ${props => (props.flex ? props.flex : 1)};
   padding: 10px 10px;
   align-items: ${props => (props.alignItems ? props.alignItems : "stretch")};
@@ -115,9 +119,20 @@ export const Thn = styled(Th)`
     background: initial;
   }
 `;
+
+export const Thn0 = styled(Thn)`
+  flex-grow: 0.5;
+  min-width: 2em;
+`;
+
+export const Thn2 = styled(Thn)`
+  flex-grow: 2;
+`;
+
 export const Td = styled.div`
   display: flex;
   flex: ${props => (props.flex ? props.flex : 1)};
+  width: ${props => (props.width ? props.width : "auto")};
   padding: 10px 10px;
   align-items: ${props => (props.alignItems ? props.alignItems : "stretch")};
   img {
@@ -138,6 +153,15 @@ export const Td = styled.div`
       padding-top: 2px;
     }
   }
+`;
+
+export const Td2 = styled(Td)`
+  flex-grow: 2;
+`;
+
+export const Td0 = styled(Td)`
+  flex-grow: 0.5;
+  min-width: 2em;
 `;
 
 export const ThButton = styled(Thn)`
