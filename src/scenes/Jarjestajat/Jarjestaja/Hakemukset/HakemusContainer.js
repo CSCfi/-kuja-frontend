@@ -37,10 +37,6 @@ import { setAttachmentUuids } from "../../../../utils/muutospyyntoUtil";
 const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
-  const notify = (title, options) => {
-    toast.success(title, options);
-  };
-
   /**
    * Configuration for backend searches to run.
    */
@@ -299,14 +295,6 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
 
   const onNewDocSave = useCallback(
     muutoshakemus => {
-      notify(
-        "Muutospyyntö tallennettu! Voit jatkaa pian dokumentin muokkaamista.",
-        {
-          autoClose: 2000,
-          position: toast.POSITION.TOP_LEFT,
-          type: toast.TYPE.SUCCESS
-        }
-      );
       const page = parseInt(match.params.page, 10);
       const url = `/jarjestajat/${match.params.ytunnus}`;
       const uuid = muutoshakemus.save.data.data.uuid;

@@ -77,8 +77,8 @@ const TaloudellisetYleisettiedot = React.memo(props => {
           key={`taloudelliset-yleisetiedot`}
           categories={props.stateObject.categories}
           changes={R.path(["taloudelliset"], props.changeObjects)}
-          disableReverting={true}
-          hideAmountOfChanges={false}
+          disableReverting={props.isReadOnly}
+          hideAmountOfChanges={true}
           showCategoryTitles={true}
           isExpanded={true}
           sectionId={sectionId}

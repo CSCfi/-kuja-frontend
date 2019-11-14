@@ -21,12 +21,16 @@ const WizardActions = props => {
   };
 
   const onSaveClick = () => {
-    props.onSave(false);
+    props.onSave({triggerPreview: false, setAsSent: false});
   };
 
   const onPreviewClick  = () => {
-    props.onSave(true);
+    props.onSave({triggerPreview: true, setAsSent: false});
   };
+
+  const onSendClick = () => {
+    props.onSave({triggerPreview: false, setAsSent: true})
+  }
 
   const handleCancel = () => {
     setConfirmDialogVisible(false);
@@ -47,7 +51,7 @@ const WizardActions = props => {
         isConfirmDialogVisible={isConfirmDialogVisible}
         title={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI}
         content={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI}
-        handleOk={handleOk}
+        handleOk={onSendClick}
         handleCancel={handleCancel}
       />
       <div className="flex flex-col md:flex-row justify-between w-full max-w-5xl p-4 mx-auto">

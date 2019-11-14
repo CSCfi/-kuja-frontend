@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Edit from "@material-ui/icons/Edit";
 import { Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
+import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
 
 const LupaText = styled.span`
   margin: 10px;
@@ -24,7 +25,6 @@ const TextPartial = styled.span`
 
 const JarjestamislupaAsiaListItem = props => {
   const { tila, uuid } = props.muutospyynto;
-
   return (
     <React.Fragment>
       <Media
@@ -39,16 +39,18 @@ const JarjestamislupaAsiaListItem = props => {
                   {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
                 </TextPartial>
               </LupaText>
-              <LupaText>
-                <NavLink
-                  to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
-                  exact={true}
-                >
-                  <Button title="Täydennä hakemusta">
-                    <Edit />
-                  </Button>
-                </NavLink>
-              </LupaText>
+              {tila === FIELDS.TILA.VALUES.LUONNOS && (
+                <LupaText>
+                  <NavLink
+                    to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
+                    exact={true}
+                  >
+                    <Button title="Täydennä hakemusta">
+                      <Edit />
+                    </Button>
+                  </NavLink>
+                </LupaText>
+              )}
             </Td>
           </Tr>
         )}
@@ -77,13 +79,18 @@ const JarjestamislupaAsiaListItem = props => {
               <Typography component="span" noWrap={true}></Typography>
             </Td>
             <Td size="small">
-              <div className="flex">
-                <NavLink to={`hakemukset-ja-paatokset/${uuid}/1`} exact={true}>
-                  <Button title="Täydennä hakemusta">
-                    <Edit /> {uuid}
-                  </Button>
-                </NavLink>
-              </div>
+              {tila === FIELDS.TILA.VALUES.LUONNOS && (
+                <div className="flex">
+                  <NavLink
+                    to={`hakemukset-ja-paatokset/${uuid}/1`}
+                    exact={true}
+                  >
+                    <Button title="Täydennä hakemusta">
+                      <Edit />
+                    </Button>
+                  </NavLink>
+                </div>
+              )}
             </Td>
           </Tr>
         )}

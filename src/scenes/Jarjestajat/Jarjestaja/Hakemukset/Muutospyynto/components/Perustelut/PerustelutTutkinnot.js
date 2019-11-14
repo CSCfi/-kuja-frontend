@@ -75,7 +75,15 @@ const PerustelutTutkinnot = React.memo(
           return { areaCode, article, categories, title };
         }, _.cloneDeep(koulutusdata));
       };
-    }, [isReadOnly, kohde, intl, locale, lomakkeet, lupaKohteet, maaraystyyppi]);
+    }, [
+      isReadOnly,
+      kohde,
+      intl,
+      locale,
+      lomakkeet,
+      lupaKohteet,
+      maaraystyyppi
+    ]);
 
     useEffect(() => {
       if (koulutusdata.length) {
@@ -114,7 +122,7 @@ const PerustelutTutkinnot = React.memo(
                   )}
                   code={stateItem.areaCode}
                   disableReverting={isReadOnly}
-                  hideAmountOfChanges={false}
+                  hideAmountOfChanges={true}
                   index={i}
                   isExpanded={true}
                   onChangesRemove={onChangesRemove}

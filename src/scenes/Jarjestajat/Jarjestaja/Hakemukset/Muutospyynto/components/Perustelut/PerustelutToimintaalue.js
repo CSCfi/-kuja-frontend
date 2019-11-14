@@ -102,7 +102,7 @@ const PerustelutToimintaalue = React.memo(
             )}
             changes={R.path(["perustelut", "removals"], changeObjects)}
             disableReverting={true}
-            hideAmountOfChanges={false}
+            hideAmountOfChanges={true}
             isExpanded={true}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}

@@ -115,7 +115,7 @@ const PerustelutATVKoulutukset = props => {
               .ammatilliseenTehtavaanValmistavatKoulutukset
           }
           disableReverting={props.isReadOnly}
-          hideAmountOfChanges={false}
+          hideAmountOfChanges={true}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}

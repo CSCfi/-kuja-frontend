@@ -173,6 +173,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                     code={areaCode}
                     title={categories[0].metadata.title}
                     isExpanded={true}
+                    hideAmountOfChanges={true}
                   />
                 ) : null;
               }
