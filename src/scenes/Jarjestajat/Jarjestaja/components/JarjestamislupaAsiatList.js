@@ -59,30 +59,31 @@ const JarjestamislupaAsiatList = ({
     ));
   }, [url, muutospyynnot]);
 
-
   return (
     <React.Fragment>
-      {muutospyynto
-        ? (
-          <Button variant="contained" color="primary" onClick={() => setMuutospyynto(null)}>
-            <ArrowBack/>
-            <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
-          </Button>
-        )
-        : (
-          <NavLink
-            to={newApplicationRouteItem.path}
-            exact={newApplicationRouteItem.exact}
-            className="pl-2"
-            style={{textDecoration: "none", color: "inherit"}}
-          >
-            <Button variant="contained" color="primary">
-              {breakpointTabletMin && <Add/>}
+      {muutospyynto ? (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setMuutospyynto(null)}
+        >
+          <ArrowBack />
+          <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
+        </Button>
+      ) : (
+        <NavLink
+          to={newApplicationRouteItem.path}
+          exact={newApplicationRouteItem.exact}
+          className="pl-2"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Button variant="contained" color="primary">
+            {breakpointTabletMin && <Add />}
 
-              <span className="pl-2">{newApplicationRouteItem.text}</span>
-            </Button>
-          </NavLink>
-        )}
+            <span className="pl-2">{newApplicationRouteItem.text}</span>
+          </Button>
+        </NavLink>
+      )}
 
       {muutospyynto && (
         <Paper className={classes.root}>
@@ -91,7 +92,8 @@ const JarjestamislupaAsiatList = ({
             muutospyynto={muutospyynto}
             intl={intl}
           />
-        </Paper>)}
+        </Paper>
+      )}
 
       {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (
         <Paper className={classes.root}>
@@ -107,16 +109,18 @@ const JarjestamislupaAsiatList = ({
             query={MEDIA_QUERIES.TABLET_MIN}
             render={() => (
               <Table className={classes.table}>
-                <Thead>
-                  <Trn>
+                <Thead role="rowgroup">
+                  <Trn role="row">
                     {columnTitles.map((title, i) => (
-                      <Thn key={`title-${i}`}>
-                    <span className="text-white">
-                      <Typography component="span">{title}</Typography>
-                    </span>
+                      <Thn role="cell" width="*" key={`title-${i}`}>
+                        <span className="text-white">
+                          <Typography component="span">{title}</Typography>
+                        </span>
                       </Thn>
                     ))}
-                    <Thn>&nbsp;</Thn>
+                    <Thn role="cell" width="auto">
+                      Toiminnot
+                    </Thn>
                   </Trn>
                 </Thead>
                 <Tbody>{jarjestamislupaAsiatList}</Tbody>

@@ -30,8 +30,8 @@ const JarjestamislupaAsiaListItem = props => {
       <Media
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
-          <Tr onClick={() => props.setOpened()}>
-            <Td>
+          <Tr role="row" onClick={() => props.setOpened()}>
+            <Td role="cell">
               <LupaText>
                 <TextPartial>{LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}</TextPartial>
                 <TextPartial>
@@ -58,27 +58,27 @@ const JarjestamislupaAsiaListItem = props => {
       <Media
         query={MEDIA_QUERIES.TABLET_MIN}
         render={() => (
-          <Tr onClick={() => props.setOpened(uuid)}>
-            <Td size="small">
+          <Tr role="row" onClick={() => props.setOpened(uuid)}>
+            <Td role="cell" size="small">
               <Typography component="span">{}</Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" width="*">
               <Typography component="span">
                 {LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}
               </Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" size="small">
               <Typography component="span">
                 {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
               </Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" width="auto">
               {tila === FIELDS.TILA.VALUES.LUONNOS && (
                 <div className="flex">
                   <NavLink
