@@ -17,6 +17,7 @@ import { FullWidthWrapper } from "../../../../modules/elements";
 import { BackendContext } from "../../../../context/backendContext";
 import * as R from "ramda";
 import FetchHandler from "../../../../FetchHandler";
+import common from "../../../../i18n/definitions/common";
 
 const Separator = styled.div`
   &:after {
@@ -107,7 +108,7 @@ const Jarjestaja = ({
   const newApplicationRouteItem = useMemo(() => {
     return {
       path: `${match.url}/hakemukset-ja-paatokset/uusi/1`,
-      text: LUPA_TEKSTIT.MUUT.UUSI_HAKEMUS_OTSIKKO.FI,
+      text: intl.formatMessage(common.newHakemus),
       authenticated: !!user
     };
   }, [match, user]);

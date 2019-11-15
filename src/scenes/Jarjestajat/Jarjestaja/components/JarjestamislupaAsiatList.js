@@ -10,10 +10,11 @@ import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
 import { Typography } from "@material-ui/core";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Media from "react-media";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
+import { injectIntl } from "react-intl";
+import common from "../../../../i18n/definitions/common";
 import {
   Table,
   Tbody,
@@ -52,7 +53,6 @@ const JarjestamislupaAsiatList = ({
   intl
 }) => {
   const { url } = match;
-  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
 
@@ -74,7 +74,9 @@ const JarjestamislupaAsiatList = ({
         {muutospyynto ? (
           <Button color="primary" onClick={() => setMuutospyynto(null)}>
             <ArrowBack />
-            <span>{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
+            <span className="pl-2">
+              {intl.formatMessage(common.backFromAsiakirjat)}
+            </span>
           </Button>
         ) : (
           <NavLink
@@ -93,7 +95,9 @@ const JarjestamislupaAsiatList = ({
 
       {muutospyynto && (
         <div>
-          <h3 className="mt-4 mb-2">Hakemukset asiakirjat</h3>
+          <h3 className="mt-4 mb-2">
+            {intl.formatMessage(common.hakemusAsiakirjat)}
+          </h3>
           <Paper className={classes.root}>
             <JarjestamislupaAsiakirjat
               organisaatio={organisaatio}
@@ -137,7 +141,9 @@ const JarjestamislupaAsiatList = ({
                     )}
                     <ThButton role="cell">
                       <span className="text-white">
-                        <Typography component="span">Toiminnot</Typography>
+                        <Typography component="span">
+                          {intl.formatMessage(common.functions)}
+                        </Typography>
                       </span>
                     </ThButton>
                   </Trn>
@@ -159,4 +165,4 @@ JarjestamislupaAsiatList.propTypes = {
   newApplicationRouteItem: PropTypes.object
 };
 
-export default JarjestamislupaAsiatList;
+export default injectIntl(JarjestamislupaAsiatList);

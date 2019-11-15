@@ -9,6 +9,8 @@ import Edit from "@material-ui/icons/Edit";
 import { Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
+import { injectIntl } from "react-intl";
+import common from "../../../../i18n/definitions/common";
 
 const LupaText = styled.span`
   margin: 10px;
@@ -25,6 +27,7 @@ const TextPartial = styled.span`
 
 const JarjestamislupaAsiaListItem = props => {
   const { tila, uuid } = props.muutospyynto;
+  const { intl } = props;
   return (
     <React.Fragment>
       <Media
@@ -33,8 +36,9 @@ const JarjestamislupaAsiaListItem = props => {
           <Tr role="row" onClick={() => props.setOpened()}>
             <Td role="cell">
               <LupaText>
-                <TextPartial>{LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}</TextPartial>
+                <TextPartial>{intl.formatMessage(common.change)}</TextPartial>
                 <TextPartial>
+                  {intl.formatMessage(common.stateAsia)}
                   {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}:&nbsp;
                   {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
                 </TextPartial>
@@ -45,7 +49,7 @@ const JarjestamislupaAsiaListItem = props => {
                     to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
                   >
-                    <Button title="Täydennä hakemusta">
+                    <Button title={intl.formatMessage(common.Edit)}>
                       <Edit />
                     </Button>
                   </NavLink>
@@ -64,7 +68,7 @@ const JarjestamislupaAsiaListItem = props => {
             </Td>
             <Td2 role="cell">
               <Typography component="span">
-                {LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}
+                {intl.formatMessage(common.change)}
               </Typography>
             </Td2>
             <Td role="cell" size="small">
@@ -85,7 +89,7 @@ const JarjestamislupaAsiaListItem = props => {
                     to={`hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
                   >
-                    <Button title="Täydennä hakemusta">
+                    <Button title={intl.formatMessage(common.edit)}>
                       <Edit />
                     </Button>
                   </NavLink>
@@ -99,4 +103,4 @@ const JarjestamislupaAsiaListItem = props => {
   );
 };
 
-export default JarjestamislupaAsiaListItem;
+export default injectIntl(JarjestamislupaAsiaListItem);

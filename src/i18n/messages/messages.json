@@ -190,6 +190,41 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.edit",
+    "defaultMessage": "Täydennä hakemusta",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.change",
+    "defaultMessage": "Järjestämisluvan muutos",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.stateAsia",
+    "defaultMessage": "Asian tila",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.functions",
+    "defaultMessage": "Toiminnot",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.hakemusAsiakirjat",
+    "defaultMessage": "Hakemukset asiakirjat",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.backFromAsiakirjat",
+    "defaultMessage": "Takaisin Järjestämislupa asiat -taulukkoon",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.newHakemus",
+    "defaultMessage": "Tee uusi hakemus",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
