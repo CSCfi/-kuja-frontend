@@ -1,5 +1,5 @@
 import { getMetadata } from "./tutkinnotUtils";
-import { getAnchorPart } from "../../../utils/common";
+import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import * as R from "ramda";
 
 const getMuutos = (stateItem, changeObj, perustelut) => {
@@ -106,10 +106,20 @@ export const getChangesToSave = (
         ),
         changeObjects.perustelut
       );
-      return R.assocPath(
+      const files = findObjectWithKey(changeObjects, "file");
+      console.info(files);
+      const backendMuutosWithChangeObjects = R.assocPath(
         ["meta", "changeObjects"],
         R.flatten([[changeObj], perustelut]),
         backendMuutos
+      );
+      // Let's add the attachments
+      return R.assocPath(
+        ["liitteet"],
+        R.map(file => {
+          return R.dissoc("tiedosto", file);
+        }, files),
+        backendMuutosWithChangeObjects
       );
     }
     return backendMuutos;

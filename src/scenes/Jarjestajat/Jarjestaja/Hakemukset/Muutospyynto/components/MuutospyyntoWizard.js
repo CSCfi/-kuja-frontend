@@ -16,7 +16,10 @@ import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
-import {saveAndSendMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
+import {
+  saveAndSendMuutospyynto,
+  saveMuutospyynto
+} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
@@ -42,6 +45,7 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
+import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
 import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
 
@@ -226,7 +230,7 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
-  const showPreviewFile = (url) => {
+  const showPreviewFile = url => {
     let a = document.createElement("a");
     a.setAttribute("type", "hidden");
     a.href = url;
@@ -236,30 +240,32 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
-    if(R.path(["save","hasErrored"], muutoshakemus) === true) {
+    if (R.path(["save", "hasErrored"], muutoshakemus) === true) {
       toast.error("Virhe muutospyynnön käsittelyssä", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
-    }
-    else if(R.path(["save","saved"],muutoshakemus) === true) {
+    } else if (R.path(["save", "saved"], muutoshakemus) === true) {
       toast.success("Muutospyyntö tallennettu!", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
     }
-  },[muutoshakemus])
+  }, [muutoshakemus]);
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
-      if(muutoshakemus.save.triggerPreview) {
-        showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
+      if (muutoshakemus.save.triggerPreview) {
+        showPreviewFile(
+          `/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`
+        );
       }
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
-        const setAttachments =
-          R.curry(setAttachmentUuids)(R.path(["save", "data", "data", "liitteet"], muutoshakemus));
+        const setAttachments = R.curry(setAttachmentUuids)(
+          R.path(["save", "data", "data", "liitteet"], muutoshakemus)
+        );
 
         const selectionChanged = (path, key) => {
           const objs = R.path(path, changeObjects);
@@ -269,10 +275,18 @@ const MuutospyyntoWizard = ({
         };
 
         selectionChanged(["perustelut", "liitteet"], "perustelut_liitteet");
-        selectionChanged(["taloudelliset", "liitteet"], "taloudelliset_liitteet");
-        selectionChanged(["yhteenveto", "hakemuksenliitteet"], "yhteenveto_hakemuksenliitteet");
-        selectionChanged(["yhteenveto", "yleisetliitteet"], "yhteenveto_yleisettiedot");
-
+        selectionChanged(
+          ["taloudelliset", "liitteet"],
+          "taloudelliset_liitteet"
+        );
+        selectionChanged(
+          ["yhteenveto", "hakemuksenliitteet"],
+          "yhteenveto_hakemuksenliitteet"
+        );
+        selectionChanged(
+          ["yhteenveto", "yleisetliitteet"],
+          "yhteenveto_yleisettiedot"
+        );
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
@@ -312,6 +326,7 @@ const MuutospyyntoWizard = ({
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
+    const files = findObjectWithKey(changeObjects, "file");
     const allAttachments = combineArrays([
       R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
       R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
@@ -334,16 +349,18 @@ const MuutospyyntoWizard = ({
           }, obj.properties.attachments);
         }
       }, allAttachments);
-      return attachments;
+      console.info(attachments, files);
     }
+    return R.concat(attachments, files);
   }, [changeObjects]);
 
-  const save = useCallback((options) => {
-    let saveFunction = saveMuutospyynto;
-    if(options.setAsSent === true) {
-      saveFunction = saveAndSendMuutospyynto;
-    }
-    const attachments = getFiles();
+  const save = useCallback(
+    options => {
+      let saveFunction = saveMuutospyynto;
+      if (options.setAsSent === true) {
+        saveFunction = saveAndSendMuutospyynto;
+      }
+      const attachments = getFiles();
       saveFunction(
         createObjectToSave(
           lupa,
@@ -355,15 +372,17 @@ const MuutospyyntoWizard = ({
         attachments,
         options.triggerPreview
       )(muutoshakemusDispatch);
-  }, [
-    changeObjects,
-    dataBySection,
-    getFiles,
-    muutoshakemusDispatch,
-    backendChanges.source,
-    lupa,
-    match.params.uuid
-  ]);
+    },
+    [
+      changeObjects,
+      dataBySection,
+      getFiles,
+      muutoshakemusDispatch,
+      backendChanges.source,
+      lupa,
+      match.params.uuid
+    ]
+  );
 
   const setChangesBySection = useCallback(
     (sectionId, changes) => {
@@ -394,10 +413,10 @@ const MuutospyyntoWizard = ({
   }, [match.params.page]);
 
   useEffect(() => {
-    if(muutoshakemus.readyToCloseWizard === true) {
-      setTimeout(closeWizard,2000);
+    if (muutoshakemus.readyToCloseWizard === true) {
+      setTimeout(closeWizard, 2000);
     }
-  },[muutoshakemus.readyToCloseWizard, closeWizard])
+  }, [muutoshakemus.readyToCloseWizard, closeWizard]);
 
   /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(

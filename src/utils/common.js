@@ -41,9 +41,9 @@ export const findAnchoredComponentFromElement = (anchor, elementObject) => {
 
 const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
   let retval = findAnchoredCategoryFromElement(anchor, elementObject);
-  if(!retval) retval = findAnchoredComponentFromElement(anchor, elementObject);
+  if (!retval) retval = findAnchoredComponentFromElement(anchor, elementObject);
   return retval;
-}
+};
 
 /**
  * Returns the element found from given anchor in a category hierarchy. We expect that the anchor is
@@ -52,15 +52,21 @@ const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
  * @param anchor The path for scanning the component from stateObject (e.g. vahimmaisopiskelijavuodet.A)
  * @param stateObject
  */
-export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => {
-  if(!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
-  const anchorParts = anchor.split('.');
+export const findAnchoredElementFromCategoryHierarchy = (
+  anchor,
+  rootObject
+) => {
+  if (!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
+  const anchorParts = anchor.split(".");
   let currentElement = rootObject;
 
-  for(const anchorPart of anchorParts) {
-    currentElement = findAnchoredCategoryOrComponentFromElement(anchorPart, currentElement);
+  for (const anchorPart of anchorParts) {
+    currentElement = findAnchoredCategoryOrComponentFromElement(
+      anchorPart,
+      currentElement
+    );
 
-    if(!currentElement) {
+    if (!currentElement) {
       return undefined;
     }
   }
@@ -113,3 +119,26 @@ export const flattenObj = obj => {
 
   return R.fromPairs(go(obj));
 };
+
+/**
+ * Function finds all the objects with given key from the given object.
+ * @param {object} object - JavaScript object, can be deeply nested
+ * @param {string} targetKey - Key to search for
+ */
+export function findObjectWithKey(object, targetKey) {
+  function find(object, targetKey) {
+    const keys = R.keys(object);
+    if (keys.length > 0) {
+      return R.map(key => {
+        if (R.equals(key, targetKey)) {
+          return object[key];
+        } else if (R.is(Object, object[key])) {
+          return findObjectWithKey(object[key], targetKey);
+        }
+        return false;
+      }, keys);
+    }
+    return false;
+  }
+  return R.flatten(find(object, targetKey)).filter(Boolean);
+}

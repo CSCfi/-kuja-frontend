@@ -3,6 +3,7 @@ import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
 import { combineArrays } from "../../../utils/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
+// import { findObjectWithKey } from "../../../utils/common";
 
 export function createObjectToSave(
   lupa,
@@ -11,6 +12,8 @@ export function createObjectToSave(
   muutoshakemus,
   uuid
 ) {
+  const files = []; // findObjectWithKey(changeObjects, "file");
+
   // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
@@ -68,12 +71,12 @@ export function createObjectToSave(
     taloudellisetLiitteetList,
     yhteenvetoYleisetLiitteetList,
     yhteenvetoLiitteetList
-  ]);
+  ]).filter(Boolean);
 
   // ... without tiedosto-property
   const allAttachments = R.map(attachment => {
     return R.dissoc("tiedosto", attachment);
-  }, allAttachmentsRaw);
+  }, R.concat(files, allAttachmentsRaw));
 
   return {
     diaarinumero: lupa.diaarinumero,

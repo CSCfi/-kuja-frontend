@@ -11,11 +11,11 @@ import opiskelijavuodet from "../lomakeosiot/opiskelijavuodet";
 export function getAdditionForm(isReadOnly) {
   return [
     {
-      anchor: "kuljettajien-jatkokoulutuslomake",
+      anchor: 5,
       styleClasses: ["px-10 py-10"],
       components: [
         {
-          anchor: "jatkokoulutus-title",
+          anchor: "peruskoulutus-title",
           name: "StatusTextRow",
           properties: {
             title:
