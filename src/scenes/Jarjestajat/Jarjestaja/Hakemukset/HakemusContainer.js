@@ -126,109 +126,28 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         fromBackend.muutospyynto
       );
 
-      const getChangesOf = (
-        key,
-        changes,
-        { path = ["kohde", "tunniste"], categoryKey } = {}
-      ) => {
-        let result = R.filter(R.pathEq(path, key))(changes);
-        result = R.concat(
-          R.reject(R.isNil, R.chain(R.propOr([], "aliMaaraykset"), result)),
-          result
-        );
-        if (key === "tutkinnotjakoulutukset") {
-          result = R.filter(
-            R.compose(
-              R.not,
-              R.equals("tutkintokieli"),
-              R.path(["meta", "tunniste"])
-            ),
-            result
-          );
-        }
+      const c = findObjectWithKey(backendMuutokset, "changeObjects");
 
-        let changeObjects = R.flatten(
-          R.map(R.path(["meta", "changeObjects"]))(result)
-        ).filter(Boolean);
+      let filesFromMuutokset = findObjectWithKey(backendMuutokset, "liitteet");
 
-        let files = R.flatten(R.map(R.prop("liitteet"))(result)).filter(
-          Boolean
-        );
+      const updatedC = R.map(changeObj => {
+        const files = changeObj.properties.files
+          ? R.map(file => {
+              const fileFromBackend =
+                R.find(
+                  R.propEq("tiedostoId", file.file.tiedostoId),
+                  filesFromMuutokset
+                ) || {};
+              return {
+                id: file.id,
+                file: Object.assign({}, file.file, fileFromBackend)
+              };
+            }, changeObj.properties.files)
+          : null;
+        return R.assocPath(["properties", "files"], files, changeObj);
+      }, c);
 
-        console.info(key, path, files, changeObjects);
-
-        if (key === "toimintaalue") {
-          changeObjects = R.map(changeObj => {
-            const type = R.path(["properties", "meta", "type"], changeObj);
-            if (type === "addition") {
-              changeObj.anchor = replaceAnchorPartWith(
-                changeObj.anchor,
-                0,
-                `${getAnchorPart(changeObj.anchor, 0)}_additions`
-              );
-            } else if (type === "removal") {
-              changeObj.anchor = replaceAnchorPartWith(
-                changeObj.anchor,
-                0,
-                `${getAnchorPart(changeObj.anchor, 0)}_removals`
-              );
-            }
-            return changeObj;
-          }, changeObjects);
-        }
-        if (categoryKey) {
-          changeObjects = getAnchorsStartingWith(categoryKey, changeObjects);
-        }
-        return changeObjects;
-      };
-
-      // let tutkinnotjakoulutuksetLiitteetChanges =
-      //   R.path(
-      //     ["raw", "meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
-      //     fromBackend.muutospyynto
-      //   ) || [];
-      // let taloudellisetChanges =
-      //   R.path(
-      //     ["raw", "meta", "taloudelliset", "changeObjects"],
-      //     fromBackend.muutospyynto
-      //   ) || [];
-      // let yhteenvetoChanges =
-      //   R.path(
-      //     ["raw", "meta", "yhteenveto", "changeObjects"],
-      //     fromBackend.muutospyynto
-      //   ) || [];
-
-      // const c = ;
-
-      // const c = R.flatten([
-      //   getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-      //     categoryKey: "tutkinnot"
-      //   }),
-      //   // getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-      //   //   categoryKey: "liitteet"
-      //   // }),
-      //   getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-      //     categoryKey: "perustelut_tutkinnot"
-      //   }),
-      //   getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-      //     categoryKey: "koulutukset"
-      //   }),
-      //   getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-      //     categoryKey: "perustelut_koulutukset"
-      //   }),
-      //   getChangesOf("opetuskieli", backendMuutokset, {
-      //     path: ["meta", "key"]
-      //   }),
-      //   getChangesOf("tutkintokieli", backendMuutokset, {
-      //     path: ["meta", "tunniste"]
-      //   }),
-      //   getChangesOf("opiskelijavuodet", backendMuutokset),
-      //   getChangesOf("toimintaalue", backendMuutokset),
-      //   getChangesOf("muut", backendMuutokset),
-      //   tutkinnotjakoulutuksetLiitteetChanges,
-      //   taloudellisetChanges,
-      //   yhteenvetoChanges
-      // ]).filter(Boolean);
+      console.info(c, updatedC, filesFromMuutokset);
 
       let changesBySection = {};
 
@@ -245,7 +164,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
           changeObjects,
           changesBySection
         );
-      }, findObjectWithKey(backendMuutokset, "changeObjects"));
+      }, updatedC);
       /**
        * At this point the backend data is handled and change objects are formed.
        */
