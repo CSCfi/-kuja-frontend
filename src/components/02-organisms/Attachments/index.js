@@ -16,8 +16,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
 import * as R from "ramda";
-import { API_BASE_URL } from "../../../modules/constants";
 import DialogTitle from "../DialogTitle";
+import { downloadFileFn } from "../../../utils/common";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
 whyDidYouRender(React);
@@ -556,39 +556,6 @@ Attachments.propTypes = {
 Attachments.whyDidYouRender = {
   logOnDifferentValues: true,
   customName: "Attachments"
-};
-
-/**
- * Open file using generated and hidden <a> element
- * @param obj containing properties filename and tiedosto or property url. Has optional parameter openInNewWindow
- */
-export const downloadFileFn = ({ filename, tiedosto, url, openInNewWindow }) => {
-  return () => {
-    let a = document.createElement("a");
-    a.setAttribute("type", "hidden");
-    if ( openInNewWindow ) {
-      a.setAttribute("target", "_blank");
-      a.setAttribute("rel", "noopener noreferer");
-    }
-
-    document.body.appendChild(a); // Needed for Firefox
-    if (tiedosto && tiedosto instanceof Blob) {
-      const reader = new FileReader();
-      reader.readAsDataURL(tiedosto);
-      reader.onload = function () {
-        a.href = reader.result;
-        a.download = filename;
-        a.click();
-        a.remove();
-      };
-    } else if (url) {
-      a.href = API_BASE_URL + url;
-      a.click();
-      a.remove();
-    } else {
-      console.warn("Cannot open file: No octet stream nor file url");
-    }
-  }
 };
 
 export default injectIntl(Attachments);

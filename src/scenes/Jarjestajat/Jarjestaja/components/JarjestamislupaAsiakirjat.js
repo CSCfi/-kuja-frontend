@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import FetchHandler from "../../../../FetchHandler";
 import { BackendContext } from "../../../../context/backendContext";
 import Moment from "react-moment";
-import { downloadFileFn } from "../../../../components/02-organisms/Attachments";
+import { downloadFileFn } from "../../../../utils/common";
 
 const WrapTable = styled.div``;
 
@@ -23,16 +23,17 @@ const titleKeys = [
   common.sent
 ];
 
-const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
-
+const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
   const fetchSetup = useMemo(() => {
     return muutospyynto && muutospyynto.uuid
-      ? [{
-          key: "muutospyynnonLiitteet",
-          dispatchFn: dispatch,
-          urlEnding: muutospyynto.uuid
-        }]
+      ? [
+          {
+            key: "muutospyynnonLiitteet",
+            dispatchFn: dispatch,
+            urlEnding: muutospyynto.uuid
+          }
+        ]
       : [];
   }, [dispatch, muutospyynto]);
 
@@ -41,38 +42,53 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
     R.path(["nimi", intl.locale], organisaatio)
   ];
 
-  const liitteetRowItems = useMemo(() => R.map((liite) =>
-    ({
-      items:
-        [
-          intl.formatMessage(liite.salainen ? common.secretAttachment : common.attachment) + " " + R.prop("nimi", liite),
-          ...baseRow,
-          liite.luontipvm
-            ? (<Moment format="D.M.YYYY">{liite.luontipvm}</Moment>)
-            : ""
-        ],
-      fileLink: `/liitteet/${liite.uuid}/raw`
-    }), R.sortBy(R.prop("nimi"), R.pathOr([], ['muutospyynnonLiitteet', 'raw'], fromBackend))
-  ), [intl, fromBackend, baseRow]);
+  const liitteetRowItems = useMemo(
+    () =>
+      R.map(
+        liite => ({
+          items: [
+            intl.formatMessage(
+              liite.salainen ? common.secretAttachment : common.attachment
+            ) +
+              " " +
+              R.prop("nimi", liite),
+            ...baseRow,
+            liite.luontipvm ? (
+              <Moment format="D.M.YYYY">{liite.luontipvm}</Moment>
+            ) : (
+              ""
+            )
+          ],
+          fileLink: `/liitteet/${liite.uuid}/raw`
+        }),
+        R.sortBy(
+          R.prop("nimi"),
+          R.pathOr([], ["muutospyynnonLiitteet", "raw"], fromBackend)
+        )
+      ),
+    [intl, fromBackend, baseRow]
+  );
 
   const muutospyyntoRowItem = {
     fileLink: `/pdf/esikatsele/muutospyynto/${muutospyynto.uuid}`,
     openInNewWindow: true,
-    items: [
-      intl.formatMessage(common.application),
-      ...baseRow,
-      ""
-    ]
+    items: [intl.formatMessage(common.application), ...baseRow, ""]
   };
 
   const jarjestamislupaAsiakirjatList = () => {
-    return R.addIndex(R.map)((row, idx) => (
-      <JarjestamislupaAsiakirjatItem
-        onClick = { downloadFileFn({ url: row.fileLink, openInNewWindow: row.openInNewWindow }) }
-        rowItems = { row.items }
-        key = { idx }
-      />
-    ), [muutospyyntoRowItem, ...liitteetRowItems]);
+    return R.addIndex(R.map)(
+      (row, idx) => (
+        <JarjestamislupaAsiakirjatItem
+          onClick={downloadFileFn({
+            url: row.fileLink,
+            openInNewWindow: row.openInNewWindow
+          })}
+          rowItems={row.items}
+          key={idx}
+        />
+      ),
+      [muutospyyntoRowItem, ...liitteetRowItems]
+    );
   };
 
   return (
@@ -94,13 +110,11 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
               <Table>
                 <Thead>
                   <Trn>
-                    {
-                      titleKeys.map((title, ind) => (
-                        <Thn key={ind}>
-                          <Typography>{intl.formatMessage(title)}</Typography>
-                        </Thn>)
-                      )
-                    }
+                    {titleKeys.map((title, ind) => (
+                      <Thn key={ind}>
+                        <Typography>{intl.formatMessage(title)}</Typography>
+                      </Thn>
+                    ))}
                   </Trn>
                 </Thead>
                 <Tbody>{jarjestamislupaAsiakirjatList()}</Tbody>
@@ -109,7 +123,7 @@ const JarjestamislupaAsiakirjat = ({muutospyynto, organisaatio, intl}) => {
           />
         </WrapTable>
       }
-      />
+    />
   );
 };
 

@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import { API_BASE_URL } from "../modules/constants";
 
 /**
  * Utility functions are listed here.
@@ -142,3 +143,41 @@ export function findObjectWithKey(object, targetKey) {
   }
   return R.flatten(find(object, targetKey)).filter(Boolean);
 }
+
+/**
+ * Open file using generated and hidden <a> element
+ * @param obj containing properties filename and tiedosto or property url. Has optional parameter openInNewWindow
+ */
+export const downloadFileFn = ({
+  filename,
+  tiedosto,
+  url,
+  openInNewWindow
+}) => {
+  return () => {
+    let a = document.createElement("a");
+    a.setAttribute("type", "hidden");
+    if (openInNewWindow) {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferer");
+    }
+
+    document.body.appendChild(a); // Needed for Firefox
+    if (tiedosto && tiedosto instanceof Blob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(tiedosto);
+      reader.onload = function() {
+        a.href = reader.result;
+        a.download = filename;
+        a.click();
+        a.remove();
+      };
+    } else if (url) {
+      a.href = API_BASE_URL + url;
+      a.click();
+      a.remove();
+    } else {
+      console.warn("Cannot open file: No octet stream nor file url");
+    }
+  };
+};
