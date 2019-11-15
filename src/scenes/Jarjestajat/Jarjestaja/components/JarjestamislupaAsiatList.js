@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Button from "@material-ui/core/Button";
-import Add from "@material-ui/icons/Add";
+import Add from "@material-ui/icons/AddCircleOutline";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
@@ -28,7 +28,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
-    overflowX: "auto"
+    overflowX: "auto",
+    marginTop: 0
   },
   table: {
     minWidth: 650
@@ -69,38 +70,38 @@ const JarjestamislupaAsiatList = ({
 
   return (
     <React.Fragment>
-      {muutospyynto ? (
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => setMuutospyynto(null)}
-        >
-          <ArrowBack />
-          <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
-        </Button>
-      ) : (
-        <NavLink
-          to={newApplicationRouteItem.path}
-          exact={newApplicationRouteItem.exact}
-          className="pl-2"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Button variant="contained" color="primary">
-            {breakpointTabletMin && <Add />}
-
-            <span className="pl-2">{newApplicationRouteItem.text}</span>
+      <div className="mb-2">
+        {muutospyynto ? (
+          <Button color="primary" onClick={() => setMuutospyynto(null)}>
+            <ArrowBack />
+            <span>{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
           </Button>
-        </NavLink>
-      )}
+        ) : (
+          <NavLink
+            className="mb-2"
+            to={newApplicationRouteItem.path}
+            exact={newApplicationRouteItem.exact}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button color="primary">
+              <Add />
+              <span className="pl-2">{newApplicationRouteItem.text}</span>
+            </Button>
+          </NavLink>
+        )}
+      </div>
 
       {muutospyynto && (
-        <Paper className={classes.root}>
-          <JarjestamislupaAsiakirjat
-            organisaatio={organisaatio}
-            muutospyynto={muutospyynto}
-            intl={intl}
-          />
-        </Paper>
+        <div>
+          <h3 className="mt-4 mb-2">Hakemukset asiakirjat</h3>
+          <Paper className={classes.root}>
+            <JarjestamislupaAsiakirjat
+              organisaatio={organisaatio}
+              muutospyynto={muutospyynto}
+              intl={intl}
+            />
+          </Paper>
+        </div>
       )}
 
       {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (

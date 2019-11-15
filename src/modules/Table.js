@@ -8,7 +8,6 @@ export const Table = styled.div`
   border: 1px solid #d5d5d5;
   border-bottom: none;
   overflow-x: hidden;
-  max-width: 90%;
 `;
 
 export const Thead = styled.div`

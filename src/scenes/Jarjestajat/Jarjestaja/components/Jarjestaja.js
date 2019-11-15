@@ -137,7 +137,7 @@ const Jarjestaja = ({
             </div>
             <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
               {!!user ? (
-                <div className="mx-auto w-11/12 lg:w-3/4 pb-8 py-8">
+                <div className="mx-auto lg:w-3/4 pb-8 py-8">
                   <Route
                     path={`${match.path}/omattiedot`}
                     exact

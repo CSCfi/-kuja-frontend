@@ -78,9 +78,9 @@ const JarjestamislupaAsiaListItem = props => {
             <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <TdButton role="cell">
+            <TdButton role="cell" className="bg-transparent">
               {tila === FIELDS.TILA.VALUES.LUONNOS && (
-                <div className="flex">
+                <div className="flex ml-auto">
                   <NavLink
                     to={`hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
