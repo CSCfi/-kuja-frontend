@@ -60,12 +60,12 @@ class LuvatList extends Component {
           query={MEDIA_QUERIES.MOBILE}
           render={() => (
             <Table>
-              <Thead>
-                <Tr>
+              <Thead role="rowgroup">
+                <Tr role="row">
                   <Th>Voimassa olevat luvat</Th>
                 </Tr>
               </Thead>
-              <Tbody>{this.renderPermits()}</Tbody>
+              <Tbody role="rowgroup">{this.renderPermits()}</Tbody>
             </Table>
           )}
         />
@@ -74,7 +74,7 @@ class LuvatList extends Component {
           render={() => (
             <Table>
               <Thead>
-                <Tr>
+                <Tr role="row">
                   <Th flex="4" onClick={() => this.sort("jarjestaja")}>
                     Koulutuksen järjestäjä
                     {this.state.sortedBy === "jarjestaja" &&
@@ -92,7 +92,7 @@ class LuvatList extends Component {
                   </Th>
                 </Tr>
               </Thead>
-              <Tbody>{this.renderPermits()}</Tbody>
+              <Tbody role="rowgroup">{this.renderPermits()}</Tbody>
             </Table>
           )}
         />

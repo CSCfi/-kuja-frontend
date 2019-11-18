@@ -2,7 +2,7 @@ import * as R from "ramda";
 import React, { useContext, useMemo } from "react";
 import Media from "react-media";
 import styled from "styled-components";
-import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
+import { Table, Tbody, Thead, Thn, Trn, Thn2 } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import JarjestamislupaAsiakirjatItem from "./JarjestamislupaAsiakirjatItem";
@@ -99,25 +99,31 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
           <Media
             query={MEDIA_QUERIES.MOBILE}
             render={() => (
-              <Table>
-                <Tbody>{jarjestamislupaAsiakirjatList()}</Tbody>
+              <Table role="table">
+                <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
               </Table>
             )}
           />
           <Media
             query={MEDIA_QUERIES.TABLET_MIN}
             render={() => (
-              <Table>
-                <Thead>
-                  <Trn>
-                    {titleKeys.map((title, ind) => (
-                      <Thn key={ind}>
-                        <Typography>{intl.formatMessage(title)}</Typography>
-                      </Thn>
-                    ))}
+              <Table role="table">
+                <Thead role="rowgroup">
+                  <Trn role="row">
+                    {titleKeys.map((title, ind) =>
+                      ind === 0 ? (
+                        <Thn2 role="cell" key={ind}>
+                          <Typography>{intl.formatMessage(title)}</Typography>
+                        </Thn2>
+                      ) : (
+                        <Thn role="cell" key={ind}>
+                          <Typography>{intl.formatMessage(title)}</Typography>
+                        </Thn>
+                      )
+                    )}
                   </Trn>
                 </Thead>
-                <Tbody>{jarjestamislupaAsiakirjatList()}</Tbody>
+                <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
               </Table>
             )}
           />
