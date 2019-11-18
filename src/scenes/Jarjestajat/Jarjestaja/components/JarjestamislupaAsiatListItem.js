@@ -38,8 +38,7 @@ const JarjestamislupaAsiaListItem = props => {
               <LupaText>
                 <TextPartial>{intl.formatMessage(common.change)}</TextPartial>
                 <TextPartial>
-                  {intl.formatMessage(common.stateAsia)}
-                  {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}:&nbsp;
+                  {intl.formatMessage(common.stateAsia)}:&nbsp;
                   {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
                 </TextPartial>
               </LupaText>
@@ -49,7 +48,7 @@ const JarjestamislupaAsiaListItem = props => {
                     to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
                   >
-                    <Button title={intl.formatMessage(common.Edit)}>
+                    <Button title={intl.formatMessage(common.edit)}>
                       <Edit />
                     </Button>
                   </NavLink>
