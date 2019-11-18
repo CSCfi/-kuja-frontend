@@ -309,25 +309,36 @@ function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
     },
     {
       anchor: "liitteet",
-      styleClasses: ["pl-6 pt-6"],
       title: "Liitteet",
-      components: [
+      categories: [
         {
           anchor: "info",
-          name: "StatusTextRow",
-          styleClasses: ["w-full"],
-          properties: {
-            title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
-            isHidden: isReadOnly
-          }
+          layout: { indentation: "none" },
+          components: [
+            {
+              anchor: "A",
+              name: "StatusTextRow",
+              styleClasses: ["w-full"],
+              properties: {
+                title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+                isHidden: isReadOnly
+              }
+            }
+          ]
         },
         {
-          anchor: "A",
-          styleClasses: ["w-full"],
-          name: "Attachments",
-          properties: {
-            isReadOnly
-          }
+          anchor: "upload",
+          layout: { indentation: "none" },
+          components: [
+            {
+              anchor: "A",
+              styleClasses: ["w-full"],
+              name: "FileUpload",
+              properties: {
+                isReadOnly
+              }
+            }
+          ]
         }
       ]
     }

@@ -223,8 +223,7 @@ const CategorizedList = React.memo(
             <div
               key={i}
               className={R.join(" ", categoryClasses)}
-              data-level={props.level}
-            >
+              data-level={props.level}>
               {isCategoryTitleVisible && (
                 <div className={categoryTitleClasses}>
                   <h4>
@@ -292,8 +291,7 @@ const CategorizedList = React.memo(
                               rootPath: props.rootPath,
                               siblings: props.categories
                             }}
-                            labelStyles={labelStyles}
-                          >
+                            labelStyles={labelStyles}>
                             <div className="flex">
                               <span className="leading-none">
                                 {propsObj.code}
@@ -322,8 +320,7 @@ const CategorizedList = React.memo(
                             }}
                             labelStyles={labelStyles}
                             value={propsObj.value}
-                            className="flex-row"
-                          >
+                            className="flex-row">
                             <div className="flex">
                               <span className="leading-none">
                                 {propsObj.code}
@@ -394,8 +391,7 @@ const CategorizedList = React.memo(
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
-                          title={propsObj.title}
-                        ></CategorizedListTextBox>
+                          title={propsObj.title}></CategorizedListTextBox>
                       )}
                       {component.name === "Input"
                         ? (category => {
@@ -520,8 +516,7 @@ const CategorizedList = React.memo(
                                   statusTextStyleClasses={
                                     propsObj.statusTextStyleClasses
                                   }
-                                  isHidden={propsObj.isHidden}
-                                >
+                                  isHidden={propsObj.isHidden}>
                                   <div className="flex">
                                     <div className="flex-1">
                                       {codeMarkup}
@@ -555,8 +550,7 @@ const CategorizedList = React.memo(
                               );
                             return (
                               <div
-                                className={`flex-1 ${component.styleClasses}`}
-                              >
+                                className={`flex-1 ${component.styleClasses}`}>
                                 <Autocomplete
                                   callback={handleChanges}
                                   id={`autocomplete-${idSuffix}`}
@@ -603,6 +597,7 @@ const CategorizedList = React.memo(
                       {component.name === "FileUpload" && (
                         <div className="flex-2">
                           <FileUpload
+                            isReadOnly={propsObj.isReadOnly}
                             onChanges={handleChanges}
                             uploadedFiles={propsObj.files}
                             payload={{

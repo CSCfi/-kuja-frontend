@@ -30,6 +30,7 @@ const StyledToggleButton = withStyles({
 
 const defaultProps = {
   acceptedTypes: ["image/*", "application/pdf"],
+  isReadOnly: false,
   minSize: 0,
   maxSize: 26214400 // 1MB = 1048576
 };
@@ -37,6 +38,7 @@ const defaultProps = {
 const FileUpload = ({
   acceptedTypes = defaultProps.acceptedTypes,
   intl,
+  isReadOnly,
   minSize = defaultProps.minSize,
   maxSize = defaultProps.maxSize,
   onChanges,
@@ -125,44 +127,59 @@ const FileUpload = ({
 
   return (
     <div>
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <div className="h-20 cursor-pointer flex flex-col justify-center items-center border border-dashed border-gray-600">
-          {isDragActive ? (
-            <p>Pudota tiedostot tähän ...</p>
-          ) : (
-            <React.Fragment>
-              <p>
-                Voit raahata tiedostot tähän tai klikata aluetta lisätäksesi
-                liitteitä.
-              </p>
-              {uploadedFiles.length > 0 && <p>Liitteet näkyvät alla.</p>}
-            </React.Fragment>
-          )}
+      {!isReadOnly && (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <div className="h-20 cursor-pointer flex flex-col justify-center items-center border border-dashed border-gray-600">
+            {isDragActive ? (
+              <p>Pudota tiedostot tähän ...</p>
+            ) : (
+              <React.Fragment>
+                <p>
+                  Voit raahata tiedostot tähän tai klikata aluetta lisätäksesi
+                  liitteitä.
+                </p>
+                {uploadedFiles.length > 0 && <p>Liitteet näkyvät alla.</p>}
+              </React.Fragment>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <ul className="mt-4">
         {uploadedFiles.length > 0 && (
           <li className="flex font-bold">
             <span className="w-5/12 pr-2">
-              Nimi <span className="font-normal">(muokattavissa)</span>
+              Nimi{" "}
+              {!isReadOnly && (
+                <span className="font-normal">(muokattavissa)</span>
+              )}
             </span>
             <span className="w-2/12">Tyyppi</span>
             <span className="w-2/12">Koko</span>
-            <span className="w-3/12 text-center">Toiminnot</span>
+            {!isReadOnly && (
+              <span className="w-3/12 text-center">Toiminnot</span>
+            )}
           </li>
         )}
         {R.map(({ file, id }) => {
           return (
-            <li key={`file-${id}`} className="border-t border-gray-400">
+            <li
+              key={`file-${id}`}
+              className={`${
+                isReadOnly ? "py-4" : ""
+              } border-t border-gray-400`}>
               <span className="flex items-center">
                 <span className={`${file.uuid ? "w-5/12" : "w-6/12"} "pr-2"`}>
-                  <ContentEditable
-                    html={file.nimi} // innerHTML of the editable div
-                    disabled={false} // use true to disable edition
-                    onChange={e => renamingDelayed(e, id)} // handle innerHTML change
-                    tagName="span"
-                  />
+                  {isReadOnly ? (
+                    file.nimi
+                  ) : (
+                    <ContentEditable
+                      html={file.nimi} // innerHTML of the editable div
+                      disabled={false} // use true to disable edition
+                      onChange={e => renamingDelayed(e, id)} // handle innerHTML change
+                      tagName="span"
+                    />
+                  )}
                 </span>
                 <span className="w-2/12">{file.type}</span>
                 <span className="w-2/12">{Math.round(file.size) / 100} KB</span>
@@ -180,42 +197,48 @@ const FileUpload = ({
                     </Tooltip>
                   </span>
                 )}
-                <span className="w-1/12 text-center">
-                  <Tooltip
-                    placement="bottom"
-                    tooltip={
-                      file.salainen
-                        ? intl.formatMessage(common.attachmentSecretUnselect)
-                        : intl.formatMessage(common.attachmentSecretSelect)
-                    }>
-                    <StyledToggleButton
-                      value="check"
-                      selected={file.salainen}
-                      size="small"
-                      onChange={() => {
-                        togglePublicity(id, !!!file.salainen);
-                      }}
-                      title={
+                {!isReadOnly && (
+                  <span className="w-1/12 text-center">
+                    <Tooltip
+                      placement="bottom"
+                      tooltip={
                         file.salainen
                           ? intl.formatMessage(common.attachmentSecretUnselect)
                           : intl.formatMessage(common.attachmentSecretSelect)
                       }>
-                      {!file.salainen ? <FaUnlock /> : <FaLock />}
-                    </StyledToggleButton>
-                  </Tooltip>
-                </span>
-                <span className="w-1/12 text-center">
-                  <Tooltip
-                    placement="right"
-                    tooltip="Poista liite hakemukselta">
-                    <IconButton
-                      variant="contained"
-                      size="small"
-                      onClick={() => removeFile(id)}>
-                      <FaTimes />
-                    </IconButton>
-                  </Tooltip>
-                </span>
+                      <StyledToggleButton
+                        value="check"
+                        selected={file.salainen}
+                        size="small"
+                        onChange={() => {
+                          togglePublicity(id, !!!file.salainen);
+                        }}
+                        title={
+                          file.salainen
+                            ? intl.formatMessage(
+                                common.attachmentSecretUnselect
+                              )
+                            : intl.formatMessage(common.attachmentSecretSelect)
+                        }>
+                        {!file.salainen ? <FaUnlock /> : <FaLock />}
+                      </StyledToggleButton>
+                    </Tooltip>
+                  </span>
+                )}
+                {!isReadOnly && (
+                  <span className="w-1/12 text-center">
+                    <Tooltip
+                      placement="right"
+                      tooltip="Poista liite hakemukselta">
+                      <IconButton
+                        variant="contained"
+                        size="small"
+                        onClick={() => removeFile(id)}>
+                        <FaTimes />
+                      </IconButton>
+                    </Tooltip>
+                  </span>
+                )}
               </span>
             </li>
           );
@@ -238,6 +261,7 @@ const FileUpload = ({
 };
 
 FileUpload.propTypes = {
+  isReadOnly: PropTypes.bool,
   minSize: PropTypes.number,
   maxSize: PropTypes.number,
   acceptedTypes: PropTypes.array,
