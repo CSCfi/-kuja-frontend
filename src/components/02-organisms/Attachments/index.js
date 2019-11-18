@@ -8,12 +8,7 @@ import { FaRegFile, FaFile, FaTimes, FaLock, FaDownload } from "react-icons/fa";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
 import common from "../../../i18n/definitions/common";
 import * as R from "ramda";
 import { API_BASE_URL } from "../../../modules/constants";
@@ -332,8 +327,9 @@ const Attachments = React.memo(
       else return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
     };
 
-    const addLiiteUrl = file => file.uuid
-        ? Object.assign({}, file, {url: `/liitteet/${file.uuid}/raw`})
+    const addLiiteUrl = file =>
+      file.uuid
+        ? Object.assign({}, file, { url: `/liitteet/${file.uuid}/raw` })
         : file;
 
     // Lists all attachments
@@ -369,7 +365,7 @@ const Attachments = React.memo(
                   <span className="size">{bytesToSize(liite.koko)}</span>
                   <button
                     title={formatMessage(common.attachmentDownload)}
-                    onClick={ downloadFileFn(addLiiteUrl(liite)) }
+                    onClick={downloadFileFn(addLiiteUrl(liite))}
                     className="ml-2"
                   >
                     <FaDownload />
@@ -441,7 +437,7 @@ const Attachments = React.memo(
                   <span className="size">{bytesToSize(liite.koko)}</span>
                   <button
                     title={formatMessage(common.attachmentDownload)}
-                    onClick={ downloadFileFn(addLiiteUrl(liite)) }
+                    onClick={downloadFileFn(addLiiteUrl(liite))}
                     className="ml-2"
                   >
                     <FaDownload />
@@ -562,11 +558,16 @@ Attachments.whyDidYouRender = {
  * Open file using generated and hidden <a> element
  * @param obj containing properties filename and tiedosto or property url. Has optional parameter openInNewWindow
  */
-export const downloadFileFn = ({ filename, tiedosto, url, openInNewWindow }) => {
+export const downloadFileFn = ({
+  filename,
+  tiedosto,
+  url,
+  openInNewWindow
+}) => {
   return () => {
     let a = document.createElement("a");
     a.setAttribute("type", "hidden");
-    if ( openInNewWindow ) {
+    if (openInNewWindow) {
       a.setAttribute("target", "_blank");
       a.setAttribute("rel", "noopener noreferer");
     }
@@ -575,7 +576,7 @@ export const downloadFileFn = ({ filename, tiedosto, url, openInNewWindow }) => 
     if (tiedosto && tiedosto instanceof Blob) {
       const reader = new FileReader();
       reader.readAsDataURL(tiedosto);
-      reader.onload = function () {
+      reader.onload = function() {
         a.href = reader.result;
         a.download = filename;
         a.click();
@@ -588,7 +589,7 @@ export const downloadFileFn = ({ filename, tiedosto, url, openInNewWindow }) => 
     } else {
       console.warn("Cannot open file: No octet stream nor file url");
     }
-  }
+  };
 };
 
 export default injectIntl(Attachments);

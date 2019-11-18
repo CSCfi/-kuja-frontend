@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Media from "react-media";
-import { Td, Tr } from "../../../../modules/Table";
+import { Td, Tr, TdButton, Td2 } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Button from "@material-ui/core/Button";
@@ -9,6 +9,8 @@ import Edit from "@material-ui/icons/Edit";
 import { Typography } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
+import { injectIntl } from "react-intl";
+import common from "../../../../i18n/definitions/common";
 
 const LupaText = styled.span`
   margin: 10px;
@@ -25,17 +27,18 @@ const TextPartial = styled.span`
 
 const JarjestamislupaAsiaListItem = props => {
   const { tila, uuid } = props.muutospyynto;
+  const { intl } = props;
   return (
     <React.Fragment>
       <Media
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
-          <Tr onClick={() => props.setOpened()}>
-            <Td>
+          <Tr role="row" onClick={() => props.setOpened()}>
+            <Td role="cell">
               <LupaText>
-                <TextPartial>{LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}</TextPartial>
+                <TextPartial>{intl.formatMessage(common.change)}</TextPartial>
                 <TextPartial>
-                  {LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI}:&nbsp;
+                  {intl.formatMessage(common.stateAsia)}:&nbsp;
                   {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
                 </TextPartial>
               </LupaText>
@@ -45,7 +48,7 @@ const JarjestamislupaAsiaListItem = props => {
                     to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
                   >
-                    <Button title="Täydennä hakemusta">
+                    <Button title={intl.formatMessage(common.edit)}>
                       <Edit />
                     </Button>
                   </NavLink>
@@ -58,40 +61,40 @@ const JarjestamislupaAsiaListItem = props => {
       <Media
         query={MEDIA_QUERIES.TABLET_MIN}
         render={() => (
-          <Tr onClick={() => props.setOpened(uuid)}>
-            <Td size="small">
+          <Tr role="row" onClick={() => props.setOpened(uuid)}>
+            <Td role="cell" size="small">
               <Typography component="span">{}</Typography>
             </Td>
-            <Td size="small">
+            <Td2 role="cell">
               <Typography component="span">
-                {LUPA_TEKSTIT.MUUTOSPYYNTO.MUUTOS.FI}
+                {intl.formatMessage(common.change)}
               </Typography>
-            </Td>
-            <Td size="small">
+            </Td2>
+            <Td role="cell" size="small">
               <Typography component="span">
                 {LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[tila].FI}
               </Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <Td size="small">
+            <Td role="cell" size="small">
               <Typography component="span" noWrap={true}></Typography>
             </Td>
-            <Td size="small">
+            <TdButton role="cell" className="bg-transparent">
               {tila === FIELDS.TILA.VALUES.LUONNOS && (
-                <div className="flex">
+                <div className="flex ml-auto">
                   <NavLink
                     to={`hakemukset-ja-paatokset/${uuid}/1`}
                     exact={true}
                   >
-                    <Button title="Täydennä hakemusta">
+                    <Button title={intl.formatMessage(common.edit)}>
                       <Edit />
                     </Button>
                   </NavLink>
                 </div>
               )}
-            </Td>
+            </TdButton>
           </Tr>
         )}
       />
@@ -99,4 +102,4 @@ const JarjestamislupaAsiaListItem = props => {
   );
 };
 
-export default JarjestamislupaAsiaListItem;
+export default injectIntl(JarjestamislupaAsiaListItem);

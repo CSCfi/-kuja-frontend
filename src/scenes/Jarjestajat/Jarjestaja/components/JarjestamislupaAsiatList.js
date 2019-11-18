@@ -4,23 +4,32 @@ import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Button from "@material-ui/core/Button";
-import Add from "@material-ui/icons/Add";
+import Add from "@material-ui/icons/AddCircleOutline";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
 import { Typography } from "@material-ui/core";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Media from "react-media";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-import { Table, Tbody, Thead, Thn, Trn } from "../../../../modules/Table";
+import { injectIntl } from "react-intl";
+import common from "../../../../i18n/definitions/common";
+import {
+  Table,
+  Tbody,
+  Thead,
+  Thn,
+  Trn,
+  ThButton,
+  Thn2
+} from "../../../../modules/Table";
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing(3),
-    overflowX: "auto"
+    overflowX: "auto",
+    marginTop: 0
   },
   table: {
     minWidth: 650
@@ -43,7 +52,6 @@ const JarjestamislupaAsiatList = ({
   intl
 }) => {
   const { url } = match;
-  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
 
@@ -59,39 +67,45 @@ const JarjestamislupaAsiatList = ({
     ));
   }, [url, muutospyynnot]);
 
-
   return (
     <React.Fragment>
-      {muutospyynto
-        ? (
-          <Button variant="contained" color="primary" onClick={() => setMuutospyynto(null)}>
-            <ArrowBack/>
-            <span className="pl-2">{LUPA_TEKSTIT.ASIAT.PALAA.FI}</span>
+      <div className="mb-2">
+        {muutospyynto ? (
+          <Button color="primary" onClick={() => setMuutospyynto(null)}>
+            <ArrowBack />
+            <span className="pl-2">
+              {intl.formatMessage(common.backFromAsiakirjat)}
+            </span>
           </Button>
-        )
-        : (
+        ) : (
           <NavLink
+            className="mb-2"
             to={newApplicationRouteItem.path}
             exact={newApplicationRouteItem.exact}
-            className="pl-2"
-            style={{textDecoration: "none", color: "inherit"}}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <Button variant="contained" color="primary">
-              {breakpointTabletMin && <Add/>}
-
+            <Button color="primary">
+              <Add />
               <span className="pl-2">{newApplicationRouteItem.text}</span>
             </Button>
           </NavLink>
         )}
+      </div>
 
       {muutospyynto && (
-        <Paper className={classes.root}>
-          <JarjestamislupaAsiakirjat
-            organisaatio={organisaatio}
-            muutospyynto={muutospyynto}
-            intl={intl}
-          />
-        </Paper>)}
+        <div>
+          <h3 className="mt-4 mb-2">
+            {intl.formatMessage(common.hakemusAsiakirjat)}
+          </h3>
+          <Paper className={classes.root}>
+            <JarjestamislupaAsiakirjat
+              organisaatio={organisaatio}
+              muutospyynto={muutospyynto}
+              intl={intl}
+            />
+          </Paper>
+        </div>
+      )}
 
       {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (
         <Paper className={classes.root}>
@@ -107,16 +121,30 @@ const JarjestamislupaAsiatList = ({
             query={MEDIA_QUERIES.TABLET_MIN}
             render={() => (
               <Table className={classes.table}>
-                <Thead>
-                  <Trn>
-                    {columnTitles.map((title, i) => (
-                      <Thn key={`title-${i}`}>
-                    <span className="text-white">
-                      <Typography component="span">{title}</Typography>
-                    </span>
-                      </Thn>
-                    ))}
-                    <Thn>&nbsp;</Thn>
+                <Thead role="rowgroup">
+                  <Trn role="row">
+                    {columnTitles.map((title, i) =>
+                      i === 1 ? (
+                        <Thn2 role="cell" key={`title-${i}`}>
+                          <span className="text-white">
+                            <Typography component="span">{title}</Typography>
+                          </span>
+                        </Thn2>
+                      ) : (
+                        <Thn role="cell" key={`title-${i}`}>
+                          <span className="text-white">
+                            <Typography component="span">{title}</Typography>
+                          </span>
+                        </Thn>
+                      )
+                    )}
+                    <ThButton role="cell">
+                      <span className="text-white">
+                        <Typography component="span">
+                          {intl.formatMessage(common.functions)}
+                        </Typography>
+                      </span>
+                    </ThButton>
                   </Trn>
                 </Thead>
                 <Tbody>{jarjestamislupaAsiatList}</Tbody>
@@ -136,4 +164,4 @@ JarjestamislupaAsiatList.propTypes = {
   newApplicationRouteItem: PropTypes.object
 };
 
-export default JarjestamislupaAsiatList;
+export default injectIntl(JarjestamislupaAsiatList);

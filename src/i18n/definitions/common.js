@@ -142,5 +142,33 @@ export default defineMessages({
   sent: {
     id: "common.sent",
     defaultMessage: "Lähetetty"
+  },
+  edit: {
+    id: "common.edit",
+    defaultMessage: "Täydennä hakemusta"
+  },
+  change: {
+    id: "common.change",
+    defaultMessage: "Järjestämisluvan muutos"
+  },
+  stateAsia: {
+    id: "common.stateAsia",
+    defaultMessage: "Asian tila"
+  },
+  functions: {
+    id: "common.functions",
+    defaultMessage: "Toiminnot"
+  },
+  hakemusAsiakirjat: {
+    id: "common.hakemusAsiakirjat",
+    defaultMessage: "Hakemukset asiakirjat"
+  },
+  backFromAsiakirjat: {
+    id: "common.backFromAsiakirjat",
+    defaultMessage: "Takaisin Järjestämislupa asiat -taulukkoon"
+  },
+  newHakemus: {
+    id: "common.newHakemus",
+    defaultMessage: "Tee uusi hakemus"
   }
 });

@@ -50,21 +50,21 @@ const LupaHistory = props => {
           <Media
             query={MEDIA_QUERIES.MOBILE}
             render={() => (
-              <Table>
-                <Tbody>{renderLupaHistoryList(data)}</Tbody>
+              <Table role="table">
+                <Tbody role="rowgroup">{renderLupaHistoryList(data)}</Tbody>
               </Table>
             )}
           />
           <Media
             query={MEDIA_QUERIES.TABLET_MIN}
             render={() => (
-              <Table>
-                <Thead>
-                  <Trn>
-                    <Thn>
+              <Table role="table">
+                <Thead role="rowgroup">
+                  <Trn role="row">
+                    <Thn role="columnheader">
                       {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.DIAARINUMERO.FI}
                     </Thn>
-                    <Thn>
+                    <Thn role="columnheader">
                       {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATOSPVM.FI}
                     </Thn>
                     <Thn>
@@ -73,15 +73,15 @@ const LupaHistory = props => {
                           .FI
                       }
                     </Thn>
-                    <Thn>
+                    <Thn role="columnheader">
                       {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATTAMISPVM.FI}
                     </Thn>
-                    <Thn>
+                    <Thn role="columnheader">
                       {LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.KUMOTTU.FI}
                     </Thn>
                   </Trn>
                 </Thead>
-                <Tbody>{renderLupaHistoryList(data)}</Tbody>
+                <Tbody role="rowgroup">{renderLupaHistoryList(data)}</Tbody>
               </Table>
             )}
           />
