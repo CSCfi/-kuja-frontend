@@ -16,10 +16,7 @@ import * as R from "ramda";
  * @param {string} separator - Default value: .
  */
 export function getAnchorPart(anchor, index, separator = ".") {
-  return R.compose(
-    R.view(R.lensIndex(index)),
-    R.split(separator)
-  )(anchor);
+  return R.compose(R.view(R.lensIndex(index)), R.split(separator))(anchor);
 }
 
 /**
@@ -41,9 +38,9 @@ export const findAnchoredComponentFromElement = (anchor, elementObject) => {
 
 const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
   let retval = findAnchoredCategoryFromElement(anchor, elementObject);
-  if(!retval) retval = findAnchoredComponentFromElement(anchor, elementObject);
+  if (!retval) retval = findAnchoredComponentFromElement(anchor, elementObject);
   return retval;
-}
+};
 
 /**
  * Returns the element found from given anchor in a category hierarchy. We expect that the anchor is
@@ -52,15 +49,21 @@ const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
  * @param anchor The path for scanning the component from stateObject (e.g. vahimmaisopiskelijavuodet.A)
  * @param stateObject
  */
-export const findAnchoredElementFromCategoryHierarchy = (anchor, rootObject) => {
-  if(!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
-  const anchorParts = anchor.split('.');
+export const findAnchoredElementFromCategoryHierarchy = (
+  anchor,
+  rootObject
+) => {
+  if (!rootObject || !anchor || R.isEmpty(rootObject)) return undefined;
+  const anchorParts = anchor.split(".");
   let currentElement = rootObject;
 
-  for(const anchorPart of anchorParts) {
-    currentElement = findAnchoredCategoryOrComponentFromElement(anchorPart, currentElement);
+  for (const anchorPart of anchorParts) {
+    currentElement = findAnchoredCategoryOrComponentFromElement(
+      anchorPart,
+      currentElement
+    );
 
-    if(!currentElement) {
+    if (!currentElement) {
       return undefined;
     }
   }
@@ -92,12 +95,7 @@ export const curriedGetAnchorPartsByIndex = R.curry((objects, index) => {
 
 export const getAnchorsStartingWith = (prefix, objects) => {
   return R.filter(
-    R.compose(
-      R.startsWith(prefix),
-      R.head,
-      R.split("."),
-      R.prop("anchor")
-    )
+    R.compose(R.startsWith(prefix), R.head, R.split("."), R.prop("anchor"))
   )(objects);
 };
 

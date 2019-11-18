@@ -39,13 +39,11 @@ const LupaHistoryItem = props => {
     <a
       href={`${API_BASE_URL}${path}${filename}`}
       target="_blank"
-      rel="noopener noreferrer"
-    >
+      rel="noopener noreferrer">
       <Media
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
           <Tr role="row">
-            >
             <LupaText>
               <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
               <TextPartial>
@@ -80,15 +78,15 @@ const LupaHistoryItem = props => {
                 <Td role="cell">
                   <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
                 </Td>
-                <Td role="cell">></Td>
-                <Td role="cell">></Td>
+                <Td role="cell"></Td>
+                <Td role="cell"></Td>
                 <Td role="cell">
                   <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
                 </Td>
               </Tr>
             ) : (
               <Tr role="row">
-                ><Td role="cell">>{diaarinumero}</Td>
+                <Td role="cell">{diaarinumero}</Td>
                 <Td role="cell">
                   <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
                 </Td>
@@ -98,7 +96,7 @@ const LupaHistoryItem = props => {
                 <Td role="cell">
                   <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
                 </Td>
-                <Td role="cell">></Td>
+                <Td role="cell"></Td>
               </Tr>
             )}
           </div>
