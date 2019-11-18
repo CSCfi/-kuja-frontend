@@ -66,3 +66,9 @@ Toiminnallisia testejä voi ajaa näin:
 npm run e2e
 ```
 Yllä oleva komento suorittaa `tests/e2e/specs`-kansion .spec-tiedostoissa määritellyt testit.
+
+## Koodin automaattinen formatointi
+Kaikki .js-koodit voi formatoida yhtenäiseksi ajamalla komento:
+```
+npm run prettier
+```

@@ -17,10 +17,7 @@ import { API_BASE_URL } from "../modules/constants";
  * @param {string} separator - Default value: .
  */
 export function getAnchorPart(anchor, index, separator = ".") {
-  return R.compose(
-    R.view(R.lensIndex(index)),
-    R.split(separator)
-  )(anchor);
+  return R.compose(R.view(R.lensIndex(index)), R.split(separator))(anchor);
 }
 
 /**
@@ -99,12 +96,7 @@ export const curriedGetAnchorPartsByIndex = R.curry((objects, index) => {
 
 export const getAnchorsStartingWith = (prefix, objects) => {
   return R.filter(
-    R.compose(
-      R.startsWith(prefix),
-      R.head,
-      R.split("."),
-      R.prop("anchor")
-    )
+    R.compose(R.startsWith(prefix), R.head, R.split("."), R.prop("anchor"))
   )(objects);
 };
 

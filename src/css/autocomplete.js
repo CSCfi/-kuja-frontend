@@ -1,7 +1,7 @@
 export const heights = {
-    LONG: 'long',
-    SHORT: 'short'
-}
+  LONG: "long",
+  SHORT: "short"
+};
 export const autocompleteShortStyles = {
   dropdownIndicator: base => ({
     ...base,
@@ -12,18 +12,18 @@ export const autocompleteShortStyles = {
     padding: 4
   }),
   valueContainer: base => ({
-    ...base,
+    ...base
   }),
   input: base => ({
     ...base,
     margin: 0,
-    padding: 0,
+    padding: 0
   }),
-  control: (styles) => {
+  control: styles => {
     return {
       ...styles,
       backgroundColor: "white",
-      minHeight: 'fit-content'
-    }
-  },
-}
+      minHeight: "fit-content"
+    };
+  }
+};
