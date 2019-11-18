@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -10,6 +10,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import { withStyles, IconButton } from "@material-ui/core";
 import Tooltip from "../Tooltip";
 import { downloadFileFn } from "../../../utils/common";
+import _ from "lodash";
 
 const alter = R.curry((id, value, path, items) =>
   R.map(R.when(R.propEq("id", id), R.assocPath(path, value)), items)
@@ -42,28 +43,6 @@ const FileUpload = ({
   payload,
   uploadedFiles = []
 }) => {
-  const [acceptedFilesCount, setAcceptedFilesCount] = useState([]);
-  const [readFiles, setReadFiles] = useState([]);
-
-  function readFile(file) {
-    const reader = new FileReader();
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading has failed");
-    reader.onload = () => {
-      const binaryStr = reader.result;
-      setReadFiles(prevState => {
-        return [
-          ...prevState,
-          {
-            properties: file
-          }
-        ];
-      });
-    };
-    reader.readAsBinaryString(file);
-    return reader;
-  }
-
   const onDrop = useCallback(
     acceptedFiles => {
       if (acceptedFiles.length > 0) {
@@ -75,7 +54,9 @@ const FileUpload = ({
               filename: file.name,
               kieli: "fi", // Hard coded... but why?
               name: file.name,
-              nimi: file.name.toLowerCase(),
+              nimi: R.toLower(
+                R.slice(0, R.lastIndexOf(".", file.name), file.name)
+              ),
               tiedosto: new Blob([file]),
               koko: file.size,
               size: file.size,
@@ -95,10 +76,8 @@ const FileUpload = ({
           files
         });
       }
-      // setAcceptedFilesCount(acceptedFiles.length);
-      // R.forEach(file => readFile(file), acceptedFiles);
     },
-    [uploadedFiles]
+    [onChanges, payload, uploadedFiles]
   );
 
   const {
@@ -113,19 +92,14 @@ const FileUpload = ({
     onDrop
   });
 
-  useEffect(() => {
-    if (readFiles.length === acceptedFilesCount) {
-      onChanges(payload, {
-        files: readFiles
-      });
-    }
-  }, [readFiles]);
-
   function handleFileRename(e, id) {
+    const files = alter(id, e.target.value, ["file", "nimi"], uploadedFiles);
     onChanges(payload, {
-      files: alter(id, e.target.value, ["file", "name"], uploadedFiles)
+      files: alter(id, e.target.value, ["file", "nimi"], uploadedFiles)
     });
   }
+
+  const renamingDelayed = _.debounce(handleFileRename, 300);
 
   function togglePublicity(id, newValue) {
     onChanges(payload, {
@@ -136,11 +110,7 @@ const FileUpload = ({
   function removeFile(id) {
     onChanges(payload, {
       files: R.filter(
-        R.compose(
-          R.not,
-          R.equals(id),
-          R.prop("id")
-        ),
+        R.compose(R.not, R.equals(id), R.prop("id")),
         uploadedFiles
       )
     });
@@ -152,24 +122,6 @@ const FileUpload = ({
       : file;
     downloadFileFn(fileToDownload)();
   }
-
-  //   useEffect(() => {
-  //     if (rejectedFiles.length > 0) {
-  //       let message = "Jokin tai jotkin tiedostoista ovat liian suuria.";
-  //       if (rejectedFiles.length === 1) {
-  //         message = `Tiedoston lisääminen epäonnistui.`;
-  //       }
-  //       toast.error(
-  // `${message} Yksittäisen tiedoston koko saa olla korkeintaan ${(0.0009765625 /
-  //   1000) *
-  //   maxSize} MB.`,
-  //         {
-  //           autoClose: 5000,
-  //           position: toast.POSITION.BOTTOM_CENTER
-  //         }
-  //       );
-  //     }
-  //   }, [rejectedFiles]);
 
   return (
     <div>
@@ -190,39 +142,44 @@ const FileUpload = ({
         </div>
       </div>
       <ul className="mt-4">
-        {R.addIndex(R.map)(({ file, id }, i) => {
+        {uploadedFiles.length > 0 && (
+          <li className="flex font-bold">
+            <span className="w-5/12 pr-2">
+              Nimi <span className="font-normal">(muokattavissa)</span>
+            </span>
+            <span className="w-2/12">Tyyppi</span>
+            <span className="w-2/12">Koko</span>
+            <span className="w-3/12">Toiminnot</span>
+          </li>
+        )}
+        {R.map(({ file, id }) => {
           return (
-            <li
-              key={`file-${id}`}
-              className={i > 0 ? "border-t border-gray-400" : ""}
-            >
+            <li key={`file-${id}`} className="border-t border-gray-400">
               <span className="flex items-center">
-                <span className="w-5/12 pr-2">
+                <span className={`${file.uuid ? "w-5/12" : "w-6/12"} "pr-2"`}>
                   <ContentEditable
-                    html={file.name} // innerHTML of the editable div
+                    html={file.nimi} // innerHTML of the editable div
                     disabled={false} // use true to disable edition
-                    onChange={e => handleFileRename(e, id)} // handle innerHTML change
+                    onChange={e => renamingDelayed(e, id)} // handle innerHTML change
                     tagName="span"
                   />
                 </span>
                 <span className="w-2/12">{file.type}</span>
                 <span className="w-2/12">{Math.round(file.size) / 100} KB</span>
-                <span className="w-1/12">
-                  {file.uuid && (
+                {file.uuid && (
+                  <span className="w-1/12">
                     <Tooltip
                       placement="left"
-                      tooltip="Tallenna liite koneellesi"
-                    >
+                      tooltip="Tallenna liite koneellesi">
                       <IconButton
                         variant="contained"
                         size="small"
-                        onClick={() => downloadFile(file)}
-                      >
+                        onClick={() => downloadFile(file)}>
                         <FaDownload />
                       </IconButton>
                     </Tooltip>
-                  )}
-                </span>
+                  </span>
+                )}
                 <span className="w-1/12">
                   <Tooltip
                     placement="bottom"
@@ -230,8 +187,7 @@ const FileUpload = ({
                       file.salainen
                         ? intl.formatMessage(common.attachmentSecretUnselect)
                         : intl.formatMessage(common.attachmentSecretSelect)
-                    }
-                  >
+                    }>
                     <StyledToggleButton
                       value="check"
                       selected={file.salainen}
@@ -243,8 +199,7 @@ const FileUpload = ({
                         file.salainen
                           ? intl.formatMessage(common.attachmentSecretUnselect)
                           : intl.formatMessage(common.attachmentSecretSelect)
-                      }
-                    >
+                      }>
                       {!file.salainen ? <FaUnlock /> : <FaLock />}
                     </StyledToggleButton>
                   </Tooltip>
@@ -252,13 +207,11 @@ const FileUpload = ({
                 <span className="w-1/12">
                   <Tooltip
                     placement="right"
-                    tooltip="Poista liite hakemukselta"
-                  >
+                    tooltip="Poista liite hakemukselta">
                     <IconButton
                       variant="contained"
                       size="small"
-                      onClick={() => removeFile(id)}
-                    >
+                      onClick={() => removeFile(id)}>
                       <FaTimes />
                     </IconButton>
                   </Tooltip>
