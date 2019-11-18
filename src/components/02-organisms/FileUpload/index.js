@@ -28,8 +28,17 @@ const StyledToggleButton = withStyles({
   }
 })(ToggleButton);
 
+// 'mimeTypes' => array('image/jpeg', 'image/png','image/jpg','application/vnd.ms-excel',
+// 'application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/docx',
+// 'application/pdf','text/plain','application/msword',
+// 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 const defaultProps = {
-  acceptedTypes: ["image/*", "application/pdf"],
+  acceptedTypes: [
+    "image/*",
+    "application/pdf",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  ],
   isReadOnly: false,
   minSize: 0,
   maxSize: 26214400 // 1MB = 1048576
@@ -62,7 +71,11 @@ const FileUpload = ({
               tiedosto: new Blob([file]),
               koko: file.size,
               size: file.size,
-              tyyppi: R.last(R.split("/", file.type)),
+              tyyppi: R.slice(
+                R.lastIndexOf(".", file.name) + 1,
+                Infinity,
+                file.name
+              ),
               type: file.type,
               removed: false,
               salainen: false,
@@ -195,7 +208,7 @@ const FileUpload = ({
                     />
                   )}
                 </span>
-                <span className="w-2/12">{file.type}</span>
+                <span className="w-2/12 break-words">{file.tyyppi}</span>
                 <span className="w-2/12">{Math.round(file.size) / 100} KB</span>
                 {file.uuid && (
                   <span className="w-1/12 text-center">
