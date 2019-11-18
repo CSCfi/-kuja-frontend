@@ -54,21 +54,23 @@ const Jarjestaja = ({
   }, [jarjestaja]);
 
   const fetchSetup = useMemo(() => {
-    return jarjestaja && jarjestaja.oid
-      ? [
-          {
-            key: "lupahistoria",
-            dispatchFn: dispatch,
-            urlEnding: jarjestaja.oid
-          },
-          {
-            key: "muutospyynnot",
-            dispatchFn: dispatch,
-            urlEnding: jarjestaja.ytunnus
-          }
-        ]
-      : [];
-  }, [dispatch, jarjestaja]);
+    const fetchItems = [];
+    if (R.prop("oid", jarjestaja)) {
+      fetchItems.push({
+        key: "lupahistoria",
+        dispatchFn: dispatch,
+        urlEnding: jarjestaja.oid
+      });
+    }
+    if (R.prop("ytunnus", jarjestaja) && user) {
+      fetchItems.push({
+        key: "muutospyynnot",
+        dispatchFn: dispatch,
+        urlEnding: jarjestaja.ytunnus
+      });
+    }
+    return fetchItems;
+  }, [dispatch, jarjestaja, user]);
 
   const tabNavRoutes = useMemo(() => {
     // Basic routes (no authentication needed)
@@ -192,7 +194,7 @@ const Jarjestaja = ({
                 <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
                   <Route
                     path={`${match.url}/jarjestamislupa`}
-                    render={() => <Jarjestamislupa />}
+                    render={() => <Jarjestamislupa lupa={lupa} lupaKohteet={lupaKohteet}/>}
                   />
                   <Route
                     path={`${match.url}`}

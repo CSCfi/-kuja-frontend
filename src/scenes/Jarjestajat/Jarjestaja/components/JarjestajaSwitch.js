@@ -18,18 +18,24 @@ const JarjestajaSwitch = ({ history, intl, match, organisaatio, user }) => {
   }, [match]);
 
   const fetchSetup = useMemo(() => {
-    return ytunnus
-      ? [
-          {
-            key: "lupa",
-            subKey: ytunnus,
-            dispatchFn: dispatch,
-            urlEnding: `${ytunnus}?with=all`
-          },
-          { key: "muutospyynnot", dispatchFn: dispatch, urlEnding: ytunnus }
-        ]
-      : [];
-  }, [dispatch, ytunnus]);
+    const fetchItems = [];
+    if (ytunnus) {
+      fetchItems.push({
+        key: "lupa",
+        subKey: ytunnus,
+        dispatchFn: dispatch,
+        urlEnding: `${ytunnus}?with=all`
+      });
+    }
+    if (user && ytunnus) {
+      fetchItems.push({
+          key: "muutospyynnot",
+          dispatchFn: dispatch,
+          urlEnding: ytunnus
+        });
+    }
+    return fetchItems;
+  }, [dispatch, ytunnus, user]);
 
   const lupa = useMemo(() => {
     return fromBackend.lupa && isReady(fromBackend.lupa[ytunnus])
