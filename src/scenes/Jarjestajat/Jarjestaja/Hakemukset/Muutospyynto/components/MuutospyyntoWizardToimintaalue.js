@@ -139,6 +139,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     );
   }, [props.changeObjects, props.lupakohde.valtakunnallinen]);
 
+  /**
+   * Changes are handled here. Changes objects will be formed and callback
+   * function will be called with them.
+   */
   const handleChanges = useCallback(
     changesByAnchor => {
       const updatedChanges = R.map(changeObj => {
@@ -301,7 +305,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         anchor: "lupaan-lisattavat-maakunnat",
         isVisible:
           !isValtakunnallinenChecked &&
-          (!!lisattavatMaakunnat && lisattavatMaakunnat.length > 0),
+          !!lisattavatMaakunnat &&
+          lisattavatMaakunnat.length > 0,
         layout: {
           indentation: "large",
           components: {
@@ -385,7 +390,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         anchor: "lupaan-lisattavat-kunnat",
         isVisible:
           !isValtakunnallinenChecked &&
-          (!!lisattavatKunnat && lisattavatKunnat.length > 0),
+          !!lisattavatKunnat &&
+          lisattavatKunnat.length > 0,
         layout: {
           indentation: "large",
           components: {

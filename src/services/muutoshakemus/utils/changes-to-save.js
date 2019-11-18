@@ -1,5 +1,5 @@
 import { getMetadata } from "./tutkinnotUtils";
-import { getAnchorPart } from "../../../utils/common";
+import { getAnchorPart, findAnchoredElement } from "../../../utils/common";
 import * as R from "ramda";
 
 const getMuutos = (stateItem, changeObj, perustelut) => {
@@ -52,10 +52,7 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
     // in case parent maarays exists
     muutos["maaraysUuid"] = maaraysUuid;
   } else if (subcode) {
-    muutos["parent"] = R.compose(
-      R.join("."),
-      R.dropLast(2)
-    )(anchorParts);
+    muutos["parent"] = R.compose(R.join("."), R.dropLast(2))(anchorParts);
   }
 
   return muutos;
@@ -87,12 +84,7 @@ export const getChangesToSave = (
       return !!R.find(
         R.startsWith(anchorInit),
         R.map(
-          R.compose(
-            R.join("."),
-            R.init,
-            R.split("."),
-            R.prop("anchor")
-          ),
+          R.compose(R.join("."), R.init, R.split("."), R.prop("anchor")),
           R.path(["meta", "changeObjects"], muutos)
         )
       );
@@ -100,10 +92,7 @@ export const getChangesToSave = (
     if (backendMuutos) {
       const perustelutAnchorInitial = `perustelut_${anchorBase}`;
       const perustelut = R.filter(
-        R.compose(
-          R.contains(perustelutAnchorInitial),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(perustelutAnchorInitial), R.prop("anchor")),
         changeObjects.perustelut
       );
       return R.assocPath(
@@ -142,10 +131,7 @@ export const getChangesToSave = (
             R.split(".")
           )(changeObj.anchor);
           const perustelut = R.filter(
-            R.compose(
-              R.contains(anchorInit),
-              R.prop("anchor")
-            ),
+            R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
           return getMuutos(stateItem, changeObj, perustelut);
@@ -155,10 +141,7 @@ export const getChangesToSave = (
     uudetMuutokset = R.map(changeObj => {
       const stateData =
         stateObject[
-          R.compose(
-            R.last,
-            R.split("_")
-          )(getAnchorPart(changeObj.anchor, 0))
+          R.compose(R.last, R.split("_"))(getAnchorPart(changeObj.anchor, 0))
         ];
       const anchorInit = R.compose(
         R.join("."),
@@ -169,10 +152,7 @@ export const getChangesToSave = (
       const meta = getMetadata([code], stateData.categories);
       const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
       return {
@@ -205,10 +185,7 @@ export const getChangesToSave = (
         R.split(".")
       )(changeObj.anchor);
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
       const code = getAnchorPart(changeObj.anchor, 1);
@@ -270,10 +247,7 @@ export const getChangesToSave = (
       }
 
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
 
@@ -291,10 +265,7 @@ export const getChangesToSave = (
   } else if (key === "toimintaalue") {
     uudetMuutokset = R.map(changeObj => {
       const perustelut = R.filter(
-        R.compose(
-          R.contains(changeObj.anchor),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(changeObj.anchor), R.prop("anchor")),
         changeObjects.perustelut
       );
       if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
@@ -333,10 +304,26 @@ export const getChangesToSave = (
           maaraystyyppi: stateObject.maaraystyyppi
         };
       } else {
-        console.info(changeObj);
+        /**
+         * Meta data have to be found. We'll try
+         * to find it by finding the target category first...
+         */
+        const category = findAnchoredElement(
+          getAnchorPart(changeObj.anchor, 1),
+          R.prop("categories", stateObject)
+        );
+        // ... then the target component that holds the meta data.
+        const component = category
+          ? findAnchoredElement(
+              getAnchorPart(changeObj.anchor, 2),
+              category.components
+            )
+          : null;
+        // We'll get an error if the component equals null. It should
+        // never happen.
         return {
-          koodiarvo: changeObj.properties.meta.koodiarvo,
-          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          koodiarvo: component.properties.meta.koodiarvo,
+          koodisto: component.properties.meta.koodisto.koodistoUri,
           tila: "POISTO",
           type: "removal",
           meta: {
@@ -361,7 +348,6 @@ export const getChangesToSave = (
       const muutCategory = R.find(R.propEq("key", categoryKey))(
         stateObject.muut.muutdata
       );
-      console.info(muutCategory);
       if (muutCategory) {
         const meta = R.find(R.propEq("anchor", koodiarvo))(
           R.flatten(R.map(R.prop("categories"), muutCategory.categories))
@@ -375,10 +361,7 @@ export const getChangesToSave = (
       )(changeObj.anchor);
 
       const perustelut = R.filter(
-        R.compose(
-          R.includes(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.includes(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
 
