@@ -46,6 +46,11 @@ loadProgressBar();
 
 const history = createBrowserHistory();
 
+/**
+ * App component forms the basic structure of the application and its routing.
+ * 
+ * @param {props} - Properties object.
+ */
 const App = ({ intl, user }) => {
   const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
 
@@ -77,12 +82,21 @@ const App = ({ intl, user }) => {
     });
   }
 
+  /**
+   * The fetch the organization we need to know the authenticated user.
+   * If the user hasn't authenticated the setup will be empty and organization
+   * is not fetched.
+   */
   const fetchSetup = useMemo(() => {
     return user && user.oid
       ? [{ key: "organisaatio", dispatchFn: dispatch, urlEnding: user.oid }]
       : [];
   }, [dispatch, user]);
 
+  /**
+   * Here we listen on changes of fromBackend.organisaatio object. If the object
+   * changes the code is run. It's good to note that ytunnus might be undefined.
+   */
   const ytunnus = useMemo(() => {
     return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
   }, [fromBackend.organisaatio]);
@@ -92,7 +106,7 @@ const App = ({ intl, user }) => {
   };
 
   /**
-   * If user has authenticated save some of his/her information into
+   * If user has authenticated save some of his/her information into the
    * session storage.
    */
   useEffect(() => {
@@ -114,6 +128,7 @@ const App = ({ intl, user }) => {
     <React.Fragment>
       <FetchHandler
         fetchSetup={fetchSetup}
+        // The value of ready is rendered when all the backend calls are done successfully.
         ready={
           <Router history={history}>
             <div className="flex flex-col min-h-screen">
