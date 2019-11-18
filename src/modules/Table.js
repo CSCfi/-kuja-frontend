@@ -158,11 +158,6 @@ export const Td2 = styled(Td)`
   flex-grow: 2;
 `;
 
-export const Td0 = styled(Td)`
-  flex-grow: 0.5;
-  min-width: 2em;
-`;
-
 export const ThButton = styled(Thn)`
   padding: 0;
   margin: 0;
