@@ -149,7 +149,7 @@ const FileUpload = ({
             </span>
             <span className="w-2/12">Tyyppi</span>
             <span className="w-2/12">Koko</span>
-            <span className="w-3/12">Toiminnot</span>
+            <span className="w-3/12 text-center">Toiminnot</span>
           </li>
         )}
         {R.map(({ file, id }) => {
@@ -167,7 +167,7 @@ const FileUpload = ({
                 <span className="w-2/12">{file.type}</span>
                 <span className="w-2/12">{Math.round(file.size) / 100} KB</span>
                 {file.uuid && (
-                  <span className="w-1/12">
+                  <span className="w-1/12 text-center">
                     <Tooltip
                       placement="left"
                       tooltip="Tallenna liite koneellesi">
@@ -180,7 +180,7 @@ const FileUpload = ({
                     </Tooltip>
                   </span>
                 )}
-                <span className="w-1/12">
+                <span className="w-1/12 text-center">
                   <Tooltip
                     placement="bottom"
                     tooltip={
@@ -204,7 +204,7 @@ const FileUpload = ({
                     </StyledToggleButton>
                   </Tooltip>
                 </span>
-                <span className="w-1/12">
+                <span className="w-1/12 text-center">
                   <Tooltip
                     placement="right"
                     tooltip="Poista liite hakemukselta">
