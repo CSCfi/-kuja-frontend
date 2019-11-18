@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -125,6 +125,14 @@ const FileUpload = ({
     downloadFileFn(fileToDownload)();
   }
 
+  const hasFilesWithUUID = useMemo(() => {
+    return (
+      R.filter(({ file }) => {
+        return file.uuid || false;
+      }, uploadedFiles).length > 0
+    );
+  }, [uploadedFiles]);
+
   return (
     <div>
       {!isReadOnly && (
@@ -148,7 +156,8 @@ const FileUpload = ({
       <ul className="mt-4">
         {uploadedFiles.length > 0 && (
           <li className="flex font-bold">
-            <span className="w-5/12 pr-2">
+            <span
+              className={`${hasFilesWithUUID ? "w-5/12" : "w-6/12"} "pr-2"`}>
               Nimi{" "}
               {!isReadOnly && (
                 <span className="font-normal">(muokattavissa)</span>
@@ -157,7 +166,12 @@ const FileUpload = ({
             <span className="w-2/12">Tyyppi</span>
             <span className="w-2/12">Koko</span>
             {!isReadOnly && (
-              <span className="w-3/12 text-center">Toiminnot</span>
+              <span
+                className={`${
+                  hasFilesWithUUID ? "w-3/12" : "w-2/12"
+                } text-center`}>
+                Toiminnot
+              </span>
             )}
           </li>
         )}

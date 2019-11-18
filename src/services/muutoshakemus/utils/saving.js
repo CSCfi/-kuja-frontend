@@ -12,8 +12,6 @@ export function createObjectToSave(
   muutoshakemus,
   uuid
 ) {
-  const files = []; // findObjectWithKey(changeObjects, "file");
-
   // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
@@ -28,10 +26,6 @@ export function createObjectToSave(
     changeObjects
   );
   const perustelutLiitteet = R.path(["perustelut", "liitteet"], changeObjects);
-  const perustelutKuljettajankoulutuksetLiitteet = R.path(
-    ["perustelut", "koulutukset", "kuljettajakoulutukset"],
-    changeObjects
-  );
 
   //get actual attachment props
 
@@ -39,14 +33,6 @@ export function createObjectToSave(
     perustelutLiitteet && perustelutLiitteet[0].properties
       ? perustelutLiitteet[0].properties.attachments
       : [];
-  //get attachments from Perustelut/muutokset forms
-  const perustelutKuljettajankoulutuksetLiitteettList =
-    perustelutKuljettajankoulutuksetLiitteet &&
-    R.flatten(
-      R.map(subarray => {
-        return subarray.properties ? subarray.properties.attachments : [];
-      }, perustelutKuljettajankoulutuksetLiitteet)
-    );
 
   const taloudellisetLiitteetList =
     taloudellisetLiitteet && taloudellisetLiitteet[0].properties
@@ -67,7 +53,6 @@ export function createObjectToSave(
 
   const allAttachmentsRaw = combineArrays([
     perustelutLiitteetList,
-    perustelutKuljettajankoulutuksetLiitteettList,
     taloudellisetLiitteetList,
     yhteenvetoYleisetLiitteetList,
     yhteenvetoLiitteetList
@@ -76,7 +61,7 @@ export function createObjectToSave(
   // ... without tiedosto-property
   const allAttachments = R.map(attachment => {
     return R.dissoc("tiedosto", attachment);
-  }, R.concat(files, allAttachmentsRaw));
+  }, allAttachmentsRaw);
 
   return {
     diaarinumero: lupa.diaarinumero,
