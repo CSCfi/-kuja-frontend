@@ -336,6 +336,7 @@ const MuutospyyntoWizardPerustelut = ({
                       )
                     }}
                     stateObjects={{
+                      toimintaalue: muutoshakemus.toimintaalue,
                       perustelut: R.path(["perustelut", "toimintaalue"])(
                         muutoshakemus
                       )

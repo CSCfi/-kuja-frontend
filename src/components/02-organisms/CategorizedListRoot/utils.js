@@ -1,14 +1,14 @@
 import * as R from "ramda";
 
 /**
- * @module CategorizedListRoot/utils 
+ * @module CategorizedListRoot/utils
  **/
 
 /**
  * Returns changes by level.
- * 
- * @param {number} level 
- * @param {array} changes 
+ *
+ * @param {number} level
+ * @param {array} changes
  */
 export const getChangesByLevel = (level, changes) => {
   return changes.filter(change => {
@@ -137,12 +137,9 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
   const changeObj = getChangeObjByAnchor(node.fullAnchor, changes);
   if (changeObj) {
     if (changeObj.properties.isChecked) {
-      changes = R.filter(
-        R.compose(
-          R.not,
-          R.propEq("anchor")(node.fullAnchor)
-        )
-      )(changes);
+      changes = R.filter(R.compose(R.not, R.propEq("anchor")(node.fullAnchor)))(
+        changes
+      );
     }
   } else if (node.properties.isChecked) {
     changes = R.insert(
@@ -150,6 +147,7 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
       {
         anchor: node.fullAnchor,
         properties: {
+          metadata: node.properties.forChangeObject,
           isChecked: false
         }
       },
@@ -170,18 +168,16 @@ const disableNodes = (nodes, reducedStructure, changes, index = 0) => {
 export const checkLeafNode = (node, changes) => {
   const changeObj = getChangeObjByAnchor(node.fullAnchor, changes);
   if (changeObj && !changeObj.properties.isChecked) {
-    changes = R.filter(
-      R.compose(
-        R.not,
-        R.propEq("anchor")(node.fullAnchor)
-      )
-    )(changes);
+    changes = R.filter(R.compose(R.not, R.propEq("anchor")(node.fullAnchor)))(
+      changes
+    );
   } else if (!changeObj && !node.properties.isChecked) {
     changes = R.insert(
       -1,
       {
         anchor: node.fullAnchor,
         properties: {
+          metadata: node.properties.forChangeObject,
           isChecked: true
         }
       },
@@ -230,10 +226,7 @@ const runActivationProcedure = (
   );
   if (changeObj && !changeObj.properties.isChecked) {
     changesWithoutRootAnchor = R.filter(
-      R.compose(
-        R.not,
-        R.propEq("anchor")(node.fullAnchor)
-      )
+      R.compose(R.not, R.propEq("anchor")(node.fullAnchor))
     )(changesWithoutRootAnchor);
   } else if (!changeObj && !node.properties.isChecked) {
     changesWithoutRootAnchor = R.insert(
@@ -241,6 +234,7 @@ const runActivationProcedure = (
       {
         anchor: node.fullAnchor,
         properties: {
+          metadata: node.properties.forChangeObject,
           isChecked: true
         }
       },
@@ -283,10 +277,7 @@ const runDeactivationProcedure = (
   );
   if (changeObj && changeObj.properties.isChecked === true) {
     changesWithoutRootAnchor = R.filter(
-      R.compose(
-        R.not,
-        R.propEq("anchor")(node.fullAnchor)
-      )
+      R.compose(R.not, R.propEq("anchor")(node.fullAnchor))
     )(changesWithoutRootAnchor);
   } else if (!changeObj && node.properties.isChecked === true) {
     changesWithoutRootAnchor = R.insert(
@@ -294,6 +285,7 @@ const runDeactivationProcedure = (
       {
         anchor: node.fullAnchor,
         properties: {
+          metadata: node.properties.forChangeObject,
           isChecked: false
         }
       },
@@ -327,6 +319,7 @@ export const handleNodeMain = (
   reducedStructure,
   changes = []
 ) => {
+  // console.info(nodeWithRequestedChanges, rootAnchor, reducedStructure, changes);
   const node = R.prop("original", nodeWithRequestedChanges);
   const requestedChanges = R.prop("requestedChanges", nodeWithRequestedChanges);
   let changesWithoutRootAnchor = rootAnchor
@@ -388,7 +381,7 @@ export const handleNodeMain = (
         );
       }, changesWithoutRootAnchor)
     : changesWithoutRootAnchor;
-
+  console.info(updatedChangesArr);
   return updatedChangesArr;
 };
 

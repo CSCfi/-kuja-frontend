@@ -291,8 +291,8 @@ export const getChangesToSave = (
         R.includes("lupaan-lisattavat", getAnchorPart(changeObj.anchor, 1))
       ) {
         return {
-          koodiarvo: changeObj.properties.meta.koodiarvo,
-          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          koodiarvo: changeObj.properties.metadata.koodiarvo,
+          koodisto: changeObj.properties.metadata.koodisto.koodistoUri,
           tila: "LISAYS",
           type: "addition",
           meta: {
@@ -304,26 +304,9 @@ export const getChangesToSave = (
           maaraystyyppi: stateObject.maaraystyyppi
         };
       } else {
-        /**
-         * Meta data have to be found. We'll try
-         * to find it by finding the target category first...
-         */
-        const category = findAnchoredElement(
-          getAnchorPart(changeObj.anchor, 1),
-          R.prop("categories", stateObject)
-        );
-        // ... then the target component that holds the meta data.
-        const component = category
-          ? findAnchoredElement(
-              getAnchorPart(changeObj.anchor, 2),
-              category.components
-            )
-          : null;
-        // We'll get an error if the component equals null. It should
-        // never happen.
         return {
-          koodiarvo: component.properties.meta.koodiarvo,
-          koodisto: component.properties.meta.koodisto.koodistoUri,
+          koodiarvo: changeObj.properties.metadata.koodiarvo,
+          koodisto: changeObj.properties.metadata.koodisto.koodistoUri,
           tila: "POISTO",
           type: "removal",
           meta: {
