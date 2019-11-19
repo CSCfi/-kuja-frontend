@@ -9,9 +9,7 @@ import {
   SET_SECTION_DATA,
   DOWNLOAD_ATTACHMENT_START,
   DOWNLOAD_ATTACHMENT_SUCCESS,
-  DOWNLOAD_ATTACHMENT_FAILURE,
-  SEND_MUUTOSPYYNTO_SUCCESS,
-  SEND_MUUTOSPYYNTO_FAILURE
+  DOWNLOAD_ATTACHMENT_FAILURE
 } from "./actionTypes";
 
 export const setBackendChanges = changes => {
@@ -57,7 +55,7 @@ const save = (data) => {
   });
 }
 
-const send = (uuid) => {
+const submitMuutospyynto = (uuid) => {
   return axios
     .post(`${API_BASE_URL}/muutospyynnot/tila/avoin/${uuid}`,{}, {
       withCredentials: true
@@ -77,17 +75,16 @@ export const saveMuutospyynto = (muutospyynto, attachments, triggerPreview = fal
   }
 }
 
-export const saveAndSendMuutospyynto = (muutospyynto, attachments) => async (dispatch) => {
+export const saveAndSubmitMuutospyynto = (muutospyynto, attachments) => async (dispatch) => {
   const data = createMuutospyyntoOutput(muutospyynto, attachments);
 
   try {
     const intermediateResponse = await save(data);
+    await submitMuutospyynto(intermediateResponse.data.uuid);
     dispatch({type: SAVE_MUUTOSPYYNTO_SUCCESS, payload: { response: intermediateResponse, triggerPreview: false }});
-    await send(intermediateResponse.data.uuid);
-    dispatch({type: SEND_MUUTOSPYYNTO_SUCCESS})
   }
   catch(err) {
-    dispatch({type: SEND_MUUTOSPYYNTO_FAILURE})
+    dispatch({type: SAVE_MUUTOSPYYNTO_FAILURE, payload: err})
   }
 }
 
