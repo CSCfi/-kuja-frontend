@@ -323,6 +323,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             properties: {
               isChecked: true,
               labelStyles: {
+                addition: isAdded,
                 removal: isRemoved
               },
               title: maakunta.title
@@ -409,6 +410,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             properties: {
               isChecked: true,
               labelStyles: {
+                addition: isAdded,
                 removal: isRemoved
               },
               title: kunta.title
