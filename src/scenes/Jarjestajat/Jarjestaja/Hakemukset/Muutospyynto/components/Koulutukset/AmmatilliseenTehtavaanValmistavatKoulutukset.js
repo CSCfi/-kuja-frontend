@@ -22,7 +22,6 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
               name: "CheckboxWithLabel",
               properties: {
                 name: "CheckboxWithLabel",
-                code: item.code,
                 title: item.title,
                 isChecked: item.shouldBeChecked,
                 labelStyles: {

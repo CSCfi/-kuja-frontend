@@ -23,7 +23,6 @@ const Kuljettajakoulutukset = React.memo(props => {
               name: "RadioButtonWithLabel",
               properties: {
                 name: "RadioButtonWithLabel",
-                code: item.code,
                 title: item.title,
                 isChecked: item.shouldBeChecked,
                 labelStyles: {
