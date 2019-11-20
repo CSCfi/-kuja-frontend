@@ -437,6 +437,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
                 removal: isRemoved
               },
+              forChangeObject: {
+                title: props.intl.formatMessage(wizardMessages.responsibilities)
+              },
               title: props.intl.formatMessage(wizardMessages.responsibilities)
             }
           }
