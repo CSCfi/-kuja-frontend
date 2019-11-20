@@ -16,7 +16,7 @@ import { MessageWrapper } from "modules/elements";
 import { ROLE_KAYTTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
-import {saveAndSendMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
+import {saveAndSubmitMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
@@ -341,7 +341,7 @@ const MuutospyyntoWizard = ({
   const save = useCallback((options) => {
     let saveFunction = saveMuutospyynto;
     if(options.setAsSent === true) {
-      saveFunction = saveAndSendMuutospyynto;
+      saveFunction = saveAndSubmitMuutospyynto;
     }
     const attachments = getFiles();
       saveFunction(
