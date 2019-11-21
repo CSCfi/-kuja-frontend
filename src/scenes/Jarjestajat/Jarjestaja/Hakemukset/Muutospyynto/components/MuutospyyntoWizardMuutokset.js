@@ -122,11 +122,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   id="toimintaalue"
                   render={_props => (
                     <MuutospyyntoWizardToimintaalue
-                      changeObjects={R.prop(
-                        "toimintaalue",
-                        props.changeObjects
-                      )}
-                      muutokset={props.toimintaalueMuutokset}
+                      changeObjects={{
+                        muutokset: props.changeObjects.toimintaalue
+                      }}
                       lupakohde={props.lupaKohteet[3]}
                       kohde={kohteet.toimintaalue}
                       kunnat={props.kunnat}
@@ -230,6 +228,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardMuutokset.defaultProps = {
+  changeObjects: {}
+};
+
 MuutospyyntoWizardMuutokset.propTypes = {
   changeObjects: PropTypes.object,
   kielet: PropTypes.object,
@@ -245,7 +247,6 @@ MuutospyyntoWizardMuutokset.propTypes = {
   muutoshakemus: PropTypes.object,
   onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  toimintaalueMuutokset: PropTypes.array,
   tutkinnot: PropTypes.object
 };
 
