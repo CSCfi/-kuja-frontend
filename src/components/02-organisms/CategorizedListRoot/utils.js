@@ -381,7 +381,6 @@ export const handleNodeMain = (
         );
       }, changesWithoutRootAnchor)
     : changesWithoutRootAnchor;
-  console.info(updatedChangesArr);
   return updatedChangesArr;
 };
 
