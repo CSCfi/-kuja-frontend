@@ -154,7 +154,6 @@ const MuutospyyntoWizard = ({
     }
   });
 
-  const [toimintaalueMuutokset, setToimintaalueMuutokset] = useState([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -601,7 +600,6 @@ const MuutospyyntoWizard = ({
     setChangesBySection,
     state.isHelpVisible,
     steps,
-    toimintaalueMuutokset,
     tutkinnot,
     vankilat
   ]);

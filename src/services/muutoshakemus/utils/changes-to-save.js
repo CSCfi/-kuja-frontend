@@ -58,14 +58,6 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   return muutos;
 };
 
-const getAnchorBase = (key, anchorInit) => {
-  let anchorBase = anchorInit;
-  if (key === "opiskelijavuodet") {
-    anchorBase = R.replace(".", "_", anchorInit);
-  }
-  return anchorBase;
-};
-
 function findBackendMuutos(anchor, backendMuutokset) {
   const backendMuutos = R.find(muutos => {
     return !!R.find(R.propEq("anchor", anchor), muutos.meta.changeObjects);

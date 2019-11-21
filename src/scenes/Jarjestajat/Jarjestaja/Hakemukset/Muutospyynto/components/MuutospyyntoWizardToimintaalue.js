@@ -26,7 +26,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     return ref.current;
   }
 
-  const prevChangeObjects = usePrevious(props.changeObjects);
+  const prevChangeObjects = usePrevious(props.changeObjects.muutokset);
 
   const lisattavatKunnat = useMemo(() => {
     return R.sortBy(
@@ -204,7 +204,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       }, props.changeObjects.muutokset || []);
       const valtakunnallinenChangeObjectBefore = R.find(changeObj => {
         return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, prevChangeObjects.muutokset || []);
+      }, prevChangeObjects || []);
 
       const isUncheckingTheMostRecentChange =
         // The case when Koko Suomi... is selected by default
@@ -230,7 +230,13 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         });
       }
     }
-  }, [props.changeObjects, isValtakunnallinenChecked, onChangesUpdate]);
+  }, [
+    isValtakunnallinenChecked,
+    onChangesUpdate,
+    prevChangeObjects,
+    props.changeObjects,
+    props.sectionId
+  ]);
 
   /**
    * Changes are handled here. Changes objects will be formed and callback

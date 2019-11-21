@@ -62,7 +62,7 @@ const PerustelutToimintaalue = React.memo(
           }, poistot)
         };
       };
-    }, [changeObjects.toimintaalue, getLomake, stateObjects.toimintaalue]);
+    }, [changeObjects.toimintaalue, getLomake]);
 
     useEffect(() => {
       const categories = getCategories();
