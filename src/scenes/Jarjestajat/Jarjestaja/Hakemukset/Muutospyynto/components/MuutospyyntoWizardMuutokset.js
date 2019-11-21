@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
+import MuutospyyntoWizardToimintaalue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -121,7 +121,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   code={3}
                   id="toimintaalue"
                   render={_props => (
-                    <MuutospyyntoWizardToimialue
+                    <MuutospyyntoWizardToimintaalue
                       changeObjects={R.prop(
                         "toimintaalue",
                         props.changeObjects

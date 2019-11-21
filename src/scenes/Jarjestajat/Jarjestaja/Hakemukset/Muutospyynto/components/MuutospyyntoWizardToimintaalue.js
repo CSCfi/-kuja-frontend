@@ -84,14 +84,14 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         return isKuntaInLupa || isKuntaInLisattavat
           ? null
           : {
-              label: labelObject.nimi,
-              value: kunta.koodiArvo,
-              metadata: {
-                koodiarvo: kunta.koodiArvo,
-                koodisto: kunta.koodisto,
-                label: labelObject.nimi
-              }
-            };
+            label: labelObject.nimi,
+            value: kunta.koodiArvo,
+            metadata: {
+              koodiarvo: kunta.koodiArvo,
+              koodisto: kunta.koodisto,
+              label: labelObject.nimi
+            }
+          };
       }, props.kunnat).filter(Boolean)
     );
   }, [kunnatInLupa, lisattavatKunnat, props.intl.locale, props.kunnat]);
@@ -114,32 +114,45 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         return isMaakuntaInLupa || isMaakuntaInLisattavat
           ? null
           : {
-              label: labelObject.nimi,
-              value: maakunta.koodiArvo,
-              metadata: {
-                koodiarvo: maakunta.koodiArvo,
-                koodisto: maakunta.koodisto,
-                label: labelObject.nimi
-              }
-            };
+            label: labelObject.nimi,
+            value: maakunta.koodiArvo,
+            metadata: {
+              koodiarvo: maakunta.koodiArvo,
+              koodisto: maakunta.koodisto,
+              label: labelObject.nimi
+            }
+          };
       }, props.maakunnat).filter(Boolean)
     );
   }, [
-    lisattavatMaakunnat,
-    maakunnatInLupa,
-    props.intl.locale,
-    props.maakunnat
-  ]);
+      lisattavatMaakunnat,
+      maakunnatInLupa,
+      props.intl.locale,
+      props.maakunnat
+    ]);
 
   const isValtakunnallinenChecked = useMemo(() => {
-    const c = R.find(changeObj => {
+    const valtakunnallinenChangeObject = R.find(changeObj => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
     }, props.changeObjects);
     return (
-      (!!props.lupakohde.valtakunnallinen && !c) ||
-      !!(c && c.properties.isChecked)
+      (!!props.lupakohde.valtakunnallinen && !valtakunnallinenChangeObject) ||
+      !!(valtakunnallinenChangeObject && valtakunnallinenChangeObject.properties.isChecked)
     );
   }, [props.changeObjects, props.lupakohde.valtakunnallinen]);
+
+  useEffect(() => {
+    if (isValtakunnallinenChecked) {
+      const valtakunnallinenChangeObject = R.filter(changeObj => {
+        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
+      }, props.changeObjects);
+      if (!R.equals(valtakunnallinenChangeObject, props.changeObjects)) {
+        onChangesUpdate({ anchor: props.sectionId, changes: valtakunnallinenChangeObject })
+        onChangesUpdate({ anchor: `perustelut_${props.sectionId}_additions`, changes: [] })
+        onChangesUpdate({ anchor: `perustelut_${props.sectionId}_removals`, changes: [] })
+      }
+    }
+  }, [props.changeObjects, isValtakunnallinenChecked, onChangesUpdate])
 
   /**
    * Changes are handled here. Changes objects will be formed and callback
@@ -179,17 +192,17 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
             return !!kuntaInLupa && !isKuntaAlreadyUnchecked
               ? {
-                  anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
-                  properties: {
-                    ...kuntaInLupa.properties,
-                    isChecked: false,
-                    metadata: {
-                      title: kuntaInLupa.title,
-                      koodiarvo: kunta.koodiArvo,
-                      koodisto: { koodistoUri: kunta.koodisto }
-                    }
+                anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
+                properties: {
+                  ...kuntaInLupa.properties,
+                  isChecked: false,
+                  metadata: {
+                    title: kuntaInLupa.title,
+                    koodiarvo: kunta.koodiArvo,
+                    koodisto: { koodistoUri: kunta.koodisto }
                   }
                 }
+              }
               : null;
           }, kunnat).filter(Boolean);
         }
@@ -447,16 +460,16 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       }
     ];
   }, [
-    isValtakunnallinenChecked,
-    kunnatInLupa,
-    maakunnatInLupa,
-    lisattavatKunnat,
-    lisattavatMaakunnat,
-    props.intl,
-    props.lupakohde.valtakunnallinen,
-    valittavissaOlevatKunnat,
-    valittavissaOlevatMaakunnat
-  ]);
+      isValtakunnallinenChecked,
+      kunnatInLupa,
+      maakunnatInLupa,
+      lisattavatKunnat,
+      lisattavatMaakunnat,
+      props.intl,
+      props.lupakohde.valtakunnallinen,
+      valittavissaOlevatKunnat,
+      valittavissaOlevatMaakunnat
+    ]);
 
   useEffect(() => {
     onStateUpdate({
