@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
-import MuutospyyntoWizardToimialue from "./MuutospyyntoWizardToimintaalue";
+import MuutospyyntoWizardToimintaalue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -121,12 +121,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   code={3}
                   id="toimintaalue"
                   render={_props => (
-                    <MuutospyyntoWizardToimialue
-                      changeObjects={R.prop(
-                        "toimintaalue",
-                        props.changeObjects
-                      )}
-                      muutokset={props.toimintaalueMuutokset}
+                    <MuutospyyntoWizardToimintaalue
+                      changeObjects={{
+                        muutokset: props.changeObjects.toimintaalue
+                      }}
                       lupakohde={props.lupaKohteet[3]}
                       kohde={kohteet.toimintaalue}
                       kunnat={props.kunnat}
@@ -230,6 +228,10 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   );
 });
 
+MuutospyyntoWizardMuutokset.defaultProps = {
+  changeObjects: {}
+};
+
 MuutospyyntoWizardMuutokset.propTypes = {
   changeObjects: PropTypes.object,
   kielet: PropTypes.object,
@@ -245,7 +247,6 @@ MuutospyyntoWizardMuutokset.propTypes = {
   muutoshakemus: PropTypes.object,
   onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  toimintaalueMuutokset: PropTypes.array,
   tutkinnot: PropTypes.object
 };
 
