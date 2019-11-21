@@ -333,7 +333,7 @@ function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
             {
               anchor: "A",
               styleClasses: ["w-full"],
-              name: "FileUpload",
+              name: "Attachments",
               properties: {
                 isReadOnly
               }
@@ -524,7 +524,7 @@ export function johtaja(orderCode, isReadOnly) {
               {
                 anchor: "A",
                 styleClasses: ["w-full"],
-                name: "FileUpload",
+                name: "Attachments",
                 properties: {
                   isReadOnly
                 }
@@ -652,7 +652,7 @@ export function ajoneuvoKanta(orderCode, isReadOnly) {
               {
                 anchor: "A",
                 styleClasses: ["w-full"],
-                name: "FileUpload",
+                name: "Attachments",
                 properties: {
                   isReadOnly
                 }
