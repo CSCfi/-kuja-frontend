@@ -113,7 +113,7 @@ export const getChangesToSave = (
     );
     if (backendMuutos) {
       const perustelut = findPerustelut(anchor, changeObjects.perustelut);
-      return R.assocPath(
+      const backendMuutosWithChangeObjects = R.assocPath(
         ["meta", "changeObjects"],
         R.flatten([[changeObj], perustelut]),
         backendMuutos
