@@ -122,10 +122,7 @@ const MuutospyyntoWizard = ({
   const koulutukset = useMemo(() => {
     return {
       muut: R.map(
-        R.compose(
-          R.sortBy(R.prop("koodiArvo")),
-          R.prop("raw")
-        ),
+        R.compose(R.sortBy(R.prop("koodiArvo")), R.prop("raw")),
         fromBackend.koulutukset.muut
       ),
       poikkeukset: R.map(R.prop("raw"), fromBackend.koulutukset.poikkeukset)
@@ -154,7 +151,6 @@ const MuutospyyntoWizard = ({
     }
   });
 
-  const [toimintaalueMuutokset, setToimintaalueMuutokset] = useState([]);
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -174,8 +170,9 @@ const MuutospyyntoWizard = ({
       valmentavatKoulutukset: []
     },
     perustelut: {
-      tutkinnot: {},
-      liitteet: {}
+      liitteet: {},
+      toimintaalue: {},
+      tutkinnot: {}
     },
     taloudelliset: {
       yleisettiedot: {},
@@ -226,7 +223,7 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
-  const showPreviewFile = (url) => {
+  const showPreviewFile = url => {
     let a = document.createElement("a");
     a.setAttribute("type", "hidden");
     a.href = url;
@@ -236,30 +233,32 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
-    if(R.path(["save","hasErrored"], muutoshakemus) === true) {
+    if (R.path(["save", "hasErrored"], muutoshakemus) === true) {
       toast.error("Virhe muutospyynnön käsittelyssä", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
-    }
-    else if(R.path(["save","saved"],muutoshakemus) === true) {
+    } else if (R.path(["save", "saved"], muutoshakemus) === true) {
       toast.success("Muutospyyntö tallennettu!", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
     }
-  },[muutoshakemus])
+  }, [muutoshakemus]);
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
-      if(muutoshakemus.save.triggerPreview) {
-        showPreviewFile(`/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`);
+      if (muutoshakemus.save.triggerPreview) {
+        showPreviewFile(
+          `/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`
+        );
       }
       if (!match.params.uuid) {
         onNewDocSave(muutoshakemus);
       } else {
-        const setAttachments =
-          R.curry(setAttachmentUuids)(R.path(["save", "data", "data", "liitteet"], muutoshakemus));
+        const setAttachments = R.curry(setAttachmentUuids)(
+          R.path(["save", "data", "data", "liitteet"], muutoshakemus)
+        );
 
         const selectionChanged = (path, key) => {
           const objs = R.path(path, changeObjects);
@@ -269,10 +268,18 @@ const MuutospyyntoWizard = ({
         };
 
         selectionChanged(["perustelut", "liitteet"], "perustelut_liitteet");
-        selectionChanged(["taloudelliset", "liitteet"], "taloudelliset_liitteet");
-        selectionChanged(["yhteenveto", "hakemuksenliitteet"], "yhteenveto_hakemuksenliitteet");
-        selectionChanged(["yhteenveto", "yleisetliitteet"], "yhteenveto_yleisettiedot");
-
+        selectionChanged(
+          ["taloudelliset", "liitteet"],
+          "taloudelliset_liitteet"
+        );
+        selectionChanged(
+          ["yhteenveto", "hakemuksenliitteet"],
+          "yhteenveto_hakemuksenliitteet"
+        );
+        selectionChanged(
+          ["yhteenveto", "yleisetliitteet"],
+          "yhteenveto_yleisettiedot"
+        );
       }
       muutoshakemus.save.saved = false; // TODO: Check if needs other state?
     }
@@ -302,12 +309,6 @@ const MuutospyyntoWizard = ({
   useEffect(() => {
     console.info("Backend changes: ", backendChanges);
     setChangeObjects(backendChanges.changeObjects);
-    setToimintaalueMuutokset(
-      R.filter(
-        R.pathEq(["kohde", "tunniste"], "toimintaalue"),
-        backendChanges.source || []
-      )
-    );
   }, [backendChanges]);
 
   const getFiles = useCallback(() => {
@@ -355,15 +356,17 @@ const MuutospyyntoWizard = ({
         attachments,
         options.triggerPreview
       )(muutoshakemusDispatch);
-  }, [
-    changeObjects,
-    dataBySection,
-    getFiles,
-    muutoshakemusDispatch,
-    backendChanges.source,
-    lupa,
-    match.params.uuid
-  ]);
+    },
+    [
+      changeObjects,
+      dataBySection,
+      getFiles,
+      muutoshakemusDispatch,
+      backendChanges.source,
+      lupa,
+      match.params.uuid
+    ]
+  );
 
   const setChangesBySection = useCallback(
     (sectionId, changes) => {
@@ -394,10 +397,10 @@ const MuutospyyntoWizard = ({
   }, [match.params.page]);
 
   useEffect(() => {
-    if(muutoshakemus.readyToCloseWizard === true) {
-      setTimeout(closeWizard,2000);
+    if (muutoshakemus.readyToCloseWizard === true) {
+      setTimeout(closeWizard, 2000);
     }
-  },[muutoshakemus.readyToCloseWizard, closeWizard])
+  }, [muutoshakemus.readyToCloseWizard, closeWizard]);
 
   /** The function is called by sections with different payloads. */
   const onSectionStateUpdate = useCallback(
@@ -423,8 +426,7 @@ const MuutospyyntoWizard = ({
             onClose={openCancelModal}
             maxWidth={state.isHelpVisible ? "xl" : "lg"}
             fullScreen={true}
-            aria-labelledby="simple-dialog-title"
-          >
+            aria-labelledby="simple-dialog-title">
             <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
               {intl.formatMessage(wizardMessages.formTitle_new)}
             </DialogTitle>
@@ -435,8 +437,7 @@ const MuutospyyntoWizard = ({
                   orientation={
                     window.innerWidth >= 768 ? "horizontal" : "vertical"
                   }
-                  style={{ backgroundColor: "transparent" }}
-                >
+                  style={{ backgroundColor: "transparent" }}>
                   {steps.map(label => {
                     const stepProps = {};
                     const labelProps = {};
@@ -453,8 +454,7 @@ const MuutospyyntoWizard = ({
                     onNext={handleNext}
                     onSave={save}
                     lupa={lupa}
-                    changeObjects={changeObjects}
-                  >
+                    changeObjects={changeObjects}>
                     <MuutospyyntoWizardMuutokset
                       changeObjects={changeObjects}
                       kielet={kielet}
@@ -471,7 +471,6 @@ const MuutospyyntoWizard = ({
                       onChangesUpdate={onSectionChangesUpdate}
                       onStateUpdate={onSectionStateUpdate}
                       setChangesBySection={setChangesBySection}
-                      toimintaalueMuutokset={toimintaalueMuutokset}
                       tutkinnot={tutkinnot}
                     />
                   </WizardPage>
@@ -483,8 +482,7 @@ const MuutospyyntoWizard = ({
                     onNext={handleNext}
                     onSave={save}
                     lupa={lupa}
-                    changeObjects={changeObjects}
-                  >
+                    changeObjects={changeObjects}>
                     <LomakkeetProvider>
                       <MuutospyyntoWizardPerustelut
                         changeObjects={changeObjects}
@@ -514,8 +512,7 @@ const MuutospyyntoWizard = ({
                     onSave={save}
                     lupa={lupa}
                     muutoshakemus={dataBySection}
-                    changeObjects={changeObjects}
-                  >
+                    changeObjects={changeObjects}>
                     <MuutospyyntoWizardTaloudelliset
                       changeObjects={changeObjects}
                       muutoshakemus={dataBySection}
@@ -530,8 +527,7 @@ const MuutospyyntoWizard = ({
                     onPrev={handlePrev}
                     onSave={save}
                     lupa={lupa}
-                    muutoshakemus={dataBySection}
-                  >
+                    muutoshakemus={dataBySection}>
                     <LomakkeetProvider>
                       <MuutospyyntoWizardYhteenveto
                         changeObjects={changeObjects}
@@ -600,7 +596,6 @@ const MuutospyyntoWizard = ({
     setChangesBySection,
     state.isHelpVisible,
     steps,
-    toimintaalueMuutokset,
     tutkinnot,
     vankilat
   ]);

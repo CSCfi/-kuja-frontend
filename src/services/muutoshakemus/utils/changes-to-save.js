@@ -52,22 +52,53 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
     // in case parent maarays exists
     muutos["maaraysUuid"] = maaraysUuid;
   } else if (subcode) {
-    muutos["parent"] = R.compose(
-      R.join("."),
-      R.dropLast(2)
-    )(anchorParts);
+    muutos["parent"] = R.compose(R.join("."), R.dropLast(2))(anchorParts);
   }
 
   return muutos;
 };
 
-const getAnchorBase = (key, anchorInit) => {
-  let anchorBase = anchorInit;
-  if (key === "opiskelijavuodet") {
-    anchorBase = R.replace(".", "_", anchorInit);
+function findBackendMuutos(anchor, backendMuutokset) {
+  const backendMuutos = R.find(muutos => {
+    return !!R.find(R.propEq("anchor", anchor), muutos.meta.changeObjects);
+  }, backendMuutokset);
+  if (!backendMuutos && R.includes(".", anchor)) {
+    return findBackendMuutos(
+      R.compose(R.join("."), R.init, R.split("."), R.always(anchor)),
+      backendMuutokset
+    );
   }
-  return anchorBase;
-};
+  return { anchor, backendMuutos };
+}
+
+/**
+ * Function returns change objects related to reasoning (perustelut)
+ * and to current anchor. There are different methods to find the
+ * correct change objects.
+ * @param {string} anchor - Dot separated string, id of a change object.
+ * @param {array} changeObjects - Array of change objects.
+ */
+function findPerustelut(anchor, changeObjects) {
+  function getPerustelut(anchor, perustelut, method = R.includes) {
+    return R.filter(R.compose(method(anchor), R.prop("anchor")), perustelut);
+  }
+  // Method 1: Add perustelut_ string in front of the anchor.
+  let perustelutAnchor = `perustelut_${anchor}`;
+  let perustelut = getPerustelut(perustelutAnchor, changeObjects);
+  if (R.isEmpty(perustelut)) {
+    // Method 2: Remove the last part of the anchor and try method 1 again.
+    let anchorInit = R.slice(0, R.lastIndexOf(".", anchor), anchor);
+    perustelutAnchor = `perustelut_${anchorInit}`;
+    perustelut = getPerustelut(perustelutAnchor, changeObjects);
+    if (R.isEmpty(perustelut)) {
+      // Method 3: Take the anchor of method to and replace the dots with
+      // underscores.
+      perustelutAnchor = `perustelut_${R.replace(".", "_", anchorInit)}`;
+      perustelut = getPerustelut(perustelutAnchor, changeObjects, R.startsWith);
+    }
+  }
+  return perustelut;
+}
 
 export const getChangesToSave = (
   key,
@@ -76,36 +107,12 @@ export const getChangesToSave = (
   backendMuutokset = []
 ) => {
   const paivitetytBackendMuutokset = R.map(changeObj => {
-    const anchorInit = R.compose(
-      R.join("."),
-      R.init,
-      R.split("."),
-      R.prop("anchor")
-    )(changeObj);
-    const anchorBase = getAnchorBase(key, anchorInit);
-    const backendMuutos = R.find(muutos => {
-      return !!R.find(
-        R.startsWith(anchorInit),
-        R.map(
-          R.compose(
-            R.join("."),
-            R.init,
-            R.split("."),
-            R.prop("anchor")
-          ),
-          R.path(["meta", "changeObjects"], muutos)
-        )
-      );
-    }, backendMuutokset);
+    let { anchor, backendMuutos } = findBackendMuutos(
+      changeObj.anchor,
+      backendMuutokset
+    );
     if (backendMuutos) {
-      const perustelutAnchorInitial = `perustelut_${anchorBase}`;
-      const perustelut = R.filter(
-        R.compose(
-          R.contains(perustelutAnchorInitial),
-          R.prop("anchor")
-        ),
-        changeObjects.perustelut
-      );
+      const perustelut = findPerustelut(anchor, changeObjects.perustelut);
       return R.assocPath(
         ["meta", "changeObjects"],
         R.flatten([[changeObj], perustelut]),
@@ -142,10 +149,7 @@ export const getChangesToSave = (
             R.split(".")
           )(changeObj.anchor);
           const perustelut = R.filter(
-            R.compose(
-              R.contains(anchorInit),
-              R.prop("anchor")
-            ),
+            R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
           return getMuutos(stateItem, changeObj, perustelut);
@@ -155,10 +159,7 @@ export const getChangesToSave = (
     uudetMuutokset = R.map(changeObj => {
       const stateData =
         stateObject[
-          R.compose(
-            R.last,
-            R.split("_")
-          )(getAnchorPart(changeObj.anchor, 0))
+          R.compose(R.last, R.split("_"))(getAnchorPart(changeObj.anchor, 0))
         ];
       const anchorInit = R.compose(
         R.join("."),
@@ -169,10 +170,7 @@ export const getChangesToSave = (
       const meta = getMetadata([code], stateData.categories);
       const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
       return {
@@ -205,10 +203,7 @@ export const getChangesToSave = (
         R.split(".")
       )(changeObj.anchor);
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
       const code = getAnchorPart(changeObj.anchor, 1);
@@ -270,10 +265,7 @@ export const getChangesToSave = (
       }
 
       const perustelut = R.filter(
-        R.compose(
-          R.contains(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
 
@@ -291,10 +283,7 @@ export const getChangesToSave = (
   } else if (key === "toimintaalue") {
     uudetMuutokset = R.map(changeObj => {
       const perustelut = R.filter(
-        R.compose(
-          R.contains(changeObj.anchor),
-          R.prop("anchor")
-        ),
+        R.compose(R.contains(changeObj.anchor), R.prop("anchor")),
         changeObjects.perustelut
       );
       if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
@@ -320,8 +309,8 @@ export const getChangesToSave = (
         R.includes("lupaan-lisattavat", getAnchorPart(changeObj.anchor, 1))
       ) {
         return {
-          koodiarvo: changeObj.properties.meta.koodiarvo,
-          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          koodiarvo: changeObj.properties.metadata.koodiarvo,
+          koodisto: changeObj.properties.metadata.koodisto.koodistoUri,
           tila: "LISAYS",
           type: "addition",
           meta: {
@@ -333,10 +322,9 @@ export const getChangesToSave = (
           maaraystyyppi: stateObject.maaraystyyppi
         };
       } else {
-        console.info(changeObj);
         return {
-          koodiarvo: changeObj.properties.meta.koodiarvo,
-          koodisto: changeObj.properties.meta.koodisto.koodistoUri,
+          koodiarvo: changeObj.properties.metadata.koodiarvo,
+          koodisto: changeObj.properties.metadata.koodisto.koodistoUri,
           tila: "POISTO",
           type: "removal",
           meta: {
@@ -361,7 +349,6 @@ export const getChangesToSave = (
       const muutCategory = R.find(R.propEq("key", categoryKey))(
         stateObject.muut.muutdata
       );
-      console.info(muutCategory);
       if (muutCategory) {
         const meta = R.find(R.propEq("anchor", koodiarvo))(
           R.flatten(R.map(R.prop("categories"), muutCategory.categories))
@@ -375,10 +362,7 @@ export const getChangesToSave = (
       )(changeObj.anchor);
 
       const perustelut = R.filter(
-        R.compose(
-          R.includes(anchorInit),
-          R.prop("anchor")
-        ),
+        R.compose(R.includes(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
 

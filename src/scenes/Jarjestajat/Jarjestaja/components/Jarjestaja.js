@@ -113,7 +113,7 @@ const Jarjestaja = ({
       text: intl.formatMessage(common.newHakemus),
       authenticated: !!user
     };
-  }, [match, user]);
+  }, [intl, match, user]);
 
   const muutospyynnot = R.path(["muutospyynnot", "raw"], fromBackend);
 

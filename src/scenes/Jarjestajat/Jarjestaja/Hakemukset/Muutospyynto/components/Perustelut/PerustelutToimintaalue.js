@@ -30,11 +30,12 @@ const PerustelutToimintaalue = React.memo(
               anchor: "A",
               name: "TextBox",
               properties: {
+                forChangeObject: changeObj.properties.metadata,
                 isReadOnly,
                 placeholder: "Kirjoita perustelut tähän...",
                 title:
                   changeObj.properties.title ||
-                  R.path(["properties", "meta", "title"], changeObj)
+                  R.path(["properties", "metadata", "title"], changeObj)
               }
             }
           ]
@@ -102,7 +103,7 @@ const PerustelutToimintaalue = React.memo(
             )}
             changes={R.path(["perustelut", "removals"], changeObjects)}
             disableReverting={true}
-            hideAmountOfChanges={true}
+            hideAmountOfChanges={false}
             isExpanded={true}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}
@@ -124,7 +125,7 @@ PerustelutToimintaalue.propTypes = {
   lupa: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
-  statetObjects: PropTypes.object
+  stateObjects: PropTypes.object
 };
 
 export default injectIntl(PerustelutToimintaalue);

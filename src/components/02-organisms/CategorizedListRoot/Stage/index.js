@@ -21,8 +21,10 @@ const Stage = props => {
       if (interval) {
         if (props.loopChanges[nodeIndex + 1]) {
           setNodeIndex(nodeIndex + 1);
-        } else {
+        } else if (props.isLoopEnabled) {
           setNodeIndex(0);
+        } else {
+          console.info("Procedure ended.");
         }
       }
     },
@@ -79,8 +81,7 @@ const Stage = props => {
           type="button"
           onClick={() => {
             setInterval(interval > 0 ? 0 : 1000);
-          }}
-        >
+          }}>
           {interval > 0 ? "Stop" : "Play"}
         </button>
         {targetNode && targetNode.original ? (
@@ -100,10 +101,12 @@ const Stage = props => {
 };
 
 Stage.defaultProps = {
+  isLoopEnabled: true,
   loopChanges: []
 };
 
 Stage.propTypes = {
+  isLoopEnabled: PropTypes.bool,
   loopChanges: PropTypes.array
 };
 

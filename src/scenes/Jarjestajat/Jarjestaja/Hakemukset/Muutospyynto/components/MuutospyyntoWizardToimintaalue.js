@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from "react";
+import React, { useEffect, useMemo, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
@@ -14,6 +14,20 @@ import * as R from "ramda";
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const { onChangesUpdate, onStateUpdate } = props;
 
+  /**
+   * Saves a value for later use.
+   * @param {*} value - Value to save for later use.
+   */
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const prevChangeObjects = usePrevious(props.changeObjects.muutokset);
+
   const lisattavatKunnat = useMemo(() => {
     return R.sortBy(
       R.prop("title"),
@@ -24,9 +38,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects).filter(Boolean)
+      }, props.changeObjects.muutokset || []).filter(Boolean)
     );
-  }, [props.changeObjects]);
+  }, [props.changeObjects.muutokset]);
 
   const lisattavatMaakunnat = useMemo(() => {
     return R.sortBy(
@@ -38,17 +52,17 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects).filter(Boolean)
+      }, props.changeObjects.muutokset || []).filter(Boolean)
     );
-  }, [props.changeObjects]);
+  }, [props.changeObjects.muutokset]);
 
   const kunnatInLupa = useMemo(() => {
     return R.sortBy(
-      R.path(["meta", "arvo"]),
+      R.path(["metadata", "arvo"]),
       R.map(kunta => {
         return {
           title: kunta.arvo,
-          meta: kunta
+          metadata: kunta
         };
       }, props.lupakohde.kunnat)
     );
@@ -56,11 +70,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   const maakunnatInLupa = useMemo(() => {
     return R.sortBy(
-      R.path(["meta", "arvo"]),
+      R.path(["metadata", "arvo"]),
       R.map(maakunta => {
         return {
           title: maakunta.arvo,
-          meta: maakunta
+          metadata: maakunta
         };
       }, props.lupakohde.maakunnat)
     );
@@ -74,11 +88,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           R.propEq("kieli", R.toUpper(props.intl.locale))
         )(kunta.metadata);
         const isKuntaInLupa = !!R.find(
-          R.pathEq(["meta", "koodiarvo"], kunta.koodiArvo),
+          R.pathEq(["metadata", "koodiarvo"], kunta.koodiArvo),
           kunnatInLupa
         );
         const isKuntaInLisattavat = !!R.find(
-          R.pathEq(["meta", "koodiarvo"], kunta.koodiArvo),
+          R.pathEq(["metadata", "koodiarvo"], kunta.koodiArvo),
           lisattavatKunnat
         );
         return isKuntaInLupa || isKuntaInLisattavat
@@ -86,9 +100,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           : {
               label: labelObject.nimi,
               value: kunta.koodiArvo,
-              meta: {
+              metadata: {
                 koodiarvo: kunta.koodiArvo,
-                koodisto: kunta.koodisto
+                koodisto: kunta.koodisto,
+                label: labelObject.nimi
               }
             };
       }, props.kunnat).filter(Boolean)
@@ -103,11 +118,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           R.propEq("kieli", R.toUpper(props.intl.locale))
         )(maakunta.metadata);
         const isMaakuntaInLupa = !!R.find(
-          R.pathEq(["meta", "koodiarvo"], maakunta.koodiArvo),
+          R.pathEq(["metadata", "koodiarvo"], maakunta.koodiArvo),
           maakunnatInLupa
         );
         const isMaakuntaInLisattavat = !!R.find(
-          R.pathEq(["meta", "koodiarvo"], maakunta.koodiArvo),
+          R.pathEq(["metadata", "koodiarvo"], maakunta.koodiArvo),
           lisattavatMaakunnat
         );
         return isMaakuntaInLupa || isMaakuntaInLisattavat
@@ -115,9 +130,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           : {
               label: labelObject.nimi,
               value: maakunta.koodiArvo,
-              meta: {
+              metadata: {
                 koodiarvo: maakunta.koodiArvo,
-                koodisto: maakunta.koodisto
+                koodisto: maakunta.koodisto,
+                label: labelObject.nimi
               }
             };
       }, props.maakunnat).filter(Boolean)
@@ -130,36 +146,122 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   ]);
 
   const isValtakunnallinenChecked = useMemo(() => {
-    const c = R.find(changeObj => {
+    const valtakunnallinenChangeObject = R.find(changeObj => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-    }, props.changeObjects);
+    }, props.changeObjects.muutokset || []);
     return (
-      (!!props.lupakohde.valtakunnallinen && !c) ||
-      !!(c && c.properties.isChecked)
+      (!!props.lupakohde.valtakunnallinen && !valtakunnallinenChangeObject) ||
+      !!(
+        valtakunnallinenChangeObject &&
+        valtakunnallinenChangeObject.properties.isChecked
+      )
     );
-  }, [props.changeObjects, props.lupakohde.valtakunnallinen]);
+  }, [props.changeObjects.muutokset, props.lupakohde.valtakunnallinen]);
 
+  /**
+   * There are two parts in Toiminta-alue section: 1) maakunnat and kunnat
+   * 2) Koko Suomi - pois lukien Ahvenanmaan maakunta. When user makes changes
+   * to either one we have to ensure that the changes related to the not selected
+   * one are deleted. This function executes the deletion.
+   */
+  useEffect(() => {
+    // isValtakunnallinenChecked = true = Koko Suomi...
+    if (isValtakunnallinenChecked) {
+      // Let's get rid of the other change objects and keep only the one related
+      // to the Koko Suomi... selection.
+      const valtakunnallinenChangeObject = R.filter(changeObj => {
+        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
+      }, props.changeObjects.muutokset);
+      // Let's check if updating is necessary.
+      if (
+        !R.equals(valtakunnallinenChangeObject, props.changeObjects.muutokset)
+      ) {
+        // Fist we are going to update the change objects of Toiminta-alue section
+        // on form page one.
+        onChangesUpdate({
+          anchor: props.sectionId,
+          changes: valtakunnallinenChangeObject // This is the only change object we want to keep
+        });
+        // Then it's time to get rid of the change objects of form page two (reasoning).
+        // The change objects are divided into two parts. So we need to make two separate calls
+        // to delete them.
+        // Call 1...
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_additions`,
+          changes: []
+        });
+        // Call 2...
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_removals`,
+          changes: []
+        });
+      }
+    } else if (prevChangeObjects) {
+      // We go here when the Koko Suomi... checkbox is unchecked and if unchecking it
+      // is the most recent action related to the Toiminta-alue section on the first page.
+      const valtakunnallinenChangeObjectNow = R.find(changeObj => {
+        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
+      }, props.changeObjects.muutokset || []);
+      const valtakunnallinenChangeObjectBefore = R.find(changeObj => {
+        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
+      }, prevChangeObjects || []);
+
+      const isUncheckingTheMostRecentChange =
+        // The case when Koko Suomi... is selected by default
+        (!!valtakunnallinenChangeObjectNow &&
+          (!!!valtakunnallinenChangeObjectBefore ||
+            (!!valtakunnallinenChangeObjectBefore &&
+              valtakunnallinenChangeObjectBefore.properties.isChecked ===
+                true))) ||
+        // The case when Koko Suomi... is not selected by default
+        (!!!valtakunnallinenChangeObjectNow &&
+          !!valtakunnallinenChangeObjectBefore &&
+          valtakunnallinenChangeObjectBefore.properties.isChecked === true);
+
+      if (isUncheckingTheMostRecentChange) {
+        // Then it's time to get rid of the change objects of form page two (reasoning).
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_additions`,
+          changes: []
+        });
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_removals`,
+          changes: []
+        });
+      }
+    }
+  }, [
+    isValtakunnallinenChecked,
+    onChangesUpdate,
+    prevChangeObjects,
+    props.changeObjects,
+    props.sectionId
+  ]);
+
+  /**
+   * Changes are handled here. Changes objects will be formed and callback
+   * function will be called with them.
+   */
   const handleChanges = useCallback(
     changesByAnchor => {
       const updatedChanges = R.map(changeObj => {
         let changeObjectsForKunnatInLupa = [];
-        const koodistoUri = R.path(
-          ["properties", "value", "meta", "koodisto", "koodistoUri"],
-          changeObj
-        );
+        const metadata =
+          R.path(["properties", "value", "metadata"], changeObj) ||
+          R.path(["properties", "metadata"], changeObj);
+        const koodistoUri = R.path(["koodisto", "koodistoUri"], metadata);
         const isMaakunta = koodistoUri && koodistoUri === "maakunta";
         if (isMaakunta) {
           const relatedKunnatParentObject = R.find(
-            R.propEq("koodiArvo", changeObj.properties.value.meta.koodiarvo),
+            R.propEq("koodiArvo", metadata.koodiarvo),
             props.maakuntakunnatList
           );
           const kunnat = relatedKunnatParentObject
             ? relatedKunnatParentObject.kunta
             : [];
-
           changeObjectsForKunnatInLupa = R.map(kunta => {
             const kuntaInLupa = R.find(
-              R.pathEq(["meta", "koodiarvo"], kunta.koodiArvo),
+              R.pathEq(["metadata", "koodiarvo"], kunta.koodiArvo),
               kunnatInLupa
             );
             const kuntaChangeObj = R.find(
@@ -167,7 +269,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 "anchor",
                 `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiarvo}`
               ),
-              props.changeObjects
+              props.changeObjects.muutokset || []
             );
             const isKuntaAlreadyUnchecked =
               kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
@@ -178,7 +280,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                   properties: {
                     ...kuntaInLupa.properties,
                     isChecked: false,
-                    meta: {
+                    metadata: {
                       title: kuntaInLupa.title,
                       koodiarvo: kunta.koodiArvo,
                       koodisto: { koodistoUri: kunta.koodisto }
@@ -210,7 +312,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               anchor: updatedAnchor,
               properties: {
                 isChecked: true,
-                meta: changeObj.properties.value.meta,
+                metadata: changeObj.properties.value.metadata,
                 title: changeObj.properties.value.label
               }
             },
@@ -229,7 +331,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     [
       onChangesUpdate,
       kunnatInLupa,
-      props.changeObjects,
+      props.changeObjects.muutokset,
       props.maakuntakunnatList
     ]
   );
@@ -275,7 +377,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         },
         components: R.map(maakunta => {
           return {
-            anchor: maakunta.meta.koodiarvo,
+            anchor: maakunta.metadata.koodiarvo,
             name: "CheckboxWithLabel",
             styleClasses: ["w-1/2 sm:w-1/4"],
             properties: {
@@ -283,9 +385,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               labelStyles: {
                 removal: isRemoved
               },
-              meta: {
-                koodiarvo: maakunta.meta.koodiarvo,
-                koodisto: { koodistoUri: maakunta.meta.koodisto }
+              forChangeObject: {
+                koodiarvo: maakunta.metadata.koodiarvo,
+                koodisto: { koodistoUri: maakunta.metadata.koodisto },
+                title: maakunta.title
               },
               title: maakunta.title
             }
@@ -301,7 +404,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         anchor: "lupaan-lisattavat-maakunnat",
         isVisible:
           !isValtakunnallinenChecked &&
-          (!!lisattavatMaakunnat && lisattavatMaakunnat.length > 0),
+          !!lisattavatMaakunnat &&
+          lisattavatMaakunnat.length > 0,
         layout: {
           indentation: "large",
           components: {
@@ -310,12 +414,13 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         },
         components: R.map(maakunta => {
           return {
-            anchor: maakunta.meta.koodiarvo,
+            anchor: maakunta.metadata.koodiarvo,
             name: "CheckboxWithLabel",
             styleClasses: ["w-1/2 sm:w-1/4"],
             properties: {
               isChecked: true,
               labelStyles: {
+                addition: isAdded,
                 removal: isRemoved
               },
               title: maakunta.title
@@ -360,7 +465,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         },
         components: R.map(kunta => {
           return {
-            anchor: kunta.meta.koodiarvo,
+            anchor: kunta.metadata.koodiarvo,
             name: "CheckboxWithLabel",
             styleClasses: ["w-1/2 sm:w-1/4"],
             properties: {
@@ -368,9 +473,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               labelStyles: {
                 removal: isRemoved
               },
-              meta: {
-                koodiarvo: kunta.meta.koodiarvo,
-                koodisto: { koodistoUri: kunta.meta.koodisto }
+              forChangeObject: {
+                koodiarvo: kunta.metadata.koodiarvo,
+                koodisto: { koodistoUri: kunta.metadata.koodisto },
+                title: kunta.title
               },
               title: kunta.title
             }
@@ -385,7 +491,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         anchor: "lupaan-lisattavat-kunnat",
         isVisible:
           !isValtakunnallinenChecked &&
-          (!!lisattavatKunnat && lisattavatKunnat.length > 0),
+          !!lisattavatKunnat &&
+          lisattavatKunnat.length > 0,
         layout: {
           indentation: "large",
           components: {
@@ -394,12 +501,13 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         },
         components: R.map(kunta => {
           return {
-            anchor: kunta.meta.koodiarvo,
+            anchor: kunta.metadata.koodiarvo,
             name: "CheckboxWithLabel",
             styleClasses: ["w-1/2 sm:w-1/4"],
             properties: {
               isChecked: true,
               labelStyles: {
+                addition: isAdded,
                 removal: isRemoved
               },
               title: kunta.title
@@ -425,6 +533,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 addition: isAdded,
                 custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
                 removal: isRemoved
+              },
+              forChangeObject: {
+                title: props.intl.formatMessage(wizardMessages.responsibilities)
               },
               title: props.intl.formatMessage(wizardMessages.responsibilities)
             }
@@ -459,7 +570,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           anchor={props.sectionId}
           key={`expandable-row-root`}
           categories={props.stateObjects.toimintaalue.categories}
-          changes={props.changeObjects}
+          changes={props.changeObjects.muutokset}
           isExpanded={true}
           showCategoryTitles={true}
           onChangesRemove={props.onChangesRemove}
@@ -472,8 +583,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  changeObjects: [],
-  muutokset: [],
+  changeObjects: {},
   kohde: {},
   kunnat: [],
   lupakohde: {},
@@ -486,8 +596,7 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  changeObjects: PropTypes.array,
-  muutokset: PropTypes.array,
+  changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   kunnat: PropTypes.array,
   lupakohde: PropTypes.object,
