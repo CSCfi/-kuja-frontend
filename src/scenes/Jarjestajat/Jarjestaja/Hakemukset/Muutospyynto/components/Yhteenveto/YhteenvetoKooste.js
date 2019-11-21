@@ -253,6 +253,7 @@ const YhteenvetoKooste = ({
                           "tutkintokielet"
                         ])(muutoshakemus)
                       }}
+                      tutkinnot={tutkinnot}
                       isReadOnly={true}
                       {..._props}
                     />
