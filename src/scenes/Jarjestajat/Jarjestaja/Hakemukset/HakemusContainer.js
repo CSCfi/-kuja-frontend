@@ -129,20 +129,18 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
       let filesFromMuutokset = findObjectWithKey(backendMuutokset, "liitteet");
 
       const updatedC = R.map(changeObj => {
-        const files = changeObj.properties.files
+        const files = changeObj.properties.attachments
           ? R.map(file => {
+              console.info(file);
               const fileFromBackend =
                 R.find(
-                  R.propEq("tiedostoId", file.file.tiedostoId),
+                  R.propEq("tiedostoId", file.tiedostoId),
                   filesFromMuutokset
                 ) || {};
-              return {
-                id: file.id,
-                file: Object.assign({}, file.file, fileFromBackend)
-              };
-            }, changeObj.properties.files)
+              return Object.assign({}, file, fileFromBackend);
+            }, changeObj.properties.attachments || [])
           : null;
-        return R.assocPath(["properties", "files"], files, changeObj);
+        return R.assocPath(["properties", "attachments"], files, changeObj);
       }, findObjectWithKey(fromBackend.muutospyynto.raw, "changeObjects"));
 
       let changesBySection = {};

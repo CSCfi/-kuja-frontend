@@ -123,7 +123,7 @@ export const getChangesToSave = (
         ["liitteet"],
         R.map(file => {
           return R.dissoc("tiedosto", file);
-        }, findObjectWithKey(changeObjects, "file")),
+        }, findObjectWithKey(changeObjects, "attachments")),
         backendMuutosWithChangeObjects
       );
     }
