@@ -126,8 +126,6 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         fromBackend.muutospyynto
       );
 
-      const c = findObjectWithKey(backendMuutokset, "changeObjects");
-
       let filesFromMuutokset = findObjectWithKey(backendMuutokset, "liitteet");
 
       const updatedC = R.map(changeObj => {
@@ -145,9 +143,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
             }, changeObj.properties.files)
           : null;
         return R.assocPath(["properties", "files"], files, changeObj);
-      }, c);
-
-      console.info(c, updatedC, filesFromMuutokset);
+      }, findObjectWithKey(fromBackend.muutospyynto.raw, "changeObjects"));
 
       let changesBySection = {};
 
@@ -261,8 +257,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
             onNewDocSave={onNewDocSave}
           />
         </MuutoshakemusProvider>
-      }
-    ></FetchHandler>
+      }></FetchHandler>
   );
 };
 
