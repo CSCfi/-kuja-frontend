@@ -185,7 +185,7 @@ export const getChangesToSave = (
         isInLupa: meta.isInLupa,
         liitteet: R.map(file => {
           return R.dissoc("tiedosto", file);
-        }, findObjectWithKey(changeObjects, "file")),
+        }, findObjectWithKey(changeObjects, "attachments")),
         kohde: meta.kohde,
         koodiarvo: code,
         koodisto: meta.koodisto.koodistoUri,
