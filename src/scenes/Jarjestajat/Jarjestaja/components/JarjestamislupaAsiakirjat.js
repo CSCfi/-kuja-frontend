@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import FetchHandler from "../../../../FetchHandler";
 import { BackendContext } from "../../../../context/backendContext";
 import Moment from "react-moment";
-import { downloadFileFn } from "../../../../components/02-organisms/Attachments";
+import { downloadFileFn } from "../../../../utils/common";
 
 const WrapTable = styled.div``;
 

@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import { API_BASE_URL } from "../modules/constants";
 
 /**
  * Utility functions are listed here.
@@ -110,4 +111,65 @@ export const flattenObj = obj => {
     }, R.toPairs(obj_));
 
   return R.fromPairs(go(obj));
+};
+
+/**
+ * Function finds all the objects with given key from the given object.
+ * @param {object} object - JavaScript object, can be deeply nested
+ * @param {string} targetKey - Key to search for
+ */
+export function findObjectWithKey(object, targetKey) {
+  function find(object, targetKey) {
+    const keys = R.keys(object);
+    if (keys.length > 0) {
+      return R.map(key => {
+        if (R.equals(key, targetKey)) {
+          return object[key];
+        } else if (R.is(Object, object[key])) {
+          return findObjectWithKey(object[key], targetKey);
+        }
+        return false;
+      }, keys);
+    }
+    return false;
+  }
+  return R.flatten(find(object, targetKey)).filter(Boolean);
+}
+
+/**
+ * Open file using generated and hidden <a> element
+ * @param obj containing properties filename and tiedosto or property url. Has optional parameter openInNewWindow
+ */
+export const downloadFileFn = ({
+  filename,
+  tiedosto,
+  url,
+  openInNewWindow
+}) => {
+  return () => {
+    let a = document.createElement("a");
+    a.setAttribute("type", "hidden");
+    if (openInNewWindow) {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferer");
+    }
+
+    document.body.appendChild(a); // Needed for Firefox
+    if (tiedosto && tiedosto instanceof Blob) {
+      const reader = new FileReader();
+      reader.readAsDataURL(tiedosto);
+      reader.onload = function() {
+        a.href = reader.result;
+        a.download = filename;
+        a.click();
+        a.remove();
+      };
+    } else if (url) {
+      a.href = API_BASE_URL + url;
+      a.click();
+      a.remove();
+    } else {
+      console.warn("Cannot open file: No octet stream nor file url");
+    }
+  };
 };

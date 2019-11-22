@@ -42,6 +42,7 @@ import {
 } from "../../../../../../utils/koulutusParser";
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
+import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
 import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
 
@@ -313,6 +314,7 @@ const MuutospyyntoWizard = ({
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
+    const files = findObjectWithKey(changeObjects, "file");
     const allAttachments = combineArrays([
       R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
       R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
@@ -335,8 +337,9 @@ const MuutospyyntoWizard = ({
           }, obj.properties.attachments);
         }
       }, allAttachments);
-      return attachments;
+      console.info(attachments, files);
     }
+    return R.concat(attachments, files);
   }, [changeObjects]);
 
   const save = useCallback((options) => {

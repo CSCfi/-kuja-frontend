@@ -10,11 +10,7 @@ import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import {
-  getAnchorsStartingWith,
-  getAnchorPart,
-  replaceAnchorPartWith
-} from "../../../../utils/common";
+import { getAnchorPart, findObjectWithKey } from "../../../../utils/common";
 import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
@@ -114,111 +110,33 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
    */
   useEffect(() => {
     if (isReady(fromBackend.muutospyynto) && match.params.uuid) {
-      const attachments = R.path(
-        ["raw", "liitteet"],
+      const attachments = R.path(["raw", "liitteet"], fromBackend.muutospyynto);
+
+      fromBackend.muutospyynto.raw = setAttachmentUuids(
+        attachments,
+        fromBackend.muutospyynto.raw
+      );
+
+      const backendMuutokset = R.compose(R.path(["raw", "muutokset"]))(
         fromBackend.muutospyynto
       );
 
-      fromBackend.muutospyynto.raw =
-        setAttachmentUuids(attachments, fromBackend.muutospyynto.raw);
+      let filesFromMuutokset = findObjectWithKey(backendMuutokset, "liitteet");
 
-      const backendMuutokset = R.compose(
-        R.path(["raw", "muutokset"]),
-      )(fromBackend.muutospyynto);
-
-      const getChangesOf = (
-        key,
-        changes,
-        { path = ["kohde", "tunniste"], categoryKey } = {}
-      ) => {
-        let result = R.filter(R.pathEq(path, key))(changes);
-        result = R.concat(
-          R.reject(R.isNil, R.chain(R.propOr([], "aliMaaraykset"), result)),
-          result
-        );
-        if (key === "tutkinnotjakoulutukset") {
-          result = R.filter(
-            R.compose(
-              R.not,
-              R.equals("tutkintokieli"),
-              R.path(["meta", "tunniste"])
-            ),
-            result
-          );
-        }
-        let changeObjects = R.flatten(
-          R.map(R.path(["meta", "changeObjects"]))(result)
-        ).filter(Boolean);
-        if (key === "toimintaalue") {
-          changeObjects = R.map(changeObj => {
-            const type = R.path(["properties", "meta", "type"], changeObj);
-            if (type === "addition") {
-              changeObj.anchor = replaceAnchorPartWith(
-                changeObj.anchor,
-                0,
-                `${getAnchorPart(changeObj.anchor, 0)}_additions`
-              );
-            } else if (type === "removal") {
-              changeObj.anchor = replaceAnchorPartWith(
-                changeObj.anchor,
-                0,
-                `${getAnchorPart(changeObj.anchor, 0)}_removals`
-              );
-            }
-            return changeObj;
-          }, changeObjects);
-        }
-        if (categoryKey) {
-          changeObjects = getAnchorsStartingWith(categoryKey, changeObjects);
-        }
-        return changeObjects;
-      };
-
-      let tutkinnotjakoulutuksetLiitteetChanges =
-        R.path(
-          ["raw", "meta", "tutkinnotjakoulutuksetLiitteet", "changeObjects"],
-          fromBackend.muutospyynto
-        ) || [];
-      let taloudellisetChanges =
-        R.path(
-          ["raw", "meta", "taloudelliset", "changeObjects"],
-          fromBackend.muutospyynto
-        ) || [];
-      let yhteenvetoChanges =
-        R.path(
-          ["raw", "meta", "yhteenveto", "changeObjects"],
-          fromBackend.muutospyynto
-        ) || [];
-
-      const c = R.flatten([
-        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-          categoryKey: "tutkinnot"
-        }),
-        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-          categoryKey: "liitteet"
-        }),
-        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-          categoryKey: "perustelut_tutkinnot"
-        }),
-        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-          categoryKey: "koulutukset"
-        }),
-        getChangesOf("tutkinnotjakoulutukset", backendMuutokset, {
-          categoryKey: "perustelut_koulutukset"
-        }),
-        getChangesOf("opetuskieli", backendMuutokset, {
-          path: ["meta", "key"]
-        }),
-        getChangesOf("tutkintokieli", backendMuutokset, {
-          path: ["meta", "tunniste"]
-        }),
-        getChangesOf("opiskelijavuodet", backendMuutokset),
-        getChangesOf("toimintaalue", backendMuutokset),
-        getChangesOf("muut", backendMuutokset),
-        tutkinnotjakoulutuksetLiitteetChanges,
-        taloudellisetChanges,
-        yhteenvetoChanges
-      ]).filter(Boolean);
+      const updatedC = R.map(changeObj => {
+        const files = changeObj.properties.attachments
+          ? R.map(file => {
+              console.info(file);
+              const fileFromBackend =
+                R.find(
+                  R.propEq("tiedostoId", file.tiedostoId),
+                  filesFromMuutokset
+                ) || {};
+              return Object.assign({}, file, fileFromBackend);
+            }, changeObj.properties.attachments || [])
+          : null;
+        return R.assocPath(["properties", "attachments"], files, changeObj);
+      }, findObjectWithKey(fromBackend.muutospyynto.raw, "changeObjects"));
 
       let changesBySection = {};
 
@@ -235,7 +153,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
           changeObjects,
           changesBySection
         );
-      }, c);
+      }, updatedC);
       /**
        * At this point the backend data is handled and change objects are formed.
        */
@@ -332,8 +250,7 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
             onNewDocSave={onNewDocSave}
           />
         </MuutoshakemusProvider>
-      }
-    ></FetchHandler>
+      }></FetchHandler>
   );
 };
 

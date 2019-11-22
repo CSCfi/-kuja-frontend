@@ -29,7 +29,7 @@ const PerustelutKuljettajakoulutukset = props => {
         categories={[]}
         changes={R.path(["perustelut"], props.changeObjects)}
         disableReverting={props.isReadOnly}
-        hideAmountOfChanges={true}
+        hideAmountOfChanges={false}
         isExpanded={true}
         onChangesRemove={onChangesRemove}
         onUpdate={onChangesUpdate}
