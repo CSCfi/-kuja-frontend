@@ -309,25 +309,36 @@ function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
     },
     {
       anchor: "liitteet",
-      styleClasses: ["pl-6 pt-6"],
       title: "Liitteet",
-      components: [
+      categories: [
         {
           anchor: "info",
-          name: "StatusTextRow",
-          styleClasses: ["w-full"],
-          properties: {
-            title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
-            isHidden: isReadOnly
-          }
+          layout: { indentation: "none" },
+          components: [
+            {
+              anchor: "A",
+              name: "StatusTextRow",
+              styleClasses: ["w-full"],
+              properties: {
+                title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+                isHidden: isReadOnly
+              }
+            }
+          ]
         },
         {
-          anchor: "A",
-          styleClasses: ["w-full"],
-          name: "Attachments",
-          properties: {
-            isReadOnly
-          }
+          anchor: "upload",
+          layout: { indentation: "none" },
+          components: [
+            {
+              anchor: "A",
+              styleClasses: ["w-full"],
+              name: "Attachments",
+              properties: {
+                isReadOnly
+              }
+            }
+          ]
         }
       ]
     }
@@ -471,7 +482,6 @@ export function johtaja(orderCode, isReadOnly) {
       {
         anchor: `johtaja-info`,
         code: "!",
-        styleClasses: ["pl-6"],
         title:
           "Valtioneuvoston asetuksen 434/2018 10 §:ssä on säädetty opettajien ja opetuksesta vastaavan johtajan pätevyydestä.",
         components: [
@@ -487,28 +497,39 @@ export function johtaja(orderCode, isReadOnly) {
       },
       {
         anchor: "liitteet",
-        styleClasses: ["pl-6 pt-6"],
         title: "Liitteet",
-        components: [
+        categories: [
           {
             anchor: "info",
-            name: "StatusTextRow",
-            styleClasses: ["w-full"],
-            properties: {
-              title: `Hakemukseen tulee liittää selvitys opetuksesta vastaavan johtajan tai johtajien kelpoisuudesta ja työkokemuksesta
-                toimipisteittäin. Lisäksi tulee toimittaa selvitys siitä, että koulutuksen järjestäjällä on opetuksesta vastaavan
-                johtajan tai vastaavien johtajien tehtävä (VNAsetus 434/2018, 10§, 12§ 1 mom 3 kohta). Merkitse liite
-                salassapidettäväksi, mikäli se sisältää henkilötietoja. Liitteiden nimet eivät myöskään saa sisältää henkilötietoa.`,
-              isHidden: isReadOnly
-            }
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                styleClasses: ["w-full"],
+                properties: {
+                  title: `Hakemukseen tulee liittää selvitys opetuksesta vastaavan johtajan tai johtajien kelpoisuudesta ja työkokemuksesta
+                  toimipisteittäin. Lisäksi tulee toimittaa selvitys siitä, että koulutuksen järjestäjällä on opetuksesta vastaavan
+                  johtajan tai vastaavien johtajien tehtävä (VNAsetus 434/2018, 10§, 12§ 1 mom 3 kohta). Merkitse liite
+                  salassapidettäväksi, mikäli se sisältää henkilötietoja. Liitteiden nimet eivät myöskään saa sisältää henkilötietoa.`,
+                  isHidden: isReadOnly
+                }
+              }
+            ]
           },
           {
-            anchor: "A",
-            styleClasses: ["w-full"],
-            name: "Attachments",
-            properties: {
-              isReadOnly
-            }
+            anchor: "upload",
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "A",
+                styleClasses: ["w-full"],
+                name: "Attachments",
+                properties: {
+                  isReadOnly
+                }
+              }
+            ]
           }
         ]
       }
@@ -516,12 +537,17 @@ export function johtaja(orderCode, isReadOnly) {
   };
 }
 
-export function johtajienKelpoisuusJaTyokokemus(orderCode, helpText, isReadOnly) {
+export function johtajienKelpoisuusJaTyokokemus(
+  orderCode,
+  helpText,
+  isReadOnly
+) {
   return {
     anchor: "johtajien-kelpoisuus-ja-tyokokemus",
     code: orderCode,
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
-    title: "Opetuksesta vastaavan johtajan tai johtajien kelpoisuus ja työkokemus",
+    title:
+      "Opetuksesta vastaavan johtajan tai johtajien kelpoisuus ja työkokemus",
     categories: kelpoisuusJaTyokokemusCategories(helpText, isReadOnly)
   };
 }
@@ -602,25 +628,36 @@ export function ajoneuvoKanta(orderCode, isReadOnly) {
       },
       {
         anchor: "liitteet",
-        styleClasses: ["pl-6 pt-6"],
         title: "Liitteet",
-        components: [
+        categories: [
           {
             anchor: "info",
-            name: "StatusTextRow",
-            styleClasses: ["w-full"],
-            properties: {
-              title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
-              isHidden: isReadOnly
-            }
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "A",
+                name: "StatusTextRow",
+                styleClasses: ["w-full"],
+                properties: {
+                  title: HAKEMUS_OTSIKOT.LIITE_OHJE.FI,
+                  isHidden: isReadOnly
+                }
+              }
+            ]
           },
           {
-            anchor: "A",
-            styleClasses: ["w-full"],
-            name: "Attachments",
-            properties: {
-              isReadOnly
-            }
+            anchor: "upload",
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "A",
+                styleClasses: ["w-full"],
+                name: "Attachments",
+                properties: {
+                  isReadOnly
+                }
+              }
+            ]
           }
         ]
       }
