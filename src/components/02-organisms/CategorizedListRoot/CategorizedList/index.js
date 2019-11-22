@@ -16,7 +16,6 @@ import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
 import { flattenObj } from "../../../../utils/common";
-import FileUpload from "../../FileUpload";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
 whyDidYouRender(React);
@@ -591,24 +590,6 @@ const CategorizedList = React.memo(
                               siblings: props.categories
                             }}
                             titles={propsObj.titles}
-                          />
-                        </div>
-                      )}
-                      {component.name === "FileUpload" && (
-                        <div className="flex-2">
-                          <FileUpload
-                            isReadOnly={propsObj.isReadOnly}
-                            onChanges={handleChanges}
-                            uploadedFiles={propsObj.files}
-                            payload={{
-                              anchor,
-                              categories: category.categories,
-                              component,
-                              fullPath,
-                              parent: props.parent,
-                              rootPath: props.rootPath,
-                              siblings: props.categories
-                            }}
                           />
                         </div>
                       )}
