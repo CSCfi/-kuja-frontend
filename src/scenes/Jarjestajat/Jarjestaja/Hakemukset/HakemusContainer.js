@@ -10,12 +10,7 @@ import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
-import {
-  getAnchorsStartingWith,
-  getAnchorPart,
-  replaceAnchorPartWith,
-  findObjectWithKey
-} from "../../../../utils/common";
+import { getAnchorPart, findObjectWithKey } from "../../../../utils/common";
 import { BackendContext } from "../../../../context/backendContext";
 import { isReady } from "../../../../services/backendService";
 import FetchHandler from "../../../../FetchHandler";
