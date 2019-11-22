@@ -1,6 +1,7 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
+import simpleStory from "./storydata/simpleStory";
 import Table2 from "./index";
 import * as R from "ramda";
 
@@ -93,8 +94,11 @@ storiesOf("Table2", module)
       return {
         [id]: {
           components: R.map(cellData => {
+            console.info(cellData.styleClasses);
             return getHeaderCell({
-              styleClasses: [`w-1/${cellsOfARow.length}`],
+              styleClasses: cellData.styleClasses || [
+                `w-1/${cellsOfARow.length}`
+              ],
               title: cellData.text
             });
           }, cellsOfARow)
@@ -107,12 +111,13 @@ storiesOf("Table2", module)
           components: R.map(cellData => {
             const cell = getCell(
               {
-                styleClasses: [`w-1/${cellsOfARow.length}`],
+                styleClasses: cellData.styleClasses || [
+                  `w-1/${cellsOfARow.length}`
+                ],
                 title: cellData.text
               },
               cellData
             );
-            console.info(cell, cellData);
             return {
               ...cell,
               includes: cellData.includes || []
@@ -120,8 +125,43 @@ storiesOf("Table2", module)
           }, cellsOfARow)
         }
       };
-      console.info(obj);
       return obj;
+    }
+
+    function addToObject(rows, isHeader = false, index = 0, result = {}) {
+      const prefix = isHeader ? "header-" : "";
+      const objectToAdd = getTableRow(`${prefix}row-${index}`, {
+        includes: [`cells-of-${prefix}row-${index}`]
+      });
+      const updatedResult = Object.assign({}, result, objectToAdd);
+      if (rows[index + 1]) {
+        return addToObject(rows, isHeader, index + 1, updatedResult);
+      }
+      return updatedResult;
+    }
+
+    function addCellsToObject(
+      cellsOfArrayBody,
+      isHeader = false,
+      index = 0,
+      result = {}
+    ) {
+      const objectToAdd = isHeader
+        ? dataCellsOnHeaderRow(
+            `cells-of-header-row-${index}`,
+            cellsOfArrayBody[index]
+          )
+        : dataCellsOnRow(`cells-of-row-${index}`, cellsOfArrayBody[index]);
+      const updatedResult = Object.assign({}, result, objectToAdd);
+      if (cellsOfArrayBody[index + 1]) {
+        return addCellsToObject(
+          cellsOfArrayBody,
+          isHeader,
+          index + 1,
+          updatedResult
+        );
+      }
+      return updatedResult;
     }
 
     const structure = Object.assign(
@@ -130,45 +170,18 @@ storiesOf("Table2", module)
         includes: ["rowGroupHeader", "rowGroupBody"]
       }),
       getRowGroup("rowGroupHeader", {
-        includes: ["headerRow"]
+        includes: R.map(
+          key => `header-row-${key}`,
+          Object.keys(simpleStory.header.rows)
+        )
       }),
       getRowGroup("rowGroupBody", {
-        includes: ["bodyRow", "bodyRow", "bodyRow"]
+        includes: R.map(key => `row-${key}`, Object.keys(simpleStory.body.rows))
       }),
-      getTableRow("headerRow", {
-        includes: ["dataCellsOnHeaderRow"]
-      }),
-      getTableRow("bodyRow", {
-        includes: ["dataCellsOnRow"]
-      }),
-      dataCellsOnHeaderRow("dataCellsOnHeaderRow", [
-        {
-          text: "Column 1 title"
-        },
-        {
-          text: "Column 2 title"
-        },
-        {
-          text: "Column 3 title"
-        },
-        {
-          text: "Column 4 title"
-        }
-      ]),
-      dataCellsOnRow("dataCellsOnRow", [
-        {
-          text: "Random thing... long text is here. How can we handle it?"
-        },
-        {
-          text: "Random thing"
-        },
-        {
-          text: "Random thing"
-        },
-        {
-          text: "Random thing"
-        }
-      ])
+      addToObject(simpleStory.header.rows, true),
+      addToObject(simpleStory.body.rows),
+      addCellsToObject(R.map(R.prop("cells"), simpleStory.header.rows), true),
+      addCellsToObject(R.map(R.prop("cells"), simpleStory.body.rows))
     );
 
     console.info(structure);
