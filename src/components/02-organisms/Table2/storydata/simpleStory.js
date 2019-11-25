@@ -1,12 +1,12 @@
 import * as R from "ramda";
 
 const colWidths = {
-  0: "w-1/12",
+  0: "w-3/12",
   1: "w-2/12",
-  2: "w-1/12",
-  3: "w-3/12",
-  4: "w-1/12",
-  5: "w-4/12"
+  2: "w-2/12",
+  3: "w-2/12",
+  4: "w-2/12",
+  5: "w-1/12"
 };
 
 const simpleStory = {
@@ -17,7 +17,9 @@ const simpleStory = {
           (col, ii) => {
             return {
               styleClasses: [colWidths[ii], "truncate"],
-              text: `Title example ${ii} ${Math.random()}`
+              text: `Title example ${ii}`,
+              isSortable: true,
+              sortingTooltip: "Järjestä sarakkeen mukaan"
             };
           },
           [1, 2, 3, 4, 5, 6]
@@ -32,13 +34,13 @@ const simpleStory = {
           (col, ii) => {
             return {
               styleClasses: [colWidths[ii], "truncate"],
-              text: `Example ${ii} ${Math.random()}`
+              text: `Example ${Math.random()}`
             };
           },
           [1, 2, 3, 4, 5, 6]
         )
       };
-    }, new Array(5))
+    }, new Array(100))
   }
 };
 
