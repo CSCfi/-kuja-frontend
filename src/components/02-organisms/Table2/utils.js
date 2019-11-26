@@ -74,14 +74,26 @@ export function getRowGroup(id, properties) {
   };
 }
 
-export function getTableRow(id, properties) {
+export function getTableRow(id, properties, onClick) {
   return {
     [id]: {
       components: [
-        {
-          ref: "table-row",
-          includes: properties.includes
-        }
+        Object.assign(
+          {},
+          {
+            ref: "table-row",
+            includes: properties.includes
+          },
+          onClick
+            ? {
+                properties: {
+                  onClick: (action, properties) => {
+                    return onClick(action, properties);
+                  }
+                }
+              }
+            : {}
+        )
       ]
     }
   };
