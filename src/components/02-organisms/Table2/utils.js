@@ -67,7 +67,10 @@ export function getRowGroup(id, properties) {
       components: [
         {
           ref: "row-group",
-          includes: properties.includes
+          includes: properties.includes,
+          properties: {
+            styleClasses: ["flex flex-col"]
+          }
         }
       ]
     }
@@ -104,6 +107,7 @@ export function dataCellsOnHeaderRow(id, cellsOfARow, properties, onClick) {
     [id]: {
       components: R.addIndex(R.map)((cellData, i) => {
         return getHeaderCell({
+          isHeader: true,
           isSortable: cellData.isSortable,
           columnIndex: i,
           orderOfBodyRows: properties.orderOfBodyRows,
@@ -142,50 +146,129 @@ export function dataCellsOnRow(id, cellsOfARow) {
   return obj;
 }
 
-export function addRowsToObject(
-  rows = [],
-  isHeader = false,
+// export function addRowGroupsToObject(prefix, ) {
+//   const objectToAdd = getTableRow(
+//     `${prefix}-rowGroup-${index}`,
+//     {
+//       includes: [`cells-of-${prefix}row-${index}`]
+//     },
+//     onClick
+//   );
+//   const updatedResult = Object.assign({}, result, objectToAdd);
+//   if (rows[index + 1]) {
+//     return addRowsToObject(prefix, onClick, index + 1, updatedResult);
+//   }
+//   return updatedResult;
+// }
+
+export function addCellsToObject(
+  cells,
+  properties = {},
+  onClick,
   index = 0,
+  level = 0,
+  prefix = "",
   result = {}
 ) {
-  const prefix = isHeader ? "header-" : "";
-  const objectToAdd = getTableRow(`${prefix}row-${index}`, {
-    includes: [`cells-of-${prefix}row-${index}`]
-  });
+  const objectToAdd = properties.isHeader
+    ? dataCellsOnHeaderRow(`cells-of-${prefix}`, cells, properties, onClick)
+    : dataCellsOnRow(`cells-of-${prefix}`, cells, properties, onClick);
   const updatedResult = Object.assign({}, result, objectToAdd);
-  if (rows[index + 1]) {
-    return addRowsToObject(rows, isHeader, index + 1, updatedResult);
+  if (cells[index + 1]) {
+    return addCellsToObject(
+      cells,
+      properties,
+      onClick,
+      index + 1,
+      level,
+      prefix,
+      updatedResult
+    );
   }
   return updatedResult;
 }
 
-export function addCellsToObject(
-  cellsOfArrayBody,
+export function addRowsToObject(
+  rows = [],
   properties = {},
   onClick,
   index = 0,
+  level = 0,
+  prevLevelPrefix = "",
   result = {}
 ) {
-  const objectToAdd = properties.isHeader
-    ? dataCellsOnHeaderRow(
-        `cells-of-header-row-${index}`,
-        cellsOfArrayBody[index],
-        properties,
-        onClick
-      )
-    : dataCellsOnRow(
-        `cells-of-row-${index}`,
-        cellsOfArrayBody[index],
-        properties,
-        onClick
-      );
-  const updatedResult = Object.assign({}, result, objectToAdd);
-  if (cellsOfArrayBody[index + 1]) {
-    return addCellsToObject(
-      cellsOfArrayBody,
+  let updatedResult = result;
+  let nextLevelKeys = [];
+  let rowGroupKey = "";
+
+  const prefixPart = `${
+    prevLevelPrefix ? prevLevelPrefix + "-" : ""
+  }${level}-${index}`;
+
+  const prefix = properties.isHeader ? `${prefixPart}-header` : prefixPart;
+
+  if (rows[index] && rows[index].rows) {
+    const subRows = addRowsToObject(
+      rows[index].rows,
+      {},
+      onClick,
+      0,
+      level + 1,
+      prefix
+    );
+
+    updatedResult = Object.assign({}, result, subRows);
+
+    nextLevelKeys = R.filter(
+      R.and(
+        R.startsWith(prefix),
+        R.compose(R.equals(R.length(prefix) + 4), R.length)
+      ),
+      R.keys(subRows)
+    );
+
+    rowGroupKey = `${prefix}-rowGroup`;
+
+    const rowGroup = getRowGroup(`${prefix}-rowGroup`, {
+      includes: nextLevelKeys
+    });
+
+    updatedResult = Object.assign({}, updatedResult, rowGroup);
+  }
+
+  const objectToAdd = getTableRow(
+    prefix,
+    {
+      includes: [
+        [`cells-of-${prefix}`],
+        rowGroupKey ? [rowGroupKey] : null
+      ].filter(Boolean)
+    },
+    onClick
+  );
+
+  updatedResult = Object.assign({}, updatedResult, objectToAdd);
+
+  if (rows[index] && rows[index].cells) {
+    const cellsOfTheCurrentRow = addCellsToObject(
+      rows[index].cells,
+      properties,
+      onClick,
+      0,
+      0,
+      prefix
+    );
+    updatedResult = Object.assign({}, updatedResult, cellsOfTheCurrentRow);
+  }
+
+  if (rows[index + 1]) {
+    return addRowsToObject(
+      rows,
       properties,
       onClick,
       index + 1,
+      level,
+      prevLevelPrefix,
       updatedResult
     );
   }

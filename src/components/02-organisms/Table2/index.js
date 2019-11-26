@@ -5,13 +5,7 @@ import RowGroup from "./RowGroup";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";
 import * as R from "ramda";
-import {
-  addCellsToObject,
-  addRowsToObject,
-  components,
-  getMain,
-  getRowGroup
-} from "./utils";
+import { addRowsToObject, components, getMain, getRowGroup } from "./utils";
 
 const availableComponents = {
   Grid,
@@ -22,6 +16,32 @@ const availableComponents = {
 
 const TableComponent = ({ components, structure, id = "main" }) => {
   if (!structure[id]) return <div>structure.{id} is missing!</div>;
+
+  function renderIncludedElements(includes = []) {
+    console.info(includes);
+    return R.map(id => {
+      console.info(id);
+      if (id.length === 0) {
+        return null;
+      } else if (Array.isArray(id)) {
+        return (
+          <div key={Math.random()}>
+            {renderIncludedElements(R.filter(R.compose(R.not, R.isEmpty), id))}
+          </div>
+        );
+      } else {
+        const _id = R.is(String, id) ? id : R.head(id);
+        return (
+          <TableComponent
+            key={Math.random()}
+            components={components}
+            structure={structure}
+            id={_id}></TableComponent>
+        );
+      }
+    }, R.filter(R.compose(R.not, R.isEmpty), includes));
+  }
+
   return (
     <React.Fragment>
       {R.map(componentSpecs => {
@@ -31,7 +51,7 @@ const TableComponent = ({ components, structure, id = "main" }) => {
         );
 
         const TagName = availableComponents[component.name];
-
+        // console.info(component.name, componentSpecs.includes);
         return (
           <TagName
             key={Math.random()}
@@ -82,6 +102,7 @@ const Table2 = ({ data }) => {
   }, [bodyRows, orderOfBodyRows]);
 
   function onCellClick(action, properties) {
+    console.info("on cell click", action, properties);
     if (action === "sort") {
       setOrderOfBodyRows(prevState => {
         let order = R.prop(prevState.order, orderSwap);
@@ -93,6 +114,10 @@ const Table2 = ({ data }) => {
     }
   }
 
+  function onRowClick(action, properties) {
+    console.info(action, properties);
+  }
+
   const structure = useMemo(() => {
     return sortedBodyRows
       ? Object.assign(
@@ -102,26 +127,23 @@ const Table2 = ({ data }) => {
           }),
           getRowGroup("rowGroupHeader", {
             includes: R.map(
-              key => `header-row-${key}`,
+              key => `0-${key}-header`,
               Object.keys(data.header.rows)
             )
           }),
           getRowGroup("rowGroupBody", {
-            includes: R.map(key => `row-${key}`, Object.keys(sortedBodyRows))
+            includes: R.map(key => `0-${key}`, Object.keys(sortedBodyRows))
           }),
-          addRowsToObject(data.header.rows, true),
-          addRowsToObject(sortedBodyRows),
-          addCellsToObject(
-            R.map(R.prop("cells"), data.header.rows),
-            { isHeader: true, orderOfBodyRows },
-            onCellClick
-          ),
-          addCellsToObject(R.map(R.prop("cells"), sortedBodyRows, onCellClick))
+          addRowsToObject(data.header.rows, { isHeader: true }, onCellClick),
+          addRowsToObject(sortedBodyRows, {}, onRowClick)
         )
       : {};
   }, [sortedBodyRows]);
 
+  console.info(structure);
+
   return (
+    // <div>a</div>
     <TableComponent
       components={components}
       structure={structure}></TableComponent>

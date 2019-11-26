@@ -18,6 +18,7 @@ const simpleStory = {
             return {
               styleClasses: [colWidths[ii], "truncate"],
               text: `Title example ${ii}`,
+              isHeader: true,
               isSortable: true,
               sortingTooltip: "Järjestä sarakkeen mukaan"
             };
@@ -30,6 +31,9 @@ const simpleStory = {
   body: {
     rows: R.addIndex(R.map)((row, i) => {
       return {
+        onClick: row => {
+          console.info(row);
+        },
         cells: R.addIndex(R.map)(
           (col, ii) => {
             return {
@@ -39,8 +43,24 @@ const simpleStory = {
           },
           [1, 2, 3, 4, 5, 6]
         )
+        // rows: R.addIndex(R.map)((row, i) => {
+        //   return {
+        //     onClick: row => {
+        //       console.info(row);
+        //     },
+        //     cells: R.addIndex(R.map)(
+        //       (col, ii) => {
+        //         return {
+        //           styleClasses: [colWidths[ii], "truncate"],
+        //           text: `Example ${Math.random()}`
+        //         };
+        //       },
+        //       [1, 2, 3, 4, 5, 6]
+        //     )
+        //   };
+        // }, new Array(5))
       };
-    }, new Array(100))
+    }, new Array(3))
   }
 };
 

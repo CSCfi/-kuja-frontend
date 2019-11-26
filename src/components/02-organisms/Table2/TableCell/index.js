@@ -22,6 +22,7 @@ const StyledButton = withStyles({
 })(Button);
 
 const TableCell = ({ children, properties = {} }) => {
+  console.info(properties);
   const classNames = R.join(
     " ",
     R.without(["truncate"], properties.styleClasses || [])
@@ -45,7 +46,10 @@ const TableCell = ({ children, properties = {} }) => {
             sort();
           }}
           title={properties.sortingToolTip}>
-          <span className="truncate">{properties.title}</span> {children}
+          {properties.title && (
+            <span className="truncate">{properties.title}</span>
+          )}
+           {children}
           {properties.orderOfBodyRows &&
             properties.columnIndex ===
               properties.orderOfBodyRows.columnIndex && (
