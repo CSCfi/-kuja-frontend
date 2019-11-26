@@ -11,9 +11,10 @@ const StyledButton = withStyles({
     border: 0,
     color: "white",
     width: "100%",
-    height: "100%",
     justifyContent: "left",
-    padding: "1rem"
+    padding: "1rem",
+    outline: "none",
+    margin: "0.5rem"
   },
   label: {
     textTransform: "capitalize"
