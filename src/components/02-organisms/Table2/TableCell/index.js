@@ -12,7 +12,6 @@ const StyledButton = withStyles({
     color: "white",
     width: "100%",
     justifyContent: "left",
-    padding: "1rem",
     outline: "none",
     margin: "0.5rem"
   },
@@ -21,59 +20,74 @@ const StyledButton = withStyles({
   }
 })(Button);
 
-const TableCell = ({ children, properties = {} }) => {
-  console.info(properties);
+const TableCell = ({
+  children,
+  columnIndex,
+  isHeaderCell = false,
+  isOnLastRow,
+  onClick,
+  orderOfBodyRows,
+  properties = {},
+  tableLevel = 0
+}) => {
   const classNames = R.join(
     " ",
     R.without(["truncate"], properties.styleClasses || [])
   );
 
   function sort() {
-    properties.onClick("sort", properties);
+    onClick("sort", { columnIndex, properties });
   }
 
   return (
     <div
       key={`key-${Math.random()}`}
-      role={properties.isHeader ? "columnheader" : "gridCell"}
-      className={`${classNames} ${
-        properties.isHeader ? "bg-green-500" : "p-4"
-      } relative flex items-center border-t`}>
+      role={isHeaderCell ? "columnheader" : "gridCell"}
+      className={`${classNames} ${properties.table ? "w-full" : "flex"} ${
+        isHeaderCell ? `bg-green-${tableLevel + 5}00` : "p-4"
+      } relative items-center ${!isOnLastRow ? "border-b" : ""}`}>
       {properties.isSortable ? (
         <StyledButton
           aria-label="Sort"
           onClick={() => {
             sort();
           }}
-          title={properties.sortingToolTip}>
-          {properties.title && (
-            <span className="truncate">{properties.title}</span>
+          title={properties.sortingTooltip}>
+          {properties.text && (
+            <span className={properties.truncate ? "truncate" : ""}>
+              {properties.text}
+            </span>
           )}
-           {children}
-          {properties.orderOfBodyRows &&
-            properties.columnIndex ===
-              properties.orderOfBodyRows.columnIndex && (
-              <React.Fragment>
-                {properties.orderOfBodyRows.order === "ascending" ? (
-                  <ArrowUpwardIcon fontSize="small" />
-                ) : (
-                  <ArrowDownwardIcon fontSize="small" />
-                )}
-              </React.Fragment>
-            )}
+          {orderOfBodyRows && columnIndex === orderOfBodyRows.columnIndex && (
+            <React.Fragment>
+              {orderOfBodyRows.order === "ascending" ? (
+                <ArrowUpwardIcon fontSize="small" />
+              ) : (
+                <ArrowDownwardIcon fontSize="small" />
+              )}
+            </React.Fragment>
+          )}
         </StyledButton>
       ) : (
         <React.Fragment>
-          <span className="truncate">{properties.title}</span> {children}
+          <span className={properties.truncate ? "truncate" : ""}>
+            {properties.text}
+          </span>
         </React.Fragment>
       )}
+      {children}
     </div>
   );
 };
 
 TableCell.propTypes = {
+  columnIndex: PropTypes.number,
+  isHeaderCell: PropTypes.bool,
+  isOnLastRow: PropTypes.bool,
+  onClick: PropTypes.func,
+  orderOfBodyRows: PropTypes.object,
   properties: PropTypes.object,
-  styleClasses: PropTypes.array
+  tableLevel: PropTypes.number
 };
 
 export default TableCell;

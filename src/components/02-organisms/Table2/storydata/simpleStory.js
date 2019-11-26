@@ -9,61 +9,210 @@ const colWidths = {
   5: "w-1/12"
 };
 
-const simpleStory = {
-  header: {
-    rows: R.addIndex(R.map)((row, i) => {
-      return {
-        cells: R.addIndex(R.map)(
-          (col, ii) => {
-            return {
-              styleClasses: [colWidths[ii], "truncate"],
-              text: `Title example ${ii}`,
-              isHeader: true,
-              isSortable: true,
-              sortingTooltip: "Järjestä sarakkeen mukaan"
-            };
-          },
-          [1, 2, 3, 4, 5, 6]
-        )
-      };
-    }, new Array(1))
+function getRandomNumber(max = 1000) {
+  return Math.floor(Math.random() * max + 1);
+}
+
+export const subTable = [
+  {
+    role: "thead",
+    rowGroups: [
+      {
+        rows: [
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  isSortable: true,
+                  sortingTooltip: "Järjestä sarakkeen mukaan",
+                  styleClasses: [colWidths[ii]],
+                  truncate: true,
+                  text: `(SubTable) ${ii}`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          }
+        ]
+      }
+    ]
   },
-  body: {
-    rows: R.addIndex(R.map)((row, i) => {
-      return {
-        onClick: row => {
-          console.info(row);
-        },
-        cells: R.addIndex(R.map)(
-          (col, ii) => {
-            return {
-              styleClasses: [colWidths[ii], "truncate"],
-              text: `Example ${Math.random()}`
-            };
-          },
-          [1, 2, 3, 4, 5, 6]
-        )
-        // rows: R.addIndex(R.map)((row, i) => {
-        //   return {
-        //     onClick: row => {
-        //       console.info(row);
-        //     },
-        //     cells: R.addIndex(R.map)(
-        //       (col, ii) => {
-        //         return {
-        //           styleClasses: [colWidths[ii], "truncate"],
-        //           text: `Example ${Math.random()}`
-        //         };
-        //       },
-        //       [1, 2, 3, 4, 5, 6]
-        //     )
-        //   };
-        // }, new Array(5))
-      };
-    }, new Array(3))
+  {
+    role: "tbody",
+    rowGroups: [
+      {
+        rows: R.addIndex(R.map)((row, i) => {
+          return {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  styleClasses: [colWidths[ii]],
+                  truncate: true,
+                  text: `${getRandomNumber(10)} (${i}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          };
+        }, new Array(10))
+      }
+    ]
+  },
+  {
+    role: "tfoot"
   }
-};
+];
 
-console.info(simpleStory);
+export const subTable2 = [
+  {
+    role: "thead",
+    rowGroups: [
+      {
+        rows: [
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  isSortable: true,
+                  styleClasses: [colWidths[ii]],
+                  truncate: true,
+                  text: `(subTable2) ${ii}`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          }
+        ]
+      }
+    ]
+  },
+  {
+    role: "tbody",
+    rowGroups: [
+      {
+        rows: R.addIndex(R.map)((row, i) => {
+          return {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  styleClasses: [colWidths[ii]],
+                  truncate: true,
+                  text: `${getRandomNumber(30)} (${i}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          };
+        }, new Array(5))
+      }
+    ]
+  },
+  {
+    role: "tfoot"
+  }
+];
 
-export default simpleStory;
+export const mainTable = [
+  {
+    role: "thead",
+    rowGroups: [
+      {
+        rows: [
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  isSortable: true,
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: `(MainTable) ${ii}`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          }
+        ]
+      }
+    ]
+  },
+  {
+    role: "tbody",
+    rowGroups: [
+      {
+        rows: [
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: `${getRandomNumber(3000)} (${0}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            ),
+            rows: [
+              {
+                cells: [
+                  {
+                    table: subTable
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: `${getRandomNumber(500)} (${0}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          },
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: `${getRandomNumber(300)} (${0}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            ),
+            rows: [
+              {
+                cells: [
+                  {
+                    table: subTable2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            cells: R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: `${getRandomNumber(10000)} (${0}${ii})`
+                };
+              },
+              [1, 2, 3, 4, 5, 6]
+            )
+          }
+        ]
+      }
+    ]
+  },
+  {
+    role: "tfoot"
+  }
+];
+
+export default mainTable;

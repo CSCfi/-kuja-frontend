@@ -1,85 +1,10 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import Grid from "./Grid";
-import RowGroup from "./RowGroup";
+import * as R from "ramda";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";
-import * as R from "ramda";
-import { addRowsToObject, components, getMain, getRowGroup } from "./utils";
 
-const availableComponents = {
-  Grid,
-  RowGroup,
-  TableCell,
-  TableRow
-};
-
-const TableComponent = ({ components, structure, id = "main" }) => {
-  if (!structure[id]) return <div>structure.{id} is missing!</div>;
-
-  function renderIncludedElements(includes = []) {
-    console.info(includes);
-    return R.map(id => {
-      console.info(id);
-      if (id.length === 0) {
-        return null;
-      } else if (Array.isArray(id)) {
-        return (
-          <div key={Math.random()}>
-            {renderIncludedElements(R.filter(R.compose(R.not, R.isEmpty), id))}
-          </div>
-        );
-      } else {
-        const _id = R.is(String, id) ? id : R.head(id);
-        return (
-          <TableComponent
-            key={Math.random()}
-            components={components}
-            structure={structure}
-            id={_id}></TableComponent>
-        );
-      }
-    }, R.filter(R.compose(R.not, R.isEmpty), includes));
-  }
-
-  return (
-    <React.Fragment>
-      {R.map(componentSpecs => {
-        const component = R.find(
-          R.propEq("id", componentSpecs.ref),
-          components
-        );
-
-        const TagName = availableComponents[component.name];
-        // console.info(component.name, componentSpecs.includes);
-        return (
-          <TagName
-            key={Math.random()}
-            properties={Object.assign(
-              {},
-              { id },
-              component.properties,
-              componentSpecs.properties || {}
-            )}>
-            <React.Fragment>
-              {R.map(id => {
-                return (
-                  <TableComponent
-                    key={Math.random()}
-                    components={components}
-                    structure={structure}
-                    id={id}></TableComponent>
-                );
-              }, componentSpecs.includes || [])}
-            </React.Fragment>
-          </TagName>
-        );
-      }, structure[id].components)}
-    </React.Fragment>
-  );
-};
-
-const Table2 = ({ data }) => {
+const Table2 = ({ structure, level = 0 }) => {
   const orderSwap = {
     ascending: "descending",
     descending: "ascending"
@@ -90,26 +15,31 @@ const Table2 = ({ data }) => {
     order: "ascending"
   });
 
-  const bodyRows = useMemo(() => {
-    return data.body.rows;
-  }, [data.body.rows]);
+  const sortedStructure = useMemo(() => {
+    const indexOfTbody = R.findIndex(R.propEq("role", "tbody"), structure);
+    if (indexOfTbody >= 0) {
+      const rowsPath = [indexOfTbody, "rowGroups", 0, "rows"];
+      const sorted = R.sortBy(
+        R.path(["cells", orderOfBodyRows.columnIndex, "text"])
+      )(R.path([indexOfTbody, "rowGroups", 0, "rows"], structure) || []);
+      const updatedStructure = R.assocPath(
+        rowsPath,
+        orderOfBodyRows.order === "ascending" ? sorted : R.reverse(sorted),
+        structure
+      );
+      return updatedStructure;
+    }
+    return structure;
+  }, [orderOfBodyRows, structure]);
 
-  const sortedBodyRows = useMemo(() => {
-    const sorted = R.sortBy(
-      R.path(["cells", orderOfBodyRows.columnIndex, "text"])
-    )(bodyRows || []);
-    return orderOfBodyRows.order === "ascending" ? sorted : R.reverse(sorted);
-  }, [bodyRows, orderOfBodyRows]);
-
-  function onCellClick(action, properties) {
-    console.info("on cell click", action, properties);
+  function onCellClick(action, { columnIndex }) {
     if (action === "sort") {
       setOrderOfBodyRows(prevState => {
         let order = R.prop(prevState.order, orderSwap);
-        if (prevState.columnIndex !== properties.columnIndex) {
+        if (prevState.columnIndex !== columnIndex) {
           order = "ascending";
         }
-        return { columnIndex: properties.columnIndex, order };
+        return { columnIndex: columnIndex, order };
       });
     }
   }
@@ -118,41 +48,62 @@ const Table2 = ({ data }) => {
     console.info(action, properties);
   }
 
-  const structure = useMemo(() => {
-    return sortedBodyRows
-      ? Object.assign(
-          {},
-          getMain({
-            includes: ["rowGroupHeader", "rowGroupBody"]
-          }),
-          getRowGroup("rowGroupHeader", {
-            includes: R.map(
-              key => `0-${key}-header`,
-              Object.keys(data.header.rows)
-            )
-          }),
-          getRowGroup("rowGroupBody", {
-            includes: R.map(key => `0-${key}`, Object.keys(sortedBodyRows))
-          }),
-          addRowsToObject(data.header.rows, { isHeader: true }, onCellClick),
-          addRowsToObject(sortedBodyRows, {}, onRowClick)
-        )
-      : {};
-  }, [sortedBodyRows]);
+  const getRowsToRender = (part, rows = []) => {
+    const jsx = R.addIndex(R.map)((row, iii) => {
+      return (
+        <React.Fragment key={iii}>
+          <TableRow
+            isLastRow={iii === rows.length - 1}
+            key={`row-${iii}`}
+            tableLevel={level}
+            onClick={() => onRowClick(row)}>
+            {R.addIndex(R.map)((cell, iiii) => {
+              return (
+                <TableCell
+                  columnIndex={iiii}
+                  isHeaderCell={part.role === "thead"}
+                  isOnLastRow={iii === rows.length - 1}
+                  key={`cell-${iiii}`}
+                  onClick={onCellClick}
+                  orderOfBodyRows={orderOfBodyRows}
+                  properties={cell}
+                  tableLevel={level}>
+                  {cell.table && (
+                    <Table2 level={level + 1} structure={cell.table}></Table2>
+                  )}
+                </TableCell>
+              );
+            }, row.cells || [])}
+          </TableRow>
+          {row.rows && getRowsToRender(part, row.rows)}
+        </React.Fragment>
+      );
+    }, rows);
+    return jsx;
+  };
 
-  console.info(structure);
+  const table = R.addIndex(R.map)((part, i) => {
+    return (
+      <React.Fragment key={i}>
+        {R.addIndex(R.map)((rowGroup, ii) => {
+          return (
+            <div
+              key={`rowGroup-${ii}`}
+              role="rowgroup"
+              className={`pl-${4 * level}`}>
+              {getRowsToRender(part, rowGroup.rows)}
+            </div>
+          );
+        }, part.rowGroups || [])}
+      </React.Fragment>
+    );
+  }, sortedStructure);
 
-  return (
-    // <div>a</div>
-    <TableComponent
-      components={components}
-      structure={structure}></TableComponent>
-  );
+  return <div role="grid">{table}</div>;
 };
 
 Table2.propTypes = {
-  components: PropTypes.array,
-  structure: PropTypes.object
+  structure: PropTypes.array
 };
 
 export default Table2;
