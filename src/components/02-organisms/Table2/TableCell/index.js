@@ -36,8 +36,8 @@ const TableCell = ({ children, properties = {} }) => {
       key={`key-${Math.random()}`}
       role={properties.isHeader ? "columnheader" : "gridCell"}
       className={`${classNames} ${
-        properties.isHeader ? "bg-green-500 border" : "border-t p-4"
-      } relative flex items-center`}>
+        properties.isHeader ? "bg-green-500" : "p-4"
+      } relative flex items-center border-t`}>
       {properties.isSortable ? (
         <StyledButton
           aria-label="Sort"
