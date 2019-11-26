@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";
+import RowGroup from "./RowGroup";
 
 const Table2 = ({ structure, level = 0 }) => {
   const orderSwap = {
@@ -32,7 +33,13 @@ const Table2 = ({ structure, level = 0 }) => {
     return structure;
   }, [orderOfBodyRows, structure]);
 
-  function onCellClick(action, { columnIndex }) {
+  function onRowClick(action, row, tableLevel) {
+    if (row.onClick) {
+      row.onClick(row, action);
+    }
+  }
+
+  function onCellClick(action, { columnIndex, cell, row }) {
     if (action === "sort") {
       setOrderOfBodyRows(prevState => {
         let order = R.prop(prevState.order, orderSwap);
@@ -41,11 +48,9 @@ const Table2 = ({ structure, level = 0 }) => {
         }
         return { columnIndex: columnIndex, order };
       });
+    } else {
+      onRowClick(action, row);
     }
-  }
-
-  function onRowClick(action, properties) {
-    console.info(action, properties);
   }
 
   const getRowsToRender = (part, rows = []) => {
@@ -53,10 +58,10 @@ const Table2 = ({ structure, level = 0 }) => {
       return (
         <React.Fragment key={iii}>
           <TableRow
-            isLastRow={iii === rows.length - 1}
             key={`row-${iii}`}
-            tableLevel={level}
-            onClick={() => onRowClick(row)}>
+            row={row}
+            onClick={onRowClick}
+            tableLevel={level}>
             {R.addIndex(R.map)((cell, iiii) => {
               return (
                 <TableCell
@@ -67,6 +72,7 @@ const Table2 = ({ structure, level = 0 }) => {
                   onClick={onCellClick}
                   orderOfBodyRows={orderOfBodyRows}
                   properties={cell}
+                  row={row}
                   tableLevel={level}>
                   {cell.table && (
                     <Table2 level={level + 1} structure={cell.table}></Table2>
@@ -87,12 +93,9 @@ const Table2 = ({ structure, level = 0 }) => {
       <React.Fragment key={i}>
         {R.addIndex(R.map)((rowGroup, ii) => {
           return (
-            <div
-              key={`rowGroup-${ii}`}
-              role="rowgroup"
-              className={`pl-${4 * level}`}>
+            <RowGroup key={`rowGroup-${ii}`} tableLevel={level}>
               {getRowsToRender(part, rowGroup.rows)}
-            </div>
+            </RowGroup>
           );
         }, part.rowGroups || [])}
       </React.Fragment>

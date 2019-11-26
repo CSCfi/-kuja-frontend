@@ -112,7 +112,7 @@ export const subTable2 = [
   }
 ];
 
-export const mainTable = [
+export default [
   {
     role: "thead",
     rowGroups: [
@@ -141,6 +141,9 @@ export const mainTable = [
       {
         rows: [
           {
+            onClick: (row, action) => {
+              console.info("The row you just clicked is: ", row, action);
+            },
             cells: R.addIndex(R.map)(
               (col, ii) => {
                 return {
@@ -214,5 +217,3 @@ export const mainTable = [
     role: "tfoot"
   }
 ];
-
-export default mainTable;

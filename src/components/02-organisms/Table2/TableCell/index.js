@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import * as R from "ramda";
 import { withStyles } from "@material-ui/core";
+import SimpleMenu from "../../SimpleMenu";
 
 const StyledButton = withStyles({
   root: {
@@ -28,6 +29,7 @@ const TableCell = ({
   onClick,
   orderOfBodyRows,
   properties = {},
+  row,
   tableLevel = 0
 }) => {
   const classNames = R.join(
@@ -39,12 +41,28 @@ const TableCell = ({
     onClick("sort", { columnIndex, properties });
   }
 
+  const menuActions = useMemo(() => {
+    return properties.menu
+      ? R.map(action => {
+          return {
+            ...action,
+            onClick: () => {
+              return onClick(action.id, {
+                cell: properties,
+                row
+              });
+            }
+          };
+        }, properties.menu.actions)
+      : [];
+  }, [properties.menu]);
+
   return (
     <div
       key={`key-${Math.random()}`}
       role={isHeaderCell ? "columnheader" : "gridCell"}
       className={`${classNames} ${properties.table ? "w-full" : "flex"} ${
-        isHeaderCell ? `bg-green-${tableLevel + 5}00` : "p-4"
+        isHeaderCell ? `bg-green-${tableLevel + 5}00 text-white` : "p-2"
       } relative items-center ${!isOnLastRow ? "border-b" : ""}`}>
       {properties.isSortable ? (
         <StyledButton
@@ -70,8 +88,12 @@ const TableCell = ({
         </StyledButton>
       ) : (
         <React.Fragment>
-          <span className={properties.truncate ? "truncate" : ""}>
+          <span
+            className={`${
+              properties.truncate ? "truncate" : ""
+            } py-1 cursor-default`}>
             {properties.text}
+            {properties.menu && <SimpleMenu actions={menuActions}></SimpleMenu>}
           </span>
         </React.Fragment>
       )}
@@ -87,6 +109,7 @@ TableCell.propTypes = {
   onClick: PropTypes.func,
   orderOfBodyRows: PropTypes.object,
   properties: PropTypes.object,
+  row: PropTypes.object,
   tableLevel: PropTypes.number
 };
 

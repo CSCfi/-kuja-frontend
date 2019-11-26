@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const TableRow = ({ children, isLastRow, onClick, tableLevel = 0 }) => {
+const TableRow = ({ children, onClick, row, tableLevel = 0 }) => {
   function onRowClick(action = "click") {
     if (onClick) {
-      onClick(action);
+      onClick(action, row, tableLevel);
     }
   }
 
@@ -12,9 +12,7 @@ const TableRow = ({ children, isLastRow, onClick, tableLevel = 0 }) => {
     <div
       key={`key-${Math.random()}`}
       role="row"
-      className={`hover:bg-gray-${tableLevel + 1}00 cursor-pointer flex ${
-        tableLevel > 0 ? "overflow-auto rounded-lg" : ""
-      }`}
+      className={`hover:bg-gray-${tableLevel + 1}00 cursor-pointer flex`}
       onClick={() => {
         onRowClick();
       }}>
@@ -24,8 +22,8 @@ const TableRow = ({ children, isLastRow, onClick, tableLevel = 0 }) => {
 };
 
 TableRow.propTypes = {
-  isLastRow: PropTypes.bool,
   onClick: PropTypes.func,
+  row: PropTypes.object,
   tableLevel: PropTypes.number
 };
 
