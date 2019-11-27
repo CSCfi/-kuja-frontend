@@ -77,7 +77,7 @@ const TableCell = ({
   return (
     <div
       key={`key-${Math.random()}`}
-      role={isHeaderCell ? "columnheader" : "gridCell"}
+      role={isHeaderCell ? "columnheader" : "gridcell"}
       className={`${classNames} ${properties.table ? "w-full" : "flex"} ${
         isHeaderCell ? `bg-green-${tableLevel + 5}00 text-white` : "p-2"
       } relative items-center ${!isOnLastRow ? "border-b" : ""}`}>
