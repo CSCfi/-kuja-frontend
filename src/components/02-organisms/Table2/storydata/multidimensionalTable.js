@@ -20,6 +20,10 @@ export const subTable = [
       {
         rows: [
           {
+            id: 0, // This can be e.g. uuid
+            onClick: (row, action) => {
+              console.info("The row you just clicked is: ", row, action);
+            },
             cells: R.addIndex(R.map)(
               (col, ii) => {
                 return {
@@ -43,6 +47,10 @@ export const subTable = [
       {
         rows: R.addIndex(R.map)((row, i) => {
           return {
+            id: i, // This can be e.g. uuid
+            onClick: (row, action) => {
+              console.info("The row you just clicked is: ", row, action);
+            },
             cells: R.addIndex(R.map)(
               (col, ii) => {
                 return {
@@ -51,8 +59,22 @@ export const subTable = [
                   text: `${getRandomNumber(10)} (${i}${ii})`
                 };
               },
-              [1, 2, 3, 4, 5, 6]
-            )
+              [1, 2, 3, 4, 5]
+            ).concat({
+              menu: {
+                actions: [
+                  {
+                    id: "start-preparing",
+                    text: "Ota valmisteluun"
+                  },
+                  {
+                    id: "delete",
+                    text: "Poista"
+                  }
+                ]
+              },
+              styleClasses: [colWidths[5]]
+            })
           };
         }, new Array(10))
       }
