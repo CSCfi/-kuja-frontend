@@ -93,7 +93,7 @@ const TableCell = ({
               isHeaderCell ? "cursor-default" : ""
             }`}>
             {properties.text}
-            {properties.menu && <SimpleMenu actions={menuActions}></SimpleMenu>}
+            {properties.menu && <SimpleMenu actions={menuActions} id={properties.menu.id}></SimpleMenu>}
           </span>
         </React.Fragment>
       )}
