@@ -23,7 +23,7 @@ function SimpleMenu({ actions = [], id }) {
    */
   const handleClick = event => {
     /**
-     * Stopping is written for using the SimpleMenu in a cell of the Table2
+     * Stopping is written for using the SimpleMenu in a cell of the Table
      * component. If propagation is allowed clicking the menu icon
      * also triggers click events of SimpleMenu's parent elements.
      */
@@ -43,7 +43,7 @@ function SimpleMenu({ actions = [], id }) {
    */
   const handleClose = (event, action) => {
     /**
-     * Stopping is written for using the SimpleMenu in a cell of the Table2
+     * Stopping is written for using the SimpleMenu in a cell of the Table
      * component. If propagation is allowed clicking the menu icon
      * also triggers click events of SimpleMenu's parent elements.
      */

@@ -3,13 +3,13 @@ import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
 import multidimensionalTable from "./storydata/multidimensionalTable";
 import simpleTable from "./storydata/simpleTable";
-import Table2 from "./index";
+import Table from "./index";
 
-storiesOf("Table2", module)
+storiesOf("Table", module)
   .addDecorator(withInfo)
   .add("Multidimensional table", () => {
-    return <Table2 structure={multidimensionalTable} />;
+    return <Table structure={multidimensionalTable} />;
   })
   .add("Simple table", () => {
-    return <Table2 structure={simpleTable} />;
+    return <Table structure={simpleTable} />;
   });
