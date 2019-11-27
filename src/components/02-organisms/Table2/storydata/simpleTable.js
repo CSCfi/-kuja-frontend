@@ -60,6 +60,7 @@ export const mainTable = [
               [1, 2, 3, 4, 5]
             ).concat({
               menu: {
+                id: `simple-menu-${i}`,
                 actions: [
                   {
                     id: "start-preparing",
