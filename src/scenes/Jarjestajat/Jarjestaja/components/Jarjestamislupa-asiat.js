@@ -4,6 +4,7 @@ import { InnerContentContainer } from "../../../../modules/elements";
 import PropTypes from "prop-types";
 
 const JarjestamislupaAsiat = ({
+  history,
   match,
   muutospyynnot,
   newApplicationRouteItem,
@@ -14,6 +15,7 @@ const JarjestamislupaAsiat = ({
     <InnerContentContainer>
       <div className="m-8">
         <JarjestamislupaAsiatList
+          history={history}
           match={match}
           intl={intl}
           muutospyynnot={muutospyynnot}
@@ -26,6 +28,7 @@ const JarjestamislupaAsiat = ({
 };
 
 JarjestamislupaAsiat.propTypes = {
+  history: PropTypes.object,
   match: PropTypes.object,
   muutospyynnot: PropTypes.array,
   newApplicationRouteItem: PropTypes.object
