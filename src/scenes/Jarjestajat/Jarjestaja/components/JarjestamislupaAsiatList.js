@@ -15,15 +15,8 @@ import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { injectIntl } from "react-intl";
 import common from "../../../../i18n/definitions/common";
-import {
-  Table,
-  Tbody,
-  Thead,
-  Thn,
-  Trn,
-  ThButton,
-  Thn2
-} from "../../../../modules/Table";
+import Table from "../../../../components/02-organisms/Table";
+import * as R from "ramda";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -37,11 +30,26 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const columnTitles = [
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
+  {
+    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
+    accessor: "dnro"
+  },
+  {
+    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
+    accessor: "asia"
+  },
+  {
+    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
+    accessor: "tila"
+  },
+  {
+    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
+    accessor: "maaraaika"
+  },
+  {
+    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI,
+    accessor: "paatetty"
+  }
 ];
 
 const JarjestamislupaAsiatList = ({
@@ -54,6 +62,25 @@ const JarjestamislupaAsiatList = ({
   const { url } = match;
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
+
+  const tableData = useMemo(() => {
+    // const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
+    const data = R.map(muutospyynto => {
+      return {
+        tila: LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila].FI
+      };
+    }, muutospyynnot);
+    console.info(data, muutospyynnot);
+    return data;
+    // return _.map(data, historyData => (
+    //   <JarjestamislupaAsiatListItem
+    //     url={url}
+    //     muutospyynto={historyData}
+    //     key={historyData.uuid}
+    //     setOpened={() => setMuutospyynto(historyData)}
+    //   />
+    // ));
+  }, [url, muutospyynnot]);
 
   const jarjestamislupaAsiatList = useMemo(() => {
     const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
@@ -82,8 +109,7 @@ const JarjestamislupaAsiatList = ({
             className="mb-2"
             to={newApplicationRouteItem.path}
             exact={newApplicationRouteItem.exact}
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
+            style={{ textDecoration: "none", color: "inherit" }}>
             <Button color="primary">
               <Add />
               <span className="pl-2">{newApplicationRouteItem.text}</span>
@@ -120,35 +146,7 @@ const JarjestamislupaAsiatList = ({
           <Media
             query={MEDIA_QUERIES.TABLET_MIN}
             render={() => (
-              <Table className={classes.table}>
-                <Thead role="rowgroup">
-                  <Trn role="row">
-                    {columnTitles.map((title, i) =>
-                      i === 1 ? (
-                        <Thn2 role="cell" key={`title-${i}`}>
-                          <span className="text-white">
-                            <Typography component="span">{title}</Typography>
-                          </span>
-                        </Thn2>
-                      ) : (
-                        <Thn role="cell" key={`title-${i}`}>
-                          <span className="text-white">
-                            <Typography component="span">{title}</Typography>
-                          </span>
-                        </Thn>
-                      )
-                    )}
-                    <ThButton role="cell">
-                      <span className="text-white">
-                        <Typography component="span">
-                          {intl.formatMessage(common.functions)}
-                        </Typography>
-                      </span>
-                    </ThButton>
-                  </Trn>
-                </Thead>
-                <Tbody>{jarjestamislupaAsiatList}</Tbody>
-              </Table>
+              <Table columns={columnTitles} data={tableData}></Table>
             )}
           />
         </Paper>
