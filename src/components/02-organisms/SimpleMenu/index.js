@@ -10,10 +10,12 @@ function SimpleMenu({ actions }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = event => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = action => {
+  const handleClose = (event, action) => {
+    event.stopPropagation();
     if (action) {
       if (action.onClick) {
         action.onClick(action);
@@ -35,14 +37,13 @@ function SimpleMenu({ actions }) {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={() => handleClose()}>
+        onClose={handleClose}>
         {R.addIndex(R.map)((action, i) => {
           return (
             <MenuItem
               key={`action-${i}`}
               onClick={e => {
-                e.preventDefault();
-                handleClose(action);
+                handleClose(e, action);
                 return false;
               }}>
               {action.text}
