@@ -7,6 +7,9 @@ import * as R from "ramda";
 import { withStyles } from "@material-ui/core";
 import SimpleMenu from "../../SimpleMenu";
 
+/**
+ * StyledButton is used for creating buttons for sort actions.
+ */
 const StyledButton = withStyles({
   root: {
     border: 0,
@@ -21,11 +24,24 @@ const StyledButton = withStyles({
   }
 })(Button);
 
+/**
+ * TableCell component. Used  by the Table component.
+ * @param {object} props - Properties object.
+ * @param {object} props.children - Dynamic content of the TableCell.
+ * @param {number} props.columnIndex - Index of the cell on the current row.
+ * @param {boolean} props.isHeaderCell - True if the cell is in thead section.
+ * @param {boolean} props.isOnLastRow - True if the cell is on the last row of table.
+ * @param {function} props.onClick - Will be called when the cell is clicked.
+ * @param {array} props.orderOfBodyRows - Config object. Is used for showing sorting related info.
+ * @param {object} props.properties - Config object. Defines cell related variables (see table structure).
+ * @param {object} props.row - Row related data. The row contains the cell.
+ * @param {number} props.tableLevel - Indicates the nesting level. For a flat table the value is 0.
+ */
 const TableCell = ({
   children,
   columnIndex,
   isHeaderCell = false,
-  isOnLastRow,
+  isOnLastRow = false,
   onClick,
   orderOfBodyRows,
   properties = {},
@@ -41,6 +57,7 @@ const TableCell = ({
     onClick("sort", { columnIndex, properties });
   }
 
+  // Callback functions of menu actions are called with additional data.
   const menuActions = useMemo(() => {
     return properties.menu
       ? R.map(action => {
@@ -93,7 +110,11 @@ const TableCell = ({
               isHeaderCell ? "cursor-default" : ""
             }`}>
             {properties.text}
-            {properties.menu && <SimpleMenu actions={menuActions} id={properties.menu.id}></SimpleMenu>}
+            {properties.menu && (
+              <SimpleMenu
+                actions={menuActions}
+                id={properties.menu.id}></SimpleMenu>
+            )}
           </span>
         </React.Fragment>
       )}

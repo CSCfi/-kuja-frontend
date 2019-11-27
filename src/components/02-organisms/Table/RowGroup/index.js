@@ -2,6 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
+/**
+ * RowGroup component. Used by the Table component.
+ * @param {object} props - Properties object.
+ * @param {object} props.children - RowGroup content.
+ * @param {array} props.styleClasses - List of css class names.
+ */
 const RowGroup = ({ children, styleClasses = [], tableLevel = 0 }) => {
   const allStyleClasses = R.concat(styleClasses, [`pl-${4 * tableLevel}`]);
   const classNames = R.join(" ", allStyleClasses);

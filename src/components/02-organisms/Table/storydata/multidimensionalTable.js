@@ -13,6 +13,9 @@ function getRandomNumber(max = 1000) {
   return Math.floor(Math.random() * max + 1);
 }
 
+/**
+ * Table can contain multiple sub tables. This is one of them.
+ */
 export const subTable = [
   {
     role: "thead",
