@@ -1,21 +1,36 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";
 import RowGroup from "./RowGroup";
+import * as R from "ramda";
 
+/**
+ *
+ * @param {object} props - Properties object.
+ * @param {object} props.structure - Structure of the table.
+ * @param {level} props.level - Level of unnested table is 0.
+ */
 const Table = ({ structure, level = 0 }) => {
+  // This is for sorting the rows.
   const orderSwap = {
     ascending: "descending",
     descending: "ascending"
   };
+
+  /**
+   * The rows of the tbody section are sorted according to this.
+   * Here you can see the default settings.
+   **/
 
   const [orderOfBodyRows, setOrderOfBodyRows] = useState({
     columnIndex: 0,
     order: "ascending"
   });
 
+  /**
+   * Sorting function.
+   */
   const sortedStructure = useMemo(() => {
     const indexOfTbody = R.findIndex(R.propEq("role", "tbody"), structure);
     if (indexOfTbody >= 0) {
@@ -33,13 +48,33 @@ const Table = ({ structure, level = 0 }) => {
     return structure;
   }, [orderOfBodyRows, structure]);
 
-  function onRowClick(action, row, tableLevel) {
+  /**
+   * There are rows in the table's structure object. One of those rows are
+   * passed to this function as a parameter and its callback function will
+   * be called.
+   * @param {string} action - Identifier for the executed action.
+   * @param {object} row - Includes cells and other row related data.
+   */
+  function onRowClick(action, row) {
     if (row.onClick) {
+      /**
+       * User can define actions in table's structure object. Actions are
+       * used later to run the correct operations for the action related row.
+       * Handling actions happens outside of the Table component.
+       **/
       row.onClick(row, action);
     }
   }
 
-  function onCellClick(action, { columnIndex, cell, row }) {
+  /**
+   *
+   * @param {string} action - Custom text string.
+   * @param {object} properties - Contains cell related properties.
+   * @param {number} properties.columnIndex - Index of the clicked column.
+   * @param {object} properties.row - Row that contains the clicked cell.
+   */
+  function onCellClick(action, { columnIndex, row }) {
+    // Sort action is handled inside the Table component.
     if (action === "sort") {
       setOrderOfBodyRows(prevState => {
         let order = R.prop(prevState.order, orderSwap);
@@ -49,10 +84,21 @@ const Table = ({ structure, level = 0 }) => {
         return { columnIndex: columnIndex, order };
       });
     } else {
+      /**
+       * Cell related actions are expanded to row level. This can change
+       * later if cell click related callbacks are needed.
+       **/
       onRowClick(action, row);
     }
   }
 
+  /**
+   * Forms the table rows and nested Table components.
+   * @param {object} part - Object of the structure array.
+   * @param {string} part.role - E.g. thead, tbody...
+   * @param {array} part.rowGroups - Array of rowgroup objects.
+   * @param {array} rows - Array of row objects.
+   */
   const getRowsToRender = (part, rows = []) => {
     const jsx = R.addIndex(R.map)((row, iii) => {
       return (
@@ -75,12 +121,16 @@ const Table = ({ structure, level = 0 }) => {
                   row={row}
                   tableLevel={level}>
                   {cell.table && (
+                    // Nested table is created here.
                     <Table level={level + 1} structure={cell.table}></Table>
                   )}
                 </TableCell>
               );
             }, row.cells || [])}
           </TableRow>
+          {/* Row object can contain "sub rows" that will always be shown under their
+          parent row - even if the table is sorted. This is especially useful what
+          comes to creating nested tables. */}
           {row.rows && getRowsToRender(part, row.rows)}
         </React.Fragment>
       );
@@ -88,6 +138,10 @@ const Table = ({ structure, level = 0 }) => {
     return jsx;
   };
 
+  /**
+   * Starting point of table creation. Structure will be walked through and table's
+   * different parts will be created.
+   */
   const table = R.addIndex(R.map)((part, i) => {
     return (
       <React.Fragment key={i}>
@@ -102,11 +156,13 @@ const Table = ({ structure, level = 0 }) => {
     );
   }, sortedStructure);
 
+  // The table will is rendered.
   return <div role="grid">{table}</div>;
 };
 
 Table.propTypes = {
-  structure: PropTypes.array
+  // Defines the structure of table.
+  structure: PropTypes.array.isRequired
 };
 
 export default Table;
