@@ -89,9 +89,9 @@ const TableCell = ({
       ) : (
         <React.Fragment>
           <span
-            className={`${
-              properties.truncate ? "truncate" : ""
-            } py-1 cursor-default`}>
+            className={`${properties.truncate ? "truncate" : ""} py-1 ${
+              isHeaderCell ? "cursor-default" : ""
+            }`}>
             {properties.text}
             {properties.menu && <SimpleMenu actions={menuActions}></SimpleMenu>}
           </span>
