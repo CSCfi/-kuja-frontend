@@ -31,7 +31,6 @@ const PerustelutATVKoulutukset = props => {
                 name: "StatusTextRow",
                 properties: {
                   name: "StatusTextRow",
-                  code: item.code,
                   title: item.title,
                   labelStyles: {
                     addition: isAdded,
