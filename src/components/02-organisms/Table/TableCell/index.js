@@ -72,7 +72,7 @@ const TableCell = ({
           };
         }, properties.menu.actions)
       : [];
-  }, [properties.menu]);
+  }, [onClick, properties, row]);
 
   return (
     <div
