@@ -32,11 +32,11 @@ const useStyles = makeStyles(theme => ({
 const colWidths = {
   0: "w-2/12",
   1: "w-1/12",
-  2: "w-2/12",
+  2: "w-1/12 sm:w-2/12",
   3: "w-2/12",
   4: "w-2/12",
   5: "w-2/12",
-  6: "w-1/12"
+  6: "w-2/12 sm:w-1/12"
 };
 
 const columnTitles = [
@@ -44,7 +44,7 @@ const columnTitles = [
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
-  "Luontipäivmäärä",
+  "Luontipvm",
   LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
 ];
 
@@ -69,10 +69,8 @@ const JarjestamislupaAsiatList = ({
         uuid: muutospyynto.uuid
       };
     }, muutospyynnot);
-    console.info(data, muutospyynnot);
     return data;
-
-  }, [url, muutospyynnot]);
+  }, [muutospyynnot]);
 
   const mainTable = [
     {
@@ -84,9 +82,10 @@ const JarjestamislupaAsiatList = ({
               cells: R.addIndex(R.map)((title, ii) => {
                 return {
                   isSortable: true,
-                  truncate: true,
+                  truncate: false,
                   styleClasses: [colWidths[ii]],
-                  text: title
+                  text: title,
+                  sortingTooltip: "Järjestä sarakkeen mukaan"
                 };
               }, columnTitles).concat({
                 text: "Toiminnot",

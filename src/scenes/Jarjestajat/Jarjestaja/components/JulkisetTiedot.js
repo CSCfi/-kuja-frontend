@@ -7,7 +7,7 @@ import { LUPA_LISAKOULUTTAJAT } from "../../constants";
 import LupaHistory from "./LupaHistory";
 import PropTypes from "prop-types";
 
-const JulkisetTiedot = ({ jarjestaja = {}, lupa = {} }) => {
+const JulkisetTiedot = ({ history, jarjestaja = {}, lupa = {} }) => {
   const lupaException = useMemo(() => {
     return LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus];
   }, [jarjestaja.ytunnus]);
@@ -42,12 +42,13 @@ const JulkisetTiedot = ({ jarjestaja = {}, lupa = {} }) => {
       <h3>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</h3>
       <br />
 
-      <LupaHistory jarjestajaOid={jarjestaja.oid} />
+      <LupaHistory history={history} jarjestajaOid={jarjestaja.oid} />
     </div>
   );
 };
 
 JulkisetTiedot.propTypes = {
+  history: PropTypes.object,
   jarjestaja: PropTypes.object,
   lupa: PropTypes.object
 };

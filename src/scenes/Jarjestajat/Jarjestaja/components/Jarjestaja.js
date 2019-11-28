@@ -160,8 +160,12 @@ const Jarjestaja = ({
                   <Route
                     path={`${match.url}`}
                     exact
-                    render={() => (
-                      <JulkisetTiedot jarjestaja={jarjestaja} lupa={lupa} />
+                    render={props => (
+                      <JulkisetTiedot
+                        history={props.history}
+                        jarjestaja={jarjestaja}
+                        lupa={lupa}
+                      />
                     )}
                   />
                   <Route
