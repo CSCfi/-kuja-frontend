@@ -20,7 +20,7 @@ const StyledButton = withStyles({
     margin: "0.5rem"
   },
   label: {
-    textTransform: "capitalize"
+    textTransform: "none"
   }
 })(Button);
 
