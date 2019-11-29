@@ -17,7 +17,7 @@ const {
   write
 } = require("taiko");
 const chai = require("chai");
-require('dotenv').config()
+require("dotenv").config();
 const assert = chai.assert;
 const headless = process.env.headless_chrome.toLowerCase() === "true";
 
@@ -69,7 +69,7 @@ step("Avaa uusi muutospyyntolomake", async () => {
   try {
     await click(link("Oma organisaatio"));
     await click(link("Järjestämislupa-asiat"));
-    await click(link("Uusi hakemus"));
+    await click("Tee uusi hakemus");
   } catch (e) {
     console.error(e);
   }
@@ -123,6 +123,6 @@ step("Assert if text exists <string>", async string => {
   try {
     assert.ok(await text(string).exists());
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 });
