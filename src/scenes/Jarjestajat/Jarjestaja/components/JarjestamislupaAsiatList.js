@@ -105,15 +105,9 @@ const JarjestamislupaAsiatList = ({
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "click" && row.id) {
+
+                } else if (action === "edit") {
                   history.push(`hakemukset-ja-paatokset/${row.id}/1`);
-                } else if (action === "delete") {
-                  alert(
-                    `TODO: Write implementation to delete document with UUID ${row.id}`
-                  );
-                } else if (action === "start-preparing") {
-                  alert(
-                    `TODO: Write implementation for "Ota valmisteluun" action. UUID: ${row.id}`
-                  );
                 }
               },
               cells: R.addIndex(R.map)(
@@ -137,12 +131,8 @@ const JarjestamislupaAsiatList = ({
                   id: `simple-menu-${i}`,
                   actions: [
                     {
-                      id: "start-preparing",
-                      text: "Ota valmisteluun"
-                    },
-                    {
-                      id: "delete",
-                      text: "Poista"
+                      id: "edit",
+                      text: "Täydennä hakemusta"
                     }
                   ]
                 },
