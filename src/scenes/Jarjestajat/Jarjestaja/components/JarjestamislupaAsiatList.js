@@ -8,7 +8,6 @@ import Add from "@material-ui/icons/AddCircleOutline";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
-import { Typography } from "@material-ui/core";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import Media from "react-media";
 import PropTypes from "prop-types";
@@ -17,6 +16,7 @@ import { injectIntl } from "react-intl";
 import common from "../../../../i18n/definitions/common";
 import Table from "../../../../components/02-organisms/Table";
 import * as R from "ramda";
+import moment from "moment";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,30 +29,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const colWidths = {
+  0: "w-2/12",
+  1: "w-1/12",
+  2: "w-1/12 sm:w-2/12",
+  3: "w-2/12",
+  4: "w-2/12",
+  5: "w-2/12",
+  6: "w-2/12 sm:w-1/12"
+};
+
 const columnTitles = [
-  {
-    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
-    accessor: "dnro"
-  },
-  {
-    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
-    accessor: "asia"
-  },
-  {
-    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
-    accessor: "tila"
-  },
-  {
-    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
-    accessor: "maaraaika"
-  },
-  {
-    Header: LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI,
-    accessor: "paatetty"
-  }
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
+  "Luontipvm",
+  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
 ];
 
 const JarjestamislupaAsiatList = ({
+  history,
   match,
   muutospyynnot = [],
   newApplicationRouteItem,
@@ -64,23 +61,102 @@ const JarjestamislupaAsiatList = ({
   const [muutospyynto, setMuutospyynto] = useState(null);
 
   const tableData = useMemo(() => {
-    // const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
     const data = R.map(muutospyynto => {
       return {
-        tila: LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila].FI
+        luontipvm: moment(muutospyynto.luontipvm).format("DD.MM.YYYY HH:mm:ss"),
+        paatetty: R.path(["paatoskierros", "loppupvm"], muutospyynto),
+        tila: LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila].FI,
+        uuid: muutospyynto.uuid
       };
     }, muutospyynnot);
-    console.info(data, muutospyynnot);
     return data;
-    // return _.map(data, historyData => (
-    //   <JarjestamislupaAsiatListItem
-    //     url={url}
-    //     muutospyynto={historyData}
-    //     key={historyData.uuid}
-    //     setOpened={() => setMuutospyynto(historyData)}
-    //   />
-    // ));
-  }, [url, muutospyynnot]);
+  }, [muutospyynnot]);
+
+  const mainTable = [
+    {
+      role: "thead",
+      rowGroups: [
+        {
+          rows: [
+            {
+              cells: R.addIndex(R.map)((title, ii) => {
+                return {
+                  isSortable: true,
+                  truncate: false,
+                  styleClasses: [colWidths[ii]],
+                  text: title,
+                  sortingTooltip: "Järjestä sarakkeen mukaan"
+                };
+              }, columnTitles).concat({
+                text: "Toiminnot",
+                styleClasses: [colWidths[6]]
+              })
+            }
+          ]
+        }
+      ]
+    },
+    {
+      role: "tbody",
+      rowGroups: [
+        {
+          rows: R.addIndex(R.map)((row, i) => {
+            return {
+              id: row.uuid,
+              onClick: (row, action) => {
+                if (action === "click" && row.id) {
+                  history.push(`hakemukset-ja-paatokset/${row.id}/1`);
+                } else if (action === "delete") {
+                  alert(
+                    `TODO: Write implementation to delete document with UUID ${row.id}`
+                  );
+                } else if (action === "start-preparing") {
+                  alert(
+                    `TODO: Write implementation for "Ota valmisteluun" action. UUID: ${row.id}`
+                  );
+                }
+              },
+              cells: R.addIndex(R.map)(
+                (col, ii) => {
+                  return {
+                    truncate: true,
+                    styleClasses: [colWidths[ii]],
+                    text: col.text
+                  };
+                },
+                [
+                  { text: "???" },
+                  { text: "???" },
+                  { text: row.tila },
+                  { text: "???" },
+                  { text: row.luontipvm },
+                  { text: row.paatetty }
+                ]
+              ).concat({
+                menu: {
+                  id: `simple-menu-${i}`,
+                  actions: [
+                    {
+                      id: "start-preparing",
+                      text: "Ota valmisteluun"
+                    },
+                    {
+                      id: "delete",
+                      text: "Poista"
+                    }
+                  ]
+                },
+                styleClasses: [colWidths[6]]
+              })
+            };
+          }, tableData)
+        }
+      ]
+    },
+    {
+      role: "tfoot"
+    }
+  ];
 
   const jarjestamislupaAsiatList = useMemo(() => {
     const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
@@ -145,9 +221,7 @@ const JarjestamislupaAsiatList = ({
           />
           <Media
             query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => (
-              <Table columns={columnTitles} data={tableData}></Table>
-            )}
+            render={() => <Table structure={mainTable}></Table>}
           />
         </Paper>
       )}
@@ -156,6 +230,7 @@ const JarjestamislupaAsiatList = ({
 };
 
 JarjestamislupaAsiatList.propTypes = {
+  history: PropTypes.object,
   lupahistory: PropTypes.array,
   match: PropTypes.object,
   muutospyynnot: PropTypes.array,

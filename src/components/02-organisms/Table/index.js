@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";
 import RowGroup from "./RowGroup";
+import { sortObjectsByProperty } from "../../../utils/common";
 import * as R from "ramda";
 
 /**
@@ -10,8 +11,11 @@ import * as R from "ramda";
  * @param {object} props - Properties object.
  * @param {object} props.structure - Structure of the table.
  * @param {level} props.level - Level of unnested table is 0.
+ * @param {object} props.sortedBy - Default sorting configuration.
+ * @param {number} props.sortedBy.columnIndex - Column index.
+ * @param {string} props.order - Valid values: ascending, descending.
  */
-const Table = ({ structure, level = 0 }) => {
+const Table = ({ structure, level = 0, sortedBy = {} }) => {
   // This is for sorting the rows.
   const orderSwap = {
     ascending: "descending",
@@ -24,8 +28,8 @@ const Table = ({ structure, level = 0 }) => {
    **/
 
   const [orderOfBodyRows, setOrderOfBodyRows] = useState({
-    columnIndex: 0,
-    order: "ascending"
+    columnIndex: R.is(Number, sortedBy.columnIndex) ? sortedBy.columnIndex : 0,
+    order: sortedBy.order || "ascending"
   });
 
   /**
@@ -35,9 +39,15 @@ const Table = ({ structure, level = 0 }) => {
     const indexOfTbody = R.findIndex(R.propEq("role", "tbody"), structure);
     if (indexOfTbody >= 0) {
       const rowsPath = [indexOfTbody, "rowGroups", 0, "rows"];
-      const sorted = R.sortBy(
-        R.path(["cells", orderOfBodyRows.columnIndex, "text"])
-      )(R.path([indexOfTbody, "rowGroups", 0, "rows"], structure) || []);
+      // ASC sorting is happening here.
+      const sorted = R.sort((a, b) => {
+        return sortObjectsByProperty(a, b, [
+          "cells",
+          orderOfBodyRows.columnIndex,
+          "text"
+        ]);
+      }, R.path(rowsPath, structure) || []);
+      // If user wants to sort by descending order the sorted array will be reversed.
       const updatedStructure = R.assocPath(
         rowsPath,
         orderOfBodyRows.order === "ascending" ? sorted : R.reverse(sorted),
@@ -161,6 +171,8 @@ const Table = ({ structure, level = 0 }) => {
 };
 
 Table.propTypes = {
+  level: PropTypes.number,
+  sortedBy: PropTypes.object,
   // Defines the structure of table.
   structure: PropTypes.array.isRequired
 };

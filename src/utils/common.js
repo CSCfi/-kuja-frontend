@@ -1,5 +1,6 @@
-import * as R from "ramda";
 import { API_BASE_URL } from "../modules/constants";
+import moment from "moment";
+import * as R from "ramda";
 
 /**
  * Utility functions are listed here.
@@ -173,3 +174,28 @@ export const downloadFileFn = ({
     }
   };
 };
+
+/**
+ *
+ * @param {object} a - Object to compare.
+ * @param {object} b - Object to compare.
+ * @param {array} path - Path to the property.
+ */
+export function sortObjectsByProperty(a, b, path) {
+  if (!path) {
+    throw new Error("No property path given.");
+  }
+  const aRaw = R.path(path, a);
+  const bRaw = R.path(path, b);
+  const aDate = moment(aRaw, "DD.MM.YYYY", true);
+  const bDate = moment(bRaw, "DD.MM.YYYY", true);
+  const aCompare = aDate.isValid() ? aDate : aRaw;
+  const bCompare = aDate.isValid() ? bDate : bRaw;
+
+  if (aCompare < bCompare) {
+    return -1;
+  } else if (aCompare > bCompare) {
+    return 1;
+  }
+  return 0;
+}
