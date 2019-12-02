@@ -34,7 +34,7 @@
   "common.fetchFailure": "Tietoja ei voitu noutaa.",
   "common.fetchFailureAuthInfo": "Tämä voi johtua siitä, ettet ole kirjautunut sisään.",
   "common.functions": "Toiminnot",
-  "common.hakemusAsiakirjat": "Hakemukset asiakirjat",
+  "common.hakemusAsiakirjat": "Hakemuksen asiakirjat",
   "common.loading": "Ladataan",
   "common.loginError": "Kirjautumisessa tapahtui virhe",
   "common.newHakemus": "Tee uusi hakemus",

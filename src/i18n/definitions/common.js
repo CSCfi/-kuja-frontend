@@ -161,7 +161,7 @@ export default defineMessages({
   },
   hakemusAsiakirjat: {
     id: "common.hakemusAsiakirjat",
-    defaultMessage: "Hakemukset asiakirjat"
+    defaultMessage: "Hakemuksen asiakirjat"
   },
   backFromAsiakirjat: {
     id: "common.backFromAsiakirjat",
