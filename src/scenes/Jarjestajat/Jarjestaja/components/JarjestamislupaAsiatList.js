@@ -8,8 +8,6 @@ import Add from "@material-ui/icons/AddCircleOutline";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
-import { MEDIA_QUERIES } from "../../../../modules/styles";
-import Media from "react-media";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { injectIntl } from "react-intl";
@@ -32,10 +30,10 @@ const useStyles = makeStyles(theme => ({
 const colWidths = {
   0: "w-2/12",
   1: "w-2/12",
-  2: "w-2/12 sm:w-3/12",
+  2: "w-2/12",
   3: "w-2/12",
   4: "w-2/12",
-  5: "w-2/12 sm:w-1/12"
+  5: "w-2/12 justify-center"
 };
 
 const columnTitles = [
@@ -199,18 +197,12 @@ const JarjestamislupaAsiatList = ({
 
       {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (
         <Paper className={classes.root}>
-          <Media
-            query={MEDIA_QUERIES.MOBILE}
-            render={() => (
-              <div>
-                <div>{jarjestamislupaAsiatList}</div>
-              </div>
-            )}
-          />
-          <Media
-            query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => <Table structure={mainTable}></Table>}
-          />
+          <div className="lg:hidden">
+            <div>{jarjestamislupaAsiatList}</div>
+          </div>
+          <div className="hidden lg:block">
+            <Table structure={mainTable}></Table>
+          </div>
         </Paper>
       )}
     </React.Fragment>

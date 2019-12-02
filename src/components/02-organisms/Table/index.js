@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import TableCell from "./TableCell";
 import TableRow from "./TableRow";

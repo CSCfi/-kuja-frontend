@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React from "react";
 import * as R from "ramda";
 import Table from "../../../components/02-organisms/Table";
