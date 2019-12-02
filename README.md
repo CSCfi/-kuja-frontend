@@ -1,2 +1,2 @@
-# -kuja-frontend
+# kuja-frontend
 KUJA project
