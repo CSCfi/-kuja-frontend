@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const colWidths = {
-  0: "w-2/12",
-  1: "w-1/12",
+  0: "w-1/12",
+  1: "w-2/12",
   2: "w-1/12 sm:w-2/12",
   3: "w-2/12",
   4: "w-2/12",
@@ -105,7 +105,6 @@ const JarjestamislupaAsiatList = ({
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "click" && row.id) {
-
                 } else if (action === "edit") {
                   history.push(`hakemukset-ja-paatokset/${row.id}/1`);
                 }
@@ -119,10 +118,10 @@ const JarjestamislupaAsiatList = ({
                   };
                 },
                 [
-                  { text: "???" },
-                  { text: "???" },
+                  { text: "?" },
+                  { text: "Järjestämisluvan muutos" },
                   { text: row.tila },
-                  { text: "???" },
+                  { text: "?" },
                   { text: row.luontipvm },
                   { text: row.paatetty }
                 ]
