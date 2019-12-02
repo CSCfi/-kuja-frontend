@@ -106,7 +106,7 @@ const TableCell = ({
       ) : (
         <React.Fragment>
           <span
-            className={`${properties.truncate ? "truncate" : ""} py-1 px-2 ${
+            className={`${properties.truncate ? "truncate" : ""} py-4 px-2 ${
               isHeaderCell ? "cursor-default" : ""
             }`}>
             {properties.text}

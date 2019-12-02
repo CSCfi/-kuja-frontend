@@ -32,10 +32,10 @@ const useStyles = makeStyles(theme => ({
 const colWidths = {
   0: "w-2/12",
   1: "w-2/12",
-  2: "w-2/12",
+  2: "w-2/12 sm:w-3/12",
   3: "w-2/12",
   4: "w-2/12",
-  5: "w-2/12"
+  5: "w-2/12 sm:w-1/12"
 };
 
 const columnTitles = [
@@ -79,7 +79,6 @@ const JarjestamislupaAsiatList = ({
             {
               cells: R.addIndex(R.map)((title, ii) => {
                 return {
-                  isSortable: true,
                   truncate: false,
                   styleClasses: [colWidths[ii]],
                   text: title,
