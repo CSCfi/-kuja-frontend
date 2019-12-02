@@ -57,7 +57,7 @@ function SimpleMenu({ actions = [], id }) {
   };
 
   return (
-    <div>
+    <React.Fragment>
       <IconButton
         aria-controls="simple-menu"
         aria-haspopup="true"
@@ -83,7 +83,7 @@ function SimpleMenu({ actions = [], id }) {
           );
         }, actions)}
       </Menu>
-    </div>
+    </React.Fragment>
   );
 }
 

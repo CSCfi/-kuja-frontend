@@ -160,8 +160,12 @@ const Jarjestaja = ({
                   <Route
                     path={`${match.url}`}
                     exact
-                    render={() => (
-                      <JulkisetTiedot jarjestaja={jarjestaja} lupa={lupa} />
+                    render={props => (
+                      <JulkisetTiedot
+                        history={props.history}
+                        jarjestaja={jarjestaja}
+                        lupa={lupa}
+                      />
                     )}
                   />
                   <Route
@@ -169,6 +173,7 @@ const Jarjestaja = ({
                     exact
                     render={props => (
                       <JarjestamislupaAsiat
+                        history={props.history}
                         intl={intl}
                         match={props.match}
                         muutospyynnot={muutospyynnot}
@@ -194,7 +199,9 @@ const Jarjestaja = ({
                 <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
                   <Route
                     path={`${match.url}/jarjestamislupa`}
-                    render={() => <Jarjestamislupa lupa={lupa} lupaKohteet={lupaKohteet}/>}
+                    render={() => (
+                      <Jarjestamislupa lupa={lupa} lupaKohteet={lupaKohteet} />
+                    )}
                   />
                   <Route
                     path={`${match.url}`}
