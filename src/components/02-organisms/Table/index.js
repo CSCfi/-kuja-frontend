@@ -16,6 +16,8 @@ import * as R from "ramda";
  * @param {string} props.order - Valid values: ascending, descending.
  */
 const Table = ({ structure, level = 0, sortedBy = {} }) => {
+  const [sortingHistory, setSortingHistory] = useState({});
+
   // This is for sorting the rows.
   const orderSwap = {
     ascending: "descending",
@@ -36,6 +38,10 @@ const Table = ({ structure, level = 0, sortedBy = {} }) => {
    * Sorting function.
    */
   const sortedStructure = useMemo(() => {
+    setSortingHistory(prevValue => ({
+      ...prevValue,
+      [orderOfBodyRows.columnIndex]: orderOfBodyRows.order
+    }));
     const indexOfTbody = R.findIndex(R.propEq("role", "tbody"), structure);
     if (indexOfTbody >= 0) {
       const rowsPath = [indexOfTbody, "rowGroups", 0, "rows"];
@@ -89,7 +95,7 @@ const Table = ({ structure, level = 0, sortedBy = {} }) => {
       setOrderOfBodyRows(prevState => {
         let order = R.prop(prevState.order, orderSwap);
         if (prevState.columnIndex !== columnIndex) {
-          order = "ascending";
+          order = sortingHistory[columnIndex] || "ascending";
         }
         return { columnIndex: columnIndex, order };
       });
