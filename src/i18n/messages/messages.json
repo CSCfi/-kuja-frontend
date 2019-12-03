@@ -225,6 +225,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.tietoaTulevanJulkaisunAjankohdasta",
+    "defaultMessage": "Tulossa vuoden 2020 aikana",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
