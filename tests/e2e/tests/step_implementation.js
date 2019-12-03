@@ -17,7 +17,7 @@ const {
   write
 } = require("taiko");
 const chai = require("chai");
-require('dotenv').config()
+require("dotenv").config();
 const assert = chai.assert;
 const headless = process.env.headless_chrome.toLowerCase() === "true";
 
@@ -123,6 +123,21 @@ step("Assert if text exists <string>", async string => {
   try {
     assert.ok(await text(string).exists());
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
+});
+
+step("Navigate to Esi- ja perusopetus", async () => {
+  click(link({ href: "/esi-ja-perusopetus" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Navigate to Lukiokoulutus", async () => {
+  click(link({ href: "/lukiokoulutus" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Navigate to Vapaa sivistystyö", async () => {
+  click(link({ href: "/vapaa-sivistystyo" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
 });
