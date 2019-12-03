@@ -2,21 +2,28 @@ import * as R from "ramda";
 import React, { useContext, useMemo } from "react";
 import Media from "react-media";
 import styled from "styled-components";
-import { Table, Tbody, Thead, Thn, Trn, Thn2 } from "../../../../modules/Table";
+import { Table as OldTable, Tbody } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import JarjestamislupaAsiakirjatItem from "./JarjestamislupaAsiakirjatItem";
-import { Typography } from "@material-ui/core";
 import common from "../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
 import FetchHandler from "../../../../FetchHandler";
 import { BackendContext } from "../../../../context/backendContext";
 import Moment from "react-moment";
 import { downloadFileFn } from "../../../../utils/common";
+import Table from "../../../../components/02-organisms/Table";
 
 const WrapTable = styled.div``;
 
-const titleKeys = [
+const colWidths = {
+  0: "w-4/12",
+  1: "w-3/12",
+  2: "w-3/12",
+  3: "w-2/12"
+};
+
+const columnTitles = [
   common.document,
   common.documentStatus,
   common.author,
@@ -46,6 +53,7 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
     () =>
       R.map(
         liite => ({
+          uuid: liite.uuid,
           items: [
             intl.formatMessage(
               liite.salainen ? common.secretAttachment : common.attachment
@@ -91,6 +99,70 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
     );
   };
 
+  const table = [
+    {
+      role: "thead",
+      rowGroups: [
+        {
+          rows: [
+            {
+              cells: R.addIndex(R.map)((title, ii) => {
+                return {
+                  isSortable: true,
+                  truncate: false,
+                  styleClasses: [colWidths[ii]],
+                  text: intl.formatMessage(title),
+                  sortingTooltip: "Järjestä sarakkeen mukaan"
+                };
+              }, columnTitles)
+            }
+          ]
+        }
+      ]
+    },
+    {
+      role: "tbody",
+      rowGroups: [
+        {
+          rows: R.addIndex(R.map)(
+            row => {
+              return {
+                fileLink: row.fileLink,
+                onClick: (row, action) => {
+                  if (action === "click" && row.fileLink) {
+                    downloadFileFn({
+                      url: row.fileLink,
+                      openInNewWindow: row.openInNewWindow
+                    })();
+                  }
+                },
+                cells: R.addIndex(R.map)(
+                  (col, ii) => {
+                    return {
+                      truncate: true,
+                      styleClasses: [colWidths[ii]],
+                      text: col.text
+                    };
+                  },
+                  [
+                    { text: row.items[0] },
+                    { text: row.items[1] },
+                    { text: row.items[2] },
+                    { text: row.items[3] }
+                  ]
+                )
+              };
+            },
+            [muutospyyntoRowItem, ...liitteetRowItems]
+          )
+        }
+      ]
+    },
+    {
+      role: "tfoot"
+    }
+  ];
+
   return (
     <FetchHandler
       fetchSetup={fetchSetup}
@@ -99,33 +171,14 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
           <Media
             query={MEDIA_QUERIES.MOBILE}
             render={() => (
-              <Table role="table">
+              <OldTable role="table">
                 <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
-              </Table>
+              </OldTable>
             )}
           />
           <Media
             query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => (
-              <Table role="table">
-                <Thead role="rowgroup">
-                  <Trn role="row">
-                    {titleKeys.map((title, ind) =>
-                      ind === 0 ? (
-                        <Thn2 role="cell" key={ind}>
-                          <Typography>{intl.formatMessage(title)}</Typography>
-                        </Thn2>
-                      ) : (
-                        <Thn role="cell" key={ind}>
-                          <Typography>{intl.formatMessage(title)}</Typography>
-                        </Thn>
-                      )
-                    )}
-                  </Trn>
-                </Thead>
-                <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
-              </Table>
-            )}
+            render={() => <Table structure={table} />}
           />
         </WrapTable>
       }
