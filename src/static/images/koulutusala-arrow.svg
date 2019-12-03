@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Järjestämislupa-v01" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-248.000000, -769.000000)">
+        <g id="Group-4" transform="translate(248.000000, 769.000000)">
+            <circle id="Oval-3" fill="#5A8A70" cx="12.5" cy="12.5" r="12.5"></circle>
+            <g id="Group-3" fill="#5A8A70">
+                <circle id="Oval-3" cx="12.5" cy="12.5" r="12.5"></circle>
+            </g>
+            <g id="Group-2" transform="translate(13.852815, 12.500000) rotate(-90.000000) translate(-13.852815, -12.500000) translate(7.852815, 9.000000)" stroke="#FFFFFF" stroke-linecap="square">
+                <path d="M0.319610552,0.319610552 L5.76238212,5.76238212" id="Line"></path>
+                <path d="M11.1863693,0.319610552 L5.76238212,5.76238212" id="Line"></path>
+            </g>
+        </g>
+    </g>
+</svg>
