@@ -211,7 +211,7 @@
   },
   {
     "id": "common.hakemusAsiakirjat",
-    "defaultMessage": "Hakemukset asiakirjat",
+    "defaultMessage": "Hakemuksen asiakirjat",
     "filepath": "src/i18n/definitions/common.js"
   },
   {

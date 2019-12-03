@@ -48,7 +48,7 @@ const history = createBrowserHistory();
 
 /**
  * App component forms the basic structure of the application and its routing.
- * 
+ *
  * @param {props} - Properties object.
  */
 const App = ({ intl, user }) => {
@@ -147,8 +147,7 @@ const App = ({ intl, user }) => {
               </header>
               <main
                 className="flex flex-1 flex-col justify-between"
-                style={{ marginTop: headerHeight }}
-              >
+                style={{ marginTop: headerHeight }}>
                 <div className="flex flex-col flex-1 bg-white">
                   <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
                     <Breadcrumbs
@@ -174,7 +173,9 @@ const App = ({ intl, user }) => {
                       <Route
                         exact
                         path="/jarjestajat"
-                        render={() => <Jarjestajat />}
+                        render={props => (
+                          <Jarjestajat history={props.history} />
+                        )}
                       />
                       <Route
                         exact
@@ -218,8 +219,7 @@ const App = ({ intl, user }) => {
             </div>
           </Router>
         }
-        user={user}
-      ></FetchHandler>
+        user={user}></FetchHandler>
     </React.Fragment>
   );
 };
