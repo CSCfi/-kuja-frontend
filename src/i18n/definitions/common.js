@@ -170,5 +170,9 @@ export default defineMessages({
   newHakemus: {
     id: "common.newHakemus",
     defaultMessage: "Tee uusi hakemus"
+  },
+  tietoaTulevanJulkaisunAjankohdasta: {
+    id: "common.tietoaTulevanJulkaisunAjankohdasta",
+    defaultMessage: "Tulossa vuoden 2020 aikana"
   }
 });
