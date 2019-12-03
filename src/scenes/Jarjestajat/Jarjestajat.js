@@ -4,9 +4,10 @@ import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import LuvatList from "./components/LuvatList";
 import { BackendContext } from "../../context/backendContext";
 import FetchHandler from "../../FetchHandler";
+import { PropTypes } from "prop-types";
 import * as R from "ramda";
 
-const Jarjestajat = () => {
+const Jarjestajat = ({ history }) => {
   const { state: fromBackend, dispatch } = useContext(BackendContext);
 
   const fetchSetup = useMemo(() => {
@@ -41,13 +42,19 @@ const Jarjestajat = () => {
                 Voimassa olevat järjestämisluvat ({R.length(luvat)} kpl) Lista
                 päivitetty: {fetchedAt}
               </p>
-              <LuvatList luvat={R.prop("raw", fromBackend.luvat)} />
+              <LuvatList
+                history={history}
+                luvat={R.prop("raw", fromBackend.luvat)}
+              />
             </div>
           </React.Fragment>
-        }
-      ></FetchHandler>
+        }></FetchHandler>
     </React.Fragment>
   );
 };
+
+Jarjestajat.propTypes = {
+  history: PropTypes.object
+}
 
 export default Jarjestajat;

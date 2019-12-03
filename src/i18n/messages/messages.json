@@ -211,7 +211,7 @@
   },
   {
     "id": "common.hakemusAsiakirjat",
-    "defaultMessage": "Hakemukset asiakirjat",
+    "defaultMessage": "Hakemuksen asiakirjat",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -222,6 +222,11 @@
   {
     "id": "common.newHakemus",
     "defaultMessage": "Tee uusi hakemus",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.tietoaTulevanJulkaisunAjankohdasta",
+    "defaultMessage": "Tulossa vuoden 2020 aikana",
     "filepath": "src/i18n/definitions/common.js"
   },
   {

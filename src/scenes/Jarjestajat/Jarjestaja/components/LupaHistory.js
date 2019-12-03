@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from "react";
 import Media from "react-media";
 import styled from "styled-components";
-import { Table as OldTable, Tbody, Thn, Trn } from "../../../../modules/Table";
+import { Table as OldTable, Tbody } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../modules/constants";
 import LupaHistoryItem from "./LupaHistoryItem";

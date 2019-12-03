@@ -161,7 +161,7 @@ export default defineMessages({
   },
   hakemusAsiakirjat: {
     id: "common.hakemusAsiakirjat",
-    defaultMessage: "Hakemukset asiakirjat"
+    defaultMessage: "Hakemuksen asiakirjat"
   },
   backFromAsiakirjat: {
     id: "common.backFromAsiakirjat",
@@ -170,5 +170,9 @@ export default defineMessages({
   newHakemus: {
     id: "common.newHakemus",
     defaultMessage: "Tee uusi hakemus"
+  },
+  tietoaTulevanJulkaisunAjankohdasta: {
+    id: "common.tietoaTulevanJulkaisunAjankohdasta",
+    defaultMessage: "Tulossa vuoden 2020 aikana"
   }
 });
