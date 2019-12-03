@@ -70,7 +70,7 @@ step("Avaa uusi muutospyyntolomake", async () => {
   try {
     await click(link("Oma organisaatio"));
     await click(link("Järjestämislupa-asiat"));
-    await click(link("Uusi hakemus"));
+    await click($("button.newHakemus"));
   } catch (e) {
     console.error(e);
   }
