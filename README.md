@@ -1,18 +1,8 @@
-                ____  _
-               / __ \(_)
-              | |  | |___   ____ _
-              | |  | | \ \ / / _` |
-              | |__| | |\ V / (_| |
-     ______    \____/|_| \_/ \__,_|
-    |  ____| ______      ____     ____  __   ________   _______   ____  __    _______
-    | |__   |  __  \   /      \  |    \|  | |__   ___| |  ____/  |    \|  |  |   __   \
-    |  __|  |  ——  |  | () ()  | |  |\    |    |  |    |  |___   |  |\    |  |  |  |  |
-    |  |    |  |\  \  | \___   | |  | |   |    |  |    |   ____  |  | |   |  |  |_/   |
-    |__|    |__| |__|  \______/  |__| |__/     |__|    |______/  |__| |__/   |_______/
+Kuja Frontend
 
 # Kehitysympäristön asentaminen
 
-Tervetuloa Oiva-projektin pariin! Tämä on projektin frontend-osuus, joka pohjautuu [Create React App](https://github.com/facebook/create-react-app) -projektipohjaan.
+Tervetuloa Kuja-projektin pariin! Tämä on projektin frontend-osuus, joka pohjautuu oiva-frontend moduuliin ja sitä kautta [Create React App](https://github.com/facebook/create-react-app) -projektipohjaan.
 
 ## Tarvitset nämä
 * NPM (6.11.3)
