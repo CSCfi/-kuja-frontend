@@ -100,3 +100,28 @@ step("Sulje ExpandableRow <anchor>", async anchor => {
   const closedExpandableRow = await $(`[id="${id}"][aria-expanded="false"]`);
   assert.ok(await closedExpandableRow.exists());
 });
+
+step("Perustele taloudelliset", async () => {
+  const Taloudelliset = async () => {
+    await scrollDown($(".MuiDialogContent-root"));
+    let textareaId = `taloudelliset_yleisettiedot.edellytykset-tekstikentta`;
+    await focus(textBox({ id: textareaId }));
+    await write(`The robot was here. ${new Date().toUTCString()}`);
+
+    textareaId = `taloudelliset_yleisettiedot.Vaikutukset-tekstikentta`;
+    await focus(textBox({ id: textareaId }));
+    await write(`The robot was here. ${new Date().toUTCString()}`);
+
+    textareaId = `taloudelliset_yleisettiedot.sopeuttaminen-tekstikentta`;
+    await focus(textBox({ id: textareaId }));
+    await write(`The robot was here. ${new Date().toUTCString()}`);
+
+    return true;
+  };
+
+  try {
+    await Taloudelliset();
+  } catch (e) {
+    console.error(e);
+  }
+});

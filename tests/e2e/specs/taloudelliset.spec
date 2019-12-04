@@ -13,9 +13,6 @@
 * Tarkista, että ollaan sivulla "2"
 * Seuraava sivu
 * Tarkista, että ollaan sivulla "3"
+* Perustele taloudelliset
 
-___
-* Sulje lomake
 
-___
-* Log out
