@@ -15,7 +15,6 @@ import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
 import EsiJaPerusopetus from "./scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
 import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
-import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { BackendContext } from "./context/backendContext";
@@ -173,9 +172,7 @@ const App = ({ intl, user }) => {
                       <Route
                         exact
                         path="/jarjestajat"
-                        render={props => (
-                          <Jarjestajat history={props.history} />
-                        )}
+                        component={Jarjestajat}
                       />
                       <Route
                         exact
@@ -191,20 +188,6 @@ const App = ({ intl, user }) => {
                         exact
                         path="/esi-ja-perusopetus"
                         component={EsiJaPerusopetus}
-                      />
-                      <Route
-                        path="/jarjestajat/:ytunnus"
-                        render={props => (
-                          <JarjestajaSwitch
-                            history={props.history}
-                            match={props.match}
-                            organisaatio={R.prop(
-                              "raw",
-                              fromBackend.organisaatio
-                            )}
-                            user={user}
-                          />
-                        )}
                       />
                     </Switch>
                   </div>
