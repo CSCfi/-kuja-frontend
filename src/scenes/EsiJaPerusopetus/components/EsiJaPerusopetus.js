@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-
+import { injectIntl } from "react-intl";
 import { MEDIA_QUERIES } from "modules/styles";
 import { ContentContainer } from "../../../modules/elements";
+import common from "../../../i18n/definitions/common";
 
 const Description = styled.p`
   font-size: 18px;
@@ -16,19 +17,19 @@ const Description = styled.p`
   }
 `;
 
-class EsiJaPerusopetus extends Component {
-  render() {
-    return (
-      <ContentContainer>
-        <Helmet>
-          <title>Oiva | Esi- ja perusopetus</title>
-        </Helmet>
-        <div height="300px">
-          <Description>Tulossa vuoden 2019 aikana</Description>
-        </div>
-      </ContentContainer>
-    );
-  }
-}
+const EsiJaPerusopetus = ({ intl }) => {
+  return (
+    <ContentContainer>
+      <Helmet>
+        <title>Oiva | Esi- ja perusopetus</title>
+      </Helmet>
+      <div height="300px">
+        <Description>
+          {intl.formatMessage(common.tietoaTulevanJulkaisunAjankohdasta)}
+        </Description>
+      </div>
+    </ContentContainer>
+  );
+};
 
-export default EsiJaPerusopetus;
+export default injectIntl(EsiJaPerusopetus);

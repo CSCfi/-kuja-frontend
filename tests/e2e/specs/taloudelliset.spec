@@ -14,5 +14,14 @@
 * Seuraava sivu
 * Tarkista, että ollaan sivulla "3"
 * Perustele taloudelliset
+* Tallenna hakemus
+* Tarkista taloudellisten kenttien arvot
+* Seuraava sivu
+* Edellinen sivu
+* Tarkista taloudellisten kenttien arvot
 
+___
+* Sulje lomake
 
+___
+* Log out

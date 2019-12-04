@@ -106,21 +106,46 @@ step("Perustele taloudelliset", async () => {
     await scrollDown($(".MuiDialogContent-root"));
     let textareaId = `taloudelliset_yleisettiedot.edellytykset-tekstikentta`;
     await focus(textBox({ id: textareaId }));
-    await write(`The robot was here. ${new Date().toUTCString()}`);
+    await write(`The robot was here: 1`);
 
     textareaId = `taloudelliset_yleisettiedot.Vaikutukset-tekstikentta`;
     await focus(textBox({ id: textareaId }));
-    await write(`The robot was here. ${new Date().toUTCString()}`);
+    await write(`The robot was here: 2`);
 
     textareaId = `taloudelliset_yleisettiedot.sopeuttaminen-tekstikentta`;
     await focus(textBox({ id: textareaId }));
-    await write(`The robot was here. ${new Date().toUTCString()}`);
+    await write(`The robot was here: 3`);
+
+    textareaId = `taloudelliset_investoinnit.investoinnit-tekstikentta`;
+    await focus(textBox({ id: textareaId }));
+    await write(`The robot was here: 4`);
+
+    textareaId = `taloudelliset_investoinnit.rahoitus-tekstikentta`;
+    await focus(textBox({ id: textareaId }));
+    await write(`The robot was here: 5`);
+
+    textareaId = `taloudelliset_investoinnit.kustannukset-Input`;
+    await focus(textBox({ id: textareaId }));
+    await write(`42`);
 
     return true;
   };
 
   try {
     await Taloudelliset();
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+step("Tarkista taloudellisten kenttien arvot", async () => {
+  try {
+    for (let i = 1; i <= 5; i++) {
+      await text("The robot was here: " + i).exists();
+    }
+    await text("42").exists();
+
+    return true;
   } catch (e) {
     console.error(e);
   }

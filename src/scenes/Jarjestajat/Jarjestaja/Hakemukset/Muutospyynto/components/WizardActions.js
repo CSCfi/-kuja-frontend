@@ -71,12 +71,14 @@ const WizardActions = props => {
           <Button
             color="secondary"
             disabled={!props.isSavingEnabled}
+            className="save"
             onClick={onSaveClick}
           >
             {formatMessage(wizardMessages.saveDraft)}
           </Button>
           <Button
             color="secondary"
+            className="preview"
             onClick={onPreviewClick}
           >
             {formatMessage(wizardMessages.preview)}

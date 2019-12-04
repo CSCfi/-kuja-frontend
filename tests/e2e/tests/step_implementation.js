@@ -14,7 +14,8 @@ const {
   scrollDown,
   scrollTo,
   text,
-  write
+  write,
+  reload
 } = require("taiko");
 const chai = require("chai");
 require("dotenv").config();
@@ -43,7 +44,7 @@ step("Log in as <username>", async username => {
   await click(link({ href: "/cas-auth" }));
   await write(username);
   await focus(inputField({ type: "password" }));
-  await write(process.env[username]);
+  await write(username);
   await click(button({ type: "submit" }));
   assert.ok(await text("Kirjaudu ulos").exists());
 });
@@ -69,7 +70,7 @@ step("Avaa uusi muutospyyntolomake", async () => {
   try {
     await click(link("Oma organisaatio"));
     await click(link("Järjestämislupa-asiat"));
-    await click("Tee uusi hakemus");
+    await click($("button.newHakemus"));
   } catch (e) {
     console.error(e);
   }
@@ -86,6 +87,22 @@ step("Edellinen sivu", async () => {
 step("Seuraava sivu", async () => {
   try {
     await click($("button.next"));
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+step("Tallenna hakemus", async () => {
+  try {
+    await click($("button.save"));
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+step("Lataa sivu uudelleen", async () => {
+  try {
+    await reload(currentURL());
   } catch (e) {
     console.error(e);
   }
@@ -125,4 +142,19 @@ step("Assert if text exists <string>", async string => {
   } catch (e) {
     console.error(e);
   }
+});
+
+step("Navigate to Esi- ja perusopetus", async () => {
+  click(link({ href: "/esi-ja-perusopetus" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Navigate to Lukiokoulutus", async () => {
+  click(link({ href: "/lukiokoulutus" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Navigate to Vapaa sivistystyö", async () => {
+  click(link({ href: "/vapaa-sivistystyo" }));
+  assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
 });
