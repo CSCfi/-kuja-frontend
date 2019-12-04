@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { MEDIA_QUERIES } from "modules/styles";
-import { ContentContainer } from "../../../modules/elements";
+import { ContentContainer } from "../../modules/elements";
 import { injectIntl } from "react-intl";
 
 const Description = styled.p`
