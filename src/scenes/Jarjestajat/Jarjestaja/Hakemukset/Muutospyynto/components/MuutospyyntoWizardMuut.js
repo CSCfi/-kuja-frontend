@@ -27,15 +27,13 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         const { metadata } = article;
         const kasite = parseLocalizedField(metadata, "FI", "kasite");
         const kuvaus = parseLocalizedField(metadata, "FI", "kuvaus");
-        const isInLupa = !!R.find(
-          R.propEq("koodiarvo", article.koodiArvo)
-        )(osiota5koskevatMaaraykset);
-
+        const isInLupa = !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
+          osiota5koskevatMaaraykset
+        );
         if (
           (kuvaus || article.koodiArvo === "22") &&
           kasite &&
-          (isInLupa ||
-            (article.koodiArvo !== "15"))
+          (isInLupa || article.koodiArvo !== "15")
         ) {
           group[kasite] = group[kasite] || [];
           group[kasite].push(article);
@@ -48,10 +46,15 @@ const MuutospyyntoWizardMuut = React.memo(props => {
   const getCategories = useMemo(() => {
     return (configObj, locale) => {
       return R.map(item => {
+        let noItemsInLupa = true;
+        const isVaativatukiRadios =
+          configObj.key === "vaativatuki" &&
+          item.componentName === "RadioButtonWithLabel";
+        const sortedArticles = R.sortBy(R.prop("koodiArvo"), item.articles);
         return {
           anchor: configObj.key,
           title: item.title,
-          categories: R.map(article => {
+          categories: R.addIndex(R.map)((article, index) => {
             const title =
               _.find(article.metadata, m => {
                 return m.kieli === locale;
@@ -59,6 +62,9 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             const isInLupaBool = !!R.find(
               R.propEq("koodiarvo", article.koodiArvo)
             )(osiota5koskevatMaaraykset);
+            if (isInLupaBool) {
+              noItemsInLupa = false;
+            }
             const labelClasses = {
               isInLupa: isInLupaBool
             };
@@ -74,8 +80,19 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                   anchor: "A",
                   name: item.componentName,
                   properties: {
+                    // This is for the Perustelut page and for showing or not showing a form for reasoning.
+                    forChangeObject: {
+                      isReasoningRequired:
+                        !isVaativatukiRadios ||
+                        index !== sortedArticles.length - 1
+                    },
                     name: item.componentName,
-                    isChecked: isInLupaBool,
+                    isChecked:
+                      isInLupaBool ||
+                      // Here we are checking if the last radio button of vaativa tuki options should be selected.
+                      (noItemsInLupa &&
+                        isVaativatukiRadios &&
+                        index === sortedArticles.length - 1),
                     title: title,
                     labelStyles: {
                       addition: isAdded,
@@ -108,7 +125,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
               ];
             }
             return result;
-          }, R.sortBy(R.prop("koodiArvo"), item.articles))
+          }, sortedArticles)
         };
       }, configObj.categoryData);
     };
