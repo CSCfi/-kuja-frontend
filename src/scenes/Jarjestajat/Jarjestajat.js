@@ -1,60 +1,34 @@
-import React, { useContext, useMemo } from "react";
+import React from "react";
+import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-import LuvatList from "./components/LuvatList";
-import { BackendContext } from "../../context/backendContext";
-import FetchHandler from "../../FetchHandler";
-import { PropTypes } from "prop-types";
-import * as R from "ramda";
+import { MEDIA_QUERIES } from "modules/styles";
+import { ContentContainer } from "../../../modules/elements";
+import { injectIntl } from "react-intl";
 
-const Jarjestajat = ({ history }) => {
-  const { state: fromBackend, dispatch } = useContext(BackendContext);
+const Description = styled.p`
+  font-size: 18px;
+  max-width: 500px;
+  margin: 50px 0 0 20px;
+  position: relative;
 
-  const fetchSetup = useMemo(() => {
-    return [{ key: "luvat", dispatchFn: dispatch }];
-  }, [dispatch]);
+  @media ${MEDIA_QUERIES.MOBILE} {
+    margin: 15px;
+  }
+`;
 
-  const { luvat, fetchedAt } = useMemo(() => {
-    return {
-      luvat: R.prop("raw", fromBackend.luvat),
-      fetchedAt: R.prop("fetchedAt", fromBackend.luvat)
-    };
-  }, [fromBackend.luvat]);
-
+const Jarjestajat = ({ intl }) => {
   return (
-    <React.Fragment>
-      <FetchHandler
-        fetchSetup={fetchSetup}
-        ready={
-          <React.Fragment>
-            <Helmet>
-              <title>Oiva | Ammatillinen koulutus</title>
-            </Helmet>
-
-            <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
-            <BreadcrumbsItem to="/jarjestajat">
-              Ammatillinen koulutus
-            </BreadcrumbsItem>
-
-            <div className="mx-auto w-full sm:w-3/4 mb-16">
-              <h1>Ammatillisen koulutuksen järjestäjät</h1>
-              <p className="my-4">
-                Voimassa olevat järjestämisluvat ({R.length(luvat)} kpl) Lista
-                päivitetty: {fetchedAt}
-              </p>
-              <LuvatList
-                history={history}
-                luvat={R.prop("raw", fromBackend.luvat)}
-              />
-            </div>
-          </React.Fragment>
-        }></FetchHandler>
-    </React.Fragment>
+    <ContentContainer>
+      <Helmet>
+        <title>Oiva | Ammatillinen koulutus</title>
+      </Helmet>
+      <div height="300px">
+        <Description>
+          TODO: Linkitys Oivaan rakennettava näille hoodeille
+        </Description>
+      </div>
+    </ContentContainer>
   );
 };
 
-Jarjestajat.propTypes = {
-  history: PropTypes.object
-}
-
-export default Jarjestajat;
+export default injectIntl(Jarjestajat);
