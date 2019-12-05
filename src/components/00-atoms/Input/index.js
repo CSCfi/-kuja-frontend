@@ -35,6 +35,7 @@ const Input = props => {
 
   return (
     <CssTextField
+      id={props.id}
       aria-label={props.ariaLabel}
       defaultValue={props.value}
       label={props.label}

@@ -425,7 +425,7 @@ const CategorizedList = React.memo(
                             return (
                               <div className={component.styleClasses}>
                                 <Input
-                                  id={`input-${idSuffix}`}
+                                  id={fullAnchor}
                                   isDisabled={isDisabled}
                                   isHidden={isDisabled}
                                   isReadOnly={propsObj.isReadOnly}
