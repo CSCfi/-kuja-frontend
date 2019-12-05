@@ -126,7 +126,27 @@ step("Perustele taloudelliset", async () => {
 
     textareaId = `taloudelliset_investoinnit.kustannukset-Input`;
     await focus(textBox({ id: textareaId }));
-    await write(`42`);
+    await write(`100000`);
+
+    textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.omavaraisuusaste`;
+    await focus(textBox({ id: textareaId }));
+    await write(`100001`);
+
+    textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.maksuvalmius`;
+    await focus(textBox({ id: textareaId }));
+    await write(`100002`);
+
+    textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.velkaantuneisuus`;
+    await focus(textBox({ id: textareaId }));
+    await write(`100003`);
+
+    textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.kannattavuus`;
+    await focus(textBox({ id: textareaId }));
+    await write(`100004`);
+
+    textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.jaama`;
+    await focus(textBox({ id: textareaId }));
+    await write(`100005`);
 
     return true;
   };
@@ -143,7 +163,9 @@ step("Tarkista taloudellisten kenttien arvot", async () => {
     for (let i = 1; i <= 5; i++) {
       await text("The robot was here: " + i).exists();
     }
-    await text("42").exists();
+    for (let j = 100000; i <= 100005; i++) {
+      await text(j).exists();
+    }
 
     return true;
   } catch (e) {
