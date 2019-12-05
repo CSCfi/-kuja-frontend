@@ -11,7 +11,6 @@ const {
   closeBrowser,
   currentURL,
   focus,
-  inputField,
   into,
   link,
   openBrowser,

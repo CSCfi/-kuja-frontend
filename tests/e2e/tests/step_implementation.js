@@ -8,12 +8,12 @@ const {
   closeBrowser,
   currentURL,
   focus,
-  inputField,
   link,
   openBrowser,
   scrollDown,
   scrollTo,
   text,
+  textBox,
   write,
   reload
 } = require("taiko");
@@ -43,7 +43,7 @@ step("Navigate to app", async () => {
 step("Log in as <username>", async username => {
   await click(link({ href: "/cas-auth" }));
   await write(username);
-  await focus(inputField({ type: "password" }));
+  await focus(textBox({ type: "password" }));
   await write(username);
   await click(button({ type: "submit" }));
   assert.ok(await text("Kirjaudu ulos").exists());
@@ -69,7 +69,7 @@ step("Jarjestamislupa", async () => {
 step("Avaa uusi muutospyyntolomake", async () => {
   try {
     await click(link("Oma organisaatio"));
-    await click(link("Järjestämislupa-asiat"));
+    await click(link({ id: "jarjestamislupa-asiat" }));
     await click($("button.newHakemus"));
   } catch (e) {
     console.error(e);
@@ -94,7 +94,7 @@ step("Seuraava sivu", async () => {
 
 step("Tallenna hakemus", async () => {
   try {
-    await click($("button.save"))
+    await click($("button.save"));
   } catch (e) {
     console.error(e);
   }
@@ -102,7 +102,7 @@ step("Tallenna hakemus", async () => {
 
 step("Lataa sivu uudelleen", async () => {
   try {
-    await reload(currentURL())
+    await reload(currentURL());
   } catch (e) {
     console.error(e);
   }
