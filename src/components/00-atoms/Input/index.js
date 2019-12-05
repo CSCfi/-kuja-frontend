@@ -74,7 +74,6 @@ const Input = props => {
 Input.defaultProps = {
   ariaLabel: "Text area",
   delay: 300,
-  id: `input-${Math.random()}`,
   isDisabled: false,
   isHidden: false,
   isReadOnly: false,

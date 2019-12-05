@@ -17,7 +17,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
           styleClasses: ["mb-6 font-normal"],
           components: [
             {
-              anchor: "label",
+              anchor: "A",
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,

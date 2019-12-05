@@ -1,5 +1,7 @@
 # Muutoshakemus
 
+Tags: muutoshakemus, taloudelliset
+
 * Navigate to app
 * Log in as "oiva-sanni"
 * Avaa uusi muutospyyntolomake
@@ -14,11 +16,13 @@
 * Seuraava sivu
 * Tarkista, että ollaan sivulla "3"
 * Perustele taloudelliset
-* Tallenna hakemus
-* Tarkista taloudellisten kenttien arvot
 * Seuraava sivu
 * Edellinen sivu
-* Tarkista taloudellisten kenttien arvot
+* Tarkista taloudelliset
+* Tallenna hakemus
+* Edellinen sivu
+* Seuraava sivu
+* Tarkista taloudelliset
 
 ___
 * Sulje lomake
