@@ -124,9 +124,10 @@ step("Perustele taloudelliset", async () => {
     await focus(textBox({ id: textareaId }));
     await write(`The robot was here: 5`);
 
-    textareaId = `taloudelliset_investoinnit.kustannukset-Input`;
-    await focus(textBox({ id: textareaId }));
-    await write(`100000`);
+    // textareaId = `taloudelliset_investoinnit.kustannukset-Input.A`;
+    // await scrollDown($(textareaId));
+    // await focus(textBox({ id: textareaId }));
+    // await write(`100000`);
 
     textareaId = `taloudelliset_tilinpaatostiedot.tilinpaatostiedot.omavaraisuusaste`;
     await focus(textBox({ id: textareaId }));
