@@ -1,6 +1,16 @@
 "use strict";
 
-const { $, clear, focus, into, textBox, write } = require("taiko");
+const {
+  $,
+  attach,
+  clear,
+  click,
+  focus,
+  into,
+  textBox,
+  to,
+  write
+} = require("taiko");
 const chai = require("chai");
 const assert = chai.assert;
 
@@ -97,4 +107,13 @@ step("View textbox <anchor>", async anchor => {
   const storedValue = gauge.dataStore.scenarioStore.get(anchor);
   const textBox = await getTextBox(anchor);
   assert.equal(storedValue, await textBox.value());
+});
+
+step("Attach file <filename> to <anchor>", async (filename, anchor) => {
+  try {
+    await attach(`./files-to-attach/${filename}`, to($(`[id="${anchor}"]`)));
+    await click("OK");
+  } catch (err) {
+    console.error(err);
+  }
 });

@@ -479,7 +479,7 @@ const CategorizedList = React.memo(
                             return (
                               <div className={component.styleClasses}>
                                 <Attachments
-                                  id={`attachments-${idSuffix}`}
+                                  id={fullAnchor}
                                   isDisabled={isDisabled}
                                   onUpdate={handleChanges}
                                   payload={{
