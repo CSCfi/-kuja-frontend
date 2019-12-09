@@ -105,17 +105,19 @@ const TableCell = ({
         </StyledButton>
       ) : (
         <React.Fragment>
-          <span
-            className={`${properties.truncate ? "truncate" : ""} py-4 px-2 ${
-              isHeaderCell ? "cursor-default" : ""
-            }`}>
-            {properties.text}
-            {properties.menu && (
-              <SimpleMenu
-                actions={menuActions}
-                id={properties.menu.id}></SimpleMenu>
-            )}
-          </span>
+          {(properties.text || properties.menu) && (
+            <span
+              className={`${properties.truncate ? "truncate" : ""} py-4 px-2 ${
+                isHeaderCell ? "cursor-default" : ""
+              }`}>
+              {properties.text}
+              {properties.menu && (
+                <SimpleMenu
+                  actions={menuActions}
+                  id={properties.menu.id}></SimpleMenu>
+              )}
+            </span>
+          )}
         </React.Fragment>
       )}
       {children}
