@@ -386,7 +386,7 @@ const CategorizedList = React.memo(
                           }}
                           _props={props}
                           onChanges={handleChanges}
-                          id={anchor}
+                          id={fullAnchor}
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
@@ -425,7 +425,7 @@ const CategorizedList = React.memo(
                             return (
                               <div className={component.styleClasses}>
                                 <Input
-                                  id={`input-${idSuffix}`}
+                                  id={fullAnchor}
                                   isDisabled={isDisabled}
                                   isHidden={isDisabled}
                                   isReadOnly={propsObj.isReadOnly}
@@ -479,7 +479,7 @@ const CategorizedList = React.memo(
                             return (
                               <div className={component.styleClasses}>
                                 <Attachments
-                                  id={`attachments-${idSuffix}`}
+                                  id={fullAnchor}
                                   isDisabled={isDisabled}
                                   onUpdate={handleChanges}
                                   payload={{

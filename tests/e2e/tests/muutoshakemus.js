@@ -5,18 +5,10 @@ const R = require("ramda");
 
 const {
   $,
-  button,
-  goto,
   click,
-  closeBrowser,
-  currentURL,
   focus,
-  into,
-  link,
-  openBrowser,
   scrollDown,
   scrollTo,
-  text,
   textBox,
   waitFor,
   write
