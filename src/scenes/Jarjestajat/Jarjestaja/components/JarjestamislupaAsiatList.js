@@ -103,6 +103,45 @@ const JarjestamislupaAsiatList = ({
       rowGroups: [
         {
           rows: R.addIndex(R.map)((row, i) => {
+            let cells = R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: col.text
+                };
+              },
+              [
+                { text: "" },
+                { text: "Järjestämisluvan muutos" },
+                { text: row.tila },
+                { text: "" },
+                { text: row.paatetty }
+              ]
+            );
+            if (sessionStorage.getItem("role") !== ROLE_KATSELIJA) {
+              cells = R.append(
+                {
+                  menu: {
+                    id: `simple-menu-${i}`,
+                    actions: [
+                      {
+                        id: "start-preparing",
+                        text: "Ota valmisteluun"
+                      },
+                      {
+                        id: "delete",
+                        text: "Poista"
+                      }
+                    ]
+                  },
+                  styleClasses: [colWidths[5]]
+                },
+                cells
+              );
+            } else {
+              cells = R.append({ styleClasses: [colWidths[5]] }, cells);
+            }
             return {
               id: row.uuid,
               onClick: (row, action) => {
@@ -114,39 +153,7 @@ const JarjestamislupaAsiatList = ({
                   history.push(`hakemukset-ja-paatokset/${row.id}/1`);
                 }
               },
-              cells: R.addIndex(R.map)(
-                (col, ii) => {
-                  return {
-                    truncate: true,
-                    styleClasses: [colWidths[ii]],
-                    text: col.text
-                  };
-                },
-                [
-                  { text: "" },
-                  { text: "Järjestämisluvan muutos" },
-                  { text: row.tila },
-                  { text: "" },
-                  { text: row.paatetty }
-                ]
-              ).concat({
-                menu: (() => {
-                  if (sessionStorage.getItem("role") === ROLE_KATSELIJA) {
-                    return null;
-                  } else {
-                    return {
-                      id: `simple-menu-${i}`,
-                      actions: [
-                        {
-                          id: "edit",
-                          text: "Täydennä hakemusta"
-                        }
-                      ]
-                    };
-                  }
-                })(),
-                styleClasses: [colWidths[5]]
-              })
+              cells: cells
             };
           }, tableData)
         }
