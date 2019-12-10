@@ -15,6 +15,13 @@ import common from "../../../../i18n/definitions/common";
 import Table from "../../../../components/02-organisms/Table";
 import * as R from "ramda";
 import moment from "moment";
+import {
+  ROLE_ESITTELIJA,
+  ROLE_KATSELIJA,
+  ROLE_KAYTTAJA,
+  ROLE_NIMENKIRJOITTAJA,
+  ROLE_YLLAPITAJA
+} from "../../../../modules/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -123,15 +130,21 @@ const JarjestamislupaAsiatList = ({
                   { text: row.paatetty }
                 ]
               ).concat({
-                menu: {
-                  id: `simple-menu-${i}`,
-                  actions: [
-                    {
-                      id: "edit",
-                      text: "Täydennä hakemusta"
-                    }
-                  ]
-                },
+                menu: (() => {
+                  if (sessionStorage.getItem("role") === ROLE_KATSELIJA) {
+                    return null;
+                  } else {
+                    return {
+                      id: `simple-menu-${i}`,
+                      actions: [
+                        {
+                          id: "edit",
+                          text: "Täydennä hakemusta"
+                        }
+                      ]
+                    };
+                  }
+                })(),
                 styleClasses: [colWidths[5]]
               })
             };
