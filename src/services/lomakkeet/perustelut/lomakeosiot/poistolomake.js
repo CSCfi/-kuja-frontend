@@ -1,7 +1,7 @@
-export default function getDefaultRemovalForm() {
+export default function getDefaultRemovalForm(prefix) {
   return [
     {
-      anchor: "removal",
+      anchor: prefix ? `${prefix}-removal` : "removal",
       components: [
         {
           anchor: "textbox",

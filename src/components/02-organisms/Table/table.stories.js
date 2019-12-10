@@ -4,6 +4,7 @@ import { withInfo } from "@storybook/addon-info";
 import multidimensionalTable from "./storydata/multidimensionalTable";
 import simpleTable from "./storydata/simpleTable";
 import Table from "./index";
+import conditionalMenuInTableCell from "./storydata/conditionalMenuInTableCell";
 
 /**
  * Tables are created using descriptive structures. One per table.
@@ -19,4 +20,7 @@ storiesOf("Table", module)
   })
   .add("Simple table", () => {
     return <Table structure={simpleTable} />;
+  })
+  .add("Conditional menu in table cell", () => {
+    return <Table structure={conditionalMenuInTableCell} />;
   });

@@ -460,6 +460,11 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
+    "id": "wizard.kuljettajakoulutusOutOfScope",
+    "defaultMessage": "Ei oikeutta järjestää kuorma- ja linja-autonkuljettajan ammattipätevyyskoulutusta",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
     "id": "app.title",
     "defaultMessage": "Opetus- ja kulttuuriministeriö",
     "filepath": "src/scenes/Footer/Footer.js"

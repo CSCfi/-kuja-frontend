@@ -16,12 +16,13 @@ const lomakkeet = {
             isReadOnly,
             locale
           ),
-        removal: (data, isReadOnly, locale) =>
+        removal: (data, isReadOnly, locale, prefix) =>
           getKuljettajienJatkokoulutuslomake(
             "removal",
             data,
             isReadOnly,
-            locale
+            locale,
+            prefix
           )
       },
       peruskoulutus: {
@@ -32,20 +33,21 @@ const lomakkeet = {
             isReadOnly,
             locale
           ),
-        removal: (data, isReadOnly, locale) =>
+        removal: (data, isReadOnly, locale, prefix) =>
           getKuljettajienPeruskoulutuslomake(
             "removal",
             data,
             isReadOnly,
-            locale
+            locale,
+            prefix
           )
       }
     },
     tyovoimakoulutukset: {
       addition: (data, isReadOnly, locale) =>
         getTyovoimakoulutuslomake("addition", data, isReadOnly, locale),
-      removal: (data, isReadOnly, locale) =>
-        getTyovoimakoulutuslomake("removal", data, isReadOnly, locale)
+      removal: (data, isReadOnly, locale, prefix) =>
+        getTyovoimakoulutuslomake("removal", data, isReadOnly, locale, prefix)
     }
   }
 };
@@ -55,10 +57,10 @@ export function getLomake(
   data = {},
   isReadOnly,
   locale,
-  path = []
+  path = [],
+  prefix
 ) {
   const fn = R.path(R.concat(path, [action]), lomakkeet);
-  const lomake = fn ? fn(data, isReadOnly, locale) : [];
-  console.info(lomake);
+  const lomake = fn ? fn(data, isReadOnly, locale, prefix) : [];
   return lomake;
 }

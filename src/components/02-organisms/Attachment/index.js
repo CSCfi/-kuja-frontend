@@ -77,6 +77,7 @@ const Attachment = React.memo(props => {
           <FaPlus /> {HAKEMUS_OTSIKOT.LISAA_LIITE.FI}...
         </div>
         <input
+          id={props.id}
           name={props.name}
           type="file"
           defaultValue=""
@@ -92,6 +93,7 @@ const Attachment = React.memo(props => {
 });
 
 Attachment.propTypes = {
+  id: PropTypes.string,
   name: PropTypes.string,
   setAttachment: PropTypes.func
 };

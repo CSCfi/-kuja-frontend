@@ -166,5 +166,9 @@ export default defineMessages({
   osaamisalarajoitus: {
     id: "wizard.osaamisalarajoitus",
     defaultMessage: "Rajoitus"
+  },
+  kuljettajakoulutusOutOfScope: {
+    id: "wizard.kuljettajakoulutusOutOfScope",
+    defaultMessage: "Ei oikeutta järjestää kuorma- ja linja-autonkuljettajan ammattipätevyyskoulutusta"
   }
 });
