@@ -134,3 +134,7 @@ step("Select radio <anchor>", async anchor => {
     console.error(e);
   }
 });
+
+step("Assert if <anchor> exists", async anchor => {
+  assert.ok(await $(`[id="${anchor}"]`).exists());
+});
