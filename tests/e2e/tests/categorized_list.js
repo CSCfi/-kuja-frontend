@@ -7,6 +7,7 @@ const {
   click,
   focus,
   into,
+  scrollTo,
   textBox,
   to,
   write
@@ -54,6 +55,7 @@ async function setValueIntoTextBox(anchor, value, shouldBeCleared = true) {
     const textBox = await getTextBox(anchor);
     let valueBeforeWriting = "";
     await focus(textBox);
+    await scrollTo(textBox);
     // let's clear the previous value of the focuced field first
     if (shouldBeCleared) {
       await clear();
