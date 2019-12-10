@@ -11,8 +11,8 @@ const {
   inputField,
   link,
   openBrowser,
-  scrollDown,
   scrollTo,
+  setViewPort,
   text,
   write,
   reload
@@ -94,7 +94,7 @@ step("Seuraava sivu", async () => {
 
 step("Tallenna hakemus", async () => {
   try {
-    await click($("button.save"))
+    await click($("button.save"));
   } catch (e) {
     console.error(e);
   }
@@ -102,7 +102,7 @@ step("Tallenna hakemus", async () => {
 
 step("Lataa sivu uudelleen", async () => {
   try {
-    await reload(currentURL())
+    await reload(currentURL());
   } catch (e) {
     console.error(e);
   }
@@ -157,4 +157,8 @@ step("Navigate to Lukiokoulutus", async () => {
 step("Navigate to Vapaa sivistystyö", async () => {
   click(link({ href: "/vapaa-sivistystyo" }));
   assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Set view port to <width> x <height>", async (width, height) => {
+  await setViewPort({ width: parseInt(width), height: parseInt(height) });
 });

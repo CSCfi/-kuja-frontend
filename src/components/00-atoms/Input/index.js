@@ -35,6 +35,7 @@ const Input = props => {
 
   return (
     <CssTextField
+      id={props.id}
       aria-label={props.ariaLabel}
       defaultValue={props.value}
       label={props.label}
@@ -73,7 +74,6 @@ const Input = props => {
 Input.defaultProps = {
   ariaLabel: "Text area",
   delay: 300,
-  id: `input-${Math.random()}`,
   isDisabled: false,
   isHidden: false,
   isReadOnly: false,
