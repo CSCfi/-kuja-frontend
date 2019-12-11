@@ -10,8 +10,8 @@ const {
   focus,
   link,
   openBrowser,
-  scrollDown,
   scrollTo,
+  setViewPort,
   text,
   textBox,
   write,
@@ -157,4 +157,8 @@ step("Navigate to Lukiokoulutus", async () => {
 step("Navigate to Vapaa sivistystyö", async () => {
   click(link({ href: "/vapaa-sivistystyo" }));
   assert.ok(await text("Tulossa vuoden 2020 aikana").exists());
+});
+
+step("Set view port to <width> x <height>", async (width, height) => {
+  await setViewPort({ width: parseInt(width), height: parseInt(height) });
 });

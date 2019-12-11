@@ -4,6 +4,7 @@ Tags: muutoshakemus, taloudelliset
 
 * Navigate to app
 * Log in as "oiva-sanni"
+* Set view port to "1200" x "1200"
 * Avaa uusi muutospyyntolomake
 
 ## Taloudelliset edellytykset

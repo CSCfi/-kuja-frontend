@@ -7,6 +7,7 @@ const {
   click,
   focus,
   into,
+  scrollTo,
   textBox,
   to,
   write
@@ -30,11 +31,15 @@ function getRandomText(length) {
   return result;
 }
 
+function getLabel(anchor) {
+  return $(`label[id="label-${anchor}"]`);
+}
+
 async function getTextBox(anchor) {
   return await textBox({ id: anchor });
 }
 
-async function verifyThatElementUnderAnchorIsChecked(
+async function verifyThatElementUnderAnchorIs(
   type,
   anchor,
   statusSelector = ""
@@ -54,6 +59,7 @@ async function setValueIntoTextBox(anchor, value, shouldBeCleared = true) {
     const textBox = await getTextBox(anchor);
     let valueBeforeWriting = "";
     await focus(textBox);
+    await scrollTo(textBox);
     // let's clear the previous value of the focuced field first
     if (shouldBeCleared) {
       await clear();
@@ -71,11 +77,11 @@ async function setValueIntoTextBox(anchor, value, shouldBeCleared = true) {
 }
 
 step("Assert if <type> <anchor> is checked", async (type, anchor) => {
-  verifyThatElementUnderAnchorIsChecked(type, anchor, ":checked");
+  verifyThatElementUnderAnchorIs(type, anchor, ":checked");
 });
 
 step("Assert if <type> <anchor> is not checked", async (type, anchor) => {
-  verifyThatElementUnderAnchorIsChecked(type, anchor, "");
+  verifyThatElementUnderAnchorIs(type, anchor, "");
 });
 
 step("Focus textarea <anchor>", async anchor => {
@@ -116,4 +122,19 @@ step("Attach file <filename> to <anchor>", async (filename, anchor) => {
   } catch (err) {
     console.error(err);
   }
+});
+
+step("Select radio <anchor>", async anchor => {
+  try {
+    const label = await getLabel(anchor);
+    await scrollTo(label);
+    await focus(label);
+    await click(label);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+step("Assert if <anchor> exists", async anchor => {
+  assert.ok(await $(`[id="${anchor}"]`).exists());
 });
