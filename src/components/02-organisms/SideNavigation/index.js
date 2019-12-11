@@ -81,8 +81,7 @@ const SideNavigation = props => {
                 pathname: "/jarjestajat/" + props.ytunnus + "/omattiedot",
                 ytunnus: props.ytunnus
               }}
-              exact
-            >
+              exact>
               Oma organisaatio
             </NavLink>
           </ListItem>
@@ -127,7 +126,7 @@ const SideNavigation = props => {
           </ListItem>
         </List>
       )}
-      {props.user && props.user.username && (
+      {props.user && props.user.username && sessionStorage.getItem("role") && (
         <List>
           <ListItem button key="logout">
             <ListItemIcon>
@@ -149,8 +148,7 @@ const SideNavigation = props => {
           tabIndex={0}
           role="button"
           onClick={handleDrawerToggle}
-          onKeyDown={handleDrawerToggle}
-        >
+          onKeyDown={handleDrawerToggle}>
           {sideList}
         </div>
       </Drawer>

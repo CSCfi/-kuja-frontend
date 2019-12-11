@@ -13,10 +13,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 import { withStyles } from "@material-ui/core/styles";
 import { MessageWrapper } from "modules/elements";
-import { ROLE_KAYTTAJA } from "modules/constants";
+import { ROLE_KAYTTAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
-import {saveAndSubmitMuutospyynto, saveMuutospyynto} from "../../../../../../services/muutoshakemus/actions";
+import {
+  saveAndSubmitMuutospyynto,
+  saveMuutospyynto
+} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
@@ -342,12 +345,13 @@ const MuutospyyntoWizard = ({
     return R.concat(attachments, files);
   }, [changeObjects]);
 
-  const save = useCallback((options) => {
-    let saveFunction = saveMuutospyynto;
-    if(options.setAsSent === true) {
-      saveFunction = saveAndSubmitMuutospyynto;
-    }
-    const attachments = getFiles();
+  const save = useCallback(
+    options => {
+      let saveFunction = saveMuutospyynto;
+      if (options.setAsSent === true) {
+        saveFunction = saveAndSubmitMuutospyynto;
+      }
+      const attachments = getFiles();
       saveFunction(
         createObjectToSave(
           lupa,
@@ -421,7 +425,22 @@ const MuutospyyntoWizard = ({
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
-    if (kielet && tutkinnot && maakuntakunnatList) {
+    if (!sessionStorage.getItem("role")) {
+      return (
+        <MessageWrapper>
+          <h3>{intl.formatMessage(wizardMessages.notSignedIn)}</h3>
+        </MessageWrapper>
+      );
+    } else if (
+      sessionStorage.getItem("role") !== ROLE_KAYTTAJA &&
+      sessionStorage.getItem("role") !== ROLE_NIMENKIRJOITTAJA
+    ) {
+      return (
+        <MessageWrapper>
+          <h3>{intl.formatMessage(wizardMessages.noRights)}</h3>
+        </MessageWrapper>
+      );
+    } else if (kielet && tutkinnot && maakuntakunnatList) {
       jsx = (
         <React.Fragment>
           <FormDialog
@@ -561,12 +580,6 @@ const MuutospyyntoWizard = ({
             handleCancel={handleCancel}
           />
         </React.Fragment>
-      );
-    } else if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
-      return (
-        <MessageWrapper>
-          <h3>{HAKEMUS_VIESTI.KIRJAUTUMINEN.FI}</h3>
-        </MessageWrapper>
       );
     } else {
       jsx = <Loading />;

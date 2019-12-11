@@ -78,6 +78,8 @@
   "wizard.noAddedTutkinnot": "Taloudelliset edellytykset ilmoitetaan vain, kun järjestämislupaan haetaan uusia tutkintoja tai koulutuksia. Jatka seuraavalle välilehdelle Seuraava-painikkeella.",
   "wizard.noArea": "Toiminta-aluetta ei määritetty",
   "wizard.noChanges": "Ei muutoksia.",
+  "wizard.noRights": "Sinulla ei ole oikeuksia tälle sivulle.",
+  "wizard.notSignedIn": "Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.",
   "wizard.osaamisalarajoitus": "Rajoitus",
   "wizard.other_placeholder": "Kerro vapaasti, mitä haluat hakea",
   "wizard.pageTitle_1": "Uusi muutoshakemus",

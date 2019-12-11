@@ -15,13 +15,7 @@ import common from "../../../../i18n/definitions/common";
 import Table from "../../../../components/02-organisms/Table";
 import * as R from "ramda";
 import moment from "moment";
-import {
-  ROLE_ESITTELIJA,
-  ROLE_KATSELIJA,
-  ROLE_KAYTTAJA,
-  ROLE_NIMENKIRJOITTAJA,
-  ROLE_YLLAPITAJA
-} from "../../../../modules/constants";
+import { ROLE_KATSELIJA } from "../../../../modules/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -176,17 +170,19 @@ const JarjestamislupaAsiatList = ({
     ));
   }, [url, muutospyynnot]);
 
+  let hasRights = sessionStorage.getItem("role") !== ROLE_KATSELIJA;
   return (
     <React.Fragment>
       <div className="mb-2">
-        {muutospyynto ? (
+        {muutospyynto && (
           <Button color="primary" onClick={() => setMuutospyynto(null)}>
             <ArrowBack />
             <span className="pl-2">
               {intl.formatMessage(common.backFromAsiakirjat)}
             </span>
           </Button>
-        ) : (
+        )}
+        {!muutospyynto && hasRights && (
           <NavLink
             className="mb-2"
             to={newApplicationRouteItem.path}
