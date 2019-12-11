@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
-import css from "../../02-organisms/ButtonAppBar/button-app-bar.module.css";
-import TemplateA from "../TemplateA";
+import css from "./header.module.css";
+import TemplateA from "../../03-templates/TemplateA";
 import { BrowserRouter as Router, NavLink } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import {
@@ -107,38 +107,40 @@ const Header = ({
       )}
       {/* Layout for bigger screens */}
       {breakpointTabletMin && (
-        <header className="px-4 border border-gray-300">
-          <TemplateA items={items}>
-            <ToggleButtonGroup
-              size="small"
-              onChange={onLocaleChange}
-              value={locale}
-              exclusive>
-              <ToggleButton
-                key={1}
-                value="fi"
-                className="whitespace-no-wrap"
-                classes={{
-                  label: css["locale-label"],
-                  selected: css["locale-selected"],
-                  sizeSmall: css["locale-button"]
-                }}>
-                {inFinnish}
-              </ToggleButton>
-              <ToggleButton
-                key={2}
-                value="sv"
-                className="whitespace-no-wrap"
-                classes={{
-                  label: css["locale-label"],
-                  selected: css["locale-selected"],
-                  sizeSmall: css["locale-button"]
-                }}>
-                {inSwedish}
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </TemplateA>
-        </header>
+        <AppBar elevation={0} position="static">
+          <Toolbar className="bg-white px-4 border border-gray-300">
+            <TemplateA items={items}>
+              <ToggleButtonGroup
+                size="small"
+                onChange={onLocaleChange}
+                value={locale}
+                exclusive>
+                <ToggleButton
+                  key={1}
+                  value="fi"
+                  className="whitespace-no-wrap"
+                  classes={{
+                    label: css["locale-label"],
+                    selected: css["locale-selected"],
+                    sizeSmall: css["locale-button"]
+                  }}>
+                  {inFinnish}
+                </ToggleButton>
+                <ToggleButton
+                  key={2}
+                  value="sv"
+                  className="whitespace-no-wrap"
+                  classes={{
+                    label: css["locale-label"],
+                    selected: css["locale-selected"],
+                    sizeSmall: css["locale-button"]
+                  }}>
+                  {inSwedish}
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </TemplateA>
+          </Toolbar>
+        </AppBar>
       )}
     </React.Fragment>
   );
