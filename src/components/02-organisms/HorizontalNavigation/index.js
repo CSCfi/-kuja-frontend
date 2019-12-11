@@ -24,7 +24,7 @@ const HorizontalNavigation = ({ links }) => {
         exact={link.isExact}
         activeClassName="active"
         to={link.path}
-        className={`px-8 border-r border-green-600 py-4 flex-1 tracking-wider min-w-200 sm:min-w-initial
+        className={`px-8 border-r border-green-600 py-4 flex-1 tracking-wider min-w-200 lg:max-w-xxs sm:min-w-initial
         bg-green-500 hover:bg-green-400 text-white text-center flex-wrap whitespace-no-wrap`}>
         {link.text}
       </NavLink>
@@ -36,7 +36,7 @@ const HorizontalNavigation = ({ links }) => {
       <Toolbar
         variant="dense"
         className="flex flex-wrap bg-white text-black border 
-        border-gray-300 text-sm overflow-auto hide-scrollbar"
+        border-gray-300 text-sm overflow-auto hide-scrollbar bg-green-500"
         disableGutters={true}>
         <Router>
           <TemplateB items={items}></TemplateB>

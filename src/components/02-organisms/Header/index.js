@@ -36,6 +36,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const useStylesForTypography = makeStyles(theme => ({
+  root: {
+    lineHeight: 1
+  }
+}));
+
 const Header = ({
   inFinnish,
   inSwedish,
@@ -50,6 +56,7 @@ const Header = ({
   shortDescription
 }) => {
   const classes = useStyles();
+  const typographyClasses = useStylesForTypography();
 
   const items = [
     <Router>
@@ -57,7 +64,9 @@ const Header = ({
         to={logo.path}
         exact={true}
         className="inline-block no-underline text-gray-800">
-        <Typography variant="h4">{logo.text}</Typography>
+        <Typography variant="h6" classes={typographyClasses}>
+          {logo.text}
+        </Typography>
       </NavLink>
     </Router>,
     <Router>
