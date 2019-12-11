@@ -21,6 +21,65 @@ const PerustelutKuljettajakoulutukset = props => {
     );
   }, [props.changeObjects.koulutukset.kuljettajakoulutukset]);
 
+  const lomakkeet = useMemo(() => {
+    return (
+      <React.Fragment>
+        {R.map(changeObj => {
+          const mapping = {
+            5: "peruskoulutus",
+            6: "jatkokoulutus"
+          };
+          const code = getAnchorPart(changeObj.anchor, 1);
+          const isReasoningRequired = R.path(
+            ["properties", "metadata", "isReasoningRequired"],
+            changeObj
+          );
+
+          let lomake = null;
+
+          if (isReasoningRequired) {
+            if (changeObj.properties.isChecked) {
+              lomake = (
+                <Lomake
+                  anchor={"perustelut_koulutukset_kuljettajakoulutukset"}
+                  changeObjects={props.changeObjects.perustelut}
+                  isReadOnly={props.isReadOnly}
+                  key={code}
+                  onChangesUpdate={onChangesUpdate}
+                  path={["koulutukset", "kuljettajakoulutukset", mapping[code]]}
+                  showCategoryTitles={true}></Lomake>
+              );
+            } else {
+              lomake = (
+                <Lomake
+                  action="removal"
+                  anchor={`perustelut_koulutukset_kuljettajakoulutukset`}
+                  changeObjects={props.changeObjects.perustelut}
+                  isReadOnly={props.isReadOnly}
+                  key={code}
+                  onChangesUpdate={onChangesUpdate}
+                  prefix={code}
+                  path={[
+                    "koulutukset",
+                    "kuljettajakoulutukset",
+                    mapping[code]
+                  ]}></Lomake>
+              );
+            }
+          }
+          return lomake;
+        }, props.changeObjects.koulutukset.kuljettajakoulutukset || []).filter(
+          Boolean
+        )}
+      </React.Fragment>
+    );
+  }, [
+    onChangesUpdate,
+    props.isReadOnly,
+    props.changeObjects.koulutukset.kuljettajakoulutukset,
+    props.changeObjects.perustelut
+  ]);
+
   return (
     <React.Fragment>
       <ExpandableRowRoot
@@ -33,27 +92,8 @@ const PerustelutKuljettajakoulutukset = props => {
         isExpanded={true}
         onChangesRemove={onChangesRemove}
         onUpdate={onChangesUpdate}
-        title={props.intl.formatMessage(wizardMessages.driverTraining)}
-      >
-        {code === "5" ? (
-          <Lomake
-            anchor={"perustelut_koulutukset_kuljettajakoulutukset"}
-            changeObjects={props.changeObjects.perustelut}
-            isReadOnly={props.isReadOnly}
-            onChangesUpdate={onChangesUpdate}
-            path={["koulutukset", "kuljettajakoulutukset", "peruskoulutus"]}
-            showCategoryTitles={true}
-          ></Lomake>
-        ) : (
-          <Lomake
-            anchor={"perustelut_koulutukset_kuljettajakoulutukset"}
-            changeObjects={props.changeObjects.perustelut}
-            isReadOnly={props.isReadOnly}
-            onChangesUpdate={onChangesUpdate}
-            path={["koulutukset", "kuljettajakoulutukset", "jatkokoulutus"]}
-            showCategoryTitles={true}
-          ></Lomake>
-        )}
+        title={props.intl.formatMessage(wizardMessages.driverTraining)}>
+        {lomakkeet}
       </ExpandableRowRoot>
     </React.Fragment>
   );

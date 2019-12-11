@@ -18,11 +18,12 @@ const Lomake = React.memo(
     locale = "fi",
     onChangesUpdate,
     path,
+    prefix = "",
     showCategoryTitles = true
   }) => {
     const categories = useMemo(() => {
-      return getLomake(action, data, isReadOnly, locale, path);
-    }, [action, data, isReadOnly, locale, path]);
+      return getLomake(action, data, isReadOnly, locale, path, prefix);
+    }, [action, data, isReadOnly, locale, path, prefix]);
 
     if (categories.length && onChangesUpdate) {
       return (
@@ -47,7 +48,10 @@ Lomake.propTypes = {
   changeObjects: PropTypes.array,
   data: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  path: PropTypes.array
+  path: PropTypes.array,
+  // Is used for matching the anchor of reasoning field to the anchor of
+  // original change object.
+  prefix: PropTypes.string
 };
 
 export default injectIntl(Lomake);

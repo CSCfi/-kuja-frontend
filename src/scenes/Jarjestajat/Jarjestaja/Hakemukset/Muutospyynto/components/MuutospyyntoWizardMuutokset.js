@@ -71,6 +71,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       changeObjects={R.prop("koulutukset", props.changeObjects)}
                       kohde={kohteet.tutkinnotjakoulutukset}
                       koulutukset={props.koulutukset}
+                      lupa={props.lupa}
                       maaraystyyppi={maaraystyypit.OIKEUS}
                       stateObjects={props.muutoshakemus.koulutukset}
                       {..._props}

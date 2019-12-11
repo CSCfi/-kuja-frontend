@@ -98,6 +98,7 @@ const Jarjestaja = ({
               authenticated: !!user
             },
             {
+              id: "jarjestamislupa-asiat",
               path: `${match.url}/jarjestamislupa-asia`,
               text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
               authenticated: !!user

@@ -103,36 +103,45 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       <React.Fragment>
         {R.map(changeObj => {
           const code = getAnchorPart(changeObj.anchor, 1);
-          const lomake = changeObj.properties.isChecked ? (
-            <Lomake
-              anchor={"perustelut_koulutukset_tyovoimakoulutukset"}
-              changeObjects={
-                props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
-              }
-              data={{
-                code,
-                elykeskukset: props.elykeskukset
-              }}
-              key={code}
-              isReadOnly={props.isReadOnly}
-              onChangesUpdate={onChangesUpdate}
-              path={["koulutukset", "tyovoimakoulutukset"]}
-            ></Lomake>
-          ) : (
-            <Lomake
-              action="removal"
-              anchor={"perustelut_koulutukset_tyovoimakoulutukset"}
-              changeObjects={
-                props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
-              }
-              isReadOnly={props.isReadOnly}
-              key={code}
-              onChangesUpdate={onChangesUpdate}
-              path={["koulutukset", "tyovoimakoulutukset"]}
-            ></Lomake>
+          const isReasoningRequired = R.path(
+            ["properties", "metadata", "isReasoningRequired"],
+            changeObj
           );
+
+          let lomake = null;
+          if (isReasoningRequired) {
+            lomake = changeObj.properties.isChecked ? (
+              <Lomake
+                anchor={"perustelut_koulutukset_tyovoimakoulutukset"}
+                changeObjects={
+                  props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
+                }
+                data={{
+                  code,
+                  elykeskukset: props.elykeskukset
+                }}
+                key={code}
+                isReadOnly={props.isReadOnly}
+                onChangesUpdate={onChangesUpdate}
+                path={["koulutukset", "tyovoimakoulutukset"]}></Lomake>
+            ) : (
+              <Lomake
+                action="removal"
+                anchor={`perustelut_koulutukset_tyovoimakoulutukset`}
+                prefix={code}
+                changeObjects={
+                  props.changeObjects.perustelut.koulutukset.tyovoimakoulutukset
+                }
+                isReadOnly={props.isReadOnly}
+                key={code}
+                onChangesUpdate={onChangesUpdate}
+                path={["koulutukset", "tyovoimakoulutukset"]}></Lomake>
+            );
+          }
           return lomake;
-        }, props.changeObjects.koulutukset.tyovoimakoulutukset || [])}
+        }, props.changeObjects.koulutukset.tyovoimakoulutukset || []).filter(
+          Boolean
+        )}
       </React.Fragment>
     );
   }, [
@@ -156,8 +165,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
           hideAmountOfChanges={true}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
-          title={props.intl.formatMessage(wizardMessages.workforceTraining)}
-        >
+          title={props.intl.formatMessage(wizardMessages.workforceTraining)}>
           {lomakkeet}
         </ExpandableRowRoot>
       )}

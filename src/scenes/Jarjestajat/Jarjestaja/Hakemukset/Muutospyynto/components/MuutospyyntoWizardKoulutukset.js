@@ -46,6 +46,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
         changeObjects={R.prop("tyovoimakoulutukset", props.changeObjects)}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
+        lupa={props.lupa}
         maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
         onChangesRemove={props.onChangesRemove}
@@ -58,6 +59,7 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
         changeObjects={R.prop("kuljettajakoulutukset", props.changeObjects)}
         kohde={props.kohde}
         koulutukset={props.koulutukset}
+        lupa={props.lupa}
         maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
         onChangesRemove={props.onChangesRemove}
@@ -78,6 +80,7 @@ MuutospyyntoWizardKoulutukset.propTypes = {
   changeObjects: PropTypes.object,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
+  lupa: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onUpdate: PropTypes.func,
   stateObjects: PropTypes.object

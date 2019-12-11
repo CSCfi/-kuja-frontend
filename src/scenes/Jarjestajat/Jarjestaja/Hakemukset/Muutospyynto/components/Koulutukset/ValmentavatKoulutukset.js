@@ -50,7 +50,10 @@ const ValmentavatKoulutukset = React.memo(props => {
     onStateUpdate(
       {
         categories: getCategories(
-          getDataForKoulutusList(props.koulutukset.poikkeukset, R.toUpper(props.intl.locale)),
+          getDataForKoulutusList(
+            R.values(props.koulutukset.poikkeukset),
+            R.toUpper(props.intl.locale)
+          ),
           props.kohde,
           props.maaraystyyppi
         )

@@ -102,10 +102,7 @@ const PerustelutMuut = React.memo(
         const koodiArvoInteger = parseInt(koodiarvo, 10);
 
         const obj = R.find(
-          R.compose(
-            R.includes(koodiArvoInteger),
-            R.prop("koodiarvot")
-          ),
+          R.compose(R.includes(koodiArvoInteger), R.prop("koodiarvot")),
           mapping
         );
         return obj
@@ -118,24 +115,25 @@ const PerustelutMuut = React.memo(
     }, [defaultAdditionForm, defaultRemovalForm, mapping]);
 
     const divideArticles = useMemo(() => {
+      const relevantMaaraykset = R.filter(
+        R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
+      )(maaraykset);
+      const localeUpper = R.toUpper(intl.locale);
       return (articles, relevantCodes) => {
         const dividedArticles = {};
-        const relevantMaaraykset = R.filter(
-          R.propEq("koodisto", "oivamuutoikeudetvelvollisuudetehdotjatehtavat")
-        )(maaraykset);
         R.forEach(article => {
           const { metadata } = article;
-          const kasite = parseLocalizedField(metadata, "FI", "kasite");
-          const kuvaus = parseLocalizedField(metadata, "FI", "kuvaus");
-          const isInRelevantMaaraykset = !!R.find(
-            R.propEq("koodiarvo", article.koodiArvo)
-          )(relevantMaaraykset);
+          const kasite = parseLocalizedField(metadata, localeUpper, "kasite");
+          const kuvaus = parseLocalizedField(metadata, localeUpper, "kuvaus");
+          const isInLupa = !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
+            relevantMaaraykset
+          );
           if (
-            kuvaus &&
-            kasite &&
+            // Relevant codes includes only the koodiarvot that are selected on page 1
             R.includes(article.koodiArvo, relevantCodes) &&
-            (isInRelevantMaaraykset ||
-              (article.koodiArvo !== "15" && article.koodiArvo !== "22"))
+            (kuvaus || article.koodiArvo === "22") &&
+            kasite &&
+            (isInLupa || article.koodiArvo !== "15")
           ) {
             dividedArticles[kasite] = dividedArticles[kasite] || [];
             dividedArticles[kasite].push({
@@ -151,7 +149,14 @@ const PerustelutMuut = React.memo(
         }, articles);
         return dividedArticles;
       };
-    }, [getCategoriesByKoodiarvo, isReadOnly, locale, maaraykset, vankilat]);
+    }, [
+      getCategoriesByKoodiarvo,
+      intl,
+      isReadOnly,
+      locale,
+      maaraykset,
+      vankilat
+    ]);
 
     const getCategories = useMemo(() => {
       return (configObj, locale) => {
@@ -160,10 +165,10 @@ const PerustelutMuut = React.memo(
             anchor: configObj.key,
             title: item.title,
             categories: R.map(({ article, lomakkeet }) => {
-              const title =
-                _.find(article.metadata, m => {
-                  return m.kieli === locale;
-                }).kuvaus || "[Koulutuksen otsikko tähän]";
+              const metadata = R.find(m => {
+                return m.kieli === locale;
+              }, article.metadata);
+              const title = metadata.kuvaus || metadata.nimi;
               const isInLupaBool = article
                 ? !!_.find(article.voimassaAlkuPvm, koulutusala => {
                     return article.koodiArvo === koulutusala;
@@ -171,73 +176,70 @@ const PerustelutMuut = React.memo(
                 : false;
               const anchorInit = `muut_${configObj.code}.${configObj.key}.${article.koodiArvo}`;
               const changeObj = R.find(
-                R.compose(
-                  R.startsWith(anchorInit),
-                  R.prop("anchor")
-                ),
+                R.compose(R.startsWith(anchorInit), R.prop("anchor")),
                 changeObjects.muut[configObj.code]
               );
               const isAddition = changeObj && changeObj.properties.isChecked;
+              const isReasoningRequired =
+                R.path(
+                  ["properties", "metadata", "isReasoningRequired"],
+                  changeObj
+                ) !== false;
               const labelClasses = {
                 isInLupa: isInLupaBool
               };
-              let structure = {
-                layout: {
-                  indentation: "none",
-                  margins: { top: "large" }
-                },
-                anchor: article.koodiArvo,
-                meta: {
-                  isInLupa: isInLupaBool,
-                  koodiarvo: article.koodiArvo,
-                  koodisto: article.koodisto
-                },
-                components: [
-                  {
-                    anchor: "A",
-                    name: item.componentName,
-                    properties: {
-                      isReadOnly,
+              let structure = null;
+              if (isReasoningRequired) {
+                structure = {
+                  layout: {
+                    indentation: "none",
+                    margins: { top: "large" }
+                  },
+                  anchor: article.koodiArvo,
+                  meta: {
+                    isInLupa: isInLupaBool,
+                    koodiarvo: article.koodiArvo,
+                    koodisto: article.koodisto
+                  },
+                  components: [
+                    {
+                      anchor: "A",
                       name: item.componentName,
-                      title: title,
-                      labelStyles: {
-                        addition: isAdded,
-                        removal: isRemoved,
-                        custom: Object.assign(
-                          {},
-                          labelClasses.isInLupa ? isInLupa : {}
-                        )
-                      },
-                      styleClasses: ["flex"],
-                      statusTextStyleClasses: isAddition
-                        ? ["text-green-600 pr-4 w-20 font-bold"]
-                        : ["text-red-500 pr-4 w-20 font-bold"],
-                      statusText: isAddition ? " LISÄYS:" : " POISTO:"
+                      properties: {
+                        isReadOnly,
+                        name: item.componentName,
+                        title: title,
+                        labelStyles: {
+                          addition: isAdded,
+                          removal: isRemoved,
+                          custom: Object.assign(
+                            {},
+                            labelClasses.isInLupa ? isInLupa : {}
+                          )
+                        },
+                        styleClasses: ["flex"],
+                        statusTextStyleClasses: isAddition
+                          ? ["text-green-600 pr-4 w-20 font-bold"]
+                          : ["text-red-500 pr-4 w-20 font-bold"],
+                        statusText: isAddition ? " LISÄYS:" : " POISTO:"
+                      }
                     }
-                  }
-                ],
-                categories: isAddition ? lomakkeet.lisays : lomakkeet.poisto
-              };
+                  ],
+                  categories: isAddition ? lomakkeet.lisays : lomakkeet.poisto
+                };
+              }
               return structure;
-            }, item.articles)
+            }, item.articles).filter(Boolean)
           };
         }, configObj.categoryData);
       };
     }, [changeObjects.muut, isReadOnly]);
 
     const relevantCodes = useMemo(() => {
-      return R.map(
-        R.compose(
-          R.view(R.lensIndex(2)),
-          R.split(".")
-        )
-      )(
+      return R.map(R.compose(R.view(R.lensIndex(2)), R.split(".")))(
         R.map(
           R.prop("anchor"),
-          R.compose(
-            R.flatten,
-            R.values
-          )(changeObjects.muut)
+          R.compose(R.flatten, R.values)(changeObjects.muut)
         )
       );
     }, [changeObjects.muut]);
@@ -245,8 +247,8 @@ const PerustelutMuut = React.memo(
     const dividedArticles = useMemo(() => {
       return divideArticles(muut, relevantCodes);
     }, [divideArticles, muut, relevantCodes]);
-
     const config = useMemo(() => {
+      console.info(dividedArticles);
       return [
         {
           code: "01",

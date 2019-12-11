@@ -22,13 +22,16 @@ const Kuljettajakoulutukset = React.memo(props => {
               anchor: "A",
               name: "RadioButtonWithLabel",
               properties: {
+                forChangeObject: {
+                  isReasoningRequired: item.isReasoningRequired
+                },
                 name: "RadioButtonWithLabel",
                 title: item.title,
                 isChecked: item.shouldBeChecked,
                 labelStyles: {
                   addition: isAdded,
                   removal: isRemoved,
-                  custom: Object({}, item.isInLupa ? isInLupa : {})
+                  custom: item.isInLupa ? isInLupa : {}
                 }
               }
             }
@@ -52,7 +55,9 @@ const Kuljettajakoulutukset = React.memo(props => {
         categories: getCategories(
           getDataForKoulutusList(
             props.koulutukset.muut[koodisto],
-            R.toUpper(props.intl.locale)
+            R.toUpper(props.intl.locale),
+            props.lupa,
+            "kuljettajakoulutus"
           ),
           props.kohde,
           props.maaraystyyppi
@@ -63,9 +68,10 @@ const Kuljettajakoulutukset = React.memo(props => {
   }, [
     getCategories,
     onStateUpdate,
+    props.intl.locale,
     props.kohde,
     props.koulutukset.muut,
-    props.intl.locale,
+    props.lupa,
     props.maaraystyyppi
   ]);
 
@@ -89,6 +95,7 @@ Kuljettajakoulutukset.defaultProps = {
 Kuljettajakoulutukset.propTypes = {
   changeObjects: PropTypes.array,
   kohde: PropTypes.object,
+  lupa: PropTypes.object,
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object
 };
