@@ -73,7 +73,7 @@ const Header = ({
         to={logoutLink.path}
         exact={true}
         className="inline-block no-underline text-gray-800 hover:underline">
-        <span>{logoutLink.text[0]}: </span>
+        <span>{logoutLink.text[0]} </span>
         <span className="font-bold">{logoutLink.text[1]}</span>
       </NavLink>
     </Router>,
