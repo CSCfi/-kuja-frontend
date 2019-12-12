@@ -174,5 +174,9 @@ export default defineMessages({
   tietoaTulevanJulkaisunAjankohdasta: {
     id: "common.tietoaTulevanJulkaisunAjankohdasta",
     defaultMessage: "Tulossa vuoden 2020 aikana"
+  },
+  sort: {
+    id: "common.sort",
+    defaultMessage: "Järjestä sarakkeen mukaan"
   }
 });

@@ -13,7 +13,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
 import { withStyles } from "@material-ui/core/styles";
 import { MessageWrapper } from "modules/elements";
-import { ROLE_KAYTTAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
+import { ROLE_MUOKKAAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import {
@@ -432,7 +432,7 @@ const MuutospyyntoWizard = ({
         </MessageWrapper>
       );
     } else if (
-      sessionStorage.getItem("role") !== ROLE_KAYTTAJA &&
+      sessionStorage.getItem("role") !== ROLE_MUOKKAAJA &&
       sessionStorage.getItem("role") !== ROLE_NIMENKIRJOITTAJA
     ) {
       return (

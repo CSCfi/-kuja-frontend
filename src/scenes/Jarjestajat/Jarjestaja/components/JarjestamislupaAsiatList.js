@@ -81,7 +81,7 @@ const JarjestamislupaAsiatList = ({
                   truncate: false,
                   styleClasses: [colWidths[ii]],
                   text: title,
-                  sortingTooltip: "Järjestä sarakkeen mukaan"
+                  sortingTooltip: intl.formatMessage(common.sort)
                 };
               }, columnTitles).concat({
                 text: "Toiminnot",
@@ -107,25 +107,24 @@ const JarjestamislupaAsiatList = ({
               },
               [
                 { text: "" },
-                { text: "Järjestämisluvan muutos" },
+                { text: intl.formatMessage(common.change) },
                 { text: row.tila },
                 { text: "" },
                 { text: row.paatetty }
               ]
             );
-            if (sessionStorage.getItem("role") !== ROLE_KATSELIJA) {
+            if (
+              sessionStorage.getItem("role") !== ROLE_KATSELIJA &&
+              row.tila !== "Avoin"
+            ) {
               cells = R.append(
                 {
                   menu: {
                     id: `simple-menu-${i}`,
                     actions: [
                       {
-                        id: "start-preparing",
-                        text: "Ota valmisteluun"
-                      },
-                      {
-                        id: "delete",
-                        text: "Poista"
+                        id: "edit",
+                        text: intl.formatMessage(common.edit)
                       }
                     ]
                   },

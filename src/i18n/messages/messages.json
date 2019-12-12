@@ -230,6 +230,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.sort",
+    "defaultMessage": "Järjestä sarakkeen mukaan",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
@@ -466,7 +471,7 @@
   },
   {
     "id": "wizard.notSignedIn",
-    "defaultMessage": "Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun",
+    "defaultMessage": "Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {

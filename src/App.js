@@ -32,7 +32,7 @@ import { ToastContainer } from "react-toastify";
 import {
   ROLE_ESITTELIJA,
   ROLE_KATSELIJA,
-  ROLE_KAYTTAJA,
+  ROLE_MUOKKAAJA,
   ROLE_NIMENKIRJOITTAJA,
   ROLE_YLLAPITAJA
 } from "./modules/constants";
@@ -116,7 +116,7 @@ const App = ({ intl, user }) => {
       const role = [
         ROLE_YLLAPITAJA,
         ROLE_ESITTELIJA,
-        ROLE_KAYTTAJA,
+        ROLE_MUOKKAAJA,
         ROLE_NIMENKIRJOITTAJA,
         ROLE_KATSELIJA
       ].find(role => _.indexOf(user.roles, role) > -1);
