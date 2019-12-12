@@ -1,8 +1,10 @@
 import React from "react";
 import { storiesOf } from "@storybook/react";
-import HorizontalNavigation from ".";
+import Navigation from ".";
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
 
-storiesOf("HorizontalNavigation", module).add("Basic layout", () => {
+storiesOf("Navigation", module).add("Basic layout", () => {
   const links = [
     {
       path: "/esi-ja-perusopetus",
@@ -14,5 +16,9 @@ storiesOf("HorizontalNavigation", module).add("Basic layout", () => {
     { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
     { path: "/tilastot", text: "Tilastot" }
   ];
-  return <HorizontalNavigation links={links}></HorizontalNavigation>;
+  return (
+    <Router history={createBrowserHistory()}>
+      <Navigation links={links}></Navigation>
+    </Router>
+  );
 });

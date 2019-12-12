@@ -5,11 +5,11 @@ import "./template-a.css";
 
 const TemplateA = ({ children, items }) => {
   return (
-    <div className="template-a-container">
+    <div className="template-a-container py-4">
       <div className="align-self-end pr-4">{items[0]}</div>
       <div className="item-2 pl-4">
         <div className="flex">
-          <div className="flex flex-col pr-4 border-r">
+          <div className="flex flex-col pr-4 border-r align-self-center">
             <div>{items[2]}</div>
             <div>{items[3]}</div>
           </div>

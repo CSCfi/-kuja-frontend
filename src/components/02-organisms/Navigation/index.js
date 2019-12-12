@@ -1,88 +1,71 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "styled-components";
-import { makeStyles } from "@material-ui/styles";
 import AppBar from "@material-ui/core/AppBar";
-import Typography from "@material-ui/core/Typography";
-import LinkItem from "./LinkItem";
-import { COLORS } from "modules/styles";
-import { injectIntl } from "react-intl";
-import userMessages from "../../../i18n/definitions/user";
+import { Toolbar, makeStyles } from "@material-ui/core";
+import TemplateB from "../../03-templates/TemplateB";
+import TemplateD from "../../03-templates/TemplateD";
+import { NavLink } from "react-router-dom";
+import * as R from "ramda";
 
 import styles from "./navigation.module.css";
 
-const HeaderBarLower = styled.div`
-  display: flex;
-  justify-content: ${props =>
-    props.justifyContent ? props.justifyContent : "flex-start"};
-  margin: 0 auto;
-  width: 100%;
-  background: ${COLORS.OIVA_MENU_BG_COLOR};
-  max-height: 50px;
-`;
-
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
-};
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
-    flexGrow: 1
-    // backgroundColor: theme.palette.background.paper,
+    boxShadow: "none"
   }
 }));
 
-const Navigation = props => {
-  const classes = useStyles();
+const Navigation = ({
+  direction = "horizontal",
+  links,
+  theme = {
+    backgroundColor: "green-500",
+    color: "white",
+    hoverColor: "green-400"
+  }
+}) => {
+  const classes = useStyles(theme);
+
+  const items = R.addIndex(R.map)((link, index) => {
+    return (
+      <NavLink
+        key={`link-${index}`}
+        exact={link.isExact}
+        activeClassName={`font-bold md:bg-green-800 md:font-normal`}
+        to={link.path}
+        className={`px-8 ${
+          direction !== "vertical" ? "border-r border-green-600" : ""
+        } py-4 flex-1 tracking-wider min-w-200 lg:max-w-xxs sm:min-w-initial
+         hover:bg-${theme.hoverColor} text-${
+          theme.color
+        } text-center flex-wrap whitespace-no-wrap`}>
+        {link.text}
+      </NavLink>
+    );
+  }, links);
 
   return (
-    <div className={classes.root} data-testid="navigation">
-      <AppBar position="static">
-        <HeaderBarLower className="text-xs lg:text-base">
-          {/* TODO: localization! */}
-          {props.pageLinks.map(link => (
-            <LinkItem
-              to={link.path}
-              className={`${
-                styles["navigation-item"]
-              } px-2 sm:px-4 py-4 no-underline`}
-              key={link.text}
-              exact={link.isExact}
-            >
-              {link.text}
-            </LinkItem>
-          ))}
-          {props.ytunnus && (
-            <LinkItem
-              className={`${
-                styles["navigation-item"]
-              } px-2 sm:px-4 py-4 no-underline`}
-              ytunnus={props.ytunnus}
-              to={{
-                pathname: "/jarjestajat/" + props.ytunnus + "/omattiedot",
-                ytunnus: props.ytunnus
-              }}
-              exact
-            >
-              {props.intl.formatMessage(userMessages.ownOrganization)}
-            </LinkItem>
-          )}
-        </HeaderBarLower>
-      </AppBar>
-    </div>
+    <React.Fragment>
+      {(!direction || direction === "horizontal") && (
+        <AppBar position="static" classes={classes}>
+          <Toolbar
+            variant="dense"
+            className={`flex flex-wrap text-black border 
+        border-gray-300 text-sm overflow-auto hide-scrollbar bg-${theme.backgroundColor}`}
+            disableGutters={true}>
+            <TemplateB items={items}></TemplateB>
+          </Toolbar>
+        </AppBar>
+      )}
+      {direction === "vertical" && <TemplateD items={items}></TemplateD>}
+    </React.Fragment>
   );
 };
 
 Navigation.propTypes = {
-  ytunnus: PropTypes.string
+  links: PropTypes.array,
+  direction: PropTypes.string,
+  theme: PropTypes.object
 };
 
-export default injectIntl(Navigation);
+export default Navigation;

@@ -1,7 +1,13 @@
-.navigation-item {
-  border-right: 1px solid #58826e;
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-.navigation-item:first-of-type {
-  border-left: 1px solid #58826e;
+/* Hide scrollbar for IE and Edge */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+}
+
+.active {
+  @apply .bg-green-800;
 }

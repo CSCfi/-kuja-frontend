@@ -19,15 +19,14 @@ import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/Jarjest
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { BackendContext } from "./context/backendContext";
-import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
-import Navigation from "./components/02-organisms/Navigation";
+import authMessages from "./i18n/definitions/auth";
 import { MEDIA_QUERIES } from "./modules/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ReactResizeDetector from "react-resize-detector";
 import { loadProgressBar } from "axios-progress-bar";
 import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
+import langMessages from "./i18n/definitions/languages";
 import { ToastContainer } from "react-toastify";
 import {
   ROLE_ESITTELIJA,
@@ -41,6 +40,11 @@ import _ from "lodash"; // TODO: Get rid of this.
 
 import "axios-progress-bar/dist/nprogress.css";
 import FetchHandler from "./FetchHandler";
+import Header from "./components/02-organisms/Header";
+import { setLocale } from "./services/app/actions";
+import { AppContext } from "./context/appContext";
+import Navigation from "./components/02-organisms/Navigation";
+import SideNavigation from "./components/02-organisms/SideNavigation";
 
 loadProgressBar();
 
@@ -52,10 +56,12 @@ const history = createBrowserHistory();
  * @param {props} - Properties object.
  */
 const App = ({ intl, user }) => {
+  const [isSideMenuVisible, setSideMenuVisibility] = useState(false);
+
   const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
-  const [headerHeight, setHeaderHeight] = useState(0);
 
   const pageLinks = [
     {
@@ -101,10 +107,6 @@ const App = ({ intl, user }) => {
     return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
   }, [fromBackend.organisaatio]);
 
-  const onHeaderResize = (width, height) => {
-    setHeaderHeight(height);
-  };
-
   /**
    * If user has authenticated save some of his/her information into the
    * session storage.
@@ -124,6 +126,46 @@ const App = ({ intl, user }) => {
     }
   }, [user]);
 
+  const getHeader = template => (
+    <Header
+      inFinnish={intl.formatMessage(langMessages.inFinnish)}
+      inSwedish={intl.formatMessage(langMessages.inSwedish)}
+      isAuthenticated={!!user}
+      locale={appState.locale}
+      logIn={intl.formatMessage(authMessages.logIn)}
+      logo={{ text: "Oiva", path: "/" }}
+      authenticationLink={{
+        text: !user
+          ? [intl.formatMessage(authMessages.logIn)]
+          : [intl.formatMessage(authMessages.logOut), user.username],
+        path: !user ? "/cas-auth" : "/cas-logout"
+      }}
+      onLocaleChange={(...props) => {
+        setLocale(props[1])(appDispatch);
+        if (props[1]) {
+          sessionStorage.setItem("locale", props[1]);
+        } else {
+          sessionStorage.removeItem("locale");
+        }
+      }}
+      onLoginButtonClick={() => history.push("/cas-auth")}
+      onMenuClick={() => {
+        return setSideMenuVisibility(isVisible => !isVisible);
+      }}
+      organisation={{
+        text: R.path(
+          ["nimi", intl.locale],
+          R.path(["organisaatio", "raw"], fromBackend)
+        ),
+        path: "/"
+      }}
+      shortDescription={{
+        text: intl.formatMessage(commonMessages.siteShortDescription),
+        path: "/"
+      }}
+      template={template}></Header>
+  );
+
   return (
     <React.Fragment>
       <FetchHandler
@@ -132,22 +174,32 @@ const App = ({ intl, user }) => {
         ready={
           <Router history={history}>
             <div className="flex flex-col min-h-screen">
-              <header className="fixed w-full z-50">
-                <ButtonAppBar
-                  ytunnus={ytunnus}
-                  user={R.path(["kayttaja", "raw"], fromBackend)}
-                  organisaatio={R.path(["organisaatio", "raw"], fromBackend)}
-                  dispatch={dispatch}
-                  pageLinks={pageLinks}
-                />
-                {breakpointTabletMin && (
-                  <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
-                )}
-                <ReactResizeDetector handleHeight onResize={onHeaderResize} />
-              </header>
-              <main
-                className="flex flex-1 flex-col justify-between"
-                style={{ marginTop: headerHeight }}>
+              {getHeader()}
+
+              <div className="hidden md:block">
+                <Navigation links={pageLinks}></Navigation>
+              </div>
+
+              <SideNavigation
+                isVisible={isSideMenuVisible}
+                handleDrawerToggle={isVisible => {
+                  setSideMenuVisibility(isVisible);
+                }}>
+                {getHeader("C")}
+
+                <div className="p-4 max-w-xl">
+                  <Navigation
+                    direction="vertical"
+                    links={pageLinks}
+                    theme={{
+                      backgroundColor: "white",
+                      color: "black",
+                      hoverColor: "white"
+                    }}></Navigation>
+                </div>
+              </SideNavigation>
+
+              <main className="flex flex-1 flex-col justify-between">
                 <div className="flex flex-col flex-1 bg-white">
                   <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
                     <Breadcrumbs
