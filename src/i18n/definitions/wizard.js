@@ -169,6 +169,15 @@ export default defineMessages({
   },
   kuljettajakoulutusOutOfScope: {
     id: "wizard.kuljettajakoulutusOutOfScope",
-    defaultMessage: "Ei oikeutta järjestää kuorma- ja linja-autonkuljettajan ammattipätevyyskoulutusta"
+    defaultMessage:
+      "Ei oikeutta järjestää kuorma- ja linja-autonkuljettajan ammattipätevyyskoulutusta"
+  },
+  notSignedIn: {
+    id: "wizard.notSignedIn",
+    defaultMessage: "Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun."
+  },
+  noRights: {
+    id: "wizard.noRights",
+    defaultMessage: "Sinulla ei ole oikeuksia tälle sivulle."
   }
 });

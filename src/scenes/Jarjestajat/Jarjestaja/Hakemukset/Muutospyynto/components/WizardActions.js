@@ -1,13 +1,12 @@
-import React, {useState} from "react";
-import {
-  WizardBottom,
-} from "./MuutospyyntoWizardComponents";
+import React, { useState } from "react";
+import { WizardBottom } from "./MuutospyyntoWizardComponents";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import {HAKEMUS_VIESTI} from "../modules/uusiHakemusFormConstants";
+import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
+import { ROLE_NIMENKIRJOITTAJA } from "../../../../../../modules/constants";
 
 const WizardActions = props => {
   const [isConfirmDialogVisible, setConfirmDialogVisible] = useState(false);
@@ -21,25 +20,25 @@ const WizardActions = props => {
   };
 
   const onSaveClick = () => {
-    props.onSave({triggerPreview: false, setAsSent: false});
+    props.onSave({ triggerPreview: false, setAsSent: false });
   };
 
-  const onPreviewClick  = () => {
-    props.onSave({triggerPreview: true, setAsSent: false});
+  const onPreviewClick = () => {
+    props.onSave({ triggerPreview: true, setAsSent: false });
   };
 
   const onSendClick = () => {
-    props.onSave({triggerPreview: false, setAsSent: true})
-  }
+    props.onSave({ triggerPreview: false, setAsSent: true });
+  };
 
   const handleCancel = () => {
     setConfirmDialogVisible(false);
-  }
+  };
 
   const handleOk = () => {
     onSendClick();
     setConfirmDialogVisible(false);
-  }
+  };
 
   const {
     intl: { formatMessage }
@@ -61,9 +60,8 @@ const WizardActions = props => {
             variant="outlined"
             className={`previous button-left ${
               !props.onPrev ? "invisible h-0" : ""
-              }`}
-            onClick={onPrevClick}
-          >
+            }`}
+            onClick={onPrevClick}>
             {formatMessage(wizardMessages.previous)}
           </Button>
         </div>
@@ -72,43 +70,36 @@ const WizardActions = props => {
             color="secondary"
             disabled={!props.isSavingEnabled}
             className="save"
-            onClick={onSaveClick}
-          >
+            onClick={onSaveClick}>
             {formatMessage(wizardMessages.saveDraft)}
           </Button>
           <Button
             color="secondary"
             className="preview"
-            onClick={onPreviewClick}
-          >
+            onClick={onPreviewClick}>
             {formatMessage(wizardMessages.preview)}
           </Button>
         </div>
         <div className="flex flex-col md:w-48 md:flex-row-reverse">
-          <Button
-            color={props.onNext ?
-              "secondary"
-              :
-              "primary"
-            }
-            variant={props.onNext ?
-              "outlined"
-              :
-              "contained"
-            }
-            className={`next button-right`}
-            onClick={props.onNext ?
-              onNextClick
-              :
-              () => setConfirmDialogVisible(true) // todo: Lähetä
-            }
-          >
-            {props.onNext ?
-              formatMessage(wizardMessages.next)
-              :
-              formatMessage(wizardMessages.send)
-            }
-          </Button>
+          {sessionStorage.getItem("role") === ROLE_NIMENKIRJOITTAJA &&
+            !props.onNext && (
+              <Button
+                color="primary"
+                variant="contained"
+                className={`next button-right`}
+                onClick={() => setConfirmDialogVisible(true)}>
+                {formatMessage(wizardMessages.send)}
+              </Button>
+            )}
+          {props.onNext && (
+            <Button
+              color="secondary"
+              variant="outlined"
+              className={`next button-right`}
+              onClick={onNextClick}>
+              {formatMessage(wizardMessages.next)}
+            </Button>
+          )}
         </div>
       </div>
     </WizardBottom>
