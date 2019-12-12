@@ -16,6 +16,7 @@ import Table from "../../../../components/02-organisms/Table";
 import * as R from "ramda";
 import moment from "moment";
 import { ROLE_KATSELIJA } from "../../../../modules/constants";
+import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -115,7 +116,7 @@ const JarjestamislupaAsiatList = ({
             );
             if (
               sessionStorage.getItem("role") !== ROLE_KATSELIJA &&
-              row.tila !== "Avoin"
+              row.tila.toLowerCase() !== FIELDS.TILA.VALUES.AVOIN.toLowerCase()
             ) {
               cells = R.append(
                 {
