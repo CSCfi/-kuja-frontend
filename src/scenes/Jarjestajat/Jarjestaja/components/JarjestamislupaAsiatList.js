@@ -63,7 +63,7 @@ const JarjestamislupaAsiatList = ({
       return {
         luontipvm: moment(muutospyynto.luontipvm).format("DD.MM.YYYY HH:mm:ss"),
         paatetty: R.path(["paatoskierros", "loppupvm"], muutospyynto),
-        tila: LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila].FI,
+        tila: muutospyynto.tila,
         uuid: muutospyynto.uuid
       };
     }, muutospyynnot);
@@ -81,7 +81,7 @@ const JarjestamislupaAsiatList = ({
                 return {
                   truncate: false,
                   styleClasses: [colWidths[ii]],
-                  text: title,
+                  text: "\xa0\xa0" + title,
                   sortingTooltip: intl.formatMessage(common.sort)
                 };
               }, columnTitles).concat({
@@ -109,14 +109,14 @@ const JarjestamislupaAsiatList = ({
               [
                 { text: "" },
                 { text: intl.formatMessage(common.change) },
-                { text: row.tila },
+                { text: LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[row.tila].FI },
                 { text: "" },
                 { text: row.paatetty }
               ]
             );
             if (
               sessionStorage.getItem("role") !== ROLE_KATSELIJA &&
-              row.tila.toLowerCase() !== FIELDS.TILA.VALUES.AVOIN.toLowerCase()
+              row.tila !== FIELDS.TILA.VALUES.AVOIN
             ) {
               cells = R.append(
                 {
