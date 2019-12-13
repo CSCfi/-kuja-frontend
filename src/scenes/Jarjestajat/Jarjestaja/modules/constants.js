@@ -384,12 +384,12 @@ export const LUPA_TEKSTIT = {
                 SV: 'Luonnos'
             },
             AVOIN: {
-                FI: 'Avoin',
-                SV: 'Avoin'
+                FI: 'Lähetetty',
+                SV: 'Lähetetty'
             },
             VALMISTELUSSA: {
-                FI: 'Valmistelussa',
-                SV: 'Valmistelussa'
+                FI: 'Käsittelyssä',
+                SV: 'Käsittelyssä'
             },
             TAYDENNETTAVA: {
                 FI: 'Täydennettävänä',
