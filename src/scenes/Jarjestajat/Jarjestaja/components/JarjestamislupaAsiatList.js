@@ -15,6 +15,7 @@ import common from "../../../../i18n/definitions/common";
 import Table from "../../../../components/02-organisms/Table";
 import * as R from "ramda";
 import moment from "moment";
+import { ROLE_KATSELIJA } from "../../../../modules/constants";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -80,7 +81,7 @@ const JarjestamislupaAsiatList = ({
                   truncate: false,
                   styleClasses: [colWidths[ii]],
                   text: title,
-                  sortingTooltip: "Järjestä sarakkeen mukaan"
+                  sortingTooltip: intl.formatMessage(common.sort)
                 };
               }, columnTitles).concat({
                 text: "Toiminnot",
@@ -96,6 +97,44 @@ const JarjestamislupaAsiatList = ({
       rowGroups: [
         {
           rows: R.addIndex(R.map)((row, i) => {
+            let cells = R.addIndex(R.map)(
+              (col, ii) => {
+                return {
+                  truncate: true,
+                  styleClasses: [colWidths[ii]],
+                  text: col.text
+                };
+              },
+              [
+                { text: "" },
+                { text: intl.formatMessage(common.change) },
+                { text: row.tila },
+                { text: "" },
+                { text: row.paatetty }
+              ]
+            );
+            if (
+              sessionStorage.getItem("role") !== ROLE_KATSELIJA &&
+              row.tila !== "Avoin"
+            ) {
+              cells = R.append(
+                {
+                  menu: {
+                    id: `simple-menu-${i}`,
+                    actions: [
+                      {
+                        id: "edit",
+                        text: intl.formatMessage(common.edit)
+                      }
+                    ]
+                  },
+                  styleClasses: [colWidths[5]]
+                },
+                cells
+              );
+            } else {
+              cells = R.append({ styleClasses: [colWidths[5]] }, cells);
+            }
             return {
               id: row.uuid,
               onClick: (row, action) => {
@@ -107,33 +146,7 @@ const JarjestamislupaAsiatList = ({
                   history.push(`hakemukset-ja-paatokset/${row.id}/1`);
                 }
               },
-              cells: R.addIndex(R.map)(
-                (col, ii) => {
-                  return {
-                    truncate: true,
-                    styleClasses: [colWidths[ii]],
-                    text: col.text
-                  };
-                },
-                [
-                  { text: "" },
-                  { text: "Järjestämisluvan muutos" },
-                  { text: row.tila },
-                  { text: "" },
-                  { text: row.paatetty }
-                ]
-              ).concat({
-                menu: {
-                  id: `simple-menu-${i}`,
-                  actions: [
-                    {
-                      id: "edit",
-                      text: "Täydennä hakemusta"
-                    }
-                  ]
-                },
-                styleClasses: [colWidths[5]]
-              })
+              cells: cells
             };
           }, tableData)
         }
@@ -156,17 +169,19 @@ const JarjestamislupaAsiatList = ({
     ));
   }, [url, muutospyynnot]);
 
+  let hasRights = sessionStorage.getItem("role") !== ROLE_KATSELIJA;
   return (
     <React.Fragment>
       <div className="mb-2">
-        {muutospyynto ? (
+        {muutospyynto && (
           <Button color="primary" onClick={() => setMuutospyynto(null)}>
             <ArrowBack />
             <span className="pl-2">
               {intl.formatMessage(common.backFromAsiakirjat)}
             </span>
           </Button>
-        ) : (
+        )}
+        {!muutospyynto && hasRights && (
           <NavLink
             className="mb-2"
             to={newApplicationRouteItem.path}

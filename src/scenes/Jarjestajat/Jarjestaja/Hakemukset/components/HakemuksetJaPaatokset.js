@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import MuutospyyntoList from "./MuutospyyntoList";
 import { MessageWrapper } from "../../../../../modules/elements";
 import { COLORS } from "../../../../../modules/styles";
-import { ROLE_KAYTTAJA } from "../../../../../modules/constants";
+import { ROLE_MUOKKAAJA } from "../../../../../modules/constants";
 import { HAKEMUS_VIESTI } from "../Muutospyynto/modules/uusiHakemusFormConstants";
 import * as R from "ramda";
 
@@ -36,7 +36,7 @@ const HakemuksetJaPaatokset = ({
     return `${match.url}/uusi`;
   };
 
-  if (sessionStorage.getItem("role") !== ROLE_KAYTTAJA) {
+  if (sessionStorage.getItem("role") !== ROLE_MUOKKAAJA) {
     return (
       <MessageWrapper>
         <h3>{HAKEMUS_VIESTI.KIRJAUTUMINEN.FI}</h3>
@@ -44,7 +44,7 @@ const HakemuksetJaPaatokset = ({
     );
   }
 
-  if (R.includes(ROLE_KAYTTAJA, user.roles) && organisaatio.oid === user.oid) {
+  if (R.includes(ROLE_MUOKKAAJA, user.roles) && organisaatio.oid === user.oid) {
     return (
       <Wrapper>
         <h2>Hakemukset</h2>

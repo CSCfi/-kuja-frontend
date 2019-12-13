@@ -178,5 +178,9 @@ export default defineMessages({
   siteShortDescription: {
     id: "common.siteShortDescription",
     defaultMessage: "Opetushallinnon ohjaus- ja säätelypalvelu"
+  },
+  sort: {
+    id: "common.sort",
+    defaultMessage: "Järjestä sarakkeen mukaan"
   }
 });

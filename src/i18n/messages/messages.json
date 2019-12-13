@@ -233,6 +233,10 @@
     "id": "common.siteShortDescription",
     "defaultMessage": "Opetushallinnon ohjaus- ja säätelypalvelu",
     "filepath": "src/i18n/definitions/common.js"
+  }, {
+    "id": "common.sort",
+    "defaultMessage": "Järjestä sarakkeen mukaan",
+    "filepath": "src/i18n/definitions/common.js"
   },
   {
     "id": "education.highSchoolEducation",
@@ -467,6 +471,16 @@
   {
     "id": "wizard.kuljettajakoulutusOutOfScope",
     "defaultMessage": "Ei oikeutta järjestää kuorma- ja linja-autonkuljettajan ammattipätevyyskoulutusta",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.notSignedIn",
+    "defaultMessage": "Uuden hakemuksen tekeminen vaatii kirjautumisen palveluun.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.noRights",
+    "defaultMessage": "Sinulla ei ole oikeuksia tälle sivulle.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
