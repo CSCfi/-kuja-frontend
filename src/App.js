@@ -20,14 +20,13 @@ import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { BackendContext } from "./context/backendContext";
 import authMessages from "./i18n/definitions/auth";
-import { MEDIA_QUERIES } from "./modules/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { loadProgressBar } from "axios-progress-bar";
 import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import langMessages from "./i18n/definitions/languages";
 import { ToastContainer } from "react-toastify";
+import ReactResizeDetector from "react-resize-detector";
 import {
   ROLE_ESITTELIJA,
   ROLE_KATSELIJA,
@@ -35,9 +34,6 @@ import {
   ROLE_NIMENKIRJOITTAJA,
   ROLE_YLLAPITAJA
 } from "./modules/constants";
-import * as R from "ramda";
-import _ from "lodash"; // TODO: Get rid of this.
-
 import "axios-progress-bar/dist/nprogress.css";
 import FetchHandler from "./FetchHandler";
 import Header from "./components/02-organisms/Header";
@@ -45,6 +41,7 @@ import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
 import Navigation from "./components/02-organisms/Navigation";
 import SideNavigation from "./components/02-organisms/SideNavigation";
+import * as R from "ramda";
 
 loadProgressBar();
 
@@ -61,7 +58,7 @@ const App = ({ intl, user }) => {
   const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
-  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   const pageLinks = [
     {
@@ -99,13 +96,9 @@ const App = ({ intl, user }) => {
       : [];
   }, [dispatch, user]);
 
-  /**
-   * Here we listen on changes of fromBackend.organisaatio object. If the object
-   * changes the code is run. It's good to note that ytunnus might be undefined.
-   */
-  const ytunnus = useMemo(() => {
-    return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
-  }, [fromBackend.organisaatio]);
+  const onHeaderResize = (width, height) => {
+    setHeaderHeight(height);
+  };
 
   /**
    * If user has authenticated save some of his/her information into the
@@ -121,7 +114,7 @@ const App = ({ intl, user }) => {
         ROLE_MUOKKAAJA,
         ROLE_NIMENKIRJOITTAJA,
         ROLE_KATSELIJA
-      ].find(role => _.indexOf(user.roles, role) > -1);
+      ].find(role => R.indexOf(role, user.roles) > -1);
       sessionStorage.setItem("role", role || "");
     }
   }, [user]);
@@ -174,10 +167,13 @@ const App = ({ intl, user }) => {
         ready={
           <Router history={history}>
             <div className="flex flex-col min-h-screen">
-              {getHeader()}
+              <div className="fixed z-50 w-full">
+                <ReactResizeDetector handleHeight onResize={onHeaderResize} />
+                {getHeader()}
 
-              <div className="hidden md:block">
-                <Navigation links={pageLinks}></Navigation>
+                <div className="hidden md:block">
+                  <Navigation links={pageLinks}></Navigation>
+                </div>
               </div>
 
               <SideNavigation
@@ -199,7 +195,9 @@ const App = ({ intl, user }) => {
                 </div>
               </SideNavigation>
 
-              <main className="flex flex-1 flex-col justify-between">
+              <main
+                className="flex flex-1 flex-col justify-between"
+                style={{ marginTop: headerHeight }}>
                 <div className="flex flex-col flex-1 bg-white">
                   <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
                     <Breadcrumbs
