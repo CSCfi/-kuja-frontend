@@ -36,6 +36,7 @@ import {
 } from "./modules/constants";
 import "axios-progress-bar/dist/nprogress.css";
 import FetchHandler from "./FetchHandler";
+import Esittelijat from "./scenes/Esittelijat/Esittelijat";
 import Header from "./components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
@@ -243,6 +244,16 @@ const App = ({ intl, user }) => {
                         component={EsiJaPerusopetus}
                       />
                       <Route
+                        path="/asiat"
+                        render={props => (
+                          <Esittelijat
+                            history={props.history}
+                            match={props.match}
+                            user={user}
+                          />
+                        )}
+                      />
+                      <Route
                         path="/jarjestajat/:ytunnus"
                         render={props => (
                           <JarjestajaSwitch
@@ -269,7 +280,7 @@ const App = ({ intl, user }) => {
             </div>
           </Router>
         }
-        user={user}></FetchHandler>
+        user={user} />
     </React.Fragment>
   );
 };
