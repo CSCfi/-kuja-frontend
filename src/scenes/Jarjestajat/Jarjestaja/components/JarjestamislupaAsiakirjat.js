@@ -44,6 +44,8 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
       : [];
   }, [dispatch, muutospyynto]);
 
+  const attachmentRow = ["", R.path(["nimi", intl.locale], organisaatio)];
+
   const baseRow = [
     LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila][R.toUpper(intl.locale)],
     R.path(["nimi", intl.locale], organisaatio)
@@ -60,7 +62,7 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
             ) +
               " " +
               R.prop("nimi", liite),
-            ...baseRow,
+            ...attachmentRow,
             liite.luontipvm ? (
               <Moment format="D.M.YYYY">{liite.luontipvm}</Moment>
             ) : (
@@ -74,7 +76,7 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
           R.pathOr([], ["muutospyynnonLiitteet", "raw"], fromBackend)
         )
       ),
-    [intl, fromBackend, baseRow]
+    [intl, fromBackend, attachmentRow]
   );
 
   const muutospyyntoRowItem = {
@@ -112,7 +114,7 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
                   truncate: false,
                   styleClasses: [colWidths[ii]],
                   text: intl.formatMessage(title),
-                  sortingTooltip: "Järjestä sarakkeen mukaan"
+                  sortingTooltip: intl.formatMessage(common.sort)
                 };
               }, columnTitles)
             }
