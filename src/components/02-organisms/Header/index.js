@@ -4,7 +4,7 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import css from "./header.module.css";
 import TemplateA from "../../03-templates/TemplateA";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import {
   AppBar,
@@ -15,6 +15,7 @@ import {
   Button
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import TemplateC from "../../03-templates/TemplateC";
 
 const MEDIA_QUERIES = {
   MOBILE: "only screen and (min-width: 360px) and (max-width: 767px)",
@@ -25,9 +26,6 @@ const MEDIA_QUERIES = {
 };
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -36,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const useStylesForTypography = makeStyles(theme => ({
+const useStylesForTypography = makeStyles(() => ({
   root: {
     lineHeight: 1
   }
@@ -45,47 +43,45 @@ const useStylesForTypography = makeStyles(theme => ({
 const Header = ({
   inFinnish,
   inSwedish,
-  isLoggedIn,
+  isAuthenticated,
   locale,
   logIn,
   logo,
-  logoutLink,
+  authenticationLink,
   onLocaleChange,
+  onLoginButtonClick,
   onMenuClick,
   organisation,
-  shortDescription
+  shortDescription,
+  template = "A"
 }) => {
   const classes = useStyles();
   const typographyClasses = useStylesForTypography();
 
   const items = [
-    <Router>
-      <NavLink
-        to={logo.path}
-        exact={true}
-        className="inline-block no-underline text-gray-800">
-        <Typography variant="h6" classes={typographyClasses}>
-          {logo.text}
-        </Typography>
-      </NavLink>
-    </Router>,
-    <Router>
-      <NavLink
-        to={shortDescription.path}
-        exact={true}
-        className="inline-block no-underline text-gray-800">
-        {shortDescription.text}
-      </NavLink>
-    </Router>,
-    <Router>
-      <NavLink
-        to={logoutLink.path}
-        exact={true}
-        className="inline-block no-underline text-gray-800 hover:underline">
-        <span>{logoutLink.text[0]} </span>
-        <span className="font-bold">{logoutLink.text[1]}</span>
-      </NavLink>
-    </Router>,
+    <NavLink
+      to={logo.path}
+      exact={true}
+      className="inline-block no-underline text-gray-800">
+      <Typography variant="h6" classes={typographyClasses}>
+        {logo.text}
+      </Typography>
+    </NavLink>,
+    <NavLink
+      to={shortDescription.path}
+      exact={true}
+      className="inline-block no-underline text-gray-800">
+      {shortDescription.text}
+    </NavLink>,
+    <NavLink
+      to={authenticationLink.path}
+      exact={false}
+      className="inline-block no-underline text-gray-800 hover:underline">
+      <span>{authenticationLink.text[0]} </span>
+      {authenticationLink.text[1] && (
+        <span className="font-bold">{authenticationLink.text[1]}</span>
+      )}
+    </NavLink>,
     <span className="text-gray-600">{organisation.text}</span>
   ];
 
@@ -95,30 +91,9 @@ const Header = ({
     <React.Fragment>
       {/* Layout for mobile and other small screens */}
       {!breakpointTabletMin && (
-        <div className={classes.root}>
-          <AppBar elevation={0} position="static">
-            <Toolbar className="bg-green-500">
-              <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="menu"
-                onClick={onMenuClick}>
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" className={classes.title}>
-                {logo.text}
-              </Typography>
-              {!isLoggedIn && <Button color="inherit">{logIn}</Button>}
-            </Toolbar>
-          </AppBar>
-        </div>
-      )}
-      {/* Layout for bigger screens */}
-      {breakpointTabletMin && (
-        <AppBar elevation={0} position="static">
-          <Toolbar className="bg-white px-4 border border-gray-300">
-            <TemplateA items={items}>
+        <React.Fragment>
+          {template === "C" && (
+            <TemplateC items={items}>
               <ToggleButtonGroup
                 size="small"
                 onChange={onLocaleChange}
@@ -147,7 +122,75 @@ const Header = ({
                   {inSwedish}
                 </ToggleButton>
               </ToggleButtonGroup>
-            </TemplateA>
+            </TemplateC>
+          )}
+          {template !== "C" && (
+            <div className={`fixed w-full z-50 ${classes.root} `}>
+              <AppBar elevation={0} position="static">
+                <Toolbar className="bg-green-500">
+                  <IconButton
+                    edge="start"
+                    className={classes.menuButton}
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={onMenuClick}>
+                    <MenuIcon />
+                  </IconButton>
+                  <NavLink
+                    to={logo.path}
+                    exact={true}
+                    className="inline-block no-underline text-white flex-grow">
+                    <Typography variant="h6" className={classes.title}>
+                      {logo.text}
+                    </Typography>
+                  </NavLink>
+                  {!isAuthenticated && (
+                    <Button color="inherit" onClick={onLoginButtonClick}>
+                      {logIn}
+                    </Button>
+                  )}
+                </Toolbar>
+              </AppBar>
+            </div>
+          )}
+        </React.Fragment>
+      )}
+      {/* Layout for bigger screens */}
+      {breakpointTabletMin && (
+        <AppBar elevation={0} position="static">
+          <Toolbar className="bg-white px-4 border border-gray-300">
+            {(template === "A" || !template) && (
+              <TemplateA items={items}>
+                <ToggleButtonGroup
+                  size="small"
+                  onChange={onLocaleChange}
+                  value={locale}
+                  exclusive>
+                  <ToggleButton
+                    key={1}
+                    value="fi"
+                    className="whitespace-no-wrap"
+                    classes={{
+                      label: css["locale-label"],
+                      selected: css["locale-selected"],
+                      sizeSmall: css["locale-button"]
+                    }}>
+                    {inFinnish}
+                  </ToggleButton>
+                  <ToggleButton
+                    key={2}
+                    value="sv"
+                    className="whitespace-no-wrap"
+                    classes={{
+                      label: css["locale-label"],
+                      selected: css["locale-selected"],
+                      sizeSmall: css["locale-button"]
+                    }}>
+                    {inSwedish}
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </TemplateA>
+            )}
           </Toolbar>
         </AppBar>
       )}
@@ -158,15 +201,17 @@ const Header = ({
 Header.propTypes = {
   inFinnish: PropTypes.string,
   inSwedish: PropTypes.string,
-  isLoggedIn: PropTypes.bool,
+  isAuthenticated: PropTypes.bool,
   locale: PropTypes.string,
   logIn: PropTypes.string,
   logo: PropTypes.object,
-  logoutLink: PropTypes.object,
+  authenticationLink: PropTypes.object,
   onLocaleChange: PropTypes.func.isRequired,
+  onLoginButtonClick: PropTypes.func.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   organisation: PropTypes.object,
-  shortDescription: PropTypes.object
+  shortDescription: PropTypes.object,
+  template: PropTypes.string
 };
 
 export default Header;

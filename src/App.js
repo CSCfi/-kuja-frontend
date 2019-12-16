@@ -19,16 +19,14 @@ import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/Jarjest
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
 import { BackendContext } from "./context/backendContext";
-import ButtonAppBar from "./components/02-organisms/ButtonAppBar";
-import Navigation from "./components/02-organisms/Navigation";
-import { MEDIA_QUERIES } from "./modules/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import ReactResizeDetector from "react-resize-detector";
+import authMessages from "./i18n/definitions/auth";
 import { loadProgressBar } from "axios-progress-bar";
 import { injectIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
+import langMessages from "./i18n/definitions/languages";
 import { ToastContainer } from "react-toastify";
+import ReactResizeDetector from "react-resize-detector";
 import {
   ROLE_ESITTELIJA,
   ROLE_KATSELIJA,
@@ -36,11 +34,14 @@ import {
   ROLE_NIMENKIRJOITTAJA,
   ROLE_YLLAPITAJA
 } from "./modules/constants";
-import * as R from "ramda";
-import _ from "lodash"; // TODO: Get rid of this.
-
 import "axios-progress-bar/dist/nprogress.css";
 import FetchHandler from "./FetchHandler";
+import Header from "./components/02-organisms/Header";
+import { setLocale } from "./services/app/actions";
+import { AppContext } from "./context/appContext";
+import Navigation from "./components/02-organisms/Navigation";
+import SideNavigation from "./components/02-organisms/SideNavigation";
+import * as R from "ramda";
 
 loadProgressBar();
 
@@ -52,9 +53,11 @@ const history = createBrowserHistory();
  * @param {props} - Properties object.
  */
 const App = ({ intl, user }) => {
-  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+  const [isSideMenuVisible, setSideMenuVisibility] = useState(false);
 
-  const breakpointTabletMin = useMediaQuery(MEDIA_QUERIES.TABLET_MIN);
+  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+  const { state: appState, dispatch: appDispatch } = useContext(AppContext);
+
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const pageLinks = [
@@ -93,14 +96,6 @@ const App = ({ intl, user }) => {
       : [];
   }, [dispatch, user]);
 
-  /**
-   * Here we listen on changes of fromBackend.organisaatio object. If the object
-   * changes the code is run. It's good to note that ytunnus might be undefined.
-   */
-  const ytunnus = useMemo(() => {
-    return R.path(["raw", "ytunnus"], fromBackend.organisaatio || {});
-  }, [fromBackend.organisaatio]);
-
   const onHeaderResize = (width, height) => {
     setHeaderHeight(height);
   };
@@ -119,10 +114,50 @@ const App = ({ intl, user }) => {
         ROLE_MUOKKAAJA,
         ROLE_NIMENKIRJOITTAJA,
         ROLE_KATSELIJA
-      ].find(role => _.indexOf(user.roles, role) > -1);
+      ].find(role => R.indexOf(role, user.roles) > -1);
       sessionStorage.setItem("role", role || "");
     }
   }, [user]);
+
+  const getHeader = template => (
+    <Header
+      inFinnish={intl.formatMessage(langMessages.inFinnish)}
+      inSwedish={intl.formatMessage(langMessages.inSwedish)}
+      isAuthenticated={!!user}
+      locale={appState.locale}
+      logIn={intl.formatMessage(authMessages.logIn)}
+      logo={{ text: "Oiva", path: "/" }}
+      authenticationLink={{
+        text: !user
+          ? [intl.formatMessage(authMessages.logIn)]
+          : [intl.formatMessage(authMessages.logOut), user.username],
+        path: !user ? "/cas-auth" : "/cas-logout"
+      }}
+      onLocaleChange={(...props) => {
+        setLocale(props[1])(appDispatch);
+        if (props[1]) {
+          sessionStorage.setItem("locale", props[1]);
+        } else {
+          sessionStorage.removeItem("locale");
+        }
+      }}
+      onLoginButtonClick={() => history.push("/cas-auth")}
+      onMenuClick={() => {
+        return setSideMenuVisibility(isVisible => !isVisible);
+      }}
+      organisation={{
+        text: R.path(
+          ["nimi", intl.locale],
+          R.path(["organisaatio", "raw"], fromBackend)
+        ),
+        path: "/"
+      }}
+      shortDescription={{
+        text: intl.formatMessage(commonMessages.siteShortDescription),
+        path: "/"
+      }}
+      template={template}></Header>
+  );
 
   return (
     <React.Fragment>
@@ -132,19 +167,34 @@ const App = ({ intl, user }) => {
         ready={
           <Router history={history}>
             <div className="flex flex-col min-h-screen">
-              <header className="fixed w-full z-50">
-                <ButtonAppBar
-                  ytunnus={ytunnus}
-                  user={R.path(["kayttaja", "raw"], fromBackend)}
-                  organisaatio={R.path(["organisaatio", "raw"], fromBackend)}
-                  dispatch={dispatch}
-                  pageLinks={pageLinks}
-                />
-                {breakpointTabletMin && (
-                  <Navigation ytunnus={ytunnus} pageLinks={pageLinks} />
-                )}
+              <div className="fixed z-50 w-full">
                 <ReactResizeDetector handleHeight onResize={onHeaderResize} />
-              </header>
+                {getHeader()}
+
+                <div className="hidden md:block">
+                  <Navigation links={pageLinks}></Navigation>
+                </div>
+              </div>
+
+              <SideNavigation
+                isVisible={isSideMenuVisible}
+                handleDrawerToggle={isVisible => {
+                  setSideMenuVisibility(isVisible);
+                }}>
+                {getHeader("C")}
+
+                <div className="p-4 max-w-xl">
+                  <Navigation
+                    direction="vertical"
+                    links={pageLinks}
+                    theme={{
+                      backgroundColor: "white",
+                      color: "black",
+                      hoverColor: "white"
+                    }}></Navigation>
+                </div>
+              </SideNavigation>
+
               <main
                 className="flex flex-1 flex-col justify-between"
                 style={{ marginTop: headerHeight }}>

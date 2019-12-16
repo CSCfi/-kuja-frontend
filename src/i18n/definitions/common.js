@@ -175,6 +175,10 @@ export default defineMessages({
     id: "common.tietoaTulevanJulkaisunAjankohdasta",
     defaultMessage: "Tulossa vuoden 2020 aikana"
   },
+  siteShortDescription: {
+    id: "common.siteShortDescription",
+    defaultMessage: "Opetushallinnon ohjaus- ja säätelypalvelu"
+  },
   sort: {
     id: "common.sort",
     defaultMessage: "Järjestä sarakkeen mukaan"

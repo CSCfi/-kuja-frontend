@@ -230,6 +230,10 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.siteShortDescription",
+    "defaultMessage": "Opetushallinnon ohjaus- ja säätelypalvelu",
+    "filepath": "src/i18n/definitions/common.js"
+  }, {
     "id": "common.sort",
     "defaultMessage": "Järjestä sarakkeen mukaan",
     "filepath": "src/i18n/definitions/common.js"
