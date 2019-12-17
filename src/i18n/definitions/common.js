@@ -127,6 +127,14 @@ export default defineMessages({
     id: "common.secretAttachement",
     defaultMessage: "Salainen liite"
   },
+  asiat: {
+    id: "common.asiat",
+    defaultMessage: "Asia"
+  },
+  asiatOpen: {
+    id: "common.asiatOpen",
+    defaultMessage: "Avoimet asiat"
+  },
   document: {
     id: "common.document",
     defaultMessage: "Asiakirja"
@@ -182,5 +190,9 @@ export default defineMessages({
   sort: {
     id: "common.sort",
     defaultMessage: "Järjestä sarakkeen mukaan"
+  },
+  frontpage: {
+    id: "common.frontpage",
+    defaultMessage: "Etusivu"
   }
 });
