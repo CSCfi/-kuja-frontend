@@ -1,4 +1,4 @@
-import { defineMessages } from "react-intl";
+import {defineMessages} from "react-intl";
 
 export default defineMessages({
   statistics: {
@@ -194,5 +194,20 @@ export default defineMessages({
   frontpage: {
     id: "common.frontpage",
     defaultMessage: "Etusivu"
+  },
+  asiaTable: {
+    headers: {
+      asianumero: {id: "asiaTable.headers.asianumero", defaultMessage: "Asianumero"},
+      tila: {id: "asiaTable.headers.tila", defaultMessage: "Tila"},
+      asia: {id: "asiaTable.headers.asia", defaultMessage: "Asia"},
+      asiakas: {id: "asiaTable.headers.asiakas", defaultMessage: "Asiakkaan nimi"},
+      maakunta: {id: "asiaTable.headers.maakunta", defaultMessage: "Maakunta"},
+      saapunut: {id: "asiaTable.headers.saapunut", defaultMessage: "Saapunut"},
+      hakupvm: {id: "asiaTable.headers.hakupvm", defaultMessage: "Haettu voimaantulo"},
+      actions: {id: "asiaTable.headers.actions", defaultMessage: "Toiminnot"},
+    },
+    actions: {
+      handle: { id: "asiaTable.actions.handle", defaultMessage: "Ota valmisteluun"}
+    }
   }
 });

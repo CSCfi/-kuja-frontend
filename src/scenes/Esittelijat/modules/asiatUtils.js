@@ -1,17 +1,18 @@
 import * as R from "ramda";
+import common from "../../../i18n/definitions/common";
 
 const asiatTableColumnSetup = [
-  {title: "Asianumero", widthClass: "w-2/12"},
-  {title: "Tila", widthClass: "w-1/12"},
-  {title: "Asia", widthClass: "w-3/12"},
-  {title: "Asiakkaan nimi", widthClass: "w-3/12"},
-  {title: "Maakunta", widthClass: "w-1/12"},
-  {title: "Saapunut", widthClass: "w-1/12"},
-  {title: "Haettu voimaantulo", widthClass: "w-1/12"},
-  {title: "Toiminnot", widthClass: "w-1/12"}
+  {titleKey: common.asiaTable.headers.asianumero, widthClass: "w-2/12"},
+  {titleKey: common.asiaTable.headers.tila, widthClass: "w-1/12"},
+  {titleKey: common.asiaTable.headers.asia, widthClass: "w-3/12"},
+  {titleKey: common.asiaTable.headers.asiakas, widthClass: "w-3/12"},
+  {titleKey: common.asiaTable.headers.maakunta, widthClass: "w-1/12"},
+  {titleKey: common.asiaTable.headers.saapunut, widthClass: "w-1/12"},
+  {titleKey: common.asiaTable.headers.hakupvm, widthClass: "w-1/12"},
+  {titleKey: common.asiaTable.headers.actions, widthClass: "w-1/12"}
 ];
 
-const generateAsiatTableHeaderStructure = () => {
+const generateAsiatTableHeaderStructure = (t) => {
   return {
     role: "thead",
     rowGroups: [
@@ -23,7 +24,7 @@ const generateAsiatTableHeaderStructure = () => {
                 isSortable: true,
                 truncate: true,
                 styleClasses: [item.widthClass],
-                text: item.title
+                text: t(item.titleKey)
               }
             })(asiatTableColumnSetup)
           }
@@ -42,9 +43,9 @@ const getJarjestajaNimiFromHakemus = (hakemus) => {
   return R.path(["jarjestaja", "nimi", "fi"], hakemus) || '';
 };
 
-export const generateAsiatTableStructure = (hakemusList) => {
+export const generateAsiatTableStructure = (hakemusList, t) => {
   return [
-    generateAsiatTableHeaderStructure(),
+    generateAsiatTableHeaderStructure(t),
     {
       role: "tbody",
       rowGroups: [{
@@ -74,7 +75,7 @@ export const generateAsiatTableStructure = (hakemusList) => {
                 actions: [
                   {
                     id: "start-preparing",
-                    text: "Ota valmisteluun"
+                    text: t(common.asiaTable.actions.handle)
                   }
                 ]
               }

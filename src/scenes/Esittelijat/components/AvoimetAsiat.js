@@ -4,8 +4,10 @@ import {BackendContext} from "../../../context/backendContext";
 import Table from "../../../components/02-organisms/Table"
 import * as R from "ramda";
 import {generateAsiatTableStructure} from "../modules/asiatUtils";
+import {injectIntl} from "react-intl";
+import {PropTypes} from "prop-types";
 
-const AvoimetAsiat = () => {
+const AvoimetAsiat = ({intl}) => {
     const {state: fromBackend, dispatch} = useContext(BackendContext);
     const fetchSetup = useMemo(() => {
       const fetchItems = [];
@@ -18,11 +20,11 @@ const AvoimetAsiat = () => {
     }, [dispatch]);
 
     const avoimetAsiatData = useMemo(() => {
-      return R.path(["muutospyynnot","raw"],fromBackend);
+      return R.path(["muutospyynnot", "raw"], fromBackend);
     }, [fromBackend]);
 
     const tableStructure = !!avoimetAsiatData ?
-      generateAsiatTableStructure(avoimetAsiatData) :
+      generateAsiatTableStructure(avoimetAsiatData, intl.formatMessage) :
       [];
 
     return (
@@ -40,4 +42,8 @@ const AvoimetAsiat = () => {
   }
 ;
 
-export default AvoimetAsiat;
+AvoimetAsiat.propTypes = {
+  intl: PropTypes.object
+};
+
+export default injectIntl(AvoimetAsiat);
