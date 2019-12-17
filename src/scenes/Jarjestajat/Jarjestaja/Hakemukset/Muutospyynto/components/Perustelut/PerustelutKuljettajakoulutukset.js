@@ -26,6 +26,10 @@ const PerustelutKuljettajakoulutukset = props => {
       <React.Fragment>
         {R.map(changeObj => {
           const mapping = {
+            1: "peruskoulutus",
+            2: "jatkokoulutus",
+            3: "peruskoulutus",
+            4: "jatkokoulutus",
             5: "peruskoulutus",
             6: "jatkokoulutus"
           };
