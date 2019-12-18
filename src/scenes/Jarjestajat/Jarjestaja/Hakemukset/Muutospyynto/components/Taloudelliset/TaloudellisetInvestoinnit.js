@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -21,7 +22,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta1
+                  )
+                }
               }
             }
           ]
@@ -33,9 +39,9 @@ const TaloudellisetInvestoinnit = React.memo(props => {
             {
               anchor: "label",
               name: "StatusTextRow",
-              styleClasses: ["font-semibold text-base mb-2"],
+              styleClasses: ["font-semibold text-base"],
               properties: {
-                title: "Investoinnin kustannukset"
+                title: "Investoinnin kustannukset",
               }
             }
           ]
@@ -51,7 +57,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               properties: {
                 isReadOnly: props.isReadOnly,
                 withoutMargin: true,
-                type: "number"
+                type: "number",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta2
+                  )
+                }
               }
             }
           ]
@@ -66,7 +77,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta3
+                  )
+                }
               }
             }
           ]

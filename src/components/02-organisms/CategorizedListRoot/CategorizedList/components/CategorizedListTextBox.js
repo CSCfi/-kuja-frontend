@@ -11,7 +11,8 @@ export const CategorizedListTextBox = ({
   onChanges,
   id,
   rows,
-  rowsMax
+  rowsMax,
+  tooltip
 }) => {
   const [value, setValue] = useState();
   let isDisabled = false;
@@ -49,6 +50,7 @@ export const CategorizedListTextBox = ({
         value={value}
         rows={rows}
         rowsMax={rowsMax}
+        tooltip={tooltip}
       />
     </div>
   );
