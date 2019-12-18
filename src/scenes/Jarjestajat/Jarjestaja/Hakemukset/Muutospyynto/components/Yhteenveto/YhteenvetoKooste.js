@@ -323,9 +323,12 @@ const YhteenvetoKooste = ({
                       muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                         muutosperusteluList
                       )}
-                      stateObject={R.path(["perustelut", "opiskelijavuodet"])(
-                        muutoshakemus
-                      )}
+                      stateObject={{
+                        opiskelijavuodet: R.path(
+                          ["opiskelijavuodet"],
+                          muutoshakemus
+                        )
+                      }}
                       {..._props}
                       isReadOnly={true}
                     />
