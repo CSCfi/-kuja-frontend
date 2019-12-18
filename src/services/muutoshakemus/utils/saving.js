@@ -63,6 +63,16 @@ export function createObjectToSave(
     return R.dissoc("tiedosto", attachment);
   }, allAttachmentsRaw);
 
+  console.log(changeObjects);
+
+  const getValueByPathAndAnchor = (anchor, path, changeObjects) => {
+    return R.path(
+      ["properties", "value"],
+      R.find(R.propEq("anchor", anchor), R.path(path, changeObjects) || []) ||
+        {}
+    );
+  };
+
   return {
     diaarinumero: lupa.diaarinumero,
     jarjestajaOid: lupa.jarjestajaOid,
@@ -76,7 +86,7 @@ export function createObjectToSave(
     paivittaja: "string",
     paivityspvm: null,
     voimassaalkupvm: lupa.alkupvm,
-    voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
+    voimassaloppupvm: null, // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
       tutkinnotjakoulutuksetLiitteet: {
@@ -84,11 +94,73 @@ export function createObjectToSave(
           R.path(["perustelut", "liitteet"], changeObjects)
         ]).filter(Boolean)
       },
+      // “investoinnit”: “”,
+      // “kustannukset”: “”,
+      // “rahoitus”: “”,
+      // “omavaraisuusaste”: “”,
+      // “maksuvalmius”: “”,
+      // “velkaantuneisuus”: “”,
+      // “kannattavuus”: “”,
       taloudelliset: {
+        edellytykset: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.edellytykset-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        vaikutukset: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.Vaikutukset-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        sopeuttaminen: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.sopeuttaminen-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        investoinnit: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.investoinnit-tekstikentta.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        kustannukset: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.kustannukset-Input.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        rahoitus: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.rahoitus-Input.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        omavaraisuusaste: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.omavaraisuusaste",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        maksuvalmius: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.maksuvalmius",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        velkaantuneisuus: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.velkaantuneisuus",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        kannattavuus: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.kannattavuus",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        jaama: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.jaama",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
         changeObjects: R.flatten([
+          R.path(["taloudelliset", "yleisettiedot"], changeObjects),
           R.path(["taloudelliset", "investoinnit"], changeObjects),
           R.path(["taloudelliset", "tilinpaatostiedot"], changeObjects),
-          R.path(["taloudelliset", "yleisettiedot"], changeObjects),
           R.path(["taloudelliset", "liitteet"], changeObjects)
         ]).filter(Boolean)
       },
