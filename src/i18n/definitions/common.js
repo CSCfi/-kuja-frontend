@@ -207,7 +207,25 @@ export default defineMessages({
       actions: {id: "asiaTable.headers.actions", defaultMessage: "Toiminnot"},
     },
     actions: {
-      handle: { id: "asiaTable.actions.handle", defaultMessage: "Ota valmisteluun"}
+      handle: {id: "asiaTable.actions.handle", defaultMessage: "Ota valmisteluun"}
+    }
+  },
+  asiaStates: {
+    kj: {
+      LUONNOS: {id: "asiaStates.kj.LUONNOS", defaultMessage: "Luonnos"},
+      AVOIN: {id: "asiaStates.kj.AVOIN", defaultMessage: "Lähetetty"},
+      VALMISTELUSSA: {id: "asiaStates.kj.VALMISTELUSSA", defaultMessage: "Lähetetty"},
+      TAYDENNETTAVA: {id: "asiaStates.kj.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
+      PAATETTY: {id: "asiaStates.kj.PAATETTY", defaultMessage: "Päätetty"},
+      PASSIVOITU: {id: "asiaStates.kj.PASSIVOITU", defaultMessage: "Poistettu"}
+    },
+    esittelija: {
+      LUONNOS: {id: "asiaStates.esittelija.LUONNOS", defaultMessage: "Luonnos"},
+      AVOIN: {id: "asiaStates.esittelija.AVOIN", defaultMessage: "Saapunut"},
+      VALMISTELUSSA: {id: "asiaStates.esittelija.VALMISTELUSSA", defaultMessage: "Valmistelussa"},
+      TAYDENNETTAVA: {id: "asiaStates.esittelija.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
+      PAATETTY: {id: "asiaStates.esittelija.PAATETTY", defaultMessage: "Päätetty"},
+      PASSIVOITU: {id: "asiaStates.esittelija.PASSIVOITU", defaultMessage: "Poistettu"}
     }
   }
 });

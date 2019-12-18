@@ -44,6 +44,7 @@ const getJarjestajaNimiFromHakemus = (hakemus) => {
 };
 
 export const generateAsiatTableStructure = (hakemusList, t) => {
+  const esittelijaStateKeys = common.asiaStates.esittelija;
   return [
     generateAsiatTableHeaderStructure(t),
     {
@@ -62,7 +63,7 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
               },
               [
                 {text: ''},
-                {text: row.tila || ''},
+                {text: t(esittelijaStateKeys[row.tila]) || ''},
                 {text: 'Järjestämisluvan muutos'},
                 {text: getJarjestajaNimiFromHakemus(row)},
                 {text: getMaakuntaNimiFromHakemus(row)},
