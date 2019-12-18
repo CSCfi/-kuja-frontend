@@ -1,5 +1,6 @@
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
+import moment from "moment";
 
 const asiatTableColumnSetup = [
   {titleKey: common.asiaTable.headers.asianumero, widthClass: "w-2/12"},
@@ -50,6 +51,12 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
       role: "tbody",
       rowGroups: [{
         rows: R.addIndex(R.map)((row, i) => {
+          const paivityspvm = row.paivityspvm ?
+            moment(row.paivityspvm).format('D.M.YYYY') :
+            '';
+          const hakupvm = row.hakupvm ?
+            moment(row.hakupvm,'yyyy-mm-dd').format('D.M.YYYY') :
+            '';
           return {
             id: row.uuid,
             cells: R.addIndex(R.map)(
@@ -66,8 +73,8 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                 {text: t(common.asiaTypes.lupaChange)}, // Only one type known in system at this juncture
                 {text: getJarjestajaNimiFromHakemus(row)},
                 {text: getMaakuntaNimiFromHakemus(row)},
-                {text: row.paivityspvm || ''},
-                {text: row.hakupvm || ''}
+                {text: paivityspvm},
+                {text: hakupvm}
               ]
             ).concat({
               menu: {
