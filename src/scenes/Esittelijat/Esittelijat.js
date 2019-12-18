@@ -11,10 +11,11 @@ import {injectIntl} from "react-intl";
 import common from "../../i18n/definitions/common";
 
 const Esittelijat = ({match, user, intl}) => {
+  const t = intl.formatMessage;
   const routes = [
     {
       path: `${match.url}/avoimet`,
-      text: intl.formatMessage(common.asiatOpen),
+      text: t(common.asiatOpen),
       authenticated: !!user
     }
   ];
@@ -22,13 +23,13 @@ const Esittelijat = ({match, user, intl}) => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>{`Oiva | ${intl.formatMessage(common.asiat)}`}</title>
+        <title>{`Oiva | ${t(common.asiat)}`}</title>
       </Helmet>
       <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
-        <BreadcrumbsItem to="/">{intl.formatMessage(common.frontpage)}</BreadcrumbsItem>
-        <BreadcrumbsItem to="/asiat">{intl.formatMessage(common.asiat)}</BreadcrumbsItem>
+        <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
+        <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
         <div className="mx-auto w-full mb-16">
-          <h1>{intl.formatMessage(common.asiat)}</h1>
+          <h1>{t(common.asiat)}</h1>
         </div>
         <ProfileMenu routes={routes}/>
       </div>
