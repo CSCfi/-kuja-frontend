@@ -68,7 +68,7 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                 };
               },
               [
-                {text: ''},
+                {text: ''}, //TODO: Fill when mechanism for Asianumero assignment exists. Currently no source.
                 {text: t(common.asiaStates.esittelija[row.tila]) || ''},
                 {text: t(common.asiaTypes.lupaChange)}, // Only one type known in system at this juncture
                 {text: getJarjestajaNimiFromHakemus(row)},
