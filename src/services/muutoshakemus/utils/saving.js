@@ -63,8 +63,6 @@ export function createObjectToSave(
     return R.dissoc("tiedosto", attachment);
   }, allAttachmentsRaw);
 
-  console.log(changeObjects);
-
   const getValueByPathAndAnchor = (anchor, path, changeObjects) => {
     return R.path(
       ["properties", "value"],
