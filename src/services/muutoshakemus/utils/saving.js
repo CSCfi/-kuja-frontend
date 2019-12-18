@@ -92,13 +92,6 @@ export function createObjectToSave(
           R.path(["perustelut", "liitteet"], changeObjects)
         ]).filter(Boolean)
       },
-      // “investoinnit”: “”,
-      // “kustannukset”: “”,
-      // “rahoitus”: “”,
-      // “omavaraisuusaste”: “”,
-      // “maksuvalmius”: “”,
-      // “velkaantuneisuus”: “”,
-      // “kannattavuus”: “”,
       taloudelliset: {
         edellytykset: getValueByPathAndAnchor(
           "taloudelliset_yleisettiedot.edellytykset-tekstikentta.A",
@@ -163,6 +156,46 @@ export function createObjectToSave(
         ]).filter(Boolean)
       },
       yhteenveto: {
+        yhteyshenkilo: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.yhteyshenkilo.nimi",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        nimike: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.yhteyshenkilo.nimike",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        puhelinnumero: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.yhteyshenkilo.puhelinnumero",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        sahkoposti: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.yhteyshenkilo.sahkoposti",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        ajankohta: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.muutoksien-voimaantulo.ajankohta",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        saate: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.saate.tekstikentta",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        hyvaksyja: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.hyvaksyja.nimi",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        hyvaksyjannimike: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.hyvaksyja.nimike",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
         changeObjects: R.flatten([
           R.path(["yhteenveto", "yleisettiedot"], changeObjects),
           R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects)
