@@ -42,6 +42,13 @@ const Esittelijat = ({match, user, intl}) => {
               <AvoimetAsiat/>
             )}
           />
+          <Route
+            path={`${match.url}`}
+            exact
+            render={() => (
+              <AvoimetAsiat/>
+            )}
+          />
         </div>
       </FullWidthWrapper>
     </React.Fragment>
