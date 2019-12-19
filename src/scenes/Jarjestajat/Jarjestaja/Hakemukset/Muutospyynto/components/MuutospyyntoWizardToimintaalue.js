@@ -197,12 +197,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         // to delete them.
         // Call 1...
         onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_additions`,
-          changes: []
-        });
-        // Call 2...
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_removals`,
+          anchor: `perustelut_${props.sectionId}`,
           changes: []
         });
       }
@@ -343,16 +338,19 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           changeObj.properties.isChecked === false
         ) {
           return null;
-        } else if (!R.includes("lupaan-lisattavat", changeObj.anchor)) {
+        } else if (R.includes("valintakentta", changeObj.anchor)) {
           // Let's return a new change object based on the one user selected using select element
-          const updatedAnchor = `${removeAnchorPart(
-            replaceAnchorPartWith(
-              changeObj.anchor,
-              1,
-              "lupaan-lisattavat-" + getAnchorPart(changeObj.anchor, 3)
-            ),
-            -1
-          )}.${changeObj.properties.value.value}`;
+          let updatedAnchor = removeAnchorPart(changeObj.anchor, 2);
+          updatedAnchor = replaceAnchorPartWith(
+            updatedAnchor,
+            1,
+            "lupaan-lisattavat-" + getAnchorPart(updatedAnchor, 2)
+          );
+          updatedAnchor = replaceAnchorPartWith(
+            updatedAnchor,
+            2,
+            changeObj.properties.value.value
+          );
           console.info(updatedAnchor);
           return [
             {
@@ -392,6 +390,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             anchor: "radio",
             name: "RadioButtonWithLabel",
             properties: {
+              isChecked:
+                !isEiMaariteltyaToimintaaluettaChecked &&
+                !isValtakunnallinenChecked,
               title: "Maakunnat ja kunnat"
             }
           }
@@ -483,6 +484,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                   isChecked: true,
                   labelStyles: {
                     addition: isAdded,
+                    custom: isAdded,
                     removal: isRemoved
                   },
                   title: maakunta.title
@@ -495,7 +497,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
            * VALINTAKENTTÄ - KUNNAT
            */
           {
-            anchor: "valintakentat-kunta",
+            anchor: "valintakentta",
             isVisible:
               !isValtakunnallinenChecked &&
               !isEiMaariteltyaToimintaaluettaChecked,
@@ -576,6 +578,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                   isChecked: true,
                   labelStyles: {
                     addition: isAdded,
+                    custom: isAdded,
                     removal: isRemoved
                   },
                   title: kunta.title
@@ -615,6 +618,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             anchor: "radio",
             name: "RadioButtonWithLabel",
             properties: {
+              isChecked: isEiMaariteltyaToimintaaluettaChecked,
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved
+              },
               title: "Ei määriteltyä toiminta-aluetta"
             }
           }
