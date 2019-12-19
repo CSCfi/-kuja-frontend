@@ -40,7 +40,7 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
       nimi: koulutus.nimi,
       koulutusala: anchorParts[0],
       koulutustyyppi: anchorParts[1],
-      perusteluteksti: null,
+      perusteluteksti: R.propEq("properties", "value", perustelut),
       muutosperustelukoodiarvo: []
     },
     nimi: finnishInfo.nimi,
@@ -55,6 +55,7 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
     muutos["parent"] = R.compose(R.join("."), R.dropLast(2))(anchorParts);
   }
 
+  console.log("getMuutos: " + muutos);
   return muutos;
 };
 
@@ -160,6 +161,8 @@ export const getChangesToSave = (
             R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
+          console.log(perustelut);
+
           return getMuutos(stateItem, changeObj, perustelut);
         }, unhandledChangeObjects).filter(Boolean)
       : [];
@@ -192,7 +195,7 @@ export const getChangesToSave = (
         maaraystyyppi: meta.maaraystyyppi,
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: null,
+          perusteluteksti: R.propEq("properties", "value", perustelut),
           muutosperustelukoodiarvo: []
         },
         nimi: finnishInfo.nimi,
@@ -232,7 +235,8 @@ export const getChangesToSave = (
         maaraystyyppi: meta.maaraystyyppi,
         meta: {
           tunniste: "tutkintokieli",
-          changeObjects: R.flatten([[changeObj], perustelut])
+          changeObjects: R.flatten([[changeObj], perustelut]),
+          perusteluteksti: R.propEq("properties", "value", perustelut)
         },
         tila: "LISAYS",
         type: "addition"
@@ -286,7 +290,10 @@ export const getChangesToSave = (
         isInLupa: category.meta.isInLupa,
         kohde: stateObject.kohde,
         maaraystyyppi: stateObject.maaraystyyppi,
-        meta: { changeObjects: R.flatten([[changeObj], perustelut]) },
+        meta: {
+          changeObjects: R.flatten([[changeObj], perustelut]),
+          perusteluteksti: R.propEq("properties", "value", perustelut)
+        },
         tila: tila,
         type: type
       };
@@ -305,7 +312,8 @@ export const getChangesToSave = (
           type: typeVal,
           meta: {
             changeObjects: R.flatten([[changeObj], perustelut]),
-            perusteluteksti: null
+            perusteluteksti: R.propEq("properties", "value"),
+            perustelut
           },
           muutosperustelukoodiarvo: null,
           kohde: stateObject.kohde,
@@ -325,7 +333,7 @@ export const getChangesToSave = (
           tila: "LISAYS",
           type: "addition",
           meta: {
-            perusteluteksti: null,
+            perusteluteksti: R.propEq("properties", "value", perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
@@ -339,7 +347,7 @@ export const getChangesToSave = (
           tila: "POISTO",
           type: "removal",
           meta: {
-            perusteluteksti: null,
+            perusteluteksti: R.propEq("properties", "value", perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
@@ -384,7 +392,10 @@ export const getChangesToSave = (
         koodisto,
         kohde: stateObject.opiskelijavuodet.kohde,
         maaraystyyppi: stateObject.opiskelijavuodet.maaraystyyppi,
-        meta: { changeObjects: R.flatten([[changeObj], perustelut]) },
+        meta: {
+          changeObjects: R.flatten([[changeObj], perustelut]),
+          perusteluteksti: R.propEq("properties", "value", perustelut)
+        },
         tila: "MUUTOS",
         type: "change"
       };
