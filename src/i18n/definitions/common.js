@@ -182,5 +182,17 @@ export default defineMessages({
   sort: {
     id: "common.sort",
     defaultMessage: "Järjestä sarakkeen mukaan"
+  },
+  current: {
+    id: "common.current",
+    defaultMessage: "Nykyinen"
+  },
+  toBeAdded: {
+    id: "common.toBeAdded",
+    defaultMessage: "Lisättävä"
+  },
+  toBeRemoved: {
+    id: "common.toBeRemoved",
+    defaultMessage: "Poistettava"
   }
 });
