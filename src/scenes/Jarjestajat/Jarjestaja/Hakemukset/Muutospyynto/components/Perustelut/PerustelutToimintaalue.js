@@ -4,6 +4,8 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
+import "./perustelut-toiminta-alue.module.css";
+
 const defaultProps = {
   changeObjects: {},
   isReadOnly: false,
@@ -22,20 +24,16 @@ const PerustelutToimintaalue = React.memo(
     stateObjects = defaultProps.stateObjects
   }) => {
     const getLomake = useMemo(() => {
-      return changeObj => {
+      return () => {
         return {
-          anchor: R.join(".", R.tail(R.split(".", changeObj.anchor))),
+          anchor: "reasoning",
           components: [
             {
               anchor: "A",
               name: "TextBox",
               properties: {
-                forChangeObject: changeObj.properties.metadata,
                 isReadOnly,
-                placeholder: "Kirjoita perustelut tähän...",
-                title:
-                  changeObj.properties.title ||
-                  R.path(["properties", "metadata", "title"], changeObj)
+                placeholder: "Kirjoita perustelut"
               }
             }
           ]
@@ -44,23 +42,59 @@ const PerustelutToimintaalue = React.memo(
     }, [isReadOnly]);
 
     const getCategories = useMemo(() => {
-      const lisaykset = R.filter(
-        R.pathEq(["properties", "isChecked"], true),
-        changeObjects.toimintaalue
-      );
-      const poistot = R.filter(
-        R.pathEq(["properties", "isChecked"], false),
-        changeObjects.toimintaalue
-      );
       return () => {
-        return {
-          additions: R.map(changeObj => {
-            return getLomake(changeObj);
-          }, lisaykset),
-          removals: R.map(changeObj => {
-            return getLomake(changeObj);
-          }, poistot)
-        };
+        return [
+          {
+            anchor: "changes",
+            layout: { indentation: "none", margins: { top: "none" } },
+            categories: [
+              {
+                anchor: "removed",
+                layout: { indentation: "none", margins: { top: "none" } },
+                title: "Poistettava",
+                components: R.map(changeObj => {
+                  let json = null;
+                  if (R.equals(changeObj.properties.isChecked, false)) {
+                    json = {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title:
+                          changeObj.properties.metadata.title ||
+                          changeObj.properties.metadata.label
+                      }
+                    };
+                  }
+                  return json;
+                }, changeObjects.toimintaalue).filter(Boolean)
+              },
+              {
+                anchor: "added",
+                layout: {
+                  margins: { top: "none" },
+                  components: { vertical: true }
+                },
+                title: "Lisättävä",
+                components: R.map(changeObj => {
+                  let json = null;
+                  if (R.equals(changeObj.properties.isChecked, true)) {
+                    json = {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title:
+                          changeObj.properties.metadata.title ||
+                          changeObj.properties.metadata.label
+                      }
+                    };
+                  }
+                  return json;
+                }, changeObjects.toimintaalue).filter(Boolean)
+              }
+            ]
+          },
+          getLomake()
+        ];
       };
     }, [changeObjects.toimintaalue, getLomake]);
 
@@ -73,44 +107,21 @@ const PerustelutToimintaalue = React.memo(
 
     return (
       <React.Fragment>
-        {R.path(["categories", "additions"], stateObjects.perustelut) &&
-        R.path(["categories", "additions"], stateObjects.perustelut).length ? (
+        {stateObjects.perustelut && (
           <ExpandableRowRoot
-            anchor={`${sectionId}_additions`}
+            anchor={sectionId}
             key={`perustelut-toimintaalue-lisattavat`}
-            categories={R.path(
-              ["categories", "additions"],
-              stateObjects.perustelut
-            )}
-            changes={R.path(["perustelut", "additions"], changeObjects)}
+            categories={stateObjects.perustelut.categories}
+            changes={changeObjects.perustelut}
             disableReverting={true}
             hideAmountOfChanges={false}
             isExpanded={true}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}
             showCategoryTitles={true}
-            title="Lupaan lisättävät"
+            title="Muutokset"
           />
-        ) : null}
-        {R.path(["categories", "removals"], stateObjects.perustelut) &&
-        R.path(["categories", "removals"], stateObjects.perustelut).length ? (
-          <ExpandableRowRoot
-            anchor={`${sectionId}_removals`}
-            key={`perustelut-toimintaalue-poistettavat`}
-            categories={R.path(
-              ["categories", "removals"],
-              stateObjects.perustelut
-            )}
-            changes={R.path(["perustelut", "removals"], changeObjects)}
-            disableReverting={true}
-            hideAmountOfChanges={false}
-            isExpanded={true}
-            onUpdate={onChangesUpdate}
-            sectionId={sectionId}
-            showCategoryTitles={true}
-            title="Luvasta poistettavat"
-          />
-        ) : null}
+        )}
       </React.Fragment>
     );
   }
