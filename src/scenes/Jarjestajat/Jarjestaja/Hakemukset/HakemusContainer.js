@@ -126,7 +126,6 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
       const updatedC = R.map(changeObj => {
         const files = changeObj.properties.attachments
           ? R.map(file => {
-              console.info(file);
               const fileFromBackend =
                 R.find(
                   R.propEq("tiedostoId", file.tiedostoId),
@@ -154,6 +153,25 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
           changesBySection
         );
       }, updatedC);
+
+      // Special case: Toiminta-alueen perustelut
+      const toimintaAluePerusteluChangeObject = R.path(
+        ["perustelut", "toimintaalue", "0"],
+        changesBySection
+      );
+      if (!R.includes("reasoning", toimintaAluePerusteluChangeObject.anchor)) {
+        changesBySection = R.assocPath(
+          ["perustelut", "toimintaalue"],
+          [
+            {
+              anchor: "perustelut_toimintaalue.reasoning.A",
+              properties: toimintaAluePerusteluChangeObject.properties
+            }
+          ],
+          changesBySection
+        );
+      }
+
       /**
        * At this point the backend data is handled and change objects are formed.
        */
