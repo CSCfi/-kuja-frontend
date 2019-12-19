@@ -83,7 +83,11 @@ export function createObjectToSave(
     tila: "LUONNOS",
     paivittaja: "string",
     paivityspvm: null,
-    voimassaalkupvm: lupa.alkupvm,
+    voimassaalkupvm: getValueByPathAndAnchor(
+      "yhteenveto_yleisettiedot.muutoksien-voimaantulo.ajankohta",
+      ["yhteenveto", "yleisettiedot"],
+      changeObjects
+    ),
     voimassaloppupvm: null, // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
@@ -178,11 +182,6 @@ export function createObjectToSave(
             changeObjects
           )
         },
-        voimaantulo: getValueByPathAndAnchor(
-          "yhteenveto_yleisettiedot.muutoksien-voimaantulo.ajankohta",
-          ["yhteenveto", "yleisettiedot"],
-          changeObjects
-        ),
         saate: getValueByPathAndAnchor(
           "yhteenveto_yleisettiedot.saate.tekstikentta",
           ["yhteenveto", "yleisettiedot"],
