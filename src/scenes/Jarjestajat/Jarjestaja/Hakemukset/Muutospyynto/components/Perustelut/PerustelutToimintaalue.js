@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
+import common from "../../../../../../../i18n/definitions/common";
 import * as R from "ramda";
 
 import "./perustelut-toiminta-alue.module.css";
@@ -10,14 +11,16 @@ const defaultProps = {
   changeObjects: {},
   isReadOnly: false,
   kohde: {},
-  lupa: {},
+  lupakohde: {},
   stateObjects: {}
 };
 
 const PerustelutToimintaalue = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
+    intl,
     isReadOnly = defaultProps.isReadOnly,
+    lupakohde = {},
     onStateUpdate,
     onChangesUpdate,
     sectionId,
@@ -49,9 +52,35 @@ const PerustelutToimintaalue = React.memo(
             layout: { indentation: "none", margins: { top: "none" } },
             categories: [
               {
-                anchor: "removed",
+                anchor: "current",
                 layout: { indentation: "none", margins: { top: "none" } },
-                title: "Poistettava",
+                title: intl.formatMessage(common.current),
+                components: (() => {
+                  const maakunnat = R.map(maakunta => {
+                    return {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title: maakunta.arvo
+                      }
+                    };
+                  }, lupakohde.maakunnat);
+                  const kunnat = R.map(kunta => {
+                    return {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title: kunta.arvo
+                      }
+                    };
+                  }, lupakohde.kunnat);
+                  return R.concat(maakunnat, kunnat);
+                })()
+              },
+              {
+                anchor: "removed",
+                layout: { margins: { top: "none" } },
+                title: intl.formatMessage(common.toBeRemoved),
                 components: R.map(changeObj => {
                   let json = null;
                   if (R.equals(changeObj.properties.isChecked, false)) {
@@ -74,29 +103,32 @@ const PerustelutToimintaalue = React.memo(
                   margins: { top: "none" },
                   components: { vertical: true }
                 },
-                title: "Lisättävä",
-                components: R.map(changeObj => {
-                  let json = null;
-                  if (R.equals(changeObj.properties.isChecked, true)) {
-                    json = {
-                      name: "StatusTextRow",
-                      layout: { dense: true },
-                      properties: {
-                        title:
-                          changeObj.properties.metadata.title ||
-                          changeObj.properties.metadata.label
-                      }
-                    };
-                  }
-                  return json;
-                }, changeObjects.toimintaalue).filter(Boolean)
+                title: intl.formatMessage(common.toBeAdded),
+                components: R.sortBy(
+                  R.path(["properties", "title"]),
+                  R.map(changeObj => {
+                    let json = null;
+                    if (R.equals(changeObj.properties.isChecked, true)) {
+                      json = {
+                        name: "StatusTextRow",
+                        layout: { dense: true },
+                        properties: {
+                          title:
+                            changeObj.properties.metadata.title ||
+                            changeObj.properties.metadata.label
+                        }
+                      };
+                    }
+                    return json;
+                  }, changeObjects.toimintaalue)
+                ).filter(Boolean)
               }
             ]
           },
           getLomake()
         ];
       };
-    }, [changeObjects.toimintaalue, getLomake]);
+    }, [changeObjects.toimintaalue, getLomake, lupakohde]);
 
     useEffect(() => {
       const categories = getCategories();
@@ -133,7 +165,7 @@ PerustelutToimintaalue.propTypes = {
   headingNumber: PropTypes.number,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
-  lupa: PropTypes.object,
+  lupakohde: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
   stateObjects: PropTypes.object
