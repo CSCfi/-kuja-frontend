@@ -158,6 +158,16 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     );
   }, [props.changeObjects.muutokset, props.lupakohde.valtakunnallinen]);
 
+  const isEiMaariteltyaToimintaaluettaChecked = useMemo(() => {
+    const changeObject = R.find(changeObj => {
+      return R.equals(
+        getAnchorPart(changeObj.anchor, 1),
+        "ei-maariteltya-toiminta-aluetta"
+      );
+    }, props.changeObjects.muutokset || []);
+    return changeObject && changeObject.properties.isChecked;
+  }, [props.changeObjects.muutokset]);
+
   /**
    * There are two parts in Toiminta-alue section: 1) maakunnat and kunnat
    * 2) Koko Suomi - pois lukien Ahvenanmaan maakunta. When user makes changes
@@ -181,6 +191,42 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         onChangesUpdate({
           anchor: props.sectionId,
           changes: valtakunnallinenChangeObject // This is the only change object we want to keep
+        });
+        // Then it's time to get rid of the change objects of form page two (reasoning).
+        // The change objects are divided into two parts. So we need to make two separate calls
+        // to delete them.
+        // Call 1...
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_additions`,
+          changes: []
+        });
+        // Call 2...
+        onChangesUpdate({
+          anchor: `perustelut_${props.sectionId}_removals`,
+          changes: []
+        });
+      }
+    } else if (isEiMaariteltyaToimintaaluettaChecked) {
+      // Let's get rid of the other change objects and keep only the one related
+      // to the Koko Suomi... selection.
+      const eiMaariteltyaToimintaaluettaChangeObject = R.filter(changeObj => {
+        return R.equals(
+          getAnchorPart(changeObj.anchor, 1),
+          "ei-maariteltya-toiminta-aluetta"
+        );
+      }, props.changeObjects.muutokset);
+      // Let's check if updating is necessary.
+      if (
+        !R.equals(
+          eiMaariteltyaToimintaaluettaChangeObject,
+          props.changeObjects.muutokset
+        )
+      ) {
+        // Fist we are going to update the change objects of Toiminta-alue section
+        // on form page one.
+        onChangesUpdate({
+          anchor: props.sectionId,
+          changes: eiMaariteltyaToimintaaluettaChangeObject // This is the only change object we want to keep
         });
         // Then it's time to get rid of the change objects of form page two (reasoning).
         // The change objects are divided into two parts. So we need to make two separate calls
@@ -267,7 +313,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             const kuntaChangeObj = R.find(
               R.propEq(
                 "anchor",
-                `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiarvo}`
+                `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
               ),
               props.changeObjects.muutokset || []
             );
@@ -297,16 +343,17 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           changeObj.properties.isChecked === false
         ) {
           return null;
-        } else if (R.includes("valintakentat", changeObj.anchor)) {
+        } else if (!R.includes("lupaan-lisattavat", changeObj.anchor)) {
           // Let's return a new change object based on the one user selected using select element
           const updatedAnchor = `${removeAnchorPart(
             replaceAnchorPartWith(
               changeObj.anchor,
               1,
-              "lupaan-lisattavat-" + getAnchorPart(changeObj.anchor, 2)
+              "lupaan-lisattavat-" + getAnchorPart(changeObj.anchor, 3)
             ),
             -1
           )}.${changeObj.properties.value.value}`;
+          console.info(updatedAnchor);
           return [
             {
               anchor: updatedAnchor,
@@ -338,196 +385,215 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
   const getCategories = useMemo(() => {
     return () => [
-      /**
-       * VALINTAKENTTÄ - MAAKUNNAT
-       */
       {
-        anchor: "valintakentat-maakunta",
-        isVisible: !isValtakunnallinenChecked,
-        title: "Maakunnat",
-        styleClasses: ["pt-0"],
+        anchor: "maakunnat-ja-kunnat",
         components: [
           {
-            anchor: "maakunnat",
-            name: "Autocomplete",
-            styleClasses: ["ml-10 mt-4"],
+            anchor: "radio",
+            name: "RadioButtonWithLabel",
             properties: {
-              isMulti: false,
-              options: valittavissaOlevatMaakunnat,
-              placeholder: "Valitse maakunta...",
-              value: []
+              title: "Maakunnat ja kunnat"
             }
+          }
+        ],
+        categories: [
+          /**
+           * VALINTAKENTTÄ - MAAKUNNAT
+           */
+          {
+            anchor: "valintakentta",
+            isVisible:
+              !isValtakunnallinenChecked &&
+              !isEiMaariteltyaToimintaaluettaChecked,
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "maakunnat",
+                name: "Autocomplete",
+                styleClasses: ["ml-10 mt-4"],
+                properties: {
+                  isMulti: false,
+                  options: valittavissaOlevatMaakunnat,
+                  placeholder: "Valitse maakunta...",
+                  value: []
+                }
+              }
+            ]
+          },
+          /**
+           * LUPAAN KUULUVAT MAAKUNNAT
+           */
+          {
+            anchor: "lupaan-kuuluvat-maakunnat",
+            isVisible:
+              !isEiMaariteltyaToimintaaluettaChecked &&
+              !isValtakunnallinenChecked &&
+              !!maakunnatInLupa &&
+              maakunnatInLupa.length > 0,
+            layout: {
+              indentation: "large",
+              components: {
+                justification: "start"
+              }
+            },
+            components: R.map(maakunta => {
+              return {
+                anchor: maakunta.metadata.koodiarvo,
+                name: "CheckboxWithLabel",
+                styleClasses: ["w-1/2 sm:w-1/4"],
+                properties: {
+                  isChecked: true,
+                  labelStyles: {
+                    removal: isRemoved
+                  },
+                  forChangeObject: {
+                    koodiarvo: maakunta.metadata.koodiarvo,
+                    koodisto: { koodistoUri: maakunta.metadata.koodisto },
+                    title: maakunta.title
+                  },
+                  title: maakunta.title
+                }
+              };
+            }, maakunnatInLupa),
+            title:
+              maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
+          },
+          /**
+           * LUPAAN LISÄTTÄVÄT MAAKUNNAT
+           */
+          {
+            anchor: "lupaan-lisattavat-maakunnat",
+            isVisible:
+              !isEiMaariteltyaToimintaaluettaChecked &&
+              !isValtakunnallinenChecked &&
+              !!lisattavatMaakunnat &&
+              lisattavatMaakunnat.length > 0,
+            layout: {
+              indentation: "large",
+              components: {
+                justification: "start"
+              }
+            },
+            components: R.map(maakunta => {
+              return {
+                anchor: maakunta.metadata.koodiarvo,
+                name: "CheckboxWithLabel",
+                styleClasses: ["w-1/2 sm:w-1/4"],
+                properties: {
+                  isChecked: true,
+                  labelStyles: {
+                    addition: isAdded,
+                    removal: isRemoved
+                  },
+                  title: maakunta.title
+                }
+              };
+            }, lisattavatMaakunnat),
+            title: "Lupaan lisättävät"
+          },
+          /**
+           * VALINTAKENTTÄ - KUNNAT
+           */
+          {
+            anchor: "valintakentat-kunta",
+            isVisible:
+              !isValtakunnallinenChecked &&
+              !isEiMaariteltyaToimintaaluettaChecked,
+            layout: { indentation: "none" },
+            components: [
+              {
+                anchor: "kunnat",
+                name: "Autocomplete",
+                styleClasses: ["ml-10 mt-4"],
+                properties: {
+                  isMulti: false,
+                  options: valittavissaOlevatKunnat,
+                  placeholder: "Valitse kunta...",
+                  value: []
+                }
+              }
+            ]
+          },
+          /**
+           * LUPAAN KUULUVAT KUNNAT
+           */
+          {
+            anchor: "lupaan-kuuluvat-kunnat",
+            isVisible:
+              !isEiMaariteltyaToimintaaluettaChecked &&
+              !isValtakunnallinenChecked &&
+              !!kunnatInLupa &&
+              kunnatInLupa.length,
+            layout: {
+              indentation: "large",
+              components: {
+                justification: "start"
+              }
+            },
+            components: R.map(kunta => {
+              return {
+                anchor: kunta.metadata.koodiarvo,
+                name: "CheckboxWithLabel",
+                styleClasses: ["w-1/2 sm:w-1/4"],
+                properties: {
+                  isChecked: true,
+                  labelStyles: {
+                    removal: isRemoved
+                  },
+                  forChangeObject: {
+                    koodiarvo: kunta.metadata.koodiarvo,
+                    koodisto: { koodistoUri: kunta.metadata.koodisto },
+                    title: kunta.title
+                  },
+                  title: kunta.title
+                }
+              };
+            }, kunnatInLupa),
+            title: kunnatInLupa && kunnatInLupa.length ? "Lupaan kuuluvat" : ""
+          },
+          /**
+           * LUPAAN LISÄTTÄVÄT KUNNAT
+           */
+          {
+            anchor: "lupaan-lisattavat-kunnat",
+            isVisible:
+              !isEiMaariteltyaToimintaaluettaChecked &&
+              !isValtakunnallinenChecked &&
+              !!lisattavatKunnat &&
+              lisattavatKunnat.length > 0,
+            layout: {
+              indentation: "large",
+              components: {
+                justification: "start"
+              }
+            },
+            components: R.map(kunta => {
+              return {
+                anchor: kunta.metadata.koodiarvo,
+                name: "CheckboxWithLabel",
+                styleClasses: ["w-1/2 sm:w-1/4"],
+                properties: {
+                  isChecked: true,
+                  labelStyles: {
+                    addition: isAdded,
+                    removal: isRemoved
+                  },
+                  title: kunta.title
+                }
+              };
+            }, lisattavatKunnat),
+            title: "Lupaan lisättävät"
           }
         ]
       },
-      /**
-       * LUPAAN KUULUVAT MAAKUNNAT
-       */
-      {
-        anchor: "lupaan-kuuluvat-maakunnat",
-        isVisible:
-          !isValtakunnallinenChecked &&
-          !!maakunnatInLupa &&
-          maakunnatInLupa.length > 0,
-        layout: {
-          indentation: "large",
-          components: {
-            justification: "start"
-          }
-        },
-        components: R.map(maakunta => {
-          return {
-            anchor: maakunta.metadata.koodiarvo,
-            name: "CheckboxWithLabel",
-            styleClasses: ["w-1/2 sm:w-1/4"],
-            properties: {
-              isChecked: true,
-              labelStyles: {
-                removal: isRemoved
-              },
-              forChangeObject: {
-                koodiarvo: maakunta.metadata.koodiarvo,
-                koodisto: { koodistoUri: maakunta.metadata.koodisto },
-                title: maakunta.title
-              },
-              title: maakunta.title
-            }
-          };
-        }, maakunnatInLupa),
-        title:
-          maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
-      },
-      /**
-       * LUPAAN LISÄTTÄVÄT MAAKUNNAT
-       */
-      {
-        anchor: "lupaan-lisattavat-maakunnat",
-        isVisible:
-          !isValtakunnallinenChecked &&
-          !!lisattavatMaakunnat &&
-          lisattavatMaakunnat.length > 0,
-        layout: {
-          indentation: "large",
-          components: {
-            justification: "start"
-          }
-        },
-        components: R.map(maakunta => {
-          return {
-            anchor: maakunta.metadata.koodiarvo,
-            name: "CheckboxWithLabel",
-            styleClasses: ["w-1/2 sm:w-1/4"],
-            properties: {
-              isChecked: true,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved
-              },
-              title: maakunta.title
-            }
-          };
-        }, lisattavatMaakunnat),
-        title: "Lupaan lisättävät"
-      },
-      /**
-       * VALINTAKENTTÄ - KUNNAT
-       */
-      {
-        anchor: "valintakentat-kunta",
-        isVisible: !isValtakunnallinenChecked,
-        title: "Kunnat",
-        components: [
-          {
-            anchor: "kunnat",
-            name: "Autocomplete",
-            styleClasses: ["ml-10 mt-4"],
-            properties: {
-              isMulti: false,
-              options: valittavissaOlevatKunnat,
-              placeholder: "Valitse kunta...",
-              value: []
-            }
-          }
-        ]
-      },
-      /**
-       * LUPAAN KUULUVAT KUNNAT
-       */
-      {
-        anchor: "lupaan-kuuluvat-kunnat",
-        isVisible:
-          !isValtakunnallinenChecked && !!kunnatInLupa && kunnatInLupa.length,
-        layout: {
-          indentation: "large",
-          components: {
-            justification: "start"
-          }
-        },
-        components: R.map(kunta => {
-          return {
-            anchor: kunta.metadata.koodiarvo,
-            name: "CheckboxWithLabel",
-            styleClasses: ["w-1/2 sm:w-1/4"],
-            properties: {
-              isChecked: true,
-              labelStyles: {
-                removal: isRemoved
-              },
-              forChangeObject: {
-                koodiarvo: kunta.metadata.koodiarvo,
-                koodisto: { koodistoUri: kunta.metadata.koodisto },
-                title: kunta.title
-              },
-              title: kunta.title
-            }
-          };
-        }, kunnatInLupa),
-        title: kunnatInLupa && kunnatInLupa.length ? "Lupaan kuuluvat" : ""
-      },
-      /**
-       * LUPAAN LISÄTTÄVÄT KUNNAT
-       */
-      {
-        anchor: "lupaan-lisattavat-kunnat",
-        isVisible:
-          !isValtakunnallinenChecked &&
-          !!lisattavatKunnat &&
-          lisattavatKunnat.length > 0,
-        layout: {
-          indentation: "large",
-          components: {
-            justification: "start"
-          }
-        },
-        components: R.map(kunta => {
-          return {
-            anchor: kunta.metadata.koodiarvo,
-            name: "CheckboxWithLabel",
-            styleClasses: ["w-1/2 sm:w-1/4"],
-            properties: {
-              isChecked: true,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved
-              },
-              title: kunta.title
-            }
-          };
-        }, lisattavatKunnat),
-        title: "Lupaan lisättävät"
-      },
-      /**
-       * VALTAKUNNALLINEN
-       */
       {
         anchor: "valtakunnallinen",
-        title: "Koko Suomi - pois lukien Ahvenanmaan maakunta",
         components: [
           {
-            anchor: "A",
-            name: "CheckboxWithLabel",
-            styleClasses: ["ml-10"],
+            anchor: "radio",
+            name: "RadioButtonWithLabel",
             properties: {
+              title: "Koko Suomi - pois lukien Ahvenanmaan maakunta",
               isChecked: isValtakunnallinenChecked,
               labelStyles: {
                 addition: isAdded,
@@ -536,14 +602,27 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               },
               forChangeObject: {
                 title: props.intl.formatMessage(wizardMessages.responsibilities)
-              },
-              title: props.intl.formatMessage(wizardMessages.responsibilities)
+              }
+              // title: props.intl.formatMessage(wizardMessages.responsibilities)
+            }
+          }
+        ]
+      },
+      {
+        anchor: "ei-maariteltya-toiminta-aluetta",
+        components: [
+          {
+            anchor: "radio",
+            name: "RadioButtonWithLabel",
+            properties: {
+              title: "Ei määriteltyä toiminta-aluetta"
             }
           }
         ]
       }
     ];
   }, [
+    isEiMaariteltyaToimintaaluettaChecked,
     isValtakunnallinenChecked,
     kunnatInLupa,
     maakunnatInLupa,
