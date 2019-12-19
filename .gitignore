@@ -28,3 +28,6 @@ src/css/tailwind.css
 # src/**/*.module.css
 
 docs
+src/components/00-atoms/Input/input.module.css
+
+src/components/00-atoms/TextBox/textbox.module.css
