@@ -150,11 +150,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
     }, props.changeObjects.muutokset || []);
     return (
-      (!!props.lupakohde.valtakunnallinen && !valtakunnallinenChangeObject) ||
-      !!(
-        valtakunnallinenChangeObject &&
-        valtakunnallinenChangeObject.properties.isChecked
-      )
+      (props.lupakohde.valtakunnallinen && !valtakunnallinenChangeObject) ||
+      (valtakunnallinenChangeObject &&
+        valtakunnallinenChangeObject.properties.isChecked)
     );
   }, [props.changeObjects.muutokset, props.lupakohde.valtakunnallinen]);
 
@@ -169,75 +167,42 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   }, [props.changeObjects.muutokset]);
 
   /**
-   * There are two parts in Toiminta-alue section: 1) maakunnat and kunnat
-   * 2) Koko Suomi - pois lukien Ahvenanmaan maakunta. When user makes changes
-   * to either one we have to ensure that the changes related to the not selected
-   * one are deleted. This function executes the deletion.
+   * There are three radio buttons in Toiminta-alue section: 1) Maakunnat and kunnat
+   * 2) Koko Suomi - pois lukien Ahvenanmaan maakunta 3) Ei määriteltyä toiminta-aluetta.
+   * When one of them is selected the change objects under other ones have to be deleted.
+   * This function deletes them.
    */
   useEffect(() => {
-    // isValtakunnallinenChecked = true = Koko Suomi...
-    if (isValtakunnallinenChecked) {
-      // Let's get rid of the other change objects and keep only the one related
-      // to the Koko Suomi... selection.
-      const valtakunnallinenChangeObject = R.filter(changeObj => {
-        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, props.changeObjects.muutokset);
+    if (isEiMaariteltyaToimintaaluettaChecked || isValtakunnallinenChecked) {
       // Let's check if updating is necessary.
-      if (
-        !R.equals(valtakunnallinenChangeObject, props.changeObjects.muutokset)
-      ) {
+      const radioButtonChangeObjects = R.filter(
+        R.compose(R.includes("radio"), R.prop("anchor")),
+        props.changeObjects.muutokset || []
+      );
+      if (!R.equals(radioButtonChangeObjects, props.changeObjects.muutokset)) {
         // Fist we are going to update the change objects of Toiminta-alue section
         // on form page one.
         onChangesUpdate({
           anchor: props.sectionId,
-          changes: valtakunnallinenChangeObject // This is the only change object we want to keep
+          changes: radioButtonChangeObjects
         });
         // Then it's time to get rid of the change objects of form page two (reasoning).
-        // The change objects are divided into two parts. So we need to make two separate calls
-        // to delete them.
-        // Call 1...
         onChangesUpdate({
           anchor: `perustelut_${props.sectionId}`,
           changes: []
         });
       }
-    } else if (isEiMaariteltyaToimintaaluettaChecked) {
-      // Let's get rid of the other change objects and keep only the one related
-      // to the Koko Suomi... selection.
-      const eiMaariteltyaToimintaaluettaChangeObject = R.filter(changeObj => {
-        return R.equals(
-          getAnchorPart(changeObj.anchor, 1),
-          "ei-maariteltya-toiminta-aluetta"
-        );
-      }, props.changeObjects.muutokset);
-      // Let's check if updating is necessary.
-      if (
-        !R.equals(
-          eiMaariteltyaToimintaaluettaChangeObject,
-          props.changeObjects.muutokset
-        )
-      ) {
-        // Fist we are going to update the change objects of Toiminta-alue section
-        // on form page one.
-        onChangesUpdate({
-          anchor: props.sectionId,
-          changes: eiMaariteltyaToimintaaluettaChangeObject // This is the only change object we want to keep
-        });
-        // Then it's time to get rid of the change objects of form page two (reasoning).
-        // The change objects are divided into two parts. So we need to make two separate calls
-        // to delete them.
-        // Call 1...
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_additions`,
-          changes: []
-        });
-        // Call 2...
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_removals`,
-          changes: []
-        });
-      }
-    } else if (prevChangeObjects) {
+    }
+  }, [
+    isEiMaariteltyaToimintaaluettaChecked,
+    isValtakunnallinenChecked,
+    onChangesUpdate,
+    props.changeObjects.muutokset,
+    props.sectionId
+  ]);
+
+  useEffect(() => {
+    if (prevChangeObjects) {
       // We go here when the Koko Suomi... checkbox is unchecked and if unchecking it
       // is the most recent action related to the Toiminta-alue section on the first page.
       const valtakunnallinenChangeObjectNow = R.find(changeObj => {
@@ -272,6 +237,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       }
     }
   }, [
+    isEiMaariteltyaToimintaaluettaChecked,
     isValtakunnallinenChecked,
     onChangesUpdate,
     prevChangeObjects,
@@ -393,6 +359,10 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               isChecked:
                 !isEiMaariteltyaToimintaaluettaChecked &&
                 !isValtakunnallinenChecked,
+              labelStyles: {
+                addition: isAdded,
+                removal: isRemoved
+              },
               title: "Maakunnat ja kunnat"
             }
           }
