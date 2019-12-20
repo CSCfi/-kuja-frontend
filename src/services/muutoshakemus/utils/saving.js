@@ -255,12 +255,14 @@ export function createObjectToSave(
              * Next step is to go through all the Toiminta-alue related "change objects" of the first
              * page of the wizard and generate change objects based on them.
              */
-            return R.map(changeObject => {
-              return {
-                anchor: `perustelut_${changeObject.anchor}`,
-                properties: sourceObject.properties
-              };
-            }, R.path(["toimintaalue"], changeObjects) || []);
+            return !!sourceObject
+              ? R.map(changeObject => {
+                  return {
+                    anchor: `perustelut_${changeObject.anchor}`,
+                    properties: sourceObject.properties
+                  };
+                }, R.path(["toimintaalue"], changeObjects) || [])
+              : [];
           })()
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(

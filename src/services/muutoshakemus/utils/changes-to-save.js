@@ -297,7 +297,18 @@ export const getChangesToSave = (
         R.compose(R.contains(changeObj.anchor), R.prop("anchor")),
         changeObjects.perustelut
       );
-      if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
+      let koodiarvo = null;
+      const anchorPart1 = getAnchorPart(changeObj.anchor, 1);
+
+      if (R.equals(anchorPart1, "maakunnat-ja-kunnat")) {
+        koodiarvo = "FI0";
+      } else if (R.equals(anchorPart1, "valtakunnallinen")) {
+        koodiarvo = "FI1";
+      } else if (R.equals(anchorPart1, "ei-maariteltya-toiminta-aluetta")) {
+        koodiarvo = "FI2";
+      }
+      console.info(koodiarvo);
+      if (koodiarvo) {
         const tilaVal = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
         const typeVal = changeObj.properties.isChecked ? "addition" : "removal";
         return {
@@ -310,14 +321,12 @@ export const getChangesToSave = (
           muutosperustelukoodiarvo: null,
           kohde: stateObject.kohde,
           maaraystyyppi: stateObject.maaraystyyppi,
-          value: "02",
-          tyyppi: " valtakunnallinen",
           koodisto: "nuts1",
-          koodiarvo: "FI1"
+          koodiarvo
         };
       } else if (
-        R.equals(getAnchorPart(changeObj.anchor, 1), "valintakentat") ||
-        R.includes("lupaan-lisattavat", getAnchorPart(changeObj.anchor, 1))
+        R.equals(anchorPart1, "valintakentat") ||
+        R.includes("lupaan-lisattavat", anchorPart1)
       ) {
         return {
           koodiarvo: changeObj.properties.metadata.koodiarvo,
@@ -334,8 +343,11 @@ export const getChangesToSave = (
         };
       } else {
         return {
-          koodiarvo: changeObj.properties.metadata.koodiarvo,
-          koodisto: changeObj.properties.metadata.koodisto.koodistoUri,
+          koodiarvo: R.path(["properties", "metadata", "koodiarvo"], changeObj),
+          koodisto: R.path(
+            ["properties", "metadata", "koodisto", "koodistoUri"],
+            changeObj
+          ),
           tila: "POISTO",
           type: "removal",
           meta: {
