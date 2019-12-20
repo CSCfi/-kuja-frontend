@@ -107,15 +107,25 @@ const PerustelutToimintaalue = React.memo(
                 components: R.sortBy(
                   R.path(["properties", "title"]),
                   R.map(changeObj => {
+                    console.info(changeObj);
                     let json = null;
-                    if (R.equals(changeObj.properties.isChecked, true)) {
+                    if (
+                      R.equals(changeObj.properties.isChecked, true) &&
+                      changeObj.properties.metadata
+                    ) {
                       json = {
                         name: "StatusTextRow",
                         layout: { dense: true },
                         properties: {
                           title:
-                            changeObj.properties.metadata.title ||
-                            changeObj.properties.metadata.label
+                            R.path(
+                              ["properties", "metadata", "title"],
+                              changeObj
+                            ) ||
+                            R.path(
+                              ["properties", "metadata", "label"],
+                              changeObj
+                            )
                         }
                       };
                     }
@@ -128,7 +138,7 @@ const PerustelutToimintaalue = React.memo(
           getLomake()
         ];
       };
-    }, [changeObjects.toimintaalue, getLomake, lupakohde]);
+    }, [changeObjects.toimintaalue, getLomake, intl, lupakohde]);
 
     useEffect(() => {
       const categories = getCategories();
