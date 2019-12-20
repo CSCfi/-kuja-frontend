@@ -26,6 +26,11 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   }
 
   const maaraysUuid = R.prop("maaraysId", koulutus);
+  console.log(
+    R.map(item => {
+      return item;
+    }, R.propEq("properties", "value", perustelut))
+  );
 
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
@@ -40,7 +45,9 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
       nimi: koulutus.nimi,
       koulutusala: anchorParts[0],
       koulutustyyppi: anchorParts[1],
-      perusteluteksti: R.propEq("properties", "value", perustelut),
+      perusteluteksti: R.map(item => {
+        return item;
+      }, R.propEq("properties", "value", perustelut)),
       muutosperustelukoodiarvo: []
     },
     nimi: finnishInfo.nimi,
@@ -161,7 +168,7 @@ export const getChangesToSave = (
             R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
-          console.log(perustelut);
+          console.log("tutkinnot: " + perustelut);
 
           return getMuutos(stateItem, changeObj, perustelut);
         }, unhandledChangeObjects).filter(Boolean)
@@ -184,6 +191,8 @@ export const getChangesToSave = (
         R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
+      console.log("koulutukset: " + perustelut);
+
       return {
         isInLupa: meta.isInLupa,
         liitteet: R.map(file => {
@@ -225,6 +234,9 @@ export const getChangesToSave = (
         item && item.categories
           ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
           : {};
+
+      console.log("tutkintokielet: " + perustelut);
+
       return {
         koodiarvo: code,
         koodisto: stateObject.koodistoUri,
@@ -284,6 +296,8 @@ export const getChangesToSave = (
         changeObjects.perustelut
       );
 
+      console.log("muut: " + perustelut);
+
       return {
         koodiarvo: maarays.koodiArvo,
         koodisto: maarays.koodisto.koodistoUri,
@@ -307,6 +321,8 @@ export const getChangesToSave = (
       if (R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen")) {
         const tilaVal = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
         const typeVal = changeObj.properties.isChecked ? "addition" : "removal";
+        console.log("toimintaalue: " + perustelut);
+
         return {
           tila: tilaVal,
           type: typeVal,
