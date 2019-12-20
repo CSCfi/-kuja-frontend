@@ -159,7 +159,10 @@ const HakemusContainer = ({ history, intl, lupa, lupaKohteet, match }) => {
         ["perustelut", "toimintaalue", "0"],
         changesBySection
       );
-      if (!R.includes("reasoning", toimintaAluePerusteluChangeObject.anchor)) {
+      if (
+        toimintaAluePerusteluChangeObject &&
+        !R.includes("reasoning", toimintaAluePerusteluChangeObject.anchor)
+      ) {
         changesBySection = R.assocPath(
           ["perustelut", "toimintaalue"],
           [
