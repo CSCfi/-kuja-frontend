@@ -98,6 +98,12 @@
   "wizard.sectionTitle_1": "Kvalifikationer och träning",
   "wizard.send": "svenska: Lähetä hakemus",
   "wizard.teachingLanguages": "Undervisningsspråk",
+  "wizard.tooltipTaloudellisetInvestoinnitKentta1": "Esittäkää haetun tehtävän mukaisen toiminnan käynnistämiseksi tarvittavat investoinnit.",
+  "wizard.tooltipTaloudellisetInvestoinnitKentta2": "Arvioikaa edellä esittämienne investointien kustannukset yhteensä.",
+  "wizard.tooltipTaloudellisetInvestoinnitKentta3": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+  "wizard.tooltipTaloudellisetYleisetTiedotKentta1": "Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+  "wizard.tooltipTaloudellisetYleisetTiedotKentta2": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
+  "wizard.tooltipTaloudellisetYleisetTiedotKentta3": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
   "wizard.vocationalTraining": "Yrkesutbildning",
   "wizard.workforceTraining": "Arbetsträning"
 }

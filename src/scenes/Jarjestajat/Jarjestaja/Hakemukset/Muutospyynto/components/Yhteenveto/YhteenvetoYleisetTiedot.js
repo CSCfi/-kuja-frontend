@@ -80,7 +80,7 @@ const YhteenvetoYleisettiedot = React.memo(props => {
               anchor: "tekstikentta",
               name: "TextBox",
               properties: {
-                placeholder: "Sana on vapaa..."
+                placeholder: ""
               }
             }
           ]

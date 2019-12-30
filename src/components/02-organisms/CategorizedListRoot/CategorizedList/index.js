@@ -393,6 +393,7 @@ const CategorizedList = React.memo(
                             rootPath: props.rootPath,
                             siblings: props.categories
                           }}
+                          tooltip={propsObj.tooltip}
                           _props={props}
                           onChanges={handleChanges}
                           id={fullAnchor}
@@ -449,12 +450,13 @@ const CategorizedList = React.memo(
                                     rootPath: props.rootPath,
                                     siblings: props.categories
                                   }}
-                                  placeholder={propsObj.placeholder}
-                                  width={propsObj.width}
                                   error={propsObj.error}
                                   fullWidth={propsObj.fullWidth}
-                                  value={value}
+                                  placeholder={propsObj.placeholder}
+                                  tooltip={propsObj.tooltip}
                                   type={propsObj.type}
+                                  value={value}
+                                  width={propsObj.width}
                                 />
                               </div>
                             );
