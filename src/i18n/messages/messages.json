@@ -233,7 +233,8 @@
     "id": "common.siteShortDescription",
     "defaultMessage": "Opetushallinnon ohjaus- ja säätelypalvelu",
     "filepath": "src/i18n/definitions/common.js"
-  }, {
+  },
+  {
     "id": "common.sort",
     "defaultMessage": "Järjestä sarakkeen mukaan",
     "filepath": "src/i18n/definitions/common.js"
@@ -481,6 +482,36 @@
   {
     "id": "wizard.noRights",
     "defaultMessage": "Sinulla ei ole oikeuksia tälle sivulle.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta1",
+    "defaultMessage": "Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta2",
+    "defaultMessage": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta3",
+    "defaultMessage": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta1",
+    "defaultMessage": "Esittäkää haetun tehtävän mukaisen toiminnan käynnistämiseksi tarvittavat investoinnit.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta2",
+    "defaultMessage": "Arvioikaa edellä esittämienne investointien kustannukset yhteensä.",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta3",
+    "defaultMessage": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {

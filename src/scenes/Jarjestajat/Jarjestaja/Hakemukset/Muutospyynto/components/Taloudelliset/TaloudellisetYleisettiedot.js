@@ -3,6 +3,7 @@ import ExpandableRowRoot from "../../../../../../../components/02-organisms/Expa
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 
 const TaloudellisetYleisettiedot = React.memo(props => {
   const { sectionId, onStateUpdate } = props;
@@ -20,7 +21,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta1
+                  )
+                }
               }
             }
           ]
@@ -35,7 +41,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta2
+                  )
+                }
               }
             }
           ]
@@ -50,7 +61,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: props.intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta3
+                  )
+                }
               }
             }
           ]

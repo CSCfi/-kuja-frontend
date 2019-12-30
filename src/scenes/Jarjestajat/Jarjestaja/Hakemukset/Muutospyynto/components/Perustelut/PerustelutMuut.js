@@ -63,6 +63,33 @@ const PerustelutMuut = React.memo(
       ];
     }, [isReadOnly]);
 
+    function getStructureByKoodiarvo(
+      perusteltavaTeksti,
+      isAddition,
+      lomakkeet
+    ) {
+      const structure =
+        perusteltavaTeksti !== ""
+          ? [
+              {
+                anchor: "A",
+                components: [
+                  {
+                    name: "StatusTextRow",
+                    properties: {
+                      title: perusteltavaTeksti
+                    }
+                  }
+                ],
+                categories: isAddition ? lomakkeet.lisays : lomakkeet.poisto
+              }
+            ]
+          : isAddition
+          ? lomakkeet.lisays
+          : lomakkeet.poisto;
+      return structure;
+    }
+
     const defaultRemovalForm = useMemo(() => {
       return _.cloneDeep(defaultAdditionForm);
     }, [defaultAdditionForm]);
@@ -180,6 +207,13 @@ const PerustelutMuut = React.memo(
                 changeObjects.muut[configObj.code]
               );
               const isAddition = changeObj && changeObj.properties.isChecked;
+              const perusteltavaTeksti =
+                article.koodiArvo === "22"
+                  ? R.find(
+                      R.propEq("anchor", "muut_07.muumaarays.22.other.A"),
+                      changeObjects.muut["07"]
+                    ).properties.value
+                  : "";
               const isReasoningRequired =
                 R.path(
                   ["properties", "metadata", "isReasoningRequired"],
@@ -225,7 +259,11 @@ const PerustelutMuut = React.memo(
                       }
                     }
                   ],
-                  categories: isAddition ? lomakkeet.lisays : lomakkeet.poisto
+                  categories: getStructureByKoodiarvo(
+                    perusteltavaTeksti,
+                    isAddition,
+                    lomakkeet
+                  )
                 };
               }
               return structure;
@@ -248,7 +286,6 @@ const PerustelutMuut = React.memo(
       return divideArticles(muut, relevantCodes);
     }, [divideArticles, muut, relevantCodes]);
     const config = useMemo(() => {
-      console.info(dividedArticles);
       return [
         {
           code: "01",

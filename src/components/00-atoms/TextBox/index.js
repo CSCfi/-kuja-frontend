@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import PropTypes from "prop-types";
+import Tooltip from "../../02-organisms/Tooltip";
+import { isEmpty } from "ramda";
+import HelpIcon from "@material-ui/icons/Help";
+
+import styles from "./textbox.module.css";
 
 const TextBox = props => {
   const [value, setValue] = useState(null);
@@ -35,27 +40,41 @@ const TextBox = props => {
               {props.title}
             </label>
           )}
-          <TextareaAutosize
-            aria-label={props.ariaLabel}
-            disabled={props.isDisabled || props.isReadOnly}
-            id={props.id}
-            placeholder={
-              props.isDisabled || props.isReadOnly ? "" : props.placeholder
-            }
-            rows={props.isReadOnly ? 1 : props.rows}
-            rowsMax={props.isReadOnly ? Infinity : props.rowsMax}
-            className={`${props.isHidden ? "hidden" : ""}
-             ${
-               props.isReadOnly
-                 ? "color: text-black"
-                 : "border border-solid border-gray-500 rounded"
-             } w-full p-2 resize-none`}
-            onChange={updateValue}
-            value={value}
-            inputprops={{
-              readOnly: props.isReadOnly
-            }}
-          />
+          <div className="flex">
+            <TextareaAutosize
+              aria-label={props.ariaLabel}
+              disabled={props.isDisabled || props.isReadOnly}
+              id={props.id}
+              placeholder={
+                props.isDisabled || props.isReadOnly ? "" : props.placeholder
+              }
+              rows={props.isReadOnly ? 1 : props.rows}
+              rowsMax={props.isReadOnly ? Infinity : props.rowsMax}
+              className={`${props.isHidden ? "hidden" : ""} ${
+                props.isReadOnly
+                  ? "text-black"
+                  : "border border-solid border-gray-500 rounded"
+              }
+            w-full p-2 resize-none`}
+              onChange={updateValue}
+              value={value}
+              inputprops={{
+                readOnly: props.isReadOnly
+              }}
+            />
+            {!isEmpty(props.tooltip) && (
+              <div className="ml-8">
+                <Tooltip tooltip={props.tooltip.text} trigger="click">
+                  <HelpIcon
+                    classes={{
+                      colorPrimary: styles.tooltipBg
+                    }}
+                    color="primary"
+                  />
+                </Tooltip>
+              </div>
+            )}
+          </div>
         </React.Fragment>
       ) : null}
     </React.Fragment>
@@ -72,7 +91,8 @@ TextBox.defaultProps = {
   isReadOnly: false,
   rows: 2,
   rowsMax: 100,
-  title: ""
+  title: "",
+  tooltip: {}
 };
 
 TextBox.propTypes = {
@@ -90,6 +110,7 @@ TextBox.propTypes = {
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
   title: PropTypes.string,
+  tooltip: PropTypes.object,
   value: PropTypes.string
 };
 
