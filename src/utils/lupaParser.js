@@ -165,12 +165,14 @@ const parseSectionData = (
         case KOODISTOT.KULJETTAJAKOULUTUS: {
           const { koodiarvo, koodisto, kohde, maaraystyyppi } = maarays;
 
-          const kuljettajaSelite = parseLocalizedField(
-            maarays.koodi.metadata,
-            "FI",
-            "kuvaus",
-            "kieli"
-          );
+          const kuljettajaSelite = maarays.koodi
+            ? parseLocalizedField(
+                maarays.koodi.metadata,
+                "FI",
+                "kuvaus",
+                "kieli"
+              )
+            : "";
 
           muutMaaraykset.push({
             selite: kuljettajaSelite,
