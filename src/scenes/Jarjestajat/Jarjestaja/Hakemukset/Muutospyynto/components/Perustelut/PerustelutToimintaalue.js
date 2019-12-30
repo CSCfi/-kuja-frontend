@@ -79,7 +79,10 @@ const PerustelutToimintaalue = React.memo(
               },
               {
                 anchor: "removed",
-                layout: { margins: { top: "none" } },
+                layout: {
+                  margins: { top: "none" },
+                  components: { vertical: true }
+                },
                 title: intl.formatMessage(common.toBeRemoved),
                 components: R.map(changeObj => {
                   let json = null;
@@ -116,6 +119,7 @@ const PerustelutToimintaalue = React.memo(
                       json = {
                         name: "StatusTextRow",
                         layout: { dense: true },
+                        styleClasses: ["whitespace-no-wrap"],
                         properties: {
                           title:
                             R.path(
