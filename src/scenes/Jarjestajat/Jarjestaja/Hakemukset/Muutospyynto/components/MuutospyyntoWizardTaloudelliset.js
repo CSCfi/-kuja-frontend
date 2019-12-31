@@ -39,7 +39,7 @@ const MuutospyyntoWizardTaloudelliset = ({
     <React.Fragment>
       <h2 className="my-6">{formatMessage(wizard.pageTitle_3)}</h2>
 
-      {!checkIfIsAdditions(R.prop("tutkinnot", changeObjects)) ? (
+      {!checkIfIsAdditions(R.props(["tutkinnot", "koulutukset"], changeObjects)) ? (
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
