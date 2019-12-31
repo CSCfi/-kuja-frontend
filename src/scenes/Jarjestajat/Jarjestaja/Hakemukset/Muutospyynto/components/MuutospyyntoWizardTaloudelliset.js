@@ -35,12 +35,11 @@ const MuutospyyntoWizardTaloudelliset = ({
 
     return findIsChecked(changeObjects);
   };
-
   return (
     <React.Fragment>
       <h2 className="my-6">{formatMessage(wizard.pageTitle_3)}</h2>
 
-      {!checkIfIsAdditions(changeObjects) ? (
+      {!checkIfIsAdditions(R.prop("tutkinnot", changeObjects)) ? (
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
