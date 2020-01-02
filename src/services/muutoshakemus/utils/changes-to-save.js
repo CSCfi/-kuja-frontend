@@ -2,6 +2,7 @@ import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import * as R from "ramda";
 
+// Return changes of Koulutukset
 const getMuutos = (stateItem, changeObj, perustelut) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
@@ -26,12 +27,7 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   }
 
   const maaraysUuid = R.prop("maaraysId", koulutus);
-  console.log(
-    R.map(item => {
-      return item;
-    }, R.propEq("properties", "value", perustelut))
-  );
-
+  console.log(R.path(["properties", "value"], perustelut[1]));
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
     isInLupa: meta.isInLupa,
@@ -46,7 +42,10 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
       koulutusala: anchorParts[0],
       koulutustyyppi: anchorParts[1],
       perusteluteksti: R.map(perustelu => {
-        return R.path(["properties", "metadata", "fieldName"], perustelu);
+        if (R.path(["properties", "value"], perustelu)) {
+          return R.path(["properties", "value"], perustelu);
+        } else
+          return R.path(["properties", "metadata", "fieldName"], perustelu);
       }, perustelut),
       muutosperustelukoodiarvo: []
     },
@@ -168,7 +167,6 @@ export const getChangesToSave = (
             R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
-          console.log("tutkinnot: " + perustelut);
 
           return getMuutos(stateItem, changeObj, perustelut);
         }, unhandledChangeObjects).filter(Boolean)
@@ -191,7 +189,6 @@ export const getChangesToSave = (
         R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
-      console.log("koulutukset: " + perustelut);
 
       return {
         isInLupa: meta.isInLupa,
@@ -204,7 +201,12 @@ export const getChangesToSave = (
         maaraystyyppi: meta.maaraystyyppi,
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.propEq("properties", "value", perustelut),
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return R.path(["properties", "value"], perustelu);
+            }
+            return R.path(["properties", "metadata", "fieldName"], perustelu);
+          }, perustelut),
           muutosperustelukoodiarvo: []
         },
         nimi: finnishInfo.nimi,
@@ -235,8 +237,6 @@ export const getChangesToSave = (
           ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
           : {};
 
-      console.log("tutkintokielet: " + perustelut);
-
       return {
         koodiarvo: code,
         koodisto: stateObject.koodistoUri,
@@ -248,7 +248,12 @@ export const getChangesToSave = (
         meta: {
           tunniste: "tutkintokieli",
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.propEq("properties", "value", perustelut)
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return R.path(["properties", "value"], perustelu);
+            }
+            return R.path(["properties", "metadata", "fieldName"], perustelu);
+          }, perustelut)
         },
         tila: "LISAYS",
         type: "addition"
@@ -306,7 +311,12 @@ export const getChangesToSave = (
         maaraystyyppi: stateObject.maaraystyyppi,
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.propEq("properties", "value", perustelut)
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return R.path(["properties", "value"], perustelu);
+            }
+            return R.path(["properties", "metadata", "fieldName"], perustelu);
+          }, perustelut)
         },
         tila: tila,
         type: type
@@ -328,7 +338,12 @@ export const getChangesToSave = (
           type: typeVal,
           meta: {
             changeObjects: R.flatten([[changeObj], perustelut]),
-            perusteluteksti: R.propEq("properties", "value"),
+            perusteluteksti: R.map(perustelu => {
+              if (R.path(["properties", "value"], perustelu)) {
+                return R.path(["properties", "value"], perustelu);
+              }
+              return R.path(["properties", "metadata", "fieldName"], perustelu);
+            }, perustelut),
             perustelut
           },
           muutosperustelukoodiarvo: null,
@@ -349,7 +364,12 @@ export const getChangesToSave = (
           tila: "LISAYS",
           type: "addition",
           meta: {
-            perusteluteksti: R.propEq("properties", "value", perustelut),
+            perusteluteksti: R.map(perustelu => {
+              if (R.path(["properties", "value"], perustelu)) {
+                return R.path(["properties", "value"], perustelu);
+              }
+              return R.path(["properties", "metadata", "fieldName"], perustelu);
+            }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
@@ -363,7 +383,12 @@ export const getChangesToSave = (
           tila: "POISTO",
           type: "removal",
           meta: {
-            perusteluteksti: R.propEq("properties", "value", perustelut),
+            perusteluteksti: R.map(perustelu => {
+              if (R.path(["properties", "value"], perustelu)) {
+                return R.path(["properties", "value"], perustelu);
+              }
+              return R.path(["properties", "metadata", "fieldName"], perustelu);
+            }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
@@ -410,7 +435,12 @@ export const getChangesToSave = (
         maaraystyyppi: stateObject.opiskelijavuodet.maaraystyyppi,
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.propEq(["properties", "value"], perustelut)
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return R.path(["properties", "value"], perustelu);
+            }
+            return R.path(["properties", "metadata", "fieldName"], perustelu);
+          }, perustelut)
         },
         tila: "MUUTOS",
         type: "change"
