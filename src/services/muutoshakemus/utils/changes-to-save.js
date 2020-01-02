@@ -45,9 +45,9 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
       nimi: koulutus.nimi,
       koulutusala: anchorParts[0],
       koulutustyyppi: anchorParts[1],
-      perusteluteksti: R.map(item => {
-        return item;
-      }, R.propEq("properties", "value", perustelut)),
+      perusteluteksti: R.map(perustelu => {
+        return R.path(["properties", "metadata", "fieldName"], perustelu);
+      }, perustelut),
       muutosperustelukoodiarvo: []
     },
     nimi: finnishInfo.nimi,
@@ -410,7 +410,7 @@ export const getChangesToSave = (
         maaraystyyppi: stateObject.opiskelijavuodet.maaraystyyppi,
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.propEq("properties", "value", perustelut)
+          perusteluteksti: R.propEq(["properties", "value"], perustelut)
         },
         tila: "MUUTOS",
         type: "change"
