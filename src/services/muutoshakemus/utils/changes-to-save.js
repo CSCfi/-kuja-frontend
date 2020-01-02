@@ -27,7 +27,6 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   }
 
   const maaraysUuid = R.prop("maaraysId", koulutus);
-  console.log(R.path(["properties", "value"], perustelut[1]));
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
     isInLupa: meta.isInLupa,
@@ -45,7 +44,10 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
         if (R.path(["properties", "value"], perustelu)) {
           return R.path(["properties", "value"], perustelu);
         } else
-          return R.path(["properties", "metadata", "fieldName"], perustelu);
+          return (
+            "selection:" +
+            R.path(["properties", "metadata", "fieldName"], perustelu)
+          );
       }, perustelut),
       muutosperustelukoodiarvo: []
     },
@@ -113,11 +115,13 @@ export const getChangesToSave = (
   changeObjects = {},
   backendMuutokset = []
 ) => {
+  // Update changes if already exits with perustelut and attachements
   const paivitetytBackendMuutokset = R.map(changeObj => {
     let { anchor, backendMuutos } = findBackendMuutos(
       changeObj.anchor,
       backendMuutokset
     );
+    let backendMuutosWithChangeObjectsWithPerustelut = [];
     if (backendMuutos) {
       const perustelut = findPerustelut(anchor, changeObjects.perustelut);
       const backendMuutosWithChangeObjects = R.assocPath(
@@ -125,16 +129,30 @@ export const getChangesToSave = (
         R.flatten([[changeObj], perustelut]),
         backendMuutos
       );
+      const perusteluTexts = R.map(perustelu => {
+        if (R.path(["properties", "value"], perustelu)) {
+          return R.path(["properties", "value"], perustelu);
+        }
+        return (
+          "selection:" +
+          R.path(["properties", "metadata", "fieldName"], perustelu)
+        );
+      }, perustelut);
+      backendMuutosWithChangeObjectsWithPerustelut = R.assoc(
+        "perusteluteksti",
+        perusteluTexts,
+        backendMuutosWithChangeObjects
+      );
       // Let's add the attachments
       return R.assocPath(
         ["liitteet"],
         R.map(file => {
           return R.dissoc("tiedosto", file);
         }, findObjectWithKey(changeObjects, "attachments")),
-        backendMuutosWithChangeObjects
+        backendMuutosWithChangeObjectsWithPerustelut
       );
     }
-    return backendMuutos;
+    return backendMuutosWithChangeObjectsWithPerustelut;
   }, changeObjects.muutokset).filter(Boolean);
 
   const alreadyHandledChangeObjects = R.flatten(
@@ -205,7 +223,10 @@ export const getChangesToSave = (
             if (R.path(["properties", "value"], perustelu)) {
               return R.path(["properties", "value"], perustelu);
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return (
+              "selection:" +
+              R.path(["properties", "metadata", "fieldName"], perustelu)
+            );
           }, perustelut),
           muutosperustelukoodiarvo: []
         },
@@ -252,7 +273,10 @@ export const getChangesToSave = (
             if (R.path(["properties", "value"], perustelu)) {
               return R.path(["properties", "value"], perustelu);
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return (
+              "selection:" +
+              R.path(["properties", "metadata", "fieldName"], perustelu)
+            );
           }, perustelut)
         },
         tila: "LISAYS",
@@ -315,7 +339,10 @@ export const getChangesToSave = (
             if (R.path(["properties", "value"], perustelu)) {
               return R.path(["properties", "value"], perustelu);
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return (
+              "selection:" +
+              R.path(["properties", "metadata", "fieldName"], perustelu)
+            );
           }, perustelut)
         },
         tila: tila,
@@ -342,7 +369,10 @@ export const getChangesToSave = (
               if (R.path(["properties", "value"], perustelu)) {
                 return R.path(["properties", "value"], perustelu);
               }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
+              return (
+                "selection:" +
+                R.path(["properties", "metadata", "fieldName"], perustelu)
+              );
             }, perustelut),
             perustelut
           },
@@ -368,7 +398,10 @@ export const getChangesToSave = (
               if (R.path(["properties", "value"], perustelu)) {
                 return R.path(["properties", "value"], perustelu);
               }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
+              return (
+                "selection:" +
+                R.path(["properties", "metadata", "fieldName"], perustelu)
+              );
             }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
@@ -387,7 +420,10 @@ export const getChangesToSave = (
               if (R.path(["properties", "value"], perustelu)) {
                 return R.path(["properties", "value"], perustelu);
               }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
+              return (
+                "selection:" +
+                R.path(["properties", "metadata", "fieldName"], perustelu)
+              );
             }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
@@ -439,7 +475,10 @@ export const getChangesToSave = (
             if (R.path(["properties", "value"], perustelu)) {
               return R.path(["properties", "value"], perustelu);
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return (
+              "selection:" +
+              R.path(["properties", "metadata", "fieldName"], perustelu)
+            );
           }, perustelut)
         },
         tila: "MUUTOS",
