@@ -138,8 +138,8 @@ export const getChangesToSave = (
           R.path(["properties", "metadata", "fieldName"], perustelu)
         );
       }, perustelut);
-      backendMuutosWithChangeObjectsWithPerustelut = R.assoc(
-        "perusteluteksti",
+      backendMuutosWithChangeObjectsWithPerustelut = R.assocPath(
+        ["meta", "perusteluteksti"],
         perusteluTexts,
         backendMuutosWithChangeObjects
       );
@@ -324,8 +324,6 @@ export const getChangesToSave = (
         R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
-
-      console.log("muut: " + perustelut);
 
       return {
         koodiarvo: maarays.koodiArvo,
