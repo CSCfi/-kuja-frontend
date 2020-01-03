@@ -2,7 +2,7 @@ import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import * as R from "ramda";
 
-// Return changes of Koulutukset
+// Return changes of Tutkinnot
 const getMuutos = (stateItem, changeObj, perustelut) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
