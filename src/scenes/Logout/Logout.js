@@ -1,27 +1,17 @@
-import React, { useContext, useEffect } from "react";
-import { logoutUser } from "../../services/backendService/actions";
-import styled from "styled-components";
-import { BackendContext } from "../../context/backendContext";
+import React, { useEffect } from "react";
 import { MessageWrapper } from "../../modules/elements";
 
-const LogoutText = styled.div`
-  padding: 14px 20px;
-  line-height: 18px;
-  width: 1200px;
-  margin: auto;
-`;
-
 const Logout = () => {
-  const { ...context } = useContext(BackendContext);
-
   useEffect(() => {
-    logoutUser(context.dispatch);
-  }, [context.dispatch]);
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("oid");
+    sessionStorage.removeItem("role");
+  }, []);
 
   return (
-    <LogoutText>
+    <div className="mx-4 sm:mx-24">
       <MessageWrapper>Olet kirjautunut ulos.</MessageWrapper>
-    </LogoutText>
+    </div>
   );
 };
 

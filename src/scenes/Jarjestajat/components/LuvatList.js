@@ -1,7 +1,7 @@
 import React from "react";
 import * as R from "ramda";
 import Table from "../../../components/02-organisms/Table";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 
 const colWidths = {
@@ -9,7 +9,8 @@ const colWidths = {
   1: "w-2/6"
 };
 
-function LuvatList({ history, intl, luvat = [] }) {
+function LuvatList({ history, luvat = [] }) {
+  const intl = useIntl();
   const tableStructure = [
     {
       role: "thead",
@@ -92,4 +93,4 @@ LuvatList.propTypes = {
   luvat: PropTypes.array
 };
 
-export default injectIntl(LuvatList);
+export default LuvatList;

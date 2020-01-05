@@ -150,7 +150,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
     }, props.changeObjects.muutokset || []);
     return (
-      (props.lupakohde.valtakunnallinen && !valtakunnallinenChangeObject) ||
+      (props.lupakohde.valtakunnallinen.arvo === "FI1" && !valtakunnallinenChangeObject) ||
       (valtakunnallinenChangeObject &&
         valtakunnallinenChangeObject.properties.isChecked)
     );
@@ -570,7 +570,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               isChecked: isValtakunnallinenChecked,
               labelStyles: {
                 addition: isAdded,
-                custom: props.lupakohde.valtakunnallinen ? isInLupa : {},
+                custom: props.lupakohde.valtakunnallinen.arvo === "FI1" ? isInLupa : {},
                 removal: isRemoved
               },
               forChangeObject: {

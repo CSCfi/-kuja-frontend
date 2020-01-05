@@ -68,7 +68,7 @@ step("Jarjestamislupa", async () => {
 
 step("Avaa uusi muutospyyntolomake", async () => {
   try {
-    await click(link("Oma organisaatio"));
+    await click(link({ class: "link-to-own-organisation" }));
     await click(link({ id: "jarjestamislupa-asiat" }));
     await click($("button.newHakemus"));
   } catch (e) {

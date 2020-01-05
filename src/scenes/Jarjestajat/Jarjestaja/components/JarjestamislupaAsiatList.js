@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
@@ -10,13 +10,15 @@ import _ from "lodash";
 import JarjestamislupaAsiakirjat from "./JarjestamislupaAsiakirjat";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import common from "../../../../i18n/definitions/common";
 import Table from "../../../../components/02-organisms/Table";
-import * as R from "ramda";
 import moment from "moment";
 import { ROLE_KATSELIJA } from "../../../../modules/constants";
 import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
+import { useMuutospyynnot } from "../../../../stores/muutospyynnot";
+import * as R from "ramda";
+import { useLupa } from "../../../../stores/lupa";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -49,26 +51,48 @@ const columnTitles = [
 const JarjestamislupaAsiatList = ({
   history,
   match,
-  muutospyynnot = [],
-  newApplicationRouteItem,
-  organisaatio,
-  intl
+  newApplicationRouteItem
 }) => {
+  const intl = useIntl();
+
+  const [lupa] = useLupa();
+  const [muutospyynnot, muutospyynnotActions] = useMuutospyynnot();
+
   const { url } = match;
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
 
+  // Let's fetch MUUTOSPYYNNÖT
+  useEffect(() => {
+    let abortController;
+    if (lupa.fetchedAt) {
+      const ytunnus = R.path(["jarjestaja", "ytunnus"], lupa.data);
+      if (ytunnus) {
+        abortController = muutospyynnotActions.load(ytunnus);
+      }
+    }
+    return function cancel() {
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, [lupa.data, lupa.fetchedAt, muutospyynnotActions]);
+
   const tableData = useMemo(() => {
-    const data = R.map(muutospyynto => {
-      return {
-        luontipvm: moment(muutospyynto.luontipvm).format("DD.MM.YYYY HH:mm:ss"),
-        paatetty: R.path(["paatoskierros", "loppupvm"], muutospyynto),
-        tila: muutospyynto.tila,
-        uuid: muutospyynto.uuid
-      };
-    }, muutospyynnot);
-    return data;
-  }, [muutospyynnot]);
+    if (muutospyynnot.fetchedAt) {
+      return R.map(muutospyynto => {
+        return {
+          luontipvm: moment(muutospyynto.luontipvm).format(
+            "DD.MM.YYYY HH:mm:ss"
+          ),
+          paatetty: R.path(["paatoskierros", "loppupvm"], muutospyynto),
+          tila: muutospyynto.tila,
+          uuid: muutospyynto.uuid
+        };
+      }, muutospyynnot.data);
+    }
+    return [];
+  }, [muutospyynnot.fetchedAt, muutospyynnot.data]);
 
   const mainTable = [
     {
@@ -141,7 +165,7 @@ const JarjestamislupaAsiatList = ({
               onClick: (row, action) => {
                 if (action === "click" && row.id) {
                   setMuutospyynto(
-                    R.find(R.propEq("uuid", row.id), muutospyynnot)
+                    R.find(R.propEq("uuid", row.id), muutospyynnot.data)
                   );
                 } else if (action === "edit") {
                   history.push(`hakemukset-ja-paatokset/${row.id}/1`);
@@ -159,7 +183,7 @@ const JarjestamislupaAsiatList = ({
   ];
 
   const jarjestamislupaAsiatList = useMemo(() => {
-    const data = _.orderBy(muutospyynnot, ["voimassaalkupvm"], ["desc"]);
+    const data = _.orderBy(muutospyynnot.data, ["voimassaalkupvm"], ["desc"]);
     return _.map(data, historyData => (
       <JarjestamislupaAsiatListItem
         url={url}
@@ -168,7 +192,7 @@ const JarjestamislupaAsiatList = ({
         setOpened={() => setMuutospyynto(historyData)}
       />
     ));
-  }, [url, muutospyynnot]);
+  }, [url, muutospyynnot.data]);
 
   let hasRights = sessionStorage.getItem("role") !== ROLE_KATSELIJA;
   return (
@@ -202,16 +226,12 @@ const JarjestamislupaAsiatList = ({
             {intl.formatMessage(common.hakemusAsiakirjat)}
           </h3>
           <Paper className={classes.root}>
-            <JarjestamislupaAsiakirjat
-              organisaatio={organisaatio}
-              muutospyynto={muutospyynto}
-              intl={intl}
-            />
+            <JarjestamislupaAsiakirjat muutospyynto={muutospyynto} />
           </Paper>
         </div>
       )}
 
-      {!muutospyynto && muutospyynnot && muutospyynnot.length > 0 && (
+      {!muutospyynto && muutospyynnot.fetchedAt && (
         <Paper className={classes.root}>
           <div className="lg:hidden">
             <div>{jarjestamislupaAsiatList}</div>
@@ -233,4 +253,4 @@ JarjestamislupaAsiatList.propTypes = {
   newApplicationRouteItem: PropTypes.object
 };
 
-export default injectIntl(JarjestamislupaAsiatList);
+export default JarjestamislupaAsiatList;
