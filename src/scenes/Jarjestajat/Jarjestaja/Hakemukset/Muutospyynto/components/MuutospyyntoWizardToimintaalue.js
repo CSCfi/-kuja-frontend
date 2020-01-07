@@ -363,6 +363,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 addition: isAdded,
                 removal: isRemoved
               },
+              forChangeObject: {
+                title: "Maakunnat ja kunnat"  
+              },
               title: "Maakunnat ja kunnat"
             }
           }
@@ -592,6 +595,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               labelStyles: {
                 addition: isAdded,
                 removal: isRemoved
+              },
+              forChangeObject: {
+                title: "Ei määriteltyä toiminta-aluetta"  
               },
               title: "Ei määriteltyä toiminta-aluetta"
             }

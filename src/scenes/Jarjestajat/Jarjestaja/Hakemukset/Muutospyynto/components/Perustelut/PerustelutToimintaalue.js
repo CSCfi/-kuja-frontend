@@ -87,6 +87,7 @@ const PerustelutToimintaalue = React.memo(
                 components: R.map(changeObj => {
                   let json = null;
                   if (R.equals(changeObj.properties.isChecked, false)) {
+                    console.info(changeObj);
                     json = {
                       name: "StatusTextRow",
                       layout: { dense: true },
@@ -119,7 +120,6 @@ const PerustelutToimintaalue = React.memo(
                       json = {
                         name: "StatusTextRow",
                         layout: { dense: true },
-                        styleClasses: ["whitespace-no-wrap"],
                         properties: {
                           title:
                             R.path(
