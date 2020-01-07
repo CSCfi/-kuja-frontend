@@ -3,13 +3,14 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const defaultProps = {
-  styleClasses: ["text-base", "py-2"]
+  styleClasses: ["text-base"]
 };
 
 const StatusTextRow = React.memo(
   ({
     children,
     labelStyles,
+    layout,
     statusText,
     statusTextStyleClasses,
     styleClasses,
@@ -22,6 +23,13 @@ const StatusTextRow = React.memo(
         setClassNames(styleClasses);
       }
     }, [styleClasses]);
+
+    useEffect(() => {
+      const paddingClass = layout && layout.dense ? "pt-2" : "py-2";
+      setClassNames(prevValue => {
+        return R.append(paddingClass, prevValue);
+      });
+    }, [layout]);
 
     if (!isHidden) {
       return (
@@ -42,6 +50,7 @@ const StatusTextRow = React.memo(
 
 StatusTextRow.propTypes = {
   labelStyles: PropTypes.object,
+  layout: PropTypes.object,
   styleClasses: PropTypes.array,
   statusText: PropTypes.string,
   statusTextStyleClasses: PropTypes.array,

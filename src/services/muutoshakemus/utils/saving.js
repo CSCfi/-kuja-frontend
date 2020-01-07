@@ -3,7 +3,6 @@ import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
 import { combineArrays } from "../../../utils/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
-// import { findObjectWithKey } from "../../../utils/common";
 
 export function createObjectToSave(
   lupa,
@@ -281,28 +280,26 @@ export function createObjectToSave(
         R.path(["toimintaalue"], muutoshakemus),
         {
           muutokset: R.path(["toimintaalue"], changeObjects) || [],
-          perustelut: R.flatten([
-            R.map(changeObj => {
-              return {
-                ...changeObj,
-                anchor: R.replace(/_additions/, "", changeObj.anchor),
-                properties: {
-                  ...changeObj.properties,
-                  meta: { type: "addition" }
-                }
-              };
-            }, R.path(["perustelut", "toimintaalue", "additions"], changeObjects) || []),
-            R.map(changeObj => {
-              return {
-                ...changeObj,
-                anchor: R.replace(/_removals/, "", changeObj.anchor),
-                properties: {
-                  ...changeObj.properties,
-                  meta: { type: "removal" }
-                }
-              };
-            }, R.path(["perustelut", "toimintaalue", "removals"], changeObjects) || [])
-          ])
+          perustelut: (() => {
+            // There is only one field for reasoning and it must be used as a source
+            // for the actual change objects.
+            const sourceObject = (R.path(
+              ["perustelut", "toimintaalue"],
+              changeObjects
+            ) || [])[0];
+            /**
+             * Next step is to go through all the Toiminta-alue related "change objects" of the first
+             * page of the wizard and generate change objects based on them.
+             */
+            return !!sourceObject
+              ? R.map(changeObject => {
+                  return {
+                    anchor: `perustelut_${changeObject.anchor}`,
+                    properties: sourceObject.properties
+                  };
+                }, R.path(["toimintaalue"], changeObjects) || [])
+              : [];
+          })()
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(
           backendMuutokset

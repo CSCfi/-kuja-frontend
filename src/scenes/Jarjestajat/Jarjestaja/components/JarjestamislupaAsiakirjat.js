@@ -1,5 +1,4 @@
-import * as R from "ramda";
-import React, { useContext, useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import Media from "react-media";
 import styled from "styled-components";
 import { Table as OldTable, Tbody } from "../../../../modules/Table";
@@ -8,11 +7,13 @@ import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants"
 import JarjestamislupaAsiakirjatItem from "./JarjestamislupaAsiakirjatItem";
 import common from "../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
-import FetchHandler from "../../../../FetchHandler";
-import { BackendContext } from "../../../../context/backendContext";
 import Moment from "react-moment";
 import { downloadFileFn } from "../../../../utils/common";
 import Table from "../../../../components/02-organisms/Table";
+import { useOrganisation } from "../../../../stores/organisation";
+import { useIntl } from "react-intl";
+import * as R from "ramda";
+import { useMuutospyynnonLiitteet } from "../../../../stores/muutospyynnonLiitteet";
 
 const WrapTable = styled.div``;
 
@@ -30,30 +31,29 @@ const columnTitles = [
   common.sent
 ];
 
-const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
-  const { state: fromBackend, dispatch } = useContext(BackendContext);
-  const fetchSetup = useMemo(() => {
-    return muutospyynto && muutospyynto.uuid
-      ? [
-          {
-            key: "muutospyynnonLiitteet",
-            dispatchFn: dispatch,
-            urlEnding: muutospyynto.uuid
-          }
-        ]
-      : [];
-  }, [dispatch, muutospyynto]);
+const JarjestamislupaAsiakirjat = ({ muutospyynto }) => {
+  const intl = useIntl();
 
-  const attachmentRow = ["", R.path(["nimi", intl.locale], organisaatio)];
+  const [organisation] = useOrganisation();
+  const [muutospyynnonLiitteet, actions] = useMuutospyynnonLiitteet();
+
+  // Let's fetch MUUTOSPYYNNÖN LIITTEET
+  useEffect(() => {
+    if (muutospyynto.uuid) {
+      actions.load(muutospyynto.uuid);
+    }
+  }, [actions, muutospyynto.uuid]);
+
+  const attachmentRow = ["", R.path(["nimi", intl.locale], organisation.data)];
 
   const baseRow = [
     LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[muutospyynto.tila][R.toUpper(intl.locale)],
-    R.path(["nimi", intl.locale], organisaatio)
+    R.path(["nimi", intl.locale], organisation.data)
   ];
 
-  const liitteetRowItems = useMemo(
-    () =>
-      R.map(
+  const liitteetRowItems = useMemo(() => {
+    if (muutospyynnonLiitteet.fetchedAt) {
+      return R.map(
         liite => ({
           uuid: liite.uuid,
           items: [
@@ -71,13 +71,16 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
           ],
           fileLink: `/liitteet/${liite.uuid}/raw`
         }),
-        R.sortBy(
-          R.prop("nimi"),
-          R.pathOr([], ["muutospyynnonLiitteet", "raw"], fromBackend)
-        )
-      ),
-    [intl, fromBackend, attachmentRow]
-  );
+        R.sortBy(R.prop("nimi"), muutospyynnonLiitteet.data || [])
+      );
+    }
+    return [];
+  }, [
+    intl,
+    muutospyynnonLiitteet.fetchedAt,
+    muutospyynnonLiitteet.data,
+    attachmentRow
+  ]);
 
   const muutospyyntoRowItem = {
     fileLink: `/pdf/esikatsele/muutospyynto/${muutospyynto.uuid}`,
@@ -166,33 +169,25 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto, organisaatio, intl }) => {
   ];
 
   return (
-    <FetchHandler
-      fetchSetup={fetchSetup}
-      ready={
-        <WrapTable>
-          <Media
-            query={MEDIA_QUERIES.MOBILE}
-            render={() => (
-              <OldTable role="table">
-                <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
-              </OldTable>
-            )}
-          />
-          <Media
-            query={MEDIA_QUERIES.TABLET_MIN}
-            render={() => <Table structure={table} />}
-          />
-        </WrapTable>
-      }
-    />
+    <WrapTable>
+      <Media
+        query={MEDIA_QUERIES.MOBILE}
+        render={() => (
+          <OldTable role="table">
+            <Tbody role="rowgroup">{jarjestamislupaAsiakirjatList()}</Tbody>
+          </OldTable>
+        )}
+      />
+      <Media
+        query={MEDIA_QUERIES.TABLET_MIN}
+        render={() => <Table structure={table} />}
+      />
+    </WrapTable>
   );
 };
 
 JarjestamislupaAsiakirjat.propTypes = {
-  match: PropTypes.object,
-  muutospyynto: PropTypes.object,
-  organisaatio: PropTypes.object,
-  intl: PropTypes.object
+  muutospyynto: PropTypes.object
 };
 
 export default JarjestamislupaAsiakirjat;

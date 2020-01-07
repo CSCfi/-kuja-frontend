@@ -7,8 +7,6 @@ import TemplateD from "../../03-templates/TemplateD";
 import { NavLink } from "react-router-dom";
 import * as R from "ramda";
 
-import styles from "./navigation.module.css";
-
 const useStyles = makeStyles(() => ({
   root: {
     boxShadow: "none"

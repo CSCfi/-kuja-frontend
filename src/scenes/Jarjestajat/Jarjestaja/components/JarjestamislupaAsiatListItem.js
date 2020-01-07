@@ -40,9 +40,7 @@ const JarjestamislupaAsiaListItem = props => {
           </LupaText>
           {tila === FIELDS.TILA.VALUES.LUONNOS && (
             <LupaText>
-              <NavLink
-                to={`${props.url}/hakemukset-ja-paatokset/${uuid}/1`}
-                exact={true}>
+              <NavLink to={`hakemukset-ja-paatokset/${uuid}/1`} exact={true}>
                 <Button title={intl.formatMessage(common.edit)}>
                   <Edit />
                 </Button>

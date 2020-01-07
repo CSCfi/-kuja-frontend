@@ -2,40 +2,41 @@ import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
+import common from "../../../../../../../i18n/definitions/common";
 import * as R from "ramda";
+
+import "./perustelut-toiminta-alue.module.css";
 
 const defaultProps = {
   changeObjects: {},
   isReadOnly: false,
   kohde: {},
-  lupa: {},
+  lupakohde: {},
   stateObjects: {}
 };
 
 const PerustelutToimintaalue = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
+    intl,
     isReadOnly = defaultProps.isReadOnly,
+    lupakohde = {},
     onStateUpdate,
     onChangesUpdate,
     sectionId,
     stateObjects = defaultProps.stateObjects
   }) => {
     const getLomake = useMemo(() => {
-      return changeObj => {
+      return () => {
         return {
-          anchor: R.join(".", R.tail(R.split(".", changeObj.anchor))),
+          anchor: "reasoning",
           components: [
             {
               anchor: "A",
               name: "TextBox",
               properties: {
-                forChangeObject: changeObj.properties.metadata,
                 isReadOnly,
-                placeholder: "Kirjoita perustelut tähän...",
-                title:
-                  changeObj.properties.title ||
-                  R.path(["properties", "metadata", "title"], changeObj)
+                placeholder: "Kirjoita perustelut"
               }
             }
           ]
@@ -44,25 +45,104 @@ const PerustelutToimintaalue = React.memo(
     }, [isReadOnly]);
 
     const getCategories = useMemo(() => {
-      const lisaykset = R.filter(
-        R.pathEq(["properties", "isChecked"], true),
-        changeObjects.toimintaalue
-      );
-      const poistot = R.filter(
-        R.pathEq(["properties", "isChecked"], false),
-        changeObjects.toimintaalue
-      );
       return () => {
-        return {
-          additions: R.map(changeObj => {
-            return getLomake(changeObj);
-          }, lisaykset),
-          removals: R.map(changeObj => {
-            return getLomake(changeObj);
-          }, poistot)
-        };
+        return [
+          {
+            anchor: "changes",
+            layout: { indentation: "none", margins: { top: "none" } },
+            categories: [
+              {
+                anchor: "current",
+                layout: { indentation: "none", margins: { top: "none" } },
+                title: intl.formatMessage(common.current),
+                components: (() => {
+                  const maakunnat = R.map(maakunta => {
+                    return {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title: maakunta.arvo
+                      }
+                    };
+                  }, lupakohde.maakunnat);
+                  const kunnat = R.map(kunta => {
+                    return {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title: kunta.arvo
+                      }
+                    };
+                  }, lupakohde.kunnat);
+                  return R.concat(maakunnat, kunnat);
+                })()
+              },
+              {
+                anchor: "removed",
+                layout: {
+                  margins: { top: "none" },
+                  components: { vertical: true }
+                },
+                title: intl.formatMessage(common.toBeRemoved),
+                components: R.map(changeObj => {
+                  let json = null;
+                  if (R.equals(changeObj.properties.isChecked, false)) {
+                    console.info(changeObj);
+                    json = {
+                      name: "StatusTextRow",
+                      layout: { dense: true },
+                      properties: {
+                        title:
+                          changeObj.properties.metadata.title ||
+                          changeObj.properties.metadata.label
+                      }
+                    };
+                  }
+                  return json;
+                }, changeObjects.toimintaalue).filter(Boolean)
+              },
+              {
+                anchor: "added",
+                layout: {
+                  margins: { top: "none" },
+                  components: { vertical: true }
+                },
+                title: intl.formatMessage(common.toBeAdded),
+                components: R.sortBy(
+                  R.path(["properties", "title"]),
+                  R.map(changeObj => {
+                    console.info(changeObj);
+                    let json = null;
+                    if (
+                      R.equals(changeObj.properties.isChecked, true) &&
+                      changeObj.properties.metadata
+                    ) {
+                      json = {
+                        name: "StatusTextRow",
+                        layout: { dense: true },
+                        properties: {
+                          title:
+                            R.path(
+                              ["properties", "metadata", "title"],
+                              changeObj
+                            ) ||
+                            R.path(
+                              ["properties", "metadata", "label"],
+                              changeObj
+                            )
+                        }
+                      };
+                    }
+                    return json;
+                  }, changeObjects.toimintaalue)
+                ).filter(Boolean)
+              }
+            ]
+          },
+          getLomake()
+        ];
       };
-    }, [changeObjects.toimintaalue, getLomake]);
+    }, [changeObjects.toimintaalue, getLomake, intl, lupakohde]);
 
     useEffect(() => {
       const categories = getCategories();
@@ -73,44 +153,21 @@ const PerustelutToimintaalue = React.memo(
 
     return (
       <React.Fragment>
-        {R.path(["categories", "additions"], stateObjects.perustelut) &&
-        R.path(["categories", "additions"], stateObjects.perustelut).length ? (
+        {stateObjects.perustelut && (
           <ExpandableRowRoot
-            anchor={`${sectionId}_additions`}
+            anchor={sectionId}
             key={`perustelut-toimintaalue-lisattavat`}
-            categories={R.path(
-              ["categories", "additions"],
-              stateObjects.perustelut
-            )}
-            changes={R.path(["perustelut", "additions"], changeObjects)}
+            categories={stateObjects.perustelut.categories}
+            changes={changeObjects.perustelut}
             disableReverting={true}
             hideAmountOfChanges={false}
             isExpanded={true}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}
             showCategoryTitles={true}
-            title="Lupaan lisättävät"
+            title="Muutokset"
           />
-        ) : null}
-        {R.path(["categories", "removals"], stateObjects.perustelut) &&
-        R.path(["categories", "removals"], stateObjects.perustelut).length ? (
-          <ExpandableRowRoot
-            anchor={`${sectionId}_removals`}
-            key={`perustelut-toimintaalue-poistettavat`}
-            categories={R.path(
-              ["categories", "removals"],
-              stateObjects.perustelut
-            )}
-            changes={R.path(["perustelut", "removals"], changeObjects)}
-            disableReverting={true}
-            hideAmountOfChanges={false}
-            isExpanded={true}
-            onUpdate={onChangesUpdate}
-            sectionId={sectionId}
-            showCategoryTitles={true}
-            title="Luvasta poistettavat"
-          />
-        ) : null}
+        )}
       </React.Fragment>
     );
   }
@@ -122,7 +179,7 @@ PerustelutToimintaalue.propTypes = {
   headingNumber: PropTypes.number,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
-  lupa: PropTypes.object,
+  lupakohde: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func,
   stateObjects: PropTypes.object
