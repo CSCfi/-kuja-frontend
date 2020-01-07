@@ -7,14 +7,14 @@ const refreshIntervalInSeconds = 1200;
 
 function executeMultiple({ getState, setState }, config, statePathStr) {
   let abortControllers = [];
-  const state = getState();
 
   forEach(key => {
+    const state = getState();
     if (
       state[statePathStr][key].isLoading !== true &&
       (state[statePathStr][key].isErroneous ||
-        !state.fetchedAt ||
-        new Date().getTime() - state.fetchedAt >=
+        !state[statePathStr][key].fetchedAt ||
+        new Date().getTime() - state[statePathStr][key].fetchedAt >=
           refreshIntervalInSeconds * 1000)
     ) {
       setState(assocPath([statePathStr, key, "isLoading"], true, state));
@@ -36,7 +36,7 @@ function executeMultiple({ getState, setState }, config, statePathStr) {
         })
       );
     }
-  }, keys(state[statePathStr]));
+  }, keys(getState()[statePathStr]));
 
   return abortControllers;
 }
