@@ -126,7 +126,10 @@ const voimassaOlo = (orderCode, isReadOnly) => {
               code: 1,
               title: "Ei",
               labelStyles: {},
-              isChecked: false
+              isChecked: false.value,
+              forChangeObject: {
+                fieldName: "Ei"
+              }
             }
           }
         ]
@@ -144,7 +147,10 @@ const voimassaOlo = (orderCode, isReadOnly) => {
               code: 2,
               title: "Kyllä",
               labelStyles: {},
-              isChecked: false
+              isChecked: false,
+              forChangeObject: {
+                fieldName: "Kyllä"
+              }
             }
           }
         ]
@@ -244,7 +250,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-liikenneopettajalupa",
-                  title: "Liikenneopettajalupa (pakollinen)"
+                  title: "Liikenneopettajalupa (pakollinen)",
+                  forChangeObject: {
+                    fieldName: "Liikenneopettajalupa"
+                  }
                 }
               }
             ]
@@ -262,7 +271,11 @@ const johtaja = (orderCode, isReadOnly) => {
                   labelStyles: {},
                   name: "checkbox-kuorma-autonkuljettaja",
                   title:
-                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
+                    "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
+                  forChangeObject: {
+                    fieldName:
+                      "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
+                  }
                 }
               }
             ]
@@ -279,7 +292,12 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-linja-autonkuljettaja",
-                  title: "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
+                  title:
+                    "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
+                  forChangeObject: {
+                    fieldName:
+                      "Voimassa oleva linja-autonkuljettajan ammattipätevyys"
+                  }
                 }
               }
             ]
@@ -305,7 +323,9 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-c-luokka",
-                  title: "C-luokka"
+                  title: "C-luokka",
+                  forChangeObject: {
+                    fieldName: "C-luokka"
                 }
               }
             ]
@@ -322,7 +342,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-ce-luokka",
-                  title: "CE-luokka"
+                  title: "CE-luokka",
+                  forChangeObject: {
+                    fieldName: "CE-luokka"
+                  }
                 }
               }
             ]
@@ -339,7 +362,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-d-luokka",
-                  title: "D-luokka"
+                  title: "D-luokka",
+                  forChangeObject: {
+                    fieldName: "D-luokka"
+                  }
                 }
               }
             ]
@@ -364,7 +390,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-linja-auto-ammattitutkinto",
-                  title: "Linja-auton kuljettajan ammattitutkinto"
+                  title: "Linja-auton kuljettajan ammattitutkinto",
+                  forChangeObject: {
+                    fieldName: "Linja-auton kuljettajan ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -381,7 +410,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
-                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
+                  title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto",
+                  forChangeObject: {
+                    fieldName: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -398,7 +430,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
-                  title: "Puutavaran autonkuljetuksen ammattitutkinto"
+                  title: "Puutavaran autonkuljetuksen ammattitutkinto",
+                  forChangeObject: {
+                    fieldName: "Puutavaran autonkuljetuksen ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -416,7 +451,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   labelStyles: {},
                   name: "checkbox-kuljetuspalvelut-logistiikan-perustutkinto",
                   title:
-                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
+                    "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
+                  forChangeObject: {
+                    fieldName: "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
+                  }
                 }
               }
             ]
@@ -433,7 +471,10 @@ const johtaja = (orderCode, isReadOnly) => {
                   isReadOnly,
                   labelStyles: {},
                   name: "checkbox-kuljetusalan-ammattitutkinto",
-                  title: "Kuljetusalan ammattitutkinto"
+                  title: "Kuljetusalan ammattitutkinto",
+                  forChangeObject: {
+                    fieldName: "Kuljetusalan ammattitutkinto"
+                  }
                 }
               }
             ]

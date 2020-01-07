@@ -1,99 +1,94 @@
-import _ from 'lodash'
-import dateformat from 'dateformat'
-import store from '../../../../store'
-import { parseLocalizedField } from "../../../../modules/helpers"
-import { KOHTEET } from "../../../Jarjestajat/Jarjestaja/modules/constants"
+import _ from "lodash";
+import dateformat from "dateformat";
+import store from "../../../../store";
+import { parseLocalizedField } from "../../../../modules/helpers";
+import { KOHTEET } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import {
   MUUTOS_TILAT,
   MUUTOS_TYPES
-} from "../../../Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants"
+} from "../../../Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 
 export function getKoulutusAlat() {
-  const state = store.getState()
+  const state = store.getState();
 
   if (state.koulutusalat && state.koulutusalat.fetched) {
-    return state.koulutusalat.data
+    return state.koulutusalat.data;
   }
 }
 
 export function getTutkintoNimiByKoodiarvo(koodi) {
-  const state = store.getState()
+  const state = store.getState();
 
   if (state.koulutukset && state.koulutukset.koulutusdata) {
-    const { koulutusdata } = state.koulutukset
+    const { koulutusdata } = state.koulutukset;
 
-    let nimi = undefined
+    let nimi = undefined;
 
     _.forEach(koulutusdata, ala => {
       _.forEach(ala.koulutukset, koulutus => {
         if (koulutus.koodiArvo === koodi) {
-          nimi = parseLocalizedField(koulutus.metadata)
+          nimi = parseLocalizedField(koulutus.metadata);
         }
-      })
-    })
+      });
+    });
 
-    return nimi
+    return nimi;
   }
 }
 
 export function getTutkintoKoodiByMaaraysId(maaraysId) {
-  const state = store.getState()
+  const state = store.getState();
 
   if (state.lupa && state.lupa.data && state.lupa.data.maaraykset) {
-    const {maaraykset} = state.lupa.data
-    const obj = _.find(maaraykset, {id: maaraysId})
+    const { maaraykset } = state.lupa.data;
+    const obj = _.find(maaraykset, { id: maaraysId });
 
     if (obj && obj.koodiarvo) {
-      return obj.koodiarvo
+      return obj.koodiarvo;
     }
   }
 }
 
 export function getTutkintoNimiByMaaraysId(maaraysId) {
-  const state = store.getState()
+  const state = store.getState();
 
   if (state.lupa && state.lupa.data && state.lupa.data.maaraykset) {
-    const {maaraykset} = state.lupa.data
-    const obj = _.find(maaraykset, {id: maaraysId})
+    const { maaraykset } = state.lupa.data;
+    const obj = _.find(maaraykset, { id: maaraysId });
 
     if (obj && obj.koodi && obj.koodi.metadata) {
-      return parseLocalizedField(obj.koodi.metadata)
+      return parseLocalizedField(obj.koodi.metadata);
     }
   }
 }
 
 export function getMuutosperusteluObjectById(muutosperustelukoodiarvo) {
-    const state = store.getState()
+  const state = store.getState();
 
-    if (state.muutosperustelut && state.muutosperustelut.data) {
-        return _.find(state.muutosperustelut.data, mperustelu => {
-            return String(mperustelu.koodiArvo) === String(muutosperustelukoodiarvo)
-        })
-    }
+  if (state.muutosperustelut && state.muutosperustelut.data) {
+    return _.find(state.muutosperustelut.data, mperustelu => {
+      return String(mperustelu.koodiArvo) === String(muutosperustelukoodiarvo);
+    });
+  }
 }
 
 export function getPaatoskierrosByUuid(paatoskierrosUuid) {
-  const state = store.getState()
+  const state = store.getState();
 
   if (state.paatoskierrokset && state.paatoskierrokset.data) {
     return _.find(state.paatoskierrokset.data, paatoskierros => {
-      return paatoskierros.uuid === paatoskierrosUuid
-    })
+      return paatoskierros.uuid === paatoskierrosUuid;
+    });
   }
 }
 
 export function getJarjestajaData(state) {
-  const fakeUser = "oiva-web" // TODO: oikea käyttäjä statesta
+  const fakeUser = "oiva-web"; // TODO: oikea käyttäjä statesta
 
   if (state.lupa && state.lupa.data) {
-    const {data} = state.lupa
-    const {
-      id,
-      diaarinumero,
-      jarjestajaYtunnus,
-      jarjestajaOid
-    } = data
-    const now = dateformat(new Date(), "yyyy-mm-dd")
+    const { data } = state.lupa;
+    const { id, diaarinumero, jarjestajaYtunnus, jarjestajaOid } = data;
+    const now = dateformat(new Date(), "yyyy-mm-dd");
 
     return {
       diaarinumero,
@@ -118,12 +113,11 @@ export function getJarjestajaData(state) {
           perusteluteksti: null
         }
       }
-    }
+    };
   }
 }
 
 export function formatMuutospyynto(muutospyynto) {
-
   const {
     diaarinumero,
     jarjestajaOid,
@@ -137,7 +131,7 @@ export function formatMuutospyynto(muutospyynto) {
     paatoskierros,
     muutosperustelu,
     muuperustelu
-  } = muutospyynto
+  } = muutospyynto;
 
   return {
     diaarinumero,
@@ -154,14 +148,14 @@ export function formatMuutospyynto(muutospyynto) {
     voimassaloppupvm: "2018-12-31",
     muutosperustelu: formatMuutosperustelu(muutosperustelu, muuperustelu),
     muutokset: formatMuutokset(lisattavat, poistettavat)
-  }
+  };
 }
 
 function formatMuutosperustelu(muutosperustelukoodiarvo, muuperustelu) {
-    const perustelu = getMuutosperusteluObjectById(muutosperustelukoodiarvo)
-    const { koodiArvo, koodisto, metadata } = perustelu
-    const nimi = parseLocalizedField(metadata, 'FI', nimi)
-    const kuvaus = parseLocalizedField(metadata, 'FI', kuvaus)
+  const perustelu = getMuutosperusteluObjectById(muutosperustelukoodiarvo);
+  const { koodiArvo, koodisto, metadata } = perustelu;
+  const nimi = parseLocalizedField(metadata, "FI", nimi);
+  const kuvaus = parseLocalizedField(metadata, "FI", kuvaus);
 
   return {
     arvo: "",
@@ -173,32 +167,32 @@ function formatMuutosperustelu(muutosperustelukoodiarvo, muuperustelu) {
       perusteluteksti: nimi,
       kuvaus: kuvaus
     }
-  }
+  };
 }
 
 function formatMuutokset(lisattavat, poistettavat) {
-  let muutokset = []
+  let muutokset = [];
 
   if (lisattavat) {
     _.forEach(lisattavat, koodiarvo => {
-      let obj = getBaseObject()
-      obj.koodiarvo = koodiarvo
-      obj.tila = "LISAYS"
-      muutokset.push(obj)
-    })
+      let obj = getBaseObject();
+      obj.koodiarvo = koodiarvo;
+      obj.tila = "LISAYS";
+      muutokset.push(obj);
+    });
   }
 
   if (poistettavat) {
     _.forEach(poistettavat, maaraysId => {
-      let obj = getBaseObject()
-      obj.koodiarvo = getTutkintoKoodiByMaaraysId(maaraysId)
-      obj.maaraysId = maaraysId
-      obj.tila = "POISTO"
-      muutokset.push(obj)
-    })
+      let obj = getBaseObject();
+      obj.koodiarvo = getTutkintoKoodiByMaaraysId(maaraysId);
+      obj.maaraysId = maaraysId;
+      obj.tila = "POISTO";
+      muutokset.push(obj);
+    });
   }
 
-  return muutokset
+  return muutokset;
 }
 
 function getBaseObject() {
@@ -218,7 +212,7 @@ function getBaseObject() {
         }
       ]
     }
-  }
+  };
 }
 
 export function loadValmisteluData(state, muutosdata) {
@@ -227,26 +221,29 @@ export function loadValmisteluData(state, muutosdata) {
   // console.log(muutosdata)
 
   if (!muutosdata) {
-    console.log('muutosdata ei saatavilla, poistutaan')
-    return
+    console.log("muutosdata ei saatavilla, poistutaan");
+    return;
   }
 
-  let uusiData = {...muutosdata}
+  let uusiData = { ...muutosdata };
 
-  const {muutokset} = muutosdata
+  const { muutokset } = muutosdata;
 
   // formatoi muutokset
 
   if (state.kohteet && state.kohteet.fetched) {
-    const kohteet = state.kohteet.data
+    const kohteet = state.kohteet.data;
 
     // 1. Tutkinnot ja koulutukset
     const tutkinnotKohde = _.find(kohteet, kohde => {
-      return kohde.tunniste === KOHTEET.TUTKINNOT
-    })
+      return kohde.tunniste === KOHTEET.TUTKINNOT;
+    });
 
     if (tutkinnotKohde) {
-      uusiData.tutkinnotjakoulutukset = getMuutosArray(muutokset, tutkinnotKohde.uuid)
+      uusiData.tutkinnotjakoulutukset = getMuutosArray(
+        muutokset,
+        tutkinnotKohde.uuid
+      );
     }
   }
 
@@ -254,32 +251,33 @@ export function loadValmisteluData(state, muutosdata) {
 
   // console.log(uusiData)
 
-  return uusiData
+  return uusiData;
 }
 
 function getMuutosArray(muutokset, kohdeUuid) {
   if (!muutokset || !kohdeUuid) {
-    return
+    return;
   }
 
   let results = _.filter(muutokset, muutos => {
     if (muutos.kohde) {
-      return muutos.kohde.uuid === kohdeUuid
+      return muutos.kohde.uuid === kohdeUuid;
     }
-  })
+  });
 
   _.forEach(results, muutos => {
     const tyyppi =
-      muutos.tila === MUUTOS_TILAT.LISAYS ? MUUTOS_TYPES.ADDITION :
-        muutos.tila === MUUTOS_TILAT.POISTO ? MUUTOS_TYPES.REMOVAL :
-          muutos.tila === MUUTOS_TILAT.MUUTOS ? MUUTOS_TYPES.CHANGE :
-            null
-    _.extend(muutos, {type: tyyppi})
-  })
+      muutos.tila === MUUTOS_TILAT.LISAYS
+        ? MUUTOS_TYPES.ADDITION
+        : muutos.tila === MUUTOS_TILAT.POISTO
+        ? MUUTOS_TYPES.REMOVAL
+        : muutos.tila === MUUTOS_TILAT.MUUTOS
+        ? MUUTOS_TYPES.CHANGE
+        : null;
+    _.extend(muutos, { type: tyyppi });
+  });
 
-  return results
+  return results;
 }
 
-export function handleRadioChange() {
-
-}
+export function handleRadioChange() {}
