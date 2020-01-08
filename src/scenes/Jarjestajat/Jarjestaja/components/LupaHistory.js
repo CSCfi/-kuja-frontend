@@ -1,19 +1,18 @@
-import React, { useContext, useMemo } from "react";
+import React, { useEffect } from "react";
 import Media from "react-media";
 import styled from "styled-components";
 import { Table as OldTable, Tbody } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../modules/constants";
 import LupaHistoryItem from "./LupaHistoryItem";
-import FetchHandler from "../../../../FetchHandler";
-import { BackendContext } from "../../../../context/backendContext";
-import * as R from "ramda";
-import _ from "lodash";
 import Table from "../../../../components/02-organisms/Table";
 import moment from "moment";
 import { API_BASE_URL } from "../../../../modules/constants";
 import PropTypes from "prop-types";
 import { downloadFileFn } from "../../../../utils/common";
+import { useLupahistoria } from "../../../../stores/lupahistoria";
+import _ from "lodash";
+import * as R from "ramda";
 
 const WrapTable = styled.div``;
 
@@ -25,25 +24,15 @@ const colWidths = {
   4: "w-3/12"
 };
 
-const LupaHistory = props => {
-  const { jarjestajaOid } = props;
-  const { state: fromBackend = {}, dispatch } = useContext(BackendContext);
+const LupaHistory = ({ history, jarjestajaOid }) => {
+  const [lupahistoria, actions] = useLupahistoria();
 
-  const fetchSetup = useMemo(() => {
-    return jarjestajaOid
-      ? [
-          {
-            key: "lupahistoria",
-            dispatchFn: dispatch,
-            urlEnding: jarjestajaOid
-          }
-        ]
-      : [];
-  }, [jarjestajaOid, dispatch]);
-
-  const data = useMemo(() => {
-    return R.prop("raw", fromBackend.lupahistoria) || [];
-  }, [fromBackend.lupahistoria]);
+  // Let's fetch LUPAHISTORIA
+  useEffect(() => {
+    if (jarjestajaOid) {
+      actions.load(jarjestajaOid);
+    }
+  }, [actions, jarjestajaOid]);
 
   const tableStructure = [
     {
@@ -93,7 +82,7 @@ const LupaHistory = props => {
               onClick: row => {
                 const lupaHistoryObject = R.find(
                   R.propEq("diaarinumero", row.id),
-                  data
+                  lupahistoria.data
                 );
                 if (lupaHistoryObject) {
                   const pathToPDF =
@@ -101,7 +90,7 @@ const LupaHistory = props => {
                     moment("2018-12-30") // Yeah, hard coded value. Not sure if it's valid anymore.
                       ? "/pdf/"
                       : "/pebble/resources/liitteet/lupahistoria/";
-                  if (props.history) {
+                  if (history) {
                     downloadFileFn({
                       filename: lupaHistoryObject.filename,
                       openInNewWindow: true,
@@ -131,7 +120,7 @@ const LupaHistory = props => {
                 ]
               )
             };
-          }, data || [])
+          }, lupahistoria.data || [])
         }
       ]
     },
@@ -151,15 +140,16 @@ const LupaHistory = props => {
   };
 
   return (
-    <FetchHandler
-      fetchSetup={fetchSetup}
-      ready={
+    <React.Fragment>
+      {lupahistoria.data && (
         <WrapTable>
           <Media
             query={MEDIA_QUERIES.MOBILE}
             render={() => (
               <OldTable role="table">
-                <Tbody role="rowgroup">{renderLupaHistoryList(data)}</Tbody>
+                <Tbody role="rowgroup">
+                  {renderLupaHistoryList(lupahistoria.data)}
+                </Tbody>
               </OldTable>
             )}
           />
@@ -172,8 +162,11 @@ const LupaHistory = props => {
             )}
           />
         </WrapTable>
-      }
-      erroneous={<h2>{LUPA_TEKSTIT.PAATOKSET.VIRHE.FI}</h2>}></FetchHandler>
+      )}
+      {lupahistoria.fetchedAt && !lupahistoria.data && (
+        <h2>{LUPA_TEKSTIT.PAATOKSET.VIRHE.FI}</h2>
+      )}
+    </React.Fragment>
   );
 };
 

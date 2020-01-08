@@ -1,36 +1,27 @@
 import React from "react";
+import PropTypes from "prop-types";
 import JarjestamislupaAsiatList from "./JarjestamislupaAsiatList";
 import { InnerContentContainer } from "../../../../modules/elements";
-import PropTypes from "prop-types";
 
-const JarjestamislupaAsiat = ({
-  history,
-  match,
-  muutospyynnot,
-  newApplicationRouteItem,
-  organisaatio,
-  intl
-}) => {
-  return (
-    <InnerContentContainer>
-      <div className="m-8">
-        <JarjestamislupaAsiatList
-          history={history}
-          match={match}
-          intl={intl}
-          muutospyynnot={muutospyynnot}
-          newApplicationRouteItem={newApplicationRouteItem}
-          organisaatio={organisaatio}
-        />
-      </div>
-    </InnerContentContainer>
-  );
-};
+const JarjestamislupaAsiat = React.memo(
+  ({ history, match, newApplicationRouteItem }) => {
+    return (
+      <InnerContentContainer>
+        <div className="m-8">
+          <JarjestamislupaAsiatList
+            history={history}
+            match={match}
+            newApplicationRouteItem={newApplicationRouteItem}
+          />
+        </div>
+      </InnerContentContainer>
+    );
+  }
+);
 
 JarjestamislupaAsiat.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  muutospyynnot: PropTypes.array,
   newApplicationRouteItem: PropTypes.object
 };
 
