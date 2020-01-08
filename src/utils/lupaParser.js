@@ -296,8 +296,9 @@ const parseSectionData = (
 
     // kohde 3: Toiminta-alueet
   } else if (target === KOHTEET.TOIMIALUE) {
-    let toimintaalueet = getToimintaalueArvoArray(maaraykset);
 
+    let toimintaalueet = getToimintaalueArvoArray(maaraykset);
+    console.info(toimintaalueet)
     let maakunnat = _.filter(toimintaalueet, alue => {
       return alue.koodisto === "maakunta";
     });
