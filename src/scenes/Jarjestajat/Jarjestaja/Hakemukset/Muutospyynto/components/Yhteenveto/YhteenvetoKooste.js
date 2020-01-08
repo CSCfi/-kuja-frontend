@@ -274,6 +274,7 @@ const YhteenvetoKooste = ({
                 <React.Fragment>
                   {!!R.path(["toimintaalue"], changeObjects) ? (
                     <PerustelutToimintaalue
+                      lupakohde={lupaKohteet[3]}
                       changeObjects={{
                         toimintaalue: R.path(["toimintaalue"], changeObjects),
                         perustelut: R.path(
