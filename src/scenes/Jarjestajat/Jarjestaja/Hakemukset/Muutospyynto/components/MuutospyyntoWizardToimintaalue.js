@@ -150,7 +150,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
     }, props.changeObjects.muutokset || []);
     return (
-      (props.lupakohde.valtakunnallinen.arvo === "FI1" && !valtakunnallinenChangeObject) ||
+      (props.lupakohde.valtakunnallinen &&
+        props.lupakohde.valtakunnallinen.arvo === "FI1" &&
+        !valtakunnallinenChangeObject) ||
       (valtakunnallinenChangeObject &&
         valtakunnallinenChangeObject.properties.isChecked)
     );
@@ -364,7 +366,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 removal: isRemoved
               },
               forChangeObject: {
-                title: "Maakunnat ja kunnat"  
+                title: "Maakunnat ja kunnat"
               },
               title: "Maakunnat ja kunnat"
             }
@@ -573,7 +575,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               isChecked: isValtakunnallinenChecked,
               labelStyles: {
                 addition: isAdded,
-                custom: props.lupakohde.valtakunnallinen.arvo === "FI1" ? isInLupa : {},
+                custom:
+                  props.lupakohde.valtakunnallinen &&
+                  props.lupakohde.valtakunnallinen.arvo === "FI1"
+                    ? isInLupa
+                    : {},
                 removal: isRemoved
               },
               forChangeObject: {
@@ -597,7 +603,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 removal: isRemoved
               },
               forChangeObject: {
-                title: "Ei määriteltyä toiminta-aluetta"  
+                title: "Ei määriteltyä toiminta-aluetta"
               },
               title: "Ei määriteltyä toiminta-aluetta"
             }

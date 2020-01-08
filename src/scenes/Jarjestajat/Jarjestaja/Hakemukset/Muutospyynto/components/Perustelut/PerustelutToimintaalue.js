@@ -5,8 +5,6 @@ import PropTypes from "prop-types";
 import common from "../../../../../../../i18n/definitions/common";
 import * as R from "ramda";
 
-import "./perustelut-toiminta-alue.module.css";
-
 const defaultProps = {
   changeObjects: {},
   isReadOnly: false,
