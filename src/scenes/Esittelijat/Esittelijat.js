@@ -7,10 +7,11 @@ import ProfileMenu from "../Jarjestajat/Jarjestaja/components/ProfileMenu";
 import {FullWidthWrapper} from "../../modules/elements";
 import AvoimetAsiat from "./components/AvoimetAsiat";
 import {Route} from "react-router-dom";
-import {injectIntl} from "react-intl";
+import {useIntl} from "react-intl";
 import common from "../../i18n/definitions/common";
 
-const Esittelijat = ({match, user, intl}) => {
+const Esittelijat = ({match, user}) => {
+  const intl = useIntl();
   const t = intl.formatMessage;
   const routes = [
     {
@@ -57,8 +58,7 @@ const Esittelijat = ({match, user, intl}) => {
 
 Esittelijat.propTypes = {
   match: PropTypes.object,
-  user: PropTypes.object,
-  intl: PropTypes.object
+  user: PropTypes.object
 };
 
-export default injectIntl(Esittelijat);
+export default Esittelijat;
