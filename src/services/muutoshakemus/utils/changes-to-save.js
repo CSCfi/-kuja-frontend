@@ -1,7 +1,7 @@
 import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import * as R from "ramda";
-import { fillForBackend } from "../../lomakkeet";
+import { fillForBackend } from "../../lomakkeet/backendMappings";
 
 // Return changes of Tutkinnot
 const getMuutos = (stateItem, changeObj, perustelut) => {
