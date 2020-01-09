@@ -1,4 +1,14 @@
-import { assocPath, find, forEach, isNil, map, propEq } from "ramda";
+import {
+  assocPath,
+  compose,
+  equals,
+  find,
+  forEach,
+  isNil,
+  map,
+  path,
+  propEq
+} from "ramda";
 
 function getMapping(koodiarvo) {
   return [
@@ -7,14 +17,32 @@ function getMapping(koodiarvo) {
       anchors: [
         `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.tehtavan-tarpeellisuus.textbox.A`
       ],
-      valueFn: changeObjects => changeObjects[0].properties.value
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     },
     {
       path: ["voimassaoleva"],
       anchors: [
-        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.voimassaolo.voimassaolo-field-yes.A`
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.voimassaolo.voimassaolo-field-yes.A`,
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.voimassaolo.voimassaolo-field-no.A`
       ],
-      valueFn: changeObjects => changeObjects[0].properties.isChecked === true
+      valueFn: changeObjects => {
+        const yesValue = path([0, "properties", "isChecked"], changeObjects);
+        const noValue = path([1, "properties", "isChecked"], changeObjects);
+        let isValid = null;
+        if (!isNil(yesValue)) {
+          isValid = true;
+        } else if (!isNil(noValue)) {
+          isValid = false;
+        }
+        return isValid;
+      }
+    },
+    {
+      path: ["suunnitelma"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.suunnitelma.suunnitelma-field.A`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     }
   ];
 }
