@@ -72,7 +72,7 @@ export function fillForBackend(changeObjects) {
     const head = getAnchorPart(changeObjects[0].anchor, 0);
     const koodiarvo = getAnchorPart(changeObjects[0].anchor, 1);
     const filled = perustelut[head] ? perustelut[head](changeObjects, koodiarvo) : null;
-    console.info(filled);
+    console.info(head, koodiarvo, filled);
     return filled;
   }
 
