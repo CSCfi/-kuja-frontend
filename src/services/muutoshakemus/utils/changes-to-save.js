@@ -1,6 +1,7 @@
 import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import * as R from "ramda";
+import { fillForBackend } from "../../lomakkeet";
 
 // Return changes of Tutkinnot
 const getMuutos = (stateItem, changeObj, perustelut) => {
@@ -64,8 +65,6 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   } else if (subcode) {
     muutos["parent"] = R.compose(R.join("."), R.dropLast(2))(anchorParts);
   }
-
-  console.log("getMuutos: " + muutos);
   return muutos;
 };
 
@@ -123,29 +122,39 @@ export const getChangesToSave = (
       changeObj.anchor,
       backendMuutokset
     );
+    let backendMuutosWithPerustelut = [];
     let backendMuutosWithChangeObjectsWithPerustelut = [];
     if (backendMuutos) {
       const perustelut = findPerustelut(anchor, changeObjects.perustelut);
-      const backendMuutosWithChangeObjects = R.assocPath(
+      const perustelutForBackend = fillForBackend(perustelut);
+      if (!perustelutForBackend) {
+        const perusteluTexts = R.map(perustelu => {
+          if (R.path(["properties", "value"], perustelu)) {
+            return R.path(["properties", "value"], perustelu);
+          } else if (
+            !R.filter(
+              R.pathEq(["properties", "metadata", "fieldName"], "Muut syyt"),
+              perustelu
+            ) // Do not send "Muut syyt" to backend
+          )
+            return R.path(["properties", "metadata", "fieldName"], perustelu);
+        }, perustelut);
+        backendMuutosWithPerustelut = R.assocPath(
+          ["meta", "perusteluteksti"],
+          perusteluTexts,
+          backendMuutos
+        );
+      } else {
+        backendMuutosWithPerustelut = R.assoc(
+          "meta",
+          perustelutForBackend,
+          backendMuutos
+        );
+      }
+      backendMuutosWithChangeObjectsWithPerustelut = R.assocPath(
         ["meta", "changeObjects"],
         R.flatten([[changeObj], perustelut]),
-        backendMuutos
-      );
-      const perusteluTexts = R.map(perustelu => {
-        if (R.path(["properties", "value"], perustelu)) {
-          return R.path(["properties", "value"], perustelu);
-        } else if (
-          !R.filter(
-            R.pathEq(["properties", "metadata", "fieldName"], "Muut syyt"),
-            perustelu
-          ) // Do not send "Muut syyt" to backend
-        )
-          return R.path(["properties", "metadata", "fieldName"], perustelu);
-      }, perustelut);
-      backendMuutosWithChangeObjectsWithPerustelut = R.assocPath(
-        ["meta", "perusteluteksti"],
-        perusteluTexts,
-        backendMuutosWithChangeObjects
+        backendMuutosWithPerustelut
       );
       // Let's add the attachments
       return R.assocPath(
