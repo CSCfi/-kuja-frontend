@@ -12,7 +12,7 @@ function getMapping(koodiarvo) {
     {
       path: ["voimassaoleva"],
       anchors: [
-        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.tehtavan-tarpeellisuus.textbox.A`
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.voimassaolo.voimassaolo-field-yes.A`
       ],
       valueFn: changeObjects => changeObjects[0].properties.isChecked === true
     }
