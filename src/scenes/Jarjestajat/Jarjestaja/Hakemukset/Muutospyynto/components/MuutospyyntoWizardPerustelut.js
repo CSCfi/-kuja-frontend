@@ -328,6 +328,7 @@ const MuutospyyntoWizardPerustelut = ({
               render={_props => (
                 <React.Fragment>
                   <PerustelutToimintaalue
+                    lupakohde={lupaKohteet[3]}
                     changeObjects={{
                       toimintaalue: R.path(["toimintaalue"], changeObjects),
                       perustelut: R.path(

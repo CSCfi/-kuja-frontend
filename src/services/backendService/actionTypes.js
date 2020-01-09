@@ -1,7 +1,0 @@
-// XHR related constants
-export const FETCH_FROM_BACKEND_FAILED = "FETCH_FROM_BACKEND_FAILED";
-export const FETCH_FROM_BACKEND_IS_ON = "FETCH_FROM_BACKEND_IS_ON";
-export const FETCH_FROM_BACKEND_SUCCESS = "FETCH_FROM_BACKEND_SUCCESS";
-
-// Context related constants
-export const LOGOUT_USER_START = "LOGOUT_USER_START";

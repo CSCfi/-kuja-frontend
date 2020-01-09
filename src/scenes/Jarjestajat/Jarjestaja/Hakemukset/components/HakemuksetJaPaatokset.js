@@ -7,6 +7,9 @@ import { MessageWrapper } from "../../../../../modules/elements";
 import { COLORS } from "../../../../../modules/styles";
 import { ROLE_MUOKKAAJA } from "../../../../../modules/constants";
 import { HAKEMUS_VIESTI } from "../Muutospyynto/modules/uusiHakemusFormConstants";
+import { useMuutospyynnot } from "../../../../../stores/muutospyynnot";
+import { useUser } from "../../../../../stores/user";
+import { useOrganisation } from "../../../../../stores/organisation";
 import * as R from "ramda";
 
 const Wrapper = styled.div`
@@ -26,12 +29,11 @@ const UusiMuutospyynto = styled(Link)`
   }
 `;
 
-const HakemuksetJaPaatokset = ({
-  match,
-  muutospyynnot,
-  organisaatio,
-  user
-}) => {
+const HakemuksetJaPaatokset = ({ match }) => {
+  const [muutospyynnot] = useMuutospyynnot();
+  const [user] = useUser();
+  const [organisation] = useOrganisation();
+
   const getMuutospyyntoUrl = () => {
     return `${match.url}/uusi`;
   };
@@ -44,12 +46,15 @@ const HakemuksetJaPaatokset = ({
     );
   }
 
-  if (R.includes(ROLE_MUOKKAAJA, user.roles) && organisaatio.oid === user.oid) {
+  if (
+    R.includes(ROLE_MUOKKAAJA, user.data.roles) &&
+    organisation.data.oid === user.data.oid
+  ) {
     return (
       <Wrapper>
         <h2>Hakemukset</h2>
         <UusiMuutospyynto to={getMuutospyyntoUrl()}>Luo uusi</UusiMuutospyynto>
-        <MuutospyyntoList muutospyynnot={muutospyynnot} />
+        <MuutospyyntoList muutospyynnot={muutospyynnot.data} />
       </Wrapper>
     );
   } else {

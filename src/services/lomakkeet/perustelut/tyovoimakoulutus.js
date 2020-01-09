@@ -170,7 +170,6 @@ export default function getTyovoimakoulutuslomake(
   locale,
   prefix
 ) {
-  console.info(action, data, isReadOnly, locale);
   switch (action) {
     case "addition":
       return getAdditionForm(

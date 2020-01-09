@@ -24,8 +24,7 @@ import { createObjectToSave } from "../../../../../../services/muutoshakemus/uti
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
 import { toast } from "react-toastify";
-import { injectIntl } from "react-intl";
-import { BackendContext } from "../../../../../../context/backendContext";
+import { useIntl } from "react-intl";
 import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import * as R from "ramda";
 import PropTypes from "prop-types";
@@ -48,6 +47,12 @@ import Loading from "../../../../../../modules/Loading";
 import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
 import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
+import { useKielet } from "../../../../../../stores/kielet";
+import { useOpetuskielet } from "../../../../../../stores/opetuskielet";
+import { useKoulutusalat } from "../../../../../../stores/koulutusalat";
+import { useTutkinnot } from "../../../../../../stores/tutkinnot";
+import { useKoulutukset } from "../../../../../../stores/koulutukset";
+import { mapObjIndexed, prop, sortBy } from "ramda";
 
 const FormDialog = withStyles(() => ({
   paper: {
@@ -66,7 +71,6 @@ const MuutospyyntoWizard = ({
   backendChanges = {},
   elykeskukset = [],
   history = {},
-  intl,
   kohteet = [],
   koulutustyypit = [],
   kunnat = [],
@@ -82,11 +86,16 @@ const MuutospyyntoWizard = ({
   onNewDocSave,
   vankilat = []
 }) => {
+  const intl = useIntl();
+
   /**
-   * fromBackend contains raw data from the backend. Some of the data is usable
-   * as it is but some must be slightly modified for the wizard's needs.
+   * We are going to create new objects based on these definitions.
    */
-  const { state: fromBackend } = useContext(BackendContext);
+  const [kielet] = useKielet();
+  const [opetuskielet] = useOpetuskielet();
+  const [koulutusalat] = useKoulutusalat();
+  const [tutkinnot] = useTutkinnot();
+  const [koulutukset] = useKoulutukset();
 
   /**
    * Muutoshakemus context is used only for some actions so we might get rid of
@@ -104,34 +113,35 @@ const MuutospyyntoWizard = ({
    * Some wizard related data is fine as it is and doesn't need to be modified.
    * That kind of data is passed to this wizard using properties.
    */
-  const kielet = useMemo(() => {
+  const kieletAndOpetuskielet = useMemo(() => {
     return {
-      kielet: sortLanguages(fromBackend.kielet.raw, R.toUpper(intl.locale)),
-      opetuskielet: fromBackend.opetuskielet.raw
+      kielet: sortLanguages(kielet.data, R.toUpper(intl.locale)),
+      opetuskielet: opetuskielet.data
     };
-  }, [fromBackend.kielet, fromBackend.opetuskielet, intl.locale]);
+  }, [kielet.data, opetuskielet.data, intl.locale]);
 
-  const koulutusalat = useMemo(() => {
-    return parseKoulutusalat(fromBackend.koulutusalat.raw);
-  }, [fromBackend.koulutusalat]);
+  const parsedKoulutusalat = useMemo(() => {
+    return parseKoulutusalat(koulutusalat.data);
+  }, [koulutusalat.data]);
 
-  const tutkinnot = useMemo(() => {
+  const parsedTutkinnot = useMemo(() => {
     return parseKoulutuksetAll(
-      R.prop("raw", fromBackend.tutkinnot) || [],
-      koulutusalat || [],
+      tutkinnot.data || [],
+      parsedKoulutusalat || [],
       koulutustyypit || []
     );
-  }, [fromBackend.tutkinnot, koulutusalat, koulutustyypit]);
+  }, [tutkinnot.data, parsedKoulutusalat, koulutustyypit]);
 
-  const koulutukset = useMemo(() => {
+  const parsedKoulutukset = useMemo(() => {
     return {
-      muut: R.map(
-        R.compose(R.sortBy(R.prop("koodiArvo")), R.prop("raw")),
-        fromBackend.koulutukset.muut
-      ),
-      poikkeukset: R.map(R.prop("raw"), fromBackend.koulutukset.poikkeukset)
+      muut: mapObjIndexed((num, key, obj) => {
+        return sortBy(prop("koodiArvo"), obj[key].data);
+      }, koulutukset.muut),
+      poikkeukset: mapObjIndexed((num, key, obj) => {
+        return obj[key].data;
+      }, koulutukset.poikkeukset)
     };
-  }, [fromBackend.koulutukset]);
+  }, [koulutukset]);
 
   const maakuntakunnatList = useMemo(() => {
     return getMaakuntakunnatList(maakuntakunnat, R.toUpper(intl.locale));
@@ -440,7 +450,12 @@ const MuutospyyntoWizard = ({
           <h3>{intl.formatMessage(wizardMessages.noRights)}</h3>
         </MessageWrapper>
       );
-    } else if (kielet && tutkinnot && maakuntakunnatList) {
+    } else if (
+      parsedKoulutukset &&
+      kieletAndOpetuskielet &&
+      parsedTutkinnot &&
+      maakuntakunnatList
+    ) {
       jsx = (
         <React.Fragment>
           <FormDialog
@@ -479,9 +494,9 @@ const MuutospyyntoWizard = ({
                     changeObjects={changeObjects}>
                     <MuutospyyntoWizardMuutokset
                       changeObjects={changeObjects}
-                      kielet={kielet}
+                      kielet={kieletAndOpetuskielet}
                       kohteet={kohteet}
-                      koulutukset={koulutukset}
+                      koulutukset={parsedKoulutukset}
                       kunnat={kunnat}
                       maakuntakunnatList={maakuntakunnatList}
                       maakunnat={maakunnat}
@@ -493,7 +508,7 @@ const MuutospyyntoWizard = ({
                       onChangesUpdate={onSectionChangesUpdate}
                       onStateUpdate={onSectionStateUpdate}
                       setChangesBySection={setChangesBySection}
-                      tutkinnot={tutkinnot}
+                      tutkinnot={parsedTutkinnot}
                     />
                   </WizardPage>
                 )}
@@ -509,9 +524,9 @@ const MuutospyyntoWizard = ({
                       <MuutospyyntoWizardPerustelut
                         changeObjects={changeObjects}
                         elykeskukset={elykeskukset}
-                        kielet={kielet}
+                        kielet={kieletAndOpetuskielet}
                         kohteet={kohteet}
-                        koulutukset={koulutukset}
+                        koulutukset={parsedKoulutukset}
                         lupa={lupa}
                         lupaKohteet={lupaKohteet}
                         maaraystyypit={maaraystyypit}
@@ -520,7 +535,7 @@ const MuutospyyntoWizard = ({
                         muutosperusteluList={muutosperusteluList}
                         onChangesUpdate={onSectionChangesUpdate}
                         onStateUpdate={onSectionStateUpdate}
-                        tutkinnot={tutkinnot}
+                        tutkinnot={parsedTutkinnot}
                         vankilat={vankilat}
                       />
                     </LomakkeetProvider>
@@ -553,9 +568,9 @@ const MuutospyyntoWizard = ({
                     <LomakkeetProvider>
                       <MuutospyyntoWizardYhteenveto
                         changeObjects={changeObjects}
-                        kielet={kielet}
+                        kielet={kieletAndOpetuskielet}
                         kohteet={kohteet}
-                        koulutukset={koulutukset}
+                        koulutukset={parsedKoulutukset}
                         lupa={lupa}
                         lupaKohteet={lupaKohteet}
                         maaraystyypit={maaraystyypit}
@@ -564,7 +579,7 @@ const MuutospyyntoWizard = ({
                         muutosperusteluList={muutosperusteluList}
                         onChangesUpdate={onSectionChangesUpdate}
                         onStateUpdate={onSectionStateUpdate}
-                        tutkinnot={tutkinnot}
+                        tutkinnot={parsedTutkinnot}
                       />
                     </LomakkeetProvider>
                   </WizardPage>
@@ -594,9 +609,9 @@ const MuutospyyntoWizard = ({
     handlePrev,
     intl,
     isConfirmDialogVisible,
-    kielet,
+    kieletAndOpetuskielet,
     kohteet,
-    koulutukset,
+    parsedKoulutukset,
     kunnat,
     lupa,
     lupaKohteet,
@@ -612,7 +627,7 @@ const MuutospyyntoWizard = ({
     setChangesBySection,
     state.isHelpVisible,
     steps,
-    tutkinnot,
+    parsedTutkinnot,
     vankilat
   ]);
 
@@ -638,4 +653,4 @@ MuutospyyntoWizard.propTypes = {
   vankilat: PropTypes.array
 };
 
-export default injectIntl(MuutospyyntoWizard);
+export default MuutospyyntoWizard;

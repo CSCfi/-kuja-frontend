@@ -22,10 +22,10 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
           },
           {
             anchor: "A",
-            name: "TextBox",
+            name: "TextBox"
           }
-        ],
-      },
+        ]
+      }
     ],
     "4": [
       {
@@ -84,7 +84,10 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   code: 1,
                   title: "Ei",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName: "Ei"
+                  }
                 }
               }
             ]
@@ -100,7 +103,10 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   code: 2,
                   title: "Kyllä",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName: "Kyllä"
+                  }
                 }
               }
             ]
@@ -215,7 +221,10 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-liikenneopettajalupa",
                   title: "Liikenneopettajalupa (pakollinen)",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName: "Liikenneopettajalupa"
+                  }
                 }
               }
             ]
@@ -231,7 +240,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   title:
                     "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Voimassa oleva kuorma-autonkuljettajan ammattipätevyys"
+                  }
                 }
               }
             ]
@@ -247,7 +260,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   title:
                     "Voimassa oleva linja-autonkuljettajan ammattipätevyys",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Voimassa oleva linja-autonkuljettajan ammattipätevyys
+                  }
                 }
               }
             ]
@@ -277,7 +294,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-c-luokka",
                   title: "C-luokka",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "C-luokka"
+                  }
                 }
               }
             ]
@@ -292,7 +313,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-ce-luokka",
                   title: "CE-luokka",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "CE-luokka"
+                  }
                 }
               }
             ]
@@ -307,7 +332,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-d-luokka",
                   title: "D-luokka",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "D-luokka"
+                  }
                 }
               }
             ]
@@ -336,7 +365,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-linja-auto-ammattitutkinto",
                   title: "Linja-auton kuljettajan ammattitutkinto",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Linja-auton kuljettajan ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -351,7 +384,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-yhdistelmäajoneuvo-ammattitutkinto",
                   title: "Yhdistelmäajoneuvonkuljettajan ammattitutkinto",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Yhdistelmäajoneuvonkuljettajan ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -366,7 +403,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-puutavara-autokuljetus-ammattitutkinto",
                   title: "Puutavaran autonkuljetuksen ammattitutkinto",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Puutavaran autonkuljetuksen ammattitutkinto"
+                  }
                 }
               }
             ]
@@ -382,7 +423,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   title:
                     "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
+                  }
                 }
               }
             ]
@@ -397,7 +442,11 @@ export const getKuljettajakoulutusPerustelulomakeByCode = code => {
                   name: "checkbox-kuljetusalan-ammattitutkinto",
                   title: "Kuljetusalan ammattitutkinto",
                   labelStyles: {},
-                  isChecked: false
+                  isChecked: false,
+                  forChangeObject: {
+                    fieldName:
+                      "Kuljetusalan ammattitutkinto"
+                  }
                 }
               }
             ]

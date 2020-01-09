@@ -5,10 +5,6 @@ export default defineMessages({
     id: "common.statistics",
     defaultMessage: "Tilastot"
   },
-  current: {
-    id: "common.current",
-    defaultMessage: "Nykyinen"
-  },
   applyFor: {
     id: "common.applyFor",
     defaultMessage: "Haettava"
@@ -230,5 +226,17 @@ export default defineMessages({
   },
   asiaTypes: {
     lupaChange: {id: "asiaTypes.lupaChange", defaultMessage: "Järjestämisluvan muutos"}
+  },
+  current: {
+    id: "common.current",
+    defaultMessage: "Nykyinen"
+  },
+  toBeAdded: {
+    id: "common.toBeAdded",
+    defaultMessage: "Lisättävä"
+  },
+  toBeRemoved: {
+    id: "common.toBeRemoved",
+    defaultMessage: "Poistettava"
   }
 });

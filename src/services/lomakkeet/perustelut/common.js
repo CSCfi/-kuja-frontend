@@ -20,7 +20,10 @@ export const getMuutostarveCheckboxes = (
           properties: {
             isChecked: false,
             isReadOnly,
-            title: metadata.nimi
+            title: metadata.nimi,
+            forChangeObject: {
+              fieldName: metadata.nimi
+            }
           }
         }
       ]

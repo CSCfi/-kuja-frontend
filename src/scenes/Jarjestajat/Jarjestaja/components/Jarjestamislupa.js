@@ -13,7 +13,7 @@ const TopSectionWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
 `;
 
-const Jarjestamislupa = ({ lupaKohteet, lupa }) => {
+const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
   // Luvan poikkeuskäsittely erikoisluville (17kpl)
   const lupaException = LUPA_LISAKOULUTTAJAT[lupa.jarjestajaYtunnus];
   return (
@@ -49,7 +49,7 @@ const Jarjestamislupa = ({ lupaKohteet, lupa }) => {
       </div>
     </InnerContentContainer>
   );
-};
+});
 
 Jarjestamislupa.propTypes = {
   lupaKohteet: PropTypes.object,

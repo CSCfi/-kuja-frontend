@@ -274,6 +274,7 @@ const YhteenvetoKooste = ({
                 <React.Fragment>
                   {!!R.path(["toimintaalue"], changeObjects) ? (
                     <PerustelutToimintaalue
+                      lupakohde={lupaKohteet[3]}
                       changeObjects={{
                         toimintaalue: R.path(["toimintaalue"], changeObjects),
                         perustelut: R.path(
@@ -323,9 +324,12 @@ const YhteenvetoKooste = ({
                       muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                         muutosperusteluList
                       )}
-                      stateObject={R.path(["perustelut", "opiskelijavuodet"])(
-                        muutoshakemus
-                      )}
+                      stateObject={{
+                        opiskelijavuodet: R.path(
+                          ["opiskelijavuodet"],
+                          muutoshakemus
+                        )
+                      }}
                       {..._props}
                       isReadOnly={true}
                     />

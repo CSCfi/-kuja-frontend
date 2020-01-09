@@ -26,12 +26,7 @@ whyDidYouRender(React);
  * @module 02-organisms
  */
 
-const componentContainerBaseClasses = [
-  "flex",
-  "flex-wrap",
-  "flex-col",
-  "sm:flex-row"
-];
+const componentContainerBaseClasses = ["flex", "flex-wrap", "flex-col"];
 
 const componentStyleMapping = {
   justification: {
@@ -118,7 +113,7 @@ const CategorizedList = React.memo(
     );
 
     return (
-      <div>
+      <div data-anchor={props.anchor}>
         {_.map(props.categories, (category, i) => {
           if (category.isVisible === false) {
             return null;
@@ -139,7 +134,8 @@ const CategorizedList = React.memo(
 
           // Category related layout styles
 
-          const { indentation, strategy, margins } = category.layout || {};
+          const { components, indentation, strategy, margins } =
+            category.layout || {};
 
           const topMarginInteger =
             margins &&
@@ -172,7 +168,7 @@ const CategorizedList = React.memo(
 
           const categoryStyles = {
             classes: {
-              indentation: `pl-0 sm:pl-${
+              indentation: `pl-${
                 !R.isNil(categoryStyleMapping.indentations[indentation])
                   ? categoryStyleMapping.indentations[indentation]
                   : // Number(!!props.level) returns 0 when props.level is 0 otherwise 1
@@ -203,7 +199,7 @@ const CategorizedList = React.memo(
             }
           };
 
-          const componentContainerClasses = R.concat(
+          let componentContainerClasses = R.concat(
             componentContainerBaseClasses,
             R.values(
               R.mapObjIndexed(styleClass => {
@@ -211,6 +207,19 @@ const CategorizedList = React.memo(
               }, componentStyles.classes)
             )
           );
+
+          if (components && components.vertical) {
+            componentContainerClasses = R.append(
+              "items-baseline",
+              componentContainerClasses
+            );
+          } else {
+            componentContainerClasses = R.append(
+              "sm:flex-row",
+              componentContainerClasses
+            );
+          }
+
           const categoryTitleClasses = R.join(" ", [
             `py-${topMarginInteger}`,
             i === 0 ? "" : `mt-${2 * topMarginInteger}`
@@ -384,6 +393,7 @@ const CategorizedList = React.memo(
                             rootPath: props.rootPath,
                             siblings: props.categories
                           }}
+                          tooltip={propsObj.tooltip}
                           _props={props}
                           onChanges={handleChanges}
                           id={fullAnchor}
@@ -440,12 +450,13 @@ const CategorizedList = React.memo(
                                     rootPath: props.rootPath,
                                     siblings: props.categories
                                   }}
-                                  placeholder={propsObj.placeholder}
-                                  width={propsObj.width}
                                   error={propsObj.error}
                                   fullWidth={propsObj.fullWidth}
-                                  value={value}
+                                  placeholder={propsObj.placeholder}
+                                  tooltip={propsObj.tooltip}
                                   type={propsObj.type}
+                                  value={value}
+                                  width={propsObj.width}
                                 />
                               </div>
                             );
@@ -511,6 +522,7 @@ const CategorizedList = React.memo(
                                 <StatusTextRow
                                   labelStyles={labelStyles}
                                   styleClasses={styleClasses}
+                                  layout={component.layout}
                                   statusText={propsObj.statusText}
                                   statusTextStyleClasses={
                                     propsObj.statusTextStyleClasses

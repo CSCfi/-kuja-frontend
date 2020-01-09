@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 
 const TaloudellisetYleisettiedot = React.memo(props => {
+  const intl = useIntl();
   const { sectionId, onStateUpdate } = props;
   const getCategories = useMemo(() => {
     return () => {
@@ -20,7 +22,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta1
+                  )
+                }
               }
             }
           ]
@@ -35,7 +42,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta2
+                  )
+                }
               }
             }
           ]
@@ -50,7 +62,12 @@ const TaloudellisetYleisettiedot = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta3
+                  )
+                }
               }
             }
           ]
@@ -58,7 +75,7 @@ const TaloudellisetYleisettiedot = React.memo(props => {
       ];
       return structure;
     };
-  }, [props.isReadOnly]);
+  }, [intl, props.isReadOnly]);
 
   useEffect(() => {
     onStateUpdate(
@@ -99,4 +116,4 @@ TaloudellisetYleisettiedot.propTypes = {
   isReadOnly: PropTypes.bool
 };
 
-export default injectIntl(TaloudellisetYleisettiedot);
+export default TaloudellisetYleisettiedot;

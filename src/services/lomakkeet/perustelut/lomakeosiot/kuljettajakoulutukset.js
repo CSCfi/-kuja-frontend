@@ -392,7 +392,10 @@ export function voimassaOlo(orderCode, isReadOnly) {
               code: 1,
               title: "Ei",
               labelStyles: {},
-              isChecked: false
+              isChecked: false,
+              forChangeObject: {
+                fieldName: "Ei"
+              }
             }
           }
         ]
@@ -410,7 +413,10 @@ export function voimassaOlo(orderCode, isReadOnly) {
               code: 2,
               title: "Kyllä",
               labelStyles: {},
-              isChecked: false
+              isChecked: false,
+              forChangeObject: {
+                fieldName: "Kyllä"
+              }
             }
           }
         ]

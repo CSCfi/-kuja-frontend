@@ -1,10 +1,13 @@
 import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { injectIntl } from "react-intl";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const TaloudellisetInvestoinnit = React.memo(props => {
+  const intl = useIntl();
+
   const { sectionId, onStateUpdate } = props;
   const getCategories = useMemo(() => {
     return () => {
@@ -21,7 +24,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta1
+                  )
+                }
               }
             }
           ]
@@ -33,7 +41,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
             {
               anchor: "label",
               name: "StatusTextRow",
-              styleClasses: ["font-semibold text-base mb-2"],
+              styleClasses: ["font-semibold text-base"],
               properties: {
                 title: "Investoinnin kustannukset"
               }
@@ -51,7 +59,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               properties: {
                 isReadOnly: props.isReadOnly,
                 withoutMargin: true,
-                type: "number"
+                type: "number",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta2
+                  )
+                }
               }
             }
           ]
@@ -66,7 +79,12 @@ const TaloudellisetInvestoinnit = React.memo(props => {
               name: "TextBox",
               properties: {
                 isReadOnly: props.isReadOnly,
-                placeholder: ""
+                placeholder: "",
+                tooltip: {
+                  text: intl.formatMessage(
+                    wizardMessages.tooltipTaloudellisetInvestoinnitKentta3
+                  )
+                }
               }
             }
           ]
@@ -74,7 +92,7 @@ const TaloudellisetInvestoinnit = React.memo(props => {
       ];
       return structure;
     };
-  }, [props.isReadOnly]);
+  }, [intl, props.isReadOnly]);
 
   useEffect(() => {
     onStateUpdate(
@@ -118,4 +136,4 @@ TaloudellisetInvestoinnit.propTypes = {
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
-export default injectIntl(TaloudellisetInvestoinnit);
+export default TaloudellisetInvestoinnit;

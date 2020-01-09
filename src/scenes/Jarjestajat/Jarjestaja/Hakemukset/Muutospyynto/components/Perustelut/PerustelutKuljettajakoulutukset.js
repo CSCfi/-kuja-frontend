@@ -11,21 +11,15 @@ const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const { onChangesRemove, onChangesUpdate } = props;
 
-  const code = useMemo(() => {
-    return getAnchorPart(
-      R.compose(
-        R.prop("anchor"),
-        R.head
-      )(props.changeObjects.koulutukset.kuljettajakoulutukset),
-      1
-    );
-  }, [props.changeObjects.koulutukset.kuljettajakoulutukset]);
-
   const lomakkeet = useMemo(() => {
     return (
       <React.Fragment>
         {R.map(changeObj => {
           const mapping = {
+            1: "peruskoulutus",
+            2: "jatkokoulutus",
+            3: "peruskoulutus",
+            4: "jatkokoulutus",
             5: "peruskoulutus",
             6: "jatkokoulutus"
           };
