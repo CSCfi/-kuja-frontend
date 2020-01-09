@@ -1,14 +1,4 @@
-import {
-  assocPath,
-  compose,
-  equals,
-  find,
-  forEach,
-  isNil,
-  map,
-  path,
-  propEq
-} from "ramda";
+import { assocPath, find, forEach, isNil, map, path, propEq } from "ramda";
 
 function getMapping(koodiarvo) {
   return [
@@ -41,6 +31,27 @@ function getMapping(koodiarvo) {
       path: ["suunnitelma"],
       anchors: [
         `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.suunnitelma.suunnitelma-field.A`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    {
+      path: ["kanta_linja_auto"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.ajoneuvokanta.ajoneuvokanta-kentat.linja-autoja`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    {
+      path: ["kanta_kuorma_auto"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.ajoneuvokanta.ajoneuvokanta-kentat.kuorma-autoja`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    {
+      path: ["kanta_peravaunu"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.ajoneuvokanta.ajoneuvokanta-kentat.peravaunuja`
       ],
       valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     }
