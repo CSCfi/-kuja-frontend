@@ -9,7 +9,7 @@ const Store = createStore({
         { getState, setState },
         {
           key: "muutospyynnot",
-          urlEnding: statusKey
+          urlEnding: statusKey //avoimet, valmistelussa, paatetyt
         }
       );
     }
