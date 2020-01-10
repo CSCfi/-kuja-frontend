@@ -42,9 +42,23 @@ export function getMapping(koodiarvo) {
       valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     },
     {
+      path: ["osaaminen"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.osaaminen.osaaminen-field.A`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    {
       path: ["suunnitelma_koulutus_paikka"],
       anchors: [
         `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.ammattipatevyyskoulutuksen-jarjestamispaikat.suunnitelma-field.A`
+      ],
+      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    {
+      path: ["kelpoisuus_ja_tyokokemus"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.johtaja.johtaja-info.A`
       ],
       valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     },
@@ -254,26 +268,28 @@ export function getMapping(koodiarvo) {
           [2, "properties", "metadata", "year"],
           changeObjects
         );
-        return [
-          firstYear
-            ? {
-                vuosi: firstYear,
-                arvo: path([0, "properties", "value"], changeObjects)
-              }
-            : null,
-          secondYear
-            ? {
-                vuosi: secondYear,
-                arvo: path([1, "properties", "value"], changeObjects)
-              }
-            : null,
-          thirdYear
-            ? {
-                vuosi: thirdYear,
-                arvo: path([2, "properties", "value"], changeObjects)
-              }
-            : null
-        ].filter(Boolean);
+        return firstYear || secondYear || thirdYear
+          ? [
+              firstYear
+                ? {
+                    vuosi: firstYear,
+                    arvo: path([0, "properties", "value"], changeObjects)
+                  }
+                : null,
+              secondYear
+                ? {
+                    vuosi: secondYear,
+                    arvo: path([1, "properties", "value"], changeObjects)
+                  }
+                : null,
+              thirdYear
+                ? {
+                    vuosi: thirdYear,
+                    arvo: path([2, "properties", "value"], changeObjects)
+                  }
+                : null
+            ].filter(Boolean)
+          : null;
       }
     },
     // VÄLINEET
