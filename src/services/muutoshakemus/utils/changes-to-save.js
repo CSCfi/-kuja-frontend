@@ -43,14 +43,16 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
       koulutustyyppi: anchorParts[1],
       perusteluteksti: R.map(perustelu => {
         if (R.path(["properties", "value"], perustelu)) {
-          return R.path(["properties", "value"], perustelu);
+          return { value: R.path(["properties", "value"], perustelu) };
         } else if (
           !R.filter(
             R.pathEq(["properties", "metadata", "fieldName"], "Muut syyt"),
             perustelu
           ) // Do not send "Muut syyt" to backend
         )
-          return R.path(["properties", "metadata", "fieldName"], perustelu);
+          return {
+            value: R.path(["properties", "metadata", "fieldName"], perustelu)
+          };
       }, perustelut),
       muutosperustelukoodiarvo: []
     },
@@ -130,14 +132,16 @@ export const getChangesToSave = (
       if (!perustelutForBackend) {
         const perusteluTexts = R.map(perustelu => {
           if (R.path(["properties", "value"], perustelu)) {
-            return R.path(["properties", "value"], perustelu);
+            return { value: R.path(["properties", "value"], perustelu) };
           } else if (
             !R.filter(
               R.pathEq(["properties", "metadata", "fieldName"], "Muut syyt"),
               perustelu
             ) // Do not send "Muut syyt" to backend
           )
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
         }, perustelut);
         backendMuutosWithPerustelut = R.assocPath(
           ["meta", "perusteluteksti"],
@@ -234,9 +238,11 @@ export const getChangesToSave = (
           changeObjects: R.flatten([[changeObj], perustelut]),
           perusteluteksti: R.map(perustelu => {
             if (R.path(["properties", "value"], perustelu)) {
-              return R.path(["properties", "value"], perustelu);
+              return { value: R.path(["properties", "value"], perustelu) };
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
           }, perustelut),
           muutosperustelukoodiarvo: []
         },
@@ -281,9 +287,11 @@ export const getChangesToSave = (
           changeObjects: R.flatten([[changeObj], perustelut]),
           perusteluteksti: R.map(perustelu => {
             if (R.path(["properties", "value"], perustelu)) {
-              return R.path(["properties", "value"], perustelu);
+              return { value: R.path(["properties", "value"], perustelu) };
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
           }, perustelut)
         },
         tila: "LISAYS",
@@ -342,9 +350,11 @@ export const getChangesToSave = (
           changeObjects: R.flatten([[changeObj], perustelut]),
           perusteluteksti: R.map(perustelu => {
             if (R.path(["properties", "value"], perustelu)) {
-              return R.path(["properties", "value"], perustelu);
+              return { value: R.path(["properties", "value"], perustelu) };
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
           }, perustelut)
         },
         tila: tila,
@@ -404,9 +414,14 @@ export const getChangesToSave = (
           meta: {
             perusteluteksti: R.map(perustelu => {
               if (R.path(["properties", "value"], perustelu)) {
-                return R.path(["properties", "value"], perustelu);
+                return { value: R.path(["properties", "value"], perustelu) };
               }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
+              return {
+                value: R.path(
+                  ["properties", "metadata", "fieldName"],
+                  perustelu
+                )
+              };
             }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
@@ -426,9 +441,14 @@ export const getChangesToSave = (
           meta: {
             perusteluteksti: R.map(perustelu => {
               if (R.path(["properties", "value"], perustelu)) {
-                return R.path(["properties", "value"], perustelu);
+                return { value: R.path(["properties", "value"], perustelu) };
               }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
+              return {
+                value: R.path(
+                  ["properties", "metadata", "fieldName"],
+                  perustelu
+                )
+              };
             }, perustelut),
             changeObjects: R.flatten([[changeObj], perustelut])
           },
@@ -478,9 +498,11 @@ export const getChangesToSave = (
           changeObjects: R.flatten([[changeObj], perustelut]),
           perusteluteksti: R.map(perustelu => {
             if (R.path(["properties", "value"], perustelu)) {
-              return R.path(["properties", "value"], perustelu);
+              return { value: R.path(["properties", "value"], perustelu) };
             }
-            return R.path(["properties", "metadata", "fieldName"], perustelu);
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
           }, perustelut)
         },
         tila: "MUUTOS",
