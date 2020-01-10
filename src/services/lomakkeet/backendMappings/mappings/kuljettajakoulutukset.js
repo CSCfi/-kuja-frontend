@@ -227,20 +227,38 @@ export function getMapping(koodiarvo) {
         `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.5-4.5-4.vuodet.C`
       ],
       valueFn: changeObjects => {
+        const firstYear = path(
+          [0, "properties", "metadata", "year"],
+          changeObjects
+        );
+        const secondYear = path(
+          [1, "properties", "metadata", "year"],
+          changeObjects
+        );
+        const thirdYear = path(
+          [2, "properties", "metadata", "year"],
+          changeObjects
+        );
         return [
-          {
-            vuosi: path([0, "properties", "metadata", "year"], changeObjects),
-            arvo: path([0, "properties", "value"], changeObjects)
-          },
-          {
-            vuosi: path([1, "properties", "metadata", "year"], changeObjects),
-            arvo: path([1, "properties", "value"], changeObjects)
-          },
-          {
-            vuosi: path([2, "properties", "metadata", "year"], changeObjects),
-            arvo: path([2, "properties", "value"], changeObjects)
-          }
-        ];
+          firstYear
+            ? {
+                vuosi: firstYear,
+                arvo: path([0, "properties", "value"], changeObjects)
+              }
+            : null,
+          secondYear
+            ? {
+                vuosi: secondYear,
+                arvo: path([1, "properties", "value"], changeObjects)
+              }
+            : null,
+          thirdYear
+            ? {
+                vuosi: thirdYear,
+                arvo: path([2, "properties", "value"], changeObjects)
+              }
+            : null
+        ].filter(Boolean);
       }
     }
     // VALINEET
