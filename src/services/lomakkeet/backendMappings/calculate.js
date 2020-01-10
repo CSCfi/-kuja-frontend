@@ -8,11 +8,9 @@ import { assocPath, find, forEach, isNil, map, propEq } from "ramda";
 export function calculateValues(mapping, changeObjects) {
   let result = {};
   forEach(item => {
-    console.info(item, result, changeObjects);
     const changeObjectsSubGroup = map(anchor => {
       return find(propEq("anchor", anchor), changeObjects);
     }, item.anchors);
-    console.info(changeObjectsSubGroup);
     const value = item.valueFn(changeObjectsSubGroup);
     if (!isNil(value)) {
       result = assocPath(item.path, value, result);
