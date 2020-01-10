@@ -53,6 +53,7 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
           return {
             value: R.path(["properties", "metadata", "fieldName"], perustelu)
           };
+        return null;
       }, perustelut),
       muutosperustelukoodiarvo: []
     },
@@ -142,6 +143,7 @@ export const getChangesToSave = (
             return {
               value: R.path(["properties", "metadata", "fieldName"], perustelu)
             };
+          return null;
         }, perustelut);
         backendMuutosWithPerustelut = R.assocPath(
           ["meta", "perusteluteksti"],
