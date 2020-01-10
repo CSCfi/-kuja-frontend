@@ -10,8 +10,7 @@ const AvoimetAsiat = () => {
   const [muutospyynnotEsittelija, muutospyynnotEsittelijaActions] = useMuutospyynnotEsittelija();
 
   useEffect(() => {
-    let abortController;
-    abortController = muutospyynnotEsittelijaActions.load('avoimet');
+    let abortController = muutospyynnotEsittelijaActions.load('avoimet');
 
     return function cancel() {
       if (abortController) {

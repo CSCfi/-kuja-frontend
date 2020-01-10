@@ -14,7 +14,7 @@ const Store = createStore({
       );
     }
   },
-  name: "Muutospyynnöt"
+  name: "Muutospyynnöt - Esittelijä"
 });
 
 export const useMuutospyynnotEsittelija = createHook(Store);
