@@ -139,7 +139,124 @@ export function getMapping(koodiarvo) {
         `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.johtajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.vahintaan-1-vuoden-kokemus.kuljetusalan-ammattitutkinto.lkm`
       ],
       valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    },
+    // OPETTAJAT
+    // {
+    //   path: ["opettajat", "liikenneopettajalupa"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "voimassa_kuorma_auto"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "voimassa_linja_auto"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "luokka_C"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "luokka_CE"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "luokka_D"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "tutkinto_linja_auto"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "tutkinto_yhdistelma"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "tutkinto_puutavara"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "tutkinto_kuljetuspalvelu"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["opettajat", "tutkinto_kujetusala"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // OPISKELIJAVUODET
+    {
+      path: ["opiskelija_vuodet"],
+      anchors: [
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.5-4.5-4.vuodet.A`,
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.5-4.5-4.vuodet.B`,
+        `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.5-4.5-4.vuodet.C`
+      ],
+      valueFn: changeObjects => {
+        return [
+          {
+            vuosi: path([0, "properties", "metadata", "year"], changeObjects),
+            arvo: path([0, "properties", "value"], changeObjects)
+          },
+          {
+            vuosi: path([1, "properties", "metadata", "year"], changeObjects),
+            arvo: path([1, "properties", "value"], changeObjects)
+          },
+          {
+            vuosi: path([2, "properties", "metadata", "year"], changeObjects),
+            arvo: path([2, "properties", "value"], changeObjects)
+          }
+        ];
+      }
     }
-    // TODO: Write mappings to the rest of the form sections e.g. Opettajien kelpoisuus ja työkokemus
+    // VALINEET
+    // {
+    //   path: ["valineet_asetus"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // },
+    // {
+    //   path: ["valineet_muut"],
+    //   anchors: [
+    //     `perustelut_koulutukset_kuljettajakoulutukset.${koodiarvo}.opettajien-kelpoisuus-ja-tyokokemus.lupien-ja-tutkintojen-maarat.liikenneopettajalupa.lkm`
+    //   ],
+    //   valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+    // }
   ];
 }
