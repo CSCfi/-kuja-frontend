@@ -128,24 +128,30 @@ const Tutkintokielet = React.memo(props => {
 
   useEffect(() => {
     if (props.unselectedAnchors.length && props.changeObjects.tutkintokielet) {
-      const areaCode = R.compose(
-        R.last,
-        R.split("_"),
-        R.head,
-        R.split(".")
-      )(props.unselectedAnchors[0]);
+      let tutkintokielichangesWithoutRemovedOnes = Object.assign(
+        {},
+        props.changeObjects.tutkintokielet
+      );
+      R.forEach(anchor => {
+        const areaCode = R.compose(
+          R.last,
+          R.split("_"),
+          R.head,
+          R.split(".")
+        )(anchor);
 
-      const commonPart = R.compose(
-        R.join("."),
-        R.concat([areaCode])
-      )(R.slice(1, 3, R.split(".", props.unselectedAnchors[0])));
+        const commonPart = R.compose(
+          R.join("."),
+          R.concat([areaCode])
+        )(R.slice(1, 3, R.split(".", anchor)));
 
-      const tutkintokielichangesWithoutRemovedOnes = {
-        ...props.changeObjects.tutkintokielet,
-        [areaCode]: R.filter(changeObj => {
-          return !R.contains(commonPart, changeObj.anchor);
-        }, props.changeObjects.tutkintokielet[areaCode] || [])
-      };
+        tutkintokielichangesWithoutRemovedOnes = {
+          ...tutkintokielichangesWithoutRemovedOnes,
+          [areaCode]: R.filter(changeObj => {
+            return !R.contains(commonPart, changeObj.anchor);
+          }, props.changeObjects.tutkintokielet[areaCode] || [])
+        };
+      }, props.unselectedAnchors);
 
       if (
         !R.equals(
