@@ -240,23 +240,15 @@ export const getChangesToSave = (
             };
           }, perustelut);
 
-      const meta = perustelutForBackend
-        ? Object.assign(
-            {},
-            {
-              changeObjects: R.flatten([[changeObj], perustelut]),
-              muutosperustelukoodiarvo: []
-            },
-            perustelutForBackend
-          )
-        : Object.assign(
-            {},
-            {
-              changeObjects: R.flatten([[changeObj], perustelut]),
-              muutosperustelukoodiarvo: []
-            },
-            { perusteluteksti }
-          );
+      let meta = Object.assign(
+        {},
+        {
+          changeObjects: R.flatten([[changeObj], perustelut]),
+          muutosperustelukoodiarvo: []
+        },
+        perustelutForBackend,
+        perusteluteksti ? { perusteluteksti } : null
+      );
 
       return {
         isInLupa: meta.isInLupa,
@@ -295,6 +287,7 @@ export const getChangesToSave = (
         item && item.categories
           ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
           : {};
+
       return {
         koodiarvo: code,
         koodisto: stateObject.koodistoUri,
