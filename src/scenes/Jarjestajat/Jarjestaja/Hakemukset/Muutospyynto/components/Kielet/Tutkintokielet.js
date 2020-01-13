@@ -149,7 +149,7 @@ const Tutkintokielet = React.memo(props => {
           ...tutkintokielichangesWithoutRemovedOnes,
           [areaCode]: R.filter(changeObj => {
             return !R.contains(commonPart, changeObj.anchor);
-          }, props.changeObjects.tutkintokielet[areaCode] || [])
+          }, tutkintokielichangesWithoutRemovedOnes[areaCode] || [])
         };
       }, props.unselectedAnchors);
 
