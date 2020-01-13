@@ -508,11 +508,14 @@ export const getChangesToSave = (
         ).meta;
         koodisto = meta.koodisto.koodistoUri;
       }
-      const anchorInit = R.compose(
-        R.join("."),
-        R.init,
-        R.split(".")
-      )(changeObj.anchor);
+      // const anchorInit = R.compose(
+      //   R.join("."),
+      //   R.init,
+      //   R.split(".")
+      // )(changeObj.anchor);
+
+      const anchorInit =
+        "perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet";
 
       const perustelut = R.filter(
         R.compose(R.includes(anchorInit), R.prop("anchor")),
