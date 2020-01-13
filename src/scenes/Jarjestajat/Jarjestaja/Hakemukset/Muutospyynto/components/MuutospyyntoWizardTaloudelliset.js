@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const MuutospyyntoWizardTaloudelliset = ({
-  changeObjects,
+  changeObjects = {},
   muutoshakemus,
   onChangesUpdate,
   onStateUpdate,
