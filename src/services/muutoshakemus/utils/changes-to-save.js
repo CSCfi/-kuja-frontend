@@ -508,17 +508,23 @@ export const getChangesToSave = (
         ).meta;
         koodisto = meta.koodisto.koodistoUri;
       }
-      // const anchorInit = R.compose(
-      //   R.join("."),
-      //   R.init,
-      //   R.split(".")
-      // )(changeObj.anchor);
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
 
-      const anchorInit =
-        "perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet";
+      let anchor = "";
+
+      if (anchorInit === "opiskelijavuodet.vahimmaisopiskelijavuodet")
+        anchor = "perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet";
+      else if (anchorInit === "opiskelijavuodet.vaativatuki")
+        anchor = "perustelut_opiskelijavuodet_vaativatuki";
+      else if (anchorInit === "opiskelijavuodet.sisaoppilaitos")
+        anchor = "perustelut_opiskelijavuodet_sisaoppilaitos";
 
       const perustelut = R.filter(
-        R.compose(R.includes(anchorInit), R.prop("anchor")),
+        R.compose(R.includes(anchor), R.prop("anchor")),
         changeObjects.perustelut
       );
 
