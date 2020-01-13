@@ -48,9 +48,8 @@ async function verifyThatElementUnderAnchorIs(
   const selector = `[data-anchor="${anchor}"] [type="${type}"]${statusSelector}`;
   try {
     const element = await $(selector);
-    assert.ok(await element.exists());
+    assert.ok(await element.exists(), `Element ${selector} does not exist`);
   } catch (e) {
-    console.error(`Element ${selector} does not exist`);
     console.error(e);
   }
 }

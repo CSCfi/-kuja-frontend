@@ -12,7 +12,7 @@
 * Avaa ExpandableRow "koulutukset_kuljettajakoulutukset"
 * Assert if "radio" "koulutukset_kuljettajakoulutukset.1" is checked
 * Assert if "radio" "koulutukset_kuljettajakoulutukset.2" is not checked
-* Assert if "radio" "koulutukset_kuljettajakoulutukset.3" is not checked
+* Assert if "radio" "koulutukset_kuljettajakoulutukset.7" is not checked
 * Select radio "koulutukset_kuljettajakoulutukset.2"
 
 * Avaa ExpandableRow "koulutukset_tyovoimakoulutukset"
