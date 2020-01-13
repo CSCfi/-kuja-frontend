@@ -220,34 +220,54 @@ export const getChangesToSave = (
         R.split(".")
       )(changeObj.anchor);
       const code = getAnchorPart(changeObj.anchor, 1);
-      const meta = getMetadata([code], stateData.categories);
-      const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
+      const metadata = getMetadata([code], stateData.categories);
+      const finnishInfo = R.find(R.propEq("kieli", "FI"), metadata.metadata);
       const perustelut = R.filter(
         R.compose(R.contains(anchorInit), R.prop("anchor")),
         changeObjects.perustelut
       );
 
-      return {
-        isInLupa: meta.isInLupa,
-        liitteet: R.map(file => {
-          return R.dissoc("tiedosto", file);
-        }, findObjectWithKey(changeObjects, "attachments")),
-        kohde: meta.kohde,
-        koodiarvo: code,
-        koodisto: meta.koodisto.koodistoUri,
-        maaraystyyppi: meta.maaraystyyppi,
-        meta: {
-          changeObjects: R.flatten([[changeObj], perustelut]),
-          perusteluteksti: R.map(perustelu => {
+      const perustelutForBackend = fillForBackend(perustelut);
+
+      const perusteluteksti = perustelutForBackend
+        ? null
+        : R.map(perustelu => {
             if (R.path(["properties", "value"], perustelu)) {
               return { value: R.path(["properties", "value"], perustelu) };
             }
             return {
               value: R.path(["properties", "metadata", "fieldName"], perustelu)
             };
-          }, perustelut),
-          muutosperustelukoodiarvo: []
-        },
+          }, perustelut);
+
+      const meta = perustelutForBackend
+        ? Object.assign(
+            {},
+            {
+              changeObjects: R.flatten([[changeObj], perustelut]),
+              muutosperustelukoodiarvo: []
+            },
+            perustelutForBackend
+          )
+        : Object.assign(
+            {},
+            {
+              changeObjects: R.flatten([[changeObj], perustelut]),
+              muutosperustelukoodiarvo: []
+            },
+            { perusteluteksti }
+          );
+
+      return {
+        isInLupa: meta.isInLupa,
+        liitteet: R.map(file => {
+          return R.dissoc("tiedosto", file);
+        }, findObjectWithKey(changeObjects, "attachments")),
+        kohde: metadata.kohde,
+        koodiarvo: code,
+        koodisto: metadata.koodisto.koodistoUri,
+        maaraystyyppi: metadata.maaraystyyppi,
+        meta,
         nimi: finnishInfo.nimi,
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
         type: changeObj.properties.isChecked ? "addition" : "removal"
@@ -275,7 +295,6 @@ export const getChangesToSave = (
         item && item.categories
           ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
           : {};
-
       return {
         koodiarvo: code,
         koodisto: stateObject.koodistoUri,
