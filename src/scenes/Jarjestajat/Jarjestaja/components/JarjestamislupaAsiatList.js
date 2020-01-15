@@ -149,7 +149,7 @@ const JarjestamislupaAsiatList = ({
                 { text: intl.formatMessage(common.change) },
                 { text: tilaText },
                 { text: "" },
-                { text: row.paatetty }
+                { text: row.tila === "LUONNOS" ? "" : row.paatetty }
               ]
             );
             if (
