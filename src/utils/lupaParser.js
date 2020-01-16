@@ -96,14 +96,14 @@ const parseSectionData = (
           if (aliMaaraykset) {
             tutkinto.rajoitteet = [];
             _.forEach(aliMaaraykset, alimaarays => {
-              const { koodi, kohde, maaraystyyppi, koodisto } = alimaarays;
+              const { koodi, kohde, koodisto } = alimaarays;
               const { koodiArvo, metadata } = koodi;
               const nimi = parseLocalizedField(metadata);
               tutkinto.rajoitteet.push({
                 koodi: koodiArvo,
                 nimi,
                 maaraysId: uuid,
-                maaraystyyppi,
+                maaraystyyppi: 2,
                 kohde,
                 koodisto: koodisto
               });
@@ -165,12 +165,14 @@ const parseSectionData = (
         case KOODISTOT.KULJETTAJAKOULUTUS: {
           const { koodiarvo, koodisto, kohde, maaraystyyppi } = maarays;
 
-          const kuljettajaSelite = parseLocalizedField(
-            maarays.koodi.metadata,
-            "FI",
-            "kuvaus",
-            "kieli"
-          );
+          const kuljettajaSelite = maarays.koodi
+            ? parseLocalizedField(
+                maarays.koodi.metadata,
+                "FI",
+                "kuvaus",
+                "kieli"
+              )
+            : "";
 
           muutMaaraykset.push({
             selite: kuljettajaSelite,

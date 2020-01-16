@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Redirect } from "react-router-dom";
-import { BackendContext } from "../../context/backendContext";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { ROLE_ESITTELIJA } from "modules/constants";
 import commonMessages from "../../i18n/definitions/common";
+import { useOrganisation } from "../../stores/organisation";
+import { useUser } from "../../stores/user";
 import * as R from "ramda";
 
 const Successful = styled.div`
@@ -13,21 +14,18 @@ const Successful = styled.div`
   max-width: 1200px;
 `;
 
-const CasAuthenticated = props => {
-  const { state } = useContext(BackendContext);
-  const {
-    intl: { formatMessage }
-  } = props;
+const CasAuthenticated = () => {
+  const intl = useIntl();
 
-  let ytunnus = undefined;
-  if (state.organisaatio) {
-    ytunnus = R.path(["organisaatio", "raw", "ytunnus"], state);
-  }
+  const [user] = useUser();
+  const [organisation] = useOrganisation();
 
-  if (state.hasErrored) {
-    return <p>{formatMessage(commonMessages.loginError)}</p>;
-  } else if (state.kayttaja && state.kayttaja.raw.roles.length > 1) {
-    const role = R.path(["kayttaja", "raw", "roles", 1], state);
+  const ytunnus = R.path(["data", "ytunnus"], organisation);
+
+  if (user.hasErrored) {
+    return <p>{intl.formatMessage(commonMessages.loginError)}</p>;
+  } else if (user.fetchedAt && ytunnus) {
+    const role = user.data.roles[1];
     // TODO: Different roles routing here when applicable
     switch (role) {
       case ROLE_ESITTELIJA: {
@@ -49,7 +47,7 @@ const CasAuthenticated = props => {
   return (
     <Successful>
       <h2>
-        {formatMessage(commonMessages.welcome)}
+        {intl.formatMessage(commonMessages.welcome)}
         {", "}
         {sessionStorage.getItem("username")}
       </h2>
@@ -57,4 +55,4 @@ const CasAuthenticated = props => {
   );
 };
 
-export default injectIntl(CasAuthenticated);
+export default CasAuthenticated;

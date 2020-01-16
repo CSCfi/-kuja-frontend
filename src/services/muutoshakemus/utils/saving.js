@@ -3,7 +3,6 @@ import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
 import { combineArrays } from "../../../utils/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
-// import { findObjectWithKey } from "../../../utils/common";
 
 export function createObjectToSave(
   lupa,
@@ -63,6 +62,14 @@ export function createObjectToSave(
     return R.dissoc("tiedosto", attachment);
   }, allAttachmentsRaw);
 
+  const getValueByPathAndAnchor = (anchor, path, changeObjects) => {
+    return R.path(
+      ["properties", "value"],
+      R.find(R.propEq("anchor", anchor), R.path(path, changeObjects) || []) ||
+        {}
+    );
+  };
+
   return {
     diaarinumero: lupa.diaarinumero,
     jarjestajaOid: lupa.jarjestajaOid,
@@ -75,8 +82,12 @@ export function createObjectToSave(
     tila: "LUONNOS",
     paivittaja: "string",
     paivityspvm: null,
-    voimassaalkupvm: lupa.alkupvm,
-    voimassaloppupvm: "2019-12-31", // TODO: find the correct value somehow,
+    voimassaalkupvm: getValueByPathAndAnchor(
+      "yhteenveto_yleisettiedot.muutoksien-voimaantulo.ajankohta",
+      ["yhteenveto", "yleisettiedot"],
+      changeObjects
+    ),
+    voimassaloppupvm: null, // TODO: find the correct value somehow,
     liitteet: allAttachments,
     meta: {
       tutkinnotjakoulutuksetLiitteet: {
@@ -85,14 +96,108 @@ export function createObjectToSave(
         ]).filter(Boolean)
       },
       taloudelliset: {
+        edellytykset: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.edellytykset-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        vaikutukset: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.Vaikutukset-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        sopeuttaminen: getValueByPathAndAnchor(
+          "taloudelliset_yleisettiedot.sopeuttaminen-tekstikentta.A",
+          ["taloudelliset", "yleisettiedot"],
+          changeObjects
+        ),
+        investoinnit: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.investoinnit-tekstikentta.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        kustannukset: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.kustannukset-Input.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        rahoitus: getValueByPathAndAnchor(
+          "taloudelliset_investoinnit.rahoitus-tekstikentta.A",
+          ["taloudelliset", "investoinnit"],
+          changeObjects
+        ),
+        omavaraisuusaste: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.omavaraisuusaste",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        maksuvalmius: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.maksuvalmius",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        velkaantuneisuus: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.velkaantuneisuus",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        kannattavuus: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.kannattavuus",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
+        jaama: getValueByPathAndAnchor(
+          "taloudelliset_tilinpaatostiedot.tilinpaatostiedot.jaama",
+          ["taloudelliset", "tilinpaatostiedot"],
+          changeObjects
+        ),
         changeObjects: R.flatten([
+          R.path(["taloudelliset", "yleisettiedot"], changeObjects),
           R.path(["taloudelliset", "investoinnit"], changeObjects),
           R.path(["taloudelliset", "tilinpaatostiedot"], changeObjects),
-          R.path(["taloudelliset", "yleisettiedot"], changeObjects),
           R.path(["taloudelliset", "liitteet"], changeObjects)
         ]).filter(Boolean)
       },
       yhteenveto: {
+        yhteyshenkilo: {
+          nimi: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.yhteyshenkilo.nimi",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          ),
+          nimike: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.yhteyshenkilo.nimike",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          ),
+          puhelin: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.yhteyshenkilo.puhelinnumero",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          ),
+          email: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.yhteyshenkilo.sahkoposti",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          )
+        },
+        saate: getValueByPathAndAnchor(
+          "yhteenveto_yleisettiedot.saate.tekstikentta",
+          ["yhteenveto", "yleisettiedot"],
+          changeObjects
+        ),
+        allekirjoittaja: {
+          nimi: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.hyvaksyja.nimi",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          ),
+          nimike: getValueByPathAndAnchor(
+            "yhteenveto_yleisettiedot.hyvaksyja.nimike",
+            ["yhteenveto", "yleisettiedot"],
+            changeObjects
+          )
+        },
         changeObjects: R.flatten([
           R.path(["yhteenveto", "yleisettiedot"], changeObjects),
           R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects)
@@ -175,28 +280,26 @@ export function createObjectToSave(
         R.path(["toimintaalue"], muutoshakemus),
         {
           muutokset: R.path(["toimintaalue"], changeObjects) || [],
-          perustelut: R.flatten([
-            R.map(changeObj => {
-              return {
-                ...changeObj,
-                anchor: R.replace(/_additions/, "", changeObj.anchor),
-                properties: {
-                  ...changeObj.properties,
-                  meta: { type: "addition" }
-                }
-              };
-            }, R.path(["perustelut", "toimintaalue", "additions"], changeObjects) || []),
-            R.map(changeObj => {
-              return {
-                ...changeObj,
-                anchor: R.replace(/_removals/, "", changeObj.anchor),
-                properties: {
-                  ...changeObj.properties,
-                  meta: { type: "removal" }
-                }
-              };
-            }, R.path(["perustelut", "toimintaalue", "removals"], changeObjects) || [])
-          ])
+          perustelut: (() => {
+            // There is only one field for reasoning and it must be used as a source
+            // for the actual change objects.
+            const sourceObject = (R.path(
+              ["perustelut", "toimintaalue"],
+              changeObjects
+            ) || [])[0];
+            /**
+             * Next step is to go through all the Toiminta-alue related "change objects" of the first
+             * page of the wizard and generate change objects based on them.
+             */
+            return !!sourceObject
+              ? R.map(changeObject => {
+                  return {
+                    anchor: `perustelut_${changeObject.anchor}`,
+                    properties: sourceObject.properties
+                  };
+                }, R.path(["toimintaalue"], changeObjects) || [])
+              : [];
+          })()
         },
         R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(
           backendMuutokset

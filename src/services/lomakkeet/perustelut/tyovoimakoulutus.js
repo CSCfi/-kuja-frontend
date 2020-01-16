@@ -167,9 +167,9 @@ export default function getTyovoimakoulutuslomake(
   action,
   data,
   isReadOnly,
-  locale
+  locale,
+  prefix
 ) {
-  console.info(action, data, isReadOnly, locale);
   switch (action) {
     case "addition":
       return getAdditionForm(
@@ -179,7 +179,7 @@ export default function getTyovoimakoulutuslomake(
         R.toUpper(locale)
       );
     case "removal":
-      return getDefaultRemovalForm();
+      return getDefaultRemovalForm(prefix);
     default:
       return [];
   }

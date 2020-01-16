@@ -5,7 +5,6 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { COLORS } from "./modules/styles";
 import AppWrapper from "./AppWrapper";
 import { AppProvider } from "./context/appContext";
-import { BackendProvider } from "./context/backendContext";
 // import * as serviceWorker from "./registerServiceWorker";
 
 import "./css/tailwind.css";
@@ -34,11 +33,9 @@ const theme = createMuiTheme({
 render(
   <ThroughProvider>
     <MuiThemeProvider theme={theme}>
-      <BackendProvider>
-        <AppProvider>
-          <AppWrapper />
-        </AppProvider>
-      </BackendProvider>
+      <AppProvider>
+        <AppWrapper />
+      </AppProvider>
     </MuiThemeProvider>
   </ThroughProvider>,
   document.getElementById("root")

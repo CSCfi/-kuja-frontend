@@ -28,3 +28,5 @@ src/css/tailwind.css
 # src/**/*.module.css
 
 docs
+
+src/css/tailwind.src.module.css
