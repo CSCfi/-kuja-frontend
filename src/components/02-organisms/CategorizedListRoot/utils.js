@@ -20,6 +20,52 @@ export const getChangesByLevel = (level, changes) => {
   });
 };
 
+/**
+ * Function returns an array of path parts. User can access the
+ * related component on the given form e.g. using Ramda's
+ * (ramdajs.com) path related functions.
+ * @param {*} anchorArr - Splitted anchor.
+ * @param {*} lomake - A categories structure.
+ * @param {*} anchorPartIndex - Initial value 0. Used for recursion.
+ * @param {*} _path - Return value. Initial value is "".
+ */
+export function getPathByAnchor(
+  anchorArr = [],
+  lomake,
+  anchorPartIndex = 0,
+  _path = []
+) {
+  const anchorPart = anchorArr[anchorPartIndex];
+  const convertedAnchorPart = isNaN(anchorPart)
+    ? anchorPart
+    : parseInt(anchorPart, 10);
+  let pathPart = [];
+  if (anchorPartIndex === 0) {
+    pathPart = [R.findIndex(R.propEq("anchor", convertedAnchorPart), lomake)];
+  } else if (anchorPartIndex + 1 < anchorArr.length) {
+    const updatedPath = R.append("categories", _path);
+    const lomakePart = R.path(updatedPath, lomake);
+    pathPart = [
+      "categories",
+      R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
+    ];
+  } else {
+    const updatedPath = R.append("components", _path);
+    const lomakePart = R.path(updatedPath, lomake);
+    pathPart = [
+      "components",
+      R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
+    ];
+  }
+
+  _path = R.concat(_path, pathPart);
+
+  if (anchorArr[anchorPartIndex + 1]) {
+    return getPathByAnchor(anchorArr, lomake, anchorPartIndex + 1, _path);
+  }
+  return _path;
+}
+
 export const findCategoryAnchor = (
   category,
   anchor,

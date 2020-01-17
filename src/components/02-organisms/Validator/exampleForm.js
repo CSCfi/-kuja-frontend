@@ -27,7 +27,7 @@ export const lomake = [
                 anchor: "A",
                 name: "TextBox",
                 properties: {
-                  isReadOnly: true,
+                  isReadOnly: false,
                   title:
                     "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
                 }
@@ -42,6 +42,15 @@ export const lomake = [
         title:
           "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?",
         styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+        components: [
+          {
+            anchor: "title",
+            name: "StatusTextRow",
+            properties: {
+              title: ""
+            }
+          }
+        ],
         categories: [
           {
             anchor: "voimassaolo-field-no",

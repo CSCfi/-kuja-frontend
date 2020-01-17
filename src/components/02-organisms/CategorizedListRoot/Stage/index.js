@@ -1,10 +1,23 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { handleNodeMain, getReducedStructure, getTargetNode } from "../utils";
-import * as R from "ramda";
 import PropTypes from "prop-types";
+import * as R from "ramda";
+
+function markRequiredFields(lomake, changeObjects, rules = []) {
+  let modifiedLomake;
+  R.forEach(rule => {
+    const isFulfilled = rule.isFulfilled(lomake, changeObjects);
+    modifiedLomake = rule.markRequiredFields(isFulfilled, lomake);
+    const isValid = rule.isValid(isFulfilled, lomake, changeObjects)();
+    modifiedLomake = rule.showErrors(isValid, modifiedLomake);
+    console.info("Is valid: ", isValid);
+  }, rules);
+  return modifiedLomake;
+}
 
 const Stage = props => {
   const [changes, setChanges] = useState(props.changes);
+  const [lomake, setLomake] = useState(props.categories);
   const [nodeIndex, setNodeIndex] = useState(0);
   const [interval, setInterval] = useState();
 
@@ -28,7 +41,7 @@ const Stage = props => {
         }
       }
     },
-    [interval, props.loopChanges]
+    [interval, props.isLoopEnabled, props.loopChanges]
   );
 
   const targetNode = useMemo(() => {
@@ -45,6 +58,15 @@ const Stage = props => {
   }, [nodeIndex, interval, props.loopChanges, reducedStructure]);
 
   useEffect(() => {
+    if (props.rules.length) {
+      const updatedLomake = markRequiredFields(lomake, changes, props.rules);
+      if (!R.equals(updatedLomake, lomake)) {
+        setLomake(updatedLomake);
+      }
+    }
+  }, [changes, lomake, props.rules]);
+
+  useEffect(() => {
     if (reducedStructure && targetNode) {
       const nextChanges = handleNodeMain(
         targetNode,
@@ -53,6 +75,7 @@ const Stage = props => {
         changes
       );
       if (!R.equals(changes, nextChanges)) {
+        console.info("setting changes...");
         setChanges(nextChanges);
       }
     }
@@ -67,7 +90,7 @@ const Stage = props => {
       {!!props.render
         ? props.render({
             anchor: props.anchor,
-            categories: props.categories,
+            categories: lomake,
             changes,
             interval: R.isNil(interval) ? 2000 : interval,
             onUpdate: handleUpdate,
@@ -102,12 +125,14 @@ const Stage = props => {
 
 Stage.defaultProps = {
   isLoopEnabled: true,
-  loopChanges: []
+  loopChanges: [],
+  rules: []
 };
 
 Stage.propTypes = {
   isLoopEnabled: PropTypes.bool,
-  loopChanges: PropTypes.array
+  loopChanges: PropTypes.array,
+  rules: PropTypes.array
 };
 
 export default Stage;

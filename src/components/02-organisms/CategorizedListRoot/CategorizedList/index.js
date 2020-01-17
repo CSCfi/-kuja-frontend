@@ -406,7 +406,8 @@ const CategorizedList = React.memo(
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
-                          title={propsObj.title}></CategorizedListTextBox>
+                          title={propsObj.title}
+                        />
                       )}
                       {component.name === "Input"
                         ? (category => {
