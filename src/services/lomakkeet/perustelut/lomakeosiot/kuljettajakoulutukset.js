@@ -363,7 +363,8 @@ export function tehtavanTarpeellisuus(orderCode, isReadOnly) {
             properties: {
               isReadOnly,
               title:
-                "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+              value: ""
             }
           }
         ]
