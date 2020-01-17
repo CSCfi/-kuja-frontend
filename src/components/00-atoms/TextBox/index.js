@@ -37,6 +37,14 @@ const TextBox = props => {
         <React.Fragment>
           {props.title && (
             <label className="text-bold text-base block my-2">
+              {props.isRequired && (
+                <span
+                  className={`text-${
+                    props.isValid ? "green" : "red"
+                  }-500 text-2xl pr-4`}>
+                  *
+                </span>
+              )}
               {props.title}
             </label>
           )}
@@ -89,6 +97,8 @@ TextBox.defaultProps = {
   payload: {},
   placeholder: "",
   isReadOnly: false,
+  isRequired: false,
+  isValid: true,
   rows: 2,
   rowsMax: 100,
   title: "",
@@ -106,7 +116,10 @@ TextBox.propTypes = {
   /** Custom object defined by user. */
   payload: PropTypes.object,
   placeholder: PropTypes.string,
+  isErroneous: PropTypes.bool,
   isReadOnly: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  isValid: PropTypes.bool,
   rows: PropTypes.number,
   rowsMax: PropTypes.number,
   title: PropTypes.string,
