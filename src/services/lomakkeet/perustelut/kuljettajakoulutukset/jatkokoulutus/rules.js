@@ -36,7 +36,7 @@ export const rules = [
               [
                 {
                   anchor: "2.tehtavan-tarpeellisuus.textbox.A",
-                  properties: { value: "testi" }
+                  properties: { value: R.compose(R.not, R.isEmpty) }
                 }
               ],
               lomake,

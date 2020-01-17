@@ -86,9 +86,12 @@ const checkTerms = (terms, lomake, changeObjects) => {
        * Let's loop through the properties of the component.
        **/
       R.mapObjIndexed((value, key) => {
+        const source = changeObject || component;
         if (
-          !R.equals(value, component.properties[key]) &&
-          (!changeObject || !R.equals(changeObject.properties[key], value))
+          (value instanceof Function && !value(source.properties[key])) ||
+          (!(value instanceof Function) &&
+            !R.equals(value, component.properties[key]) &&
+            (!changeObject || !R.equals(changeObject.properties[key], value)))
         ) {
           isValid = false;
         }
