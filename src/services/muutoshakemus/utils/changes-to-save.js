@@ -4,7 +4,7 @@ import * as R from "ramda";
 import { fillForBackend } from "../../lomakkeet/backendMappings";
 
 // Return changes of Tutkinnot
-const getMuutos = (stateItem, changeObj, perustelut) => {
+const getMuutos = (stateItem, changeObj, perustelut, anchor) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
   const koulutusCode = R.nth(2, anchorParts);
@@ -28,20 +28,25 @@ const getMuutos = (stateItem, changeObj, perustelut) => {
   }
 
   const maaraysUuid = R.prop("maaraysId", koulutus);
-  const perusteluteksti = R.reject(R.equals(null))(
-    R.map(perustelu => {
-      if (R.path(["properties", "value"], perustelu)) {
-        return { value: R.path(["properties", "value"], perustelu) };
-      }
-      const value = R.path(["properties", "metadata", "fieldName"], perustelu);
-      if (value !== "Muut syyt")
-        // Do not send "Muut syyt" to backend
-        return {
-          value: R.path(["properties", "metadata", "fieldName"], perustelu)
-        };
-      return null;
-    }, perustelut)
-  );
+  const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
+  const perusteluteksti = perustelutForBackend
+    ? perustelutForBackend.perusteluteksti
+    : // R.map(perustelu => {
+      //     if (R.path(["properties", "value"], perustelu)) {
+      //       return { value: R.path(["properties", "value"], perustelu) };
+      //     }
+      //     const value = R.path(
+      //       ["properties", "metadata", "fieldName"],
+      //       perustelu
+      //     );
+      //     if (value !== "Muut syyt")
+      //       // Do not send "Muut syyt" to backend
+      //       return {
+      //         value: R.path(["properties", "metadata", "fieldName"], perustelu)
+      //       };
+      //     return null;
+      //   }, perustelutForBackend.perusteluteksti)
+      null;
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
     isInLupa: meta.isInLupa,
@@ -211,12 +216,8 @@ export const getChangesToSave = (
             R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
-          const perustelutForBackend = fillForBackend(
-            perustelut,
-            changeObj.anchor
-          );
 
-          return getMuutos(stateItem, changeObj, perustelut);
+          return getMuutos(stateItem, changeObj, perustelut, changeObj.anchor);
         }, unhandledChangeObjects).filter(Boolean)
       : [];
   } else if (key === "koulutukset") {

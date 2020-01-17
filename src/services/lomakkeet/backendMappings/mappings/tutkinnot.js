@@ -17,17 +17,20 @@ export function getMapping(anchor) {
     {
       path: ["value"],
       anchors: [`perustelut_${anchor}.perustelut.1.A`],
-      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+      valueFn: changeObjects =>
+        path([0, "properties", "metadata", "fieldName"], changeObjects)
     },
     {
       path: ["value"],
       anchors: [`perustelut_${anchor}.perustelut.2.A`],
-      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+      valueFn: changeObjects =>
+        path([0, "properties", "metadata", "fieldName"], changeObjects)
     },
     {
       path: ["value"],
       anchors: [`perustelut_${anchor}.perustelut.2.A`],
-      valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
+      valueFn: changeObjects =>
+        path([0, "properties", "metadata", "fieldName"], changeObjects)
     },
     {
       path: ["value"],
