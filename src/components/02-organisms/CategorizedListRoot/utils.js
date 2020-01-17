@@ -52,10 +52,16 @@ export function getPathByAnchor(
   } else {
     const updatedPath = R.append("components", _path);
     const lomakePart = R.path(updatedPath, lomake);
-    pathPart = [
-      "components",
-      R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
-    ];
+    if (lomakePart) {
+      pathPart = [
+        "components",
+        R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
+      ];
+    } else {
+      console.error(
+        `Can't find anchor ${convertedAnchorPart} of ${lomakePart}.`
+      );
+    }
   }
 
   _path = R.concat(_path, pathPart);
@@ -65,6 +71,39 @@ export function getPathByAnchor(
   }
   return _path;
 }
+
+const checkTerms = (terms, lomake, changeObjects) => {
+  return R.map(term => {
+    const _path = getPathByAnchor(R.split(".", term.anchor), lomake);
+    const component = R.path(_path, lomake);
+    let isValid = true;
+    if (component) {
+      const changeObject = R.find(changeObj => {
+        const anchor = removeAnchorPart(changeObj.anchor, 0);
+        return R.equals(anchor, term.anchor);
+      }, changeObjects);
+      /**
+       * Let's loop through the properties of the component.
+       **/
+      R.mapObjIndexed((value, key) => {
+        if (
+          !R.equals(value, component.properties[key]) &&
+          (!changeObject || !R.equals(changeObject.properties[key], value))
+        ) {
+          isValid = false;
+        }
+      }, term.properties);
+    } else {
+      isValid = false;
+    }
+
+    return isValid;
+  }, terms);
+};
+
+export const ifAll = R.all(R.equals(true));
+export const ifAllTerms = R.compose(ifAll, checkTerms);
+export const ifOneTerm = R.compose(R.includes(true), checkTerms);
 
 export const findCategoryAnchor = (
   category,

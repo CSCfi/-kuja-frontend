@@ -534,7 +534,9 @@ const CategorizedList = React.memo(
                                   statusTextStyleClasses={
                                     propsObj.statusTextStyleClasses
                                   }
-                                  isHidden={propsObj.isHidden}>
+                                  isHidden={propsObj.isHidden}
+                                  isRequired={propsObj.isRequired}
+                                  isValid={propsObj.isValid}>
                                   <div className="flex">
                                     <div className="flex-1">
                                       {codeMarkup}

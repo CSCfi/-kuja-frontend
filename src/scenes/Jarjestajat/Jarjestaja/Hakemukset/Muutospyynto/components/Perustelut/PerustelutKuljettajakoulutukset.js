@@ -6,6 +6,7 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
+import { rules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
 
 const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
@@ -41,6 +42,7 @@ const PerustelutKuljettajakoulutukset = props => {
                   key={code}
                   onChangesUpdate={onChangesUpdate}
                   path={["koulutukset", "kuljettajakoulutukset", mapping[code]]}
+                  rules={rules}
                   showCategoryTitles={true}></Lomake>
               );
             } else {

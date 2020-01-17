@@ -1,4 +1,5 @@
 import { HAKEMUS_OTSIKOT } from "../../../../locales/uusiHakemusFormConstants";
+import { getLomake } from "../..";
 
 function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
   return [
@@ -375,9 +376,18 @@ export function voimassaOlo(orderCode, isReadOnly) {
   return {
     anchor: "voimassaolo",
     code: orderCode,
-    title:
-      "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?",
+    title: "Lupa",
     styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
+    components: [
+      {
+        anchor: "title",
+        name: "StatusTextRow",
+        properties: {
+          title:
+            "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?"
+        }
+      }
+    ],
     categories: [
       {
         anchor: "voimassaolo-field-no",

@@ -1,5 +1,5 @@
 import getDefaultRemovalForm from "./lomakeosiot/poistolomake";
-import { getAdditionForm as getAdditionFormJatkokoulutus } from "./kuljettajakoulutukset/jatkokoulutus";
+import { getAdditionForm as getAdditionFormJatkokoulutus } from "./kuljettajakoulutukset/jatkokoulutus/";
 import { getAdditionForm as getAdditionFormPeruskoulutus } from "./kuljettajakoulutukset/peruskoulutus/";
 
 export function getKuljettajienJatkokoulutuslomake(

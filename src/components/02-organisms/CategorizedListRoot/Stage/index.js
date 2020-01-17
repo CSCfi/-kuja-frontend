@@ -2,14 +2,15 @@ import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { handleNodeMain, getReducedStructure, getTargetNode } from "../utils";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import { cloneDeep } from "lodash";
 
-function markRequiredFields(lomake, changeObjects, rules = []) {
-  let modifiedLomake;
+function markRequiredFields(lomake, changeObjects = [], rules = []) {
+  let modifiedLomake = cloneDeep(lomake);
   R.forEach(rule => {
-    const isFulfilled = rule.isFulfilled(lomake, changeObjects);
-    modifiedLomake = rule.markRequiredFields(isFulfilled, lomake);
-    const isValid = rule.isValid(isFulfilled, lomake, changeObjects)();
-    modifiedLomake = rule.showErrors(isValid, modifiedLomake);
+    const isRequired = rule.isRequired(modifiedLomake, changeObjects);
+    modifiedLomake = rule.markRequiredFields(isRequired, modifiedLomake);
+    const isValid = rule.isValid(isRequired, modifiedLomake, changeObjects)();
+    modifiedLomake = rule.showErrors(modifiedLomake, isValid);
     console.info("Is valid: ", isValid);
   }, rules);
   return modifiedLomake;
