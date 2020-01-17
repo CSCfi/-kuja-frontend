@@ -20,6 +20,7 @@ import { getMapping as getMappingForTyovoimakoulutus } from "./mappings/tyovoima
 import { getMapping as getMappingForVaativaerityinentuki } from "./mappings/vaativaerityinentuki";
 import { getMapping as getMappingForOppisopimuskoulutus } from "./mappings/oppisopimuskoulutus";
 import { getMapping as getMappingForVankilakoulutus } from "./mappings/vankilakoulutus";
+import { getMapping as getMappingForTutkinnot } from "./mappings/tutkinnot";
 
 export const perustelut = {
   /**
@@ -64,6 +65,14 @@ export const perustelut = {
     return {
       perusteluteksti_vankila: calculateValues(
         getMappingForVankilakoulutus(),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_02: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValues(
+        getMappingForTutkinnot(anchor),
         changeObjects
       )
     };

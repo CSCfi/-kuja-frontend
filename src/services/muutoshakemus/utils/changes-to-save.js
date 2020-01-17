@@ -211,6 +211,10 @@ export const getChangesToSave = (
             R.compose(R.contains(anchorInit), R.prop("anchor")),
             changeObjects.perustelut
           );
+          const perustelutForBackend = fillForBackend(
+            perustelut,
+            changeObj.anchor
+          );
 
           return getMuutos(stateItem, changeObj, perustelut);
         }, unhandledChangeObjects).filter(Boolean)
