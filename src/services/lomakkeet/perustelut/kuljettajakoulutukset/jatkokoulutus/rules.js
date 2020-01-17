@@ -4,6 +4,14 @@ import {
 } from "../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
 
+// const rules = [
+//   {
+//     anchor: "2.tehtavan-tarpeellisuus.textbox.A",
+//     isRequired: true,
+//     isValid: { value: R.compose(R.not, R.isEmpty) }
+//   }
+// ];
+
 export const rules = [
   {
     /**
@@ -19,14 +27,11 @@ export const rules = [
     markRequiredFields: (isRequired, lomake) => {
       const anchor = "2.tehtavan-tarpeellisuus.textbox.A";
       const _path = getPathByAnchor(R.split(".", anchor), lomake);
-      if (isRequired) {
-        return R.assocPath(
-          R.concat(_path, ["properties", "isRequired"]),
-          true,
-          lomake
-        );
-      }
-      return R.assocPath(R.concat(_path, ["properties", "title"]), "", lomake);
+      return R.assocPath(
+        R.concat(_path, ["properties", "isRequired"]),
+        isRequired,
+        lomake
+      );
     },
     // Here we can set fields as mandatory
     isValid: (isRequired, lomake, changeObjects) => {
