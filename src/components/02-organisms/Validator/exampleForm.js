@@ -29,7 +29,8 @@ export const lomake = [
                 properties: {
                   isReadOnly: false,
                   title:
-                    "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                    "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+                  value: ""
                 }
               }
             ]
@@ -39,15 +40,15 @@ export const lomake = [
       {
         anchor: "voimassaolo",
         code: 2,
-        title:
-          "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?",
+        title: "Lupa",
         styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
         components: [
           {
             anchor: "title",
             name: "StatusTextRow",
             properties: {
-              title: ""
+              title:
+                "Onko hakijalla voimassa olevaa Liikenne- ja turvallisuusviraston (Trafi) myöntämää lupaa järjestää ammattipätevyyskoulutusta?"
             }
           }
         ],
@@ -109,7 +110,7 @@ export const lomake = [
                   isReadOnly: false,
                   title:
                     "Esittäkää toimintamalli ammattipätevyyskoulutuksen tiloista ja toteutuksesta",
-                  value: "Testi"
+                  value: ""
                 }
               }
             ]
@@ -132,7 +133,8 @@ export const lomake = [
                 properties: {
                   isReadOnly: false,
                   title:
-                    "Selvitys henkilöstön osaamisesta koulutusohjelman järjestämiseksi"
+                    "Selvitys henkilöstön osaamisesta koulutusohjelman järjestämiseksi",
+                  value: ""
                 }
               }
             ]
@@ -148,16 +150,16 @@ export const lomake = [
         categories: [
           {
             anchor: "johtaja-info",
-            code: "!",
-            title:
-              "Valtioneuvoston asetuksen 434/2018 10 §:ssä on säädetty opettajien ja opetuksesta vastaavan johtajan pätevyydestä.",
             components: [
               {
                 anchor: "A",
                 name: "TextBox",
                 properties: {
                   isReadOnly: false,
-                  placeholder: "Sana on vapaa..."
+                  placeholder: "Sana on vapaa...",
+                  title:
+                    "! Valtioneuvoston asetuksen 434/2018 10 §:ssä on säädetty opettajien ja opetuksesta vastaavan johtajan pätevyydestä.",
+                  value: ""
                 }
               }
             ]
@@ -246,7 +248,8 @@ export const lomake = [
                       fullWidth: true,
                       isReadOnly: false,
                       placeholder: "Lukumäärä",
-                      type: "number"
+                      type: "number",
+                      value: ""
                     }
                   }
                 ]
@@ -271,7 +274,8 @@ export const lomake = [
                       fullWidth: true,
                       isReadOnly: false,
                       placeholder: "Lukumäärä",
-                      type: "number"
+                      type: "number",
+                      value: ""
                     }
                   }
                 ]
@@ -296,13 +300,14 @@ export const lomake = [
                       fullWidth: true,
                       isReadOnly: false,
                       placeholder: "Lukumäärä",
-                      type: "number"
+                      type: "number",
+                      value: ""
                     }
                   }
                 ]
               },
               {
-                anchor: "vahintaan-1-vuoden-kokemus",
+                anchor: "vahintaan-1-vuoden-kokemus-a",
                 title:
                   "a) vähintään 1 vuoden kokemus johonkin seuraavista luokista kuuluvan ajoneuvon päätoimisena kuljettajana:",
                 categories: [
@@ -323,7 +328,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -345,7 +351,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -367,7 +374,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -375,7 +383,7 @@ export const lomake = [
                 ]
               },
               {
-                anchor: "vahintaan-1-vuoden-kokemus",
+                anchor: "vahintaan-1-vuoden-kokemus-b",
                 title: "b) jokin seuraavista tutkinnoista:",
                 categories: [
                   {
@@ -395,7 +403,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -419,7 +428,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -444,7 +454,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -468,7 +479,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -494,7 +506,8 @@ export const lomake = [
                           fullWidth: true,
                           isReadOnly: false,
                           placeholder: "Lukumäärä",
-                          type: "number"
+                          type: "number",
+                          value: ""
                         }
                       }
                     ]
@@ -560,7 +573,8 @@ export const lomake = [
                   isReadOnly: false,
                   label: "Linja-autoja",
                   placeholder: "Linja-autoja",
-                  type: "number"
+                  type: "number",
+                  value: ""
                 }
               },
               {
@@ -572,7 +586,8 @@ export const lomake = [
                   isReadOnly: false,
                   label: "Kuorma-autoja",
                   placeholder: "Kuorma-autoja",
-                  type: "number"
+                  type: "number",
+                  value: ""
                 }
               },
               {
@@ -584,7 +599,8 @@ export const lomake = [
                   isReadOnly: false,
                   label: "Perävaunuja",
                   placeholder: "Perävaunuja",
-                  type: "number"
+                  type: "number",
+                  value: ""
                 }
               },
               {
@@ -596,7 +612,8 @@ export const lomake = [
                   isReadOnly: false,
                   label: "Muut ajoneuvot",
                   placeholder: "Muut ajoneuvot",
-                  type: "number"
+                  type: "number",
+                  value: ""
                 }
               }
             ]
@@ -645,22 +662,23 @@ export const lomake = [
         categories: [
           {
             anchor: "asetuksen-mukaiset",
-            code: "!",
             styleClasses: ["pl-6"],
-            title:
-              "Asetuksen mukaiset opetus- ja havaintovälineet (VnAsetus 434/2018, 11 § 1 ja 2 mom.)",
             components: [
               {
                 anchor: "A",
                 name: "TextBox",
-                properties: { isReadOnly: false }
+                properties: {
+                  isReadOnly: false,
+                  title:
+                    "! Asetuksen mukaiset opetus- ja havaintovälineet (VnAsetus 434/2018, 11 § 1 ja 2 mom.)",
+                  value: ""
+                }
               }
             ]
           },
           {
             anchor: "muut",
             styleClasses: ["pl-6"],
-            title: "Muut opetus- ja havaintovälineet",
             components: [
               {
                 anchor: "B",
@@ -669,7 +687,9 @@ export const lomake = [
                   isReadOnly: false,
                   labelStyles: {},
                   placeholder:
-                    "Muut oppilaitoksen oppimisympäristöissä tapahtuvaan osaamisen hankkimiseen liittyvät välineet"
+                    "Muut oppilaitoksen oppimisympäristöissä tapahtuvaan osaamisen hankkimiseen liittyvät välineet",
+                  title: "Muut opetus- ja havaintovälineet",
+                  value: ""
                 }
               }
             ]
