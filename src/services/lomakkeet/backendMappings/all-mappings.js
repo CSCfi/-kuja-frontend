@@ -69,7 +69,79 @@ export const perustelut = {
       )
     };
   },
+  perustelut_tutkinnot_01: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
   perustelut_tutkinnot_02: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_03: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_04: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_05: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_06: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_07: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_08: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_09: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_10: (changeObjects, anchor) => {
     return {
       perusteluteksti: calculateValuesAsArray(
         getMappingForTutkinnot(anchor),

@@ -31,22 +31,7 @@ const getMuutos = (stateItem, changeObj, perustelut, anchor) => {
   const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
   const perusteluteksti = perustelutForBackend
     ? perustelutForBackend.perusteluteksti
-    : // R.map(perustelu => {
-      //     if (R.path(["properties", "value"], perustelu)) {
-      //       return { value: R.path(["properties", "value"], perustelu) };
-      //     }
-      //     const value = R.path(
-      //       ["properties", "metadata", "fieldName"],
-      //       perustelu
-      //     );
-      //     if (value !== "Muut syyt")
-      //       // Do not send "Muut syyt" to backend
-      //       return {
-      //         value: R.path(["properties", "metadata", "fieldName"], perustelu)
-      //       };
-      //     return null;
-      //   }, perustelutForBackend.perusteluteksti)
-      null;
+    : null;
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
     isInLupa: meta.isInLupa,
@@ -142,19 +127,9 @@ export const getChangesToSave = (
             if (R.path(["properties", "value"], perustelu)) {
               return { value: R.path(["properties", "value"], perustelu) };
             }
-            const value = R.path(
-              ["properties", "metadata", "fieldName"],
-              perustelu
-            );
-            if (value !== "Muut syyt")
-              // Do not send "Muut syyt" to backend
-              return {
-                value: R.path(
-                  ["properties", "metadata", "fieldName"],
-                  perustelu
-                )
-              };
-            return null;
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
           }, perustelut)
         );
         backendMuutosWithPerustelut = R.assocPath(
@@ -239,7 +214,7 @@ export const getChangesToSave = (
         changeObjects.perustelut
       );
 
-      const perustelutForBackend = fillForBackend(perustelut);
+      const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
 
       const perusteluteksti = perustelutForBackend
         ? null
@@ -366,7 +341,7 @@ export const getChangesToSave = (
         changeObjects.perustelut
       );
 
-      const perustelutForBackend = fillForBackend(perustelut);
+      const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
 
       const perusteluteksti = perustelutForBackend
         ? null
@@ -536,7 +511,7 @@ export const getChangesToSave = (
         changeObjects.perustelut
       );
 
-      const perustelutForBackend = fillForBackend(perustelut);
+      const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
 
       const perusteluteksti = perustelutForBackend
         ? null
