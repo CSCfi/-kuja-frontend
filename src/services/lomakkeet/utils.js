@@ -10,7 +10,6 @@ export function createRules(requiredFields = []) {
       isRequired: () => true,
       markRequiredFields: lomake => {
         const _path = getPathByAnchor(R.split(".", rule.anchor), lomake);
-        console.info(_path);
         return R.assocPath(
           R.concat(_path, ["properties", "isRequired"]),
           true,
@@ -32,7 +31,6 @@ export function createRules(requiredFields = []) {
       },
       showErrors: (lomake, isValid) => {
         const _path = getPathByAnchor(R.split(".", rule.anchor), lomake);
-        console.info(_path);
         return R.assocPath(
           R.concat(_path, ["properties", "isValid"]),
           isValid,

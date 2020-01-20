@@ -1,7 +1,6 @@
 import {
   ifOneTerm,
-  getPathByAnchor,
-  ifAll
+  getPathByAnchor
 } from "../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
 import { createRules } from "../../../utils";
@@ -18,14 +17,11 @@ const conditionalRules = [
      **/
     markRequiredFields: (lomake, isRequired) => {
       const _path = getPathByAnchor([2, "voimassaolo", "title"], lomake);
-      if (isRequired) {
-        return R.assocPath(
-          R.concat(_path, ["properties", "isRequired"]),
-          true,
-          lomake
-        );
-      }
-      return R.assocPath(R.concat(_path, ["properties", "title"]), "", lomake);
+      return R.assocPath(
+        R.concat(_path, ["properties", "isRequired"]),
+        isRequired,
+        lomake
+      );
     },
     // Here we can set fields as mandatory
     isValid: (lomake, changeObjects, isRequired) => {

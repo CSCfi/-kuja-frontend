@@ -12,17 +12,6 @@ storiesOf("Validator", module)
     return (
       <Stage
         anchor={"root-anchor"}
-        interval={0}
-        loopChanges={[
-          {
-            anchor: "2.tehtavan-tarpeellisuus.textbox.A",
-            properties: { value: "" }
-          },
-          {
-            anchor: "2.tehtavan-tarpeellisuus.textbox.A",
-            properties: { value: "" }
-          }
-        ]}
         categories={lomake}
         rules={rules}
         changes={[]}
