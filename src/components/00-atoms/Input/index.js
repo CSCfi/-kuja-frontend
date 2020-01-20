@@ -40,6 +40,14 @@ const Input = props => {
 
   return (
     <div className="flex items-center">
+      {props.isRequired && (
+        <span
+          className={`text-${
+            props.isValid ? "green" : "red"
+          }-500 text-2xl pr-4`}>
+          *
+        </span>
+      )}
       <CssTextField
         id={props.id}
         aria-label={props.ariaLabel}
@@ -94,6 +102,8 @@ Input.defaultProps = {
   isDisabled: false,
   isHidden: false,
   isReadOnly: false,
+  isRequired: false,
+  isValid: true,
   payload: {},
   placeholder: "",
   rows: 1,
@@ -112,6 +122,8 @@ Input.propTypes = {
   isDisabled: PropTypes.bool,
   isHidden: PropTypes.bool,
   isReadOnly: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  isValid: PropTypes.bool,
   label: PropTypes.string,
   /** Is called with the payload and the value. */
   onChanges: PropTypes.func.isRequired,

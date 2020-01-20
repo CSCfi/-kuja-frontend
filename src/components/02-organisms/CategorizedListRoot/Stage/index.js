@@ -8,8 +8,8 @@ function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
   R.forEach(rule => {
     const isRequired = rule.isRequired(modifiedLomake, changeObjects);
-    modifiedLomake = rule.markRequiredFields(isRequired, modifiedLomake);
-    const isValid = rule.isValid(isRequired, modifiedLomake, changeObjects)();
+    modifiedLomake = rule.markRequiredFields(modifiedLomake, isRequired);
+    const isValid = rule.isValid(modifiedLomake, changeObjects, isRequired)();
     modifiedLomake = rule.showErrors(modifiedLomake, isValid);
     console.info("Is valid: ", isValid);
   }, rules);

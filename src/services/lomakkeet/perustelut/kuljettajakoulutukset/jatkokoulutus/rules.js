@@ -1,71 +1,22 @@
 import {
   ifOneTerm,
-  getPathByAnchor
+  getPathByAnchor,
+  ifAll
 } from "../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
+import { createRules } from "../../../utils";
+import { requiredFields } from "./requiredFields";
 
-// const rules = [
-//   {
-//     anchor: "2.tehtavan-tarpeellisuus.textbox.A",
-//     isRequired: true,
-//     isValid: { value: R.compose(R.not, R.isEmpty) }
-//   }
-// ];
+const basicRules = createRules(requiredFields);
 
-export const rules = [
-  {
-    /**
-     * Value of 'isRequired' property should be boolean. The property indicates
-     * a state that is needed to find out if some other field(s) should be
-     * required.
-     **/
-    isRequired: () => true,
-    /**
-     * Modify form to include asterisks to indicated that user should fill
-     * the related fields.
-     **/
-    markRequiredFields: (isRequired, lomake) => {
-      const anchor = "2.tehtavan-tarpeellisuus.textbox.A";
-      const _path = getPathByAnchor(R.split(".", anchor), lomake);
-      return R.assocPath(
-        R.concat(_path, ["properties", "isRequired"]),
-        isRequired,
-        lomake
-      );
-    },
-    // Here we can set fields as mandatory
-    isValid: (isRequired, lomake, changeObjects) => {
-      return isRequired
-        ? () =>
-            ifOneTerm(
-              [
-                {
-                  anchor: "2.tehtavan-tarpeellisuus.textbox.A",
-                  properties: { value: R.compose(R.not, R.isEmpty) }
-                }
-              ],
-              lomake,
-              changeObjects
-            )
-        : () => true;
-    },
-    showErrors: (lomake, isValid) => {
-      const anchor = "2.tehtavan-tarpeellisuus.textbox.A";
-      const _path = getPathByAnchor(R.split(".", anchor), lomake);
-      return R.assocPath(
-        R.concat(_path, ["properties", "isValid"]),
-        isValid,
-        lomake
-      );
-    }
-  },
+const conditionalRules = [
   {
     isRequired: () => true,
     /**
      * Modify form to include asterisks to indicated that user should fill
      * the related fields.
      **/
-    markRequiredFields: (isRequired, lomake) => {
+    markRequiredFields: (lomake, isRequired) => {
       const _path = getPathByAnchor([2, "voimassaolo", "title"], lomake);
       if (isRequired) {
         return R.assocPath(
@@ -77,7 +28,7 @@ export const rules = [
       return R.assocPath(R.concat(_path, ["properties", "title"]), "", lomake);
     },
     // Here we can set fields as mandatory
-    isValid: (isRequired, lomake, changeObjects) => {
+    isValid: (lomake, changeObjects, isRequired) => {
       return isRequired
         ? () =>
             ifOneTerm(
@@ -106,3 +57,5 @@ export const rules = [
     }
   }
 ];
+
+export const rules = R.concat(basicRules, conditionalRules);

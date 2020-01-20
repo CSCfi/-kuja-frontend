@@ -10,8 +10,8 @@ function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
   forEach(rule => {
     const isRequired = rule.isRequired(modifiedLomake, changeObjects);
-    modifiedLomake = rule.markRequiredFields(isRequired, modifiedLomake);
-    const isValid = rule.isValid(isRequired, modifiedLomake, changeObjects)();
+    modifiedLomake = rule.markRequiredFields(modifiedLomake, isRequired);
+    const isValid = rule.isValid(modifiedLomake, changeObjects, isRequired)();
     modifiedLomake = rule.showErrors(modifiedLomake, isValid);
   }, rules);
   return modifiedLomake;
@@ -38,7 +38,7 @@ const Lomake = React.memo(
     const categories = useMemo(() => {
       const lomake = getLomake(action, data, isReadOnly, locale, path, prefix);
       return markRequiredFields(lomake, changeObjects, rules);
-    }, [action, changeObjects, data, isReadOnly, locale, path, prefix]);
+    }, [action, changeObjects, data, isReadOnly, locale, path, prefix, rules]);
 
     if (categories.length && onChangesUpdate) {
       return (
