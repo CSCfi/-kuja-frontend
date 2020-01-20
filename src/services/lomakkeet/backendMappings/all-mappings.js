@@ -21,6 +21,7 @@ import { getMapping as getMappingForVaativaerityinentuki } from "./mappings/vaat
 import { getMapping as getMappingForOppisopimuskoulutus } from "./mappings/oppisopimuskoulutus";
 import { getMapping as getMappingForVankilakoulutus } from "./mappings/vankilakoulutus";
 import { getMapping as getMappingForTutkinnot } from "./mappings/tutkinnot";
+import { getMapping as getMappingForOpiskeluvuodet } from "./mappings/opiskeluvuodet";
 
 export const perustelut = {
   /**
@@ -145,6 +146,17 @@ export const perustelut = {
     return {
       perusteluteksti: calculateValuesAsArray(
         getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet: (
+    changeObjects,
+    anchor
+  ) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForOpiskeluvuodet(anchor),
         changeObjects
       )
     };
