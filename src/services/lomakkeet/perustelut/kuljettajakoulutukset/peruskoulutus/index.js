@@ -42,7 +42,8 @@ export function getAdditionForm(isReadOnly) {
                   properties: {
                     isReadOnly,
                     title:
-                      "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta"
+                      "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta",
+                    value: ""
                   }
                 }
               ]
@@ -66,7 +67,8 @@ export function getAdditionForm(isReadOnly) {
                     isReadOnly,
                     placeholder:
                       "Esittäkää selvitys koulutuksen järjestämispaikoista",
-                    title: "Ammattipätevyyskoulutuksen järjestämispaikat"
+                    title: "Ammattipätevyyskoulutuksen järjestämispaikat",
+                    value: ""
                   }
                 }
               ]

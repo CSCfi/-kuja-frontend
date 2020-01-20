@@ -6,7 +6,8 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
+import { rules as jatkokoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
+import { rules as peruskoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/peruskoulutus/rules";
 
 const PerustelutKuljettajakoulutukset = props => {
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
@@ -33,6 +34,7 @@ const PerustelutKuljettajakoulutukset = props => {
           let lomake = null;
 
           if (isReasoningRequired) {
+            const rules = mapping[code] === "peruskoulutus" ? peruskoulutusRules : jatkokoulutusRules;
             if (changeObj.properties.isChecked) {
               lomake = (
                 <Lomake
