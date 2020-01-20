@@ -28,13 +28,13 @@ export function getMapping(anchor) {
     },
     {
       path: ["value"],
-      anchors: [`perustelut_${anchor}.perustelut.2.A`],
+      anchors: [`perustelut_${anchor}.perustelut.3.A`],
       valueFn: changeObjects =>
         path([0, "properties", "metadata", "fieldName"], changeObjects)
     },
     {
       path: ["value"],
-      anchors: [`perustelut_${anchor}.vapaateksti-kentta.4.A`],
+      anchors: [`perustelut_${anchor}.vapaa-tekstikentta.A`],
       valueFn: changeObjects => path([0, "properties", "value"], changeObjects)
     }
   ];

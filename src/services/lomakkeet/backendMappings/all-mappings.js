@@ -12,7 +12,7 @@
  * mappings there.
  * 2) Import the mapping here and alialize it using 'as' keyword.
  */
-import { calculateValues } from "./calculate";
+import { calculateValues, calculateValuesAsArray } from "./calculate";
 
 // TODO: Add more imports for other forms
 import { getMapping as getMappingForKuljettajakoulutukset } from "./mappings/kuljettajakoulutukset";
@@ -71,7 +71,7 @@ export const perustelut = {
   },
   perustelut_tutkinnot_02: (changeObjects, anchor) => {
     return {
-      perusteluteksti: calculateValues(
+      perusteluteksti: calculateValuesAsArray(
         getMappingForTutkinnot(anchor),
         changeObjects
       )

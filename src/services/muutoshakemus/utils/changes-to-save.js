@@ -135,7 +135,7 @@ export const getChangesToSave = (
     let backendMuutosWithChangeObjectsWithPerustelut = [];
     if (backendMuutos) {
       const perustelut = findPerustelut(anchor, changeObjects.perustelut);
-      const perustelutForBackend = fillForBackend(perustelut);
+      const perustelutForBackend = fillForBackend(perustelut, anchor);
       if (!perustelutForBackend) {
         const perusteluTexts = R.reject(R.equals(null))(
           R.map(perustelu => {
