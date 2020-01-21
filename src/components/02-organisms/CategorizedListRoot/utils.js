@@ -36,31 +36,38 @@ export function getPathByAnchor(
   _path = []
 ) {
   const anchorPart = anchorArr[anchorPartIndex];
-  const convertedAnchorPart = isNaN(anchorPart)
-    ? anchorPart
-    : parseInt(anchorPart, 10);
+  if (typeof anchorPart === "number") {
+    console.error(`Anchor must be a string not a number.`);
+  }
   let pathPart = [];
   if (anchorPartIndex === 0) {
-    pathPart = [R.findIndex(R.propEq("anchor", convertedAnchorPart), lomake)];
+    pathPart = [R.findIndex(R.propEq("anchor", anchorPart), lomake)];
   } else if (anchorPartIndex + 1 < anchorArr.length) {
     const updatedPath = R.append("categories", _path);
     const lomakePart = R.path(updatedPath, lomake);
-    pathPart = [
-      "categories",
-      R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
-    ];
+    if (lomakePart) {
+      pathPart = [
+        "categories",
+        R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
+      ];
+    } else {
+      console.error(
+        `Can't find the requested part of the form.`,
+        lomake,
+        _path,
+        updatedPath
+      );
+    }
   } else {
     const updatedPath = R.append("components", _path);
     const lomakePart = R.path(updatedPath, lomake);
     if (lomakePart) {
       pathPart = [
         "components",
-        R.findIndex(R.propEq("anchor", convertedAnchorPart), lomakePart)
+        R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
       ];
     } else {
-      console.error(
-        `Can't find anchor ${convertedAnchorPart} of ${lomakePart}.`
-      );
+      console.error(`Can't find anchor ${anchorPart} of ${lomakePart}.`);
     }
   }
 
