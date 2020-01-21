@@ -150,17 +150,14 @@ export const perustelut = {
       )
     };
   },
-  perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet: (
-    changeObjects,
-    anchor
-  ) => {
+  perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet: changeObjects => {
     return {
       perusteluteksti: calculateValuesAsArray(
-        getMappingForOpiskeluvuodet(anchor),
+        getMappingForOpiskeluvuodet(),
         changeObjects
       )
     };
   }
-  //, TODO: Write more definitions here and call the 'calculateValues' function with
+  //, TODO: Write more definitions here and call the 'calculateValues' (Or calculateValuesAsArray') function with
   // mappings array and and array of change objects.
 };
