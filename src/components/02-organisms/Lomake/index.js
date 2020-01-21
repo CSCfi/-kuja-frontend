@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
 import { forEach } from "ramda";
@@ -72,4 +71,4 @@ Lomake.propTypes = {
   rules: PropTypes.array
 };
 
-export default injectIntl(Lomake);
+export default Lomake;
