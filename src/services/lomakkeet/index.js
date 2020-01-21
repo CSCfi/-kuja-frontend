@@ -5,6 +5,7 @@ import {
 } from "./perustelut/kuljettajakoulutukset";
 import { concat, path } from "ramda";
 import getATVKoulutuslomake from "./perustelut/atv-koulutukset";
+import getValmentavatKoulutuksetLomake from "./perustelut/valmentavatKoulutukset";
 
 const lomakkeet = {
   koulutukset: {
@@ -55,6 +56,24 @@ const lomakkeet = {
         getTyovoimakoulutuslomake("addition", data, isReadOnly, locale),
       removal: (data, isReadOnly, locale, prefix) =>
         getTyovoimakoulutuslomake("removal", data, isReadOnly, locale, prefix)
+    },
+    valmentavat: {
+      addition: (data, isReadOnly, locale, prefix) =>
+        getValmentavatKoulutuksetLomake(
+          "addition",
+          data,
+          isReadOnly,
+          locale,
+          prefix
+        ),
+      removal: (data, isReadOnly, locale, prefix) =>
+        getValmentavatKoulutuksetLomake(
+          "removal",
+          data,
+          isReadOnly,
+          locale,
+          prefix
+        )
     }
   }
 };
