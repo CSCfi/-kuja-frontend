@@ -12,7 +12,7 @@
  * mappings there.
  * 2) Import the mapping here and alialize it using 'as' keyword.
  */
-import { calculateValues } from "./calculate";
+import { calculateValues, calculateValuesAsArray } from "./calculate";
 
 // TODO: Add more imports for other forms
 import { getMapping as getMappingForKuljettajakoulutukset } from "./mappings/kuljettajakoulutukset";
@@ -20,6 +20,8 @@ import { getMapping as getMappingForTyovoimakoulutus } from "./mappings/tyovoima
 import { getMapping as getMappingForVaativaerityinentuki } from "./mappings/vaativaerityinentuki";
 import { getMapping as getMappingForOppisopimuskoulutus } from "./mappings/oppisopimuskoulutus";
 import { getMapping as getMappingForVankilakoulutus } from "./mappings/vankilakoulutus";
+import { getMapping as getMappingForTutkinnot } from "./mappings/tutkinnot";
+import { getMapping as getMappingForOpiskeluvuodet } from "./mappings/opiskeluvuodet";
 
 export const perustelut = {
   /**
@@ -52,10 +54,10 @@ export const perustelut = {
       )
     };
   },
-  perustelut_muut_02: changeObjects => {
+  perustelut_muut_02: (changeObjects, koodiarvo) => {
     return {
       perusteluteksti_vaativa: calculateValues(
-        getMappingForVaativaerityinentuki(),
+        getMappingForVaativaerityinentuki(koodiarvo),
         changeObjects
       )
     };
@@ -67,7 +69,95 @@ export const perustelut = {
         changeObjects
       )
     };
+  },
+  perustelut_tutkinnot_01: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_02: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_03: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_04: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_05: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_06: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_07: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_08: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_09: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_tutkinnot_10: (changeObjects, anchor) => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForTutkinnot(anchor),
+        changeObjects
+      )
+    };
+  },
+  perustelut_opiskelijavuodet_vahimmaisopiskelijavuodet: changeObjects => {
+    return {
+      perusteluteksti: calculateValuesAsArray(
+        getMappingForOpiskeluvuodet(),
+        changeObjects
+      )
+    };
   }
-  //, TODO: Write more definitions here and call the 'calculateValues' function with
+  //, TODO: Write more definitions here and call the 'calculateValues' (Or calculateValuesAsArray') function with
   // mappings array and and array of change objects.
 };
