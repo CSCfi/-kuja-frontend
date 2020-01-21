@@ -11,6 +11,7 @@ import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import { rules } from "../../../../../../../services/lomakkeet/perustelut/tyovoimakoulutus/rules";
 
 const PerustelutTyovoimakoulutukset = React.memo(props => {
   const sectionId = "perustelut_koulutukset_tyovoimakoulutukset";
@@ -123,7 +124,8 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                 key={code}
                 isReadOnly={props.isReadOnly}
                 onChangesUpdate={onChangesUpdate}
-                path={["koulutukset", "tyovoimakoulutukset"]}></Lomake>
+                path={["koulutukset", "tyovoimakoulutukset"]}
+                rules={rules}></Lomake>
             ) : (
               <Lomake
                 action="removal"

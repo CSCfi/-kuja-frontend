@@ -9,12 +9,14 @@ const defaultProps = {
 const StatusTextRow = React.memo(
   ({
     children,
+    isHidden,
+    isRequired,
+    isValid,
     labelStyles,
     layout,
     statusText,
     statusTextStyleClasses,
-    styleClasses,
-    isHidden
+    styleClasses
   }) => {
     const [classNames, setClassNames] = useState(defaultProps.styleClasses);
 
@@ -40,6 +42,14 @@ const StatusTextRow = React.memo(
                 {statusText}
               </div>
             )}
+            {isRequired && (
+              <span
+                className={`text-${
+                  isValid ? "green" : "red"
+                }-500 text-2xl pr-4`}>
+                *
+              </span>
+            )}{" "}
             {children}
           </div>
         </div>
@@ -49,12 +59,14 @@ const StatusTextRow = React.memo(
 );
 
 StatusTextRow.propTypes = {
+  isHidden: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  isValid: PropTypes.bool,
   labelStyles: PropTypes.object,
   layout: PropTypes.object,
   styleClasses: PropTypes.array,
   statusText: PropTypes.string,
-  statusTextStyleClasses: PropTypes.array,
-  isHidden: PropTypes.bool
+  statusTextStyleClasses: PropTypes.array
 };
 
 export default StatusTextRow;

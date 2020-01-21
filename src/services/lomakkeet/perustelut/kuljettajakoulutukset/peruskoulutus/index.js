@@ -11,7 +11,7 @@ import opiskelijavuodet from "../../lomakeosiot/opiskelijavuodet";
 export function getAdditionForm(isReadOnly) {
   return [
     {
-      anchor: 1,
+      anchor: "1",
       styleClasses: ["px-10 py-10"],
       components: [
         {
@@ -42,7 +42,8 @@ export function getAdditionForm(isReadOnly) {
                   properties: {
                     isReadOnly,
                     title:
-                      "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta"
+                      "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta",
+                    value: ""
                   }
                 }
               ]
@@ -66,7 +67,8 @@ export function getAdditionForm(isReadOnly) {
                     isReadOnly,
                     placeholder:
                       "Esittäkää selvitys koulutuksen järjestämispaikoista",
-                    title: "Ammattipätevyyskoulutuksen järjestämispaikat"
+                    title: "Ammattipätevyyskoulutuksen järjestämispaikat",
+                    value: ""
                   }
                 }
               ]

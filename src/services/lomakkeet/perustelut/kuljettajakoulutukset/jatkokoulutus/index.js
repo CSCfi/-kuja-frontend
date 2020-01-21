@@ -7,12 +7,12 @@ import {
   opettajien,
   ajoneuvoKanta,
   muutOpetusvalineet
-} from "../lomakeosiot/kuljettajakoulutukset";
+} from "../../lomakeosiot/kuljettajakoulutukset";
 
 export function getAdditionForm(isReadOnly) {
   return [
     {
-      anchor: 2,
+      anchor: "2",
       styleClasses: ["px-10 py-10"],
       components: [
         {

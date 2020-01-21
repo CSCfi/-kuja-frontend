@@ -406,7 +406,8 @@ const CategorizedList = React.memo(
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
-                          title={propsObj.title}></CategorizedListTextBox>
+                          title={propsObj.title}
+                        />
                       )}
                       {component.name === "Input"
                         ? (category => {
@@ -445,6 +446,8 @@ const CategorizedList = React.memo(
                                   isDisabled={isDisabled}
                                   isHidden={isDisabled}
                                   isReadOnly={propsObj.isReadOnly}
+                                  isRequired={propsObj.isRequired}
+                                  isValid={propsObj.isValid}
                                   label={propsObj.label}
                                   onChanges={handleChanges}
                                   payload={{
@@ -533,7 +536,9 @@ const CategorizedList = React.memo(
                                   statusTextStyleClasses={
                                     propsObj.statusTextStyleClasses
                                   }
-                                  isHidden={propsObj.isHidden}>
+                                  isHidden={propsObj.isHidden}
+                                  isRequired={propsObj.isRequired}
+                                  isValid={propsObj.isValid}>
                                   <div className="flex">
                                     <div className="flex-1">
                                       {codeMarkup}
@@ -572,6 +577,8 @@ const CategorizedList = React.memo(
                                   callback={handleChanges}
                                   id={`autocomplete-${idSuffix}`}
                                   isMulti={propsObj.isMulti}
+                                  isRequired={propsObj.isRequired}
+                                  isValid={propsObj.isValid}
                                   options={propsObj.options}
                                   payload={{
                                     anchor,
