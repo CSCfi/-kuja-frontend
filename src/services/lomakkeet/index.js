@@ -1,4 +1,4 @@
-import getTyovoimakoulutuslomake from "./perustelut/tyovoimakoulutus";
+import getTyovoimakoulutuslomake from "./perustelut/tyovoimakoulutus/";
 import {
   getKuljettajienJatkokoulutuslomake,
   getKuljettajienPeruskoulutuslomake

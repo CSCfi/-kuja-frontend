@@ -1,5 +1,5 @@
-import opiskelijavuodet from "./lomakeosiot/opiskelijavuodet";
-import getDefaultRemovalForm from "./lomakeosiot/poistolomake";
+import opiskelijavuodet from "../lomakeosiot/opiskelijavuodet";
+import getDefaultRemovalForm from "../lomakeosiot/poistolomake";
 import * as R from "ramda";
 
 function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
@@ -24,7 +24,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     placeholder:
                       "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
                     title:
-                      "Tehtävän tarpeellisuus ensisijaisella toiminta-alueella"
+                      "Tehtävän tarpeellisuus ensisijaisella toiminta-alueella",
+                    value: ""
                   }
                 }
               ]
@@ -47,7 +48,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
-                    title: "Henkilöstöresurssit"
+                    title: "Henkilöstöresurssit",
+                    value: ""
                   }
                 }
               ]
@@ -62,7 +64,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
-                    title: "Osaaminen"
+                    title: "Osaaminen",
+                    value: ""
                   }
                 }
               ]
@@ -77,7 +80,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
-                    title: "Pedagogiset järjestelyt"
+                    title: "Pedagogiset järjestelyt",
+                    value: ""
                   }
                 }
               ]
@@ -92,7 +96,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
-                    title: "Sidosryhmäyhteistyö"
+                    title: "Sidosryhmäyhteistyö",
+                    value: ""
                   }
                 }
               ]
@@ -116,7 +121,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                     placeholder:
                       "mm. koulutusalat, joille työvoimakoulutusta aiotaan järjestää",
                     title:
-                      "Toimintamalli työvoimakoulutuksen suunnittelusta ja toteutuksesta"
+                      "Toimintamalli työvoimakoulutuksen suunnittelusta ja toteutuksesta",
+                    value: ""
                   }
                 }
               ]
@@ -150,7 +156,8 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
                       }, elykeskukset || [])
                     ),
                     title:
-                      "Valitkaa listasta ne ELY-keskukset joiden kanssa suunnittelette tekevänne yhteistyötä työvoimakoulutuksen järjestämisessä."
+                      "Valitkaa listasta ne ELY-keskukset joiden kanssa suunnittelette tekevänne yhteistyötä työvoimakoulutuksen järjestämisessä.",
+                    value: ""
                   }
                 }
               ]
