@@ -11,7 +11,7 @@ import opiskelijavuodet from "../../lomakeosiot/opiskelijavuodet";
 export function getAdditionForm(isReadOnly) {
   return [
     {
-      anchor: 1,
+      anchor: "1",
       styleClasses: ["px-10 py-10"],
       components: [
         {

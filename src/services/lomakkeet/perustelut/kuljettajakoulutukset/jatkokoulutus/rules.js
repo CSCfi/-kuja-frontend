@@ -16,7 +16,8 @@ const conditionalRules = [
      * the related fields.
      **/
     markRequiredFields: (lomake, isRequired) => {
-      const _path = getPathByAnchor([2, "voimassaolo", "title"], lomake);
+      const anchor = "2.voimassaolo.title";
+      const _path = getPathByAnchor(R.split(".", anchor), lomake);
       return R.assocPath(
         R.concat(_path, ["properties", "isRequired"]),
         isRequired,
@@ -44,7 +45,8 @@ const conditionalRules = [
         : () => true;
     },
     showErrors: (lomake, isValid) => {
-      const _path = getPathByAnchor([2, "voimassaolo", "title"], lomake);
+      const anchor = "2.voimassaolo.title";
+      const _path = getPathByAnchor(R.split(".", anchor), lomake);
       return R.assocPath(
         R.concat(_path, ["properties", "isValid"]),
         isValid,
