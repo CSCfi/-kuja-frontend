@@ -37,7 +37,9 @@ const Lomake = React.memo(
   }) => {
     const categories = useMemo(() => {
       const lomake = getLomake(action, data, isReadOnly, locale, path, prefix);
-      return markRequiredFields(lomake, changeObjects, rules);
+      return rules.length
+        ? markRequiredFields(lomake, changeObjects, rules)
+        : lomake;
     }, [action, changeObjects, data, isReadOnly, locale, path, prefix, rules]);
 
     if (categories.length && onChangesUpdate) {
