@@ -54,10 +54,10 @@ export const perustelut = {
       )
     };
   },
-  perustelut_muut_02: changeObjects => {
+  perustelut_muut_02: (changeObjects, koodiarvo) => {
     return {
       perusteluteksti_vaativa: calculateValues(
-        getMappingForVaativaerityinentuki(),
+        getMappingForVaativaerityinentuki(koodiarvo),
         changeObjects
       )
     };
