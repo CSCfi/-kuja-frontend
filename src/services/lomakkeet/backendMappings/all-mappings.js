@@ -22,6 +22,7 @@ import { getMapping as getMappingForOppisopimuskoulutus } from "./mappings/oppis
 import { getMapping as getMappingForVankilakoulutus } from "./mappings/vankilakoulutus";
 import { getMapping as getMappingForTutkinnot } from "./mappings/tutkinnot";
 import { getMapping as getMappingForOpiskeluvuodet } from "./mappings/opiskeluvuodet";
+import { path } from "ramda";
 
 export const perustelut = {
   /**
@@ -63,12 +64,20 @@ export const perustelut = {
     };
   },
   perustelut_muut_04: changeObjects => {
-    return {
-      perusteluteksti_vankila: calculateValues(
-        getMappingForVankilakoulutus(),
-        changeObjects
-      )
-    };
+    const perustelut =
+      changeObjects.length === 1
+        ? {
+            perusteluteksti: [
+              { value: path(["properties", "value"], changeObjects[0]) }
+            ]
+          }
+        : {
+            perusteluteksti_vankila: calculateValues(
+              getMappingForVankilakoulutus(),
+              changeObjects
+            )
+          };
+    return perustelut;
   },
   perustelut_tutkinnot_01: (changeObjects, anchor) => {
     return {
