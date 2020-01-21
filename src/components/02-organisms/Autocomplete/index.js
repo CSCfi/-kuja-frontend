@@ -104,7 +104,19 @@ const Autocomplete = React.memo(props => {
 
   return (
     <React.Fragment>
-      {props.title && <label className="block py-2">{props.title}</label>}
+      {props.title && (
+        <label className="block py-2">
+          {props.isRequired && (
+            <span
+              className={`text-${
+                props.isValid ? "green" : "red"
+              }-500 text-2xl pr-4`}>
+              *
+            </span>
+          )}
+          {props.title}
+        </label>
+      )}
       <Select
         autosize={false}
         name={props.name}
@@ -128,12 +140,16 @@ const Autocomplete = React.memo(props => {
 
 Autocomplete.defaultProps = {
   isMulti: true,
+  isRequired: false,
+  isValid: true,
   placeholder: "Valitse...",
   value: []
 };
 
 Autocomplete.propTypes = {
   isMulti: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  isValid: PropTypes.bool,
   name: PropTypes.string,
   callback: PropTypes.func,
   options: PropTypes.array,

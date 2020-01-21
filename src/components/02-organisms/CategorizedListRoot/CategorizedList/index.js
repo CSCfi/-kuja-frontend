@@ -577,6 +577,8 @@ const CategorizedList = React.memo(
                                   callback={handleChanges}
                                   id={`autocomplete-${idSuffix}`}
                                   isMulti={propsObj.isMulti}
+                                  isRequired={propsObj.isRequired}
+                                  isValid={propsObj.isValid}
                                   options={propsObj.options}
                                   payload={{
                                     anchor,
