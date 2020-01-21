@@ -1,7 +1,9 @@
 import getDefaultRemovalForm from "../lomakeosiot/poistolomake";
-import * as R from "ramda";
 import { curriedGetAnchorPartsByIndex } from "../../../../utils/common";
 import { isAdded, isRemoved, isInLupa } from "../../../../css/label";
+import "../../i18n-config";
+import { __ } from "i18n-for-browser";
+import * as R from "ramda";
 
 function getAdditionForm(
   koulutusdata,
@@ -51,8 +53,7 @@ function getAdditionForm(
                 properties: {
                   isReadOnly,
                   placeholder: "Perustelut...",
-                  title:
-                    "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+                  title: __("reasoning.title.default"),
                   value: ""
                 }
               }
@@ -70,7 +71,6 @@ export default function getValmentavatKoulutuksetLomake(
   action,
   data,
   isReadOnly,
-  locale,
   prefix
 ) {
   switch (action) {
@@ -80,8 +80,7 @@ export default function getValmentavatKoulutuksetLomake(
         data.kohde,
         data.maaraystyyppi,
         data.changeObjectsPage1,
-        isReadOnly,
-        R.toUpper(locale)
+        isReadOnly
       );
     case "removal":
       return getDefaultRemovalForm(prefix);

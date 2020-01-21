@@ -69,7 +69,6 @@ export default function getATVKoulutuslomake(
   action,
   data,
   isReadOnly,
-  locale,
   prefix
 ) {
   switch (action) {
@@ -79,8 +78,7 @@ export default function getATVKoulutuslomake(
         data.kohde,
         data.maaraystyyppi,
         data.changeObjectsPage1,
-        isReadOnly,
-        R.toUpper(locale)
+        isReadOnly
       );
     case "removal":
       return getDefaultRemovalForm(prefix);

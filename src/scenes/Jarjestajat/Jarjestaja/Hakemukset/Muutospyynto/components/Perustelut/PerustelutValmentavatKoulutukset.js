@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import { curriedGetAnchorPartsByIndex } from "../../../../../../../utils/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -13,7 +11,7 @@ import Lomake from "../../../../../../../components/02-organisms/Lomake";
 const PerustelutValmentavatKoulutukset = React.memo(props => {
   const intl = useIntl();
   const sectionId = "perustelut_koulutukset_valmentavatKoulutukset";
-  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+  const { onChangesRemove, onChangesUpdate } = props;
 
   const koulutusdata = useMemo(() => {
     return getDataForKoulutusList(

@@ -12,7 +12,7 @@ const PerustelutATVKoulutukset = props => {
   const intl = useIntl();
   const sectionId =
     "perustelut_koulutukset_ammatilliseenTehtavaanValmistavatKoulutukset";
-  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+  const { onChangesRemove, onChangesUpdate } = props;
 
   const koulutusdata = useMemo(() => {
     return getDataForKoulutusList(
