@@ -8,7 +8,7 @@ export function getAdditionForm(isReadOnly) {
       anchor: "edellytykset-tekstikentta",
       title: "Taloudelliset edellytykset",
       styleClasses: ["mb-6"],
-      components: [
+      components: 
         {
           anchor: "A",
           name: "TextBox",
