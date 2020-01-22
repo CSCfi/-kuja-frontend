@@ -32,7 +32,7 @@ export function calculateValuesAsArray(mapping, changeObjects) {
     }, item.anchors);
     const value = item.valueFn(changeObjectsSubGroup);
     if (!isNil(value)) {
-      result.push(value);
+      result.push({ value: value });
     }
   }, mapping || []);
   return result;
