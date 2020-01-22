@@ -6,6 +6,7 @@ import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit
 import TaloudellisetTilinpaatostiedot from "./Taloudelliset/TaloudellisetTilinpaatostiedot";
 import TaloudellisetLiitteet from "./Taloudelliset/TaloudellisetLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
+import Lomake from "../../../../../../components/02-organisms/Lomake";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
@@ -39,11 +40,25 @@ const MuutospyyntoWizardTaloudelliset = ({
     <React.Fragment>
       <h2 className="my-6">{formatMessage(wizard.pageTitle_3)}</h2>
 
-      {!checkIfIsAdditions(R.props(["tutkinnot", "koulutukset"], changeObjects)) ? (
+      {!checkIfIsAdditions(
+        R.props(["tutkinnot", "koulutukset"], changeObjects)
+      ) ? (
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
-          <FormSection
+          <Lomake
+            anchor={"taloudelliset_yleisettiedot"}
+            changeObjects={R.path(
+              ["taloudelliset", "yleisettiedot"],
+              changeObjects
+            )}
+            key={`taloudelliset-yleisetiedot`}
+            // isReadOnly={props.isReadOnly}
+            // onChangesUpdate={onChangesUpdate}
+            path={["taloudelliset", "yleisettiedot"]}
+            // rules={rules}
+            showCategoryTitles={true}></Lomake>
+          {/* <FormSection
             id="taloudelliset_yleisettiedot"
             render={_props => (
               <React.Fragment>
@@ -64,7 +79,7 @@ const MuutospyyntoWizardTaloudelliset = ({
             )}
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
-          />
+          /> */}
           <FormSection
             id="taloudelliset_investoinnit"
             render={_props => (

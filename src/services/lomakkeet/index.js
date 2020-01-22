@@ -3,6 +3,7 @@ import {
   getKuljettajienJatkokoulutuslomake,
   getKuljettajienPeruskoulutuslomake
 } from "./perustelut/kuljettajakoulutukset";
+import { getTaloudellisetlomake } from "./taloudelliset/taloudelliset";
 import { concat, path } from "ramda";
 
 const lomakkeet = {
@@ -49,6 +50,10 @@ const lomakkeet = {
       removal: (data, isReadOnly, locale, prefix) =>
         getTyovoimakoulutuslomake("removal", data, isReadOnly, locale, prefix)
     }
+  },
+  taloudelliset: {
+    addition: (data, isReadOnly, locale) =>
+      getTaloudellisetlomake("addition", data, isReadOnly, locale)
   }
 };
 
