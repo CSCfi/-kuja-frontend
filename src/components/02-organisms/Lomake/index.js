@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
 import { forEach } from "ramda";
 import { cloneDeep } from "lodash";
+import { useIntl } from "react-intl";
 
 function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
@@ -28,19 +28,20 @@ const Lomake = React.memo(
     changeObjects = defaultProps.changeObjects,
     data,
     isReadOnly,
-    locale = "fi",
     onChangesUpdate,
     path,
     prefix = "",
     rules = [],
     showCategoryTitles = true
   }) => {
+    const intl = useIntl();
+
     const categories = useMemo(() => {
-      const lomake = getLomake(action, data, isReadOnly, locale, path, prefix);
+      const lomake = getLomake(action, data, isReadOnly, intl.locale, path, prefix);
       return rules.length
         ? markRequiredFields(lomake, changeObjects, rules)
         : lomake;
-    }, [action, changeObjects, data, isReadOnly, locale, path, prefix, rules]);
+    }, [action, changeObjects, data, intl.locale, isReadOnly, path, prefix, rules]);
 
     if (categories.length && onChangesUpdate) {
       return (
@@ -72,4 +73,4 @@ Lomake.propTypes = {
   rules: PropTypes.array
 };
 
-export default injectIntl(Lomake);
+export default Lomake;
