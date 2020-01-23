@@ -191,6 +191,11 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
+  vst: {
+    titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
+    jarjestajatHeading: { id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
+  },
   asiaTable: {
     headers: {
       asianumero: {id: "asiaTable.headers.asianumero", defaultMessage: "Asianumero"},
