@@ -241,6 +241,14 @@ const CategorizedList = React.memo(
               {isCategoryTitleVisible && (
                 <div className={categoryTitleClasses}>
                   <h4>
+                    {category.isRequired && (
+                      <span
+                        className={`text-${
+                          category.isValid ? "green" : "red"
+                        }-500 text-2xl pr-4`}>
+                        *
+                      </span>
+                    )}
                     {category.code && (
                       <span className="mr-4">{category.code}</span>
                     )}
