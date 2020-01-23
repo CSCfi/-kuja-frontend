@@ -32,16 +32,40 @@ const Lomake = React.memo(
     path,
     prefix = "",
     rules = [],
+    rulesFn,
     showCategoryTitles = true
   }) => {
     const intl = useIntl();
 
     const categories = useMemo(() => {
-      const lomake = getLomake(action, data, isReadOnly, intl.locale, path, prefix);
-      return rules.length
-        ? markRequiredFields(lomake, changeObjects, rules)
-        : lomake;
-    }, [action, changeObjects, data, intl.locale, isReadOnly, path, prefix, rules]);
+      const lomake = getLomake(
+        action,
+        data,
+        isReadOnly,
+        intl.locale,
+        path,
+        prefix
+      );
+      let _rules = _.cloneDeep(rules);
+      if (rulesFn) {
+        _rules = rulesFn(lomake);
+      }
+      if (_rules.length) {
+        console.info("merkataan", _rules);
+        return markRequiredFields(lomake, changeObjects, _rules);
+      }
+      return lomake;
+    }, [
+      action,
+      changeObjects,
+      data,
+      intl.locale,
+      isReadOnly,
+      path,
+      prefix,
+      rules,
+      rulesFn
+    ]);
 
     if (categories.length && onChangesUpdate) {
       return (
@@ -70,7 +94,9 @@ Lomake.propTypes = {
   // Is used for matching the anchor of reasoning field to the anchor of
   // original change object.
   prefix: PropTypes.string,
-  rules: PropTypes.array
+  rules: PropTypes.array,
+  // This is useful for dynamic forms.
+  rulesFn: PropTypes.func
 };
 
 export default Lomake;
