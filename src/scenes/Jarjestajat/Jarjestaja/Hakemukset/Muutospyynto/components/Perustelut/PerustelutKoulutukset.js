@@ -1,5 +1,4 @@
 import React from "react";
-import { useIntl } from "react-intl";
 import PerustelutValmentavatKoulutukset from "./PerustelutValmentavatKoulutukset";
 import PerustelutATVKoulutukset from "./PerustelutATVKoulutukset";
 import PerustelutTyovoimakoulutukset from "./PerustelutTyovoimakoulutukset";
@@ -8,7 +7,6 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutKoulutukset = React.memo(props => {
-  const intl = useIntl();
   return (
     <React.Fragment>
       {props.kohde && props.maaraystyyppi && props.muutoshakemus ? (

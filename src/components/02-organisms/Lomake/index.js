@@ -46,12 +46,11 @@ const Lomake = React.memo(
         path,
         prefix
       );
-      let _rules = _.cloneDeep(rules);
+      let _rules = cloneDeep(rules);
       if (rulesFn) {
         _rules = rulesFn(lomake);
       }
       if (_rules.length) {
-        console.info("merkataan", _rules);
         return markRequiredFields(lomake, changeObjects, _rules);
       }
       return lomake;

@@ -7,7 +7,6 @@ import * as R from "ramda";
 import _ from "lodash";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/tutkinnot/rules";
-import { getLomake } from "../../../../../../../services/lomakkeet";
 
 const defaultProps = {
   changeObjects: {},
