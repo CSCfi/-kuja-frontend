@@ -1,5 +1,5 @@
 import React from "react";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PerustelutValmentavatKoulutukset from "./PerustelutValmentavatKoulutukset";
 import PerustelutATVKoulutukset from "./PerustelutATVKoulutukset";
 import PerustelutTyovoimakoulutukset from "./PerustelutTyovoimakoulutukset";
@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutKoulutukset = React.memo(props => {
+  const intl = useIntl();
   return (
     <React.Fragment>
       {props.kohde && props.maaraystyyppi && props.muutoshakemus ? (
@@ -176,11 +177,10 @@ PerustelutKoulutukset.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func
 };
 
-export default injectIntl(PerustelutKoulutukset);
+export default PerustelutKoulutukset;
