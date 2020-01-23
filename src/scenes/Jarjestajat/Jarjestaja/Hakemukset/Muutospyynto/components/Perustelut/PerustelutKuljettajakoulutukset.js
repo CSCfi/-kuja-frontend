@@ -109,7 +109,6 @@ PerustelutKuljettajakoulutukset.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
