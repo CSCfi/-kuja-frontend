@@ -3,7 +3,7 @@ import {
   getPathByAnchor
 } from "../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
-import { createRules } from "../../../utils";
+import { createRules, createTerms } from "../../../utils";
 import { requiredFields } from "./requiredFields";
 
 const basicRules = createRules(requiredFields);
@@ -29,16 +29,18 @@ const conditionalRules = [
       return isRequired
         ? () =>
             ifOneTerm(
-              [
-                {
-                  anchor: "2.voimassaolo.voimassaolo-field-yes.A",
-                  properties: { isChecked: true }
-                },
-                {
-                  anchor: "2.voimassaolo.voimassaolo-field-no.A",
-                  properties: { isChecked: true }
-                }
-              ],
+              R.flatten(
+                createTerms(
+                  R.path([0, "categories", 1, "categories"], lomake),
+                  { name: "RadioButtonWithLabel" },
+                  {
+                    properties: {
+                      isChecked: true
+                    }
+                  },
+                  ["2", "voimassaolo"]
+                )
+              ),
               lomake,
               changeObjects
             )
