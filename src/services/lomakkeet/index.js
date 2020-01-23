@@ -3,10 +3,12 @@ import {
   getKuljettajienJatkokoulutuslomake,
   getKuljettajienPeruskoulutuslomake
 } from "./perustelut/kuljettajakoulutukset";
+import getTutkinnotLomake from "./perustelut/tutkinnot/";
 import { concat, path } from "ramda";
 import getATVKoulutuslomake from "./perustelut/atv-koulutukset";
 import getValmentavatKoulutuksetLomake from "./perustelut/valmentavatKoulutukset";
 import { setLocale } from "./i18n-config";
+import { getCheckboxes } from "./perustelut/muutostarpeet";
 
 const lomakkeet = {
   koulutukset: {
@@ -52,6 +54,14 @@ const lomakkeet = {
       removal: (data, isReadOnly, prefix) =>
         getValmentavatKoulutuksetLomake("removal", data, isReadOnly, prefix)
     }
+  },
+  muutostarpeet: {
+    checkboxes: (data, isReadOnly, locale) =>
+      getCheckboxes(data.checkboxItems, locale, isReadOnly)
+  },
+  tutkinnot: {
+    reasoning: (data, isReadOnly, locale, prefix) =>
+      getTutkinnotLomake("reasoning", data, isReadOnly, locale, prefix)
   }
 };
 
@@ -68,5 +78,6 @@ export function getLomake(
 
   const fn = path(concat(_path, [action]), lomakkeet);
   const lomake = fn ? fn(data, isReadOnly, locale, prefix) : [];
+
   return lomake;
 }
