@@ -5,7 +5,13 @@ import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { yleisettiedot } from "../../../../../../../services/lomakkeet/taloudelliset/rules";
 
 const TaloudellisetYleisettiedot = React.memo(
-  ({ changeObjects, isReadOnly, onChangesUpdate, sectionId }) => {
+  ({
+    changeObjects,
+    isReadOnly,
+    onChangesRemove,
+    onChangesUpdate,
+    sectionId
+  }) => {
     return (
       <ExpandableRowRoot
         title={"Yleiset tiedot"}
@@ -18,6 +24,7 @@ const TaloudellisetYleisettiedot = React.memo(
         showCategoryTitles={true}
         isExpanded={true}
         sectionId={sectionId}
+        onChangesRemove={onChangesRemove}
         onUpdate={onChangesUpdate}>
         <Lomake
           action="yleisettiedot"
@@ -34,6 +41,8 @@ const TaloudellisetYleisettiedot = React.memo(
 
 TaloudellisetYleisettiedot.propTypes = {
   changeObjects: PropTypes.array,
+  onChangesRemove: PropTypes.func,
+  onChangeUpdate: PropTypes.func,
   isReadOnly: PropTypes.bool
 };
 
