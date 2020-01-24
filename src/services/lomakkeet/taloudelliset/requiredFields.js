@@ -3,5 +3,12 @@ export const requiredFields = {
     { anchor: "edellytykset-tekstikentta.A" },
     { anchor: "Vaikutukset-tekstikentta.A" },
     { anchor: "sopeuttaminen-tekstikentta.A" }
+  ],
+  tilinpaatostiedot: [
+    { anchor: "tilinpaatostiedot.omavaraisuusaste" },
+    { anchor: "tilinpaatostiedot.maksuvalmius" },
+    { anchor: "tilinpaatostiedot.velkaantuneisuus" },
+    { anchor: "tilinpaatostiedot.kannattavuus" },
+    { anchor: "tilinpaatostiedot.jaama" }
   ]
 };

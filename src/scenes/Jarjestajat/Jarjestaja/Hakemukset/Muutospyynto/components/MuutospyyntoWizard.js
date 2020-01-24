@@ -191,7 +191,7 @@ const MuutospyyntoWizard = ({
     taloudelliset: {
       yleisettiedot: [],
       investoinnit: {},
-      tilinpaatostiedot: {},
+      tilinpaatostiedot: [],
       liitteet: {}
     },
     yhteenveto: {

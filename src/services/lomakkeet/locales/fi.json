@@ -3,5 +3,10 @@
     "reasoning.title.default": "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
     "taloudelliset.yleisettiedot.kentta1.tooltip": "Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
     "taloudelliset.yleisettiedot.kentta2.tooltip": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
-    "taloudelliset.yleisettiedot.kentta3.tooltip": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti."
+    "taloudelliset.yleisettiedot.kentta3.tooltip": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
+    "taloudelliset.omavaraisuusaste": "Omavaraisuusaste",
+    "taloudelliset.maksuvalmius": "Maksuvalmius",
+    "taloudelliset.velkaantuneisuus": "Velkaantuneisuus",
+    "taloudelliset.kannattavuus": "Kannattavuus",
+    "taloudelliset.kumulatiivinen": "Kumulatiivinen yli- tai alijäämä"
 }
