@@ -82,7 +82,7 @@ export function getLomake(
 ) {
   // This defines the language of the requested form.
   setLocale(locale);
-  console.info(_path, action);
+
   const fn = path(concat(_path, [action]), lomakkeet);
   const lomake = fn ? fn(data, isReadOnly, locale, prefix) : [];
 
