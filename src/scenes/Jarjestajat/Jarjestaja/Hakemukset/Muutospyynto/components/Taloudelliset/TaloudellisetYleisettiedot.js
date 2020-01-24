@@ -1,118 +1,39 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
-import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import { yleisettiedot } from "../../../../../../../services/lomakkeet/taloudelliset/rules";
 
-const TaloudellisetYleisettiedot = React.memo(props => {
-  const intl = useIntl();
-  const { sectionId, onStateUpdate } = props;
-  const getCategories = useMemo(() => {
-    return () => {
-      let structure = null;
-      structure = [
-        {
-          anchor: "edellytykset-tekstikentta",
-          title: "Taloudelliset edellytykset",
-          styleClasses: ["mb-6"],
-          components: [
-            {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                isReadOnly: props.isReadOnly,
-                placeholder: "",
-                tooltip: {
-                  text: intl.formatMessage(
-                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta1
-                  )
-                }
-              }
-            }
-          ]
-        },
-        {
-          anchor: "Vaikutukset-tekstikentta",
-          title: "Vaikutukset taloudellisten resurssien kohdentamiseen",
-          styleClasses: ["mb-6"],
-          components: [
-            {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                isReadOnly: props.isReadOnly,
-                placeholder: "",
-                tooltip: {
-                  text: intl.formatMessage(
-                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta2
-                  )
-                }
-              }
-            }
-          ]
-        },
-        {
-          anchor: "sopeuttaminen-tekstikentta",
-          title: "Toiminnan ja talouden sopeuttaminen",
-          styleClasses: [""],
-          components: [
-            {
-              anchor: "A",
-              name: "TextBox",
-              properties: {
-                isReadOnly: props.isReadOnly,
-                placeholder: "",
-                tooltip: {
-                  text: intl.formatMessage(
-                    wizardMessages.tooltipTaloudellisetYleisetTiedotKentta3
-                  )
-                }
-              }
-            }
-          ]
-        }
-      ];
-      return structure;
-    };
-  }, [intl, props.isReadOnly]);
-
-  useEffect(() => {
-    onStateUpdate(
-      {
-        categories: getCategories()
-      },
-      sectionId
+const TaloudellisetYleisettiedot = React.memo(
+  ({ changeObjects, isReadOnly, onChangesUpdate, sectionId }) => {
+    return (
+      <ExpandableRowRoot
+        title={"Yleiset tiedot"}
+        anchor={"taloudelliset_yleisettiedot"}
+        key={`taloudelliset-yleisetiedot`}
+        categories={[]}
+        changes={changeObjects}
+        disableReverting={isReadOnly}
+        hideAmountOfChanges={true}
+        showCategoryTitles={true}
+        isExpanded={true}
+        sectionId={sectionId}
+        onUpdate={onChangesUpdate}>
+        <Lomake
+          action="yleisettiedot"
+          anchor={sectionId}
+          changeObjects={changeObjects}
+          onChangesUpdate={onChangesUpdate}
+          path={["taloudelliset"]}
+          rules={yleisettiedot}
+          showCategoryTitles={true}></Lomake>
+      </ExpandableRowRoot>
     );
-  }, [getCategories, onStateUpdate, sectionId]);
-  return (
-    <React.Fragment>
-      {!!R.path(["categories"], props.stateObject) && (
-        <ExpandableRowRoot
-          title={"Yleiset tiedot"}
-          anchor={"taloudelliset_yleisettiedot"}
-          key={`taloudelliset-yleisetiedot`}
-          categories={props.stateObject.categories}
-          changes={R.path(["taloudelliset"], props.changeObjects)}
-          disableReverting={props.isReadOnly}
-          hideAmountOfChanges={true}
-          showCategoryTitles={true}
-          isExpanded={true}
-          sectionId={sectionId}
-          onUpdate={props.onChangesUpdate}
-          {...props}
-        />
-      )}
-    </React.Fragment>
-  );
-});
+  }
+);
 
 TaloudellisetYleisettiedot.propTypes = {
-  changeObjects: PropTypes.object,
-  handleChanges: PropTypes.func,
-  lupa: PropTypes.object,
-  onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object,
+  changeObjects: PropTypes.array,
   isReadOnly: PropTypes.bool
 };
 

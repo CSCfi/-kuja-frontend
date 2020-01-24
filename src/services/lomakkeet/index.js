@@ -3,7 +3,7 @@ import {
   getKuljettajienJatkokoulutuslomake,
   getKuljettajienPeruskoulutuslomake
 } from "./perustelut/kuljettajakoulutukset";
-import { getTaloudellisetlomake } from "./taloudelliset/taloudelliset";
+import { getTaloudellisetlomake } from "./taloudelliset";
 import { concat, path } from "ramda";
 import getATVKoulutuslomake from "./perustelut/atv-koulutukset";
 import getValmentavatKoulutuksetLomake from "./perustelut/valmentavatKoulutukset";
@@ -55,9 +55,8 @@ const lomakkeet = {
     }
   },
   taloudelliset: {
-    yleisettiedot: {
-      addition: (data, isReadOnly) => getTaloudellisetlomake(data, isReadOnly)
-    }
+    yleisettiedot: (data, isReadOnly) =>
+      getTaloudellisetlomake("yleisettiedot", data, isReadOnly)
   }
 };
 
@@ -71,7 +70,7 @@ export function getLomake(
 ) {
   // This defines the language of the requested form.
   setLocale(locale);
-
+  console.info(_path, action)
   const fn = path(concat(_path, [action]), lomakkeet);
   const lomake = fn ? fn(data, isReadOnly, locale, prefix) : [];
   return lomake;

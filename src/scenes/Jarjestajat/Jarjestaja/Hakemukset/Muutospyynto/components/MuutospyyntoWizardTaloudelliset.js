@@ -6,10 +6,8 @@ import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit
 import TaloudellisetTilinpaatostiedot from "./Taloudelliset/TaloudellisetTilinpaatostiedot";
 import TaloudellisetLiitteet from "./Taloudelliset/TaloudellisetLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
-import Lomake from "../../../../../../components/02-organisms/Lomake";
 import PropTypes from "prop-types";
 import * as R from "ramda";
-import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 
 const MuutospyyntoWizardTaloudelliset = ({
   changeObjects = {},
@@ -47,49 +45,22 @@ const MuutospyyntoWizardTaloudelliset = ({
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
-          <ExpandableRowRoot
-            anchor={"1"}
-            key={`expandable-row-root`}
-            categories={[]}
-            changes={R.path(["taloudelliset", "yleisettiedot"], changeObjects)}
-            disableReverting={true}
-            hideAmountOfChanges={true}
-            isExpanded={true}
-            onUpdate={onChangesUpdate}
-            title="Yleiset tiedot">
-            <Lomake
-              anchor={"taloudelliset_yleisettiedot"}
-              changeObjects={R.path(
-                ["taloudelliset", "yleisettiedot"],
-                changeObjects
-              )}
-              onChangesUpdate={onChangesUpdate}
-              path={["taloudelliset", "yleisettiedot"]}
-              // rules={rules}
-              showCategoryTitles={true}></Lomake>
-          </ExpandableRowRoot>
-          {/* <FormSection
+          <FormSection
             id="taloudelliset_yleisettiedot"
             render={_props => (
               <React.Fragment>
                 <TaloudellisetYleisettiedot
-                  stateObject={R.path(
+                  changeObjects={R.path(
                     ["taloudelliset", "yleisettiedot"],
-                    muutoshakemus
+                    changeObjects
                   )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "yleisettiedot"],
-                      changeObjects
-                    )
-                  }}
                   {..._props}
                 />
               </React.Fragment>
             )}
             runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
-          /> */}
+          />
           <FormSection
             id="taloudelliset_investoinnit"
             render={_props => (
