@@ -41,14 +41,15 @@ export const getAdditionForm = (checkboxItems, locale, isReadOnly = false) => {
 export const getRemovalForm = () => {
   return [
     {
-      anchor: "vapaa-tekstikentta",
+      anchor: "removal",
       components: [
         {
           anchor: "A",
           name: "TextBox",
           properties: {
-            placeholder:
-              "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää"
+            title:
+              "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää",
+            value: ""
           }
         }
       ]
@@ -59,14 +60,14 @@ export const getRemovalForm = () => {
 export const getOsaamisalaForm = () => {
   return [
     {
-      anchor: "vapaa-tekstikentta",
+      anchor: "osaamisala",
       components: [
         {
           anchor: "A",
           name: "TextBox",
           properties: {
-            placeholder:
-              "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+            value: ""
           }
         }
       ]
@@ -140,13 +141,9 @@ function getCategoriesForPerustelut(
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: R.join(
-                ".",
-                [
-                  getAnchorPart(changeObj.anchor, 2),
-                  osaamisala ? osaamisala.koodiArvo : null
-                ].filter(Boolean)
-              ),
+              anchor: osaamisala
+                ? osaamisala.koodiArvo
+                : getAnchorPart(changeObj.anchor, 2),
               meta: {
                 kohde,
                 maaraystyyppi,
