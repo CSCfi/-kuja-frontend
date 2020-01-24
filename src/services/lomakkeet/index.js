@@ -68,7 +68,9 @@ const lomakkeet = {
     yleisettiedot: (data, isReadOnly) =>
       getTaloudellisetlomake("yleisettiedot", data, isReadOnly),
     investoinnit: (data, isReadOnly) =>
-      getTaloudellisetlomake("investoinnit", data, isReadOnly)
+      getTaloudellisetlomake("investoinnit", data, isReadOnly),
+    tilinpaatostiedot: (data, isReadOnly) =>
+      getTaloudellisetlomake("tilinpaatostiedot", data, isReadOnly)
   }
 };
 

@@ -8,5 +8,12 @@ export const requiredFields = {
     { anchor: "investoinnit-tekstikentta.A" },
     { anchor: "kustannukset-Input.A" },
     { anchor: "rahoitus-tekstikentta.A" }
+  ],
+  tilinpaatostiedot: [
+    { anchor: "tilinpaatostiedot.omavaraisuusaste" },
+    { anchor: "tilinpaatostiedot.maksuvalmius" },
+    { anchor: "tilinpaatostiedot.velkaantuneisuus" },
+    { anchor: "tilinpaatostiedot.kannattavuus" },
+    { anchor: "tilinpaatostiedot.jaama" }
   ]
 };

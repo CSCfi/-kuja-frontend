@@ -1,5 +1,10 @@
 {
     "osaamisalarajoitus": "SV: Rajoitus",
     "reasoning.title.default": "SV: Perustele lyhyesti miksi tälle muutokselle on tarvetta",
-    "taloudelliset.yleisettiedot.kentta1.tooltip": "SV: Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä."
+    "taloudelliset.yleisettiedot.kentta1.tooltip": "SV: Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+    "taloudelliset.omavaraisuusaste": "SV: Omavaraisuusaste",
+    "taloudelliset.maksuvalmius": "SV: Maksuvalmius",
+    "taloudelliset.velkaantuneisuus": "SV: Velkaantuneisuus",
+    "taloudelliset.kannattavuus": "SV: Kannattavuus",
+    "taloudelliset.kumulatiivinen": "SV: Kumulatiivinen yli- tai alijäämä"
 }
