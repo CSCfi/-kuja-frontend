@@ -6,6 +6,7 @@ import { withStyles } from "@material-ui/core";
 import Tooltip from "../../02-organisms/Tooltip";
 import { isEmpty } from "ramda";
 import HelpIcon from "@material-ui/icons/Help";
+import CheckIcon from "@material-ui/icons/Check";
 
 import styles from "./input.module.css";
 
@@ -41,11 +42,9 @@ const Input = props => {
   return (
     <div className="flex items-center">
       {props.isRequired && (
-        <span
-          className={`text-${
-            props.isValid ? "green" : "red"
-          }-500 text-2xl pr-4`}>
-          *
+        <span className={`text-${props.isValid ? "green" : "red"}-500 pr-2`}>
+          {props.isValid && <CheckIcon fontSize="small"></CheckIcon>}
+          {!props.isValid && <span>*</span>}
         </span>
       )}
       <CssTextField
