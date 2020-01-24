@@ -66,16 +66,10 @@ const MuutospyyntoWizardTaloudelliset = ({
             render={_props => (
               <React.Fragment>
                 <TaloudellisetInvestoinnit
-                  stateObject={R.path(
+                  changeObjects={R.path(
                     ["taloudelliset", "investoinnit"],
-                    muutoshakemus
+                    changeObjects
                   )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "investoinnit"],
-                      changeObjects
-                    )
-                  }}
                   {..._props}
                 />
               </React.Fragment>

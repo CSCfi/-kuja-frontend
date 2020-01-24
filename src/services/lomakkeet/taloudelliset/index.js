@@ -63,6 +63,80 @@ function getYleisetTiedotForm(isReadOnly) {
   ];
 }
 
+export function getInvestoinnitForm(isReadOnly) {
+  return [
+    {
+      anchor: "investoinnit-tekstikentta",
+      title: "Tarvittavat investoinnit",
+      styleClasses: ["mb-6 font-normal"],
+      components: [
+        {
+          anchor: "A",
+          name: "TextBox",
+          properties: {
+            isReadOnly: isReadOnly,
+            placeholder: "",
+            tooltip: {
+              text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta1")
+            }
+          }
+        }
+      ]
+    },
+    {
+      anchor: "kustannukset-header",
+      styleClasses: [""],
+      components: [
+        {
+          anchor: "label",
+          name: "StatusTextRow",
+          styleClasses: ["font-semibold text-base"],
+          properties: {
+            title: "Investoinnin kustannukset"
+          }
+        }
+      ]
+    },
+    {
+      anchor: "kustannukset-Input",
+      styleClasses: ["flex sm:row mb-6"],
+      components: [
+        {
+          anchor: "A",
+          name: "Input",
+          styleClasses: [""],
+          properties: {
+            isReadOnly: isReadOnly,
+            withoutMargin: true,
+            type: "number",
+            tooltip: {
+              text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")
+            }
+          }
+        }
+      ]
+    },
+    {
+      anchor: "rahoitus-tekstikentta",
+      title: "Investointien rahoitus",
+      styleClasses: [""],
+      components: [
+        {
+          anchor: "A",
+          name: "TextBox",
+          properties: {
+            isReadOnly: isReadOnly,
+            placeholder: "",
+            tooltip: {
+              text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta3")
+            }
+          }
+        }
+      ]
+    }
+  ];
+}
+
 function getTilinpaatostiedotForm(isReadOnly) {
   return [
     {
@@ -133,11 +207,12 @@ function getTilinpaatostiedotForm(isReadOnly) {
     }
   ];
 }
-
 export function getTaloudellisetlomake(action, data, isReadOnly) {
   switch (action) {
     case "yleisettiedot":
       return getYleisetTiedotForm(isReadOnly);
+    case "investoinnit":
+      return getInvestoinnitForm(isReadOnly);
     case "tilinpaatostiedot":
       return getTilinpaatostiedotForm(isReadOnly);
     default:
