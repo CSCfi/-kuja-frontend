@@ -16,6 +16,7 @@ import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "../../ActionList";
 import { flattenObj } from "../../../../utils/common";
+import CheckIcon from "@material-ui/icons/Check";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
 whyDidYouRender(React);
@@ -246,7 +247,10 @@ const CategorizedList = React.memo(
                         className={`text-${
                           category.isValid ? "green" : "red"
                         }-500 text-2xl pr-4`}>
-                        *
+                        {category.isValid && (
+                          <CheckIcon fontSize="small"></CheckIcon>
+                        )}
+                        {!category.isValid && <span>*</span>}
                       </span>
                     )}
                     {category.code && (
