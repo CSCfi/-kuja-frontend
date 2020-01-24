@@ -62,10 +62,16 @@ export function getPathByAnchor(
     const updatedPath = R.append("components", _path);
     const lomakePart = R.path(updatedPath, lomake);
     if (lomakePart) {
-      pathPart = [
-        "components",
-        R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
-      ];
+      const componentPathPart = R.findIndex(
+        R.propEq("anchor", anchorPart),
+        lomakePart
+      );
+      if (componentPathPart !== -1) {
+        pathPart = [
+          "components",
+          R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
+        ];
+      }
     } else {
       console.error(`Can't find anchor ${anchorPart} of ${lomakePart}.`);
     }
