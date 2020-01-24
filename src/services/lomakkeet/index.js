@@ -55,8 +55,9 @@ const lomakkeet = {
     }
   },
   taloudelliset: {
-    addition: (data, isReadOnly, locale) =>
-      getTaloudellisetlomake("addition", data, isReadOnly, locale)
+    yleisettiedot: {
+      addition: (data, isReadOnly) => getTaloudellisetlomake(data, isReadOnly)
+    }
   }
 };
 

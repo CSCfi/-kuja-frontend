@@ -1,5 +1,5 @@
-import { getAdditionForm } from "./TaloudellisetYleisettiedot";
+import { getForm } from "./TaloudellisetYleisettiedot";
 
-export function getTaloudellisetlomake(data, isReadOnly, locale) {
-  return getAdditionForm(isReadOnly, locale, data);
+export function getTaloudellisetlomake(data, isReadOnly) {
+  return getForm(isReadOnly);
 }

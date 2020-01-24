@@ -1,14 +1,14 @@
 // import { useIntl } from "react-intl";
 import wizardMessages from "../../../i18n/definitions/wizard";
 
-export function getAdditionForm(isReadOnly) {
+export function getForm(isReadOnly) {
   // const intl = useIntl();
   return [
     {
       anchor: "edellytykset-tekstikentta",
       title: "Taloudelliset edellytykset",
       styleClasses: ["mb-6"],
-      components: 
+      components: [
         {
           anchor: "A",
           name: "TextBox",

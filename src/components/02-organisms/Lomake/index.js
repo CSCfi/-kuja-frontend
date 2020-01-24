@@ -37,11 +37,27 @@ const Lomake = React.memo(
     const intl = useIntl();
 
     const categories = useMemo(() => {
-      const lomake = getLomake(action, data, isReadOnly, intl.locale, path, prefix);
+      const lomake = getLomake(
+        action,
+        data,
+        isReadOnly,
+        intl.locale,
+        path,
+        prefix
+      );
       return rules.length
         ? markRequiredFields(lomake, changeObjects, rules)
         : lomake;
-    }, [action, changeObjects, data, intl.locale, isReadOnly, path, prefix, rules]);
+    }, [
+      action,
+      changeObjects,
+      data,
+      intl.locale,
+      isReadOnly,
+      path,
+      prefix,
+      rules
+    ]);
 
     if (categories.length && onChangesUpdate) {
       return (
@@ -56,7 +72,7 @@ const Lomake = React.memo(
         </div>
       );
     } else {
-      return <div>Nothing so show.</div>;
+      return <div>Nothing to show.</div>;
     }
   }
 );

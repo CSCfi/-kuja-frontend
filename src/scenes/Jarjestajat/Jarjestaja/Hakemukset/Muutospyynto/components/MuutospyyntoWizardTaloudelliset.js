@@ -9,6 +9,7 @@ import wizard from "../../../../../../i18n/definitions/wizard";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 
 const MuutospyyntoWizardTaloudelliset = ({
   changeObjects = {},
@@ -46,18 +47,27 @@ const MuutospyyntoWizardTaloudelliset = ({
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
-          <Lomake
-            anchor={"taloudelliset_yleisettiedot"}
-            changeObjects={R.path(
-              ["taloudelliset", "yleisettiedot"],
-              changeObjects
-            )}
-            key={`taloudelliset-yleisetiedot`}
-            // isReadOnly={props.isReadOnly}
-            // onChangesUpdate={onChangesUpdate}
-            path={["taloudelliset", "yleisettiedot"]}
-            // rules={rules}
-            showCategoryTitles={true}></Lomake>
+          <ExpandableRowRoot
+            anchor={"1"}
+            key={`expandable-row-root`}
+            categories={[]}
+            changes={R.path(["taloudelliset", "yleisettiedot"], changeObjects)}
+            disableReverting={true}
+            hideAmountOfChanges={true}
+            isExpanded={true}
+            onUpdate={onChangesUpdate}
+            title="Yleiset tiedot">
+            <Lomake
+              anchor={"taloudelliset_yleisettiedot"}
+              changeObjects={R.path(
+                ["taloudelliset", "yleisettiedot"],
+                changeObjects
+              )}
+              onChangesUpdate={onChangesUpdate}
+              path={["taloudelliset", "yleisettiedot"]}
+              // rules={rules}
+              showCategoryTitles={true}></Lomake>
+          </ExpandableRowRoot>
           {/* <FormSection
             id="taloudelliset_yleisettiedot"
             render={_props => (
@@ -156,7 +166,8 @@ MuutospyyntoWizardTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(MuutospyyntoWizardTaloudelliset);
