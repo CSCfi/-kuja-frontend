@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import CheckIcon from "@material-ui/icons/Check";
 import * as R from "ramda";
 
 const defaultProps = {
@@ -43,13 +44,11 @@ const StatusTextRow = React.memo(
               </div>
             )}
             {isRequired && (
-              <span
-                className={`text-${
-                  isValid ? "green" : "red"
-                }-500 text-2xl pr-4`}>
-                *
+              <span className={`text-${isValid ? "green" : "red"}-500 pr-2`}>
+                {isValid && <CheckIcon fontSize="small"></CheckIcon>}
+                {!isValid && <span>*</span>}
               </span>
-            )}{" "}
+            )}
             {children}
           </div>
         </div>
