@@ -6,9 +6,9 @@ import * as R from "ramda";
 import { createRules, createTerms } from "../../../utils";
 import { requiredFields } from "./requiredFields";
 
-const basicRules = createRules(requiredFields);
+export const removalRules = createRules(requiredFields.removal);
 
-const conditionalRules = [
+export const additionRules = R.concat(createRules(requiredFields.addition), [
   {
     isRequired: () => true,
     /**
@@ -56,6 +56,4 @@ const conditionalRules = [
       );
     }
   }
-];
-
-export const rules = R.concat(basicRules, conditionalRules);
+]);

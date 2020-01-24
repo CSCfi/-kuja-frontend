@@ -23,7 +23,7 @@ const lomakkeet = {
       jatkokoulutus: {
         addition: (data, isReadOnly) =>
           getKuljettajienJatkokoulutuslomake("addition", data, isReadOnly),
-        removal: (data, isReadOnly, prefix) =>
+        removal: (data, isReadOnly, locale, prefix) =>
           getKuljettajienJatkokoulutuslomake(
             "removal",
             data,
@@ -34,7 +34,7 @@ const lomakkeet = {
       peruskoulutus: {
         addition: (data, isReadOnly) =>
           getKuljettajienPeruskoulutuslomake("addition", data, isReadOnly),
-        removal: (data, isReadOnly, prefix) =>
+        removal: (data, isReadOnly, locale, prefix) =>
           getKuljettajienPeruskoulutuslomake(
             "removal",
             data,
@@ -50,9 +50,9 @@ const lomakkeet = {
         getTyovoimakoulutuslomake("removal", data, isReadOnly, locale, prefix)
     },
     valmentavat: {
-      addition: (data, isReadOnly, prefix) =>
+      addition: (data, isReadOnly, locale, prefix) =>
         getValmentavatKoulutuksetLomake("addition", data, isReadOnly, prefix),
-      removal: (data, isReadOnly, prefix) =>
+      removal: (data, isReadOnly, locale, prefix) =>
         getValmentavatKoulutuksetLomake("removal", data, isReadOnly, prefix)
     }
   },

@@ -8,7 +8,8 @@ export default function getDefaultRemovalForm(prefix) {
           name: "TextBox",
           properties: {
             placeholder: "Syitä voi olla monia. Sana on vapaa...",
-            title: "Perustelut poistolle"
+            title: "Perustelut poistolle",
+            value: ""
           }
         }
       ]
