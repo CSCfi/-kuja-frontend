@@ -1,3 +1,6 @@
+import "../i18n-config";
+import { __ } from "i18n-for-browser";
+
 export function getYleisetTiedotForm(isReadOnly) {
   return [
     {
@@ -12,9 +15,7 @@ export function getYleisetTiedotForm(isReadOnly) {
             placeholder: "",
             title: "Taloudelliset edellytykset",
             tooltip: {
-              // text: intl.formatMessage(
-              //   wizardMessages.tooltipTaloudellisetYleisetTiedotKentta1
-              // )
+              text: __("taloudelliset.yleisettiedot.kentta1.tooltip")
             },
             value: ""
           }
@@ -33,9 +34,7 @@ export function getYleisetTiedotForm(isReadOnly) {
             placeholder: "",
             title: "Vaikutukset taloudellisten resurssien kohdentamiseen",
             tooltip: {
-              // text: intl.formatMessage(
-              //   wizardMessages.tooltipTaloudellisetYleisetTiedotKentta2
-              // )
+              text: __("taloudelliset.yleisettiedot.kentta2.tooltip")
             },
             value: ""
           }
@@ -54,9 +53,7 @@ export function getYleisetTiedotForm(isReadOnly) {
             placeholder: "",
             title: "Toiminnan ja talouden sopeuttaminen",
             tooltip: {
-              // text: intl.formatMessage(
-              //   wizardMessages.tooltipTaloudellisetYleisetTiedotKentta3
-              // )
+              text: __("taloudelliset.yleisettiedot.kentta3.tooltip")
             },
             value: ""
           }
