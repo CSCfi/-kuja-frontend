@@ -7,8 +7,7 @@ import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
 import {
-  rules as jatkokoulutusRules,
-  additionRules,
+  additionRules as jatkokoulutusRules,
   removalRules
 } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
 import { rules as peruskoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/peruskoulutus/rules";
@@ -51,7 +50,7 @@ const PerustelutKuljettajakoulutukset = props => {
                   key={code}
                   onChangesUpdate={onChangesUpdate}
                   path={["koulutukset", "kuljettajakoulutukset", mapping[code]]}
-                  rules={additionRules}
+                  rules={rules}
                   showCategoryTitles={true}></Lomake>
               );
             } else {
