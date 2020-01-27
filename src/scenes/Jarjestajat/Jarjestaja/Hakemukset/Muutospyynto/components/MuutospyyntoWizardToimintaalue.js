@@ -33,7 +33,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.prop("title"),
       R.map(changeObj => {
         return R.equals(
-          getAnchorPart(changeObj.anchor, 1),
+          getAnchorPart(changeObj.anchor, 2),
           "lupaan-lisattavat-kunnat"
         )
           ? changeObj.properties
@@ -47,7 +47,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.prop("title"),
       R.map(changeObj => {
         return R.equals(
-          getAnchorPart(changeObj.anchor, 1),
+          getAnchorPart(changeObj.anchor, 2),
           "lupaan-lisattavat-maakunnat"
         )
           ? changeObj.properties
@@ -203,56 +203,13 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.sectionId
   ]);
 
-  useEffect(() => {
-    if (prevChangeObjects) {
-      // We go here when the Koko Suomi... checkbox is unchecked and if unchecking it
-      // is the most recent action related to the Toiminta-alue section on the first page.
-      const valtakunnallinenChangeObjectNow = R.find(changeObj => {
-        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, props.changeObjects.muutokset || []);
-      const valtakunnallinenChangeObjectBefore = R.find(changeObj => {
-        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, prevChangeObjects || []);
-
-      const isUncheckingTheMostRecentChange =
-        // The case when Koko Suomi... is selected by default
-        (!!valtakunnallinenChangeObjectNow &&
-          (!!!valtakunnallinenChangeObjectBefore ||
-            (!!valtakunnallinenChangeObjectBefore &&
-              valtakunnallinenChangeObjectBefore.properties.isChecked ===
-                true))) ||
-        // The case when Koko Suomi... is not selected by default
-        (!!!valtakunnallinenChangeObjectNow &&
-          !!valtakunnallinenChangeObjectBefore &&
-          valtakunnallinenChangeObjectBefore.properties.isChecked === true);
-
-      if (isUncheckingTheMostRecentChange) {
-        // Then it's time to get rid of the change objects of form page two (reasoning).
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_additions`,
-          changes: []
-        });
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_removals`,
-          changes: []
-        });
-      }
-    }
-  }, [
-    isEiMaariteltyaToimintaaluettaChecked,
-    isValtakunnallinenChecked,
-    onChangesUpdate,
-    prevChangeObjects,
-    props.changeObjects,
-    props.sectionId
-  ]);
-
   /**
    * Changes are handled here. Changes objects will be formed and callback
    * function will be called with them.
    */
   const handleChanges = useCallback(
     changesByAnchor => {
+      console.info(changesByAnchor);
       const updatedChanges = R.map(changeObj => {
         let changeObjectsForKunnatInLupa = [];
         const metadata =
@@ -299,7 +256,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               : null;
           }, kunnat).filter(Boolean);
         }
-
+        console.info(changeObj);
         if (
           // Let's remove all the change objects which are not checked and which are not in LUPA
           R.includes("lupaan-lisattavat", changeObj.anchor) &&
@@ -309,14 +266,15 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         } else if (R.includes("valintakentta", changeObj.anchor)) {
           // Let's return a new change object based on the one user selected using select element
           let updatedAnchor = removeAnchorPart(changeObj.anchor, 2);
+          console.info(updatedAnchor);
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
             1,
-            "lupaan-lisattavat-" + getAnchorPart(updatedAnchor, 2)
+            "maakunnat-ja-kunnat.lupaan-lisattavat-" + getAnchorPart(updatedAnchor, 2)
           );
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
-            2,
+            3,
             changeObj.properties.value.value
           );
           console.info(updatedAnchor);
