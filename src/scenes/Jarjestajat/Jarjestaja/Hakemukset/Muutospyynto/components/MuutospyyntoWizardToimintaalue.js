@@ -14,20 +14,6 @@ import * as R from "ramda";
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const { onChangesUpdate, onStateUpdate } = props;
 
-  /**
-   * Saves a value for later use.
-   * @param {*} value - Value to save for later use.
-   */
-  function usePrevious(value) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  }
-
-  const prevChangeObjects = usePrevious(props.changeObjects.muutokset);
-
   const lisattavatKunnat = useMemo(() => {
     return R.sortBy(
       R.prop("title"),
@@ -209,7 +195,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
    */
   const handleChanges = useCallback(
     changesByAnchor => {
-      console.info(changesByAnchor);
       const updatedChanges = R.map(changeObj => {
         let changeObjectsForKunnatInLupa = [];
         const metadata =
@@ -233,7 +218,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             const kuntaChangeObj = R.find(
               R.propEq(
                 "anchor",
-                `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
+                `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
               ),
               props.changeObjects.muutokset || []
             );
@@ -242,7 +227,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
             return !!kuntaInLupa && !isKuntaAlreadyUnchecked
               ? {
-                  anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
+                  anchor: `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
                   properties: {
                     ...kuntaInLupa.properties,
                     isChecked: false,
@@ -256,7 +241,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
               : null;
           }, kunnat).filter(Boolean);
         }
-        console.info(changeObj);
+
         if (
           // Let's remove all the change objects which are not checked and which are not in LUPA
           R.includes("lupaan-lisattavat", changeObj.anchor) &&
@@ -266,7 +251,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         } else if (R.includes("valintakentta", changeObj.anchor)) {
           // Let's return a new change object based on the one user selected using select element
           let updatedAnchor = removeAnchorPart(changeObj.anchor, 2);
-          console.info(updatedAnchor);
+
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
             1,
@@ -277,7 +262,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             3,
             changeObj.properties.value.value
           );
-          console.info(updatedAnchor);
+
           return [
             {
               anchor: updatedAnchor,
