@@ -1,5 +1,4 @@
 import { HAKEMUS_OTSIKOT } from "../../../../locales/uusiHakemusFormConstants";
-import { getLomake } from "../..";
 
 function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
   return [

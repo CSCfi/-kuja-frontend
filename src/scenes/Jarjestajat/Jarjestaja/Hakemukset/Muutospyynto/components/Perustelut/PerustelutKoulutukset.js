@@ -1,5 +1,4 @@
 import React from "react";
-import { injectIntl } from "react-intl";
 import PerustelutValmentavatKoulutukset from "./PerustelutValmentavatKoulutukset";
 import PerustelutATVKoulutukset from "./PerustelutATVKoulutukset";
 import PerustelutTyovoimakoulutukset from "./PerustelutTyovoimakoulutukset";
@@ -176,11 +175,10 @@ PerustelutKoulutukset.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onStateUpdate: PropTypes.func
 };
 
-export default injectIntl(PerustelutKoulutukset);
+export default PerustelutKoulutukset;

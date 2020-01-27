@@ -40,3 +40,81 @@ export function createRules(requiredFields = []) {
     };
   }, requiredFields);
 }
+/**
+ *
+ * @param {array} categories - Categories structure.
+ * @param {object} reqProps - Is used for filtering found components.
+ * @param {object} decorateWith - Object that will be attached return value.
+ * @param {array} _fullAnchor - "Component's full anchor. For recursion only."
+ */
+export function createTerms(
+  categories,
+  reqProps = {},
+  decorateWith = {},
+  _fullAnchor = []
+) {
+  return R.map(category => {
+    const fullAnchor = R.append(category.anchor, _fullAnchor);
+    if (category.categories) {
+      return createTerms(
+        category.categories,
+        reqProps,
+        decorateWith,
+        fullAnchor
+      ).filter(Boolean);
+    }
+    if (category.components) {
+      return R.map(component => {
+        let isToBeReturned = true;
+        R.mapObjIndexed((value, key) => {
+          if (!R.equals(R.prop(key, component), value)) {
+            isToBeReturned = false;
+          }
+        }, reqProps);
+        return isToBeReturned
+          ? Object.assign(
+              {},
+              {
+                anchor: `${R.join(".", fullAnchor)}.${component.anchor}`
+              },
+              decorateWith
+            )
+          : null;
+      }, category.components).filter(Boolean);
+    }
+    return null;
+  }, categories);
+}
+
+export function getCategoriesByProps(
+  categories,
+  reqProps = {},
+  _fullAnchor = [],
+  results = []
+) {
+  return R.map(category => {
+    const fullAnchor = R.append(category.anchor, _fullAnchor);
+    let isToBeReturned = true;
+    R.forEachObjIndexed((value, key) => {
+      if (!R.equals(R.prop(key, category), value)) {
+        isToBeReturned = false;
+      }
+    }, reqProps);
+    if (isToBeReturned) {
+      results.push(
+        Object.assign({}, category, {
+          fullAnchor: R.join(".", fullAnchor)
+        })
+      );
+    }
+    if (category.categories) {
+      return getCategoriesByProps(
+        category.categories,
+        reqProps,
+        fullAnchor,
+        results
+      ).filter(Boolean);
+    }
+    return results;
+  }, categories);
+}

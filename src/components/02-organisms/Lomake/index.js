@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
 import { forEach } from "ramda";
 import { cloneDeep } from "lodash";
+import { useIntl } from "react-intl";
 
 function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
@@ -28,19 +28,43 @@ const Lomake = React.memo(
     changeObjects = defaultProps.changeObjects,
     data,
     isReadOnly,
-    locale = "fi",
     onChangesUpdate,
     path,
     prefix = "",
     rules = [],
+    rulesFn,
     showCategoryTitles = true
   }) => {
+    const intl = useIntl();
+
     const categories = useMemo(() => {
-      const lomake = getLomake(action, data, isReadOnly, locale, path, prefix);
-      return rules.length
-        ? markRequiredFields(lomake, changeObjects, rules)
-        : lomake;
-    }, [action, changeObjects, data, isReadOnly, locale, path, prefix, rules]);
+      const lomake = getLomake(
+        action,
+        data,
+        isReadOnly,
+        intl.locale,
+        path,
+        prefix
+      );
+      let _rules = cloneDeep(rules);
+      if (rulesFn) {
+        _rules = rulesFn(lomake);
+      }
+      if (_rules.length) {
+        return markRequiredFields(lomake, changeObjects, _rules);
+      }
+      return lomake;
+    }, [
+      action,
+      changeObjects,
+      data,
+      intl.locale,
+      isReadOnly,
+      path,
+      prefix,
+      rules,
+      rulesFn
+    ]);
 
     if (categories.length && onChangesUpdate) {
       return (
@@ -55,7 +79,7 @@ const Lomake = React.memo(
         </div>
       );
     } else {
-      return <div>Nothing so show.</div>;
+      return <div>Nothing to show.</div>;
     }
   }
 );
@@ -69,7 +93,9 @@ Lomake.propTypes = {
   // Is used for matching the anchor of reasoning field to the anchor of
   // original change object.
   prefix: PropTypes.string,
-  rules: PropTypes.array
+  rules: PropTypes.array,
+  // This is useful for dynamic forms.
+  rulesFn: PropTypes.func
 };
 
-export default injectIntl(Lomake);
+export default Lomake;

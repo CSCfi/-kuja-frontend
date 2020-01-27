@@ -39,7 +39,9 @@ const MuutospyyntoWizardTaloudelliset = ({
     <React.Fragment>
       <h2 className="my-6">{formatMessage(wizard.pageTitle_3)}</h2>
 
-      {!checkIfIsAdditions(R.props(["tutkinnot", "koulutukset"], changeObjects)) ? (
+      {!checkIfIsAdditions(
+        R.props(["tutkinnot", "koulutukset"], changeObjects)
+      ) ? (
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
@@ -48,16 +50,10 @@ const MuutospyyntoWizardTaloudelliset = ({
             render={_props => (
               <React.Fragment>
                 <TaloudellisetYleisettiedot
-                  stateObject={R.path(
+                  changeObjects={R.path(
                     ["taloudelliset", "yleisettiedot"],
-                    muutoshakemus
+                    changeObjects
                   )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "yleisettiedot"],
-                      changeObjects
-                    )
-                  }}
                   {..._props}
                 />
               </React.Fragment>
@@ -70,16 +66,10 @@ const MuutospyyntoWizardTaloudelliset = ({
             render={_props => (
               <React.Fragment>
                 <TaloudellisetInvestoinnit
-                  stateObject={R.path(
+                  changeObjects={R.path(
                     ["taloudelliset", "investoinnit"],
-                    muutoshakemus
+                    changeObjects
                   )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "investoinnit"],
-                      changeObjects
-                    )
-                  }}
                   {..._props}
                 />
               </React.Fragment>
@@ -92,16 +82,10 @@ const MuutospyyntoWizardTaloudelliset = ({
             render={_props => (
               <React.Fragment>
                 <TaloudellisetTilinpaatostiedot
-                  stateObject={R.path(
+                  changeObjects={R.path(
                     ["taloudelliset", "tilinpaatostiedot"],
-                    muutoshakemus
+                    changeObjects
                   )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "tilinpaatostiedot"],
-                      changeObjects
-                    )
-                  }}
                   {..._props}
                 />
               </React.Fragment>
@@ -141,7 +125,8 @@ MuutospyyntoWizardTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onStateUpdate: PropTypes.func,
+  isReadOnly: PropTypes.bool
 };
 
 export default injectIntl(MuutospyyntoWizardTaloudelliset);

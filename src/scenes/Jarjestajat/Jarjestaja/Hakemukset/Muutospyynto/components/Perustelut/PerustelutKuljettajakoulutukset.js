@@ -34,7 +34,10 @@ const PerustelutKuljettajakoulutukset = props => {
           let lomake = null;
 
           if (isReasoningRequired) {
-            const rules = mapping[code] === "peruskoulutus" ? peruskoulutusRules : jatkokoulutusRules;
+            const rules =
+              mapping[code] === "peruskoulutus"
+                ? peruskoulutusRules
+                : jatkokoulutusRules;
             if (changeObj.properties.isChecked) {
               lomake = (
                 <Lomake
@@ -79,21 +82,19 @@ const PerustelutKuljettajakoulutukset = props => {
   ]);
 
   return (
-    <React.Fragment>
-      <ExpandableRowRoot
-        anchor={sectionId}
-        key={`expandable-row-root`}
-        categories={[]}
-        changes={R.path(["perustelut"], props.changeObjects)}
-        disableReverting={props.isReadOnly}
-        hideAmountOfChanges={false}
-        isExpanded={true}
-        onChangesRemove={onChangesRemove}
-        onUpdate={onChangesUpdate}
-        title={props.intl.formatMessage(wizardMessages.driverTraining)}>
-        {lomakkeet}
-      </ExpandableRowRoot>
-    </React.Fragment>
+    <ExpandableRowRoot
+      anchor={sectionId}
+      key={`expandable-row-root`}
+      categories={[]}
+      changes={R.path(["perustelut"], props.changeObjects)}
+      disableReverting={props.isReadOnly}
+      hideAmountOfChanges={false}
+      isExpanded={true}
+      onChangesRemove={onChangesRemove}
+      onUpdate={onChangesUpdate}
+      title={props.intl.formatMessage(wizardMessages.driverTraining)}>
+      {lomakkeet}
+    </ExpandableRowRoot>
   );
 };
 
@@ -108,7 +109,6 @@ PerustelutKuljettajakoulutukset.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
-  lomakkeet: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,

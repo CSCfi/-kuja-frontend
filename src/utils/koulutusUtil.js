@@ -33,9 +33,12 @@ export function getDataForKoulutusList(
         koodisto: koulutus.koodisto,
         metadata: koulutus.metadata,
         title:
-          R.find(m => {
-            return m.kieli === locale;
-          }, koulutus.metadata).nimi || "[Koulutuksen otsikko tähän]"
+          R.prop(
+            "nimi",
+            R.find(m => {
+              return m.kieli === locale;
+            }, koulutus.metadata)
+          ) || "[Koulutuksen otsikko tähän]"
       };
     }, koulutukset)
   };

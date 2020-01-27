@@ -1,31 +1,22 @@
-import React, { useContext, useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "./Perustelut/PerustelutTutkintokielet";
 import PerustelutTutkinnot from "./Perustelut/PerustelutTutkinnot";
-import { LomakkeetContext } from "../../../../../../context/lomakkeetContext";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
-import * as R from "ramda";
+import { useIntl } from "react-intl";
 import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
-import { updateFormStructure } from "../../../../../../services/lomakkeet/actions";
-import {
-  getAdditionFormStructure,
-  getOsaamisalaFormStructure
-} from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
-import { getRemovalFormStructure } from "../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 import PerustelutOpiskelijavuodet from "./Perustelut/PerustelutOpiskelijavuodet";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 import PerustelutLiitteet from "./Perustelut/PerustelutLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
+import * as R from "ramda";
 
 const MuutospyyntoWizardPerustelut = ({
   changeObjects = {},
   elykeskukset = [],
-  intl,
-  intl: { formatMessage },
   kielet,
   kohteet = [],
   koulutukset,
@@ -40,37 +31,13 @@ const MuutospyyntoWizardPerustelut = ({
   tutkinnot,
   vankilat = []
 }) => {
+  const intl = useIntl();
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
 
-  const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
-    LomakkeetContext
-  );
-
-  useEffect(() => {
-    /**
-     * Let's get the structures of different tutkinto based reasoning forms and update the context.
-     * These will be needed later.
-     */
-    const additionFormStructure = getAdditionFormStructure(
-      R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
-      R.toUpper(intl.locale)
-    );
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "addition"],
-      additionFormStructure
-    )(lomakkeetDispatch);
-    const removalFormStructure = getRemovalFormStructure();
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "removal"],
-      removalFormStructure
-    )(lomakkeetDispatch);
-    const osaamisalaFormStructure = getOsaamisalaFormStructure();
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "osaamisala"],
-      osaamisalaFormStructure
-    )(lomakkeetDispatch);
-  }, [lomakkeetDispatch, muutosperusteluList, intl.locale]);
+  const muutosperusteluListSorted = useMemo(() => {
+    return R.sortBy(R.prop("koodiArvo"))(muutosperusteluList);
+  }, [muutosperusteluList]);
 
   useEffect(() => {
     const kohdeTiedot = R.map(kohde => {
@@ -150,9 +117,9 @@ const MuutospyyntoWizardPerustelut = ({
 
   return (
     <React.Fragment>
-      <h2 className="my-6">{formatMessage(wizard.pageTitle_2)}</h2>
+      <h2 className="my-6">{intl.formatMessage(wizard.pageTitle_2)}</h2>
 
-      {!isAnyChanges && <p>{formatMessage(wizard.noChanges)}</p>}
+      {!isAnyChanges && <p>{intl.formatMessage(wizard.noChanges)}</p>}
 
       {isAnyChanges && muutosperusteluList && muutoshakemus && kohdetiedot ? (
         <React.Fragment>
@@ -181,7 +148,7 @@ const MuutospyyntoWizardPerustelut = ({
                       lupa={lupa}
                       lupaKohteet={lupaKohteet}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
-                      lomakkeet={lomakkeet.perustelut.tutkinnot}
+                      muutosperustelut={muutosperusteluListSorted}
                       stateObject={R.path(["perustelut", "tutkinnot"])(
                         muutoshakemus
                       )}
@@ -207,7 +174,6 @@ const MuutospyyntoWizardPerustelut = ({
                       koulutukset={koulutukset}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       maaraykset={lupa.maaraykset}
-                      lomakkeet={lomakkeet.perustelut.koulutukset}
                       stateObject={R.path([
                         "perustelut",
                         "koulutukset",
@@ -466,4 +432,4 @@ MuutospyyntoWizardPerustelut.propTypes = {
   vankilat: PropTypes.array
 };
 
-export default injectIntl(MuutospyyntoWizardPerustelut);
+export default MuutospyyntoWizardPerustelut;
