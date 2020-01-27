@@ -68,7 +68,15 @@ export const getChangesOfOpetuskielet = (
         type: changeObj.properties.isChecked ? "addition" : "removal",
         meta: {
           changeObjects: R.flatten([[changeObj], perustelut]),
-          key: "opetuskieli"
+          key: "opetuskieli",
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return { value: R.path(["properties", "value"], perustelu) };
+            }
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
+          }, perustelut)
         },
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
       };

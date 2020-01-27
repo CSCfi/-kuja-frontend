@@ -244,6 +244,26 @@ export function createObjectToSave(
         )
       ),
       // OPETUSKIELET
+      getChangesToSave(
+        "opetuskielet",
+        R.path(["kielet", "opetuskielet"], muutoshakemus),
+        {
+          muutokset: R.compose(
+            R.flatten,
+            R.values
+          )(R.values(R.path(["kielet", "opetuskielet"], changeObjects))),
+          perustelut: R.compose(
+            R.flatten,
+            R.values
+          )(
+            R.values(
+              R.path(["perustelut", "kielet", "opetuskielet"], changeObjects)
+            )
+          )
+        },
+        R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
+      ),
+      // OPETUSKIELET
       getChangesOfOpetuskielet(
         R.path(["kielet", "opetuskielet"], muutoshakemus),
         R.flatten([
