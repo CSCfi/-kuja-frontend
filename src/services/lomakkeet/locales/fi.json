@@ -11,5 +11,8 @@
   "taloudelliset.kumulatiivinen": "Kumulatiivinen yli- tai alijäämä",
   "taloudelliset.tooltipTaloudellisetInvestoinnitKentta1": "Esittäkää haetun tehtävän mukaisen toiminnan käynnistämiseksi tarvittavat investoinnit.",
   "taloudelliset.tooltipTaloudellisetInvestoinnitKentta2": "Arvioikaa edellä esittämienne investointien kustannukset yhteensä.",
-  "taloudelliset.tooltipTaloudellisetInvestoinnitKentta3": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä."
+  "taloudelliset.tooltipTaloudellisetInvestoinnitKentta3": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+  "current": "Nykyinen",
+  "toBeAdded": "Lisättävä",
+  "toBeRemoved": "Poistettava"
 }
