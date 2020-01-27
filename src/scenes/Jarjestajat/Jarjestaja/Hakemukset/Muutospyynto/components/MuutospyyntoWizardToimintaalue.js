@@ -255,7 +255,8 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
             1,
-            "maakunnat-ja-kunnat.lupaan-lisattavat-" + getAnchorPart(updatedAnchor, 2)
+            "maakunnat-ja-kunnat.lupaan-lisattavat-" +
+              getAnchorPart(updatedAnchor, 2)
           );
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
@@ -280,7 +281,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
       const sectionChanges = {
         anchor: changesByAnchor.anchor,
-        changes: R.flatten(updatedChanges)
+        changes: R.uniq(R.flatten(updatedChanges))
       };
       onChangesUpdate(sectionChanges);
     },
