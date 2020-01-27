@@ -67,7 +67,6 @@ export function getInvestoinnitForm(isReadOnly) {
   return [
     {
       anchor: "investoinnit-tekstikentta",
-      title: "Tarvittavat investoinnit",
       styleClasses: ["mb-6 font-normal"],
       components: [
         {
@@ -78,7 +77,9 @@ export function getInvestoinnitForm(isReadOnly) {
             placeholder: "",
             tooltip: {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta1")
-            }
+            },
+            value: "",
+            title: "Tarvittavat investoinnit"
           }
         }
       ]
@@ -90,10 +91,10 @@ export function getInvestoinnitForm(isReadOnly) {
         {
           anchor: "label",
           name: "StatusTextRow",
-          styleClasses: ["font-semibold text-base"],
           properties: {
             title: "Investoinnin kustannukset"
-          }
+          },
+          value: ""
         }
       ]
     },
@@ -111,14 +112,15 @@ export function getInvestoinnitForm(isReadOnly) {
             type: "number",
             tooltip: {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")
-            }
+            },
+            value: "",
+            title: "Investoinnin kustannukset"
           }
         }
       ]
     },
     {
       anchor: "rahoitus-tekstikentta",
-      title: "Investointien rahoitus",
       styleClasses: [""],
       components: [
         {
@@ -129,7 +131,9 @@ export function getInvestoinnitForm(isReadOnly) {
             placeholder: "",
             tooltip: {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta3")
-            }
+            },
+            value: "",
+            title: "Investointien rahoitus"
           }
         }
       ]
