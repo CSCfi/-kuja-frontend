@@ -256,10 +256,13 @@ export const getChangesToSave = (
     uudetMuutokset = R.map(changeObj => {
       const anchorParts = changeObj.anchor.split(".");
       const code = R.view(R.lensIndex(1), anchorParts);
-      const meta = getMetadata(
-        R.view(R.lensIndex(1))(anchorParts),
-        stateObject.categories
-      );
+      const meta =
+        stateObject && stateObject.categories
+          ? getMetadata(
+              R.view(R.lensIndex(1))(anchorParts),
+              stateObject.categories
+            )
+          : {};
       const perustelut = R.filter(
         R.compose(
           R.equals(code),
