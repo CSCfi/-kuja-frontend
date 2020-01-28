@@ -184,6 +184,10 @@ const MuutospyyntoWizard = ({
       valmentavatKoulutukset: []
     },
     perustelut: {
+      kielet: {
+        opetuskielet: [],
+        tutkintokielet: []
+      },
       liitteet: {},
       toimintaalue: {},
       tutkinnot: {}

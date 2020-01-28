@@ -235,11 +235,6 @@ const MuutospyyntoWizardPerustelut = ({
                       lupa={lupa}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       opetuskielet={kielet.opetuskielet}
-                      stateObject={R.path([
-                        "perustelut",
-                        "kielet",
-                        "opetuskielet"
-                      ])(muutoshakemus)}
                       {..._props}
                     />
                   ) : null}
