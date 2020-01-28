@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
-import SimpleButton from "../../../00-atoms/SimpleButton";
+import SimpleButton from "okm-frontend-components/dist/components/00-atoms/SimpleButton";
 import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
