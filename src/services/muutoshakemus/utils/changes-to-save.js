@@ -392,23 +392,19 @@ export const getChangesToSave = (
       } else if (R.equals(anchorPart1, "ei-maariteltya-toiminta-aluetta")) {
         koodiarvo = "FI2";
       }
-      console.info(koodiarvo);
+
       if (koodiarvo) {
         const tilaVal = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
         const typeVal = changeObj.properties.isChecked ? "addition" : "removal";
-        console.log("toimintaalue: " + perustelut);
 
         return {
           tila: tilaVal,
           type: typeVal,
           meta: {
             changeObjects: R.flatten([[changeObj], perustelut]),
-            perusteluteksti: R.map(perustelu => {
-              if (R.path(["properties", "value"], perustelu)) {
-                return R.path(["properties", "value"], perustelu);
-              }
-              return R.path(["properties", "metadata", "fieldName"], perustelu);
-            }, perustelut),
+            perusteluteksti: [
+              { value: perustelut ? perustelut[0].properties.value : "" }
+            ],
             perustelut
           },
           muutosperustelukoodiarvo: null,
