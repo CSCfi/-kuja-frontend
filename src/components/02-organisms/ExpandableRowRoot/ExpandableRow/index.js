@@ -5,7 +5,7 @@ import MuiExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import { withStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Slot from "../../../00-atoms/Slot/Slot";
+import Slot from "okm-frontend-components/dist/components/00-atoms/Slot/Slot";
 
 /**
  * @module Components/01-molecules
