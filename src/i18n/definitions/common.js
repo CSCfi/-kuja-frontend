@@ -191,6 +191,14 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  jarjestaja: {
+    id: "common.jarjestaja",
+    defaultMessage: "Koulutuksen järjestäjä"
+  },
+  homeCounty: {
+    id: "common.homeCounty",
+    defaultMessage: "Kotipaikan maakunta"
+  },
   activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
   vst: {
     titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
