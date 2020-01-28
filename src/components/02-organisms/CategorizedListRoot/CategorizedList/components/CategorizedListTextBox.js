@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import TextBox from "../../../../00-atoms/TextBox";
+import TextBox from "okm-frontend-components/dist/components/00-atoms/TextBox";
 import * as R from "ramda";
 
 export const CategorizedListTextBox = ({
