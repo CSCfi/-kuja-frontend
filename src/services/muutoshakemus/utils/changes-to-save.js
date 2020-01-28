@@ -404,8 +404,7 @@ export const getChangesToSave = (
             changeObjects: R.flatten([[changeObj], perustelut]),
             perusteluteksti: [
               { value: perustelut ? perustelut[0].properties.value : "" }
-            ],
-            perustelut
+            ]
           },
           muutosperustelukoodiarvo: null,
           kohde: stateObject.kohde,
