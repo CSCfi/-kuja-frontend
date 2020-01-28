@@ -275,7 +275,7 @@ export const getChangesToSave = (
         nimi: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         isInLupa: meta.isInLupa,
-        kohde: meta.kohde,
+        kohde: meta.kohde.kohdeArvot[0].kohde,
         maaraystyyppi: meta.maaraystyyppi,
         meta: {
           tunniste: "opetuskieli",

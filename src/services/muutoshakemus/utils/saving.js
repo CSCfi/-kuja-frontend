@@ -1,5 +1,4 @@
 import { getChangesToSave } from "./changes-to-save";
-import { getChangesOfOpetuskielet } from "./opetuskieli-saving";
 import { combineArrays } from "../../../utils/muutospyyntoUtil";
 import moment from "moment";
 import * as R from "ramda";
@@ -262,17 +261,6 @@ export function createObjectToSave(
           )
         },
         R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
-      ),
-      // OPETUSKIELET
-      getChangesOfOpetuskielet(
-        R.path(["kielet", "opetuskielet"], muutoshakemus),
-        R.flatten([
-          R.path(["kielet", "opetuskielet"], changeObjects) || [],
-          R.path(["perustelut", "kielet", "opetuskielet"], changeObjects) || []
-        ]),
-        R.filter(R.propEq("koodisto", "oppilaitoksenopetuskieli"))(
-          backendMuutokset
-        )
       ),
       // TUTKINTOKIELET
       getChangesToSave(
