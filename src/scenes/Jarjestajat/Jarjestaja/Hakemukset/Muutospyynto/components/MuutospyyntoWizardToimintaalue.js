@@ -14,26 +14,12 @@ import * as R from "ramda";
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const { onChangesUpdate, onStateUpdate } = props;
 
-  /**
-   * Saves a value for later use.
-   * @param {*} value - Value to save for later use.
-   */
-  function usePrevious(value) {
-    const ref = useRef();
-    useEffect(() => {
-      ref.current = value;
-    });
-    return ref.current;
-  }
-
-  const prevChangeObjects = usePrevious(props.changeObjects.muutokset);
-
   const lisattavatKunnat = useMemo(() => {
     return R.sortBy(
       R.prop("title"),
       R.map(changeObj => {
         return R.equals(
-          getAnchorPart(changeObj.anchor, 1),
+          getAnchorPart(changeObj.anchor, 2),
           "lupaan-lisattavat-kunnat"
         )
           ? changeObj.properties
@@ -47,7 +33,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       R.prop("title"),
       R.map(changeObj => {
         return R.equals(
-          getAnchorPart(changeObj.anchor, 1),
+          getAnchorPart(changeObj.anchor, 2),
           "lupaan-lisattavat-maakunnat"
         )
           ? changeObj.properties
@@ -203,50 +189,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     props.sectionId
   ]);
 
-  useEffect(() => {
-    if (prevChangeObjects) {
-      // We go here when the Koko Suomi... checkbox is unchecked and if unchecking it
-      // is the most recent action related to the Toiminta-alue section on the first page.
-      const valtakunnallinenChangeObjectNow = R.find(changeObj => {
-        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, props.changeObjects.muutokset || []);
-      const valtakunnallinenChangeObjectBefore = R.find(changeObj => {
-        return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-      }, prevChangeObjects || []);
-
-      const isUncheckingTheMostRecentChange =
-        // The case when Koko Suomi... is selected by default
-        (!!valtakunnallinenChangeObjectNow &&
-          (!!!valtakunnallinenChangeObjectBefore ||
-            (!!valtakunnallinenChangeObjectBefore &&
-              valtakunnallinenChangeObjectBefore.properties.isChecked ===
-                true))) ||
-        // The case when Koko Suomi... is not selected by default
-        (!!!valtakunnallinenChangeObjectNow &&
-          !!valtakunnallinenChangeObjectBefore &&
-          valtakunnallinenChangeObjectBefore.properties.isChecked === true);
-
-      if (isUncheckingTheMostRecentChange) {
-        // Then it's time to get rid of the change objects of form page two (reasoning).
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_additions`,
-          changes: []
-        });
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}_removals`,
-          changes: []
-        });
-      }
-    }
-  }, [
-    isEiMaariteltyaToimintaaluettaChecked,
-    isValtakunnallinenChecked,
-    onChangesUpdate,
-    prevChangeObjects,
-    props.changeObjects,
-    props.sectionId
-  ]);
-
   /**
    * Changes are handled here. Changes objects will be formed and callback
    * function will be called with them.
@@ -276,7 +218,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             const kuntaChangeObj = R.find(
               R.propEq(
                 "anchor",
-                `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
+                `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
               ),
               props.changeObjects.muutokset || []
             );
@@ -285,7 +227,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
             return !!kuntaInLupa && !isKuntaAlreadyUnchecked
               ? {
-                  anchor: `toimintaalue.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
+                  anchor: `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`,
                   properties: {
                     ...kuntaInLupa.properties,
                     isChecked: false,
@@ -309,17 +251,19 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         } else if (R.includes("valintakentta", changeObj.anchor)) {
           // Let's return a new change object based on the one user selected using select element
           let updatedAnchor = removeAnchorPart(changeObj.anchor, 2);
+
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
             1,
-            "lupaan-lisattavat-" + getAnchorPart(updatedAnchor, 2)
+            "maakunnat-ja-kunnat.lupaan-lisattavat-" +
+              getAnchorPart(updatedAnchor, 2)
           );
           updatedAnchor = replaceAnchorPartWith(
             updatedAnchor,
-            2,
+            3,
             changeObj.properties.value.value
           );
-          console.info(updatedAnchor);
+
           return [
             {
               anchor: updatedAnchor,
@@ -337,7 +281,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
       const sectionChanges = {
         anchor: changesByAnchor.anchor,
-        changes: R.flatten(updatedChanges)
+        changes: R.uniq(R.flatten(updatedChanges))
       };
       onChangesUpdate(sectionChanges);
     },

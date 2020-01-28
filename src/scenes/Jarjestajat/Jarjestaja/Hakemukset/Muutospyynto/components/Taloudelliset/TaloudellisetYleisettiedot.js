@@ -31,6 +31,7 @@ const TaloudellisetYleisettiedot = React.memo(
           anchor={sectionId}
           changeObjects={changeObjects}
           onChangesUpdate={onChangesUpdate}
+          isReadOnly={isReadOnly}
           path={["taloudelliset"]}
           rules={yleisettiedot}
           showCategoryTitles={true}></Lomake>

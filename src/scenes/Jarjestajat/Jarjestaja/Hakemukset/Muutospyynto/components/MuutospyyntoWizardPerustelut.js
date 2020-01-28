@@ -149,9 +149,6 @@ const MuutospyyntoWizardPerustelut = ({
                       lupaKohteet={lupaKohteet}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       muutosperustelut={muutosperusteluListSorted}
-                      stateObject={R.path(["perustelut", "tutkinnot"])(
-                        muutoshakemus
-                      )}
                       tutkinnot={tutkinnot}
                       {..._props}
                     />
