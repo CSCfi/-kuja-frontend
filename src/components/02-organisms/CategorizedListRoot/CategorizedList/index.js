@@ -4,7 +4,7 @@ import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
 import SimpleButton from "../../../00-atoms/SimpleButton";
 import Dropdown from "../../../00-atoms/Dropdown";
 import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
-import Input from "../../../00-atoms/Input";
+import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 import StatusTextRow from "../../../01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Datepicker from "../../../00-atoms/Datepicker";
