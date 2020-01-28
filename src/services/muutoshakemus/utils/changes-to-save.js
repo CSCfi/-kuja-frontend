@@ -423,17 +423,9 @@ export const getChangesToSave = (
           tila: "LISAYS",
           type: "addition",
           meta: {
-            perusteluteksti: R.map(perustelu => {
-              if (R.path(["properties", "value"], perustelu)) {
-                return { value: R.path(["properties", "value"], perustelu) };
-              }
-              return {
-                value: R.path(
-                  ["properties", "metadata", "fieldName"],
-                  perustelu
-                )
-              };
-            }, perustelut),
+            perusteluteksti: [
+              { value: perustelut ? perustelut[0].properties.value : "" }
+            ],
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
@@ -450,17 +442,9 @@ export const getChangesToSave = (
           tila: "POISTO",
           type: "removal",
           meta: {
-            perusteluteksti: R.map(perustelu => {
-              if (R.path(["properties", "value"], perustelu)) {
-                return { value: R.path(["properties", "value"], perustelu) };
-              }
-              return {
-                value: R.path(
-                  ["properties", "metadata", "fieldName"],
-                  perustelu
-                )
-              };
-            }, perustelut),
+            perusteluteksti: [
+              { value: perustelut ? perustelut[0].properties.value : "" }
+            ],
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
