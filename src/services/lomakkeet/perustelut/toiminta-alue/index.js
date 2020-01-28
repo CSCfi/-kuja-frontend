@@ -67,7 +67,7 @@ function getReasoningForm(isReadOnly, lupakohde, changeObjects) {
                           R.path(["properties", "metadata", "label"], changeObj)
                         );
                       }
-                      return "kukkuu";
+                      return null;
                     }, changeObjects).filter(Boolean)
                   )
                 )
