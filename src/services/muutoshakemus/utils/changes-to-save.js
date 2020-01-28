@@ -256,13 +256,6 @@ export const getChangesToSave = (
     uudetMuutokset = R.map(changeObj => {
       const anchorParts = changeObj.anchor.split(".");
       const code = R.view(R.lensIndex(1), anchorParts);
-      const meta =
-        stateObject && stateObject.categories
-          ? getMetadata(
-              R.view(R.lensIndex(1))(anchorParts),
-              stateObject.categories
-            )
-          : {};
       const perustelut = R.filter(
         R.compose(
           R.equals(code),
@@ -272,6 +265,7 @@ export const getChangesToSave = (
         ),
         changeObjects.perustelut
       );
+      const meta = R.path(["properties", "metadata"], changeObj) || {};
       return {
         koodiarvo: code,
         koodisto: "oppilaitoksenopetuskieli",

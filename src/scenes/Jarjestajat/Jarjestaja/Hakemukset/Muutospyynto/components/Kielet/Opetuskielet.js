@@ -24,18 +24,18 @@ const Opetuskielet = React.memo(props => {
     return R.map(item => {
       return {
         anchor: item.code,
-        meta: {
-          isInLupa: item.isInLupa,
-          kuvaus: item.title,
-          kohde: props.kohde,
-          maaraystyyppi: props.maaraystyyppi,
-          meta: item.meta
-        },
         components: [
           {
             anchor: "A",
             name: "CheckboxWithLabel",
             properties: {
+              forChangeObject: {
+                isInLupa: item.isInLupa,
+                kuvaus: item.title,
+                kohde: props.kohde,
+                maaraystyyppi: props.maaraystyyppi,
+                meta: item.meta
+              },
               name: "CheckboxWithLabel",
               isChecked: item.shouldBeSelected,
               title: item.title,
