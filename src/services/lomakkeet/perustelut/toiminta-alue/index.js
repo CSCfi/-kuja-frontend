@@ -122,7 +122,7 @@ function getReasoningForm(isReadOnly, lupakohde, changeObjects) {
           name: "TextBox",
           properties: {
             isReadOnly,
-            title: "Kirjoita perustelut",
+            title: "Perustelut",
             value: ""
           }
         }

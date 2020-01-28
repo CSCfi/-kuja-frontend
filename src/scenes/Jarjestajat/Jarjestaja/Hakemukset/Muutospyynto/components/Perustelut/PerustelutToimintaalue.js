@@ -20,12 +20,11 @@ const PerustelutToimintaalue = React.memo(
     isReadOnly = defaultProps.isReadOnly,
     lupakohde = {},
     onChangesUpdate,
-    sectionId,
-    stateObjects = defaultProps.stateObjects
+    sectionId
   }) => {
     return (
       <React.Fragment>
-        {lupakohde && (
+        {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && (
           <ExpandableRowRoot
             anchor={sectionId}
             categories={[]}
@@ -40,6 +39,7 @@ const PerustelutToimintaalue = React.memo(
               action="reasoning"
               anchor={sectionId}
               changeObjects={changeObjects.perustelut}
+              isReadOnly={isReadOnly}
               data={{
                 changeObjectsPage1: changeObjects.toimintaalue,
                 lupakohde
@@ -58,13 +58,10 @@ const PerustelutToimintaalue = React.memo(
 PerustelutToimintaalue.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
-  headingNumber: PropTypes.number,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupakohde: PropTypes.object,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
-  stateObjects: PropTypes.object
+  onChangesUpdate: PropTypes.func
 };
 
 export default PerustelutToimintaalue;

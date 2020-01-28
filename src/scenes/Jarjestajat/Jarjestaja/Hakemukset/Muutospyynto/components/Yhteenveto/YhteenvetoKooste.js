@@ -8,7 +8,7 @@ import PerustelutTutkinnot from "../Perustelut/PerustelutTutkinnot";
 import PerustelutLiitteet from "../Perustelut/PerustelutLiitteet";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import * as R from "ramda";
 import PerustelutToimintaalue from "../Perustelut/PerustelutToimintaalue";
 import { updateFormStructure } from "../../../../../../../services/lomakkeet/actions";
@@ -22,7 +22,6 @@ import YhteenvetoTaloudelliset from "./YhteenvetoTaloudelliset";
 
 const YhteenvetoKooste = ({
   changeObjects,
-  intl,
   kielet,
   kohteet = [],
   koulutukset,
@@ -36,6 +35,7 @@ const YhteenvetoKooste = ({
   onStateUpdate,
   tutkinnot
 }) => {
+  const intl = useIntl();
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
   const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
@@ -274,6 +274,7 @@ const YhteenvetoKooste = ({
                 <React.Fragment>
                   {!!R.path(["toimintaalue"], changeObjects) ? (
                     <PerustelutToimintaalue
+                      lupakohde={lupaKohteet[3]}
                       changeObjects={{
                         toimintaalue: R.path(["toimintaalue"], changeObjects),
                         perustelut: R.path(
@@ -410,4 +411,4 @@ YhteenvetoKooste.propTypes = {
   tutkinnot: PropTypes.object
 };
 
-export default injectIntl(YhteenvetoKooste);
+export default YhteenvetoKooste;
