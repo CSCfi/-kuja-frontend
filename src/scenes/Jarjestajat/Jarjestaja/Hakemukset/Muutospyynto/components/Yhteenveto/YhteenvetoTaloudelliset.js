@@ -52,6 +52,7 @@ const YhteenvetoTaloudelliset = ({
                     ["taloudelliset", "investoinnit"],
                     changeObjects
                   )}
+                  isReadOnly={true}
                   {..._props}
                 />
               </React.Fragment>
@@ -68,6 +69,7 @@ const YhteenvetoTaloudelliset = ({
                     ["taloudelliset", "tilinpaatostiedot"],
                     changeObjects
                   )}
+                  isReadOnly={true}
                   {..._props}
                 />
               </React.Fragment>
