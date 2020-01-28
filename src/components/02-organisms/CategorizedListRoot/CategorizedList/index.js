@@ -5,7 +5,7 @@ import SimpleButton from "okm-frontend-components/dist/components/00-atoms/Simpl
 import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown";
 import RadioButtonWithLabel from "okm-frontend-components/dist/components/01-molecules/RadioButtonWithLabel";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
-import StatusTextRow from "../../../01-molecules/StatusTextRow";
+import StatusTextRow from "okm-frontend-components/dist/components/01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
 import Datepicker from "../../../00-atoms/Datepicker";
 import Autocomplete from "../../Autocomplete";
