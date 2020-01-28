@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import { getRules } from "../../../../../../../services/lomakkeet/perustelut/opetuskielet/rules";
 
 const PerustelutOpetuskielet = React.memo(props => {
   const intl = useIntl();
@@ -46,7 +47,7 @@ const PerustelutOpetuskielet = React.memo(props => {
           isReadOnly={props.isReadOnly}
           onChangesUpdate={onChangesUpdate}
           path={["kielet", "opetuskielet"]}
-          rules={[]}></Lomake>
+          rulesFn={getRules}></Lomake>
       )}
     </ExpandableRowRoot>
   );

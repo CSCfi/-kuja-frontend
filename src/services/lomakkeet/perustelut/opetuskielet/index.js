@@ -40,7 +40,7 @@ function getReasoningForm(
         ],
         categories: [
           {
-            anchor: "vapaa-tekstikentta",
+            anchor: "perustelut",
             components: [
               {
                 anchor: "A",
