@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import PerustelutKoulutukset from "../Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "../Perustelut/PerustelutMuut";
 import PerustelutOpiskelijavuodet from "../Perustelut/PerustelutOpiskelijavuodet";
@@ -9,16 +9,10 @@ import PerustelutLiitteet from "../Perustelut/PerustelutLiitteet";
 import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
-import * as R from "ramda";
 import PerustelutToimintaalue from "../Perustelut/PerustelutToimintaalue";
-import { updateFormStructure } from "../../../../../../../services/lomakkeet/actions";
-import {
-  getAdditionFormStructure,
-  getOsaamisalaFormStructure,
-  getRemovalFormStructure
-} from "../../../../../../../services/lomakkeet/perustelut/tutkinnot";
 import FormSection from "../../../../../../../components/03-templates/FormSection";
 import YhteenvetoTaloudelliset from "./YhteenvetoTaloudelliset";
+import * as R from "ramda";
 
 const YhteenvetoKooste = ({
   changeObjects,
@@ -42,31 +36,9 @@ const YhteenvetoKooste = ({
     LomakkeetContext
   );
 
-  useEffect(() => {
-    /**
-     * Let's get the structures of different tutkinto based reasoning forms and update the context.
-     * These will be needed later.
-     */
-    const additionFormStructure = getAdditionFormStructure(
-      R.sortBy(R.prop("koodiArvo"))(muutosperusteluList),
-      R.toUpper(intl.locale),
-      true // isReadOnly
-    );
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "addition"],
-      additionFormStructure
-    )(lomakkeetDispatch);
-    const removalFormStructure = getRemovalFormStructure();
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "removal"],
-      removalFormStructure
-    )(lomakkeetDispatch);
-    const osaamisalaFormStructure = getOsaamisalaFormStructure();
-    updateFormStructure(
-      ["perustelut", "tutkinnot", "osaamisala"],
-      osaamisalaFormStructure
-    )(lomakkeetDispatch);
-  }, [lomakkeetDispatch, muutosperusteluList, intl.locale]);
+  const muutosperusteluListSorted = useMemo(() => {
+    return R.sortBy(R.prop("koodiArvo"))(muutosperusteluList);
+  }, [muutosperusteluList]);
 
   useEffect(() => {
     const kohdeTiedot = R.map(kohde => {
@@ -96,12 +68,14 @@ const YhteenvetoKooste = ({
     <React.Fragment>
       {muutoshakemus && kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
+          {console.info(changeObjects)}
+
           {muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
               <FormSection
                 code={1}
-                id="yhteenveto_muutokset_perusteluineen"
+                id="perustelut_tutkinnot"
                 muutoshakemus={muutoshakemus}
                 render={_props => (
                   <React.Fragment>
@@ -117,19 +91,15 @@ const YhteenvetoKooste = ({
                               ) || {}
                           }
                         }}
-                        isReadOnly={true}
                         kohde={R.find(
                           R.propEq("tunniste", "tutkinnotjakoulutukset")
                         )(kohteet)}
-                        koulutukset={koulutukset}
-                        lomakkeet={lomakkeet.perustelut.tutkinnot}
                         lupa={lupa}
                         lupaKohteet={lupaKohteet}
                         maaraystyyppi={maaraystyypitState.OIKEUS}
-                        stateObject={R.path(["perustelut", "tutkinnot"])(
-                          muutoshakemus
-                        )}
+                        muutosperustelut={muutosperusteluListSorted}
                         tutkinnot={tutkinnot}
+                        isReadOnly={true}
                         {..._props}
                       />
                     )}
@@ -383,7 +353,7 @@ const YhteenvetoKooste = ({
               onStateUpdate={onStateUpdate}
               onChangesUpdate={onChangesUpdate}
               stateObjects={{
-                taloudelliset: R.path(["taloudelliset"])(muutoshakemus),
+                taloudelliset: muutoshakemus.taloudelliset,
                 yhteenveto: R.path(["yhteenveto", "taloudelliset"])(
                   muutoshakemus
                 )
