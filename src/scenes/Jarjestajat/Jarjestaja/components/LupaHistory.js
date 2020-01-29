@@ -5,7 +5,7 @@ import { Table as OldTable, Tbody } from "../../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { LUPA_TEKSTIT } from "../modules/constants";
 import LupaHistoryItem from "./LupaHistoryItem";
-import Table from "../../../../components/02-organisms/Table";
+import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import moment from "moment";
 import { API_BASE_URL } from "../../../../modules/constants";
 import PropTypes from "prop-types";
