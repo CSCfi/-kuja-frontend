@@ -663,6 +663,8 @@ const CategorizedList = React.memo(
                             maxDate={propsObj.maxDate}
                             disablePast={propsObj.disablePast}
                             disableFuture={propsObj.disableFuture}
+                            locale={propsObj.locale}
+                            messages={propsObj.localizations}
                             payload={{
                               anchor,
                               categories: category.categories,

@@ -11,6 +11,16 @@ storiesOf("Datepicker", module)
     };
     const today = new Date(Date.now());
     const yesterday = new Date(Date.now() - 86400000);
+    const messages = {
+        ok: "ok",
+        cancel: "cancel",
+        clear: "clear",
+        today: "today",
+        datemax: "datemax",
+        datemin: "datemin",
+        dateinvalid: "dateinvalid"
+    };
+
     return (
       <div>
         <p>Normal</p>
@@ -18,6 +28,8 @@ storiesOf("Datepicker", module)
           value={today}
           payload={{ value: today }}
           onChanges={onChanges}
+          messages={messages}
+          locale={"fi"}
         />
         <p>Error + clearable</p>
         <Datepicker
@@ -27,9 +39,17 @@ storiesOf("Datepicker", module)
           error={true}
           clearable={true}
           showTodayButton={false}
+          messages={messages}
+          locale={"fi"}
         />
         <p>Wide</p>
-        <Datepicker value={today} onChanges={onChanges} fullWidth />
+        <Datepicker
+          value={today}
+          onChanges={onChanges}
+          messages={messages}
+          locale={"fi"}
+          fullWidth
+        />
       </div>
     );
   });

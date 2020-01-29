@@ -46,6 +46,7 @@
   "common.change": "Järjestämisluvan muutos",
   "common.clear": "Tyhjennä",
   "common.current": "Nykyinen",
+  "common.date": "Päivämäärä",
   "common.dateinvalid": "Päiväys on virheellinen",
   "common.datemax": "Päiväys on liian suuri",
   "common.datemin": "Päiväys on liian pieni",

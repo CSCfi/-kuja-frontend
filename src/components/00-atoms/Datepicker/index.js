@@ -10,12 +10,10 @@ import green from "@material-ui/core/colors/green";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import DateFnsUtils from "@date-io/date-fns";
-import { injectIntl } from "react-intl";
 import fiLocale from "date-fns/locale/fi";
 import svLocale from "date-fns/locale/sv";
 import enLocale from "date-fns/locale/en-GB";
 import format from "date-fns/format";
-import common from "../../../i18n/definitions/common";
 
 const styles = createStyles(theme => ({
   dense: {
@@ -36,17 +34,13 @@ class LocalizedUtils extends DateFnsUtils {
 }
 
 const Datepicker = props => {
-  const { classes } = props;
+  const { classes, messages, locale } = props;
   const [selectedDate, setSelectedDate] = useState(props.value);
   const localeMap = {
     en: enLocale,
     fi: fiLocale,
     sv: svLocale
   };
-  const {
-    intl: { formatMessage }
-  } = props;
-  const locale = props.intl.locale;
 
   const handleDateChange = date => {
     props.onChanges(props.payload, { value: date });
@@ -83,14 +77,14 @@ const Datepicker = props => {
           value={selectedDate || null}
           inputVariant="outlined"
           showTodayButton={props.showTodayButton}
-          okLabel={formatMessage(common.ok)}
-          clearLabel={formatMessage(common.clear)}
-          cancelLabel={formatMessage(common.cancel)}
-          todayLabel={formatMessage(common.today)}
+          okLabel={messages.ok}
+          clearLabel={messages.clear}
+          cancelLabel={messages.cancel}
+          todayLabel={messages.today}
           clearable={props.clearable}
-          maxDateMessage={formatMessage(common.datemax)}
-          minDateMessage={formatMessage(common.datemin)}
-          invalidDateMessage={formatMessage(common.dateinvalid)}
+          maxDateMessage={messages.datemax}
+          minDateMessage={messages.datemin}
+          invalidDateMessage={messages.dateinvalid}
           minDate={props.minDate}
           maxDate={props.maxDate}
           disablePast={props.disablePast}
@@ -138,7 +132,9 @@ Datepicker.propTypes = {
   disablePast: PropTypes.bool,
   disableFuture: PropTypes.bool,
   minDate: PropTypes.instanceOf(Date),
-  maxDate: PropTypes.instanceOf(Date)
+  maxDate: PropTypes.instanceOf(Date),
+  locale: PropTypes.string,
+  messages: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(injectIntl(Datepicker));
+export default withStyles(styles)(Datepicker);
