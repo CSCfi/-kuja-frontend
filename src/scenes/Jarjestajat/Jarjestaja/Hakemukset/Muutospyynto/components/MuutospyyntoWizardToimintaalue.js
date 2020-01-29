@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 import {
@@ -12,6 +12,7 @@ import { isAdded, isInLupa, isRemoved } from "../../../../../../css/label";
 import * as R from "ramda";
 
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
+  const intl = useIntl();
   const { onChangesUpdate, onStateUpdate } = props;
 
   const lisattavatKunnat = useMemo(() => {
@@ -70,9 +71,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     return R.sortBy(
       R.prop("label"),
       R.map(kunta => {
-        const labelObject = R.find(
-          R.propEq("kieli", R.toUpper(props.intl.locale))
-        )(kunta.metadata);
+        const labelObject = R.find(R.propEq("kieli", R.toUpper(intl.locale)))(
+          kunta.metadata
+        );
         const isKuntaInLupa = !!R.find(
           R.pathEq(["metadata", "koodiarvo"], kunta.koodiArvo),
           kunnatInLupa
@@ -94,15 +95,15 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             };
       }, props.kunnat).filter(Boolean)
     );
-  }, [kunnatInLupa, lisattavatKunnat, props.intl.locale, props.kunnat]);
+  }, [kunnatInLupa, lisattavatKunnat, intl.locale, props.kunnat]);
 
   const valittavissaOlevatMaakunnat = useMemo(() => {
     return R.sortBy(
       R.prop("label"),
       R.map(maakunta => {
-        const labelObject = R.find(
-          R.propEq("kieli", R.toUpper(props.intl.locale))
-        )(maakunta.metadata);
+        const labelObject = R.find(R.propEq("kieli", R.toUpper(intl.locale)))(
+          maakunta.metadata
+        );
         const isMaakuntaInLupa = !!R.find(
           R.pathEq(["metadata", "koodiarvo"], maakunta.koodiArvo),
           maakunnatInLupa
@@ -124,12 +125,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             };
       }, props.maakunnat).filter(Boolean)
     );
-  }, [
-    lisattavatMaakunnat,
-    maakunnatInLupa,
-    props.intl.locale,
-    props.maakunnat
-  ]);
+  }, [lisattavatMaakunnat, maakunnatInLupa, intl.locale, props.maakunnat]);
 
   const isValtakunnallinenChecked = useMemo(() => {
     const valtakunnallinenChangeObject = R.find(changeObj => {
@@ -527,7 +523,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 removal: isRemoved
               },
               forChangeObject: {
-                title: props.intl.formatMessage(wizardMessages.responsibilities)
+                title: intl.formatMessage(wizardMessages.responsibilities)
               }
             }
           }
@@ -561,7 +557,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     maakunnatInLupa,
     lisattavatKunnat,
     lisattavatMaakunnat,
-    props.intl,
+    intl,
     props.lupakohde.valtakunnallinen,
     valittavissaOlevatKunnat,
     valittavissaOlevatMaakunnat
@@ -621,4 +617,4 @@ MuutospyyntoWizardToimintaalue.propTypes = {
   stateObjects: PropTypes.object
 };
 
-export default injectIntl(MuutospyyntoWizardToimintaalue);
+export default MuutospyyntoWizardToimintaalue;

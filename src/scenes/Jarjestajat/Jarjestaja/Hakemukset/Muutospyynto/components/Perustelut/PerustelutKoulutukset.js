@@ -47,24 +47,22 @@ const PerustelutKoulutukset = React.memo(props => {
             />
           ) : null}
 
-          {!!R.path(
-            ["koulutukset", "ammatilliseenTehtavaanValmistavatKoulutukset"],
-            props.changeObjects
+          {!R.isEmpty(
+            R.path(["koulutukset", "atvKoulutukset"], props.changeObjects)
           ) ? (
             <PerustelutATVKoulutukset
               changeObjects={{
                 koulutukset: {
-                  ammatilliseenTehtavaanValmistavatKoulutukset: R.path([
-                    "koulutukset",
-                    "ammatilliseenTehtavaanValmistavatKoulutukset"
-                  ])(props.changeObjects)
+                  atvKoulutukset: R.path(["koulutukset", "atv-koulutukset"])(
+                    props.changeObjects
+                  )
                 },
                 perustelut: {
                   koulutukset: {
-                    ammatilliseenTehtavaanValmistavatKoulutukset: R.path([
+                    atvKoulutukset: R.path([
                       "perustelut",
                       "koulutukset",
-                      "ammatilliseenTehtavaanValmistavatKoulutukset"
+                      "atv-koulutukset"
                     ])(props.changeObjects)
                   }
                 }
@@ -76,11 +74,7 @@ const PerustelutKoulutukset = React.memo(props => {
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
               stateObject={R.path(
-                [
-                  "perustelut",
-                  "koulutukset",
-                  "ammatilliseenTehtavaanValmistavatKoulutukset"
-                ],
+                ["perustelut", "koulutukset", "atvKoulutukset"],
                 props.muutoshakemus
               )}
               onStateUpdate={props.onStateUpdate}

@@ -7,11 +7,12 @@ import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavu
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import * as R from "ramda";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 
 const MuutospyyntoWizardMuutokset = React.memo(props => {
+  const intl = useIntl();
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState(null);
 
@@ -47,7 +48,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     <React.Fragment>
       <div>
         <p className="py-10">
-          {props.intl.formatMessage(wizardMessages.info_01)}
+          {intl.formatMessage(wizardMessages.info_01)}
         </p>
 
         <form onSubmit={props.handleSubmit}>
@@ -111,7 +112,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   )}
                   runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
-                  title={props.intl.formatMessage(
+                  title={intl.formatMessage(
                     wizardMessages.header_section2
                   )}
                 />
@@ -144,7 +145,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
                   title={R.path(
-                    ["meta", "otsikko", props.intl.locale],
+                    ["meta", "otsikko", intl.locale],
                     kohteet.toimintaalue
                   )}
                 />
@@ -184,7 +185,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                     )}
                     runOnStateUpdate={props.onStateUpdate}
                     runOnChanges={props.onChangesUpdate}
-                    title={props.intl.formatMessage(
+                    title={intl.formatMessage(
                       wizardMessages.header_section4
                     )}
                   />
@@ -216,7 +217,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   )}
                   runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
-                  title={props.intl.formatMessage(
+                  title={intl.formatMessage(
                     wizardMessages.header_section5
                   )}
                 />
@@ -251,4 +252,4 @@ MuutospyyntoWizardMuutokset.propTypes = {
   tutkinnot: PropTypes.object
 };
 
-export default injectIntl(MuutospyyntoWizardMuutokset);
+export default MuutospyyntoWizardMuutokset;

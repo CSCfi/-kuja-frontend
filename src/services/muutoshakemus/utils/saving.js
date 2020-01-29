@@ -28,22 +28,22 @@ export function createObjectToSave(
   //get actual attachment props
 
   const perustelutLiitteetList =
-    perustelutLiitteet && perustelutLiitteet[0].properties
+    !R.isEmpty(perustelutLiitteet) && perustelutLiitteet[0].properties
       ? perustelutLiitteet[0].properties.attachments
       : [];
 
   const taloudellisetLiitteetList =
-    taloudellisetLiitteet && taloudellisetLiitteet[0].properties
+    !R.isEmpty(taloudellisetLiitteet) && taloudellisetLiitteet[0].properties
       ? taloudellisetLiitteet[0].properties.attachments
       : [];
 
   const yhteenvetoYleisetLiitteetList =
-    yhteenvetoYleiset && yhteenvetoYleiset[0].properties
+    !R.isEmpty(yhteenvetoYleiset) && yhteenvetoYleiset[0].properties
       ? yhteenvetoYleiset[0].properties.attachments
       : [];
 
   const yhteenvetoLiitteetList =
-    yhteenvetoLiitteet && yhteenvetoLiitteet[0].properties
+    !R.isEmpty(yhteenvetoLiitteet) && yhteenvetoLiitteet[0].properties
       ? yhteenvetoLiitteet[0].properties.attachments
       : [];
 
@@ -234,6 +234,7 @@ export function createObjectToSave(
             R.values
           )(R.values(R.path(["koulutukset"], changeObjects))),
           perustelut: R.compose(
+            R.filter(R.compose(R.not, R.isEmpty)),
             R.flatten,
             R.values
           )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))

@@ -10,8 +10,7 @@ import { rules } from "../../../../../../../services/lomakkeet/perustelut/atv-ko
 
 const PerustelutATVKoulutukset = props => {
   const intl = useIntl();
-  const sectionId =
-    "perustelut_koulutukset_ammatilliseenTehtavaanValmistavatKoulutukset";
+  const sectionId = "perustelut_koulutukset_atvKoulutukset";
   const { onChangesRemove, onChangesUpdate } = props;
 
   const koulutusdata = useMemo(() => {
@@ -29,10 +28,7 @@ const PerustelutATVKoulutukset = props => {
       anchor={sectionId}
       key={`expandable-row-root`}
       categories={[]}
-      changes={
-        props.changeObjects.perustelut.koulutukset
-          .ammatilliseenTehtavaanValmistavatKoulutukset
-      }
+      changes={props.changeObjects.perustelut.koulutukset.atvKoulutukset}
       disableReverting={props.isReadOnly}
       hideAmountOfChanges={true}
       isExpanded={true}
@@ -42,13 +38,10 @@ const PerustelutATVKoulutukset = props => {
       <Lomake
         anchor={sectionId}
         changeObjects={
-          props.changeObjects.perustelut.koulutukset
-            .ammatilliseenTehtavaanValmistavatKoulutukset
+          props.changeObjects.perustelut.koulutukset.atvKoulutukset
         }
         data={{
-          changeObjectsPage1:
-            props.changeObjects.koulutukset
-              .ammatilliseenTehtavaanValmistavatKoulutukset,
+          changeObjectsPage1: props.changeObjects.koulutukset.atvKoulutukset,
           koulutusdata,
           kohde: props.kohde,
           maaraystyyppi: props.maaraystyyppi

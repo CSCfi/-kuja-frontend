@@ -18,22 +18,8 @@ export const getAdditionForm = (checkboxItems, locale, isReadOnly = false) => {
       layout: {
         indentation: "none"
       },
-      title: "Muutospyynnön taustalla olevat syyt",
+      title: __("muutospyynnon.taustalla.olevat.syyt"),
       categories: checkboxes
-    },
-    {
-      anchor: "vapaa-tekstikentta",
-      components: [
-        {
-          anchor: "A",
-          name: "TextBox",
-          properties: {
-            isReadOnly,
-            placeholder:
-              "Perustele lyhyesti miksi tutkintoon johtavaa koulutusta halutaan järjestää"
-          }
-        }
-      ]
     }
   ];
 };

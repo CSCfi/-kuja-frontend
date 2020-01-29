@@ -32,7 +32,7 @@ const YhteenvetoKooste = ({
   const intl = useIntl();
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
-  const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
+  const { state: lomakkeet } = useContext(
     LomakkeetContext
   );
 

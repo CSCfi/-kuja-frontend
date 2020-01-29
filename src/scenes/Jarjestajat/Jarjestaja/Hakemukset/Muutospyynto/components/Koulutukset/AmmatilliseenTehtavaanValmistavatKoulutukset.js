@@ -3,12 +3,13 @@ import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil"
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 
-const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
-  const sectionId = "koulutukset_ammatilliseenTehtavaanValmistavatKoulutukset";
+const ATVKoulutukset = props => {
+  const intl = useIntl();
+  const sectionId = "koulutukset_atvKoulutukset";
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
 
   const getCategories = useMemo(() => {
@@ -52,7 +53,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
           getDataForKoulutusList(
             props.koulutukset.muut
               .ammatilliseentehtavaanvalmistavakoulutus,
-            R.toUpper(props.intl.locale)
+            R.toUpper(intl.locale)
           ),
           props.kohde,
           props.maaraystyyppi
@@ -65,7 +66,7 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
     onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
-    props.intl.locale,
+    intl.locale,
     props.maaraystyyppi
   ]);
 
@@ -79,18 +80,18 @@ const AmmatilliseenTehtavaanValmistavatKoulutukset = props => {
           changes={props.changeObjects}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
-          title={props.intl.formatMessage(wizardMessages.vocationalTraining)}
+          title={intl.formatMessage(wizardMessages.vocationalTraining)}
         />
       ) : null}
     </React.Fragment>
   );
 };
 
-AmmatilliseenTehtavaanValmistavatKoulutukset.defaultProps = {
+ATVKoulutukset.defaultProps = {
   stateObject: {}
 };
 
-AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
+ATVKoulutukset.propTypes = {
   changeObjects: PropTypes.array,
   kohde: PropTypes.object,
   koulutukset: PropTypes.object,
@@ -98,4 +99,4 @@ AmmatilliseenTehtavaanValmistavatKoulutukset.propTypes = {
   stateObject: PropTypes.object
 };
 
-export default injectIntl(AmmatilliseenTehtavaanValmistavatKoulutukset);
+export default ATVKoulutukset;

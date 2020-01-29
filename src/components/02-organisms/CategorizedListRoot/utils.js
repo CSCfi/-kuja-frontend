@@ -117,9 +117,15 @@ const checkTerms = (terms, lomake, changeObjects) => {
   }, terms);
 };
 
+const checkTerm = (term, lomake, changeObjects) => {
+  return checkTerms([term], lomake, changeObjects);
+};
+
+export const ifOne = R.includes(true);
 export const ifAll = R.all(R.equals(true));
 export const ifAllTerms = R.compose(ifAll, checkTerms);
 export const ifOneTerm = R.compose(R.includes(true), checkTerms);
+export const ifTerm = R.compose(R.includes(true), checkTerm);
 
 export const findCategoryAnchor = (
   category,

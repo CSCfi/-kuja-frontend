@@ -39,6 +39,7 @@ import {
   toUpper
 } from "ramda";
 import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
+import { useChangeObjects } from "../../../../stores/changeObjects";
 
 /**
  * HakemusContainer gathers all the required data for the MuutospyyntoWizard by
@@ -54,6 +55,7 @@ import { MUUT_KEYS } from "./Muutospyynto/modules/constants";
 const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
   const intl = useIntl();
 
+  const [cos, coActions] = useChangeObjects();
   const [elykeskukset, elykeskuksetActions] = useElykeskukset();
   const [kohteet, kohteetActions] = useKohteet();
   const [koulutukset, koulutuksetActions] = useKoulutukset();
@@ -83,6 +85,7 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
       opetuskieletActions.load(),
       maaraystyypitActions.load(),
       muutActions.load(),
+      koulutuksetActions.load(),
       kunnatActions.load(),
       maakunnatActions.load(),
       maakuntakunnatActions.load(),
@@ -97,6 +100,7 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
     if (match.params.uuid) {
       muutospyyntoActions.load(match.params.uuid);
     }
+
     return function cancel() {
       forEach(
         abortContoller => abortContoller.abort(),
@@ -124,52 +128,59 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
     match.params.uuid
   ]);
 
-  const [backendChanges, setBackendChanges] = useState({});
+  const [isHandled, setAsHandled] = useState(false);
+
+  const [backendMuutokset, setBackendMuutokset] = useState([]);
+
+  const filesFromMuutokset = useMemo(() => {
+    if (muutospyynto.fetchedAt && match.params.uuid) {
+      const attachments = prop("liitteet", muutospyynto.data);
+      const muutospyyntoData = setAttachmentUuids(
+        attachments,
+        muutospyynto.data
+      );
+      const backendMuutokset = prop("muutokset")(muutospyyntoData);
+      return findObjectWithKey(backendMuutokset, "liitteet");
+    }
+  }, [match.params.uuid, muutospyynto.data, muutospyynto.fetchedAt]);
+
+  const updatedC = useMemo(() => {
+    return map(changeObj => {
+      const files = path(["properties", "attachments"], changeObj)
+        ? map(file => {
+            const fileFromBackend =
+              find(propEq("tiedostoId", file.tiedostoId), filesFromMuutokset) ||
+              {};
+            return Object.assign({}, file, fileFromBackend);
+          }, changeObj.properties.attachments || [])
+        : null;
+      return assocPath(["properties", "attachments"], files, changeObj);
+    }, findObjectWithKey({ ...muutospyynto.data }, "changeObjects"));
+  }, [filesFromMuutokset, muutospyynto.data]);
 
   /**
    * Let's walk through all the changes from the backend and update the muutoshakemus.
    */
   useEffect(() => {
-    let muutospyyntoData = { ...muutospyynto.data };
     if (muutospyynto.fetchedAt && match.params.uuid) {
-      const attachments = prop("liitteet", muutospyynto.data);
-
-      muutospyyntoData = setAttachmentUuids(attachments, muutospyynto.data);
-
-      const backendMuutokset = prop("muutokset")(muutospyyntoData);
-
-      let filesFromMuutokset = findObjectWithKey(backendMuutokset, "liitteet");
-
-      const updatedC = map(changeObj => {
-        const files = changeObj.properties.attachments
-          ? map(file => {
-              const fileFromBackend =
-                find(
-                  propEq("tiedostoId", file.tiedostoId),
-                  filesFromMuutokset
-                ) || {};
-              return Object.assign({}, file, fileFromBackend);
-            }, changeObj.properties.attachments || [])
-          : null;
-        return assocPath(["properties", "attachments"], files, changeObj);
-      }, findObjectWithKey(muutospyyntoData, "changeObjects"));
-
       let changesBySection = {};
 
-      forEach(changeObj => {
-        const anchorInitialSplitted = split(
-          "_",
-          getAnchorPart(changeObj.anchor, 0)
-        );
-        const existingChangeObjects =
-          path(anchorInitialSplitted, changesBySection) || [];
-        const changeObjects = insert(-1, changeObj, existingChangeObjects);
-        changesBySection = assocPath(
-          anchorInitialSplitted,
-          changeObjects,
-          changesBySection
-        );
-      }, updatedC);
+      if (updatedC) {
+        forEach(changeObj => {
+          const anchorInitialSplitted = split(
+            "_",
+            getAnchorPart(changeObj.anchor, 0)
+          );
+          const existingChangeObjects =
+            path(anchorInitialSplitted, changesBySection) || [];
+          const changeObjects = insert(-1, changeObj, existingChangeObjects);
+          changesBySection = assocPath(
+            anchorInitialSplitted,
+            changeObjects,
+            changesBySection
+          );
+        }, updatedC);
+      }
 
       // Special case: Toiminta-alueen perustelut
       const toimintaAluePerusteluChangeObject = path(
@@ -195,13 +206,21 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
       /**
        * At this point the backend data is handled and change objects are formed.
        */
-      setBackendChanges({
-        changeObjects: changesBySection,
-        source: backendMuutokset,
-        handled: true
-      });
+      coActions.initialize(changesBySection);
+
+      setBackendMuutokset(backendMuutokset);
+
+      setAsHandled(true);
     }
-  }, [muutospyynto.data, muutospyynto.fetchedAt, match.params.uuid]);
+  }, [
+    coActions,
+    backendMuutokset,
+    filesFromMuutokset,
+    muutospyynto.data,
+    muutospyynto.fetchedAt,
+    match.params.uuid,
+    updatedC
+  ]);
 
   const muutosperusteluList = useMemo(() => {
     return oivaperustelut.fetchedAt
@@ -254,12 +273,12 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
     tutkinnot.fetchedAt &&
     omovt.fetchedAt &&
     oivaperustelut.fetchedAt &&
-    (!match.params.uuid || (muutospyynto.fetchedAt && backendChanges.handled))
+    (!match.params.uuid || (muutospyynto.fetchedAt && isHandled))
   ) {
     return (
       <MuutoshakemusProvider>
         <MuutospyyntoWizard
-          backendChanges={backendChanges}
+          backendMuutokset={backendMuutokset}
           elykeskukset={elykeskukset.data}
           history={history}
           kohteet={kohteet.data}

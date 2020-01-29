@@ -134,7 +134,10 @@ export function findObjectWithKey(object, targetKey) {
     }
     return false;
   }
-  return R.flatten(find(object, targetKey)).filter(Boolean);
+  return R.filter(
+    R.compose(R.not, R.isEmpty),
+    R.flatten(find(object, targetKey)).filter(Boolean)
+  );
 }
 
 /**

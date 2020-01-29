@@ -87,8 +87,15 @@ const getChangeObjByAnchor = (anchor, changes) => {
  * @param {object} changeObj
  * @param {object} component
  */
-const getPropertiesObject = (changeObj, component) => {
-  return Object.assign({}, component.properties, changeObj.properties || {});
+const getPropertiesObject = (
+  changeObj = { properties: {} },
+  component = { properties: {} }
+) => {
+  return Object.assign(
+    {},
+    R.prop("properties", component) || {},
+    R.prop("properties", changeObj) || {}
+  );
 };
 
 const CategorizedList = React.memo(
@@ -279,6 +286,10 @@ const CategorizedList = React.memo(
                         props.changes
                       )
                     : {};
+                  const parentPropsObj = getPropertiesObject(
+                    parentChangeObj,
+                    parentComponent
+                  );
                   const propsObj = getPropertiesObject(changeObj, component);
                   const isAddition = !!changeObj.properties.isChecked;
                   const isRemoved =
@@ -418,6 +429,7 @@ const CategorizedList = React.memo(
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
+                          parentPropsObj={parentPropsObj}
                           title={propsObj.title}
                         />
                       )}

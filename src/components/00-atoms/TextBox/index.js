@@ -35,7 +35,7 @@ const TextBox = props => {
   return (
     <React.Fragment>
       {value !== null ? (
-        <React.Fragment>
+        <div className={props.isHidden ? "hidden" : ""}>
           {props.title && (
             <label className="text-bold text-base block my-2">
               {props.isRequired && (
@@ -85,7 +85,7 @@ const TextBox = props => {
               </div>
             )}
           </div>
-        </React.Fragment>
+        </div>
       ) : null}
     </React.Fragment>
   );
