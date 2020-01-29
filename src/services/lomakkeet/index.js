@@ -10,8 +10,16 @@ import getATVKoulutuslomake from "./perustelut/atv-koulutukset";
 import getValmentavatKoulutuksetLomake from "./perustelut/valmentavatKoulutukset";
 import { setLocale } from "./i18n-config";
 import { getCheckboxes } from "./perustelut/muutostarpeet";
+import getToimintaaluelomake from "./perustelut/toiminta-alue";
+import getOpetuskieletLomake from "./perustelut/opetuskielet";
 
 const lomakkeet = {
+  kielet: {
+    opetuskielet: {
+      reasoning: (data, isReadOnly) =>
+        getOpetuskieletLomake("reasoning", data, isReadOnly)
+    }
+  },
   koulutukset: {
     "atv-koulutukset": {
       addition: (data, isReadOnly, locale, prefix) =>
@@ -59,6 +67,10 @@ const lomakkeet = {
   muutostarpeet: {
     checkboxes: (data, isReadOnly, locale) =>
       getCheckboxes(data.checkboxItems, locale, isReadOnly)
+  },
+  "toiminta-alue": {
+    reasoning: (data, isReadOnly, locale, prefix) =>
+      getToimintaaluelomake("reasoning", data, isReadOnly, locale, prefix)
   },
   tutkinnot: {
     reasoning: (data, isReadOnly, locale, prefix) =>
