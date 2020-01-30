@@ -200,6 +200,7 @@ export default defineMessages({
     defaultMessage: "Kotipaikan maakunta"
   },
   activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
+  searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {
     titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
     jarjestajatHeading: { id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}

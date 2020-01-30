@@ -48,15 +48,18 @@ export const generateVSTTableStructure = (tableData = [], intl) => {
             );
             return {
               id: row.jarjestajaYtunnus,
+              /*
+              TODO: onclick handler for VST lupa
               onClick: row => {
                 if (history) {
-                  //TODO: history.push(`vapaa-sivistystyo/${row.id}/jarjestamislupa`);
+                  history.push(`vapaa-sivistystyo/${row.id}/jarjestamislupa`);
                 } else {
                   console.error(
                     "Järjestämislupatietojen näyttäminen epäonnistui."
                   );
                 }
               },
+               */
               cells: R.addIndex(R.map)(
                 (col, ii) => {
                   return {
