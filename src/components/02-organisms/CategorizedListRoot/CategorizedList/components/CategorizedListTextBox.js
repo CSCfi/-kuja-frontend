@@ -42,7 +42,6 @@ export const CategorizedListTextBox = ({
     ) {
       // If parent checkbox is unchecked the changeObject of
       // the current textbox will be removed
-      console.info("Poistettaan");
       coActions.removeByAnchor(changeObj.anchor);
     }
   }, [parentComponent, parentPropsObj, changeObj]);
