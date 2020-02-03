@@ -19,7 +19,7 @@ const Store = createStore({
       },
       koulutukset: {
         atvKoulutukset: [],
-        kuljettajakoulutukset: {},
+        kuljettajakoulutukset: [],
         valmentavatKoulutukset: []
       },
       liitteet: [],
