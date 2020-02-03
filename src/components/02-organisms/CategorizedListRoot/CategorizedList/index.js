@@ -14,7 +14,7 @@ import { heights } from "okm-frontend-components/dist/css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
-import ActionList from "../../ActionList";
+import ActionList from "okm-frontend-components/dist/components/02-organisms/ActionList";
 import { flattenObj } from "../../../../utils/common";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
