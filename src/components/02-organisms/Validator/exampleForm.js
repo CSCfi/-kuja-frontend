@@ -1,7 +1,7 @@
 // Kuljettajien jatkokoulutuslomake
 export const lomake = [
   {
-    anchor: 2,
+    anchor: "2",
     styleClasses: ["px-10 py-10"],
     components: [
       {
