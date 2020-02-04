@@ -500,7 +500,7 @@ const MuutospyyntoWizard = ({
             </div>
             <div className="border-b border-gray-400 w-full" />
             <DialogContent>
-              <div className="lg:px-16 max-w-6xl m-auto mb-10">
+              <div className="lg:px-16 max-w-6xl m-auto mb-20">
                 {page === 1 && (
                   <WizardPage
                     pageNumber={1}
