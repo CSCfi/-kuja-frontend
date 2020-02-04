@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
-import { forEach } from "ramda";
+import { forEach, split } from "ramda";
 import { cloneDeep } from "lodash";
 import { useIntl } from "react-intl";
+import { useLomakkeet } from "../../../stores/lomakkeet";
 
 function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
@@ -36,6 +37,7 @@ const Lomake = React.memo(
     showCategoryTitles = true
   }) => {
     const intl = useIntl();
+    const [lomakkeet, lomakkeetActions] = useLomakkeet();
 
     const categories = useMemo(() => {
       const lomake = getLomake(
@@ -65,6 +67,10 @@ const Lomake = React.memo(
       rules,
       rulesFn
     ]);
+
+    useEffect(() => {
+      lomakkeetActions.set(split("_", anchor), categories);
+    }, [categories]);
 
     if (categories.length && onChangesUpdate) {
       return (
