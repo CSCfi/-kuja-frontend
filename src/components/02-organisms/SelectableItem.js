@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CheckboxWithLabel from "../01-molecules/CheckboxWithLabel";
+import CheckboxWithLabel from "okm-frontend-components/dist/components/01-molecules/CheckboxWithLabel";
 import { isInLupa, isAdded, isRemoved } from "../../css/label";
 // import Dropdown from "../00-atoms/Dropdown/Dropdown";
 

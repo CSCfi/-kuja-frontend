@@ -163,7 +163,7 @@ const Jarjestaja = React.memo(
               <Route
                 path={`${url}`}
                 exact
-                render={() => <JulkisetTiedot lupa={lupa} />}
+                render={() => <JulkisetTiedot lupa={lupa} jarjestaja={jarjestaja} />}
               />
             </div>
           )}

@@ -252,6 +252,44 @@ export const getChangesToSave = (
         type: changeObj.properties.isChecked ? "addition" : "removal"
       };
     }, unhandledChangeObjects).filter(Boolean);
+  } else if (key === "opetuskielet") {
+    uudetMuutokset = R.map(changeObj => {
+      const anchorParts = changeObj.anchor.split(".");
+      const code = R.view(R.lensIndex(1), anchorParts);
+      const perustelut = R.filter(
+        R.compose(
+          R.equals(code),
+          R.view(R.lensIndex(1)),
+          R.split("."),
+          R.prop("anchor")
+        ),
+        changeObjects.perustelut
+      );
+      const meta = R.path(["properties", "metadata"], changeObj) || {};
+      return {
+        koodiarvo: code,
+        koodisto: "oppilaitoksenopetuskieli",
+        nimi: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
+        isInLupa: meta.isInLupa,
+        kohde: meta.kohde.kohdeArvot[0].kohde,
+        maaraystyyppi: meta.maaraystyyppi,
+        meta: {
+          tunniste: "opetuskieli",
+          changeObjects: R.flatten([[changeObj], perustelut]),
+          perusteluteksti: R.map(perustelu => {
+            if (R.path(["properties", "value"], perustelu)) {
+              return { value: R.path(["properties", "value"], perustelu) };
+            }
+            return {
+              value: R.path(["properties", "metadata", "fieldName"], perustelu)
+            };
+          }, perustelut)
+        },
+        tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
+        type: changeObj.properties.isChecked ? "addition" : "removal"
+      };
+    }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "tutkintokielet") {
     uudetMuutokset = R.map(changeObj => {
       const anchorParts = changeObj.anchor.split(".");
