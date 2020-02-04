@@ -5,9 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import StepperNavigation from "okm-frontend-components/dist/components/01-molecules/Stepper";
 import WizardPage from "./WizardPage";
 import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
@@ -246,6 +244,13 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
+  const handleStep = useCallback(
+    pageNumber => {
+      history.push(String(pageNumber));
+    },
+    [history]
+  );
+
   const showPreviewFile = url => {
     let a = document.createElement("a");
     a.setAttribute("type", "hidden");
@@ -321,11 +326,20 @@ const MuutospyyntoWizard = ({
   ]);
 
   useEffect(() => {
+    // TODO: add isCompleted, isFailed for validation
     setSteps([
-      intl.formatMessage(wizardMessages.pageTitle_1),
-      intl.formatMessage(wizardMessages.pageTitle_2),
-      intl.formatMessage(wizardMessages.pageTitle_3),
-      intl.formatMessage(wizardMessages.pageTitle_4)
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_1)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_2)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_3)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_4)
+      }
     ]);
   }, [intl]);
 
@@ -444,6 +458,7 @@ const MuutospyyntoWizard = ({
 
   const view = useMemo(() => {
     let jsx = <React.Fragment></React.Fragment>;
+
     if (!sessionStorage.getItem("role")) {
       return (
         <MessageWrapper>
@@ -476,24 +491,16 @@ const MuutospyyntoWizard = ({
             <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
               {intl.formatMessage(wizardMessages.formTitle_new)}
             </DialogTitle>
+            <div className="lg:px-16 max-w-6xl mx-auto w-full">
+              <StepperNavigation
+                activeStep={page - 1}
+                stepProps={steps}
+                handleStepChange={handleStep}
+              />
+            </div>
+            <div className="border-b border-gray-400 w-full" />
             <DialogContent>
-              <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
-                <Stepper
-                  activeStep={page - 1}
-                  orientation={
-                    window.innerWidth >= 768 ? "horizontal" : "vertical"
-                  }
-                  style={{ backgroundColor: "transparent" }}>
-                  {steps.map(label => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    return (
-                      <Step key={label} {...stepProps}>
-                        <StepLabel {...labelProps}>{label}</StepLabel>
-                      </Step>
-                    );
-                  })}
-                </Stepper>
+              <div className="lg:px-16 max-w-6xl m-auto mb-10">
                 {page === 1 && (
                   <WizardPage
                     pageNumber={1}
