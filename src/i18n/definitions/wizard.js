@@ -179,5 +179,13 @@ export default defineMessages({
   noRights: {
     id: "wizard.noRights",
     defaultMessage: "Sinulla ei ole oikeuksia tälle sivulle."
+  },
+  allFieldsRequired: {
+    id: "wizard.allFieldsRequired",
+    defaultMessage: "Täydennä kaikki tämän sivun kentät."
+  },
+  allPerustelutRequired: {
+    id: "wizard.allPerustelutRequired",
+    defaultMessage: "Perustele kaikki muutokset."
   }
 });
