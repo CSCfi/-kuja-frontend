@@ -70,7 +70,7 @@ const Lomake = React.memo(
 
     useEffect(() => {
       lomakkeetActions.set(split("_", anchor), categories);
-    }, [categories]);
+    }, [anchor, categories, lomakkeetActions]);
 
     if (categories.length && onChangesUpdate) {
       return (

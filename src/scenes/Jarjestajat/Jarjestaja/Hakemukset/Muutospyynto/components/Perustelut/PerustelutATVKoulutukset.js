@@ -48,7 +48,7 @@ const PerustelutATVKoulutukset = props => {
         }}
         isReadOnly={props.isReadOnly}
         onChangesUpdate={onChangesUpdate}
-        path={["koulutukset", "atv-koulutukset"]}
+        path={["perustelut", "koulutukset", "atvKoulutukset"]}
         rules={rules}
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>

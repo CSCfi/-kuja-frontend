@@ -54,6 +54,7 @@ import { useTutkinnot } from "../../../../../../stores/tutkinnot";
 import { useKoulutukset } from "../../../../../../stores/koulutukset";
 import { mapObjIndexed, prop, sortBy } from "ramda";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
+import { useLomakkeet } from "../../../../../../stores/lomakkeet";
 
 const FormDialog = withStyles(() => ({
   paper: {
@@ -91,8 +92,7 @@ const MuutospyyntoWizard = ({
   /**
    * We are going to create new objects based on these definitions.
    */
-  // cos means change objects
-  const [cos, coActions] = useChangeObjects();
+  const [cos, coActions] = useChangeObjects(); // cos means change objects
   const [kielet] = useKielet();
   const [opetuskielet] = useOpetuskielet();
   const [koulutusalat] = useKoulutusalat();
@@ -166,6 +166,8 @@ const MuutospyyntoWizard = ({
       tutkinnot: {}
     }
   });
+
+  const [lomakkeet] = useLomakkeet();
 
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
@@ -327,7 +329,7 @@ const MuutospyyntoWizard = ({
           lupa,
           cos,
           backendMuutokset,
-          dataBySection,
+          lomakkeet,
           match.params.uuid
         ),
         attachments,
@@ -336,10 +338,10 @@ const MuutospyyntoWizard = ({
     },
     [
       cos,
-      dataBySection,
       getFiles,
       muutoshakemusDispatch,
       backendMuutokset,
+      lomakkeet,
       lupa,
       match.params.uuid
     ]
@@ -462,7 +464,7 @@ const MuutospyyntoWizard = ({
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}
                     muut={muut}
-                    muutoshakemus={dataBySection}
+                    lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
                     onStateUpdate={onSectionStateUpdate}
                     setChangesBySection={setChangesBySection}

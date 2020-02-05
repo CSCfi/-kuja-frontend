@@ -3,6 +3,7 @@ import {
   getPathByAnchor,
   ifOneTerm
 } from "../../components/02-organisms/CategorizedListRoot/utils";
+import { findObjectWithKey } from "../../utils/common";
 
 export function createRules(requiredFields = []) {
   return R.map(rule => {
@@ -117,4 +118,31 @@ export function getCategoriesByProps(
     }
     return results;
   }, categories);
+}
+
+export function getActiveCheckboxes(lomake, changeObjects = []) {
+  const components = R.filter(
+    R.propEq("name", "CheckboxWithLabel"),
+    findObjectWithKey(lomake, "components")
+  );
+  const changeObjectsWithTailAnchors = R.map(changeObj => {
+    const tailAnchor = R.compose(
+      R.join("."),
+      R.tail(),
+      R.split("."),
+      R.prop("anchor")
+    )(changeObj);
+    return R.assoc("anchor", tailAnchor, changeObj);
+  }, changeObjects);
+
+  return R.filter(component => {
+    const changeObj = R.find(
+      R.propEq("anchor", component.fullAnchor),
+      changeObjectsWithTailAnchors
+    );
+    return (
+      (component.properties.isChecked && !changeObj) ||
+      (changeObj && changeObj.properties.isChecked)
+    );
+  }, components);
 }

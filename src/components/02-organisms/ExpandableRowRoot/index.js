@@ -20,7 +20,8 @@ const useStyles = makeStyles(() => ({
 const compare = (prevProps, nextProps) => {
   const sameCategories = R.equals(prevProps.categories, nextProps.categories);
   const sameChanges = R.equals(prevProps.changes, nextProps.changes);
-  return sameCategories && sameChanges;
+  const sameTitle = R.equals(prevProps.title, nextProps.title);
+  return sameCategories && sameChanges && sameTitle;
 };
 
 const defaultProps = {
@@ -64,8 +65,7 @@ const ExpandableRowRoot = React.memo(
           <ExpandableRow
             shouldBeExpanded={isExpanded}
             onToggle={onToggle}
-            id={anchor}
-          >
+            id={anchor}>
             <h4 data-slot="title" className="opacity-75">
               {code && <span className="pr-6">{code}</span>}
               <span>{title}</span>
@@ -86,8 +86,7 @@ const ExpandableRowRoot = React.memo(
                           onClick={e => {
                             e.stopPropagation();
                             return onChangesRemove(sectionId, anchor, index);
-                          }}
-                        >
+                          }}>
                           <UndoIcon />
                         </IconButton>
                       </Tooltip>
@@ -98,8 +97,7 @@ const ExpandableRowRoot = React.memo(
             </div>
             <div
               data-slot="content"
-              className={`w-full ${!children ? "p-8" : ""}`}
-            >
+              className={`w-full ${!children ? "p-8" : ""}`}>
               {!children && (isExpanded || isToggledOpen) ? (
                 <CategorizedListRoot
                   anchor={anchor}
@@ -119,8 +117,9 @@ const ExpandableRowRoot = React.memo(
         )}
       </React.Fragment>
     );
-  },
-  compare
+  }
+  // ,
+  // compare
 );
 
 ExpandableRowRoot.propTypes = {

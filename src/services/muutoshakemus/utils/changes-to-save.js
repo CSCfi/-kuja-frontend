@@ -1,10 +1,10 @@
 import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
-import * as R from "ramda";
 import { fillForBackend } from "../../lomakkeet/backendMappings";
+import * as R from "ramda";
 
 // Return changes of Tutkinnot
-const getMuutos = (stateItem, changeObj, perustelut, anchor) => {
+const getMuutos = (lomake, changeObj, perustelut) => {
   let koulutus = {};
   const anchorParts = changeObj.anchor.split(".");
   const koulutusCode = R.nth(2, anchorParts);
@@ -13,8 +13,8 @@ const getMuutos = (stateItem, changeObj, perustelut, anchor) => {
     subcodeCandidate && !isNaN(subcodeCandidate) ? subcodeCandidate : undefined;
 
   const meta = subcode
-    ? getMetadata(R.slice(1, 4)(anchorParts), stateItem.categories)
-    : getMetadata(R.slice(1, 3)(anchorParts), stateItem.categories);
+    ? getMetadata(R.slice(1, 4)(anchorParts), lomake)
+    : getMetadata(R.slice(1, 3)(anchorParts), lomake);
 
   const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
   if (koulutusCode) {
@@ -24,7 +24,7 @@ const getMuutos = (stateItem, changeObj, perustelut, anchor) => {
         R.chain(R.prop("koulutukset")),
         R.values,
         R.path(["article", "koulutusalat"])
-      )(stateItem) || {};
+      )(lomake) || {};
   }
 
   const maaraysUuid = R.prop("maaraysId", koulutus);
@@ -104,12 +104,12 @@ function findPerustelut(anchor, changeObjects) {
   return perustelut;
 }
 
-export const getChangesToSave = (
+export function getChangesToSave(
   key,
-  stateObject = {},
+  lomake = {},
   changeObjects = {},
   backendMuutokset = []
-) => {
+) {
   // Update changes if already exits with perustelut and attachements
   const paivitetytBackendMuutokset = R.map(changeObj => {
     let { anchor, backendMuutos } = findBackendMuutos(
@@ -173,15 +173,12 @@ export const getChangesToSave = (
   let uudetMuutokset = [];
 
   if (key === "tutkinnot") {
-    uudetMuutokset = stateObject.items
+    uudetMuutokset = lomake
       ? R.map(changeObj => {
           const areaCode = R.compose(
             R.view(R.lensIndex(1)),
             R.split("_")
           )(getAnchorPart(changeObj.anchor, 0));
-          const stateItem = R.find(R.propEq("areaCode", areaCode))(
-            stateObject.items
-          );
           const anchorInit = R.compose(
             R.join("."),
             R.init,
@@ -192,22 +189,27 @@ export const getChangesToSave = (
             changeObjects.perustelut
           );
 
-          return getMuutos(stateItem, changeObj, perustelut, changeObj.anchor);
+          return getMuutos(
+            lomake[areaCode],
+            changeObj,
+            perustelut,
+            changeObj.anchor
+          );
         }, unhandledChangeObjects).filter(Boolean)
       : [];
   } else if (key === "koulutukset") {
     uudetMuutokset = R.map(changeObj => {
-      const stateData =
-        stateObject[
-          R.compose(R.last, R.split("_"))(getAnchorPart(changeObj.anchor, 0))
-        ];
+      const lomakeKey = R.compose(
+        R.last,
+        R.split("_")
+      )(getAnchorPart(changeObj.anchor, 0));
       const anchorInit = R.compose(
         R.join("."),
         R.init,
         R.split(".")
       )(changeObj.anchor);
       const code = getAnchorPart(changeObj.anchor, 1);
-      const metadata = getMetadata([code], stateData.categories);
+      const metadata = getMetadata([code], lomake[lomakeKey]);
       const finnishInfo = R.find(R.propEq("kieli", "FI"), metadata.metadata);
       const perustelut = R.filter(
         R.compose(R.contains(anchorInit), R.prop("anchor")),
@@ -297,7 +299,6 @@ export const getChangesToSave = (
         R.view(R.lensIndex(2)),
         R.split("_")
       )(anchorParts[0]);
-      const item = R.find(R.propEq("areaCode", areaCode))(stateObject.items);
       const anchorInit = R.compose(
         R.join("."),
         R.init,
@@ -308,14 +309,13 @@ export const getChangesToSave = (
         changeObjects.perustelut
       );
       const code = getAnchorPart(changeObj.anchor, 1);
-      const meta =
-        item && item.categories
-          ? getMetadata(R.slice(1, 3)(anchorParts), item.categories)
-          : {};
+      const meta = lomake[areaCode]
+        ? getMetadata(R.slice(1, 3)(anchorParts), lomake[areaCode])
+        : {};
 
       return {
         koodiarvo: code,
-        koodisto: stateObject.koodistoUri,
+        koodisto: "kieli",
         nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         isInLupa: meta.isInLupa,
@@ -350,7 +350,7 @@ export const getChangesToSave = (
         R.split("_"),
         R.view(R.lensIndex(0))
       )(anchorArr);
-      const section = R.find(R.propEq("code", areaCode))(stateObject.muutdata);
+      const section = R.find(R.propEq("code", areaCode))(lomake.muutdata);
       let category = false;
       let maarays = false;
       if (section) {
@@ -407,8 +407,8 @@ export const getChangesToSave = (
         koodiarvo: maarays.koodiArvo,
         koodisto: maarays.koodisto.koodistoUri,
         isInLupa: category.meta.isInLupa,
-        kohde: stateObject.kohde,
-        maaraystyyppi: stateObject.maaraystyyppi,
+        kohde: lomake.kohde,
+        maaraystyyppi: lomake.maaraystyyppi,
         meta,
         tila: tila,
         type: type
@@ -445,8 +445,8 @@ export const getChangesToSave = (
             ]
           },
           muutosperustelukoodiarvo: null,
-          kohde: stateObject.kohde,
-          maaraystyyppi: stateObject.maaraystyyppi,
+          kohde: lomake.kohde,
+          maaraystyyppi: lomake.maaraystyyppi,
           koodisto: "nuts1",
           koodiarvo
         };
@@ -466,8 +466,8 @@ export const getChangesToSave = (
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
-          kohde: stateObject.kohde,
-          maaraystyyppi: stateObject.maaraystyyppi
+          kohde: lomake.kohde,
+          maaraystyyppi: lomake.maaraystyyppi
         };
       } else {
         return {
@@ -485,8 +485,8 @@ export const getChangesToSave = (
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
-          kohde: stateObject.kohde,
-          maaraystyyppi: stateObject.maaraystyyppi
+          kohde: lomake.kohde,
+          maaraystyyppi: lomake.maaraystyyppi
         };
       }
     }, unhandledChangeObjects).filter(Boolean);
@@ -495,12 +495,9 @@ export const getChangesToSave = (
       let koodisto = "koulutussektori";
       const anchorParts = R.split(".", changeObj.anchor);
       const categoryKey = R.view(R.lensIndex(1))(anchorParts);
-      const koodiarvo = R.prop(
-        categoryKey,
-        stateObject.opiskelijavuodet.koodiarvot
-      );
+      const koodiarvo = R.prop(categoryKey, lomake.opiskelijavuodet.koodiarvot);
       const muutCategory = R.find(R.propEq("key", categoryKey))(
-        stateObject.muut.muutdata
+        lomake.muut.muutdata
       );
       if (muutCategory) {
         const meta = R.find(R.propEq("anchor", koodiarvo))(
@@ -557,8 +554,8 @@ export const getChangesToSave = (
         kategoria: R.head(anchorParts),
         koodiarvo,
         koodisto,
-        kohde: stateObject.opiskelijavuodet.kohde,
-        maaraystyyppi: stateObject.opiskelijavuodet.maaraystyyppi,
+        kohde: lomake.opiskelijavuodet.kohde,
+        maaraystyyppi: lomake.opiskelijavuodet.maaraystyyppi,
         meta,
         tila: "MUUTOS",
         type: "change"
@@ -567,4 +564,4 @@ export const getChangesToSave = (
   }
 
   return R.flatten([paivitetytBackendMuutokset, uudetMuutokset]);
-};
+}

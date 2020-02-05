@@ -7,13 +7,14 @@ import {
   getAnchorPart
 } from "../../../../../../../utils/common";
 import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { rules } from "../../../../../../../services/lomakkeet/perustelut/tyovoimakoulutus/rules";
 
 const PerustelutTyovoimakoulutukset = React.memo(props => {
+  const intl = useIntl();
   const sectionId = "perustelut_koulutukset_tyovoimakoulutukset";
   const koodisto = "oivatyovoimakoulutus";
   const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
@@ -82,7 +83,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
         categories: getCategories(
           getDataForKoulutusList(
             props.koulutukset.muut[koodisto],
-            R.toUpper(props.intl.locale)
+            R.toUpper(intl.locale)
           ),
           props.kohde,
           props.maaraystyyppi
@@ -95,7 +96,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
     onStateUpdate,
     props.kohde,
     props.koulutukset.muut,
-    props.intl.locale,
+    intl.locale,
     props.maaraystyyppi
   ]);
 
@@ -124,7 +125,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                 key={code}
                 isReadOnly={props.isReadOnly}
                 onChangesUpdate={onChangesUpdate}
-                path={["koulutukset", "tyovoimakoulutukset"]}
+                path={["perustelut", "koulutukset", "tyovoimakoulutukset"]}
                 rules={rules}></Lomake>
             ) : (
               <Lomake
@@ -137,7 +138,11 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                 isReadOnly={props.isReadOnly}
                 key={code}
                 onChangesUpdate={onChangesUpdate}
-                path={["koulutukset", "tyovoimakoulutukset"]}></Lomake>
+                path={[
+                  "perustelut",
+                  "koulutukset",
+                  "tyovoimakoulutukset"
+                ]}></Lomake>
             );
           }
           return lomake;
@@ -156,7 +161,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
 
   return (
     <React.Fragment>
-      {props.stateObjects.perustelut && lomakkeet && (
+      {lomakkeet && (
         <ExpandableRowRoot
           anchor={sectionId}
           key={`expandable-row-root`}
@@ -167,7 +172,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
           hideAmountOfChanges={true}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
-          title={props.intl.formatMessage(wizardMessages.workforceTraining)}>
+          title={intl.formatMessage(wizardMessages.workforceTraining)}>
           {lomakkeet}
         </ExpandableRowRoot>
       )}
@@ -177,8 +182,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
 
 PerustelutTyovoimakoulutukset.defaultProps = {
   changeObjects: {},
-  isReadOnly: false,
-  stateObjects: {}
+  isReadOnly: false
 };
 
 PerustelutTyovoimakoulutukset.propTypes = {
@@ -186,8 +190,7 @@ PerustelutTyovoimakoulutukset.propTypes = {
   code: PropTypes.string,
   elykeskukset: PropTypes.array,
   isReadOnly: PropTypes.bool,
-  koulutukset: PropTypes.object,
-  stateObjects: PropTypes.object
+  koulutukset: PropTypes.object
 };
 
-export default injectIntl(PerustelutTyovoimakoulutukset);
+export default PerustelutTyovoimakoulutukset;

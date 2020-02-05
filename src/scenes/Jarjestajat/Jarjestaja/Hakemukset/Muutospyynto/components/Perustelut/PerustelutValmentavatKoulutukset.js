@@ -54,7 +54,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
           }}
           isReadOnly={props.isReadOnly}
           onChangesUpdate={onChangesUpdate}
-          path={["koulutukset", "valmentavat"]}
+          path={["perustelut", "koulutukset", "valmentavat"]}
           rules={rules}
           showCategoryTitles={true}></Lomake>
       </ExpandableRowRoot>
@@ -64,8 +64,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
 });
 
 PerustelutValmentavatKoulutukset.defaultProps = {
-  changeObjects: {},
-  stateObject: {}
+  changeObjects: {}
 };
 
 PerustelutValmentavatKoulutukset.propTypes = {
@@ -76,8 +75,7 @@ PerustelutValmentavatKoulutukset.propTypes = {
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  onStateUpdate: PropTypes.func
 };
 
 export default PerustelutValmentavatKoulutukset;

@@ -131,7 +131,7 @@ function getReasoningForm(isReadOnly, lupakohde, changeObjects) {
   ];
 }
 
-export default function getToimintaaluelomake(
+export default function getToimintaaluePerustelulomake(
   action,
   data,
   isReadOnly,

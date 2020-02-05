@@ -44,7 +44,7 @@ export const CategorizedListTextBox = ({
       // the current textbox will be removed
       coActions.removeByAnchor(changeObj.anchor);
     }
-  }, [parentComponent, parentPropsObj, changeObj]);
+  }, [coActions, parentComponent, parentPropsObj, changeObj]);
 
   const value = useMemo(() => {
     return (
@@ -53,13 +53,7 @@ export const CategorizedListTextBox = ({
       propsObj.defaultValue ||
       ""
     );
-  }, [
-    changeObj,
-    parentComponent,
-    parentPropsObj,
-    propsObj.defaultValue,
-    propsObj.value
-  ]);
+  }, [changeObj, propsObj.defaultValue, propsObj.value]);
 
   return (
     <div className={`w-full ${payload.component.styleClasses}`}>

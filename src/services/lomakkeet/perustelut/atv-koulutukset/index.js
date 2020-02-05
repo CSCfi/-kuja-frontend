@@ -65,7 +65,7 @@ function getAdditionForm(
   return categories.filter(Boolean);
 }
 
-export default function getATVKoulutuslomake(
+export default function getATVKoulutuksetPerustelulomake(
   action,
   data,
   isReadOnly,

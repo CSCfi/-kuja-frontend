@@ -46,7 +46,7 @@ const findAnchoredCategoryOrComponentFromElement = (anchor, elementObject) => {
 
 /**
  * Returns the element found from given anchor in a category hierarchy. We expect that the anchor is
- * a . delimited path with elementes being categories and optionally the last element being a component
+ * a . delimited path with elements being categories and optionally the last element being a component
  *
  * @param anchor The path for scanning the component from stateObject (e.g. vahimmaisopiskelijavuodet.A)
  * @param stateObject
@@ -115,7 +115,7 @@ export const flattenObj = obj => {
 };
 
 /**
- * Function finds all the objects with given key from the given object.
+ * Function finds all objects with given key from the given object.
  * @param {object} object - JavaScript object, can be deeply nested
  * @param {string} targetKey - Key to search for
  */

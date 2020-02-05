@@ -39,10 +39,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              stateObject={R.path(
-                ["perustelut", "koulutukset", "valmentavatKoulutukset"],
-                props.muutoshakemus
-              )}
               onStateUpdate={props.onStateUpdate}
             />
           ) : null}
@@ -53,17 +49,12 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutATVKoulutukset
               changeObjects={{
                 koulutukset: {
-                  atvKoulutukset: R.path(["koulutukset", "atv-koulutukset"])(
-                    props.changeObjects
-                  )
+                  atvKoulutukset: props.changeObjects.koulutukset.atvKoulutukset
                 },
                 perustelut: {
                   koulutukset: {
-                    atvKoulutukset: R.path([
-                      "perustelut",
-                      "koulutukset",
-                      "atv-koulutukset"
-                    ])(props.changeObjects)
+                    atvKoulutukset:
+                      props.changeObjects.perustelut.koulutukset.atvKoulutukset
                   }
                 }
               }}
@@ -73,10 +64,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              stateObject={R.path(
-                ["perustelut", "koulutukset", "atvKoulutukset"],
-                props.muutoshakemus
-              )}
               onStateUpdate={props.onStateUpdate}
             />
           ) : null}
@@ -88,18 +75,14 @@ const PerustelutKoulutukset = React.memo(props => {
             <PerustelutTyovoimakoulutukset
               changeObjects={{
                 koulutukset: {
-                  tyovoimakoulutukset: R.path([
-                    "koulutukset",
-                    "tyovoimakoulutukset"
-                  ])(props.changeObjects)
+                  tyovoimakoulutukset:
+                    props.changeObjects.koulutukset.tyovoimakoulutukset
                 },
                 perustelut: {
                   koulutukset: {
-                    tyovoimakoulutukset: R.path([
-                      "perustelut",
-                      "koulutukset",
-                      "tyovoimakoulutukset"
-                    ])(props.changeObjects)
+                    tyovoimakoulutukset:
+                      props.changeObjects.perustelut.koulutukset
+                        .tyovoimakoulutukset
                   }
                 }
               }}
@@ -110,12 +93,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              stateObjects={{
-                perustelut: R.path(
-                  ["perustelut", "koulutukset", "tyovoimakoulutukset"],
-                  props.muutoshakemus
-                )
-              }}
               onStateUpdate={props.onStateUpdate}
             />
           ) : null}
@@ -145,10 +122,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              stateObject={R.path(
-                ["perustelut", "koulutukset", "kuljettajakoulutukset"],
-                props.muutoshakemus
-              )}
               onStateUpdate={props.onStateUpdate}
             />
           ) : null}

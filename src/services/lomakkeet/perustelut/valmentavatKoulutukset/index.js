@@ -67,7 +67,7 @@ function getAdditionForm(
   return categories.filter(Boolean);
 }
 
-export default function getValmentavatKoulutuksetLomake(
+export default function getValmentavatKoulutuksetPerustelulomake(
   action,
   data,
   isReadOnly,

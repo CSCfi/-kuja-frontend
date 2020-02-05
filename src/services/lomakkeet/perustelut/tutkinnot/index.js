@@ -212,7 +212,7 @@ const getReasoningForm = (
   return categories;
 };
 
-export default function getTutkinnotLomake(action, data, isReadOnly, locale) {
+export default function getTutkinnotPerustelulomake(action, data, isReadOnly, locale) {
   switch (action) {
     case "addition":
       return getAdditionForm(data.checkboxItems, locale, isReadOnly);

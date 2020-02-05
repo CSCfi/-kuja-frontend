@@ -6,10 +6,11 @@ const Store = createStore({
   initialState: {
     kielet: {
       opetuskielet: [],
-      tutkintokielet: []
+      tutkintokielet: {}
     },
     koulutukset: {
       atvKoulutukset: [],
+      kuljettajakoulutukset: [],
       valmentavatKoulutukset: []
     },
     perustelut: {
@@ -32,6 +33,8 @@ const Store = createStore({
       tilinpaatostiedot: [],
       liitteet: []
     },
+    muut: {},
+    opiskelijavuodet: [],
     toimintaalue: [],
     yhteenveto: {
       yleisettiedot: [],

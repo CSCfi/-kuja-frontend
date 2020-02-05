@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { getAnchorPart } from "../../../../../../../utils/common";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
@@ -13,6 +13,7 @@ import {
 import { rules as peruskoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/peruskoulutus/rules";
 
 const PerustelutKuljettajakoulutukset = props => {
+  const intl = useIntl();
   const sectionId = "perustelut_koulutukset_kuljettajakoulutukset";
   const { onChangesRemove, onChangesUpdate } = props;
 
@@ -49,7 +50,12 @@ const PerustelutKuljettajakoulutukset = props => {
                   isReadOnly={props.isReadOnly}
                   key={code}
                   onChangesUpdate={onChangesUpdate}
-                  path={["koulutukset", "kuljettajakoulutukset", mapping[code]]}
+                  path={[
+                    "perustelut",
+                    "koulutukset",
+                    "kuljettajakoulutukset",
+                    mapping[code]
+                  ]}
                   rules={rules}
                   showCategoryTitles={true}></Lomake>
               );
@@ -63,7 +69,12 @@ const PerustelutKuljettajakoulutukset = props => {
                   key={code}
                   onChangesUpdate={onChangesUpdate}
                   prefix={code}
-                  path={["koulutukset", "kuljettajakoulutukset", mapping[code]]}
+                  path={[
+                    "perustelut",
+                    "koulutukset",
+                    "kuljettajakoulutukset",
+                    mapping[code]
+                  ]}
                   rules={removalRules}></Lomake>
               );
             }
@@ -92,7 +103,7 @@ const PerustelutKuljettajakoulutukset = props => {
       isExpanded={true}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
-      title={props.intl.formatMessage(wizardMessages.driverTraining)}>
+      title={intl.formatMessage(wizardMessages.driverTraining)}>
       {lomakkeet}
     </ExpandableRowRoot>
   );
@@ -100,8 +111,7 @@ const PerustelutKuljettajakoulutukset = props => {
 
 PerustelutKuljettajakoulutukset.defaultProps = {
   changeObjects: {},
-  isReadOnly: false,
-  stateObject: {}
+  isReadOnly: false
 };
 
 PerustelutKuljettajakoulutukset.propTypes = {
@@ -112,8 +122,7 @@ PerustelutKuljettajakoulutukset.propTypes = {
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
-  stateObject: PropTypes.object
+  onStateUpdate: PropTypes.func
 };
 
-export default injectIntl(PerustelutKuljettajakoulutukset);
+export default PerustelutKuljettajakoulutukset;

@@ -21,6 +21,7 @@
     "i18n-for-browser": "^1.2.2",
     "implement-js": "0.0.27",
     "jest-dom": "^3.5.0",
+    "localforage": "^1.7.3",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
     "postcss-import": "^12.0.1",

@@ -1,0 +1,101 @@
+import { isAdded, isRemoved, isInLupa } from "../../../css/label";
+import "../i18n-config";
+import { __ } from "i18n-for-browser";
+import * as R from "ramda";
+import _ from "lodash";
+
+function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
+  return R.map(item => {
+    let noItemsInLupa = true;
+    const isVaativatukiRadios =
+      configObj.key === "vaativatuki" &&
+      item.componentName === "RadioButtonWithLabel";
+    const sortedArticles = R.sortBy(R.prop("koodiArvo"), item.articles);
+    return {
+      anchor: configObj.key,
+      title: item.title,
+      categories: R.addIndex(R.map)((article, index) => {
+        const title =
+          _.find(article.metadata, m => {
+            return m.kieli === locale;
+          }).kuvaus || "Muu";
+        const isInLupaBool = !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
+          osiota5koskevatMaaraykset
+        );
+        if (isInLupaBool) {
+          noItemsInLupa = false;
+        }
+        const labelClasses = {
+          isInLupa: isInLupaBool
+        };
+        let result = {
+          anchor: article.koodiArvo,
+          meta: {
+            isInLupa: isInLupaBool,
+            koodiarvo: article.koodiArvo,
+            koodisto: article.koodisto
+          },
+          components: [
+            {
+              anchor: "A",
+              name: item.componentName,
+              properties: {
+                // This is for the Perustelut page and for showing or not showing a form for reasoning.
+                forChangeObject: {
+                  isReasoningRequired:
+                    !isVaativatukiRadios || index !== sortedArticles.length - 1
+                },
+                name: item.componentName,
+                isChecked:
+                  isInLupaBool ||
+                  // Here we are checking if the last radio button of vaativa tuki options should be selected.
+                  (noItemsInLupa &&
+                    isVaativatukiRadios &&
+                    index === sortedArticles.length - 1),
+                title: title,
+                labelStyles: {
+                  addition: isAdded,
+                  removal: isRemoved,
+                  custom: Object.assign(
+                    {},
+                    labelClasses.isInLupa ? isInLupa : {}
+                  )
+                }
+              }
+            }
+          ]
+        };
+        if (article.koodiArvo === "22") {
+          result.categories = [
+            {
+              anchor: "other",
+              components: [
+                {
+                  anchor: "A",
+                  name: "TextBox",
+                  properties: {
+                    placeholder: __("other_placeholder")
+                  }
+                }
+              ]
+            }
+          ];
+        }
+        return result;
+      }, sortedArticles)
+    };
+  }, configObj.categoryData);
+}
+
+export default function getMuutLomake(action, data, isReadOnly, locale) {
+  switch (action) {
+    case "modification":
+      return getModificationForm(
+        data.configObj,
+        data.osiota5koskevatMaaraykset,
+        R.toUpper(locale)
+      );
+    default:
+      return [];
+  }
+}

@@ -170,7 +170,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
   ];
 }
 
-export default function getTyovoimakoulutuslomake(
+export default function getTyovoimakoulutusperustelulomake(
   action,
   data,
   isReadOnly,

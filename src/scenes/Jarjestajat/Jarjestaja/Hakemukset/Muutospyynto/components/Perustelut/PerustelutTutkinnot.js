@@ -86,7 +86,7 @@ const PerustelutTutkinnot = React.memo(
                   key={`form-${koulutusala.koodiArvo}`}
                   isReadOnly={isReadOnly}
                   onChangesUpdate={onChangesUpdate}
-                  path={["tutkinnot"]}
+                  path={["perustelut", "tutkinnot"]}
                   rulesFn={getRules}></Lomake>
               </ExpandableRowRoot>
             ) : null;

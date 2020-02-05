@@ -7,7 +7,7 @@ export function createObjectToSave(
   lupa,
   changeObjects,
   backendMuutokset = [],
-  muutoshakemus,
+  lomakkeet,
   uuid
 ) {
   // Adds data that has attachements
@@ -207,7 +207,7 @@ export function createObjectToSave(
       // TUTKINNOT
       getChangesToSave(
         "tutkinnot",
-        R.path(["tutkinnot"], muutoshakemus), // stateObject
+        R.path(["tutkinnot"], lomakkeet), // stateObject
         {
           // Page 1 changes
           muutokset: R.compose(
@@ -227,7 +227,7 @@ export function createObjectToSave(
       // KOULUTUKSET
       getChangesToSave(
         "koulutukset",
-        R.path(["koulutukset"], muutoshakemus),
+        R.path(["koulutukset"], lomakkeet),
         {
           muutokset: R.compose(
             R.flatten,
@@ -246,7 +246,7 @@ export function createObjectToSave(
       // OPETUSKIELET
       getChangesToSave(
         "opetuskielet",
-        R.path(["kielet", "opetuskielet"], muutoshakemus),
+        R.path(["kielet", "opetuskielet"], lomakkeet),
         {
           muutokset: R.compose(
             R.flatten,
@@ -266,7 +266,7 @@ export function createObjectToSave(
       // TUTKINTOKIELET
       getChangesToSave(
         "tutkintokielet",
-        R.path(["kielet", "tutkintokielet"], muutoshakemus),
+        R.path(["kielet", "tutkintokielet"], lomakkeet),
         {
           muutokset: R.compose(
             R.flatten,
@@ -286,7 +286,7 @@ export function createObjectToSave(
       // TOIMINTA-ALUE
       getChangesToSave(
         "toimintaalue",
-        R.path(["toimintaalue"], muutoshakemus),
+        R.path(["toimintaalue"], lomakkeet),
         {
           muutokset: R.path(["toimintaalue"], changeObjects) || [],
           perustelut: (() => {
@@ -318,8 +318,8 @@ export function createObjectToSave(
       getChangesToSave(
         "opiskelijavuodet",
         {
-          opiskelijavuodet: R.path(["opiskelijavuodet"], muutoshakemus),
-          muut: R.path(["muut"], muutoshakemus)
+          opiskelijavuodet: R.path(["opiskelijavuodet"], lomakkeet),
+          muut: R.path(["muut"], lomakkeet)
         },
         {
           muutokset: R.compose(
@@ -338,7 +338,7 @@ export function createObjectToSave(
       // MUUT
       getChangesToSave(
         "muut",
-        R.path(["muut"], muutoshakemus),
+        R.path(["muut"], lomakkeet),
         {
           muutokset: R.compose(
             R.flatten,

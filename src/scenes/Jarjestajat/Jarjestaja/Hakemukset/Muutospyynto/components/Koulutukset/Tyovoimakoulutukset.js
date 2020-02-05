@@ -1,104 +1,72 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
-import { injectIntl } from "react-intl";
 import PropTypes from "prop-types";
+import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import { useIntl } from "react-intl";
 import * as R from "ramda";
 
-const Tyovoimakoulutukset = React.memo(props => {
-  const sectionId = "koulutukset_tyovoimakoulutukset";
-  const koodisto = "oivatyovoimakoulutus";
-  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+const Tyovoimakoulutukset = React.memo(
+  ({
+    changeObjects,
+    kohde,
+    koulutukset,
+    lupa,
+    maaraystyyppi,
+    onChangesRemove,
+    onChangesUpdate
+  }) => {
+    const intl = useIntl();
+    const sectionId = "koulutukset_tyovoimakoulutukset";
+    const koodisto = "oivatyovoimakoulutus";
 
-  const getCategories = useMemo(() => {
-    return (koulutusData, kohde, maaraystyyppi) => {
-      const categories = R.map(item => {
-        return {
-          anchor: item.code,
-          components: [
-            {
-              anchor: "A",
-              name: "RadioButtonWithLabel",
-              properties: {
-                forChangeObject: {
-                  isReasoningRequired: item.isReasoningRequired
-                },
-                name: "RadioButtonWithLabel",
-                title: item.title,
-                isChecked: item.shouldBeChecked,
-                labelStyles: {
-                  addition: isAdded,
-                  removal: isRemoved,
-                  custom: item.isInLupa ? isInLupa : {}
-                }
-              }
-            }
-          ],
-          meta: {
-            kohde,
-            maaraystyyppi,
-            isInLupa: item.isInLupa,
-            koodisto: item.koodisto,
-            metadata: item.metadata
-          }
-        };
-      }, koulutusData.items);
-      return categories;
-    };
-  }, []);
+    const koulutusdata = useMemo(() => {
+      return getDataForKoulutusList(
+        koulutukset.muut[koodisto],
+        R.toUpper(intl.locale),
+        lupa,
+        "oivatyovoimakoulutus"
+      );
+    }, [intl.locale, koulutukset, lupa]);
 
-  useEffect(() => {
-    onStateUpdate(
-      {
-        categories: getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.muut[koodisto],
-            R.toUpper(props.intl.locale),
-            props.lupa,
-            "oivatyovoimakoulutus"
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
-      },
-      sectionId
+    return (
+      <ExpandableRowRoot
+        anchor={sectionId}
+        key={`expandable-row-root`}
+        categories={[]}
+        changes={changeObjects}
+        onUpdate={onChangesUpdate}
+        onChangesRemove={onChangesRemove}
+        title={intl.formatMessage(wizardMessages.workforceTraining)}>
+        {koulutusdata && (
+          <Lomake
+            action="modification"
+            anchor={sectionId}
+            changeObjects={changeObjects}
+            data={{
+              kohde,
+              koulutusdata,
+              maaraystyyppi
+            }}
+            onChangesUpdate={onChangesUpdate}
+            path={["koulutukset", "tyovoimakoulutukset"]}
+            rules={[]}
+            showCategoryTitles={true}></Lomake>
+        )}
+      </ExpandableRowRoot>
     );
-  }, [
-    getCategories,
-    onStateUpdate,
-    props.intl.locale,
-    props.kohde,
-    props.koulutukset.muut,
-    props.lupa,
-    props.maaraystyyppi
-  ]);
-
-  return (
-    <React.Fragment>
-      {props.stateObject.categories ? (
-        <ExpandableRowRoot
-          anchor={sectionId}
-          key={`expandable-row-root`}
-          categories={props.stateObject.categories}
-          changes={props.changeObjects}
-          onUpdate={onChangesUpdate}
-          onChangesRemove={onChangesRemove}
-          title={props.intl.formatMessage(wizardMessages.workforceTraining)}
-        />
-      ) : null}
-    </React.Fragment>
-  );
-});
-
-Tyovoimakoulutukset.defaultProps = {
-  stateObject: {}
-};
+  }
+);
 
 Tyovoimakoulutukset.propTypes = {
   changeObjects: PropTypes.array,
-  koulutukset: PropTypes.object
+  kohde: PropTypes.object,
+  koulutukset: PropTypes.object,
+  lupa: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func
 };
 
-export default injectIntl(Tyovoimakoulutukset);
+export default Tyovoimakoulutukset;
