@@ -350,7 +350,7 @@ export function getChangesToSave(
         R.split("_"),
         R.view(R.lensIndex(0))
       )(anchorArr);
-      const section = R.find(R.propEq("code", areaCode))(lomake.muutdata);
+      const section = R.find(R.propEq("code", areaCode), lomake);
       let category = false;
       let maarays = false;
       if (section) {
@@ -497,7 +497,7 @@ export function getChangesToSave(
       const categoryKey = R.view(R.lensIndex(1))(anchorParts);
       const koodiarvo = R.prop(categoryKey, lomake.opiskelijavuodet.koodiarvot);
       const muutCategory = R.find(R.propEq("key", categoryKey))(
-        lomake.muut.muutdata
+        lomake.muut
       );
       if (muutCategory) {
         const meta = R.find(R.propEq("anchor", koodiarvo))(
