@@ -4,6 +4,7 @@ import { getAnchorPart } from "../utils/common";
 
 const Store = createStore({
   initialState: {
+    tutkinnot: {},
     kielet: {
       opetuskielet: [],
       tutkintokielet: {}
