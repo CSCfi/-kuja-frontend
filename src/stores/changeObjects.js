@@ -22,10 +22,11 @@ const Store = createStore({
       koulutukset: {
         atvKoulutukset: [],
         kuljettajakoulutukset: [],
+        tyovoimakoulutukset: [],
         valmentavatKoulutukset: []
       },
       liitteet: [],
-      toimintaalue: {},
+      toimintaalue: [],
       tutkinnot: {}
     },
     taloudelliset: {
