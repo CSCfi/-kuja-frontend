@@ -2,7 +2,7 @@ import React, { useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
-import { forEach, split } from "ramda";
+import { forEach, prop, split } from "ramda";
 import { cloneDeep } from "lodash";
 import { useIntl } from "react-intl";
 import { useLomakkeet } from "../../../stores/lomakkeet";
@@ -28,6 +28,7 @@ const Lomake = React.memo(
     anchor,
     changeObjects = defaultProps.changeObjects,
     data,
+    metadata,
     isReadOnly,
     onChangesUpdate,
     path,
@@ -37,10 +38,10 @@ const Lomake = React.memo(
     showCategoryTitles = true
   }) => {
     const intl = useIntl();
-    const [lomakkeet, lomakkeetActions] = useLomakkeet();
+    const [, lomakkeetActions] = useLomakkeet();
 
-    const categories = useMemo(() => {
-      const lomake = getLomake(
+    const lomake = useMemo(() => {
+      let categories = getLomake(
         action,
         data,
         isReadOnly,
@@ -50,12 +51,15 @@ const Lomake = React.memo(
       );
       let _rules = cloneDeep(rules);
       if (rulesFn) {
-        _rules = rulesFn(lomake);
+        _rules = rulesFn(categories);
       }
       if (_rules.length) {
-        return markRequiredFields(lomake, changeObjects, _rules);
+        categories = markRequiredFields(categories, changeObjects, _rules);
       }
-      return lomake;
+      return {
+        categories,
+        metadata
+      };
     }, [
       action,
       changeObjects,
@@ -69,15 +73,15 @@ const Lomake = React.memo(
     ]);
 
     useEffect(() => {
-      lomakkeetActions.set(split("_", anchor), categories);
-    }, [anchor, categories, lomakkeetActions]);
+      lomakkeetActions.set(split("_", anchor), lomake);
+    }, [anchor, lomake, lomakkeetActions]);
 
-    if (categories.length && onChangesUpdate) {
+    if (prop("categories", lomake) && onChangesUpdate) {
       return (
         <div className="p-8">
           <CategorizedListRoot
             anchor={anchor}
-            categories={categories}
+            categories={lomake.categories}
             changes={changeObjects}
             onUpdate={onChangesUpdate}
             showCategoryTitles={showCategoryTitles}
@@ -94,6 +98,7 @@ Lomake.propTypes = {
   anchor: PropTypes.string,
   changeObjects: PropTypes.array,
   data: PropTypes.object,
+  metadata: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   path: PropTypes.array,
   // Is used for matching the anchor of reasoning field to the anchor of
