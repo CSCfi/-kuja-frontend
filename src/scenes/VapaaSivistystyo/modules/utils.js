@@ -6,7 +6,7 @@ const colWidths = {
   1: "w-2/6"
 };
 
-export const generateVSTTableStructure = (tableData = [], intl) => {
+export const generateVSTTableStructure = (tableData = [], intl, vstMap) => {
   return [
     {
       role: "thead",
@@ -25,7 +25,7 @@ export const generateVSTTableStructure = (tableData = [], intl) => {
                 },
                 [
                   { text: intl.formatMessage(common.jarjestaja) },
-                  { text: intl.formatMessage(common.homeCounty) }
+                  { text: intl.formatMessage(common.oppilaitostyyppi) }
                 ]
               )
             }
@@ -68,7 +68,7 @@ export const generateVSTTableStructure = (tableData = [], intl) => {
                     text: col.text
                   };
                 },
-                [{ text: jarjestajanNimi }, { text: maakunta.nimi }]
+                [{ text: jarjestajanNimi }, { text: vstMap[row.oppilaitostyyppi] }]
               )
             };
           }, tableData)

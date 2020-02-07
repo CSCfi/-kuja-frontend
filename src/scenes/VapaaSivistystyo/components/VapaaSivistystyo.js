@@ -9,13 +9,22 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table"
 import SearchFilter from "okm-frontend-components/dist/components/02-organisms/SearchFilter"
 import {useLuvat} from "../../../stores/luvat";
 import {generateVSTTableStructure} from "../modules/utils";
+import {useVSTTyypit} from "../../../stores/vsttyypit";
 const VapaaSivistystyo = ({history}) => {
   const intl = useIntl();
-  const [luvat, luvatActions] = useLuvat();
-  const [luvatData, setLuvatData] = useState([]);
+  const [luvatRaw, luvatActions] = useLuvat();
+  const [vstRaw, vstActions] = useVSTTyypit();
+  const [luvat, setLuvat] = useState([]);
+  const [vstMap, setvstMap] = useState({
+    1: '1',
+    2: '2',
+    3: '3',
+    4: '4',
+    5: '5'
+  });
+
   const [searchFilter, updateSearchFilter] = useState("");
 
-  // Let's fetch LUVAT
   useEffect(() => {
     const queryParameters = [{
       key: 'koulutustyyppi',
@@ -30,10 +39,19 @@ const VapaaSivistystyo = ({history}) => {
   }, [luvatActions]);
 
   useEffect(() => {
-    if (luvat.data) {
+    const abortController = vstActions.load();
+    return function cancel() {
+      if (abortController) {
+        abortController.abort();
+      }
+    }
+  }, [vstActions])
+
+  useEffect(() => {
+    if (luvatRaw.data) {
       if(searchFilter.length > 0) {
-        setLuvatData(
-          luvat.data.filter(
+        setLuvat(
+          luvatRaw.data.filter(
             lupa => {
               const nimi = R.path(["jarjestaja", "nimi", "fi"])(lupa);
               if (nimi) {
@@ -44,13 +62,24 @@ const VapaaSivistystyo = ({history}) => {
         )
       }
       else {
-        setLuvatData(luvat.data);
+        setLuvat(luvatRaw.data);
       }
     }
-  }, [luvat, searchFilter]);
+  }, [luvatRaw, searchFilter]);
 
-  const tableStructure = generateVSTTableStructure(luvatData, intl);
+  useEffect(() => {
+    if(vstRaw.data) {
+      const vst = {};
+      vstRaw.data.forEach(item => {
+        vst[item.koodiArvo] = R.path(["nimi"], R.find(metadata => metadata.kieli === "FI", item.metadata));
+      });
+      setvstMap(vst);
+    }
+  }, [vstRaw])
 
+  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap);
+
+  // TODO: SearchFilter's container needs to be styled properly
   return (
     <React.Fragment>
       <Helmet>
@@ -60,13 +89,13 @@ const VapaaSivistystyo = ({history}) => {
       <BreadcrumbsItem to="/vapaa-sivistystyo">{intl.formatMessage(common.vst.titleName)}</BreadcrumbsItem>
       <div className="mx-auto w-full sm:w-3/4 mb-16">
       <h1>{intl.formatMessage(common.vst.jarjestajatHeading)}</h1>
-        <p className="my-4">
-          {intl.formatMessage(common.activeLuvatCount, {count: luvatData.length})}
-        </p>
+        <div className="my-4">
+          {intl.formatMessage(common.activeLuvatCount, {count: luvat.length})}
+        </div>
 
-        <p className="flex w-1/2">
+        <div className="flex w-1/2">
           <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
-        </p>
+        </div>
 
         <Table structure={tableStructure}/>
       </div>

@@ -199,6 +199,10 @@ export default defineMessages({
     id: "common.homeCounty",
     defaultMessage: "Kotipaikan maakunta"
   },
+  oppilaitostyyppi: {
+    id: "common.oppilaitostyyppi",
+    defaultMessage: "Oppilaitostyyppi"
+  },
   activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
   searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {
