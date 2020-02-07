@@ -7,9 +7,11 @@ import common from "../../../i18n/definitions/common";
 import {useIntl} from "react-intl";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table"
 import SearchFilter from "okm-frontend-components/dist/components/02-organisms/SearchFilter"
+import Autocomplete from "okm-frontend-components/dist/components/02-organisms/Autocomplete"
 import {useLuvat} from "../../../stores/luvat";
 import {generateVSTTableStructure} from "../modules/utils";
 import {useVSTTyypit} from "../../../stores/vsttyypit";
+import Select from "react-select";
 const VapaaSivistystyo = ({history}) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -20,10 +22,12 @@ const VapaaSivistystyo = ({history}) => {
     2: '2',
     3: '3',
     4: '4',
-    5: '5'
+    5: '5',
+    6: '6'
   });
-
+  const [vstTypeOptions, setvstTypeOptions] = useState([]);
   const [searchFilter, updateSearchFilter] = useState("");
+  const [vstTypeSelection, setvstTypeSelection] = useState(null);
 
   useEffect(() => {
     const queryParameters = [{
@@ -49,35 +53,53 @@ const VapaaSivistystyo = ({history}) => {
 
   useEffect(() => {
     if (luvatRaw.data) {
+      let filteredLuvat = luvatRaw.data;
       if(searchFilter.length > 0) {
-        setLuvat(
-          luvatRaw.data.filter(
-            lupa => {
-              const nimi = R.path(["jarjestaja", "nimi", "fi"])(lupa);
-              if (nimi) {
-                return nimi.includes(searchFilter);
-              } else return false;
+        filteredLuvat = filteredLuvat.filter(
+          lupa => {
+            const nimi = R.path(["jarjestaja", "nimi", "fi"])(lupa);
+            if (nimi) {
+              return nimi.includes(searchFilter);
             }
-          )
+            else {
+              return false;
+            }
+          }
         )
       }
-      else {
-        setLuvat(luvatRaw.data);
+      if(vstTypeSelection) {
+        filteredLuvat = filteredLuvat.filter(
+          lupa => lupa.oppilaitostyyppi === vstTypeSelection
+        )
       }
+      setLuvat(filteredLuvat);
     }
-  }, [luvatRaw, searchFilter]);
+  }, [luvatRaw, searchFilter, vstTypeSelection]);
 
   useEffect(() => {
     if(vstRaw.data) {
       const vst = {};
+      const vstOptions = []
       vstRaw.data.forEach(item => {
-        vst[item.koodiArvo] = R.path(["nimi"], R.find(metadata => metadata.kieli === "FI", item.metadata));
+        const name = R.path(["nimi"], R.find(metadata => metadata.kieli === "FI", item.metadata));
+        vst[item.koodiArvo] = name;
+        vstOptions.push({value: item.koodiArvo, label: name});
       });
       setvstMap(vst);
+      setvstTypeOptions(vstOptions);
     }
   }, [vstRaw])
 
   const tableStructure = generateVSTTableStructure(luvat, intl, vstMap);
+  const onTypeSelectionChange = (selection) => {
+    if(selection) {
+      setvstTypeSelection(selection.value)
+    }
+    else {
+      setvstTypeSelection(null)
+    }
+  };
+  const vstTypeSelectionPlaceholder = `${intl.formatMessage(common.oppilaitostyyppi)}...`;
 
   // TODO: SearchFilter's container needs to be styled properly
   return (
@@ -93,8 +115,18 @@ const VapaaSivistystyo = ({history}) => {
           {intl.formatMessage(common.activeLuvatCount, {count: luvat.length})}
         </div>
 
-        <div className="flex w-1/2">
-          <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
+        <div className="flex">
+          <div className="w-1/4">
+            <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
+          </div>
+          <div className="w-1/4">
+            <Select
+              onChange={onTypeSelectionChange}
+              isClearable={true}
+              options={vstTypeOptions}
+              placeholder={vstTypeSelectionPlaceholder}
+            />
+          </div>
         </div>
 
         <Table structure={tableStructure}/>
