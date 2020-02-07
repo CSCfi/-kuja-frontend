@@ -7,7 +7,7 @@ import RadioButtonWithLabel from "okm-frontend-components/dist/components/01-mol
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 import StatusTextRow from "okm-frontend-components/dist/components/01-molecules/StatusTextRow";
 import Difference from "../../../02-organisms/Difference";
-import Datepicker from "../../../00-atoms/Datepicker";
+import Datepicker from "okm-frontend-components/dist/components/00-atoms/Datepicker";
 import Autocomplete from "../../Autocomplete";
 import Attachments from "../../Attachments";
 import { heights } from "../../../../css/autocomplete";
@@ -663,6 +663,8 @@ const CategorizedList = React.memo(
                             maxDate={propsObj.maxDate}
                             disablePast={propsObj.disablePast}
                             disableFuture={propsObj.disableFuture}
+                            locale={propsObj.locale}
+                            messages={propsObj.localizations}
                             payload={{
                               anchor,
                               categories: category.categories,

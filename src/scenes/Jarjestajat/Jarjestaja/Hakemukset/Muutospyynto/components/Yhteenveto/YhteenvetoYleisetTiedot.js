@@ -1,11 +1,13 @@
 import React, { useEffect, useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import common from "../../../../../../../i18n/definitions/common";
 
 const YhteenvetoYleisettiedot = React.memo(props => {
   const { sectionId, onStateUpdate } = props;
+  const intl = useIntl();
   const getCategories = useMemo(() => {
     return () => {
       const structure = [
@@ -63,9 +65,19 @@ const YhteenvetoYleisettiedot = React.memo(props => {
               styleClasses: ["w-full sm:pr-2 sm:w-1/2 md:w-1/4"],
               properties: {
                 fullWidth: true,
-                label: "Päivämäärä",
-                placeholder: "Päivämäärä",
-                disablePast: true
+                label: intl.formatMessage(common.date),
+                placeholder: intl.formatMessage(common.date),
+                disablePast: true,
+                locale: intl.locale,
+                localizations: {
+                  ok: intl.formatMessage(common.ok),
+                  clear: intl.formatMessage(common.clear),
+                  cancel: intl.formatMessage(common.cancel),
+                  today: intl.formatMessage(common.today),
+                  datemax: intl.formatMessage(common.datemax),
+                  datemin: intl.formatMessage(common.datemin),
+                  dateinvalid: intl.formatMessage(common.dateinvalid)
+                }
               }
             }
           ]
@@ -178,4 +190,4 @@ YhteenvetoYleisettiedot.propTypes = {
   onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
-export default injectIntl(YhteenvetoYleisettiedot);
+export default YhteenvetoYleisettiedot;
