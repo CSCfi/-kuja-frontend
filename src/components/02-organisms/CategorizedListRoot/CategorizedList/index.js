@@ -516,10 +516,6 @@ const CategorizedList = React.memo(
                                 change.properties.isChecked
                               );
                             let attachments = propsObj.attachments || [];
-                            console.info(
-                              "renderöidään attachments uudestaan...",
-                              attachments
-                            );
                             return (
                               <div className={component.styleClasses}>
                                 <Attachments
