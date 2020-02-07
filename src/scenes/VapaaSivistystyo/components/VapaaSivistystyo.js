@@ -120,10 +120,10 @@ const VapaaSivistystyo = ({history}) => {
         </div>
 
         <div className="flex">
-          <div className="w-1/4">
+          <div className="w-1/4 mr-4">
             <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
           </div>
-          <div className="w-1/4">
+          <div className="w-1/4 mr-4">
             <Select
               onChange={onTypeSelectionChange}
               isClearable={true}
@@ -131,7 +131,7 @@ const VapaaSivistystyo = ({history}) => {
               placeholder={vstTypeSelectionPlaceholder}
             />
           </div>
-          <div className="1/4">
+          <div className="w1/4 mr-4">
             {intl.formatMessage(common.displayingPortion, {selectedCount: filteredDataLength, allCount: allDataLength})}
           </div>
         </div>
