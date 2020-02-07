@@ -17,7 +17,11 @@ const VapaaSivistystyo = ({history}) => {
 
   // Let's fetch LUVAT
   useEffect(() => {
-    const abortController = luvatActions.load();
+    const queryParameters = [{
+      key: 'koulutustyyppi',
+      value: '3'
+    }];
+    const abortController = luvatActions.load(queryParameters);
     return function cancel() {
       if (abortController) {
         abortController.abort();
@@ -59,6 +63,7 @@ const VapaaSivistystyo = ({history}) => {
         <p className="my-4">
           {intl.formatMessage(common.activeLuvatCount, {count: luvatData.length})}
         </p>
+
         <p className="flex w-1/2">
           <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
         </p>
