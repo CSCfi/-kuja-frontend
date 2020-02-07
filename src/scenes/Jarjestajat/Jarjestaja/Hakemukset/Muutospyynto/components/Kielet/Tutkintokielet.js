@@ -57,7 +57,7 @@ const Tutkintokielet = React.memo(props => {
   return (
     <React.Fragment>
       {R.map(areaCode => {
-        const tutkintolomake = props.tutkintolomakkeet[areaCode];
+        const tutkintolomake = props.tutkintolomakkeet[areaCode].categories;
         const actives = getActiveCheckboxes(
           tutkintolomake,
           props.changeObjects.tutkinnot[areaCode]

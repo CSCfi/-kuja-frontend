@@ -182,7 +182,6 @@ PerustelutOpiskelijavuodet.propTypes = {
   muutosperustelut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object,
   isReadOnly: PropTypes.bool
 };

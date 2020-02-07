@@ -1,5 +1,5 @@
-import opiskelijavuodet from "../lomakeosiot/opiskelijavuodet";
-import getDefaultRemovalForm from "../lomakeosiot/poistolomake";
+import opiskelijavuodet from "../../lomakeosiot/opiskelijavuodet";
+import getDefaultRemovalForm from "../../lomakeosiot/poistolomake";
 import * as R from "ramda";
 
 function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
@@ -170,7 +170,7 @@ function getAdditionForm(code, elykeskukset = [], isReadOnly, locale = "FI") {
   ];
 }
 
-export default function getTyovoimakoulutusperustelulomake(
+export default function getTyovoimakoulutuksetPerustelulomake(
   action,
   data,
   isReadOnly,

@@ -149,24 +149,7 @@ const MuutospyyntoWizard = ({
     return getMaakuntakunnatList(maakuntakunnat, R.toUpper(intl.locale));
   }, [intl.locale, maakuntakunnat]);
 
-  /**
-   * The wizard is splitted in to multiple sections. dataBySection contains
-   * all the basic settings of the sections. It doesn't contain any changes
-   * that user makes to the form.
-   */
-  const [dataBySection, setDataBySection] = useState({
-    kielet: {},
-    koulutukset: {},
-    muut: {},
-    opiskelijavuodet: [],
-    toimintaalue: {},
-    tutkinnot: {},
-    perustelut: {
-      koulutukset: {},
-      tutkinnot: {}
-    }
-  });
-
+  // All forms of KJ Wizard
   const [lomakkeet] = useLomakkeet();
 
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
@@ -381,20 +364,6 @@ const MuutospyyntoWizard = ({
     }
   }, [muutoshakemus.readyToCloseWizard, closeWizard]);
 
-  /** The function is called by sections with different payloads. */
-  const onSectionStateUpdate = useCallback(
-    (id, state) => {
-      if (id && state) {
-        setDataBySection(prevData => {
-          const nextData = R.assocPath(R.split("_", id), state, prevData);
-          console.info("Next state objects: ", nextData);
-          return nextData;
-        });
-      }
-    },
-    [setDataBySection]
-  );
-
   if (!sessionStorage.getItem("role")) {
     return (
       <MessageWrapper>
@@ -466,7 +435,6 @@ const MuutospyyntoWizard = ({
                     muut={muut}
                     lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
-                    onStateUpdate={onSectionStateUpdate}
                     setChangesBySection={setChangesBySection}
                     tutkinnot={parsedTutkinnot}
                   />
@@ -491,10 +459,9 @@ const MuutospyyntoWizard = ({
                       lupaKohteet={lupaKohteet}
                       maaraystyypit={maaraystyypit}
                       muut={muut}
-                      muutoshakemus={dataBySection}
+                      lomakkeet={lomakkeet}
                       muutosperusteluList={muutosperusteluList}
                       onChangesUpdate={onSectionChangesUpdate}
-                      onStateUpdate={onSectionStateUpdate}
                       tutkinnot={parsedTutkinnot}
                       vankilat={vankilat}
                     />
@@ -508,13 +475,11 @@ const MuutospyyntoWizard = ({
                   onNext={handleNext}
                   onSave={save}
                   lupa={lupa}
-                  muutoshakemus={dataBySection}
                   changeObjects={cos}>
                   <MuutospyyntoWizardTaloudelliset
                     changeObjects={cos}
-                    muutoshakemus={dataBySection}
+                    lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
-                    onStateUpdate={onSectionStateUpdate}
                   />
                 </WizardPage>
               )}
@@ -523,8 +488,7 @@ const MuutospyyntoWizard = ({
                   pageNumber={4}
                   onPrev={handlePrev}
                   onSave={save}
-                  lupa={lupa}
-                  muutoshakemus={dataBySection}>
+                  lupa={lupa}>
                   <LomakkeetProvider>
                     <MuutospyyntoWizardYhteenveto
                       changeObjects={cos}
@@ -535,10 +499,9 @@ const MuutospyyntoWizard = ({
                       lupaKohteet={lupaKohteet}
                       maaraystyypit={maaraystyypit}
                       muut={muut}
-                      muutoshakemus={dataBySection}
+                      lomakkeet={lomakkeet}
                       muutosperusteluList={muutosperusteluList}
                       onChangesUpdate={onSectionChangesUpdate}
-                      onStateUpdate={onSectionStateUpdate}
                       tutkinnot={parsedTutkinnot}
                     />
                   </LomakkeetProvider>

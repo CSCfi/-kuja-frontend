@@ -1,15 +1,16 @@
-import getDefaultRemovalForm from "../lomakeosiot/poistolomake";
+import getDefaultRemovalForm from "../../lomakeosiot/poistolomake";
+import { isAdded, isRemoved, isInLupa } from "../../../../../css/label";
+import { curriedGetAnchorPartsByIndex } from "../../../../../utils/common";
 import * as R from "ramda";
-import { curriedGetAnchorPartsByIndex } from "../../../../utils/common";
-import { isAdded, isRemoved, isInLupa } from "../../../../css/label";
 
 function getAdditionForm(
   koulutusdata,
   kohde,
   maaraystyyppi,
-  changeObjectsPage1,
+  changeObjectsPage1 = [],
   isReadOnly
 ) {
+  console.info(koulutusdata, changeObjectsPage1);
   const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
     changeObjectsPage1
   );
@@ -42,7 +43,7 @@ function getAdditionForm(
         },
         categories: [
           {
-            anchor: "vapaa-tekstikentta",
+            anchor: "perustelut",
             components: [
               {
                 anchor: "A",

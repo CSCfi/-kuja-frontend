@@ -7,9 +7,10 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const PerustelutKoulutukset = React.memo(props => {
+  console.info(props.changeObjects);
   return (
     <React.Fragment>
-      {props.kohde && props.maaraystyyppi && props.muutoshakemus ? (
+      {props.kohde && props.maaraystyyppi ? (
         <div className="py-4">
           {!!R.path(
             ["koulutukset", "valmentavatKoulutukset"],
@@ -39,22 +40,24 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              onStateUpdate={props.onStateUpdate}
             />
           ) : null}
 
-          {!R.isEmpty(
-            R.path(["koulutukset", "atvKoulutukset"], props.changeObjects)
-          ) ? (
+          {!R.isNil(props.changeObjects.koulutukset.atvKoulutukset) ? (
             <PerustelutATVKoulutukset
               changeObjects={{
                 koulutukset: {
-                  atvKoulutukset: props.changeObjects.koulutukset.atvKoulutukset
+                  atvKoulutukset: R.path(
+                    ["koulutukset", "atvKoulutukset"],
+                    props.changeObjects
+                  )
                 },
                 perustelut: {
                   koulutukset: {
-                    atvKoulutukset:
-                      props.changeObjects.perustelut.koulutukset.atvKoulutukset
+                    atvKoulutukset: R.path(
+                      ["perustelut", "koulutukset", "atvKoulutukset"],
+                      props.changeObjects
+                    )
                   }
                 }
               }}
@@ -64,7 +67,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              onStateUpdate={props.onStateUpdate}
             />
           ) : null}
 
@@ -93,7 +95,6 @@ const PerustelutKoulutukset = React.memo(props => {
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              onStateUpdate={props.onStateUpdate}
             />
           ) : null}
 
@@ -118,11 +119,9 @@ const PerustelutKoulutukset = React.memo(props => {
               isReadOnly={props.isReadOnly}
               kohde={props.kohde}
               koulutukset={props.koulutukset}
-              lomakkeet={props.lomakkeet}
               maaraystyyppi={props.maaraystyyppi}
               onChangesRemove={props.onChangesRemove}
               onChangesUpdate={props.onChangesUpdate}
-              onStateUpdate={props.onStateUpdate}
             />
           ) : null}
         </div>
@@ -144,8 +143,7 @@ PerustelutKoulutukset.propTypes = {
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func
 };
 
 export default PerustelutKoulutukset;

@@ -28,7 +28,9 @@ export function createObjectToSave(
   //get actual attachment props
 
   const perustelutLiitteetList =
-    !R.isEmpty(perustelutLiitteet) && perustelutLiitteet[0].properties
+    perustelutLiitteet &&
+    !R.isEmpty(perustelutLiitteet) &&
+    perustelutLiitteet[0].properties
       ? perustelutLiitteet[0].properties.attachments
       : [];
 

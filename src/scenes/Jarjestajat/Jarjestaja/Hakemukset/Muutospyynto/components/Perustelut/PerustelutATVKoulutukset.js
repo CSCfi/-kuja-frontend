@@ -4,9 +4,9 @@ import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/atv-koulutukset/rules";
+import { getRules } from "../../../../../../../services/lomakkeet/perustelut/koulutukset/atv-koulutukset/rules";
+import * as R from "ramda";
 
 const PerustelutATVKoulutukset = props => {
   const intl = useIntl();
@@ -49,7 +49,7 @@ const PerustelutATVKoulutukset = props => {
         isReadOnly={props.isReadOnly}
         onChangesUpdate={onChangesUpdate}
         path={["perustelut", "koulutukset", "atvKoulutukset"]}
-        rules={rules}
+        rulesFn={getRules}
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>
   );
@@ -67,8 +67,7 @@ PerustelutATVKoulutukset.propTypes = {
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func
 };
 
 export default PerustelutATVKoulutukset;

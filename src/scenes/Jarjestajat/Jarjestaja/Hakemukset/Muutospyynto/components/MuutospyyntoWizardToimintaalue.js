@@ -190,7 +190,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
    */
   const handleChanges = useCallback(
     changesByAnchor => {
-      console.info(changesByAnchor);
       const updatedChanges = R.map(changeObj => {
         let changeObjectsForKunnatInLupa = [];
         const metadata =
@@ -289,14 +288,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     ]
   );
 
-  // useEffect(() => {
-  //   onStateUpdate({
-  //     categories: getCategories(),
-  //     kohde: props.kohde,
-  //     maaraystyyppi: props.maaraystyyppi
-  //   });
-  // }, [getCategories, props.kohde, props.maaraystyyppi, onStateUpdate]);
-
   return (
     <ExpandableRowRoot
       anchor={props.sectionId}
@@ -323,6 +314,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           valittavissaOlevatKunnat,
           valittavissaOlevatMaakunnat
         }}
+        metadata={{ kohde: props.kohde, maaraystyyppi: props.maaraystyyppi }}
         onChangesUpdate={handleChanges}
         path={["toimintaalue"]}
         rules={[]}

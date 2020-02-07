@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const YhteenvetoYleisettiedot = React.memo(props => {
-  const { sectionId, onStateUpdate } = props;
+  const { sectionId } = props;
   const getCategories = useMemo(() => {
     return () => {
       const structure = [
@@ -135,15 +135,6 @@ const YhteenvetoYleisettiedot = React.memo(props => {
     };
   }, []);
 
-  useEffect(() => {
-    onStateUpdate(
-      {
-        categories: getCategories()
-      },
-      sectionId
-    );
-  }, [getCategories, onStateUpdate, sectionId]);
-
   return (
     <React.Fragment>
       <p></p>
@@ -175,7 +166,6 @@ YhteenvetoYleisettiedot.defaultProps = {
 YhteenvetoYleisettiedot.propTypes = {
   changeObjects: PropTypes.object,
   handleChanges: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object
 };
 export default injectIntl(YhteenvetoYleisettiedot);

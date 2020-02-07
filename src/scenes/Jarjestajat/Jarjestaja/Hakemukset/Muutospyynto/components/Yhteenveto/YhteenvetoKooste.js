@@ -26,7 +26,6 @@ const YhteenvetoKooste = ({
   lupaKohteet,
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate,
   tutkinnot
 }) => {
   const intl = useIntl();
@@ -149,12 +148,10 @@ const YhteenvetoKooste = ({
                           {..._props}
                         />
                       )}
-                      runOnStateUpdate={onStateUpdate}
                       runOnChanges={onChangesUpdate}
                     />
                   </React.Fragment>
                 )}
-                runOnStateUpdate={onStateUpdate}
                 runOnChanges={onChangesUpdate}
                 title={kohdetiedot[0].title}
               />
@@ -230,7 +227,6 @@ const YhteenvetoKooste = ({
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[1].title}
             />
@@ -263,7 +259,6 @@ const YhteenvetoKooste = ({
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[2].title}
             />
@@ -306,7 +301,6 @@ const YhteenvetoKooste = ({
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[3].title}
             />
@@ -340,7 +334,6 @@ const YhteenvetoKooste = ({
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[4].title}
             />
@@ -350,7 +343,6 @@ const YhteenvetoKooste = ({
             <YhteenvetoTaloudelliset
               changeObjects={changeObjects}
               muutoshakemus={muutoshakemus}
-              onStateUpdate={onStateUpdate}
               onChangesUpdate={onChangesUpdate}
               stateObjects={{
                 taloudelliset: muutoshakemus.taloudelliset,
@@ -377,7 +369,6 @@ YhteenvetoKooste.propTypes = {
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };
 

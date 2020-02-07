@@ -22,7 +22,6 @@ const MuutospyyntoWizardYhteenveto = ({
   muutoshakemus,
   muutosperusteluList,
   onChangesUpdate,
-  onStateUpdate,
   tutkinnot
 }) => {
   const jarjestaja = useMemo(() => {
@@ -123,12 +122,10 @@ const MuutospyyntoWizardYhteenveto = ({
               muut={muut}
               muutoshakemus={muutoshakemus}
               onChangesUpdate={onChangesUpdate}
-              onStateUpdate={onStateUpdate}
               tutkinnot={tutkinnot}
             ></YhteenvetoKooste>
           </React.Fragment>
         )}
-        runOnStateUpdate={onStateUpdate}
         runOnChanges={onChangesUpdate}
       />
       <FormSection
@@ -151,7 +148,6 @@ const MuutospyyntoWizardYhteenveto = ({
             />
           </React.Fragment>
         )}
-        runOnStateUpdate={onStateUpdate}
         runOnChanges={onChangesUpdate}
       />
     </React.Fragment>
@@ -169,7 +165,6 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   muutoshakemus: PropTypes.object,
   muutosperusteluList: PropTypes.array,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };
 

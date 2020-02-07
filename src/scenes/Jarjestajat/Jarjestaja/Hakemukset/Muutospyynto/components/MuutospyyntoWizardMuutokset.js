@@ -75,7 +75,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                     />
                   </React.Fragment>
                 )}
-                runOnStateUpdate={props.onStateUpdate}
                 runOnChanges={props.onChangesUpdate}
                 title={props.lupaKohteet[1].heading}
               />
@@ -102,7 +101,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                     />
                   </React.Fragment>
                 )}
-                runOnStateUpdate={props.onStateUpdate}
                 runOnChanges={props.onChangesUpdate}
                 title={intl.formatMessage(wizardMessages.header_section2)}
               />
@@ -124,7 +122,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                     {..._props}
                   />
                 )}
-                runOnStateUpdate={props.onStateUpdate}
                 runOnChanges={props.onChangesUpdate}
                 title={R.path(
                   ["meta", "otsikko", intl.locale],
@@ -158,7 +155,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       />
                     </React.Fragment>
                   )}
-                  runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
                   title={intl.formatMessage(wizardMessages.header_section4)}
                 />
@@ -188,7 +184,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       )}
                     </React.Fragment>
                   )}
-                  runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
                   title={intl.formatMessage(wizardMessages.header_section5)}
                 />
@@ -218,7 +213,6 @@ MuutospyyntoWizardMuutokset.propTypes = {
   lupaKohteet: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
-  onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };

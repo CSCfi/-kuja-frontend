@@ -11,13 +11,13 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/tyovoimakoulutus/rules";
+import { rules } from "../../../../../../../services/lomakkeet/perustelut/koulutukset/tyovoimakoulutukset/rules";
 
 const PerustelutTyovoimakoulutukset = React.memo(props => {
   const intl = useIntl();
   const sectionId = "perustelut_koulutukset_tyovoimakoulutukset";
   const koodisto = "oivatyovoimakoulutus";
-  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+  const { onChangesRemove, onChangesUpdate } = props;
 
   const getCategories = useMemo(() => {
     const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
@@ -55,7 +55,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
             },
             categories: [
               {
-                anchor: "vapaa-tekstikentta",
+                anchor: "perustelut",
                 title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
                 components: [
                   {
@@ -76,29 +76,6 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
       return categories.filter(Boolean);
     };
   }, [props.isReadOnly, props.changeObjects.koulutukset.tyovoimakoulutukset]);
-
-  useEffect(() => {
-    onStateUpdate(
-      {
-        categories: getCategories(
-          getDataForKoulutusList(
-            props.koulutukset.muut[koodisto],
-            R.toUpper(intl.locale)
-          ),
-          props.kohde,
-          props.maaraystyyppi
-        )
-      },
-      sectionId
-    );
-  }, [
-    getCategories,
-    onStateUpdate,
-    props.kohde,
-    props.koulutukset.muut,
-    intl.locale,
-    props.maaraystyyppi
-  ]);
 
   const lomakkeet = useMemo(() => {
     return (

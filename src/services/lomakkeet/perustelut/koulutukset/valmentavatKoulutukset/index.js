@@ -1,7 +1,7 @@
-import getDefaultRemovalForm from "../lomakeosiot/poistolomake";
-import { curriedGetAnchorPartsByIndex } from "../../../../utils/common";
-import { isAdded, isRemoved, isInLupa } from "../../../../css/label";
-import "../../i18n-config";
+import getDefaultRemovalForm from "../../lomakeosiot/poistolomake";
+import { curriedGetAnchorPartsByIndex } from "../../../../../utils/common";
+import { isAdded, isRemoved, isInLupa } from "../../../../../css/label";
+import "../../../i18n-config";
 import { __ } from "i18n-for-browser";
 import * as R from "ramda";
 
@@ -45,7 +45,7 @@ function getAdditionForm(
         },
         categories: [
           {
-            anchor: "vapaa-tekstikentta",
+            anchor: "perustelut",
             components: [
               {
                 anchor: "A",

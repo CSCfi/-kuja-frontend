@@ -53,6 +53,7 @@ const Tutkinnot = React.memo(props => {
                 maaraystyyppi: props.maaraystyyppi,
                 title
               }}
+              metadata={{ article }}
               onChangesUpdate={props.onChangesUpdate}
               path={["tutkinnot"]}
               rules={[]}

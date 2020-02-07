@@ -13,7 +13,6 @@ const MuutospyyntoWizardTaloudelliset = ({
   changeObjects = {},
   muutoshakemus,
   onChangesUpdate,
-  onStateUpdate,
   intl: { formatMessage }
 }) => {
   const checkIfIsAdditions = changeObjects => {
@@ -58,7 +57,6 @@ const MuutospyyntoWizardTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -74,7 +72,6 @@ const MuutospyyntoWizardTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -90,7 +87,6 @@ const MuutospyyntoWizardTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -112,7 +108,6 @@ const MuutospyyntoWizardTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
         </React.Fragment>
@@ -125,7 +120,6 @@ MuutospyyntoWizardTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
   muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   isReadOnly: PropTypes.bool
 };
 

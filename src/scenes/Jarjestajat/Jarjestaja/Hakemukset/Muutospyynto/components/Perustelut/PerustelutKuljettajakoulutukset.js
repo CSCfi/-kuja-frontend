@@ -121,8 +121,7 @@ PerustelutKuljettajakoulutukset.propTypes = {
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func
 };
 
 export default PerustelutKuljettajakoulutukset;

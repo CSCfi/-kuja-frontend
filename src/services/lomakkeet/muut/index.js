@@ -43,7 +43,10 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
                 // This is for the Perustelut page and for showing or not showing a form for reasoning.
                 forChangeObject: {
                   isReasoningRequired:
-                    !isVaativatukiRadios || index !== sortedArticles.length - 1
+                    !isVaativatukiRadios || index !== sortedArticles.length - 1,
+                  key: configObj.key,
+                  code: configObj.code,
+                  title: configObj.title
                 },
                 name: item.componentName,
                 isChecked:

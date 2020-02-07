@@ -4,9 +4,9 @@ import ExpandableRowRoot from "../../../../../../../components/02-organisms/Expa
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/valmentavatKoulutukset/rules";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import { getRules } from "../../../../../../../services/lomakkeet/perustelut/koulutukset/valmentavatKoulutukset/rules";
+import * as R from "ramda";
 
 const PerustelutValmentavatKoulutukset = React.memo(props => {
   const intl = useIntl();
@@ -55,7 +55,7 @@ const PerustelutValmentavatKoulutukset = React.memo(props => {
           isReadOnly={props.isReadOnly}
           onChangesUpdate={onChangesUpdate}
           path={["perustelut", "koulutukset", "valmentavat"]}
-          rules={rules}
+          rulesFn={getRules}
           showCategoryTitles={true}></Lomake>
       </ExpandableRowRoot>
     );
@@ -74,8 +74,7 @@ PerustelutValmentavatKoulutukset.propTypes = {
   koulutukset: PropTypes.object,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func
 };
 
 export default PerustelutValmentavatKoulutukset;

@@ -1,12 +1,11 @@
-import getTyovoimakoulutusperustelulomake from "./perustelut/tyovoimakoulutus/";
 import {
   getKuljettajienJatkokoulutuslomake,
   getKuljettajienPeruskoulutuslomake
 } from "./perustelut/kuljettajakoulutukset";
 import { getTaloudellisetlomake } from "./taloudelliset";
 import { concat, path } from "ramda";
-import getATVKoulutuksetPerustelulomake from "./perustelut/atv-koulutukset";
-import getValmentavatKoulutuksetPerustelulomake from "./perustelut/valmentavatKoulutukset";
+import getATVKoulutuksetPerustelulomake from "./perustelut/koulutukset/atv-koulutukset";
+import getValmentavatKoulutuksetPerustelulomake from "./perustelut/koulutukset/valmentavatKoulutukset";
 import { setLocale } from "./i18n-config";
 import { getCheckboxes } from "./perustelut/muutostarpeet";
 import getToimintaaluePerustelulomake from "./perustelut/toiminta-alue";
@@ -22,6 +21,11 @@ import getTutkintokieletLomake from "./kielet/tutkintokielet";
 import getToimintaaluelomake from "./toimintaalue";
 import getMuutLomake from "./muut";
 import getOpiskelijavuodetLomake from "./opiskelijavuodet";
+import getPerustelutLiitteetlomake from "./perustelut/liitteet";
+import getYhteenvetoLiitteetLomake from "./yhteenveto";
+import getTutkintokieletPerustelulomake from "./perustelut/kielet/tutkintokielet";
+import getMuutPerustelulomake from "./perustelut/muutMuutokset";
+import getTyovoimakoulutuksetPerustelulomake from "./perustelut/koulutukset/tyovoimakoulutukset";
 
 /**
  * LOMAKEPALVELU - Provider of forms.
@@ -94,6 +98,15 @@ const lomakkeet = {
       opetuskielet: {
         reasoning: (data, isReadOnly) =>
           getOpetuskieletPerustelulomake("reasoning", data, isReadOnly)
+      },
+      tutkintokielet: {
+        reasoning: (data, isReadOnly, locale) =>
+          getTutkintokieletPerustelulomake(
+            "reasoning",
+            data,
+            isReadOnly,
+            locale
+          )
       }
     },
     koulutukset: {
@@ -141,14 +154,14 @@ const lomakkeet = {
       },
       tyovoimakoulutukset: {
         addition: (data, isReadOnly, locale) =>
-          getTyovoimakoulutusperustelulomake(
+          getTyovoimakoulutuksetPerustelulomake(
             "addition",
             data,
             isReadOnly,
             locale
           ),
         removal: (data, isReadOnly, locale, prefix) =>
-          getTyovoimakoulutusperustelulomake(
+          getTyovoimakoulutuksetPerustelulomake(
             "removal",
             data,
             isReadOnly,
@@ -173,11 +186,15 @@ const lomakkeet = {
           )
       }
     },
+    liitteet: {
+      reasoning: (data, isReadOnly) =>
+        getPerustelutLiitteetlomake("reasoning", isReadOnly)
+    },
     muutostarpeet: {
       checkboxes: (data, isReadOnly, locale) =>
         getCheckboxes(data.checkboxItems, locale, isReadOnly)
     },
-    "toiminta-alue": {
+    toimintaalue: {
       reasoning: (data, isReadOnly, locale, prefix) =>
         getToimintaaluePerustelulomake(
           "reasoning",
@@ -196,6 +213,10 @@ const lomakkeet = {
           locale,
           prefix
         )
+    },
+    muut: {
+      reasoning: (data, isReadOnly, locale) =>
+        getMuutPerustelulomake("reasoning", data, isReadOnly, locale)
     }
   },
   taloudelliset: {
@@ -205,6 +226,11 @@ const lomakkeet = {
       getTaloudellisetlomake("investoinnit", data, isReadOnly),
     tilinpaatostiedot: (data, isReadOnly) =>
       getTaloudellisetlomake("tilinpaatostiedot", data, isReadOnly)
+  },
+  yhteenveto: {
+    liitteet: {
+      addition: () => getYhteenvetoLiitteetLomake()
+    }
   }
 };
 

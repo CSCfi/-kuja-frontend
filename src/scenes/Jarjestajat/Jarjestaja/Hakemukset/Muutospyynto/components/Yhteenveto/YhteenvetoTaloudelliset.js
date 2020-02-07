@@ -11,8 +11,7 @@ import * as R from "ramda";
 const YhteenvetoTaloudelliset = ({
   changeObjects,
   muutoshakemus,
-  onChangesUpdate,
-  onStateUpdate
+  onChangesUpdate
 }) => {
   return (
     <React.Fragment>
@@ -40,7 +39,6 @@ const YhteenvetoTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -57,7 +55,6 @@ const YhteenvetoTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -74,7 +71,6 @@ const YhteenvetoTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
@@ -97,7 +93,6 @@ const YhteenvetoTaloudelliset = ({
                 />
               </React.Fragment>
             )}
-            runOnStateUpdate={onStateUpdate}
             runOnChanges={onChangesUpdate}
           />
         </React.Fragment>
@@ -109,8 +104,7 @@ const YhteenvetoTaloudelliset = ({
 YhteenvetoTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
   muutoshakemus: PropTypes.object,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func
+  onChangesUpdate: PropTypes.func
 };
 
 export default YhteenvetoTaloudelliset;

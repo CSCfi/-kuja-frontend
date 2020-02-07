@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 
 const TaloudellisetLiitteet = React.memo(props => {
-  const { onStateUpdate, sectionId } = props;
+  const { sectionId } = props;
 
   const getCategories = useMemo(() => {
     return () => {
@@ -36,16 +36,6 @@ const TaloudellisetLiitteet = React.memo(props => {
     };
   }, [props.isReadOnly]);
 
-  useEffect(() => {
-    const array = getCategories();
-
-    onStateUpdate(
-      {
-        categories: array
-      },
-      sectionId
-    );
-  }, [getCategories, onStateUpdate, sectionId]);
   return (
     <React.Fragment>
       {!!R.path(["categories"], props.stateObject) && (
@@ -74,7 +64,6 @@ TaloudellisetLiitteet.propTypes = {
   headingNumber: PropTypes.number,
   kohde: PropTypes.object,
   lupa: PropTypes.object,
-  onStateUpdate: PropTypes.func,
   stateObject: PropTypes.object,
   isReadOnly: PropTypes.bool
 };

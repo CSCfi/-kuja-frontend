@@ -19,6 +19,7 @@ const PerustelutToimintaalue = React.memo(
     changeObjects = defaultProps.changeObjects,
     isReadOnly = defaultProps.isReadOnly,
     lupakohde = {},
+    onChangesRemove,
     onChangesUpdate,
     sectionId
   }) => {
@@ -29,9 +30,10 @@ const PerustelutToimintaalue = React.memo(
             anchor={sectionId}
             categories={[]}
             changes={changeObjects.perustelut}
-            disableReverting={true}
+            disableReverting={false}
             hideAmountOfChanges={true}
             isExpanded={true}
+            onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}
             title="Muutokset">
@@ -45,7 +47,7 @@ const PerustelutToimintaalue = React.memo(
                 lupakohde
               }}
               onChangesUpdate={onChangesUpdate}
-              path={["toiminta-alue"]}
+              path={["perustelut", "toimintaalue"]}
               rules={rules}
               showCategoryTitles={true}></Lomake>
           </ExpandableRowRoot>
@@ -61,6 +63,7 @@ PerustelutToimintaalue.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupakohde: PropTypes.object,
+  onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
 };
 

@@ -174,6 +174,11 @@ const MuutospyyntoWizardMuut = React.memo(props => {
                     configObj,
                     osiota5koskevatMaaraykset
                   }}
+                  metadata={{
+                    categoryData: configObj.categoryData,
+                    kohde: props.kohde,
+                    maaraystyyppi: props.maaraystyyppi
+                  }}
                   onChangesUpdate={onChangesUpdate}
                   path={["muut"]}
                   rules={[]}
