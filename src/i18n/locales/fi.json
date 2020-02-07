@@ -51,6 +51,7 @@
   "common.datemax": "Päiväys on liian suuri",
   "common.datemin": "Päiväys on liian pieni",
   "common.difference": "Muutos",
+  "common.displayingPortion": "Näytetään {selectedCount}/{allCount}",
   "common.homeCounty": "Kotipaikan maakunta",
   "common.oppilaitostyyppi": "Oppilaitostyyppi",
   "common.asiat": "Asiat",

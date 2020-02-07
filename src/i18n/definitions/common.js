@@ -203,6 +203,10 @@ export default defineMessages({
     id: "common.oppilaitostyyppi",
     defaultMessage: "Oppilaitostyyppi"
   },
+  displayingPortion: {
+    id: "common.displayingPortion",
+    defaultMessage: "Näytetään {selectedCount}/{allCount}"
+  },
   activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
   searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {

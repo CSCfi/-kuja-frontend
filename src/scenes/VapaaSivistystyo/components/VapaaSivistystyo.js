@@ -28,6 +28,8 @@ const VapaaSivistystyo = ({history}) => {
   const [vstTypeOptions, setvstTypeOptions] = useState([]);
   const [searchFilter, updateSearchFilter] = useState("");
   const [vstTypeSelection, setvstTypeSelection] = useState(null);
+  const [allDataLength, setAllDataLength] = useState(0);
+  const [filteredDataLength, setFilteredDataLength] = useState(0);
 
   useEffect(() => {
     const queryParameters = [{
@@ -73,6 +75,8 @@ const VapaaSivistystyo = ({history}) => {
         )
       }
       setLuvat(filteredLuvat);
+      setAllDataLength(luvatRaw.data.length);
+      setFilteredDataLength(filteredLuvat.length)
     }
   }, [luvatRaw, searchFilter, vstTypeSelection]);
 
@@ -112,7 +116,7 @@ const VapaaSivistystyo = ({history}) => {
       <div className="mx-auto w-full sm:w-3/4 mb-16">
       <h1>{intl.formatMessage(common.vst.jarjestajatHeading)}</h1>
         <div className="my-4">
-          {intl.formatMessage(common.activeLuvatCount, {count: luvat.length})}
+          {intl.formatMessage(common.activeLuvatCount, {count: allDataLength})}
         </div>
 
         <div className="flex">
@@ -126,6 +130,9 @@ const VapaaSivistystyo = ({history}) => {
               options={vstTypeOptions}
               placeholder={vstTypeSelectionPlaceholder}
             />
+          </div>
+          <div>
+            {intl.formatMessage(common.displayingPortion, {selectedCount: filteredDataLength, allCount: allDataLength})}
           </div>
         </div>
 
