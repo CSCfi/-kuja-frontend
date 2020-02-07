@@ -37,7 +37,11 @@ export function getPathByAnchor(
 ) {
   const anchorPart = anchorArr[anchorPartIndex];
   if (typeof anchorPart === "number") {
-    console.error(`Anchor must be a string not a number.`, anchorPart, anchorArr);
+    console.error(
+      `Anchor must be a string not a number.`,
+      anchorPart,
+      anchorArr
+    );
   }
   let pathPart = [];
   if (anchorPartIndex === 0) {
