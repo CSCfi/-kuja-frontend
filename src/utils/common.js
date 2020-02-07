@@ -92,7 +92,7 @@ export const replaceAnchorPartWith = (anchor, index, replaceWith) => {
 export const curriedGetAnchorPartsByIndex = R.curry((objects, index) => {
   return R.map(obj => {
     return getAnchorPart(R.prop("anchor", obj), index);
-  })(objects);
+  }, objects);
 });
 
 export const getAnchorsStartingWith = (prefix, objects) => {
