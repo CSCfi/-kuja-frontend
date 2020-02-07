@@ -1,16 +1,22 @@
 import { API_BASE_URL } from "../../modules/constants";
 import { backendRoutes } from "./backendRoutes";
-import { equals, includes, join, mergeDeepLeft } from "ramda";
+import { equals, includes, join, map, mergeDeepLeft } from "ramda";
 
 async function run(abortController, config, callbackFn) {
-  const routeObj = backendRoutes[config.key];
+  // key is used to resolve path parameters from backendRoutes
+  // queryParameters is a list of key-value pairs
+  // urlEnding is a string of supplementary path parameters
+  const {key, urlEnding, queryParameters = []} = config;
+  const queryString = join("&", map(item => `${item.key}=${item.value}`)(queryParameters));
+  const routeObj = backendRoutes[key];
   const options = { signal: abortController.signal };
 
   const response = await fetch(
     `${API_BASE_URL}/${join("", [
       routeObj.path,
-      config.urlEnding,
-      routeObj.postfix
+      urlEnding,
+      routeObj.postfix,
+      queryString.length > 0 ? `?${queryString}` : ""
     ])}`,
     // add 'accept' header if it does not exist
     mergeDeepLeft(options, {
