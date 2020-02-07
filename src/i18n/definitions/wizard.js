@@ -179,5 +179,9 @@ export default defineMessages({
   noRights: {
     id: "wizard.noRights",
     defaultMessage: "Sinulla ei ole oikeuksia tälle sivulle."
+  },
+  tutkintokielet: {
+    id: "wizard.tutkintokielet",
+    defaultMessage: "Tutkintokielet"
   }
 });
