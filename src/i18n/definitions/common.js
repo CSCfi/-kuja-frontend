@@ -203,6 +203,10 @@ export default defineMessages({
     id: "common.oppilaitostyyppi",
     defaultMessage: "Oppilaitostyyppi"
   },
+  filterByOppilaitostyyppi: {
+    id: "common.filterByOppilaitostyyppi",
+    defaultMessage: "Rajaa oppilaitostyypin mukaan"
+  },
   displayingPortion: {
     id: "common.displayingPortion",
     defaultMessage: "Näytetään {selectedCount}/{allCount}"

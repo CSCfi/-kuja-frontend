@@ -103,7 +103,7 @@ const VapaaSivistystyo = ({history}) => {
       setvstTypeSelection(null)
     }
   };
-  const vstTypeSelectionPlaceholder = `${intl.formatMessage(common.oppilaitostyyppi)}...`;
+  const vstTypeSelectionPlaceholder = intl.formatMessage(common.filterByOppilaitostyyppi);
 
   // TODO: SearchFilter's container needs to be styled properly
   return (
@@ -131,7 +131,7 @@ const VapaaSivistystyo = ({history}) => {
               placeholder={vstTypeSelectionPlaceholder}
             />
           </div>
-          <div>
+          <div className="1/4">
             {intl.formatMessage(common.displayingPortion, {selectedCount: filteredDataLength, allCount: allDataLength})}
           </div>
         </div>
