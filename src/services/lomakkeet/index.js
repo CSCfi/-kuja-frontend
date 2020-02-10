@@ -26,6 +26,9 @@ import getYhteenvetoLiitteetLomake from "./yhteenveto";
 import getTutkintokieletPerustelulomake from "./perustelut/kielet/tutkintokielet";
 import getMuutPerustelulomake from "./perustelut/muutMuutokset";
 import getTyovoimakoulutuksetPerustelulomake from "./perustelut/koulutukset/tyovoimakoulutukset";
+import getSisaoppilaitosOpiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/sisaoppilaitos";
+import getVahimmaisopiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/vahimmais";
+import getVaativaTukiOpiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/vaativa";
 
 /**
  * LOMAKEPALVELU - Provider of forms.
@@ -213,6 +216,33 @@ const lomakkeet = {
           locale,
           prefix
         )
+    },
+    opiskelijavuodet: {
+      sisaoppilaitos: {
+        reasoning: (data, isReadOnly) =>
+          getSisaoppilaitosOpiskelijavuodetPerustelulomake(
+            "reasoning",
+            data,
+            isReadOnly
+          )
+      },
+      vaativatuki: {
+        reasoning: (data, isReadOnly) =>
+          getVaativaTukiOpiskelijavuodetPerustelulomake(
+            "reasoning",
+            data,
+            isReadOnly
+          )
+      },
+      vahimmais: {
+        reasoning: (data, isReadOnly, locale) =>
+          getVahimmaisopiskelijavuodetPerustelulomake(
+            "reasoning",
+            data,
+            isReadOnly,
+            locale
+          )
+      }
     },
     muut: {
       reasoning: (data, isReadOnly, locale) =>

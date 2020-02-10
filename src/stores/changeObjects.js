@@ -25,6 +25,11 @@ const Store = createStore({
         tyovoimakoulutukset: [],
         valmentavatKoulutukset: []
       },
+      opiskelijavuodet: {
+        sisaoppilaitos: [],
+        vaativatuki: [],
+        vahimmaisopiskelijavuodet: []
+      },
       liitteet: [],
       toimintaalue: [],
       tutkinnot: {}

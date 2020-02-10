@@ -281,19 +281,12 @@ const MuutospyyntoWizardPerustelut = ({
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
-              lomakkeet={lomakkeet}
               render={_props => (
                 <React.Fragment>
                   <PerustelutOpiskelijavuodet
                     changeObjects={{
-                      opiskelijavuodet: R.path(
-                        ["opiskelijavuodet"],
-                        changeObjects
-                      ),
-                      perustelut: R.path(
-                        ["perustelut", "opiskelijavuodet"],
-                        changeObjects
-                      )
+                      opiskelijavuodet: changeObjects.opiskelijavuodet,
+                      perustelut: changeObjects.perustelut.opiskelijavuodet
                     }}
                     kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
                       kohteet
