@@ -43,22 +43,21 @@ const MuutospyyntoWizardYhteenveto = ({
     const sahkopostiosoite = {
       label: "Sähköpostiosoite",
       value:
-        (R.find(R.prop("email"))(lupa.jarjestaja.yhteystiedot) || {})
-          .email || "-"
+        (R.find(R.prop("email"))(lupa.jarjestaja.yhteystiedot) || {}).email ||
+        "-"
     };
 
     const www = {
       label: "WWW-osoite",
       value:
-        (R.find(R.prop("www"))(lupa.jarjestaja.yhteystiedot) || {}).www ||
-        "-"
+        (R.find(R.prop("www"))(lupa.jarjestaja.yhteystiedot) || {}).www || "-"
     };
 
     const puhelinnumero = {
       label: "Puhelinnumero",
       value:
-        (R.find(R.prop("numero"))(lupa.jarjestaja.yhteystiedot) || {})
-          .numero || "-"
+        (R.find(R.prop("numero"))(lupa.jarjestaja.yhteystiedot) || {}).numero ||
+        "-"
     };
 
     return {
@@ -98,15 +97,8 @@ const MuutospyyntoWizardYhteenveto = ({
         render={_props => (
           <React.Fragment>
             <YhteenvetoYleisetTiedot
-              stateObject={R.path(
-                ["yhteenveto", "yleisettiedot"],
-                muutoshakemus
-              )}
               changeObjects={{
-                yhteenveto: R.path(
-                  ["yhteenveto", "yleisettiedot"],
-                  changeObjects
-                )
+                yhteenveto: changeObjects.yhteenveto.yleisettiedot
               }}
               {..._props}
             />
@@ -122,8 +114,7 @@ const MuutospyyntoWizardYhteenveto = ({
               muut={muut}
               muutoshakemus={muutoshakemus}
               onChangesUpdate={onChangesUpdate}
-              tutkinnot={tutkinnot}
-            ></YhteenvetoKooste>
+              tutkinnot={tutkinnot}></YhteenvetoKooste>
           </React.Fragment>
         )}
         runOnChanges={onChangesUpdate}

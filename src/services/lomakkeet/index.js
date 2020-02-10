@@ -22,13 +22,14 @@ import getToimintaaluelomake from "./toimintaalue";
 import getMuutLomake from "./muut";
 import getOpiskelijavuodetLomake from "./opiskelijavuodet";
 import getPerustelutLiitteetlomake from "./perustelut/liitteet";
-import getYhteenvetoLiitteetLomake from "./yhteenveto";
+import getYhteenvetoLiitteetLomake from "./yhteenveto/liitteet";
 import getTutkintokieletPerustelulomake from "./perustelut/kielet/tutkintokielet";
 import getMuutPerustelulomake from "./perustelut/muutMuutokset";
 import getTyovoimakoulutuksetPerustelulomake from "./perustelut/koulutukset/tyovoimakoulutukset";
 import getSisaoppilaitosOpiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/sisaoppilaitos";
 import getVahimmaisopiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/vahimmais";
 import getVaativaTukiOpiskelijavuodetPerustelulomake from "./perustelut/opiskelijavuodet/vaativa";
+import getYhteenvetoYleisetTiedotLomake from "./yhteenveto/yleisetTiedot";
 
 /**
  * LOMAKEPALVELU - Provider of forms.
@@ -260,6 +261,10 @@ const lomakkeet = {
   yhteenveto: {
     liitteet: {
       addition: () => getYhteenvetoLiitteetLomake()
+    },
+    yleisetTiedot: {
+      modification: (data, isReadOnly) =>
+        getYhteenvetoYleisetTiedotLomake("modification", data, isReadOnly)
     }
   }
 };
