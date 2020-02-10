@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import { injectIntl } from "react-intl";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
-import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
+import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
 import { ROLE_NIMENKIRJOITTAJA } from "../../../../../../modules/constants";
 
 const WizardActions = props => {
@@ -50,6 +50,8 @@ const WizardActions = props => {
         isConfirmDialogVisible={isConfirmDialogVisible}
         title={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI}
         content={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI}
+        yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
+        noMessage={HAKEMUS_VIESTI.EI.FI}
         handleOk={handleOk}
         handleCancel={handleCancel}
       />

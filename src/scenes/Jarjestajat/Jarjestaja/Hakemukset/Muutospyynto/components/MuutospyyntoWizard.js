@@ -43,7 +43,7 @@ import {
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
 import { findObjectWithKey } from "../../../../../../utils/common";
-import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
+import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
 import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
 import { useKielet } from "../../../../../../stores/kielet";
 import { useOpetuskielet } from "../../../../../../stores/opetuskielet";
@@ -607,6 +607,8 @@ const MuutospyyntoWizard = ({
             isConfirmDialogVisible={isConfirmDialogVisible}
             title={"Poistutaanko?"}
             content={HAKEMUS_VIESTI.VARMISTUS.FI}
+            yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
+            noMessage={HAKEMUS_VIESTI.EI.FI}
             handleOk={closeWizard}
             handleCancel={handleCancel}
           />
