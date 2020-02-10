@@ -7,7 +7,6 @@ import common from "../../../i18n/definitions/common";
 import {useIntl} from "react-intl";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table"
 import SearchFilter from "okm-frontend-components/dist/components/02-organisms/SearchFilter"
-import Autocomplete from "okm-frontend-components/dist/components/02-organisms/Autocomplete"
 import {useLuvat} from "../../../stores/luvat";
 import {generateVSTTableStructure} from "../modules/utils";
 import {useVSTTyypit} from "../../../stores/vsttyypit";
@@ -120,10 +119,10 @@ const VapaaSivistystyo = ({history}) => {
         </div>
 
         <div className="flex">
-          <div className="w-1/4 mr-4">
+          <div className="sm:pr-2 w-full sm:w-1/2 md:w-1/4">
             <SearchFilter onValueChanged={updateSearchFilter} placeholder={intl.formatMessage(common.searchByJarjestaja)}/>
           </div>
-          <div className="w-1/4 mr-4">
+          <div className="sm:pr-2 w-full sm:w-1/2 md:w-1/4">
             <Select
               onChange={onTypeSelectionChange}
               isClearable={true}
@@ -131,7 +130,7 @@ const VapaaSivistystyo = ({history}) => {
               placeholder={vstTypeSelectionPlaceholder}
             />
           </div>
-          <div className="w1/4 mr-4">
+          <div className="sm:pr-2 w-full sm:w-1/2 md:w-2/4">
             {intl.formatMessage(common.displayingPortion, {selectedCount: filteredDataLength, allCount: allDataLength})}
           </div>
         </div>
