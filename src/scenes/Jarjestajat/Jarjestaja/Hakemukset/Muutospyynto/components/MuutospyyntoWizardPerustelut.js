@@ -294,9 +294,6 @@ const MuutospyyntoWizardPerustelut = ({
                     muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                       muutosperusteluList
                     )}
-                    lomakkeet={{
-                      opiskelijavuodet: lomakkeet.opiskelijavuodet
-                    }}
                     {..._props}
                   />
                 </React.Fragment>

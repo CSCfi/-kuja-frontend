@@ -18,7 +18,7 @@ function getReasoningForm(
       ]
     },
     {
-      anchor: "sisaoppilaitos",
+      anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
       styleClasses: ["px-10 py-10"],
       components: [
@@ -27,8 +27,8 @@ function getReasoningForm(
           name: "TextBox",
           properties: {
             isReadOnly,
-            placeholder:
-              "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+            value: ""
           }
         }
       ]

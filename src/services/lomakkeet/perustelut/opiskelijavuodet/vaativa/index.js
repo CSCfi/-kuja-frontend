@@ -18,7 +18,7 @@ function getReasoningForm(
       ]
     },
     {
-      anchor: "vaativatuki",
+      anchor: "perustelut",
       title: "Mikä on aiheuttanut muutostarpeen?",
       styleClasses: ["px-10 py-10"],
       components: [
