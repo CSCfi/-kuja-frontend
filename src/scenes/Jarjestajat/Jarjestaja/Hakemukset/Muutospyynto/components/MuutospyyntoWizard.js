@@ -44,7 +44,7 @@ import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
 import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
-import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
+import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import { useKielet } from "../../../../../../stores/kielet";
 import { useOpetuskielet } from "../../../../../../stores/opetuskielet";
 import { useKoulutusalat } from "../../../../../../stores/koulutusalat";
