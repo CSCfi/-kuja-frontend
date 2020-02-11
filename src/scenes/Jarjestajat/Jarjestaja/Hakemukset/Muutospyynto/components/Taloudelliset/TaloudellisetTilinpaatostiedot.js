@@ -30,6 +30,7 @@ const TaloudellisetTilinpaatostiedot = React.memo(
           action="tilinpaatostiedot"
           anchor={sectionId}
           changeObjects={changeObjects}
+          isReadOnly={isReadOnly}
           onChangesUpdate={onChangesUpdate}
           path={["taloudelliset"]}
           rules={tilinpaatostiedot}

@@ -5,24 +5,17 @@ import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import * as R from "ramda";
+import { toUpper, values } from "ramda";
 
 const ValmentavatKoulutukset = React.memo(
-  ({
-    changeObjects,
-    kohde,
-    koulutukset,
-    maaraystyyppi,
-    onChangesRemove,
-    onChangesUpdate
-  }) => {
+  ({ changeObjects, koulutukset, onChangesRemove, onChangesUpdate }) => {
     const intl = useIntl();
     const sectionId = "koulutukset_valmentavatKoulutukset";
 
     const koulutusdata = useMemo(() => {
       return getDataForKoulutusList(
-        R.values(koulutukset.poikkeukset),
-        R.toUpper(intl.locale)
+        values(koulutukset.poikkeukset),
+        toUpper(intl.locale)
       );
     }, [intl.locale, koulutukset]);
 
@@ -43,9 +36,7 @@ const ValmentavatKoulutukset = React.memo(
             anchor={sectionId}
             changeObjects={changeObjects}
             data={{
-              kohde,
-              koulutusdata,
-              maaraystyyppi
+              koulutusdata
             }}
             onChangesUpdate={onChangesUpdate}
             path={["koulutukset", "valmentavatKoulutukset"]}
@@ -59,9 +50,7 @@ const ValmentavatKoulutukset = React.memo(
 
 ValmentavatKoulutukset.propTypes = {
   changeObjects: PropTypes.array,
-  kohde: PropTypes.object,
-  koulutukset: PropTypes.object,
-  maaraystyyppi: PropTypes.object
+  koulutukset: PropTypes.object
 };
 
 export default ValmentavatKoulutukset;

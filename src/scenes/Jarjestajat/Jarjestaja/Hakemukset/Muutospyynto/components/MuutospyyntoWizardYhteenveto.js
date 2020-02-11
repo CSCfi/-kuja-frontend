@@ -1,17 +1,15 @@
 import React, { useMemo } from "react";
 import FormSection from "../../../../../../components/03-templates/FormSection";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
+import * as R from "ramda";
 
 const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
-  intl,
-  intl: { formatMessage },
   kielet,
   kohteet,
   koulutukset,
@@ -24,6 +22,7 @@ const MuutospyyntoWizardYhteenveto = ({
   onChangesUpdate,
   tutkinnot
 }) => {
+  const intl = useIntl();
   const jarjestaja = useMemo(() => {
     const nimi = {
       label: "Nimi",
@@ -85,7 +84,7 @@ const MuutospyyntoWizardYhteenveto = ({
 
   return (
     <React.Fragment>
-      <h2 className="my-6">{formatMessage(wizard.pageTitle_4)}</h2>
+      <h2 className="my-6">{intl.formatMessage(wizard.pageTitle_4)}</h2>
 
       <h4 className="my-6">Organisaation tiedot</h4>
 
@@ -159,4 +158,4 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   tutkinnot: PropTypes.object
 };
 
-export default injectIntl(MuutospyyntoWizardYhteenveto);
+export default MuutospyyntoWizardYhteenveto;

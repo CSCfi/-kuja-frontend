@@ -15,28 +15,22 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
 
       <ValmentavatKoulutukset
         changeObjects={props.changeObjects.valmentavatKoulutukset}
-        kohde={props.kohde}
         koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
       />
 
       <ATVKoulutukset
         changeObjects={props.changeObjects.atvKoulutukset}
-        kohde={props.kohde}
         koulutukset={props.koulutukset}
-        maaraystyyppi={props.maaraystyyppi}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
       />
 
       <Tyovoimakoulutukset
         changeObjects={props.changeObjects.tyovoimakoulutukset}
-        kohde={props.kohde}
         koulutukset={props.koulutukset}
         lupa={props.lupa}
-        maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
@@ -44,10 +38,8 @@ const MuutospyyntoWizardKoulutukset = React.memo(props => {
 
       <Kuljettajakoulutukset
         changeObjects={props.changeObjects.kuljettajakoulutukset}
-        kohde={props.kohde}
         koulutukset={props.koulutukset}
         lupa={props.lupa}
-        maaraystyyppi={props.maaraystyyppi}
         onUpdate={props.onUpdate}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
@@ -62,10 +54,8 @@ MuutospyyntoWizardKoulutukset.defaultProps = {
 
 MuutospyyntoWizardKoulutukset.propTypes = {
   changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,
-  maaraystyyppi: PropTypes.object,
   onUpdate: PropTypes.func
 };
 

@@ -13,6 +13,7 @@ function getModificationForm(
   return R.map(category => {
     const areaCode = category.meta.areaCode;
     const categories = R.map(subCategory => {
+      console.info(subCategory);
       /**
        * There might be some sub articles (alimääräyksiä) under the current article (määräys).
        * We are interested of them which are related to tutkintokielet section.
@@ -75,6 +76,8 @@ function getModificationForm(
             anchor: "B",
             name: "Autocomplete",
             properties: {
+              forChangeObject:
+                subCategory.components[0].properties.forChangeObject,
               options: R.map(language => {
                 return {
                   label:

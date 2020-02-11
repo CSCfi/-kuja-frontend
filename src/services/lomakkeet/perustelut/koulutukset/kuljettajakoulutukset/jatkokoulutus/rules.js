@@ -1,9 +1,9 @@
 import {
   ifOneTerm,
   getPathByAnchor
-} from "../../../../../components/02-organisms/CategorizedListRoot/utils";
+} from "../../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
-import { createRules, createTerms } from "../../../utils";
+import { createRules, createTerms } from "../../../../utils";
 import { requiredFields } from "./requiredFields";
 
 export const removalRules = createRules(requiredFields.removal);

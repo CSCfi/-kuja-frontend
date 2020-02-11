@@ -1,7 +1,7 @@
 import { isAdded, isRemoved, isInLupa } from "../../../../css/label";
 import { map } from "ramda";
 
-function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
+function getModificationForm(koulutusdata) {
   return map(item => {
     return {
       anchor: item.code,
@@ -11,7 +11,10 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
           name: "RadioButtonWithLabel",
           properties: {
             forChangeObject: {
-              isReasoningRequired: item.isReasoningRequired
+              isReasoningRequired: item.isReasoningRequired,
+              isInLupa: item.isInLupa,
+              koodisto: item.koodisto,
+              metadata: item.metadata
             },
             name: "RadioButtonWithLabel",
             title: item.title,
@@ -23,14 +26,7 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
             }
           }
         }
-      ],
-      meta: {
-        kohde,
-        maaraystyyppi,
-        isInLupa: item.isInLupa,
-        koodisto: item.koodisto,
-        metadata: item.metadata
-      }
+      ]
     };
   }, koulutusdata.items);
 }
@@ -38,11 +34,7 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
 export default function getTyovoimakoulutuslomake(action, data) {
   switch (action) {
     case "modification":
-      return getModificationForm(
-        data.kohde,
-        data.koulutusdata,
-        data.maaraystyyppi
-      );
+      return getModificationForm(data.koulutusdata);
     default:
       return [];
   }

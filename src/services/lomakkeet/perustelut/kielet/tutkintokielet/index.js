@@ -97,6 +97,10 @@ const getReasoningForm = (
                       anchor: "A",
                       name: "TextBox",
                       properties: {
+                        forChangeObject: {
+                          areaCode,
+                          title: koulutusalaMetadata.nimi
+                        },
                         isReadOnly: isReadOnly,
                         title: "Perustele muutos tähän, kiitos.",
                         value: ""
@@ -107,11 +111,7 @@ const getReasoningForm = (
               ]
             }
           : [];
-      }, R.flatten([selectedByDefault, changeObj.properties.value].filter(Boolean))),
-      metadata: {
-        areaCode,
-        title: koulutusalaMetadata.nimi
-      }
+      }, R.flatten([selectedByDefault, changeObj.properties.value].filter(Boolean)))
     };
   }, changeObjects || []).filter(Boolean);
 };

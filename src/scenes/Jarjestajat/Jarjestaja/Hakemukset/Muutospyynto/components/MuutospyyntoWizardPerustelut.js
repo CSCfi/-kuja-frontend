@@ -225,8 +225,10 @@ const MuutospyyntoWizardPerustelut = ({
                       changeObjects={{
                         tutkintokielet: changeObjects.kielet.tutkintokielet,
                         perustelut: {
-                          tutkintokielet:
-                            changeObjects.perustelut.kielet.tutkintokielet
+                          tutkintokielet: R.path(
+                            ["perustelut", "kielet", "tutkintokielet"],
+                            changeObjects
+                          )
                         }
                       }}
                       kohde={R.find(
@@ -249,6 +251,8 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[1].title}
             />
           )}
+
+          {/* TOIMINTA-ALUE */}
           {isToimintaalueChanges ? (
             <FormSection
               code={3}
@@ -257,7 +261,11 @@ const MuutospyyntoWizardPerustelut = ({
               render={_props => (
                 <React.Fragment>
                   <PerustelutToimintaalue
+                    kohde={R.find(R.propEq("tunniste", "toimintaalue"))(
+                      kohteet
+                    )}
                     lupakohde={lupaKohteet[3]}
+                    maaraystyyppi={maaraystyypitState.VELVOITE}
                     changeObjects={{
                       toimintaalue: R.path(["toimintaalue"], changeObjects),
                       perustelut: R.path(
@@ -277,6 +285,8 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[2].title}
             />
           ) : null}
+
+          {/* OPISKELIJAVUODET */}
           {isOpiskelijavuodetChanges ? (
             <FormSection
               code={4}
@@ -284,13 +294,6 @@ const MuutospyyntoWizardPerustelut = ({
               render={_props => (
                 <React.Fragment>
                   <PerustelutOpiskelijavuodet
-                    changeObjects={{
-                      opiskelijavuodet: changeObjects.opiskelijavuodet,
-                      perustelut: changeObjects.perustelut.opiskelijavuodet
-                    }}
-                    kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
-                      kohteet
-                    )}
                     muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                       muutosperusteluList
                     )}
@@ -302,6 +305,8 @@ const MuutospyyntoWizardPerustelut = ({
               title={kohdetiedot[3].title}
             />
           ) : null}
+
+          {/* MUUT */}
           {isMuutChanges ? (
             <FormSection
               code={5}

@@ -5,13 +5,7 @@ import "../../../i18n-config";
 import { __ } from "i18n-for-browser";
 import * as R from "ramda";
 
-function getAdditionForm(
-  koulutusdata,
-  kohde,
-  maaraystyyppi,
-  changeObjectsPage1,
-  isReadOnly
-) {
+function getAdditionForm(koulutusdata, changeObjectsPage1, isReadOnly) {
   const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
     changeObjectsPage1
   );
@@ -36,13 +30,6 @@ function getAdditionForm(
             }
           }
         ],
-        meta: {
-          kohde,
-          maaraystyyppi,
-          isInLupa: item.isInLupa,
-          koodisto: item.koodisto,
-          metadata: item.metadata
-        },
         categories: [
           {
             anchor: "perustelut",
@@ -51,6 +38,11 @@ function getAdditionForm(
                 anchor: "A",
                 name: "TextBox",
                 properties: {
+                  forChangeObject: {
+                    isInLupa: item.isInLupa,
+                    koodisto: item.koodisto,
+                    metadata: item.metadata
+                  },
                   isReadOnly,
                   placeholder: "Perustelut...",
                   title: __("reasoning.title.default"),
@@ -77,8 +69,6 @@ export default function getValmentavatKoulutuksetPerustelulomake(
     case "addition":
       return getAdditionForm(
         data.koulutusdata,
-        data.kohde,
-        data.maaraystyyppi,
         data.changeObjectsPage1,
         isReadOnly
       );

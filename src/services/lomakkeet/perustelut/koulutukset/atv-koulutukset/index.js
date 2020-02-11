@@ -3,14 +3,7 @@ import { isAdded, isRemoved, isInLupa } from "../../../../../css/label";
 import { curriedGetAnchorPartsByIndex } from "../../../../../utils/common";
 import * as R from "ramda";
 
-function getAdditionForm(
-  koulutusdata,
-  kohde,
-  maaraystyyppi,
-  changeObjectsPage1 = [],
-  isReadOnly
-) {
-  console.info(koulutusdata, changeObjectsPage1);
+function getAdditionForm(koulutusdata, changeObjectsPage1 = [], isReadOnly) {
   const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
     changeObjectsPage1
   );
@@ -34,13 +27,6 @@ function getAdditionForm(
             }
           }
         ],
-        meta: {
-          kohde,
-          maaraystyyppi,
-          isInLupa: item.isInLupa,
-          koodisto: item.koodisto,
-          metadata: item.metadata
-        },
         categories: [
           {
             anchor: "perustelut",
@@ -49,6 +35,11 @@ function getAdditionForm(
                 anchor: "A",
                 name: "TextBox",
                 properties: {
+                  forChangeObject: {
+                    isInLupa: item.isInLupa,
+                    koodisto: item.koodisto,
+                    metadata: item.metadata
+                  },
                   isReadOnly: isReadOnly,
                   placeholder: "Perustelut...",
                   title:
@@ -76,8 +67,6 @@ export default function getATVKoulutuksetPerustelulomake(
     case "addition":
       return getAdditionForm(
         data.koulutusdata,
-        data.kohde,
-        data.maaraystyyppi,
         data.changeObjectsPage1,
         isReadOnly
       );

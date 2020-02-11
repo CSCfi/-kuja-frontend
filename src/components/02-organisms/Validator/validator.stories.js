@@ -4,7 +4,7 @@ import { withInfo } from "@storybook/addon-info";
 import CategorizedListRoot from "../CategorizedListRoot";
 import { lomake } from "./exampleForm";
 import Stage from "../CategorizedListRoot/Stage";
-import { rules } from "../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
+import { rules } from "../../../services/lomakkeet/perustelut/koulutukset/kuljettajakoulutukset/jatkokoulutus/rules";
 
 storiesOf("Validator", module)
   .addDecorator(withInfo)

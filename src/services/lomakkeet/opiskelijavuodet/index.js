@@ -14,6 +14,7 @@ function getModificationForm(
   isVaativaTukiVisible,
   isSisaoppilaitosValueRequired,
   isVaativaTukiValueRequired,
+  koodiarvot,
   sectionId
 ) {
   return [
@@ -25,6 +26,9 @@ function getModificationForm(
           anchor: "A",
           name: "Difference",
           properties: {
+            forChangeObject: {
+              koodiarvo: koodiarvot.vahimmaisopiskelijavuodet
+            },
             initialValue: initialValue,
             applyForValue: applyFor,
             name: `${sectionId}-difference-1`,
@@ -42,6 +46,9 @@ function getModificationForm(
               anchor: "A",
               name: "Difference",
               properties: {
+                forChangeObject: {
+                  koodiarvo: koodiarvot.vaativatuki
+                },
                 isRequired: isVaativaTukiValueRequired,
                 initialValue: initialValueVaativa,
                 applyForValue: applyForVaativa,
@@ -61,6 +68,9 @@ function getModificationForm(
               anchor: "A",
               name: "Difference",
               properties: {
+                forChangeObject: {
+                  koodiarvo: koodiarvot.sisaoppilaitos
+                },
                 isRequired: isSisaoppilaitosValueRequired,
                 initialValue: initialValueSisaoppilaitos,
                 applyForValue: applyForSisaoppilaitos,
@@ -88,6 +98,7 @@ export default function getOpiskelijavuodetLomake(action, data) {
         data.isVaativaTukiVisible,
         data.isSisaoppilaitosValueRequired,
         data.isVaativaTukiValueRequired,
+        data.koodiarvot,
         data.sectionId
       );
     default:

@@ -1,7 +1,7 @@
 import { isAdded, isRemoved, isInLupa } from "../../../../css/label";
 import { map } from "ramda";
 
-function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
+function getModificationForm(koulutusdata) {
   const categories = map(item => {
     return {
       anchor: item.code,
@@ -10,6 +10,11 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
           anchor: "A",
           name: "CheckboxWithLabel",
           properties: {
+            forChangeObject: {
+              isInLupa: item.isInLupa,
+              koodisto: item.koodisto,
+              metadata: item.metadata
+            },
             name: "CheckboxWithLabel",
             code: item.code,
             title: item.title,
@@ -21,14 +26,7 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
             }
           }
         }
-      ],
-      meta: {
-        kohde,
-        maaraystyyppi,
-        isInLupa: item.isInLupa,
-        koodisto: item.koodisto,
-        metadata: item.metadata
-      }
+      ]
     };
   }, koulutusdata.items);
   return categories;
@@ -37,11 +35,7 @@ function getModificationForm(kohde, koulutusdata, maaraystyyppi) {
 export default function getValmentavatKoulutuksetLomake(action, data) {
   switch (action) {
     case "modification":
-      return getModificationForm(
-        data.kohde,
-        data.koulutusdata,
-        data.maaraystyyppi
-      );
+      return getModificationForm(data.koulutusdata);
     default:
       return [];
   }

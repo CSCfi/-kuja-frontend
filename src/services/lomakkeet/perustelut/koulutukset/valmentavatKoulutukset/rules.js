@@ -9,7 +9,6 @@ export function getRules(_lomake) {
   const perustelukentatCategories = R.uniq(
     R.flatten(getCategoriesByProps(_lomake, { anchor: "perustelut" }))
   );
-  console.info(perustelukentatCategories, _lomake);
   // Rules for muutosperustelut (one of the checkboxes must be checked)
   const perustelukentatRules = R.map(category => {
     return {

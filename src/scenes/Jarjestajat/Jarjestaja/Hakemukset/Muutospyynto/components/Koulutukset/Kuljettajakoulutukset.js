@@ -5,14 +5,12 @@ import ExpandableRowRoot from "../../../../../../../components/02-organisms/Expa
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
-import * as R from "ramda";
+import { toUpper } from "ramda";
 
 const Kuljettajakoulutukset = ({
   changeObjects,
-  kohde,
   koulutukset,
   lupa,
-  maaraystyyppi,
   onChangesRemove,
   onChangesUpdate
 }) => {
@@ -23,7 +21,7 @@ const Kuljettajakoulutukset = ({
   const koulutusdata = useMemo(() => {
     return getDataForKoulutusList(
       koulutukset.muut[koodisto],
-      R.toUpper(intl.locale),
+      toUpper(intl.locale),
       lupa,
       "kuljettajakoulutus"
     );
@@ -43,9 +41,7 @@ const Kuljettajakoulutukset = ({
         anchor={sectionId}
         changeObjects={changeObjects}
         data={{
-          kohde,
-          koulutusdata,
-          maaraystyyppi
+          koulutusdata
         }}
         onChangesUpdate={onChangesUpdate}
         path={["koulutukset", "kuljettajakoulutukset"]}
@@ -57,10 +53,8 @@ const Kuljettajakoulutukset = ({
 
 Kuljettajakoulutukset.propTypes = {
   changeObjects: PropTypes.array,
-  kohde: PropTypes.object,
   lupa: PropTypes.object,
   koulutukset: PropTypes.object,
-  maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
 };

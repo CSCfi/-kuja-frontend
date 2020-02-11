@@ -8,9 +8,12 @@ import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getRules as getVahimmaisRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/vahimmais/rules";
 import { getRules as getSisaoppilaitosRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/sisaoppilaitos/rules";
 import { getRules as getVaativaTukiRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/vaativa/rules";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
+import { path } from "ramda";
 
 const PerustelutOpiskelijavuodet = props => {
   const intl = useIntl();
+  const [changeObjects] = useChangeObjects();
   const sectionId = "perustelut_opiskelijavuodet";
   const { onChangesRemove, onChangesUpdate, isReadOnly } = props;
 
@@ -18,18 +21,18 @@ const PerustelutOpiskelijavuodet = props => {
     return {
       vahimmaisopiskelijavuosimaara: findAnchoredElement(
         "opiskelijavuodet.vahimmaisopiskelijavuodet.A",
-        props.changeObjects.opiskelijavuodet
+        changeObjects.opiskelijavuodet
       ),
       sisaoppilaitos: findAnchoredElement(
         "opiskelijavuodet.sisaoppilaitos.A",
-        props.changeObjects.opiskelijavuodet
+        changeObjects.opiskelijavuodet
       ),
       vaativatuki: findAnchoredElement(
         "opiskelijavuodet.vaativatuki.A",
-        props.changeObjects.opiskelijavuodet
+        changeObjects.opiskelijavuodet
       )
     };
-  }, [props.changeObjects.opiskelijavuodet]);
+  }, [changeObjects.opiskelijavuodet]);
 
   const differenceTitles = [
     intl.formatMessage(commonMessages.current),
@@ -38,11 +41,15 @@ const PerustelutOpiskelijavuodet = props => {
   ];
   return (
     <React.Fragment>
+      {console.info(changeObjects)}
       {valueChanges.vahimmaisopiskelijavuosimaara && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
           key={`expandable-row-root-vahimmaisopiskelijavuodet`}
-          changes={props.changeObjects.perustelut.vahimmaisopiskelijavuodet}
+          changes={path(
+            ["perustelut", "opiskelijavuodet", "vahimmaisopiskelijavuodet"],
+            changeObjects
+          )}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -50,9 +57,10 @@ const PerustelutOpiskelijavuodet = props => {
           <Lomake
             anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
             action="reasoning"
-            changeObjects={
-              props.changeObjects.perustelut.vahimmaisopiskelijavuodet
-            }
+            changeObjects={path(
+              ["perustelut", "opiskelijavuodet", "vahimmaisopiskelijavuodet"],
+              changeObjects
+            )}
             data={{
               checkboxItems: props.muutosperustelut,
               changeObject:
@@ -65,12 +73,11 @@ const PerustelutOpiskelijavuodet = props => {
             rulesFn={getVahimmaisRules}></Lomake>
         </ExpandableRowRoot>
       )}
-
       {valueChanges.sisaoppilaitos && (
         <ExpandableRowRoot
           anchor={`${sectionId}_sisaoppilaitos`}
           key={`expandable-row-root-sisaoppilaitos`}
-          changes={props.changeObjects.perustelut.sisaoppilaitos}
+          changes={changeObjects.perustelut.sisaoppilaitos}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -78,7 +85,7 @@ const PerustelutOpiskelijavuodet = props => {
           <Lomake
             action="reasoning"
             anchor={`${sectionId}_sisaoppilaitos`}
-            changeObjects={props.changeObjects.perustelut.sisaoppilaitos}
+            changeObjects={changeObjects.perustelut.sisaoppilaitos}
             data={{
               changeObject: valueChanges.sisaoppilaitos.properties,
               differenceTitles
@@ -89,12 +96,11 @@ const PerustelutOpiskelijavuodet = props => {
             rulesFn={getSisaoppilaitosRules}></Lomake>
         </ExpandableRowRoot>
       )}
-
       {valueChanges.vaativatuki && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vaativatuki`}
           key={`expandable-row-root-vaativatuki`}
-          changes={props.changeObjects.perustelut.vaativatuki}
+          changes={changeObjects.perustelut.vaativatuki}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -102,7 +108,7 @@ const PerustelutOpiskelijavuodet = props => {
           <Lomake
             action="reasoning"
             anchor={`${sectionId}_vaativatuki`}
-            changeObjects={props.changeObjects.perustelut.vaativatuki}
+            changeObjects={changeObjects.perustelut.vaativatuki}
             data={{
               changeObject: valueChanges.vaativatuki.properties,
               differenceTitles
@@ -125,7 +131,6 @@ PerustelutOpiskelijavuodet.defaultProps = {
 
 PerustelutOpiskelijavuodet.propTypes = {
   changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   muutosperustelut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,

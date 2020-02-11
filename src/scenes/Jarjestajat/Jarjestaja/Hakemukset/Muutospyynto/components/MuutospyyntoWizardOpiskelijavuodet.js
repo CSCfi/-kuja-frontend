@@ -253,20 +253,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     props.sectionId
   ]);
 
-  useEffect(() => {
-    const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.maaraykset
-    );
-    if (maarays) {
-      setKoodiarvot(prevState => {
-        return {
-          ...prevState,
-          vahimmaisopiskelijavuodet: maarays.koodiarvo
-        };
-      });
-    }
-  }, [props.lupa.maaraykset]);
-
   return (
     <ExpandableRowRoot
       anchor={props.sectionId}
@@ -296,12 +282,8 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
             constraintFlags.isSisaoppilaitosValueRequired,
           isVaativaTukiValueRequired:
             constraintFlags.isVaativaTukiValueRequired,
-          sectionId: props.sectionId
-        }}
-        metadata={{
-          kohde: props.kohde,
           koodiarvot,
-          maaraystyyppi: props.maaraystyyppi
+          sectionId: props.sectionId
         }}
         onChangesUpdate={onChangesUpdate}
         path={["opiskelijavuodet"]}

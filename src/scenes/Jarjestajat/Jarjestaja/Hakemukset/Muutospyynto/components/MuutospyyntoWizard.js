@@ -295,7 +295,6 @@ const MuutospyyntoWizard = ({
           }, obj.properties.attachments);
         }
       }, allAttachments);
-      console.info(attachments, files);
     }
     return R.concat(attachments, files);
   }, [cos]);
@@ -313,7 +312,11 @@ const MuutospyyntoWizard = ({
           cos,
           backendMuutokset,
           lomakkeet,
-          match.params.uuid
+          match.params.uuid,
+          kohteet,
+          maaraystyypit,
+          muut,
+          lupaKohteet
         ),
         attachments,
         options.triggerPreview

@@ -8,8 +8,13 @@ export function createObjectToSave(
   changeObjects,
   backendMuutokset = [],
   lomakkeet,
-  uuid
+  uuid,
+  kohteet,
+  maaraystyypit,
+  muut,
+  lupaKohteet
 ) {
+  console.info(kohteet, maaraystyypit);
   // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
@@ -35,7 +40,9 @@ export function createObjectToSave(
       : [];
 
   const taloudellisetLiitteetList =
-    !R.isEmpty(taloudellisetLiitteet) && taloudellisetLiitteet[0].properties
+    taloudellisetLiitteet &&
+    !R.isEmpty(taloudellisetLiitteet) &&
+    taloudellisetLiitteet[0].properties
       ? taloudellisetLiitteet[0].properties.attachments
       : [];
 
@@ -70,6 +77,153 @@ export function createObjectToSave(
         {}
     );
   };
+
+  // TUTKINNOT
+  const tutkinnot = getChangesToSave(
+    "tutkinnot",
+    {},
+    {
+      // Page 1 changes
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["tutkinnot"], changeObjects))),
+      // Page 2 changes
+      perustelut: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects)))
+    },
+    R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
+      backendMuutokset
+    ),
+    R.find(R.propEq("tunniste", "tutkinnotjakoulutukset"), kohteet),
+    R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit),
+    null,
+    lupaKohteet[1].maaraykset
+  );
+
+  // KOULUTUKSET
+  const koulutukset = getChangesToSave(
+    "koulutukset",
+    {},
+    {
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["koulutukset"], changeObjects))),
+      perustelut: R.compose(
+        R.filter(R.compose(R.not, R.isEmpty)),
+        R.flatten,
+        R.values
+      )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))
+    },
+    R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
+      backendMuutokset
+    ),
+    R.find(R.propEq("tunniste", "tutkinnotjakoulutukset"), kohteet),
+    R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit)
+  );
+
+  // OPETUSKIELET
+  const opetuskielet = getChangesToSave(
+    "opetuskielet",
+    {},
+    {
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["kielet", "opetuskielet"], changeObjects))),
+      perustelut: R.compose(
+        R.flatten,
+        R.values
+      )(
+        R.values(
+          R.path(["perustelut", "kielet", "opetuskielet"], changeObjects)
+        )
+      )
+    },
+    R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset),
+    R.find(R.propEq("tunniste", "opetusjatutkintokieli"), kohteet),
+    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit)
+  );
+
+  // TUTKINTOKIELET
+  const tutkintokielet = getChangesToSave(
+    "tutkintokielet",
+    {},
+    {
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["kielet", "tutkintokielet"], changeObjects))),
+      perustelut: R.compose(
+        R.flatten,
+        R.values
+      )(
+        R.values(
+          R.path(["perustelut", "kielet", "tutkintokielet"], changeObjects)
+        )
+      )
+    },
+    R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset),
+    R.find(R.propEq("tunniste", "opetusjatutkintokieli"), kohteet),
+    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit),
+  );
+
+  // TOIMINTA-ALUE
+  const toimintaalue = getChangesToSave(
+    "toimintaalue",
+    {},
+    {
+      muutokset: R.path(["toimintaalue"], changeObjects) || [],
+      perustelut: (() => {
+        // There is only one field for reasoning and it must be used as a source
+        // for the actual change objects.
+        const sourceObject = (R.path(
+          ["perustelut", "toimintaalue"],
+          changeObjects
+        ) || [])[0];
+        /**
+         * Next step is to go through all the Toiminta-alue related "change objects" of the first
+         * page of the wizard and generate change objects based on them.
+         */
+        return !!sourceObject
+          ? R.map(changeObject => {
+              return {
+                anchor: `perustelut_${changeObject.anchor}`,
+                properties: sourceObject.properties
+              };
+            }, R.path(["toimintaalue"], changeObjects) || [])
+          : [];
+      })()
+    },
+    R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(backendMuutokset),
+    R.find(R.propEq("tunniste", "toimintaalue"), kohteet),
+    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit)
+  );
+
+  // OPISKELIJAVUODET
+  const opiskelijavuodet = getChangesToSave(
+    "opiskelijavuodet",
+    {},
+    {
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["opiskelijavuodet"], changeObjects))),
+      perustelut: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["perustelut", "opiskelijavuodet"], changeObjects)))
+    },
+    R.filter(R.pathEq(["kohde", "tunniste"], "opiskelijavuodet"))(
+      backendMuutokset
+    ),
+    R.find(R.propEq("tunniste", "opiskelijavuodet"), kohteet),
+    R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit),
+    muut
+  );
 
   return {
     diaarinumero: lupa.diaarinumero,
@@ -206,137 +360,12 @@ export function createObjectToSave(
       }
     },
     muutokset: R.flatten([
-      // TUTKINNOT
-      getChangesToSave(
-        "tutkinnot",
-        R.path(["tutkinnot"], lomakkeet), // stateObject
-        {
-          // Page 1 changes
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["tutkinnot"], changeObjects))),
-          // Page 2 changes
-          perustelut: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["perustelut", "tutkinnot"], changeObjects)))
-        },
-        R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
-          backendMuutokset
-        )
-      ),
-      // KOULUTUKSET
-      getChangesToSave(
-        "koulutukset",
-        R.path(["koulutukset"], lomakkeet),
-        {
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["koulutukset"], changeObjects))),
-          perustelut: R.compose(
-            R.filter(R.compose(R.not, R.isEmpty)),
-            R.flatten,
-            R.values
-          )(R.values(R.path(["perustelut", "koulutukset"], changeObjects)))
-        },
-        R.filter(R.pathEq(["kohde", "tunniste"], "tutkinnotjakoulutukset"))(
-          backendMuutokset
-        )
-      ),
-      // OPETUSKIELET
-      getChangesToSave(
-        "opetuskielet",
-        R.path(["kielet", "opetuskielet"], lomakkeet),
-        {
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["kielet", "opetuskielet"], changeObjects))),
-          perustelut: R.compose(
-            R.flatten,
-            R.values
-          )(
-            R.values(
-              R.path(["perustelut", "kielet", "opetuskielet"], changeObjects)
-            )
-          )
-        },
-        R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
-      ),
-      // TUTKINTOKIELET
-      getChangesToSave(
-        "tutkintokielet",
-        R.path(["kielet", "tutkintokielet"], lomakkeet),
-        {
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["kielet", "tutkintokielet"], changeObjects))),
-          perustelut: R.compose(
-            R.flatten,
-            R.values
-          )(
-            R.values(
-              R.path(["perustelut", "kielet", "tutkintokielet"], changeObjects)
-            )
-          )
-        },
-        R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset)
-      ),
-      // TOIMINTA-ALUE
-      getChangesToSave(
-        "toimintaalue",
-        R.path(["toimintaalue"], lomakkeet),
-        {
-          muutokset: R.path(["toimintaalue"], changeObjects) || [],
-          perustelut: (() => {
-            // There is only one field for reasoning and it must be used as a source
-            // for the actual change objects.
-            const sourceObject = (R.path(
-              ["perustelut", "toimintaalue"],
-              changeObjects
-            ) || [])[0];
-            /**
-             * Next step is to go through all the Toiminta-alue related "change objects" of the first
-             * page of the wizard and generate change objects based on them.
-             */
-            return !!sourceObject
-              ? R.map(changeObject => {
-                  return {
-                    anchor: `perustelut_${changeObject.anchor}`,
-                    properties: sourceObject.properties
-                  };
-                }, R.path(["toimintaalue"], changeObjects) || [])
-              : [];
-          })()
-        },
-        R.filter(R.pathEq(["kohde", "tunniste"], "toimintaalue"))(
-          backendMuutokset
-        )
-      ),
-      // OPISKELIJAVUODET
-      getChangesToSave(
-        "opiskelijavuodet",
-        {
-          opiskelijavuodet: R.path(["opiskelijavuodet"], lomakkeet),
-          muut: R.path(["muut"], lomakkeet)
-        },
-        {
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["opiskelijavuodet"], changeObjects))),
-          perustelut: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["perustelut", "opiskelijavuodet"], changeObjects)))
-        },
-        R.filter(R.pathEq(["kohde", "tunniste"], "opiskelijavuodet"))(
-          backendMuutokset
-        )
-      ),
+      tutkinnot,
+      koulutukset,
+      opetuskielet,
+      tutkintokielet,
+      toimintaalue,
+      opiskelijavuodet,
       // MUUT
       getChangesToSave(
         "muut",

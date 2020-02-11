@@ -15,10 +15,10 @@ const Opetuskielet = React.memo(props => {
   const opetuskieletData = useMemo(() => {
     return getDataForOpetuskieletList(
       R.sortBy(R.prop("koodiArvo"), R.values(props.opetuskielet)),
-      props.kohde,
+      props.lupakohde,
       R.toUpper(intl.locale)
     );
-  }, [intl.locale, props.kohde, props.opetuskielet]);
+  }, [intl.locale, props.lupakohde, props.opetuskielet]);
 
   return (
     <React.Fragment>
@@ -38,8 +38,6 @@ const Opetuskielet = React.memo(props => {
             anchor={sectionId}
             changeObjects={props.changeObjects}
             data={{
-              kohde: props.kohde,
-              maaraystyyppi: props.maaraystyyppi,
               opetuskieletData
             }}
             onChangesUpdate={onChangesUpdate}
@@ -61,7 +59,7 @@ Opetuskielet.propTypes = {
   opetuskielet: PropTypes.array,
   onChangesUpdate: PropTypes.func,
   onChangesRemove: PropTypes.func,
-  kohde: PropTypes.object,
+  lupakohde: PropTypes.object,
   lupa: PropTypes.object
 };
 

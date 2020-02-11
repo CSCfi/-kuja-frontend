@@ -11,6 +11,7 @@ const defaultProps = {
   isReadOnly: false,
   kohde: {},
   lupakohde: {},
+  maaraystyyppi: {},
   stateObjects: {}
 };
 
@@ -18,14 +19,16 @@ const PerustelutToimintaalue = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
     isReadOnly = defaultProps.isReadOnly,
+    kohde = defaultProps.kohde,
     lupakohde = {},
+    maaraystyyppi = defaultProps.maaraystyyppi,
     onChangesRemove,
     onChangesUpdate,
     sectionId
   }) => {
     return (
       <React.Fragment>
-        {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && (
+        {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && kohde && (
           <ExpandableRowRoot
             anchor={sectionId}
             categories={[]}
@@ -46,6 +49,7 @@ const PerustelutToimintaalue = React.memo(
                 changeObjectsPage1: changeObjects.toimintaalue,
                 lupakohde
               }}
+              metadata={{ kohde, maaraystyyppi }}
               onChangesUpdate={onChangesUpdate}
               path={["perustelut", "toimintaalue"]}
               rules={rules}
@@ -63,6 +67,7 @@ PerustelutToimintaalue.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupakohde: PropTypes.object,
+  maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
 };

@@ -3,7 +3,7 @@ import { storiesOf } from "@storybook/react";
 import { withInfo } from "@storybook/addon-info";
 import Lomake from "../../../02-organisms/Lomake";
 
-storiesOf("Lomakkeet/Perustelut/Kuljettajakoulutukset/Peruskoulutus", module)
+storiesOf("Lomakkeet/Perustelut/Koulutukset/Kuljettajakoulutukset/Peruskoulutus", module)
   .addDecorator(withInfo)
   .add("Lisääminen", () => {
     return (

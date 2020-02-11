@@ -2,48 +2,32 @@ import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import { fillForBackend } from "../../lomakkeet/backendMappings";
 import * as R from "ramda";
-import { getCategoriesByProps } from "../../lomakkeet/utils";
 
 // Return changes of Tutkinnot
-const getMuutos = (lomake, changeObj, perustelut) => {
-  let koulutus = {};
+const getMuutos = (changeObj, perustelut, kohde, maaraystyyppi) => {
+  const metadata = R.path(["properties", "metadata"], changeObj);
   const anchorParts = changeObj.anchor.split(".");
   const koulutusCode = R.nth(2, anchorParts);
   const subcodeCandidate = R.nth(3, anchorParts);
   const subcode =
     subcodeCandidate && !isNaN(subcodeCandidate) ? subcodeCandidate : undefined;
-
-  const meta = subcode
-    ? getMetadata(R.slice(1, 4)(anchorParts), lomake.categories)
-    : getMetadata(R.slice(1, 3)(anchorParts), lomake.categories);
-
-  const finnishInfo = R.find(R.propEq("kieli", "FI"), meta.metadata);
-  if (koulutusCode) {
-    koulutus =
-      R.compose(
-        R.find(R.propEq("koodi", "" + koulutusCode)),
-        R.chain(R.prop("koulutukset")),
-        R.values,
-        R.path(["article", "koulutusalat"])
-      )(lomake.metadata) || {};
-  }
-
-  const maaraysUuid = R.prop("maaraysId", koulutus);
+  const finnishInfo = R.find(R.propEq("kieli", "FI"), metadata.metadata);
+  const maaraysUuid = changeObj.properties.metadata.maaraysId;
   const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
   const perusteluteksti = perustelutForBackend
     ? perustelutForBackend.perusteluteksti
     : null;
   const muutos = {
     generatedId: R.join(".", R.init(anchorParts)),
-    isInLupa: meta.isInLupa,
-    kohde: meta.kohde || koulutus.kohde,
+    isInLupa: metadata.isInLupa,
+    kohde,
     koodiarvo: subcode || koulutusCode,
-    koodisto: meta.koodisto.koodistoUri,
+    koodisto: metadata.koodisto.koodistoUri,
     kuvaus: finnishInfo.kuvaus,
-    maaraystyyppi: meta.maaraystyyppi || koulutus.maaraystyyppi,
+    maaraystyyppi,
     meta: {
       changeObjects: R.flatten([[changeObj], perustelut]),
-      nimi: koulutus.nimi,
+      nimi: finnishInfo.nimi,
       koulutusala: anchorParts[0],
       koulutustyyppi: anchorParts[1],
       perusteluteksti,
@@ -109,8 +93,13 @@ export function getChangesToSave(
   key,
   lomake = {},
   changeObjects = {},
-  backendMuutokset = []
+  backendMuutokset = [],
+  kohde,
+  maaraystyyppi,
+  muut,
+  maaraykset
 ) {
+  console.info(kohde, maaraystyyppi, maaraykset);
   // Update changes if already exits with perustelut and attachements
   const paivitetytBackendMuutokset = R.map(changeObj => {
     let { anchor, backendMuutos } = findBackendMuutos(
@@ -174,43 +163,27 @@ export function getChangesToSave(
   let uudetMuutokset = [];
 
   if (key === "tutkinnot") {
-    uudetMuutokset = lomake
-      ? R.map(changeObj => {
-          const areaCode = R.compose(
-            R.view(R.lensIndex(1)),
-            R.split("_")
-          )(getAnchorPart(changeObj.anchor, 0));
-          const anchorInit = R.compose(
-            R.join("."),
-            R.init,
-            R.split(".")
-          )(changeObj.anchor);
-          const perustelut = R.filter(
-            R.compose(R.contains(anchorInit), R.prop("anchor")),
-            changeObjects.perustelut
-          );
-
-          return getMuutos(
-            lomake[areaCode],
-            changeObj,
-            perustelut,
-            changeObj.anchor
-          );
-        }, unhandledChangeObjects).filter(Boolean)
-      : [];
+    uudetMuutokset = R.map(changeObj => {
+      const anchorInit = R.compose(
+        R.join("."),
+        R.init,
+        R.split(".")
+      )(changeObj.anchor);
+      const perustelut = R.filter(
+        R.compose(R.contains(anchorInit), R.prop("anchor")),
+        changeObjects.perustelut
+      );
+      return getMuutos(changeObj, perustelut, kohde, maaraystyyppi);
+    }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "koulutukset") {
     uudetMuutokset = R.map(changeObj => {
-      const lomakeKey = R.compose(
-        R.last,
-        R.split("_")
-      )(getAnchorPart(changeObj.anchor, 0));
       const anchorInit = R.compose(
         R.join("."),
         R.init,
         R.split(".")
       )(changeObj.anchor);
       const code = getAnchorPart(changeObj.anchor, 1);
-      const metadata = getMetadata([code], lomake[lomakeKey].categories);
+      const metadata = R.path(["properties", "metadata"], changeObj);
       const finnishInfo = R.find(R.propEq("kieli", "FI"), metadata.metadata);
       const perustelut = R.filter(
         R.compose(R.contains(anchorInit), R.prop("anchor")),
@@ -241,14 +214,14 @@ export function getChangesToSave(
       );
 
       return {
-        isInLupa: meta.isInLupa,
+        isInLupa: metadata.isInLupa,
         liitteet: R.map(file => {
           return R.dissoc("tiedosto", file);
         }, findObjectWithKey(changeObjects, "attachments")),
-        kohde: metadata.kohde,
+        kohde,
         koodiarvo: code,
         koodisto: metadata.koodisto.koodistoUri,
-        maaraystyyppi: metadata.maaraystyyppi,
+        maaraystyyppi,
         meta,
         nimi: finnishInfo.nimi,
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
@@ -275,8 +248,8 @@ export function getChangesToSave(
         nimi: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         isInLupa: meta.isInLupa,
-        kohde: meta.kohde.kohdeArvot[0].kohde,
-        maaraystyyppi: meta.maaraystyyppi,
+        kohde, //: meta.kohde.kohdeArvot[0].kohde,
+        maaraystyyppi, // : meta.maaraystyyppi,
         meta: {
           tunniste: "opetuskieli",
           changeObjects: R.flatten([[changeObj], perustelut]),
@@ -295,11 +268,6 @@ export function getChangesToSave(
     }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "tutkintokielet") {
     uudetMuutokset = R.map(changeObj => {
-      const anchorParts = changeObj.anchor.split(".");
-      const areaCode = R.compose(
-        R.view(R.lensIndex(2)),
-        R.split("_")
-      )(anchorParts[0]);
       const anchorInit = R.compose(
         R.join("."),
         R.init,
@@ -310,9 +278,7 @@ export function getChangesToSave(
         changeObjects.perustelut
       );
       const code = getAnchorPart(changeObj.anchor, 1);
-      const meta = lomake[areaCode]
-        ? getMetadata(R.slice(1, 3)(anchorParts), lomake[areaCode].categories)
-        : {};
+      const meta = changeObj.properties.metadata;
 
       return {
         koodiarvo: code,
@@ -320,8 +286,8 @@ export function getChangesToSave(
         nimi: meta.nimi, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         kuvaus: meta.kuvaus, // TODO: Tähän oikea arvo, jos tarvitaan, muuten poistetaan
         isInLupa: meta.isInLupa,
-        kohde: meta.kohde,
-        maaraystyyppi: meta.maaraystyyppi,
+        kohde,
+        maaraystyyppi,
         meta: {
           tunniste: "tutkintokieli",
           changeObjects: R.flatten([[changeObj], perustelut]),
@@ -419,7 +385,6 @@ export function getChangesToSave(
         R.compose(R.contains(changeObj.anchor), R.prop("anchor")),
         changeObjects.perustelut
       );
-      console.warn(perustelut);
       let koodiarvo = null;
       const anchorPart1 = getAnchorPart(changeObj.anchor, 1);
 
@@ -450,8 +415,8 @@ export function getChangesToSave(
             ]
           },
           muutosperustelukoodiarvo: null,
-          kohde: lomake.metadata.kohde,
-          maaraystyyppi: lomake.metadata.maaraystyyppi,
+          kohde,
+          maaraystyyppi,
           koodisto: "nuts1",
           koodiarvo
         };
@@ -471,8 +436,8 @@ export function getChangesToSave(
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
-          kohde: lomake.kohde,
-          maaraystyyppi: lomake.maaraystyyppi
+          kohde,
+          maaraystyyppi
         };
       } else {
         return {
@@ -490,29 +455,19 @@ export function getChangesToSave(
             changeObjects: R.flatten([[changeObj], perustelut])
           },
           muutosperustelukoodiarvo: null,
-          kohde: lomake.kohde,
-          maaraystyyppi: lomake.maaraystyyppi
+          kohde,
+          maaraystyyppi
         };
       }
     }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "opiskelijavuodet") {
     uudetMuutokset = R.map(changeObj => {
-      let koodisto = { koodistoUri: "koulutussektori" };
       const anchorParts = R.split(".", changeObj.anchor);
-      const categoryKey = R.view(R.lensIndex(1))(anchorParts);
-      const koodiarvo = R.prop(
-        categoryKey,
-        lomake.opiskelijavuodet.metadata.koodiarvot
-      );
-      const categories = findObjectWithKey(lomake.muut, "categories");
-      const categoriesWithKoodiarvo = R.flatten(
-        getCategoriesByProps(categories, {
-          anchor: koodiarvo,
-          fullAnchor: `${categoryKey}.${koodiarvo}`
-        })
-      );
-      if (categoriesWithKoodiarvo.length > 0) {
-        koodisto = R.path([0, "meta", "koodisto"], categoriesWithKoodiarvo);
+      const koodiarvo = changeObj.properties.metadata.koodiarvo;
+      let koodisto = { koodistoUri: "koulutussektori" };
+      if (!R.equals("vahimmaisopiskelijavuodet", R.nth(1, anchorParts))) {
+        koodisto = (R.find(R.propEq("koodiArvo", koodiarvo), muut) || {})
+          .koodisto;
       }
       const anchorInit = R.compose(
         R.join("."),
@@ -557,13 +512,14 @@ export function getChangesToSave(
         perustelutForBackend,
         perusteluteksti ? { perusteluteksti } : null
       );
+      console.info(kohde, maaraystyyppi, koodisto);
       return {
         arvo: changeObj.properties.applyForValue,
         kategoria: R.head(anchorParts),
         koodiarvo,
         koodisto: koodisto.koodistoUri,
-        kohde: lomake.opiskelijavuodet.metadata.kohde,
-        maaraystyyppi: lomake.opiskelijavuodet.metadata.maaraystyyppi,
+        kohde,
+        maaraystyyppi,
         meta,
         tila: "MUUTOS",
         type: "change"

@@ -59,18 +59,14 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   <React.Fragment>
                     <Tutkinnot
                       changeObjects={R.prop("tutkinnot", props.changeObjects)}
-                      kohde={kohteet.tutkinnotjakoulutukset}
                       tutkinnot={props.tutkinnot}
                       lupaKohteet={props.lupaKohteet}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
                       {..._props}
                     />
                     <MuutospyyntoWizardKoulutukset
                       changeObjects={props.changeObjects.koulutukset}
-                      kohde={kohteet.tutkinnotjakoulutukset}
                       koulutukset={props.koulutukset}
                       lupa={props.lupa}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
                       {..._props}
                     />
                   </React.Fragment>
@@ -114,11 +110,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                       muutokset: props.changeObjects.toimintaalue
                     }}
                     lupakohde={props.lupaKohteet[3]}
-                    kohde={kohteet.toimintaalue}
                     kunnat={props.kunnat}
                     maakuntakunnatList={props.maakuntakunnatList}
                     maakunnat={props.maakunnat}
-                    maaraystyyppi={maaraystyypit.VELVOITE}
                     {..._props}
                   />
                 )}
@@ -141,10 +135,8 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                             props.changeObjects.opiskelijavuodet,
                           muut: props.changeObjects.muut
                         }}
-                        kohde={kohteet.opiskelijavuodet}
                         lupa={props.lupa}
                         lupaKohteet={props.lupaKohteet}
-                        maaraystyyppi={maaraystyypit.OIKEUS}
                         muut={props.muut}
                         opiskelijavuodet={props.opiskelijavuodet}
                         lomakkeet={{

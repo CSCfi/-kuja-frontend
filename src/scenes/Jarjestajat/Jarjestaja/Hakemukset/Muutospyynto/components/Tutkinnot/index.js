@@ -49,11 +49,8 @@ const Tutkinnot = React.memo(props => {
                 index: i,
                 article,
                 koulutustyypit: koulutusala.koulutukset,
-                kohde: props.kohde,
-                maaraystyyppi: props.maaraystyyppi,
                 title
               }}
-              metadata={{ article }}
               onChangesUpdate={props.onChangesUpdate}
               path={["tutkinnot"]}
               rules={[]}
@@ -66,15 +63,12 @@ const Tutkinnot = React.memo(props => {
 });
 
 Tutkinnot.defaultProps = {
-  changeObjects: {},
-  maaraystyyppi: {}
+  changeObjects: {}
 };
 
 Tutkinnot.propTypes = {
   changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   lupaKohteet: PropTypes.object,
-  maaraystyyppi: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };

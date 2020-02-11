@@ -29,30 +29,37 @@ const PerustelutTutkintokielet = React.memo(props => {
         </h2>
         {R.addIndex(R.map)((areaCode, index) => {
           const changeObjects = props.changeObjects.tutkintokielet[areaCode];
+          const title = R.find(
+            R.propEq("kieli", R.toUpper(intl.locale)),
+            props.tutkinnot[areaCode].metadata
+          ).nimi;
+          console.info(areaCode, props.tutkinnot, title);
           if (changeObjects.length > 0) {
             return (
               <ExpandableRowRoot
                 anchor={`${sectionId}_${areaCode}`}
                 key={`expandable-row-root-${index}`}
                 categories={[]}
-                changes={
-                  props.changeObjects.perustelut.tutkintokielet[areaCode]
-                }
+                changes={R.path(
+                  ["perustelut", "tutkintokielet", areaCode],
+                  props.changeObjects
+                )}
                 disableReverting={props.isReadOnly}
                 onChangesRemove={onChangesRemove}
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
                 showCategoryTitles={true}
                 code={areaCode}
-                title={"Testi"}
+                title={title}
                 isExpanded={true}
                 hideAmountOfChanges={false}>
                 <Lomake
                   action="reasoning"
                   anchor={`${sectionId}_${areaCode}`}
-                  changeObjects={
-                    props.changeObjects.perustelut.tutkintokielet[areaCode]
-                  }
+                  changeObjects={R.path(
+                    ["perustelut", "tutkintokielet", areaCode],
+                    props.changeObjects
+                  )}
                   data={{
                     areaCode,
                     changeObjectsPage1: changeObjects,

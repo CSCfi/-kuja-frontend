@@ -314,7 +314,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           valittavissaOlevatKunnat,
           valittavissaOlevatMaakunnat
         }}
-        metadata={{ kohde: props.kohde, maaraystyyppi: props.maaraystyyppi }}
         onChangesUpdate={handleChanges}
         path={["toimintaalue"]}
         rules={[]}
@@ -325,22 +324,18 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
   changeObjects: {},
-  kohde: {},
   kunnat: [],
   lupakohde: {},
   maakunnat: [],
-  maakuntakunnatList: [],
-  maaraystyyppi: {}
+  maakuntakunnatList: []
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
   changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   kunnat: PropTypes.array,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.array,
   maakuntakunnatList: PropTypes.array,
-  maaraystyyppi: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onChangesRemove: PropTypes.func
 };

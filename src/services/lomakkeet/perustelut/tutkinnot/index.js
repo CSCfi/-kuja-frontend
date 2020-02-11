@@ -24,7 +24,7 @@ export const getAdditionForm = (checkboxItems, locale, isReadOnly = false) => {
   ];
 };
 
-export const getRemovalForm = () => {
+export const getRemovalForm = isReadOnly => {
   return [
     {
       anchor: "removal",
@@ -33,6 +33,7 @@ export const getRemovalForm = () => {
           anchor: "A",
           name: "TextBox",
           properties: {
+            isReadOnly,
             title:
               "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää",
             value: ""
@@ -112,8 +113,7 @@ function getCategoriesForPerustelut(
             [R.ascend(R.compose(R.length, anchor)), R.ascend(anchor)],
             R.filter(R.compose(R.startsWith(anchorBase), anchor))(changes)
           );
-
-          const toStructure = changeObj => {
+          return R.addIndex(R.map)((changeObj, i) => {
             const anchorWOLast = R.init(R.split(".")(anchor(changeObj)));
             const osaamisalakoodi = R.last(anchorWOLast);
 
@@ -127,50 +127,58 @@ function getCategoriesForPerustelut(
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: osaamisala
-                ? osaamisala.koodiArvo
-                : getAnchorPart(changeObj.anchor, 2),
-              meta: {
-                kohde,
-                maaraystyyppi,
-                koodisto: koulutus.koodisto,
-                metadata: koulutus.metadata,
-                isInLupa: isInLupaBool
-              },
-              categories: osaamisala
-                ? getOsaamisalaForm()
-                : isAddition
-                ? getAdditionForm(muutosperustelut, locale, isReadOnly)
-                : getRemovalForm(),
-              components: [
+              anchor: `${koulutus.koodiArvo}|${i}`,
+              categories: [
                 {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  properties: {
-                    code: osaamisala ? "" : koulutus.koodiArvo,
-                    title: osaamisala
-                      ? R.join(" ", [
-                          __("osaamisalarajoitus"),
-                          osaamisalakoodi,
-                          nimi(osaamisala),
-                          "(" + koulutus.koodiArvo + " " + nimi(koulutus) + ")"
-                        ])
-                      : nimi(koulutus),
-                    labelStyles: {
-                      addition: isAdded,
-                      removal: isRemoved
-                    },
-                    styleClasses: ["flex"],
-                    statusTextStyleClasses: isAddition
-                      ? ["text-green-600 pr-4 w-20 font-bold"]
-                      : ["text-red-500 pr-4 w-20 font-bold"],
-                    statusText: isAddition ? " LISÄYS:" : " POISTO:"
-                  }
+                  anchor: osaamisala
+                    ? osaamisala.koodiArvo
+                    : getAnchorPart(changeObj.anchor, 2),
+                  meta: {
+                    kohde,
+                    maaraystyyppi,
+                    koodisto: koulutus.koodisto,
+                    metadata: koulutus.metadata,
+                    isInLupa: isInLupaBool
+                  },
+                  categories: osaamisala
+                    ? getOsaamisalaForm()
+                    : isAddition
+                    ? getAdditionForm(muutosperustelut, locale, isReadOnly)
+                    : getRemovalForm(isReadOnly),
+                  components: [
+                    {
+                      anchor: "A",
+                      name: "StatusTextRow",
+                      properties: {
+                        code: osaamisala ? "" : koulutus.koodiArvo,
+                        title: osaamisala
+                          ? R.join(" ", [
+                              __("osaamisalarajoitus"),
+                              osaamisalakoodi,
+                              nimi(osaamisala),
+                              "(" +
+                                koulutus.koodiArvo +
+                                " " +
+                                nimi(koulutus) +
+                                ")"
+                            ])
+                          : nimi(koulutus),
+                        labelStyles: {
+                          addition: isAdded,
+                          removal: isRemoved
+                        },
+                        styleClasses: ["flex"],
+                        statusTextStyleClasses: isAddition
+                          ? ["text-green-600 pr-4 w-20 font-bold"]
+                          : ["text-red-500 pr-4 w-20 font-bold"],
+                        statusText: isAddition ? " LISÄYS:" : " POISTO:"
+                      }
+                    }
+                  ]
                 }
               ]
             };
-          };
-          return R.map(toStructure, changeObjs);
+          }, changeObjs);
         }, koulutustyyppi.koulutukset)
       };
     }, _.cloneDeep(relevantKoulutustyypit))
@@ -193,6 +201,7 @@ const getReasoningForm = (
   locale,
   isReadOnly = false
 ) => {
+  console.info(isReadOnly);
   const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
   const anchorInitial = `tutkinnot_${areaCode}`;
   const article = getArticle(areaCode, lupakohde.maaraykset);
@@ -212,7 +221,13 @@ const getReasoningForm = (
   return categories;
 };
 
-export default function getTutkinnotPerustelulomake(action, data, isReadOnly, locale) {
+export default function getTutkinnotPerustelulomake(
+  action,
+  data,
+  isReadOnly,
+  locale
+) {
+  console.info(isReadOnly);
   switch (action) {
     case "addition":
       return getAdditionForm(data.checkboxItems, locale, isReadOnly);

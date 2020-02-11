@@ -47,45 +47,33 @@ const MuutospyyntoWizardTaloudelliset = ({
           <FormSection
             id="taloudelliset_yleisettiedot"
             render={_props => (
-              <React.Fragment>
-                <TaloudellisetYleisettiedot
-                  changeObjects={R.path(
-                    ["taloudelliset", "yleisettiedot"],
-                    changeObjects
-                  )}
-                  {..._props}
-                />
-              </React.Fragment>
+              <TaloudellisetYleisettiedot
+                changeObjects={changeObjects.taloudelliset.yleisettiedot}
+                {..._props}
+              />
             )}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
             id="taloudelliset_investoinnit"
             render={_props => (
-              <React.Fragment>
-                <TaloudellisetInvestoinnit
-                  changeObjects={R.path(
-                    ["taloudelliset", "investoinnit"],
-                    changeObjects
-                  )}
-                  {..._props}
-                />
-              </React.Fragment>
+              <TaloudellisetInvestoinnit
+                changeObjects={changeObjects.taloudelliset.investoinnit}
+                {..._props}
+              />
             )}
             runOnChanges={onChangesUpdate}
           />
           <FormSection
             id="taloudelliset_tilinpaatostiedot"
             render={_props => (
-              <React.Fragment>
-                <TaloudellisetTilinpaatostiedot
-                  changeObjects={R.path(
-                    ["taloudelliset", "tilinpaatostiedot"],
-                    changeObjects
-                  )}
-                  {..._props}
-                />
-              </React.Fragment>
+              <TaloudellisetTilinpaatostiedot
+                changeObjects={R.path(
+                  ["taloudelliset", "tilinpaatostiedot"],
+                  changeObjects
+                )}
+                {..._props}
+              />
             )}
             runOnChanges={onChangesUpdate}
           />

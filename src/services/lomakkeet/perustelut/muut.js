@@ -189,8 +189,9 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                   name: "TextBox",
                   properties: {
                     isReadOnly,
-                    placeholder:
-                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                    title:
+                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+                    value: ""
                   }
                 }
               ]
@@ -214,7 +215,8 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
-                    title: "Henkilöstöresurssit"
+                    title: "Henkilöstöresurssit",
+                    value: ""
                   }
                 }
               ]
@@ -230,7 +232,8 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
-                    title: "Osaaminen"
+                    title: "Osaaminen",
+                    value: ""
                   }
                 }
               ]
@@ -246,7 +249,8 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
-                    title: "Pedagogiset järjestelyt"
+                    title: "Pedagogiset järjestelyt",
+                    value: ""
                   }
                 }
               ]
@@ -262,7 +266,8 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
-                    title: "Sidosryhmäyhteistyö"
+                    title: "Sidosryhmäyhteistyö",
+                    value: ""
                   }
                 }
               ]
@@ -285,7 +290,8 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                   properties: {
                     isReadOnly,
                     placeholder:
-                      "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta)."
+                      "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta).",
+                    value: ""
                   }
                 }
               ]
@@ -478,7 +484,8 @@ const opiskelijavuodet = (code, anchorNumber, isReadOnly) => {
               isReadOnly,
               labelStyles: {},
               title:
-                "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina."
+                "Merkitkää arvionne tehtävään kohdistettavista opiskelijavuosista po. vuosina.",
+              value: ""
             }
           }
         ],
@@ -502,7 +509,8 @@ const opiskelijavuodet = (code, anchorNumber, isReadOnly) => {
                   withoutMargin: true,
                   label: (year + 1).toString(),
                   type: "number",
-                  width: "7em"
+                  width: "7em",
+                  value: ""
                 }
               },
               {
@@ -517,7 +525,8 @@ const opiskelijavuodet = (code, anchorNumber, isReadOnly) => {
                   withoutMargin: true,
                   label: (year + 2).toString(),
                   type: "number",
-                  width: "7em"
+                  width: "7em",
+                  value: ""
                 }
               },
               {
@@ -531,7 +540,8 @@ const opiskelijavuodet = (code, anchorNumber, isReadOnly) => {
                   withoutMargin: true,
                   label: (year + 3).toString(),
                   type: "number",
-                  width: "7em"
+                  width: "7em",
+                  value: ""
                 }
               }
             ]

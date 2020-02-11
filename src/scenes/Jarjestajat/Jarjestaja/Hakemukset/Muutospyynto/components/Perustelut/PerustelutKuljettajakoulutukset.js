@@ -9,8 +9,8 @@ import * as R from "ramda";
 import {
   additionRules as jatkokoulutusRules,
   removalRules
-} from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/jatkokoulutus/rules";
-import { rules as peruskoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/kuljettajakoulutukset/peruskoulutus/rules";
+} from "../../../../../../../services/lomakkeet/perustelut/koulutukset/kuljettajakoulutukset/jatkokoulutus/rules";
+import { rules as peruskoulutusRules } from "../../../../../../../services/lomakkeet/perustelut/koulutukset/kuljettajakoulutukset/peruskoulutus/rules";
 
 const PerustelutKuljettajakoulutukset = props => {
   const intl = useIntl();

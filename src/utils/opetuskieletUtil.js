@@ -9,6 +9,7 @@ export function sortOpetuskielet(kielet) {
 }
 
 export function getDataForOpetuskieletList(opetuskielet, kohde, locale) {
+  console.info(kohde);
   return {
     items: _.map(opetuskielet, opetuskieli => {
       const { koodiArvo, metadata } = opetuskieli;

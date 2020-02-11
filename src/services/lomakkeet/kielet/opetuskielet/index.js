@@ -6,7 +6,7 @@ import { map } from "ramda";
  * Used on: Wizard page 1
  * Section: kielet, opetuskielet
  */
-function getModificationForm(kohde, maaraystyyppi, opetuskieletData) {
+function getModificationForm(opetuskieletData) {
   return map(item => {
     return {
       anchor: item.code,
@@ -18,8 +18,6 @@ function getModificationForm(kohde, maaraystyyppi, opetuskieletData) {
             forChangeObject: {
               isInLupa: item.isInLupa,
               kuvaus: item.title,
-              kohde: kohde,
-              maaraystyyppi: maaraystyyppi,
               meta: item.meta
             },
             name: "CheckboxWithLabel",
@@ -40,11 +38,7 @@ function getModificationForm(kohde, maaraystyyppi, opetuskieletData) {
 export default function getOpetuskieletLomake(action, data) {
   switch (action) {
     case "modification":
-      return getModificationForm(
-        data.kohde,
-        data.maaraystyyppi,
-        data.opetuskieletData
-      );
+      return getModificationForm(data.opetuskieletData);
     default:
       return [];
   }

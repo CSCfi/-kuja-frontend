@@ -20,8 +20,8 @@ export function getRules(_lomake) {
   const categoriesWithOsaamisalaTextBoxes = R.uniq(
     R.flatten(getCategoriesByProps(_lomake, { anchor: "osaamisala" }))
   );
-
-  // Osaamisala textbox rules
+  console.info(categoriesWithOsaamisalaTextBoxes);
+  // // Osaamisala textbox rules
   const osaamisalaTextBoxRules = R.map(category => {
     return {
       isRequired: () => true,
