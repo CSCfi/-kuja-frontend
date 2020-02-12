@@ -10,7 +10,7 @@ const YhteenvetoLiitteet = React.memo(props => {
       <ExpandableRowRoot
         title={"Hakemuksen yleiset liitteet"}
         anchor={props.sectionId}
-        key={`yhteenveto-hakemuksenliitteet`}
+        key={`yhteenveto-hakemuksenLiitteet`}
         categories={[]}
         changes={props.changeObjects.hakemuksenLiitteet}
         disableReverting={true}
@@ -18,8 +18,8 @@ const YhteenvetoLiitteet = React.memo(props => {
         isExpanded={true}
         sectionId={props.sectionId}
         onUpdate={props.onChangesUpdate}
-        hideAmountOfChanges={true}
-        {...props}>
+        hideAmountOfChanges={true}>
+        {console.info(props.changeObjects)}
         <Lomake
           action="modification"
           anchor={props.sectionId}

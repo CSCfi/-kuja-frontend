@@ -260,7 +260,7 @@ const lomakkeet = {
   },
   yhteenveto: {
     liitteet: {
-      addition: () => getYhteenvetoLiitteetLomake()
+      modification: () => getYhteenvetoLiitteetLomake("modification")
     },
     yleisetTiedot: {
       modification: (data, isReadOnly) =>
@@ -281,5 +281,6 @@ export function getLomake(
   setLocale(locale);
   const fn = path(concat(_path, [action]), lomakkeet);
   const lomake = fn ? fn(data, isReadOnly, locale, prefix) : [];
+
   return lomake;
 }

@@ -119,18 +119,18 @@ const MuutospyyntoWizardYhteenveto = ({
         runOnChanges={onChangesUpdate}
       />
       <FormSection
-        id="yhteenveto_hakemuksenliitteet"
+        id="yhteenveto_hakemuksenLiitteet"
         className="my-0"
         render={_props => (
           <React.Fragment>
             <YhteenvetoLiitteet
               stateObject={R.path(
-                ["yhteenveto", "hakemuksenliitteet"],
+                ["yhteenveto", "hakemuksenLiitteet"],
                 muutoshakemus
               )}
               changeObjects={{
                 yhteenveto: R.path(
-                  ["yhteenveto", "hakemuksenliitteet"],
+                  ["yhteenveto", "hakemuksenLiitteet"],
                   changeObjects
                 )
               }}

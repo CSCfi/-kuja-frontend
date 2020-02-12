@@ -239,8 +239,8 @@ const MuutospyyntoWizard = ({
           "taloudelliset_liitteet"
         );
         selectionChanged(
-          ["yhteenveto", "hakemuksenliitteet"],
-          "yhteenveto_hakemuksenliitteet"
+          ["yhteenveto", "hakemuksenLiitteet"],
+          "yhteenveto_hakemuksenLiitteet"
         );
         selectionChanged(
           ["yhteenveto", "yleisetliitteet"],
@@ -277,7 +277,7 @@ const MuutospyyntoWizard = ({
     const files = findObjectWithKey(cos, "file");
     const allAttachments = combineArrays([
       R.path(["yhteenveto", "yleisettiedot"], cos) || [],
-      R.path(["yhteenveto", "hakemuksenliitteet"], cos) || [],
+      R.path(["yhteenveto", "hakemuksenLiitteet"], cos) || [],
       R.path(["taloudelliset", "liitteet"], cos) || [],
       R.path(["perustelut", "liitteet"], cos) || [],
       R.flatten(

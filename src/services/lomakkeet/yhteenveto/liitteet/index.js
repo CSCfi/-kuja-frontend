@@ -1,7 +1,7 @@
 function getLiitteetForm() {
   return [
     {
-      anchor: "hakemuksenliitteet",
+      anchor: "hakemuksenLiitteet",
       components: [
         {
           name: "StatusTextRow",

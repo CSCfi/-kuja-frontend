@@ -334,7 +334,7 @@ const MuutospyyntoWizardPerustelut = ({
           {/* Common attachments, the same also in Yhteenveto */}
           {isAnyChanges && (
             <FormSection
-              id="yhteenveto_hakemuksenliitteet"
+              id="yhteenveto_hakemuksenLiitteet"
               className="my-0"
               render={_props => (
                 <React.Fragment>

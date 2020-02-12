@@ -38,7 +38,7 @@ const Store = createStore({
     tutkinnot: {},
     yhteenveto: {
       yleisettiedot: [],
-      hakemuksenliitteet: []
+      hakemuksenLiitteet: []
     }
   },
   actions: {

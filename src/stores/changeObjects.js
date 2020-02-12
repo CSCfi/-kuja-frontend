@@ -45,7 +45,7 @@ const Store = createStore({
     toimintaalue: [],
     yhteenveto: {
       yleisettiedot: [],
-      hakemuksenliitteet: []
+      hakemuksenLiitteet: []
     }
   },
   actions: {

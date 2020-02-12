@@ -13,14 +13,13 @@ export function createObjectToSave(
   muut,
   lupaKohteet
 ) {
-  console.info(kohteet, maaraystyypit);
   // Adds data that has attachements
   const yhteenvetoYleiset = R.path(
     ["yhteenveto", "yleisettiedot"],
     changeObjects
   );
   const yhteenvetoLiitteet = R.path(
-    ["yhteenveto", "hakemuksenliitteet"],
+    ["yhteenveto", "hakemuksenLiitteet"],
     changeObjects
   );
   const taloudellisetLiitteet = R.path(
@@ -46,7 +45,9 @@ export function createObjectToSave(
       : [];
 
   const yhteenvetoYleisetLiitteetList =
-    !R.isEmpty(yhteenvetoYleiset) && yhteenvetoYleiset[0].properties
+    yhteenvetoYleiset &&
+    !R.isEmpty(yhteenvetoYleiset) &&
+    yhteenvetoYleiset[0].properties
       ? yhteenvetoYleiset[0].properties.attachments
       : [];
 
@@ -366,7 +367,7 @@ export function createObjectToSave(
         },
         changeObjects: R.flatten([
           R.path(["yhteenveto", "yleisettiedot"], changeObjects),
-          R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects)
+          R.path(["yhteenveto", "hakemuksenLiitteet"], changeObjects)
         ]).filter(Boolean)
       }
     },
