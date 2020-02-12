@@ -178,11 +178,12 @@ const YhteenvetoKooste = ({
                         tutkintokielet:
                           R.path(["kielet", "tutkintokielet"], changeObjects) ||
                           [],
-                        perustelut:
-                          R.path(
+                        perustelut: {
+                          tutkintokielet: R.path(
                             ["perustelut", "kielet", "tutkintokielet"],
                             changeObjects
-                          ) || []
+                          )
+                        }
                       }}
                       kohde={R.find(
                         R.propEq("tunniste", "opetusjatutkintokieli")

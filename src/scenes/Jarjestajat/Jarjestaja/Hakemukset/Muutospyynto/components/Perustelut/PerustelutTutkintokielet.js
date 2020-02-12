@@ -34,6 +34,7 @@ const PerustelutTutkintokielet = React.memo(props => {
             props.tutkinnot[areaCode].metadata
           ).nimi;
           if (changeObjects.length > 0) {
+            console.info(changeObjects);
             return (
               <ExpandableRowRoot
                 anchor={`${sectionId}_${areaCode}`}
@@ -65,6 +66,7 @@ const PerustelutTutkintokielet = React.memo(props => {
                     maaraykset: props.maaraykset,
                     tutkinnot: props.tutkinnot
                   }}
+                  isReadOnly={props.isReadOnly}
                   onChangesUpdate={onChangesUpdate}
                   path={["perustelut", "kielet", "tutkintokielet"]}
                   rulesFn={getRules}
