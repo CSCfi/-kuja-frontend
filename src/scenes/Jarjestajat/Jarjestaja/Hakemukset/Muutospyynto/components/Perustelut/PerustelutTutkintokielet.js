@@ -33,7 +33,6 @@ const PerustelutTutkintokielet = React.memo(props => {
             R.propEq("kieli", R.toUpper(intl.locale)),
             props.tutkinnot[areaCode].metadata
           ).nimi;
-          console.info(areaCode, props.tutkinnot, title);
           if (changeObjects.length > 0) {
             return (
               <ExpandableRowRoot

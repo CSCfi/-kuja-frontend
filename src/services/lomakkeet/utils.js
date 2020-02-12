@@ -91,20 +91,24 @@ export function getCategoriesByProps(
   categories,
   reqProps = {},
   _fullAnchor = [],
-  results = []
+  results = [],
+  fullPath = []
 ) {
-  return R.map(category => {
+  return R.addIndex(R.map)((category, i) => {
     const fullAnchor = R.append(category.anchor, _fullAnchor);
     let isToBeReturned = true;
     R.forEachObjIndexed((value, key) => {
-      if (!R.equals(R.prop(key, category), value)) {
+      if (value instanceof Function) {
+        isToBeReturned = value(R.prop(key, category));
+      } else if (!R.equals(R.prop(key, category), value)) {
         isToBeReturned = false;
       }
     }, reqProps);
     if (isToBeReturned) {
       results.push(
         Object.assign({}, category, {
-          fullAnchor: R.join(".", fullAnchor)
+          fullAnchor: R.join(".", fullAnchor),
+          fullPath: R.append(i, fullPath)
         })
       );
     }
@@ -113,7 +117,8 @@ export function getCategoriesByProps(
         category.categories,
         reqProps,
         fullAnchor,
-        results
+        results,
+        R.concat(fullPath, [i, "categories"])
       ).filter(Boolean);
     }
     return results;

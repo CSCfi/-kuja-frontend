@@ -2,7 +2,7 @@ import React from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { addIndex, keys, map, path, prop } from "ramda";
+import { addIndex, curry, keys, map, path, prop } from "ramda";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/muutMuutokset/rules";
 
 const defaultProps = {

@@ -201,7 +201,6 @@ const getReasoningForm = (
   locale,
   isReadOnly = false
 ) => {
-  console.info(isReadOnly);
   const areaCode = koulutusala.koodiarvo || koulutusala.koodiArvo;
   const anchorInitial = `tutkinnot_${areaCode}`;
   const article = getArticle(areaCode, lupakohde.maaraykset);
@@ -227,7 +226,6 @@ export default function getTutkinnotPerustelulomake(
   isReadOnly,
   locale
 ) {
-  console.info(isReadOnly);
   switch (action) {
     case "addition":
       return getAdditionForm(data.checkboxItems, locale, isReadOnly);

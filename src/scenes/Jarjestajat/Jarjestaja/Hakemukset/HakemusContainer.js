@@ -277,7 +277,6 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
   ) {
     return (
       <MuutoshakemusProvider>
-        {console.info(lupaKohteet)}
         <MuutospyyntoWizard
           backendMuutokset={backendMuutokset}
           elykeskukset={elykeskukset.data}

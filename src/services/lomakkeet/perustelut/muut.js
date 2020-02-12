@@ -181,7 +181,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
           title: "Tehtävän tarpeellisuus",
           categories: [
             {
-              anchor: "tehtavan-tarpeellisuus-field",
+              anchor: "toiminta-alue-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -206,7 +206,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
             "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi",
           categories: [
             {
-              anchor: "henkilostoresurssit-field",
+              anchor: "henkilostoresurssit-perustelut",
               components: [
                 {
                   anchor: "A",
@@ -222,7 +222,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
               ]
             },
             {
-              anchor: "osaaminen-field",
+              anchor: "osaaminen-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -239,7 +239,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
               ]
             },
             {
-              anchor: "jarjestelyt-field",
+              anchor: "jarjestelyt-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -256,7 +256,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
               ]
             },
             {
-              anchor: "sidosryhmayhteistyo-field",
+              anchor: "sidosryhmayhteistyo-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -281,7 +281,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
           title: "Suunnitelma vaativan erityisen tuen tehtävän järjestämiseksi",
           categories: [
             {
-              anchor: "suunnitelma-field",
+              anchor: "suunnitelma-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -291,6 +291,7 @@ export const getVaativaErityinenTukilomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Toimintamalli vaativan erityisen tuen tehtävän järjestämisen suunnittelusta ja toteutuksesta (strateginen suunnitelma, käytännön toteutusmalli ja laadun seuranta).",
+                    title: "Toimintamalli",
                     value: ""
                   }
                 }
