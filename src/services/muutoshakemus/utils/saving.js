@@ -81,7 +81,6 @@ export function createObjectToSave(
   // TUTKINNOT
   const tutkinnot = getChangesToSave(
     "tutkinnot",
-    {},
     {
       // Page 1 changes
       muutokset: R.compose(
@@ -106,7 +105,6 @@ export function createObjectToSave(
   // KOULUTUKSET
   const koulutukset = getChangesToSave(
     "koulutukset",
-    {},
     {
       muutokset: R.compose(
         R.flatten,
@@ -128,7 +126,6 @@ export function createObjectToSave(
   // OPETUSKIELET
   const opetuskielet = getChangesToSave(
     "opetuskielet",
-    {},
     {
       muutokset: R.compose(
         R.flatten,
@@ -151,7 +148,6 @@ export function createObjectToSave(
   // TUTKINTOKIELET
   const tutkintokielet = getChangesToSave(
     "tutkintokielet",
-    {},
     {
       muutokset: R.compose(
         R.flatten,
@@ -168,13 +164,12 @@ export function createObjectToSave(
     },
     R.filter(R.pathEq(["koodisto"], "kieli"))(backendMuutokset),
     R.find(R.propEq("tunniste", "opetusjatutkintokieli"), kohteet),
-    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit),
+    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit)
   );
 
   // TOIMINTA-ALUE
   const toimintaalue = getChangesToSave(
     "toimintaalue",
-    {},
     {
       muutokset: R.path(["toimintaalue"], changeObjects) || [],
       perustelut: (() => {
@@ -206,7 +201,6 @@ export function createObjectToSave(
   // OPISKELIJAVUODET
   const opiskelijavuodet = getChangesToSave(
     "opiskelijavuodet",
-    {},
     {
       muutokset: R.compose(
         R.flatten,
@@ -223,6 +217,24 @@ export function createObjectToSave(
     R.find(R.propEq("tunniste", "opiskelijavuodet"), kohteet),
     R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit),
     muut
+  );
+
+  // MUUT
+  const muutMuutokset = getChangesToSave(
+    "muut",
+    {
+      muutokset: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["muut"], changeObjects))),
+      perustelut: R.compose(
+        R.flatten,
+        R.values
+      )(R.values(R.path(["perustelut", "muut"], changeObjects)))
+    },
+    R.filter(R.pathEq(["kohde", "tunniste"], "muut"))(backendMuutokset),
+    R.find(R.propEq("tunniste", "muut"), kohteet),
+    R.find(R.propEq("tunniste", "VELVOITE"), maaraystyypit)
   );
 
   return {
@@ -366,22 +378,7 @@ export function createObjectToSave(
       tutkintokielet,
       toimintaalue,
       opiskelijavuodet,
-      // MUUT
-      getChangesToSave(
-        "muut",
-        R.path(["muut"], lomakkeet),
-        {
-          muutokset: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["muut"], changeObjects))),
-          perustelut: R.compose(
-            R.flatten,
-            R.values
-          )(R.values(R.path(["perustelut", "muut"], changeObjects)))
-        },
-        R.filter(R.pathEq(["kohde", "tunniste"], "muut"))(backendMuutokset)
-      )
+      muutMuutokset
     ]),
     uuid
   };

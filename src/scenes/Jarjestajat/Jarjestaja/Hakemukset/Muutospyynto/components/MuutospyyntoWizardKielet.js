@@ -83,7 +83,6 @@ const MuutospyyntoWizardKielet = React.memo(props => {
             tutkinnot: props.changeObjects.tutkinnot
           }}
           kielet={props.kielet.kielet}
-          kohde={props.lupaKohteet[1]}
           lupa={lupa}
           onChangesRemove={props.onChangesRemove}
           onChangesUpdate={props.onChangesUpdate}

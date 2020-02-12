@@ -85,14 +85,12 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                         kielet: props.changeObjects.kielet,
                         tutkinnot: props.changeObjects.tutkinnot
                       }}
-                      kohde={kohteet.kielet}
                       lupa={props.lupa}
                       lupaKohteet={props.lupaKohteet}
                       kielet={props.kielet}
                       koulutukset={props.koulutukset}
                       tutkintolomakkeet={props.lomakkeet.tutkinnot}
                       onUpdate={props.onUpdate}
-                      maaraystyyppi={maaraystyypit.VELVOITE}
                       {..._props}
                     />
                   </React.Fragment>
@@ -163,14 +161,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                           changeObjects={{
                             muut: R.prop("muut", props.changeObjects)
                           }}
-                          kohde={kohteet.muut}
                           maaraykset={props.lupa.maaraykset}
                           muut={props.muut}
                           koulutukset={props.koulutukset}
-                          maaraystyyppi={maaraystyypit.VELVOITE}
-                          stateObjects={{
-                            muut: props.lomakkeet.muut
-                          }}
                           {..._props}
                         />
                       )}

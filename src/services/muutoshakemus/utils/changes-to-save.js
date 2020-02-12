@@ -1,4 +1,3 @@
-import { getMetadata } from "./tutkinnotUtils";
 import { getAnchorPart, findObjectWithKey } from "../../../utils/common";
 import { fillForBackend } from "../../lomakkeet/backendMappings";
 import * as R from "ramda";
@@ -91,7 +90,6 @@ function findPerustelut(anchor, changeObjects) {
 
 export function getChangesToSave(
   key,
-  lomake = {},
   changeObjects = {},
   backendMuutokset = [],
   kohde,
@@ -312,23 +310,6 @@ export function getChangesToSave(
         R.init,
         R.split(".")
       )(changeObj.anchor);
-      const anchorArr = R.split(".", changeObj.anchor);
-      const areaCode = R.compose(
-        R.last,
-        R.split("_"),
-        R.view(R.lensIndex(0))
-      )(anchorArr);
-      const section = lomake[areaCode];
-      let category = false;
-      let maarays = false;
-      if (section) {
-        category = R.map(item => {
-          return R.find(R.propEq("anchor", anchorArr[2]), item.categories);
-        })(section.categories).filter(Boolean)[0];
-        maarays = R.map(item => {
-          return R.find(R.propEq("koodiArvo", anchorArr[2]), item.articles);
-        })(section.metadata.categoryData).filter(Boolean)[0];
-      }
       let tila = changeObj.properties.isChecked ? "LISAYS" : "POISTO";
       let type = changeObj.properties.isChecked ? "addition" : "removal";
 
@@ -370,14 +351,17 @@ export function getChangesToSave(
         perusteluteksti ? { perusteluteksti } : null
       );
       return {
-        koodiarvo: maarays.koodiArvo,
-        koodisto: maarays.koodisto.koodistoUri,
-        isInLupa: category.meta.isInLupa,
-        kohde: section.metadata.kohde,
-        maaraystyyppi: section.metadata.maaraystyyppi,
+        koodiarvo: R.path(["properties", "metadata", "koodiarvo"], changeObj),
+        koodisto: R.path(
+          ["properties", "metadata", "koodisto", "koodistoUri"],
+          changeObj
+        ),
+        isInLupa: R.path(["properties", "metadata", "isInLupa"], changeObj),
+        kohde,
+        maaraystyyppi,
         meta,
-        tila: tila,
-        type: type
+        tila,
+        type
       };
     }, unhandledChangeObjects).filter(Boolean);
   } else if (key === "toimintaalue") {

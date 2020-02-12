@@ -147,47 +147,38 @@ const MuutospyyntoWizardMuut = React.memo(props => {
 
   return (
     <React.Fragment>
-      {props.kohde && (
-        <React.Fragment>
-          {R.addIndex(R.map)((configObj, i) => {
-            return (
-              <ExpandableRowRoot
-                anchor={`${sectionId}_${configObj.code}`}
-                key={`expandable-row-root-${i}`}
-                categories={[]}
-                changes={R.prop(configObj.code, props.changeObjects.muut)}
-                code={configObj.code}
-                index={i}
-                onUpdate={onChangesUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={true}
-                title={configObj.title}
-                onChangesRemove={onChangesRemove}>
-                <Lomake
-                  action="modification"
-                  anchor={`${sectionId}_${configObj.code}`}
-                  changeObjects={R.prop(
-                    configObj.code,
-                    props.changeObjects.muut
-                  )}
-                  data={{
-                    configObj,
-                    osiota5koskevatMaaraykset
-                  }}
-                  metadata={{
-                    categoryData: configObj.categoryData,
-                    kohde: props.kohde,
-                    maaraystyyppi: props.maaraystyyppi
-                  }}
-                  onChangesUpdate={onChangesUpdate}
-                  path={["muut"]}
-                  rules={[]}
-                  showCategoryTitles={true}></Lomake>
-              </ExpandableRowRoot>
-            );
-          }, R.filter(R.propEq("isInUse", true))(config))}
-        </React.Fragment>
-      )}
+      {R.addIndex(R.map)((configObj, i) => {
+        return (
+          <ExpandableRowRoot
+            anchor={`${sectionId}_${configObj.code}`}
+            key={`expandable-row-root-${i}`}
+            categories={[]}
+            changes={R.prop(configObj.code, props.changeObjects.muut)}
+            code={configObj.code}
+            index={i}
+            onUpdate={onChangesUpdate}
+            sectionId={sectionId}
+            showCategoryTitles={true}
+            title={configObj.title}
+            onChangesRemove={onChangesRemove}>
+            <Lomake
+              action="modification"
+              anchor={`${sectionId}_${configObj.code}`}
+              changeObjects={R.prop(configObj.code, props.changeObjects.muut)}
+              data={{
+                configObj,
+                osiota5koskevatMaaraykset
+              }}
+              metadata={{
+                categoryData: configObj.categoryData
+              }}
+              onChangesUpdate={onChangesUpdate}
+              path={["muut"]}
+              rules={[]}
+              showCategoryTitles={true}></Lomake>
+          </ExpandableRowRoot>
+        );
+      }, R.filter(R.propEq("isInUse", true))(config))}
     </React.Fragment>
   );
 });

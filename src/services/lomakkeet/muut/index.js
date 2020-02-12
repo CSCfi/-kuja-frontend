@@ -30,11 +30,6 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
         };
         let result = {
           anchor: article.koodiArvo,
-          meta: {
-            isInLupa: isInLupaBool,
-            koodiarvo: article.koodiArvo,
-            koodisto: article.koodisto
-          },
           components: [
             {
               anchor: "A",
@@ -46,7 +41,10 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
                     !isVaativatukiRadios || index !== sortedArticles.length - 1,
                   key: configObj.key,
                   code: configObj.code,
-                  title: configObj.title
+                  title: configObj.title,
+                  isInLupa: isInLupaBool,
+                  koodiarvo: article.koodiArvo,
+                  koodisto: article.koodisto
                 },
                 name: item.componentName,
                 isChecked:
