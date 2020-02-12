@@ -19,7 +19,6 @@ const YhteenvetoLiitteet = React.memo(props => {
         sectionId={props.sectionId}
         onUpdate={props.onChangesUpdate}
         hideAmountOfChanges={true}>
-        {console.info(props.changeObjects)}
         <Lomake
           action="modification"
           anchor={props.sectionId}

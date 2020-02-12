@@ -41,7 +41,6 @@ const PerustelutOpiskelijavuodet = props => {
   ];
   return (
     <React.Fragment>
-      {console.info(changeObjects)}
       {valueChanges.vahimmaisopiskelijavuosimaara && (
         <ExpandableRowRoot
           anchor={`${sectionId}_vahimmaisopiskelijavuodet`}

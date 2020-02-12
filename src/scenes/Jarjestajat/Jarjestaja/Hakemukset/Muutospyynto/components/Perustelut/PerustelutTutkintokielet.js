@@ -34,7 +34,6 @@ const PerustelutTutkintokielet = React.memo(props => {
             props.tutkinnot[areaCode].metadata
           ).nimi;
           if (changeObjects.length > 0) {
-            console.info(changeObjects);
             return (
               <ExpandableRowRoot
                 anchor={`${sectionId}_${areaCode}`}

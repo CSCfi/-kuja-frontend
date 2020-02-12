@@ -336,7 +336,6 @@ const Attachments = React.memo(
     const LiiteList = () => {
       if (attachments && attachments.length > 0)
         return attachments.map(liite => {
-          console.info(liite);
           if (
             (liite.tiedostoId || liite.uuid) &&
             !liite.removed &&

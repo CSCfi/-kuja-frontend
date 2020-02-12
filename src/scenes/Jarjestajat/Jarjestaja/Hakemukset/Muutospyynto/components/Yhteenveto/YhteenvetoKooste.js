@@ -64,8 +64,6 @@ const YhteenvetoKooste = ({
     <React.Fragment>
       {kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
-          {console.info(changeObjects)}
-
           {muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
