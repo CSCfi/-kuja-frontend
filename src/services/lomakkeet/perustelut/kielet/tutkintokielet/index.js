@@ -10,7 +10,7 @@ const getReasoningForm = (
 ) => {
   const localeUpper = R.toUpper(locale);
   const currentDate = new Date();
-  return R.map(changeObj => {
+  return R.addIndex(R.map)((changeObj, i) => {
     const anchorParts = R.split(".", changeObj.anchor);
     const item = R.find(
       R.propEq("koodiArvo", anchorParts[2]),
@@ -54,7 +54,7 @@ const getReasoningForm = (
       return null;
     }, alimaaraykset || []).filter(Boolean);
     return {
-      anchor: anchorParts[1],
+      anchor: `${anchorParts[1]}|${i}|`,
       code: item.koodiArvo,
       title: metadata.nimi,
       categories: R.addIndex(R.map)((language, index) => {
@@ -71,7 +71,7 @@ const getReasoningForm = (
           );
         return isAdded || isRemoved
           ? {
-              anchor: `${item.koodiArvo}|${index}`,
+              anchor: `${item.koodiArvo}${index > 0 ? index : ""}`,
               categories: [
                 {
                   anchor: "title",

@@ -6,10 +6,9 @@ import {
 import { getCategoriesByProps } from "../../../utils";
 
 export function getRules(_lomake) {
-    const perustelukentatCategories = R.uniq(
+  const perustelukentatCategories = R.uniq(
     R.flatten(getCategoriesByProps(_lomake, { anchor: "perustelut" }))
   );
-
   // Rules for muutosperustelut (one of the checkboxes must be checked)
   const perustelukentatRules = R.map(category => {
     return {

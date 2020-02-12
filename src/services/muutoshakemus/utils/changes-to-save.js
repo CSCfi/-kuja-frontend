@@ -273,10 +273,11 @@ export function getChangesToSave(
         R.init,
         R.split(".")
       )(changeObj.anchor);
-      const perustelut = R.filter(
-        R.compose(R.contains(anchorInit), R.prop("anchor")),
-        changeObjects.perustelut
-      );
+      const perustelut = R.filter(perustelu => {
+        // Let's remove chars between | | marks
+        const simplifiedAnchor = R.replace(/\|.*\|/, "", perustelu.anchor);
+        return R.contains(anchorInit, simplifiedAnchor);
+      }, changeObjects.perustelut);
       const code = getAnchorPart(changeObj.anchor, 1);
       const meta = changeObj.properties.metadata;
 
