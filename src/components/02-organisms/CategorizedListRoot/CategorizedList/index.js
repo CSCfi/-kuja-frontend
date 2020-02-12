@@ -6,15 +6,15 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import RadioButtonWithLabel from "okm-frontend-components/dist/components/01-molecules/RadioButtonWithLabel";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 import StatusTextRow from "okm-frontend-components/dist/components/01-molecules/StatusTextRow";
-import Difference from "../../../02-organisms/Difference";
+import Difference from "okm-frontend-components/dist/components/02-organisms/Difference";
 import Datepicker from "okm-frontend-components/dist/components/00-atoms/Datepicker";
-import Autocomplete from "../../Autocomplete";
+import Autocomplete from "okm-frontend-components/dist/components/02-organisms/Autocomplete";
 import Attachments from "../../Attachments";
-import { heights } from "../../../../css/autocomplete";
+import { heights } from "okm-frontend-components/dist/css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
-import ActionList from "../../ActionList";
+import ActionList from "okm-frontend-components/dist/components/02-organisms/ActionList";
 import { flattenObj } from "../../../../utils/common";
 
 const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
