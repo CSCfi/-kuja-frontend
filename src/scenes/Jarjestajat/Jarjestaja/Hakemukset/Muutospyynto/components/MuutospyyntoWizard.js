@@ -311,7 +311,6 @@ const MuutospyyntoWizard = ({
           lupa,
           cos,
           backendMuutokset,
-          lomakkeet,
           match.params.uuid,
           kohteet,
           maaraystyypit,

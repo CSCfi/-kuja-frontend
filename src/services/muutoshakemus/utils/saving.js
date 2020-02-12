@@ -7,7 +7,6 @@ export function createObjectToSave(
   lupa,
   changeObjects,
   backendMuutokset = [],
-  lomakkeet,
   uuid,
   kohteet,
   maaraystyypit,
