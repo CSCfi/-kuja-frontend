@@ -124,15 +124,8 @@ const MuutospyyntoWizardYhteenveto = ({
         render={_props => (
           <React.Fragment>
             <YhteenvetoLiitteet
-              stateObject={R.path(
-                ["yhteenveto", "hakemuksenLiitteet"],
-                muutoshakemus
-              )}
               changeObjects={{
-                yhteenveto: R.path(
-                  ["yhteenveto", "hakemuksenLiitteet"],
-                  changeObjects
-                )
+                hakemuksenLiitteet: changeObjects.yhteenveto.hakemuksenLiitteet
               }}
               {..._props}
             />
