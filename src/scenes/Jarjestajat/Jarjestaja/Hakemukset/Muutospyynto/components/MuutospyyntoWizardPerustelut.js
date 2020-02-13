@@ -68,7 +68,7 @@ const MuutospyyntoWizardPerustelut = ({
   }, [changeObjects.tutkinnot]);
 
   const isKoulutuksetChanges = useMemo(() => {
-    return R.not(R.isEmpty(changeObjects.koulutukset || {}));
+    return R.not(R.isEmpty(R.flatten(R.values(changeObjects.koulutukset))));
   }, [changeObjects.koulutukset]);
 
   const isToimintaalueChanges = useMemo(() => {
