@@ -52,7 +52,9 @@ export function createObjectToSave(
       : [];
 
   const yhteenvetoLiitteetList =
-    !R.isEmpty(yhteenvetoLiitteet) && yhteenvetoLiitteet[0].properties
+    yhteenvetoLiitteetList &&
+    !R.isEmpty(yhteenvetoLiitteet) &&
+    yhteenvetoLiitteet[0].properties
       ? yhteenvetoLiitteet[0].properties.attachments
       : [];
 
