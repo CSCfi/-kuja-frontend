@@ -11,7 +11,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import common from "../../../i18n/definitions/common";
 import * as R from "ramda";
-import DialogTitle from "../DialogTitle";
+import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import { downloadFileFn } from "../../../utils/common";
 
 const Error = styled.div`

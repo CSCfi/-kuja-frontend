@@ -37,6 +37,10 @@ export default defineMessages({
     id: "common.today",
     defaultMessage: "Tänään"
   },
+  date: {
+    id: "common.date",
+    defaultMessage: "Päivämäärä"
+  },
   datemax: {
     id: "common.datemax",
     defaultMessage: "Päiväys on liian suuri"

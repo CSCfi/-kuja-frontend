@@ -1,20 +1,20 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import CheckboxWithLabel from "../../../01-molecules/CheckboxWithLabel";
-import SimpleButton from "../../../00-atoms/SimpleButton";
-import Dropdown from "../../../00-atoms/Dropdown";
-import RadioButtonWithLabel from "../../../01-molecules/RadioButtonWithLabel";
-import Input from "../../../00-atoms/Input";
-import StatusTextRow from "../../../01-molecules/StatusTextRow";
-import Difference from "../../../02-organisms/Difference";
-import Datepicker from "../../../00-atoms/Datepicker";
-import Autocomplete from "../../Autocomplete";
+import CheckboxWithLabel from "okm-frontend-components/dist/components/01-molecules/CheckboxWithLabel";
+import SimpleButton from "okm-frontend-components/dist/components/00-atoms/SimpleButton";
+import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown";
+import RadioButtonWithLabel from "okm-frontend-components/dist/components/01-molecules/RadioButtonWithLabel";
+import Input from "okm-frontend-components/dist/components/00-atoms/Input";
+import StatusTextRow from "okm-frontend-components/dist/components/01-molecules/StatusTextRow";
+import Difference from "okm-frontend-components/dist/components/02-organisms/Difference";
+import Datepicker from "okm-frontend-components/dist/components/00-atoms/Datepicker";
+import Autocomplete from "okm-frontend-components/dist/components/02-organisms/Autocomplete";
 import Attachments from "../../Attachments";
-import { heights } from "../../../../css/autocomplete";
+import { heights } from "okm-frontend-components/dist/css/autocomplete";
 import * as R from "ramda";
 import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
-import ActionList from "../../ActionList";
+import ActionList from "okm-frontend-components/dist/components/02-organisms/ActionList";
 import { flattenObj } from "../../../../utils/common";
 import CheckIcon from "@material-ui/icons/Check";
 
@@ -672,6 +672,8 @@ const CategorizedList = React.memo(
                             maxDate={propsObj.maxDate}
                             disablePast={propsObj.disablePast}
                             disableFuture={propsObj.disableFuture}
+                            locale={propsObj.locale}
+                            messages={propsObj.localizations}
                             payload={{
                               anchor,
                               categories: category.categories,

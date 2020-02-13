@@ -1,6 +1,6 @@
 import React from "react";
 import * as R from "ramda";
-import Table from "../../../components/02-organisms/Table";
+import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 

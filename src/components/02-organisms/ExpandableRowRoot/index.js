@@ -3,7 +3,7 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import ExpandableRow from "./ExpandableRow";
 import CategorizedListRoot from "../CategorizedListRoot";
-import NumberOfChanges from "components/00-atoms/NumberOfChanges";
+import NumberOfChanges from "okm-frontend-components/dist/components/00-atoms/NumberOfChanges";
 import { makeStyles } from "@material-ui/core/styles";
 import UndoIcon from "@material-ui/icons/Undo";
 import * as R from "ramda";

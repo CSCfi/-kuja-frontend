@@ -119,6 +119,9 @@ const MuutospyyntoWizardPerustelut = ({
       <h2 className="my-6">{intl.formatMessage(wizard.pageTitle_2)}</h2>
 
       {!isAnyChanges && <p>{intl.formatMessage(wizard.noChanges)}</p>}
+      {isAnyChanges && (
+        <p>{intl.formatMessage(wizard.allPerustelutRequired)}</p>
+      )}
 
       {isAnyChanges && muutosperusteluList && kohdetiedot ? (
         <React.Fragment>

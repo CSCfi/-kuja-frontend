@@ -183,5 +183,13 @@ export default defineMessages({
   tutkintokielet: {
     id: "wizard.tutkintokielet",
     defaultMessage: "Tutkintokielet"
+  },
+  allFieldsRequired: {
+    id: "wizard.allFieldsRequired",
+    defaultMessage: "Täydennä kaikki tämän sivun kentät."
+  },
+  allPerustelutRequired: {
+    id: "wizard.allPerustelutRequired",
+    defaultMessage: "Perustele kaikki muutokset."
   }
 });

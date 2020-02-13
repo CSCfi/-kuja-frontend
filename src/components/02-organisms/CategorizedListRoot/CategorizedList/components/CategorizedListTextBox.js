@@ -1,5 +1,5 @@
-import React, { useMemo, useEffect } from "react";
-import TextBox from "../../../../00-atoms/TextBox";
+import React, { useMemo, useState, useEffect } from "react";
+import TextBox from "okm-frontend-components/dist/components/00-atoms/TextBox";
 import { useChangeObjects } from "../../../../../stores/changeObjects";
 import * as R from "ramda";
 

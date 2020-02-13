@@ -44,6 +44,7 @@ const MuutospyyntoWizardTaloudelliset = ({
         <p>{formatMessage(wizard.noAddedTutkinnot)}</p>
       ) : (
         <React.Fragment>
+          <p className={"mb-10"}>{formatMessage(wizard.allFieldsRequired)}</p>
           <FormSection
             id="taloudelliset_yleisettiedot"
             render={_props => (

@@ -5,9 +5,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import StepperNavigation from "okm-frontend-components/dist/components/01-molecules/Stepper";
 import WizardPage from "./WizardPage";
 import DialogContent from "@material-ui/core/DialogContent";
 import MuutospyyntoWizardMuutokset from "./MuutospyyntoWizardMuutokset";
@@ -45,8 +43,8 @@ import {
 import { getMaakuntakunnatList } from "../../../../../../utils/toimialueUtil";
 import Loading from "../../../../../../modules/Loading";
 import { findObjectWithKey } from "../../../../../../utils/common";
-import ConfirmDialog from "../../../../../../components/02-organisms/ConfirmDialog";
-import DialogTitle from "../../../../../../components/02-organisms/DialogTitle";
+import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
+import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import { useKielet } from "../../../../../../stores/kielet";
 import { useOpetuskielet } from "../../../../../../stores/opetuskielet";
 import { useKoulutusalat } from "../../../../../../stores/koulutusalat";
@@ -189,6 +187,13 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
+  const handleStep = useCallback(
+    pageNumber => {
+      history.push(String(pageNumber));
+    },
+    [history]
+  );
+
   const showPreviewFile = url => {
     let a = document.createElement("a");
     a.setAttribute("type", "hidden");
@@ -264,11 +269,20 @@ const MuutospyyntoWizard = ({
   ]);
 
   useEffect(() => {
+    // TODO: add isCompleted, isFailed for validation
     setSteps([
-      intl.formatMessage(wizardMessages.pageTitle_1),
-      intl.formatMessage(wizardMessages.pageTitle_2),
-      intl.formatMessage(wizardMessages.pageTitle_3),
-      intl.formatMessage(wizardMessages.pageTitle_4)
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_1)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_2)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_3)
+      },
+      {
+        title: intl.formatMessage(wizardMessages.pageTitle_4)
+      }
     ]);
   }, [intl]);
 
