@@ -37,7 +37,11 @@ export function getPathByAnchor(
 ) {
   const anchorPart = anchorArr[anchorPartIndex];
   if (typeof anchorPart === "number") {
-    console.error(`Anchor must be a string not a number.`);
+    console.error(
+      `Anchor must be a string not a number.`,
+      anchorPart,
+      anchorArr
+    );
   }
   let pathPart = [];
   if (anchorPartIndex === 0) {
@@ -45,17 +49,13 @@ export function getPathByAnchor(
   } else if (anchorPartIndex + 1 < anchorArr.length) {
     const updatedPath = R.append("categories", _path);
     const lomakePart = R.path(updatedPath, lomake);
-    if (lomakePart) {
-      pathPart = [
-        "categories",
-        R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
-      ];
+    const index = R.findIndex(R.propEq("anchor", anchorPart), lomakePart);
+    if (index !== -1 && lomakePart) {
+      pathPart = ["categories", index];
     } else {
-      console.error(
-        `Can't find the requested part of the form.`,
-        lomake,
-        _path,
-        updatedPath
+      console.error("Can't find the requested part of the form.");
+      console.info(
+        "Make sure that there aren't duplicate anchor values on the same level of form definition."
       );
     }
   } else {
@@ -77,10 +77,16 @@ export function getPathByAnchor(
     }
   }
 
-  _path = R.concat(_path, pathPart);
+  if (R.head(pathPart) !== -1) {
+    _path = R.concat(_path, pathPart);
 
-  if (anchorArr[anchorPartIndex + 1]) {
-    return getPathByAnchor(anchorArr, lomake, anchorPartIndex + 1, _path);
+    if (anchorArr[anchorPartIndex + 1]) {
+      return getPathByAnchor(anchorArr, lomake, anchorPartIndex + 1, _path);
+    }
+  } else {
+    console.error(
+      `Can't calculate the path for ${anchorArr} of the form ${lomake}.`
+    );
   }
   return _path;
 }
@@ -117,9 +123,15 @@ const checkTerms = (terms, lomake, changeObjects) => {
   }, terms);
 };
 
+const checkTerm = (term, lomake, changeObjects) => {
+  return checkTerms([term], lomake, changeObjects);
+};
+
+export const ifOne = R.includes(true);
 export const ifAll = R.all(R.equals(true));
 export const ifAllTerms = R.compose(ifAll, checkTerms);
 export const ifOneTerm = R.compose(R.includes(true), checkTerms);
+export const ifTerm = R.compose(R.includes(true), checkTerm);
 
 export const findCategoryAnchor = (
   category,

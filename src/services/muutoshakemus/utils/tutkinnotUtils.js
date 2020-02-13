@@ -5,14 +5,8 @@ import _ from "lodash";
 
 const categories = {};
 
-export const getMetadata = (anchorParts, categories, i = 0) => {
-  const category = R.find(R.propEq("anchor", anchorParts[i]), categories);
-  if (anchorParts[i + 1]) {
-    return getMetadata(anchorParts, category.categories, i + 1);
-  }
-  return category ? category.meta : {};
-};
-
+// This function might be unnecessary.
+// All the form definitions should be in services/lomakkeet/ folder.
 export const getCategories = (
   index,
   article,

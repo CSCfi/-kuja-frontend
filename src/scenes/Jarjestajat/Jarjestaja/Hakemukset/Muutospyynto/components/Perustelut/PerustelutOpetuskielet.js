@@ -44,9 +44,10 @@ const PerustelutOpetuskielet = React.memo(props => {
             maaraystyyppi: props.maaraystyyppi,
             opetuskielet: opetuskieletList
           }}
+          metadata={{ kohde: props.kohde, maaraystyyppi: props.maaraystyyppi }}
           isReadOnly={props.isReadOnly}
           onChangesUpdate={onChangesUpdate}
-          path={["kielet", "opetuskielet"]}
+          path={["perustelut", "kielet", "opetuskielet"]}
           rulesFn={getRules}></Lomake>
       )}
     </ExpandableRowRoot>

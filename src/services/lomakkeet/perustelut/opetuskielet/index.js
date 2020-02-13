@@ -61,25 +61,20 @@ function getReasoningForm(
   }, opetuskielet.items).filter(Boolean);
 }
 
-export default function getOpetuskieletLomake(
+export default function getOpetuskieletPerustelulomake(
   action,
   data,
-  isReadOnly,
-  locale,
-  prefix
+  isReadOnly
 ) {
-  console.info(data);
   switch (action) {
     case "reasoning":
-      const a = getReasoningForm(
+      return getReasoningForm(
         data.changeObjectsPage1,
         isReadOnly,
         data.kohde,
         data.maaraystyyppi,
         data.opetuskielet
       );
-      console.info(a);
-      return a;
     default:
       return [];
   }

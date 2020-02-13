@@ -14,9 +14,6 @@ import * as R from "ramda";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import { downloadFileFn } from "../../../utils/common";
 
-const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
-whyDidYouRender(React);
-
 const Error = styled.div`
   color: ${COLORS.OIVA_RED};
   margin-bottom: 8px;
@@ -336,7 +333,6 @@ const Attachments = React.memo(
     const LiiteList = () => {
       if (attachments && attachments.length > 0)
         return attachments.map(liite => {
-          console.info(liite);
           if (
             (liite.tiedostoId || liite.uuid) &&
             !liite.removed &&
@@ -538,11 +534,6 @@ Attachments.propTypes = {
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
   showListOnly: PropTypes.bool
-};
-
-Attachments.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: "Attachments"
 };
 
 export default injectIntl(Attachments);

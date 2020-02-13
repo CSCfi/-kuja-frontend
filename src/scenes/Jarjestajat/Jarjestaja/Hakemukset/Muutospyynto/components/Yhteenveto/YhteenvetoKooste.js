@@ -24,17 +24,13 @@ const YhteenvetoKooste = ({
   muutosperusteluList = [],
   lupa,
   lupaKohteet,
-  muutoshakemus,
   onChangesUpdate,
-  onStateUpdate,
   tutkinnot
 }) => {
   const intl = useIntl();
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
-  const { state: lomakkeet, dispatch: lomakkeetDispatch } = useContext(
-    LomakkeetContext
-  );
+  const { state: lomakkeet } = useContext(LomakkeetContext);
 
   const muutosperusteluListSorted = useMemo(() => {
     return R.sortBy(R.prop("koodiArvo"))(muutosperusteluList);
@@ -66,17 +62,14 @@ const YhteenvetoKooste = ({
 
   return (
     <React.Fragment>
-      {muutoshakemus && kohdetiedot && kohdetiedot.length ? (
+      {kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
-          {console.info(changeObjects)}
-
           {muutosperusteluList &&
             (!!R.path(["tutkinnot"], changeObjects) ||
               !!R.path(["koulutukset"], changeObjects)) && (
               <FormSection
                 code={1}
                 id="perustelut_tutkinnot"
-                muutoshakemus={muutoshakemus}
                 render={_props => (
                   <React.Fragment>
                     {!!R.prop("tutkinnot", changeObjects) && (
@@ -120,11 +113,6 @@ const YhteenvetoKooste = ({
                         koulutukset={koulutukset}
                         maaraystyyppi={maaraystyypitState.OIKEUS}
                         lomakkeet={lomakkeet.perustelut.koulutukset}
-                        stateObject={R.path([
-                          "perustelut",
-                          "koulutukset",
-                          "valmentavatKoulutukset"
-                        ])(muutoshakemus)}
                         isReadOnly={true}
                         {..._props}
                       />
@@ -135,10 +123,6 @@ const YhteenvetoKooste = ({
                       className="my-0"
                       render={_props => (
                         <PerustelutLiitteet
-                          stateObject={R.path(
-                            ["perustelut", "liitteet"],
-                            muutoshakemus
-                          )}
                           changeObjects={{
                             perustelut: R.path(
                               ["perustelut", "liitteet"],
@@ -149,21 +133,19 @@ const YhteenvetoKooste = ({
                           {..._props}
                         />
                       )}
-                      runOnStateUpdate={onStateUpdate}
                       runOnChanges={onChangesUpdate}
                     />
                   </React.Fragment>
                 )}
-                runOnStateUpdate={onStateUpdate}
                 runOnChanges={onChangesUpdate}
                 title={kohdetiedot[0].title}
               />
             )}
-          {!!R.prop(["kielet"], changeObjects) ? (
+          {!R.isEmpty(changeObjects.kielet.opetuskielet) ||
+          !R.isEmpty(changeObjects.kielet.tutkintokielet) ? (
             <FormSection
               code={2}
               id="perustelut_kielet"
-              muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
                   {!!R.path(["kielet", "opetuskielet"], changeObjects) ? (
@@ -184,11 +166,6 @@ const YhteenvetoKooste = ({
                       lupa={lupa}
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       opetuskielet={kielet.opetuskielet}
-                      stateObject={R.path([
-                        "perustelut",
-                        "kielet",
-                        "opetuskielet"
-                      ])(muutoshakemus)}
                       isReadOnly={true}
                       {..._props}
                     />
@@ -200,11 +177,12 @@ const YhteenvetoKooste = ({
                         tutkintokielet:
                           R.path(["kielet", "tutkintokielet"], changeObjects) ||
                           [],
-                        perustelut:
-                          R.path(
+                        perustelut: {
+                          tutkintokielet: R.path(
                             ["perustelut", "kielet", "tutkintokielet"],
                             changeObjects
-                          ) || []
+                          )
+                        }
                       }}
                       kohde={R.find(
                         R.propEq("tunniste", "opetusjatutkintokieli")
@@ -213,16 +191,6 @@ const YhteenvetoKooste = ({
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       maaraykset={lupa.maaraykset}
                       opetuskielet={kielet.opetuskielet}
-                      stateObjects={{
-                        tutkintokielet: R.path(["kielet", "tutkintokielet"])(
-                          muutoshakemus
-                        ),
-                        perustelut: R.path([
-                          "perustelut",
-                          "kielet",
-                          "tutkintokielet"
-                        ])(muutoshakemus)
-                      }}
                       tutkinnot={tutkinnot}
                       isReadOnly={true}
                       {..._props}
@@ -230,16 +198,16 @@ const YhteenvetoKooste = ({
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[1].title}
             />
           ) : null}
-          {!!R.prop(["toimintaalue"], changeObjects) ? (
+
+          {/* TOIMINTA-ALUE */}
+          {!R.isEmpty(changeObjects.toimintaalue) ? (
             <FormSection
               code={3}
               id="perustelut_toimintaalue"
-              muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
                   {!!R.path(["toimintaalue"], changeObjects) ? (
@@ -252,71 +220,41 @@ const YhteenvetoKooste = ({
                           changeObjects
                         )
                       }}
-                      stateObjects={{
-                        perustelut: R.path(["perustelut", "toimintaalue"])(
-                          muutoshakemus
-                        )
-                      }}
                       isReadOnly={true}
                       {..._props}
                     />
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[2].title}
             />
           ) : null}
-          {!!R.prop(["opiskelijavuodet"], changeObjects) &&
-          muutosperusteluList ? (
+
+          {/* OPISKELIJAVUODET */}
+          {!R.isEmpty(changeObjects.opiskelijavuodet) && muutosperusteluList ? (
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
-              muutoshakemus={muutoshakemus}
               render={_props => (
-                <React.Fragment>
-                  {!!R.path(["opiskelijavuodet"], changeObjects) ? (
-                    <PerustelutOpiskelijavuodet
-                      changeObjects={{
-                        opiskelijavuodet: R.path(
-                          ["opiskelijavuodet"],
-                          changeObjects
-                        ),
-                        perustelut: R.path(
-                          ["perustelut", "opiskelijavuodet"],
-                          changeObjects
-                        )
-                      }}
-                      kohde={R.find(R.propEq("tunniste", "opiskelijavuodet"))(
-                        kohteet
-                      )}
-                      muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
-                        muutosperusteluList
-                      )}
-                      stateObject={{
-                        opiskelijavuodet: R.path(
-                          ["opiskelijavuodet"],
-                          muutoshakemus
-                        )
-                      }}
-                      {..._props}
-                      isReadOnly={true}
-                    />
-                  ) : null}
-                </React.Fragment>
+                <PerustelutOpiskelijavuodet
+                  muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
+                    muutosperusteluList
+                  )}
+                  {..._props}
+                  isReadOnly={true}
+                />
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[3].title}
             />
           ) : null}
 
-          {!!R.prop(["muut"], changeObjects) ? (
+          {/* MUUT */}
+          {!R.isEmpty(changeObjects.muut) ? (
             <FormSection
               code={5}
               id="perustelut_muut"
-              muutoshakemus={muutoshakemus}
               render={_props => (
                 <React.Fragment>
                   {!!R.path(["muut"], changeObjects) ? (
@@ -331,16 +269,12 @@ const YhteenvetoKooste = ({
                       kohde={R.find(R.propEq("tunniste", "muut"))(kohteet)}
                       maaraykset={lupa.maaraykset}
                       muut={muut}
-                      stateObject={R.path(["perustelut", "muut"])(
-                        muutoshakemus
-                      )}
                       isReadOnly={true}
                       {..._props}
                     />
                   ) : null}
                 </React.Fragment>
               )}
-              runOnStateUpdate={onStateUpdate}
               runOnChanges={onChangesUpdate}
               title={kohdetiedot[4].title}
             />
@@ -349,15 +283,7 @@ const YhteenvetoKooste = ({
           {!!R.prop("taloudelliset", changeObjects) && (
             <YhteenvetoTaloudelliset
               changeObjects={changeObjects}
-              muutoshakemus={muutoshakemus}
-              onStateUpdate={onStateUpdate}
               onChangesUpdate={onChangesUpdate}
-              stateObjects={{
-                taloudelliset: muutoshakemus.taloudelliset,
-                yhteenveto: R.path(["yhteenveto", "taloudelliset"])(
-                  muutoshakemus
-                )
-              }}
             />
           )}
         </React.Fragment>
@@ -375,9 +301,7 @@ YhteenvetoKooste.propTypes = {
   muutosperusteluList: PropTypes.array,
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
-  muutoshakemus: PropTypes.object,
   onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };
 

@@ -119,7 +119,5 @@ export function getChangeObjects(muutoshakemus) {
       R.concat(valtakunnallinenChange)
     )(newChanges);
   }
-
-  console.info(changeObjects);
   return changeObjects;
 }

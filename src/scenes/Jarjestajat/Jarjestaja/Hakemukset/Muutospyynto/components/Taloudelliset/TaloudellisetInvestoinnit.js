@@ -30,6 +30,7 @@ const TaloudellisetInvestoinnit = React.memo(
           action="investoinnit"
           anchor={sectionId}
           changeObjects={changeObjects}
+          isReadOnly={isReadOnly}
           onChangesUpdate={onChangesUpdate}
           path={["taloudelliset"]}
           rules={investoinnit}

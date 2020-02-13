@@ -1,6 +1,6 @@
 import getDefaultRemovalForm from "./lomakeosiot/poistolomake";
-import { getAdditionForm as getAdditionFormJatkokoulutus } from "./kuljettajakoulutukset/jatkokoulutus/";
-import { getAdditionForm as getAdditionFormPeruskoulutus } from "./kuljettajakoulutukset/peruskoulutus/";
+import { getAdditionForm as getAdditionFormJatkokoulutus } from "./koulutukset/kuljettajakoulutukset/jatkokoulutus/";
+import { getAdditionForm as getAdditionFormPeruskoulutus } from "./koulutukset/kuljettajakoulutukset/peruskoulutus/";
 
 export function getKuljettajienJatkokoulutuslomake(
   action,
@@ -12,7 +12,7 @@ export function getKuljettajienJatkokoulutuslomake(
     case "addition":
       return getAdditionFormJatkokoulutus(isReadOnly, data);
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }
@@ -28,7 +28,7 @@ export function getKuljettajienPeruskoulutuslomake(
     case "addition":
       return getAdditionFormPeruskoulutus(isReadOnly, data);
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Helmet, Title } from "react-helmet";
+import { Helmet } from "react-helmet";
 
 import { ContentContainer } from "../../../modules/elements";
 
@@ -11,9 +11,7 @@ const Linkki = styled.div`
 const Tilastot = () => {
   return (
     <ContentContainer>
-      <Helmet height="50px">
-        <Title>Oiva | Tilastot</Title>
-      </Helmet>
+      <Helmet height="50px" title={"Oiva | Tilastot"}></Helmet>
       <h1>Tilastot</h1>
       <p>Linkkejä tilastodataan (beta-versio):</p>
       <Linkki>

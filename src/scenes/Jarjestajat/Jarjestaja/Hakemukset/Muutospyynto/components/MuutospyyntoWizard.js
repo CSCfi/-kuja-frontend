@@ -51,6 +51,8 @@ import { useKoulutusalat } from "../../../../../../stores/koulutusalat";
 import { useTutkinnot } from "../../../../../../stores/tutkinnot";
 import { useKoulutukset } from "../../../../../../stores/koulutukset";
 import { mapObjIndexed, prop, sortBy } from "ramda";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
+import { useLomakkeet } from "../../../../../../stores/lomakkeet";
 
 const FormDialog = withStyles(() => ({
   paper: {
@@ -66,7 +68,7 @@ const FormDialog = withStyles(() => ({
  * @param {Object} backendChanges - Backend known changes of the current application
  */
 const MuutospyyntoWizard = ({
-  backendChanges = {},
+  backendMuutokset = [],
   elykeskukset = [],
   history = {},
   kohteet = [],
@@ -80,7 +82,6 @@ const MuutospyyntoWizard = ({
   match,
   muut = [],
   muutosperusteluList = [],
-  muutospyynto = {},
   onNewDocSave,
   vankilat = []
 }) => {
@@ -89,6 +90,7 @@ const MuutospyyntoWizard = ({
   /**
    * We are going to create new objects based on these definitions.
    */
+  const [cos, coActions] = useChangeObjects(); // cos means change objects
   const [kielet] = useKielet();
   const [opetuskielet] = useOpetuskielet();
   const [koulutusalat] = useKoulutusalat();
@@ -145,23 +147,8 @@ const MuutospyyntoWizard = ({
     return getMaakuntakunnatList(maakuntakunnat, R.toUpper(intl.locale));
   }, [intl.locale, maakuntakunnat]);
 
-  /**
-   * The wizard is splitted in to multiple sections. dataBySection contains
-   * all the basic settings of the sections. It doesn't contain any changes
-   * that user makes to the form.
-   */
-  const [dataBySection, setDataBySection] = useState({
-    kielet: {},
-    koulutukset: {},
-    muut: {},
-    opiskelijavuodet: [],
-    toimintaalue: {},
-    tutkinnot: {},
-    perustelut: {
-      koulutukset: {},
-      tutkinnot: {}
-    }
-  });
+  // All forms of KJ Wizard
+  const [lomakkeet] = useLomakkeet();
 
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
@@ -169,38 +156,6 @@ const MuutospyyntoWizard = ({
   });
   const [steps, setSteps] = useState([]);
   const [page, setPage] = useState(1);
-  /**
-   * ChangeObjects contains all changes of the form by section.
-   */
-  const [changeObjects, setChangeObjects] = useState({
-    kielet: {
-      opetuskielet: [],
-      tutkintokielet: []
-    },
-    koulutukset: {
-      ammatilliseenTehtavaanValmistavatKoulutukset: {},
-      valmentavatKoulutukset: []
-    },
-    perustelut: {
-      kielet: {
-        opetuskielet: [],
-        tutkintokielet: []
-      },
-      liitteet: {},
-      toimintaalue: {},
-      tutkinnot: {}
-    },
-    taloudelliset: {
-      yleisettiedot: [],
-      investoinnit: {},
-      tilinpaatostiedot: [],
-      liitteet: {}
-    },
-    yhteenveto: {
-      yleisettiedot: [],
-      hakemuksenliitteet: []
-    }
-  });
 
   /**
    * The function is mainly called by FormSection.
@@ -208,22 +163,10 @@ const MuutospyyntoWizard = ({
   const onSectionChangesUpdate = useCallback(
     (id, changeObjects) => {
       if (id && changeObjects) {
-        setChangeObjects(prevState => {
-          let nextState;
-          if (
-            (Array.isArray(changeObjects) && changeObjects.length > 0) ||
-            !R.isEmpty(changeObjects)
-          ) {
-            nextState = R.assocPath(R.split("_", id), changeObjects, prevState);
-          } else {
-            nextState = R.dissocPath(R.split("_", id), prevState);
-          }
-          console.info("Next changeObjects:", id, nextState, changeObjects);
-          return nextState;
-        });
+        coActions.set(id, changeObjects);
       }
     },
-    [setChangeObjects]
+    [coActions]
   );
 
   const handlePrev = useCallback(
@@ -289,7 +232,7 @@ const MuutospyyntoWizard = ({
         );
 
         const selectionChanged = (path, key) => {
-          const objs = R.path(path, changeObjects);
+          const objs = R.path(path, cos);
           if (objs) {
             onSectionChangesUpdate(key, setAttachments(objs));
           }
@@ -301,8 +244,8 @@ const MuutospyyntoWizard = ({
           "taloudelliset_liitteet"
         );
         selectionChanged(
-          ["yhteenveto", "hakemuksenliitteet"],
-          "yhteenveto_hakemuksenliitteet"
+          ["yhteenveto", "hakemuksenLiitteet"],
+          "yhteenveto_hakemuksenLiitteet"
         );
         selectionChanged(
           ["yhteenveto", "yleisetliitteet"],
@@ -318,7 +261,7 @@ const MuutospyyntoWizard = ({
     lupa,
     match.params,
     onNewDocSave,
-    changeObjects
+    cos
     // cannot add these, as some might be empty
     // changeObjects.perustelut,
     // changeObjects.taloudelliset,
@@ -343,24 +286,17 @@ const MuutospyyntoWizard = ({
     ]);
   }, [intl]);
 
-  useEffect(() => {
-    console.info("Backend changes: ", backendChanges);
-    setChangeObjects(backendChanges.changeObjects);
-  }, [backendChanges]);
-
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
-    const files = findObjectWithKey(changeObjects, "file");
+    const files = findObjectWithKey(cos, "file");
     const allAttachments = combineArrays([
-      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
-      R.path(["yhteenveto", "hakemuksenliitteet"], changeObjects) || [],
-      R.path(["taloudelliset", "liitteet"], changeObjects) || [],
-      R.path(["perustelut", "liitteet"], changeObjects) || [],
+      R.path(["yhteenveto", "yleisettiedot"], cos) || [],
+      R.path(["yhteenveto", "hakemuksenLiitteet"], cos) || [],
+      R.path(["taloudelliset", "liitteet"], cos) || [],
+      R.path(["perustelut", "liitteet"], cos) || [],
       R.flatten(
-        R.path(
-          ["perustelut", "koulutukset", "kuljettajakoulutukset"],
-          changeObjects
-        ) || []
+        R.path(["perustelut", "koulutukset", "kuljettajakoulutukset"], cos) ||
+          []
       ) || []
     ]);
     // Returns only attachments
@@ -373,10 +309,9 @@ const MuutospyyntoWizard = ({
           }, obj.properties.attachments);
         }
       }, allAttachments);
-      console.info(attachments, files);
     }
     return R.concat(attachments, files);
-  }, [changeObjects]);
+  }, [cos]);
 
   const save = useCallback(
     options => {
@@ -388,23 +323,29 @@ const MuutospyyntoWizard = ({
       saveFunction(
         createObjectToSave(
           lupa,
-          changeObjects,
-          backendChanges.source,
-          dataBySection,
-          match.params.uuid
+          cos,
+          backendMuutokset,
+          match.params.uuid,
+          kohteet,
+          maaraystyypit,
+          muut,
+          lupaKohteet
         ),
         attachments,
         options.triggerPreview
       )(muutoshakemusDispatch);
     },
     [
-      changeObjects,
-      dataBySection,
+      cos,
       getFiles,
       muutoshakemusDispatch,
-      backendChanges.source,
+      backendMuutokset,
       lupa,
-      match.params.uuid
+      match.params.uuid,
+      kohteet,
+      lupaKohteet,
+      maaraystyypit,
+      muut
     ]
   );
 
@@ -427,10 +368,12 @@ const MuutospyyntoWizard = ({
    * User is redirected to the following path when the form is closed.
    */
   const closeWizard = useCallback(() => {
+    // Let's empty the store of changes first
+    coActions.reset();
     return history.push(
       `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
     );
-  }, [history, match.params.ytunnus]);
+  }, [coActions, history, match.params.ytunnus]);
 
   useEffect(() => {
     setPage(parseInt(match.params.page, 10));
@@ -442,218 +385,161 @@ const MuutospyyntoWizard = ({
     }
   }, [muutoshakemus.readyToCloseWizard, closeWizard]);
 
-  /** The function is called by sections with different payloads. */
-  const onSectionStateUpdate = useCallback(
-    (id, state) => {
-      if (id && state) {
-        setDataBySection(prevData => {
-          const nextData = R.assocPath(R.split("_", id), state, prevData);
-          console.info("Next state objects: ", nextData);
-          return nextData;
-        });
-      }
-    },
-    [setDataBySection]
-  );
-
-  const view = useMemo(() => {
-    let jsx = <React.Fragment></React.Fragment>;
-
-    if (!sessionStorage.getItem("role")) {
-      return (
-        <MessageWrapper>
-          <h3>{intl.formatMessage(wizardMessages.notSignedIn)}</h3>
-        </MessageWrapper>
-      );
-    } else if (
-      sessionStorage.getItem("role") !== ROLE_MUOKKAAJA &&
-      sessionStorage.getItem("role") !== ROLE_NIMENKIRJOITTAJA
-    ) {
-      return (
-        <MessageWrapper>
-          <h3>{intl.formatMessage(wizardMessages.noRights)}</h3>
-        </MessageWrapper>
-      );
-    } else if (
-      parsedKoulutukset &&
-      kieletAndOpetuskielet &&
-      parsedTutkinnot &&
-      maakuntakunnatList
-    ) {
-      jsx = (
-        <React.Fragment>
-          <FormDialog
-            open={true}
-            onClose={openCancelModal}
-            maxWidth={state.isHelpVisible ? "xl" : "lg"}
-            fullScreen={true}
-            aria-labelledby="simple-dialog-title">
-            <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
-              {intl.formatMessage(wizardMessages.formTitle_new)}
-            </DialogTitle>
-            <div className="lg:px-16 max-w-6xl mx-auto w-full">
-              <StepperNavigation
-                activeStep={page - 1}
-                stepProps={steps}
-                handleStepChange={handleStep}
-              />
-            </div>
-            <div className="border-b border-gray-400 w-full" />
-            <DialogContent>
-              <div className="lg:px-16 max-w-6xl m-auto mb-20">
-                {page === 1 && (
-                  <WizardPage
-                    pageNumber={1}
-                    onNext={handleNext}
-                    onSave={save}
+  if (!sessionStorage.getItem("role")) {
+    return (
+      <MessageWrapper>
+        <h3>{intl.formatMessage(wizardMessages.notSignedIn)}</h3>
+      </MessageWrapper>
+    );
+  } else if (
+    sessionStorage.getItem("role") !== ROLE_MUOKKAAJA &&
+    sessionStorage.getItem("role") !== ROLE_NIMENKIRJOITTAJA
+  ) {
+    return (
+      <MessageWrapper>
+        <h3>{intl.formatMessage(wizardMessages.noRights)}</h3>
+      </MessageWrapper>
+    );
+  } else if (
+    parsedKoulutukset &&
+    kieletAndOpetuskielet &&
+    parsedTutkinnot &&
+    maakuntakunnatList
+  ) {
+    return (
+      <React.Fragment>
+        <FormDialog
+          open={true}
+          onClose={openCancelModal}
+          maxWidth={state.isHelpVisible ? "xl" : "lg"}
+          fullScreen={true}
+          aria-labelledby="simple-dialog-title">
+          <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
+            {intl.formatMessage(wizardMessages.formTitle_new)}
+          </DialogTitle>
+          <div className="lg:px-16 max-w-6xl mx-auto w-full">
+            <StepperNavigation
+              activeStep={page - 1}
+              stepProps={steps}
+              handleStepChange={handleStep}
+            />
+          </div>
+          <div className="border-b border-gray-400 w-full" />
+          <DialogContent>
+            <div className="lg:px-16 max-w-6xl m-auto mb-20">
+              {page === 1 && (
+                <WizardPage
+                  pageNumber={1}
+                  onNext={handleNext}
+                  onSave={save}
+                  lupa={lupa}
+                  changeObjects={cos}>
+                  <MuutospyyntoWizardMuutokset
+                    kielet={kieletAndOpetuskielet}
+                    kohteet={kohteet}
+                    koulutukset={parsedKoulutukset}
+                    kunnat={kunnat}
+                    maakuntakunnatList={maakuntakunnatList}
+                    maakunnat={maakunnat}
                     lupa={lupa}
-                    changeObjects={changeObjects}>
-                    <MuutospyyntoWizardMuutokset
-                      changeObjects={changeObjects}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    lomakkeet={lomakkeet}
+                    onChangesUpdate={onSectionChangesUpdate}
+                    setChangesBySection={setChangesBySection}
+                    tutkinnot={parsedTutkinnot}
+                  />
+                </WizardPage>
+              )}
+              {page === 2 && (
+                <WizardPage
+                  pageNumber={2}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onSave={save}
+                  lupa={lupa}
+                  changeObjects={cos}>
+                  <LomakkeetProvider>
+                    <MuutospyyntoWizardPerustelut
+                      changeObjects={cos}
+                      elykeskukset={elykeskukset}
                       kielet={kieletAndOpetuskielet}
                       kohteet={kohteet}
                       koulutukset={parsedKoulutukset}
-                      kunnat={kunnat}
-                      maakuntakunnatList={maakuntakunnatList}
-                      maakunnat={maakunnat}
                       lupa={lupa}
                       lupaKohteet={lupaKohteet}
                       maaraystyypit={maaraystyypit}
                       muut={muut}
-                      muutoshakemus={dataBySection}
+                      lomakkeet={lomakkeet}
+                      muutosperusteluList={muutosperusteluList}
                       onChangesUpdate={onSectionChangesUpdate}
-                      onStateUpdate={onSectionStateUpdate}
-                      setChangesBySection={setChangesBySection}
+                      tutkinnot={parsedTutkinnot}
+                      vankilat={vankilat}
+                    />
+                  </LomakkeetProvider>
+                </WizardPage>
+              )}
+              {page === 3 && (
+                <WizardPage
+                  pageNumber={3}
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onSave={save}
+                  lupa={lupa}
+                  changeObjects={cos}>
+                  <MuutospyyntoWizardTaloudelliset
+                    changeObjects={cos}
+                    lomakkeet={lomakkeet}
+                    onChangesUpdate={onSectionChangesUpdate}
+                  />
+                </WizardPage>
+              )}
+              {page === 4 && (
+                <WizardPage
+                  pageNumber={4}
+                  onPrev={handlePrev}
+                  onSave={save}
+                  lupa={lupa}>
+                  <LomakkeetProvider>
+                    <MuutospyyntoWizardYhteenveto
+                      changeObjects={cos}
+                      kielet={kieletAndOpetuskielet}
+                      kohteet={kohteet}
+                      koulutukset={parsedKoulutukset}
+                      lupa={lupa}
+                      lupaKohteet={lupaKohteet}
+                      maaraystyypit={maaraystyypit}
+                      muut={muut}
+                      lomakkeet={lomakkeet}
+                      muutosperusteluList={muutosperusteluList}
+                      onChangesUpdate={onSectionChangesUpdate}
                       tutkinnot={parsedTutkinnot}
                     />
-                  </WizardPage>
-                )}
-                {page === 2 && (
-                  <WizardPage
-                    pageNumber={2}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                    onSave={save}
-                    lupa={lupa}
-                    changeObjects={changeObjects}>
-                    <LomakkeetProvider>
-                      <MuutospyyntoWizardPerustelut
-                        changeObjects={changeObjects}
-                        elykeskukset={elykeskukset}
-                        kielet={kieletAndOpetuskielet}
-                        kohteet={kohteet}
-                        koulutukset={parsedKoulutukset}
-                        lupa={lupa}
-                        lupaKohteet={lupaKohteet}
-                        maaraystyypit={maaraystyypit}
-                        muut={muut}
-                        muutoshakemus={dataBySection}
-                        muutosperusteluList={muutosperusteluList}
-                        onChangesUpdate={onSectionChangesUpdate}
-                        onStateUpdate={onSectionStateUpdate}
-                        tutkinnot={parsedTutkinnot}
-                        vankilat={vankilat}
-                      />
-                    </LomakkeetProvider>
-                  </WizardPage>
-                )}
-                {page === 3 && (
-                  <WizardPage
-                    pageNumber={3}
-                    onPrev={handlePrev}
-                    onNext={handleNext}
-                    onSave={save}
-                    lupa={lupa}
-                    muutoshakemus={dataBySection}
-                    changeObjects={changeObjects}>
-                    <MuutospyyntoWizardTaloudelliset
-                      changeObjects={changeObjects}
-                      muutoshakemus={dataBySection}
-                      onChangesUpdate={onSectionChangesUpdate}
-                      onStateUpdate={onSectionStateUpdate}
-                    />
-                  </WizardPage>
-                )}
-                {page === 4 && (
-                  <WizardPage
-                    pageNumber={4}
-                    onPrev={handlePrev}
-                    onSave={save}
-                    lupa={lupa}
-                    muutoshakemus={dataBySection}>
-                    <LomakkeetProvider>
-                      <MuutospyyntoWizardYhteenveto
-                        changeObjects={changeObjects}
-                        kielet={kieletAndOpetuskielet}
-                        kohteet={kohteet}
-                        koulutukset={parsedKoulutukset}
-                        lupa={lupa}
-                        lupaKohteet={lupaKohteet}
-                        maaraystyypit={maaraystyypit}
-                        muut={muut}
-                        muutoshakemus={dataBySection}
-                        muutosperusteluList={muutosperusteluList}
-                        onChangesUpdate={onSectionChangesUpdate}
-                        onStateUpdate={onSectionStateUpdate}
-                        tutkinnot={parsedTutkinnot}
-                      />
-                    </LomakkeetProvider>
-                  </WizardPage>
-                )}
-              </div>
-            </DialogContent>
-          </FormDialog>
-          <ConfirmDialog
-            isConfirmDialogVisible={isConfirmDialogVisible}
-            title={"Poistutaanko?"}
-            content={HAKEMUS_VIESTI.VARMISTUS.FI}
-            yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
-            noMessage={HAKEMUS_VIESTI.EI.FI}
-            handleOk={closeWizard}
-            handleCancel={handleCancel}
-          />
-        </React.Fragment>
-      );
-    } else {
-      jsx = <Loading />;
-    }
-    return jsx;
-  }, [
-    changeObjects,
-    dataBySection,
-    elykeskukset,
-    handleNext,
-    closeWizard,
-    handlePrev,
-    intl,
-    isConfirmDialogVisible,
-    kieletAndOpetuskielet,
-    kohteet,
-    parsedKoulutukset,
-    kunnat,
-    lupa,
-    lupaKohteet,
-    maakunnat,
-    maakuntakunnatList,
-    maaraystyypit,
-    muut,
-    muutosperusteluList,
-    onSectionChangesUpdate,
-    onSectionStateUpdate,
-    page,
-    save,
-    setChangesBySection,
-    state.isHelpVisible,
-    steps,
-    parsedTutkinnot,
-    vankilat
-  ]);
-
-  return view;
+                  </LomakkeetProvider>
+                </WizardPage>
+              )}
+            </div>
+          </DialogContent>
+        </FormDialog>
+        <ConfirmDialog
+          isConfirmDialogVisible={isConfirmDialogVisible}
+          title={"Poistutaanko?"}
+          content={HAKEMUS_VIESTI.VARMISTUS.FI}
+          yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
+          noMessage={HAKEMUS_VIESTI.EI.FI}
+          handleOk={closeWizard}
+          handleCancel={handleCancel}
+        />
+      </React.Fragment>
+    );
+  } else {
+    return <Loading />;
+  }
 };
 
 MuutospyyntoWizard.propTypes = {
-  backendChanges: PropTypes.object,
+  backendMuutokset: PropTypes.array,
   elykeskukset: PropTypes.array,
   history: PropTypes.object,
   koulutustyypit: PropTypes.array,
@@ -666,7 +552,6 @@ MuutospyyntoWizard.propTypes = {
   match: PropTypes.object,
   muut: PropTypes.array,
   muutosperusteluList: PropTypes.array,
-  muutospyynto: PropTypes.object,
   onNewDocSave: PropTypes.func,
   vankilat: PropTypes.array
 };

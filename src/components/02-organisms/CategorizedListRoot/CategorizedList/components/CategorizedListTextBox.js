@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import TextBox from "okm-frontend-components/dist/components/00-atoms/TextBox";
+import { useChangeObjects } from "../../../../../stores/changeObjects";
 import * as R from "ramda";
 
 export const CategorizedListTextBox = ({
   changeObj = {},
   parentComponent,
   parentChangeObj,
+  parentPropsObj,
   propsObj,
   payload,
   onChanges,
@@ -14,7 +16,8 @@ export const CategorizedListTextBox = ({
   rowsMax,
   tooltip
 }) => {
-  const [value, setValue] = useState();
+  const [, coActions] = useChangeObjects();
+
   let isDisabled = false;
   if (parentComponent) {
     isDisabled =
@@ -28,12 +31,28 @@ export const CategorizedListTextBox = ({
   }
 
   useEffect(() => {
-    const initialValue =
+    const value = R.path(["properties", "value"], changeObj);
+    if (
+      parentComponent &&
+      (parentComponent.name === "CheckboxWithLabel" ||
+        parentComponent.name === "RadioButtonWithLabel") &&
+      !R.equals(parentPropsObj.isChecked, true) &&
+      !R.isNil(value) &&
+      !R.isEmpty(value)
+    ) {
+      // If parent checkbox is unchecked the changeObject of
+      // the current textbox will be removed
+      coActions.removeByAnchor(changeObj.anchor);
+    }
+  }, [coActions, parentComponent, parentPropsObj, changeObj]);
+
+  const value = useMemo(() => {
+    return (
       R.path(["properties", "value"], changeObj) ||
       propsObj.value ||
       propsObj.defaultValue ||
-      "";
-    setValue(initialValue);
+      ""
+    );
   }, [changeObj, propsObj.defaultValue, propsObj.value]);
 
   return (

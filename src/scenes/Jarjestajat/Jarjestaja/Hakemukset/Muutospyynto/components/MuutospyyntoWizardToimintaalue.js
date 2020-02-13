@@ -1,18 +1,20 @@
-import React, { useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
-import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import { useIntl } from "react-intl";
 import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 import {
   getAnchorPart,
   replaceAnchorPartWith,
   removeAnchorPart
 } from "../../../../../../utils/common";
-import { isAdded, isInLupa, isRemoved } from "../../../../../../css/label";
+import Lomake from "../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
-  const { onChangesUpdate, onStateUpdate } = props;
+  const [changeObjects] = useChangeObjects();
+  const intl = useIntl();
+  const { onChangesUpdate } = props;
 
   const lisattavatKunnat = useMemo(() => {
     return R.sortBy(
@@ -24,9 +26,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects.muutokset || []).filter(Boolean)
+      }, changeObjects.toimintaalue || []).filter(Boolean)
     );
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   const lisattavatMaakunnat = useMemo(() => {
     return R.sortBy(
@@ -38,9 +40,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects.muutokset || []).filter(Boolean)
+      }, changeObjects.toimintaalue || []).filter(Boolean)
     );
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   const kunnatInLupa = useMemo(() => {
     return R.sortBy(
@@ -70,9 +72,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     return R.sortBy(
       R.prop("label"),
       R.map(kunta => {
-        const labelObject = R.find(
-          R.propEq("kieli", R.toUpper(props.intl.locale))
-        )(kunta.metadata);
+        const labelObject = R.find(R.propEq("kieli", R.toUpper(intl.locale)))(
+          kunta.metadata
+        );
         const isKuntaInLupa = !!R.find(
           R.pathEq(["metadata", "koodiarvo"], kunta.koodiArvo),
           kunnatInLupa
@@ -94,15 +96,15 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             };
       }, props.kunnat).filter(Boolean)
     );
-  }, [kunnatInLupa, lisattavatKunnat, props.intl.locale, props.kunnat]);
+  }, [kunnatInLupa, lisattavatKunnat, intl.locale, props.kunnat]);
 
   const valittavissaOlevatMaakunnat = useMemo(() => {
     return R.sortBy(
       R.prop("label"),
       R.map(maakunta => {
-        const labelObject = R.find(
-          R.propEq("kieli", R.toUpper(props.intl.locale))
-        )(maakunta.metadata);
+        const labelObject = R.find(R.propEq("kieli", R.toUpper(intl.locale)))(
+          maakunta.metadata
+        );
         const isMaakuntaInLupa = !!R.find(
           R.pathEq(["metadata", "koodiarvo"], maakunta.koodiArvo),
           maakunnatInLupa
@@ -124,17 +126,12 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
             };
       }, props.maakunnat).filter(Boolean)
     );
-  }, [
-    lisattavatMaakunnat,
-    maakunnatInLupa,
-    props.intl.locale,
-    props.maakunnat
-  ]);
+  }, [lisattavatMaakunnat, maakunnatInLupa, intl.locale, props.maakunnat]);
 
   const isValtakunnallinenChecked = useMemo(() => {
     const valtakunnallinenChangeObject = R.find(changeObj => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-    }, props.changeObjects.muutokset || []);
+    }, changeObjects.toimintaalue || []);
     return (
       (props.lupakohde.valtakunnallinen &&
         props.lupakohde.valtakunnallinen.arvo === "FI1" &&
@@ -142,7 +139,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       (valtakunnallinenChangeObject &&
         valtakunnallinenChangeObject.properties.isChecked)
     );
-  }, [props.changeObjects.muutokset, props.lupakohde.valtakunnallinen]);
+  }, [changeObjects.toimintaalue, props.lupakohde.valtakunnallinen]);
 
   const isEiMaariteltyaToimintaaluettaChecked = useMemo(() => {
     const changeObject = R.find(changeObj => {
@@ -150,9 +147,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         getAnchorPart(changeObj.anchor, 1),
         "ei-maariteltya-toiminta-aluetta"
       );
-    }, props.changeObjects.muutokset || []);
+    }, changeObjects.toimintaalue || []);
     return changeObject && changeObject.properties.isChecked;
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   /**
    * There are three radio buttons in Toiminta-alue section: 1) Maakunnat and kunnat
@@ -165,9 +162,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       // Let's check if updating is necessary.
       const radioButtonChangeObjects = R.filter(
         R.compose(R.includes("radio"), R.prop("anchor")),
-        props.changeObjects.muutokset || []
+        changeObjects.toimintaalue || []
       );
-      if (!R.equals(radioButtonChangeObjects, props.changeObjects.muutokset)) {
+      if (!R.equals(radioButtonChangeObjects, changeObjects.toimintaalue)) {
         // Fist we are going to update the change objects of Toiminta-alue section
         // on form page one.
         onChangesUpdate({
@@ -185,7 +182,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     isEiMaariteltyaToimintaaluettaChecked,
     isValtakunnallinenChecked,
     onChangesUpdate,
-    props.changeObjects.muutokset,
+    changeObjects.toimintaalue,
     props.sectionId
   ]);
 
@@ -220,7 +217,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 "anchor",
                 `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
               ),
-              props.changeObjects.muutokset || []
+              changeObjects.toimintaalue || []
             );
             const isKuntaAlreadyUnchecked =
               kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
@@ -288,337 +285,59 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     [
       onChangesUpdate,
       kunnatInLupa,
-      props.changeObjects.muutokset,
+      changeObjects.toimintaalue,
       props.maakuntakunnatList
     ]
   );
 
-  const getCategories = useMemo(() => {
-    return () => [
-      {
-        anchor: "maakunnat-ja-kunnat",
-        components: [
-          {
-            anchor: "radio",
-            name: "RadioButtonWithLabel",
-            properties: {
-              isChecked:
-                !isEiMaariteltyaToimintaaluettaChecked &&
-                !isValtakunnallinenChecked,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved
-              },
-              forChangeObject: {
-                title: "Maakunnat ja kunnat"
-              },
-              title: "Maakunnat ja kunnat"
-            }
-          }
-        ],
-        categories: [
-          /**
-           * VALINTAKENTTÄ - MAAKUNNAT
-           */
-          {
-            anchor: "valintakentta",
-            isVisible:
-              !isValtakunnallinenChecked &&
-              !isEiMaariteltyaToimintaaluettaChecked,
-            layout: { indentation: "none" },
-            components: [
-              {
-                anchor: "maakunnat",
-                name: "Autocomplete",
-                styleClasses: ["ml-10 mt-4"],
-                properties: {
-                  isMulti: false,
-                  options: valittavissaOlevatMaakunnat,
-                  placeholder: "Valitse maakunta...",
-                  value: []
-                }
-              }
-            ]
-          },
-          /**
-           * LUPAAN KUULUVAT MAAKUNNAT
-           */
-          {
-            anchor: "lupaan-kuuluvat-maakunnat",
-            isVisible:
-              !isEiMaariteltyaToimintaaluettaChecked &&
-              !isValtakunnallinenChecked &&
-              !!maakunnatInLupa &&
-              maakunnatInLupa.length > 0,
-            layout: {
-              indentation: "large",
-              components: {
-                justification: "start"
-              }
-            },
-            components: R.map(maakunta => {
-              return {
-                anchor: maakunta.metadata.koodiarvo,
-                name: "CheckboxWithLabel",
-                styleClasses: ["w-1/2 sm:w-1/4"],
-                properties: {
-                  isChecked: true,
-                  labelStyles: {
-                    removal: isRemoved
-                  },
-                  forChangeObject: {
-                    koodiarvo: maakunta.metadata.koodiarvo,
-                    koodisto: { koodistoUri: maakunta.metadata.koodisto },
-                    title: maakunta.title
-                  },
-                  title: maakunta.title
-                }
-              };
-            }, maakunnatInLupa),
-            title:
-              maakunnatInLupa && maakunnatInLupa.length ? "Lupaan kuuluvat" : ""
-          },
-          /**
-           * LUPAAN LISÄTTÄVÄT MAAKUNNAT
-           */
-          {
-            anchor: "lupaan-lisattavat-maakunnat",
-            isVisible:
-              !isEiMaariteltyaToimintaaluettaChecked &&
-              !isValtakunnallinenChecked &&
-              !!lisattavatMaakunnat &&
-              lisattavatMaakunnat.length > 0,
-            layout: {
-              indentation: "large",
-              components: {
-                justification: "start"
-              }
-            },
-            components: R.map(maakunta => {
-              return {
-                anchor: maakunta.metadata.koodiarvo,
-                name: "CheckboxWithLabel",
-                styleClasses: ["w-1/2 sm:w-1/4"],
-                properties: {
-                  isChecked: true,
-                  labelStyles: {
-                    addition: isAdded,
-                    custom: isAdded,
-                    removal: isRemoved
-                  },
-                  title: maakunta.title
-                }
-              };
-            }, lisattavatMaakunnat),
-            title: "Lupaan lisättävät"
-          },
-          /**
-           * VALINTAKENTTÄ - KUNNAT
-           */
-          {
-            anchor: "valintakentta",
-            isVisible:
-              !isValtakunnallinenChecked &&
-              !isEiMaariteltyaToimintaaluettaChecked,
-            layout: { indentation: "none" },
-            components: [
-              {
-                anchor: "kunnat",
-                name: "Autocomplete",
-                styleClasses: ["ml-10 mt-4"],
-                properties: {
-                  isMulti: false,
-                  options: valittavissaOlevatKunnat,
-                  placeholder: "Valitse kunta...",
-                  value: []
-                }
-              }
-            ]
-          },
-          /**
-           * LUPAAN KUULUVAT KUNNAT
-           */
-          {
-            anchor: "lupaan-kuuluvat-kunnat",
-            isVisible:
-              !isEiMaariteltyaToimintaaluettaChecked &&
-              !isValtakunnallinenChecked &&
-              !!kunnatInLupa &&
-              kunnatInLupa.length,
-            layout: {
-              indentation: "large",
-              components: {
-                justification: "start"
-              }
-            },
-            components: R.map(kunta => {
-              return {
-                anchor: kunta.metadata.koodiarvo,
-                name: "CheckboxWithLabel",
-                styleClasses: ["w-1/2 sm:w-1/4"],
-                properties: {
-                  isChecked: true,
-                  labelStyles: {
-                    removal: isRemoved
-                  },
-                  forChangeObject: {
-                    koodiarvo: kunta.metadata.koodiarvo,
-                    koodisto: { koodistoUri: kunta.metadata.koodisto },
-                    title: kunta.title
-                  },
-                  title: kunta.title
-                }
-              };
-            }, kunnatInLupa),
-            title: kunnatInLupa && kunnatInLupa.length ? "Lupaan kuuluvat" : ""
-          },
-          /**
-           * LUPAAN LISÄTTÄVÄT KUNNAT
-           */
-          {
-            anchor: "lupaan-lisattavat-kunnat",
-            isVisible:
-              !isEiMaariteltyaToimintaaluettaChecked &&
-              !isValtakunnallinenChecked &&
-              !!lisattavatKunnat &&
-              lisattavatKunnat.length > 0,
-            layout: {
-              indentation: "large",
-              components: {
-                justification: "start"
-              }
-            },
-            components: R.map(kunta => {
-              return {
-                anchor: kunta.metadata.koodiarvo,
-                name: "CheckboxWithLabel",
-                styleClasses: ["w-1/2 sm:w-1/4"],
-                properties: {
-                  isChecked: true,
-                  labelStyles: {
-                    addition: isAdded,
-                    custom: isAdded,
-                    removal: isRemoved
-                  },
-                  title: kunta.title
-                }
-              };
-            }, lisattavatKunnat),
-            title: "Lupaan lisättävät"
-          }
-        ]
-      },
-      {
-        anchor: "valtakunnallinen",
-        components: [
-          {
-            anchor: "radio",
-            name: "RadioButtonWithLabel",
-            properties: {
-              title: "Koko Suomi - pois lukien Ahvenanmaan maakunta",
-              isChecked: isValtakunnallinenChecked,
-              labelStyles: {
-                addition: isAdded,
-                custom:
-                  props.lupakohde.valtakunnallinen &&
-                  props.lupakohde.valtakunnallinen.arvo === "FI1"
-                    ? isInLupa
-                    : {},
-                removal: isRemoved
-              },
-              forChangeObject: {
-                title: props.intl.formatMessage(wizardMessages.responsibilities)
-              }
-            }
-          }
-        ]
-      },
-      {
-        anchor: "ei-maariteltya-toiminta-aluetta",
-        components: [
-          {
-            anchor: "radio",
-            name: "RadioButtonWithLabel",
-            properties: {
-              isChecked: isEiMaariteltyaToimintaaluettaChecked,
-              labelStyles: {
-                addition: isAdded,
-                removal: isRemoved
-              },
-              forChangeObject: {
-                title: "Ei määriteltyä toiminta-aluetta"
-              },
-              title: "Ei määriteltyä toiminta-aluetta"
-            }
-          }
-        ]
-      }
-    ];
-  }, [
-    isEiMaariteltyaToimintaaluettaChecked,
-    isValtakunnallinenChecked,
-    kunnatInLupa,
-    maakunnatInLupa,
-    lisattavatKunnat,
-    lisattavatMaakunnat,
-    props.intl,
-    props.lupakohde.valtakunnallinen,
-    valittavissaOlevatKunnat,
-    valittavissaOlevatMaakunnat
-  ]);
-
-  useEffect(() => {
-    onStateUpdate({
-      categories: getCategories(),
-      kohde: props.kohde,
-      maaraystyyppi: props.maaraystyyppi
-    });
-  }, [getCategories, props.kohde, props.maaraystyyppi, onStateUpdate]);
-
   return (
-    <React.Fragment>
-      {R.path(["categories"], props.stateObjects.toimintaalue) ? (
-        <ExpandableRowRoot
-          anchor={props.sectionId}
-          key={`expandable-row-root`}
-          categories={props.stateObjects.toimintaalue.categories}
-          changes={props.changeObjects.muutokset}
-          isExpanded={true}
-          showCategoryTitles={true}
-          onChangesRemove={props.onChangesRemove}
-          onUpdate={handleChanges}
-          title={"Yksittäiset kunnat ja maakunnat tai koko maa"}
-        />
-      ) : null}
-    </React.Fragment>
+    <ExpandableRowRoot
+      anchor={props.sectionId}
+      key={`expandable-row-root`}
+      categories={[]}
+      changes={changeObjects.toimintaalue}
+      isExpanded={true}
+      showCategoryTitles={true}
+      onChangesRemove={props.onChangesRemove}
+      onUpdate={handleChanges}
+      title={"Yksittäiset kunnat ja maakunnat tai koko maa"}>
+      <Lomake
+        action="modification"
+        anchor={props.sectionId}
+        changeObjects={changeObjects.toimintaalue}
+        data={{
+          isEiMaariteltyaToimintaaluettaChecked,
+          isValtakunnallinenChecked,
+          kunnatInLupa,
+          lupakohde: props.lupakohde,
+          maakunnatInLupa,
+          lisattavatKunnat,
+          lisattavatMaakunnat,
+          valittavissaOlevatKunnat,
+          valittavissaOlevatMaakunnat
+        }}
+        onChangesUpdate={handleChanges}
+        path={["toimintaalue"]}
+        rules={[]}
+        showCategoryTitles={true}></Lomake>
+    </ExpandableRowRoot>
   );
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  changeObjects: {},
-  kohde: {},
   kunnat: [],
   lupakohde: {},
   maakunnat: [],
-  maakuntakunnatList: [],
-  maaraystyyppi: {},
-  stateObjects: {
-    toimintaalue: {}
-  }
+  maakuntakunnatList: []
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   kunnat: PropTypes.array,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.array,
   maakuntakunnatList: PropTypes.array,
-  maaraystyyppi: PropTypes.object,
-  onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  onChangesRemove: PropTypes.func,
-  stateObjects: PropTypes.object
+  onChangesRemove: PropTypes.func
 };
 
-export default injectIntl(MuutospyyntoWizardToimintaalue);
+export default MuutospyyntoWizardToimintaalue;

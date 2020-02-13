@@ -7,11 +7,12 @@ import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavu
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
-import { injectIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import * as R from "ramda";
 import FormSection from "../../../../../../components/03-templates/FormSection";
 
 const MuutospyyntoWizardMuutokset = React.memo(props => {
+  const intl = useIntl();
   const [kohteet, setKohteet] = useState({});
   const [maaraystyypit, setMaaraystyypit] = useState(null);
 
@@ -47,9 +48,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     <React.Fragment>
       <div>
         <h2 className="my-6">
-          {props.intl.formatMessage(wizardMessages.pageTitle_1)}
+          {intl.formatMessage(wizardMessages.pageTitle_1)}
         </h2>
-        <p>{props.intl.formatMessage(wizardMessages.info_01)}</p>
+        <p>{intl.formatMessage(wizardMessages.info_01)}</p>
 
         <form onSubmit={props.handleSubmit}>
           {R.is(Object, maaraystyypit) ? (
@@ -60,166 +61,96 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 render={_props => (
                   <React.Fragment>
                     <Tutkinnot
-                      changeObjects={R.prop("tutkinnot", props.changeObjects)}
-                      kohde={kohteet.tutkinnotjakoulutukset}
                       tutkinnot={props.tutkinnot}
                       lupaKohteet={props.lupaKohteet}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
-                      stateObject={props.muutoshakemus.tutkinnot}
                       {..._props}
                     />
                     <MuutospyyntoWizardKoulutukset
-                      changeObjects={R.prop("koulutukset", props.changeObjects)}
-                      kohde={kohteet.tutkinnotjakoulutukset}
                       koulutukset={props.koulutukset}
-                      lupa={props.lupa}
-                      maaraystyyppi={maaraystyypit.OIKEUS}
-                      stateObjects={props.muutoshakemus.koulutukset}
+                      maaraykset={props.lupa.maaraykset}
                       {..._props}
                     />
                   </React.Fragment>
                 )}
-                runOnStateUpdate={props.onStateUpdate}
                 runOnChanges={props.onChangesUpdate}
                 title={props.lupaKohteet[1].heading}
               />
 
-              {!!R.path(["tutkinnot", "items"], props.muutoshakemus) ? (
-                <FormSection
-                  code={props.lupaKohteet[2].headingNumber}
-                  id="tutkinnot"
-                  render={_props => (
-                    <React.Fragment>
-                      <MuutospyyntoWizardKielet
-                        changeObjects={{
-                          kielet: R.prop("kielet", props.changeObjects),
-                          tutkinnot: R.prop("tutkinnot", props.changeObjects)
-                        }}
-                        kohde={kohteet.kielet}
-                        lupa={props.lupa}
-                        lupaKohteet={props.lupaKohteet}
-                        kielet={props.kielet}
-                        koulutukset={props.koulutukset}
-                        onUpdate={props.onUpdate}
-                        maaraystyyppi={maaraystyypit.VELVOITE}
-                        stateObjects={{
-                          kielet: R.prop("kielet", props.muutoshakemus),
-                          tutkinnot: R.prop("tutkinnot", props.muutoshakemus)
-                        }}
-                        {..._props}
-                      />
-                    </React.Fragment>
-                  )}
-                  runOnStateUpdate={props.onStateUpdate}
-                  runOnChanges={props.onChangesUpdate}
-                  title={props.intl.formatMessage(
-                    wizardMessages.header_section2
-                  )}
-                />
-              ) : null}
+              <FormSection
+                code={props.lupaKohteet[2].headingNumber}
+                id="tutkinnot"
+                render={_props => (
+                  <React.Fragment>
+                    <MuutospyyntoWizardKielet
+                      lupa={props.lupa}
+                      lupaKohteet={props.lupaKohteet}
+                      kielet={props.kielet}
+                      koulutukset={props.koulutukset}
+                      tutkintolomakkeet={props.lomakkeet.tutkinnot}
+                      onUpdate={props.onUpdate}
+                      {..._props}
+                    />
+                  </React.Fragment>
+                )}
+                runOnChanges={props.onChangesUpdate}
+                title={intl.formatMessage(wizardMessages.header_section2)}
+              />
 
-              {!!R.path(["toimintaalue"], props.muutoshakemus) && (
+              <FormSection
+                code={3}
+                id="toimintaalue"
+                render={_props => (
+                  <MuutospyyntoWizardToimintaalue
+                    lupakohde={props.lupaKohteet[3]}
+                    kunnat={props.kunnat}
+                    maakuntakunnatList={props.maakuntakunnatList}
+                    maakunnat={props.maakunnat}
+                    {..._props}
+                  />
+                )}
+                runOnChanges={props.onChangesUpdate}
+                title={R.path(
+                  ["meta", "otsikko", intl.locale],
+                  kohteet.toimintaalue
+                )}
+              />
+
+              {kohteet.opiskelijavuodet && !R.isEmpty(props.lomakkeet.muut) && (
                 <FormSection
-                  code={3}
-                  id="toimintaalue"
+                  code={props.lupaKohteet[4].headingNumber}
+                  id="opiskelijavuodet"
                   render={_props => (
-                    <MuutospyyntoWizardToimintaalue
-                      changeObjects={{
-                        muutokset: props.changeObjects.toimintaalue
-                      }}
-                      lupakohde={props.lupaKohteet[3]}
-                      kohde={kohteet.toimintaalue}
-                      kunnat={props.kunnat}
-                      maakuntakunnatList={props.maakuntakunnatList}
-                      maakunnat={props.maakunnat}
-                      maaraystyyppi={maaraystyypit.VELVOITE}
-                      stateObjects={{
-                        toimintaalue: R.prop(
-                          "toimintaalue",
-                          props.muutoshakemus
-                        )
+                    <MuutospyyntoWizardOpiskelijavuodet
+                      lupaKohteet={props.lupaKohteet}
+                      maaraykset={props.lupa.maaraykset}
+                      muut={props.muut}
+                      opiskelijavuodet={props.opiskelijavuodet}
+                      lomakkeet={{
+                        opiskelijavuodet: props.lomakkeet.opiskelijavuodet,
+                        muut: props.lomakkeet.muut
                       }}
                       {..._props}
                     />
                   )}
-                  runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
-                  title={R.path(
-                    ["meta", "otsikko", props.intl.locale],
-                    kohteet.toimintaalue
-                  )}
+                  title={intl.formatMessage(wizardMessages.header_section4)}
                 />
               )}
-
-              {kohteet.opiskelijavuodet &&
-                !!R.path(["muut", "muutdata"], props.muutoshakemus) && (
-                  <FormSection
-                    code={props.lupaKohteet[4].headingNumber}
-                    id="opiskelijavuodet"
-                    render={_props => (
-                      <React.Fragment>
-                        <MuutospyyntoWizardOpiskelijavuodet
-                          changeObjects={{
-                            opiskelijavuodet: R.prop(
-                              "opiskelijavuodet",
-                              props.changeObjects
-                            ),
-                            muut: R.prop("muut", props.changeObjects)
-                          }}
-                          kohde={kohteet.opiskelijavuodet}
-                          lupa={props.lupa}
-                          lupaKohteet={props.lupaKohteet}
-                          maaraystyyppi={maaraystyypit.OIKEUS}
-                          muut={props.muut}
-                          opiskelijavuodet={props.opiskelijavuodet}
-                          stateObjects={{
-                            opiskelijavuodet: R.prop(
-                              "opiskelijavuodet",
-                              props.muutoshakemus
-                            ),
-                            muut: R.prop("muut", props.muutoshakemus)
-                          }}
-                          {..._props}
-                        />
-                      </React.Fragment>
-                    )}
-                    runOnStateUpdate={props.onStateUpdate}
-                    runOnChanges={props.onChangesUpdate}
-                    title={props.intl.formatMessage(
-                      wizardMessages.header_section4
-                    )}
-                  />
-                )}
 
               {kohteet.muut && props.muut && maaraystyypit && (
                 <FormSection
                   code={props.lupaKohteet[5].headingNumber}
                   id="muut"
                   render={_props => (
-                    <React.Fragment>
-                      {kohteet.muut && props.muut && maaraystyypit && (
-                        <MuutospyyntoWizardMuut
-                          changeObjects={{
-                            muut: R.prop("muut", props.changeObjects)
-                          }}
-                          kohde={kohteet.muut}
-                          maaraykset={props.lupa.maaraykset}
-                          muut={props.muut}
-                          koulutukset={props.koulutukset}
-                          maaraystyyppi={maaraystyypit.VELVOITE}
-                          stateObjects={{
-                            muut: props.muutoshakemus.muut
-                          }}
-                          {..._props}
-                        />
-                      )}
-                    </React.Fragment>
+                    <MuutospyyntoWizardMuut
+                      maaraykset={props.lupa.maaraykset}
+                      muut={props.muut}
+                      koulutukset={props.koulutukset}
+                      {..._props}
+                    />
                   )}
-                  runOnStateUpdate={props.onStateUpdate}
                   runOnChanges={props.onChangesUpdate}
-                  title={props.intl.formatMessage(
-                    wizardMessages.header_section5
-                  )}
+                  title={intl.formatMessage(wizardMessages.header_section5)}
                 />
               )}
             </React.Fragment>
@@ -230,26 +161,20 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   );
 });
 
-MuutospyyntoWizardMuutokset.defaultProps = {
-  changeObjects: {}
-};
-
 MuutospyyntoWizardMuutokset.propTypes = {
-  changeObjects: PropTypes.object,
   kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
   kunnat: PropTypes.array,
   maakuntakunnatList: PropTypes.array,
   maakunnat: PropTypes.array,
+  lomakkeet: PropTypes.object,
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
-  muutoshakemus: PropTypes.object,
-  onStateUpdate: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   tutkinnot: PropTypes.object
 };
 
-export default injectIntl(MuutospyyntoWizardMuutokset);
+export default MuutospyyntoWizardMuutokset;

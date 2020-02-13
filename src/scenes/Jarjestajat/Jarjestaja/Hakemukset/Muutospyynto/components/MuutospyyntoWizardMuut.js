@@ -1,18 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { injectIntl } from "react-intl";
-import * as R from "ramda";
+import React, { useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../modules/helpers";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../css/label";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import Lomake from "../../../../../../components/02-organisms/Lomake";
+import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
-const MuutospyyntoWizardMuut = React.memo(props => {
+const MuutospyyntoWizardMuut = props => {
+  const [changeObjects] = useChangeObjects();
+  const intl = useIntl();
   const sectionId = "muut";
-  const [muutdata, setMuutdata] = useState(null);
-  const [locale, setLocale] = useState("FI");
-  const { onChangesRemove, onChangesUpdate, onStateUpdate } = props;
+  const { onChangesRemove, onChangesUpdate } = props;
 
   const osiota5koskevatMaaraykset = useMemo(() => {
     return R.filter(
@@ -43,94 +43,6 @@ const MuutospyyntoWizardMuut = React.memo(props => {
     };
   }, [osiota5koskevatMaaraykset, props.muut]);
 
-  const getCategories = useMemo(() => {
-    return (configObj, locale) => {
-      return R.map(item => {
-        let noItemsInLupa = true;
-        const isVaativatukiRadios =
-          configObj.key === "vaativatuki" &&
-          item.componentName === "RadioButtonWithLabel";
-        const sortedArticles = R.sortBy(R.prop("koodiArvo"), item.articles);
-        return {
-          anchor: configObj.key,
-          title: item.title,
-          categories: R.addIndex(R.map)((article, index) => {
-            const title =
-              _.find(article.metadata, m => {
-                return m.kieli === locale;
-              }).kuvaus || "Muu";
-            const isInLupaBool = !!R.find(
-              R.propEq("koodiarvo", article.koodiArvo)
-            )(osiota5koskevatMaaraykset);
-            if (isInLupaBool) {
-              noItemsInLupa = false;
-            }
-            const labelClasses = {
-              isInLupa: isInLupaBool
-            };
-            let result = {
-              anchor: article.koodiArvo,
-              meta: {
-                isInLupa: isInLupaBool,
-                koodiarvo: article.koodiArvo,
-                koodisto: article.koodisto
-              },
-              components: [
-                {
-                  anchor: "A",
-                  name: item.componentName,
-                  properties: {
-                    // This is for the Perustelut page and for showing or not showing a form for reasoning.
-                    forChangeObject: {
-                      isReasoningRequired:
-                        !isVaativatukiRadios ||
-                        index !== sortedArticles.length - 1
-                    },
-                    name: item.componentName,
-                    isChecked:
-                      isInLupaBool ||
-                      // Here we are checking if the last radio button of vaativa tuki options should be selected.
-                      (noItemsInLupa &&
-                        isVaativatukiRadios &&
-                        index === sortedArticles.length - 1),
-                    title: title,
-                    labelStyles: {
-                      addition: isAdded,
-                      removal: isRemoved,
-                      custom: Object.assign(
-                        {},
-                        labelClasses.isInLupa ? isInLupa : {}
-                      )
-                    }
-                  }
-                }
-              ]
-            };
-            if (article.koodiArvo === "22") {
-              result.categories = [
-                {
-                  anchor: "other",
-                  components: [
-                    {
-                      anchor: "A",
-                      name: "TextBox",
-                      properties: {
-                        placeholder: props.intl.formatMessage(
-                          wizardMessages.other_placeholder
-                        )
-                      }
-                    }
-                  ]
-                }
-              ];
-            }
-            return result;
-          }, sortedArticles)
-        };
-      }, configObj.categoryData);
-    };
-  }, [props.intl, osiota5koskevatMaaraykset]);
-
   const config = useMemo(() => {
     const dividedArticles = divideArticles();
     return [
@@ -158,12 +70,12 @@ const MuutospyyntoWizardMuut = React.memo(props => {
           {
             articles: dividedArticles.vaativa_1 || [],
             componentName: "RadioButtonWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseOnlyOne)
+            title: intl.formatMessage(wizardMessages.chooseOnlyOne)
           },
           {
             articles: dividedArticles.vaativa_2 || [],
             componentName: "CheckboxWithLabel",
-            title: props.intl.formatMessage(wizardMessages.chooseAdditional)
+            title: intl.formatMessage(wizardMessages.chooseAdditional)
           }
         ]
       },
@@ -233,86 +145,49 @@ const MuutospyyntoWizardMuut = React.memo(props => {
         ]
       }
     ];
-  }, [divideArticles, props.intl]);
-
-  const expandableRows = useMemo(() => {
-    return !!locale.length
-      ? R.addIndex(R.map)((configObj, i) => {
-          return {
-            code: configObj.code,
-            key: configObj.key,
-            title: configObj.title,
-            categories: getCategories(configObj, locale, props.kohde),
-            data: configObj.categoryData
-          };
-        }, R.filter(R.propEq("isInUse", true))(config))
-      : [];
-  }, [config, getCategories, props.kohde, locale]);
-
-  useEffect(() => {
-    setMuutdata(expandableRows);
-  }, [expandableRows]);
-
-  useEffect(() => {
-    setLocale(R.toUpper(props.intl.locale));
-  }, [props.intl.locale]);
-
-  useEffect(() => {
-    if (muutdata) {
-      onStateUpdate(
-        {
-          kohde: props.kohde,
-          maaraystyyppi: props.maaraystyyppi,
-          muutdata
-        },
-        sectionId
-      );
-    }
-  }, [muutdata, onStateUpdate, props.kohde, props.maaraystyyppi]);
+  }, [divideArticles, intl]);
 
   return (
     <React.Fragment>
-      {props.kohde && muutdata && (
-        <React.Fragment>
-          {R.addIndex(R.map)((row, i) => {
-            return (
-              <ExpandableRowRoot
-                anchor={`${sectionId}_${row.code}`}
-                key={`expandable-row-root-${i}`}
-                categories={row.categories}
-                changes={R.path(["muut", row.code], props.changeObjects)}
-                code={row.code}
-                index={i}
-                onUpdate={onChangesUpdate}
-                sectionId={sectionId}
-                showCategoryTitles={true}
-                title={row.title}
-                onChangesRemove={onChangesRemove}
-              />
-            );
-          }, muutdata)}
-        </React.Fragment>
-      )}
+      {R.addIndex(R.map)((configObj, i) => {
+        return (
+          <ExpandableRowRoot
+            anchor={`${sectionId}_${configObj.code}`}
+            key={`expandable-row-root-${i}`}
+            categories={[]}
+            changes={R.prop(configObj.code, changeObjects.muut)}
+            code={configObj.code}
+            index={i}
+            onUpdate={onChangesUpdate}
+            sectionId={sectionId}
+            showCategoryTitles={true}
+            title={configObj.title}
+            onChangesRemove={onChangesRemove}>
+            <Lomake
+              action="modification"
+              anchor={`${sectionId}_${configObj.code}`}
+              changeObjects={R.prop(configObj.code, changeObjects.muut)}
+              data={{
+                configObj,
+                osiota5koskevatMaaraykset
+              }}
+              onChangesUpdate={onChangesUpdate}
+              path={["muut"]}
+              rules={[]}
+              showCategoryTitles={true}></Lomake>
+          </ExpandableRowRoot>
+        );
+      }, R.filter(R.propEq("isInUse", true))(config))}
     </React.Fragment>
   );
-});
-
-MuutospyyntoWizardMuut.defaultProps = {
-  changeObjects: {},
-  stateObjects: {}
 };
 
 MuutospyyntoWizardMuut.propTypes = {
-  changeObjects: PropTypes.object,
   headingNumber: PropTypes.number,
-  kohde: PropTypes.object,
   maaraykset: PropTypes.array,
-  maaraystyyppi: PropTypes.object,
   muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
-  onChangesUpdate: PropTypes.func,
-  onStateUpdate: PropTypes.func,
-  stateObjects: PropTypes.object
+  onChangesUpdate: PropTypes.func
 };
 
-export default injectIntl(MuutospyyntoWizardMuut);
+export default MuutospyyntoWizardMuut;

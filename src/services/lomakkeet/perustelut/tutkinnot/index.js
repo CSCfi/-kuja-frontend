@@ -18,37 +18,25 @@ export const getAdditionForm = (checkboxItems, locale, isReadOnly = false) => {
       layout: {
         indentation: "none"
       },
-      title: "Muutospyynnön taustalla olevat syyt",
+      title: __("muutospyynnon.taustalla.olevat.syyt"),
       categories: checkboxes
-    },
+    }
+  ];
+};
+
+export const getRemovalForm = isReadOnly => {
+  return [
     {
-      anchor: "vapaa-tekstikentta",
+      anchor: "removal",
       components: [
         {
           anchor: "A",
           name: "TextBox",
           properties: {
             isReadOnly,
-            placeholder:
-              "Perustele lyhyesti miksi tutkintoon johtavaa koulutusta halutaan järjestää"
-          }
-        }
-      ]
-    }
-  ];
-};
-
-export const getRemovalForm = () => {
-  return [
-    {
-      anchor: "vapaa-tekstikentta",
-      components: [
-        {
-          anchor: "A",
-          name: "TextBox",
-          properties: {
-            placeholder:
-              "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää"
+            title:
+              "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää",
+            value: ""
           }
         }
       ]
@@ -59,14 +47,14 @@ export const getRemovalForm = () => {
 export const getOsaamisalaForm = () => {
   return [
     {
-      anchor: "vapaa-tekstikentta",
+      anchor: "osaamisala",
       components: [
         {
           anchor: "A",
           name: "TextBox",
           properties: {
-            placeholder:
-              "Perustele lyhyesti miksi tälle muutokselle on tarvetta"
+            title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
+            value: ""
           }
         }
       ]
@@ -125,8 +113,7 @@ function getCategoriesForPerustelut(
             [R.ascend(R.compose(R.length, anchor)), R.ascend(anchor)],
             R.filter(R.compose(R.startsWith(anchorBase), anchor))(changes)
           );
-
-          const toStructure = changeObj => {
+          return R.addIndex(R.map)((changeObj, i) => {
             const anchorWOLast = R.init(R.split(".")(anchor(changeObj)));
             const osaamisalakoodi = R.last(anchorWOLast);
 
@@ -140,54 +127,58 @@ function getCategoriesForPerustelut(
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: R.join(
-                ".",
-                [
-                  getAnchorPart(changeObj.anchor, 2),
-                  osaamisala ? osaamisala.koodiArvo : null
-                ].filter(Boolean)
-              ),
-              meta: {
-                kohde,
-                maaraystyyppi,
-                koodisto: koulutus.koodisto,
-                metadata: koulutus.metadata,
-                isInLupa: isInLupaBool
-              },
-              categories: osaamisala
-                ? getOsaamisalaForm()
-                : isAddition
-                ? getAdditionForm(muutosperustelut, locale, isReadOnly)
-                : getRemovalForm(),
-              components: [
+              anchor: `${koulutus.koodiArvo}|${i}`,
+              categories: [
                 {
-                  anchor: "A",
-                  name: "StatusTextRow",
-                  properties: {
-                    code: osaamisala ? "" : koulutus.koodiArvo,
-                    title: osaamisala
-                      ? R.join(" ", [
-                          __("osaamisalarajoitus"),
-                          osaamisalakoodi,
-                          nimi(osaamisala),
-                          "(" + koulutus.koodiArvo + " " + nimi(koulutus) + ")"
-                        ])
-                      : nimi(koulutus),
-                    labelStyles: {
-                      addition: isAdded,
-                      removal: isRemoved
-                    },
-                    styleClasses: ["flex"],
-                    statusTextStyleClasses: isAddition
-                      ? ["text-green-600 pr-4 w-20 font-bold"]
-                      : ["text-red-500 pr-4 w-20 font-bold"],
-                    statusText: isAddition ? " LISÄYS:" : " POISTO:"
-                  }
+                  anchor: osaamisala
+                    ? osaamisala.koodiArvo
+                    : getAnchorPart(changeObj.anchor, 2),
+                  meta: {
+                    kohde,
+                    maaraystyyppi,
+                    koodisto: koulutus.koodisto,
+                    metadata: koulutus.metadata,
+                    isInLupa: isInLupaBool
+                  },
+                  categories: osaamisala
+                    ? getOsaamisalaForm()
+                    : isAddition
+                    ? getAdditionForm(muutosperustelut, locale, isReadOnly)
+                    : getRemovalForm(isReadOnly),
+                  components: [
+                    {
+                      anchor: "A",
+                      name: "StatusTextRow",
+                      properties: {
+                        code: osaamisala ? "" : koulutus.koodiArvo,
+                        title: osaamisala
+                          ? R.join(" ", [
+                              __("osaamisalarajoitus"),
+                              osaamisalakoodi,
+                              nimi(osaamisala),
+                              "(" +
+                                koulutus.koodiArvo +
+                                " " +
+                                nimi(koulutus) +
+                                ")"
+                            ])
+                          : nimi(koulutus),
+                        labelStyles: {
+                          addition: isAdded,
+                          removal: isRemoved
+                        },
+                        styleClasses: ["flex"],
+                        statusTextStyleClasses: isAddition
+                          ? ["text-green-600 pr-4 w-20 font-bold"]
+                          : ["text-red-500 pr-4 w-20 font-bold"],
+                        statusText: isAddition ? " LISÄYS:" : " POISTO:"
+                      }
+                    }
+                  ]
                 }
               ]
             };
-          };
-          return R.map(toStructure, changeObjs);
+          }, changeObjs);
         }, koulutustyyppi.koulutukset)
       };
     }, _.cloneDeep(relevantKoulutustyypit))
@@ -229,7 +220,12 @@ const getReasoningForm = (
   return categories;
 };
 
-export default function getTutkinnotLomake(action, data, isReadOnly, locale) {
+export default function getTutkinnotPerustelulomake(
+  action,
+  data,
+  isReadOnly,
+  locale
+) {
   switch (action) {
     case "addition":
       return getAdditionForm(data.checkboxItems, locale, isReadOnly);

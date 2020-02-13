@@ -3,6 +3,7 @@ import {
   getPathByAnchor,
   ifOneTerm
 } from "../../components/02-organisms/CategorizedListRoot/utils";
+import { findObjectWithKey } from "../../utils/common";
 
 export function createRules(requiredFields = []) {
   return R.map(rule => {
@@ -90,20 +91,24 @@ export function getCategoriesByProps(
   categories,
   reqProps = {},
   _fullAnchor = [],
-  results = []
+  results = [],
+  fullPath = []
 ) {
-  return R.map(category => {
+  return R.addIndex(R.map)((category, i) => {
     const fullAnchor = R.append(category.anchor, _fullAnchor);
     let isToBeReturned = true;
     R.forEachObjIndexed((value, key) => {
-      if (!R.equals(R.prop(key, category), value)) {
+      if (value instanceof Function) {
+        isToBeReturned = value(R.prop(key, category));
+      } else if (!R.equals(R.prop(key, category), value)) {
         isToBeReturned = false;
       }
     }, reqProps);
     if (isToBeReturned) {
       results.push(
         Object.assign({}, category, {
-          fullAnchor: R.join(".", fullAnchor)
+          fullAnchor: R.join(".", fullAnchor),
+          fullPath: R.append(i, fullPath)
         })
       );
     }
@@ -112,9 +117,37 @@ export function getCategoriesByProps(
         category.categories,
         reqProps,
         fullAnchor,
-        results
+        results,
+        R.concat(fullPath, [i, "categories"])
       ).filter(Boolean);
     }
     return results;
   }, categories);
+}
+
+export function getActiveCheckboxes(lomake, changeObjects = []) {
+  const components = R.filter(
+    R.propEq("name", "CheckboxWithLabel"),
+    findObjectWithKey(lomake, "components")
+  );
+  const changeObjectsWithTailAnchors = R.map(changeObj => {
+    const tailAnchor = R.compose(
+      R.join("."),
+      R.tail(),
+      R.split("."),
+      R.prop("anchor")
+    )(changeObj);
+    return R.assoc("anchor", tailAnchor, changeObj);
+  }, changeObjects);
+
+  return R.filter(component => {
+    const changeObj = R.find(
+      R.propEq("anchor", component.fullAnchor),
+      changeObjectsWithTailAnchors
+    );
+    return (
+      (component.properties.isChecked && !changeObj) ||
+      (changeObj && changeObj.properties.isChecked)
+    );
+  }, components);
 }

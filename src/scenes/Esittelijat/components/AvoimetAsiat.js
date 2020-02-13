@@ -1,16 +1,19 @@
-import React, {useEffect, useMemo} from "react";
-import Table from "okm-frontend-components/dist/components/02-organisms/Table"
-import {generateAsiatTableStructure} from "../modules/asiatUtils";
-import {useIntl} from "react-intl";
-import {PropTypes} from "prop-types";
-import {useMuutospyynnotEsittelija} from "../../../stores/muutospyynnotEsittelija";
+import React, { useEffect, useMemo } from "react";
+import Table from "okm-frontend-components/dist/components/02-organisms/Table";
+import { generateAsiatTableStructure } from "../modules/asiatUtils";
+import { useIntl } from "react-intl";
+import { PropTypes } from "prop-types";
+import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
 
 const AvoimetAsiat = () => {
   const intl = useIntl();
-  const [muutospyynnotEsittelija, muutospyynnotEsittelijaActions] = useMuutospyynnotEsittelija();
+  const [
+    muutospyynnotEsittelija,
+    muutospyynnotEsittelijaActions
+  ] = useMuutospyynnotEsittelija();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load('avoimet');
+    let abortController = muutospyynnotEsittelijaActions.load("avoimet");
 
     return function cancel() {
       if (abortController) {
@@ -20,20 +23,22 @@ const AvoimetAsiat = () => {
   }, [muutospyynnotEsittelijaActions]);
 
   const tableStructure = useMemo(() => {
-    return !!muutospyynnotEsittelija.data ?
-      generateAsiatTableStructure(muutospyynnotEsittelija.data, intl.formatMessage) :
-      [];
-  }, [muutospyynnotEsittelija.data]);
+    return !!muutospyynnotEsittelija.data
+      ? generateAsiatTableStructure(
+          muutospyynnotEsittelija.data,
+          intl.formatMessage
+        )
+      : [];
+  }, [intl.formatMessage, muutospyynnotEsittelija.data]);
 
   return (
     <React.Fragment>
       <React.Fragment>
         <Table structure={tableStructure}></Table>
       </React.Fragment>
-    </React.Fragment>)
-  }
-;
-
+    </React.Fragment>
+  );
+};
 AvoimetAsiat.propTypes = {
   intl: PropTypes.object
 };

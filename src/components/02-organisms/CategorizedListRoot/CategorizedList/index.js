@@ -16,9 +16,7 @@ import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "okm-frontend-components/dist/components/02-organisms/ActionList";
 import { flattenObj } from "../../../../utils/common";
-
-const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
-whyDidYouRender(React);
+import CheckIcon from "@material-ui/icons/Check";
 
 /** @namespace components */
 
@@ -86,8 +84,15 @@ const getChangeObjByAnchor = (anchor, changes) => {
  * @param {object} changeObj
  * @param {object} component
  */
-const getPropertiesObject = (changeObj, component) => {
-  return Object.assign({}, component.properties, changeObj.properties || {});
+const getPropertiesObject = (
+  changeObj = { properties: {} },
+  component = { properties: {} }
+) => {
+  return Object.assign(
+    {},
+    R.prop("properties", component) || {},
+    R.prop("properties", changeObj) || {}
+  );
 };
 
 const CategorizedList = React.memo(
@@ -246,7 +251,10 @@ const CategorizedList = React.memo(
                         className={`text-${
                           category.isValid ? "green" : "red"
                         }-500 text-2xl pr-4`}>
-                        *
+                        {category.isValid && (
+                          <CheckIcon fontSize="small"></CheckIcon>
+                        )}
+                        {!category.isValid && <span>*</span>}
                       </span>
                     )}
                     {category.code && (
@@ -275,6 +283,10 @@ const CategorizedList = React.memo(
                         props.changes
                       )
                     : {};
+                  const parentPropsObj = getPropertiesObject(
+                    parentChangeObj,
+                    parentComponent
+                  );
                   const propsObj = getPropertiesObject(changeObj, component);
                   const isAddition = !!changeObj.properties.isChecked;
                   const isRemoved =
@@ -414,6 +426,7 @@ const CategorizedList = React.memo(
                           idSuffix
                           propsObj={propsObj}
                           parentChangeObj={parentChangeObj}
+                          parentPropsObj={parentPropsObj}
                           title={propsObj.title}
                         />
                       )}
@@ -500,10 +513,6 @@ const CategorizedList = React.memo(
                                 change.properties.isChecked
                               );
                             let attachments = propsObj.attachments || [];
-                            console.info(
-                              "renderöidään attachments uudestaan...",
-                              attachments
-                            );
                             return (
                               <div className={component.styleClasses}>
                                 <Attachments
@@ -748,11 +757,6 @@ CategorizedList.propTypes = {
   runRootOperations: PropTypes.func,
   showCategoryTitles: PropTypes.bool,
   onChangesUpdate: PropTypes.func
-};
-
-CategorizedList.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: "CategorizedList"
 };
 
 export default CategorizedList;

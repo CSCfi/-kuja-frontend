@@ -7,10 +7,8 @@ const FormSection = React.memo(
     children,
     code,
     id,
-    muutoshakemus,
     render,
     runOnChanges,
-    runOnStateUpdate,
     title
   }) => {
     const updateChanges = useCallback(
@@ -18,13 +16,6 @@ const FormSection = React.memo(
         runOnChanges(payload.anchor, payload.changes);
       },
       [runOnChanges]
-    );
-
-    const updateState = useCallback(
-      (data, sectionId) => {
-        runOnStateUpdate(sectionId || id, data);
-      },
-      [id, runOnStateUpdate]
     );
 
     const removeChanges = useCallback(
@@ -38,10 +29,8 @@ const FormSection = React.memo(
       <Section code={code} title={title}>
         {!!render
           ? render({
-              muutoshakemus,
               onChangesRemove: removeChanges,
               onChangesUpdate: updateChanges,
-              onStateUpdate: updateState,
               sectionId: id
             })
           : null}
@@ -54,9 +43,7 @@ const FormSection = React.memo(
 FormSection.propTypes = {
   id: PropTypes.string,
   code: PropTypes.number,
-  muutoshakemus: PropTypes.object,
   runOnChanges: PropTypes.func,
-  runOnStateUpdate: PropTypes.func,
   title: PropTypes.string
 };
 
