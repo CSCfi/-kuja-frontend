@@ -40,7 +40,7 @@
     "react-moment": "^0.9.6",
     "react-resize-detector": "^4.2.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "3.3.1",
     "react-select": "^3.0.8",
     "react-sweet-state": "^1.1.1",
     "react-table": "^6.10.3",
