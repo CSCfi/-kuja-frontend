@@ -2,52 +2,54 @@ import { createStore, createHook } from "react-sweet-state";
 import { assocPath, filter, path, split } from "ramda";
 import { getAnchorPart } from "../utils/common";
 
-const Store = createStore({
-  initialState: {
-    tutkinnot: {},
+const initialState = {
+  tutkinnot: {},
+  kielet: {
+    opetuskielet: [],
+    tutkintokielet: {}
+  },
+  koulutukset: {
+    atvKoulutukset: [],
+    kuljettajakoulutukset: [],
+    valmentavatKoulutukset: []
+  },
+  perustelut: {
     kielet: {
       opetuskielet: [],
-      tutkintokielet: {}
+      tutkintokielet: []
     },
     koulutukset: {
       atvKoulutukset: [],
       kuljettajakoulutukset: [],
+      tyovoimakoulutukset: [],
       valmentavatKoulutukset: []
     },
-    perustelut: {
-      kielet: {
-        opetuskielet: [],
-        tutkintokielet: []
-      },
-      koulutukset: {
-        atvKoulutukset: [],
-        kuljettajakoulutukset: [],
-        tyovoimakoulutukset: [],
-        valmentavatKoulutukset: []
-      },
-      opiskelijavuodet: {
-        sisaoppilaitos: [],
-        vaativatuki: [],
-        vahimmaisopiskelijavuodet: []
-      },
-      liitteet: [],
-      toimintaalue: [],
-      tutkinnot: {}
+    opiskelijavuodet: {
+      sisaoppilaitos: [],
+      vaativatuki: [],
+      vahimmaisopiskelijavuodet: []
     },
-    taloudelliset: {
-      yleisettiedot: [],
-      investoinnit: [],
-      tilinpaatostiedot: [],
-      liitteet: []
-    },
-    muut: {},
-    opiskelijavuodet: [],
+    liitteet: [],
     toimintaalue: [],
-    yhteenveto: {
-      yleisettiedot: [],
-      hakemuksenLiitteet: []
-    }
+    tutkinnot: {}
   },
+  taloudelliset: {
+    yleisettiedot: [],
+    investoinnit: [],
+    tilinpaatostiedot: [],
+    liitteet: []
+  },
+  muut: {},
+  opiskelijavuodet: [],
+  toimintaalue: [],
+  yhteenveto: {
+    yleisettiedot: [],
+    hakemuksenLiitteet: []
+  }
+};
+
+const Store = createStore({
+  initialState,
   actions: {
     initialize: changeObjects => ({ setState }) => {
       setState(changeObjects);
@@ -59,6 +61,9 @@ const Store = createStore({
         return changeObj.anchor !== anchor;
       }, path(pathOfChangeObj, currentState));
       setState(assocPath(pathOfChangeObj, changeObjectsLeft, currentState));
+    },
+    reset: () => ({ setState }) => {
+      setState(initialState);
     },
     set: (id, changeObjects) => ({ getState, setState }) => {
       setState(assocPath(split("_", id), changeObjects, getState()));

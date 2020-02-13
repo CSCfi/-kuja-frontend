@@ -351,6 +351,8 @@ const MuutospyyntoWizard = ({
    * User is redirected to the following path when the form is closed.
    */
   const closeWizard = useCallback(() => {
+    // Let's empty the store of changes first
+    coActions.reset();
     return history.push(
       `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
     );
