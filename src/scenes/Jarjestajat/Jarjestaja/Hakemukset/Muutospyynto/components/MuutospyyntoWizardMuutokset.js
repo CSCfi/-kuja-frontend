@@ -58,15 +58,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 render={_props => (
                   <React.Fragment>
                     <Tutkinnot
-                      changeObjects={R.prop("tutkinnot", props.changeObjects)}
                       tutkinnot={props.tutkinnot}
                       lupaKohteet={props.lupaKohteet}
                       {..._props}
                     />
                     <MuutospyyntoWizardKoulutukset
-                      changeObjects={props.changeObjects.koulutukset}
                       koulutukset={props.koulutukset}
-                      lupa={props.lupa}
+                      maaraykset={props.lupa.maaraykset}
                       {..._props}
                     />
                   </React.Fragment>
@@ -81,10 +79,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 render={_props => (
                   <React.Fragment>
                     <MuutospyyntoWizardKielet
-                      changeObjects={{
-                        kielet: props.changeObjects.kielet,
-                        tutkinnot: props.changeObjects.tutkinnot
-                      }}
                       lupa={props.lupa}
                       lupaKohteet={props.lupaKohteet}
                       kielet={props.kielet}
@@ -104,9 +98,6 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 id="toimintaalue"
                 render={_props => (
                   <MuutospyyntoWizardToimintaalue
-                    changeObjects={{
-                      muutokset: props.changeObjects.toimintaalue
-                    }}
                     lupakohde={props.lupaKohteet[3]}
                     kunnat={props.kunnat}
                     maakuntakunnatList={props.maakuntakunnatList}
@@ -126,24 +117,17 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   code={props.lupaKohteet[4].headingNumber}
                   id="opiskelijavuodet"
                   render={_props => (
-                    <React.Fragment>
-                      <MuutospyyntoWizardOpiskelijavuodet
-                        changeObjects={{
-                          opiskelijavuodet:
-                            props.changeObjects.opiskelijavuodet,
-                          muut: props.changeObjects.muut
-                        }}
-                        lupa={props.lupa}
-                        lupaKohteet={props.lupaKohteet}
-                        muut={props.muut}
-                        opiskelijavuodet={props.opiskelijavuodet}
-                        lomakkeet={{
-                          opiskelijavuodet: props.lomakkeet.opiskelijavuodet,
-                          muut: props.lomakkeet.muut
-                        }}
-                        {..._props}
-                      />
-                    </React.Fragment>
+                    <MuutospyyntoWizardOpiskelijavuodet
+                      lupaKohteet={props.lupaKohteet}
+                      maaraykset={props.lupa.maaraykset}
+                      muut={props.muut}
+                      opiskelijavuodet={props.opiskelijavuodet}
+                      lomakkeet={{
+                        opiskelijavuodet: props.lomakkeet.opiskelijavuodet,
+                        muut: props.lomakkeet.muut
+                      }}
+                      {..._props}
+                    />
                   )}
                   runOnChanges={props.onChangesUpdate}
                   title={intl.formatMessage(wizardMessages.header_section4)}
@@ -155,19 +139,12 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                   code={props.lupaKohteet[5].headingNumber}
                   id="muut"
                   render={_props => (
-                    <React.Fragment>
-                      {kohteet.muut && props.muut && maaraystyypit && (
-                        <MuutospyyntoWizardMuut
-                          changeObjects={{
-                            muut: R.prop("muut", props.changeObjects)
-                          }}
-                          maaraykset={props.lupa.maaraykset}
-                          muut={props.muut}
-                          koulutukset={props.koulutukset}
-                          {..._props}
-                        />
-                      )}
-                    </React.Fragment>
+                    <MuutospyyntoWizardMuut
+                      maaraykset={props.lupa.maaraykset}
+                      muut={props.muut}
+                      koulutukset={props.koulutukset}
+                      {..._props}
+                    />
                   )}
                   runOnChanges={props.onChangesUpdate}
                   title={intl.formatMessage(wizardMessages.header_section5)}
@@ -181,12 +158,7 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
   );
 });
 
-MuutospyyntoWizardMuutokset.defaultProps = {
-  changeObjects: {}
-};
-
 MuutospyyntoWizardMuutokset.propTypes = {
-  changeObjects: PropTypes.object,
   kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,

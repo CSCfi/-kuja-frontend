@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
 const getArticle = (areaCode, articles = []) => {
   return R.find(article => {
@@ -12,7 +13,8 @@ const getArticle = (areaCode, articles = []) => {
   }, articles);
 };
 
-const Tutkinnot = React.memo(props => {
+const Tutkinnot = props => {
+  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const sectionId = "tutkinnot";
 
@@ -33,7 +35,7 @@ const Tutkinnot = React.memo(props => {
             anchor={anchorInitial}
             key={`expandable-row-root-${i}`}
             categories={[]}
-            changes={props.changeObjects[areaCode]}
+            changes={changeObjects.tutkinnot[areaCode]}
             code={areaCode}
             onChangesRemove={props.onChangesRemove}
             onUpdate={props.onChangesUpdate}
@@ -43,7 +45,7 @@ const Tutkinnot = React.memo(props => {
             <Lomake
               action="modification"
               anchor={anchorInitial}
-              changeObjects={props.changeObjects[areaCode]}
+              changeObjects={changeObjects.tutkinnot[areaCode]}
               data={{
                 areaCode,
                 index: i,
@@ -60,14 +62,9 @@ const Tutkinnot = React.memo(props => {
       }, koulutusdata)}
     </React.Fragment>
   );
-});
-
-Tutkinnot.defaultProps = {
-  changeObjects: {}
 };
 
 Tutkinnot.propTypes = {
-  changeObjects: PropTypes.object,
   lupaKohteet: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   tutkinnot: PropTypes.object

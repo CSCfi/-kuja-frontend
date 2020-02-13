@@ -6,14 +6,15 @@ import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil"
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
 import { toUpper } from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
 const Kuljettajakoulutukset = ({
-  changeObjects,
   koulutukset,
-  lupa,
+  maaraykset,
   onChangesRemove,
   onChangesUpdate
 }) => {
+  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const sectionId = "koulutukset_kuljettajakoulutukset";
   const koodisto = "kuljettajakoulutus";
@@ -22,24 +23,24 @@ const Kuljettajakoulutukset = ({
     return getDataForKoulutusList(
       koulutukset.muut[koodisto],
       toUpper(intl.locale),
-      lupa,
+      maaraykset,
       "kuljettajakoulutus"
     );
-  }, [intl.locale, koulutukset, lupa]);
+  }, [intl.locale, koulutukset, maaraykset]);
 
   return (
     <ExpandableRowRoot
       anchor={sectionId}
       key={`expandable-row-root`}
       categories={[]}
-      changes={changeObjects}
+      changes={changeObjects.koulutukset.kuljettajakoulutukset}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       title={intl.formatMessage(wizardMessages.driverTraining)}>
       <Lomake
         action="modification"
         anchor={sectionId}
-        changeObjects={changeObjects}
+        changeObjects={changeObjects.koulutukset.kuljettajakoulutukset}
         data={{
           koulutusdata
         }}
@@ -52,9 +53,8 @@ const Kuljettajakoulutukset = ({
 };
 
 Kuljettajakoulutukset.propTypes = {
-  changeObjects: PropTypes.array,
-  lupa: PropTypes.object,
   koulutukset: PropTypes.object,
+  maaraykset: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
 };

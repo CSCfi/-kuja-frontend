@@ -94,10 +94,8 @@ export function getChangesToSave(
   backendMuutokset = [],
   kohde,
   maaraystyyppi,
-  muut,
-  maaraykset
+  muut
 ) {
-  console.info(kohde, maaraystyyppi, maaraykset);
   // Update changes if already exits with perustelut and attachements
   const paivitetytBackendMuutokset = R.map(changeObj => {
     let { anchor, backendMuutos } = findBackendMuutos(
@@ -497,7 +495,6 @@ export function getChangesToSave(
         perustelutForBackend,
         perusteluteksti ? { perusteluteksti } : null
       );
-      console.info(kohde, maaraystyyppi, koodisto);
       return {
         arvo: changeObj.properties.applyForValue,
         kategoria: R.head(anchorParts),

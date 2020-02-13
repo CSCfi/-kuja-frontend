@@ -6,8 +6,10 @@ import Lomake from "../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
-const MuutospyyntoWizardMuut = React.memo(props => {
+const MuutospyyntoWizardMuut = props => {
+  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const sectionId = "muut";
   const { onChangesRemove, onChangesUpdate } = props;
@@ -153,7 +155,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             anchor={`${sectionId}_${configObj.code}`}
             key={`expandable-row-root-${i}`}
             categories={[]}
-            changes={R.prop(configObj.code, props.changeObjects.muut)}
+            changes={R.prop(configObj.code, changeObjects.muut)}
             code={configObj.code}
             index={i}
             onUpdate={onChangesUpdate}
@@ -164,7 +166,7 @@ const MuutospyyntoWizardMuut = React.memo(props => {
             <Lomake
               action="modification"
               anchor={`${sectionId}_${configObj.code}`}
-              changeObjects={R.prop(configObj.code, props.changeObjects.muut)}
+              changeObjects={R.prop(configObj.code, changeObjects.muut)}
               data={{
                 configObj,
                 osiota5koskevatMaaraykset
@@ -178,14 +180,9 @@ const MuutospyyntoWizardMuut = React.memo(props => {
       }, R.filter(R.propEq("isInUse", true))(config))}
     </React.Fragment>
   );
-});
-
-MuutospyyntoWizardMuut.defaultProps = {
-  changeObjects: {}
 };
 
 MuutospyyntoWizardMuut.propTypes = {
-  changeObjects: PropTypes.object,
   headingNumber: PropTypes.number,
   maaraykset: PropTypes.array,
   muut: PropTypes.array,

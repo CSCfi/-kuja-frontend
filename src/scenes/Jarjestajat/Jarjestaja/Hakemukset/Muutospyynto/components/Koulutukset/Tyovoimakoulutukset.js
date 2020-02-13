@@ -6,53 +6,57 @@ import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
 import { toUpper } from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
-const Tyovoimakoulutukset = React.memo(
-  ({ changeObjects, koulutukset, lupa, onChangesRemove, onChangesUpdate }) => {
-    const intl = useIntl();
-    const sectionId = "koulutukset_tyovoimakoulutukset";
-    const koodisto = "oivatyovoimakoulutus";
+const Tyovoimakoulutukset = ({
+  koulutukset,
+  maaraykset,
+  onChangesRemove,
+  onChangesUpdate
+}) => {
+  const [changeObjects] = useChangeObjects();
+  const intl = useIntl();
+  const sectionId = "koulutukset_tyovoimakoulutukset";
+  const koodisto = "oivatyovoimakoulutus";
 
-    const koulutusdata = useMemo(() => {
-      return getDataForKoulutusList(
-        koulutukset.muut[koodisto],
-        toUpper(intl.locale),
-        lupa,
-        "oivatyovoimakoulutus"
-      );
-    }, [intl.locale, koulutukset, lupa]);
-
-    return (
-      <ExpandableRowRoot
-        anchor={sectionId}
-        key={`expandable-row-root`}
-        categories={[]}
-        changes={changeObjects}
-        onUpdate={onChangesUpdate}
-        onChangesRemove={onChangesRemove}
-        title={intl.formatMessage(wizardMessages.workforceTraining)}>
-        {koulutusdata && (
-          <Lomake
-            action="modification"
-            anchor={sectionId}
-            changeObjects={changeObjects}
-            data={{
-              koulutusdata
-            }}
-            onChangesUpdate={onChangesUpdate}
-            path={["koulutukset", "tyovoimakoulutukset"]}
-            rules={[]}
-            showCategoryTitles={true}></Lomake>
-        )}
-      </ExpandableRowRoot>
+  const koulutusdata = useMemo(() => {
+    return getDataForKoulutusList(
+      koulutukset.muut[koodisto],
+      toUpper(intl.locale),
+      maaraykset,
+      "oivatyovoimakoulutus"
     );
-  }
-);
+  }, [intl.locale, koulutukset, maaraykset]);
+
+  return (
+    <ExpandableRowRoot
+      anchor={sectionId}
+      key={`expandable-row-root`}
+      categories={[]}
+      changes={changeObjects.koulutukset.tyovoimakoulutukset}
+      onUpdate={onChangesUpdate}
+      onChangesRemove={onChangesRemove}
+      title={intl.formatMessage(wizardMessages.workforceTraining)}>
+      {koulutusdata && (
+        <Lomake
+          action="modification"
+          anchor={sectionId}
+          changeObjects={changeObjects.koulutukset.tyovoimakoulutukset}
+          data={{
+            koulutusdata
+          }}
+          onChangesUpdate={onChangesUpdate}
+          path={["koulutukset", "tyovoimakoulutukset"]}
+          rules={[]}
+          showCategoryTitles={true}></Lomake>
+      )}
+    </ExpandableRowRoot>
+  );
+};
 
 Tyovoimakoulutukset.propTypes = {
-  changeObjects: PropTypes.array,
   koulutukset: PropTypes.object,
-  lupa: PropTypes.object,
+  maaraykset: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
 };

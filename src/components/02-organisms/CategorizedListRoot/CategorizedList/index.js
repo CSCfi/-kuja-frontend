@@ -18,9 +18,6 @@ import ActionList from "../../ActionList";
 import { flattenObj } from "../../../../utils/common";
 import CheckIcon from "@material-ui/icons/Check";
 
-const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
-whyDidYouRender(React);
-
 /** @namespace components */
 
 /**
@@ -758,11 +755,6 @@ CategorizedList.propTypes = {
   runRootOperations: PropTypes.func,
   showCategoryTitles: PropTypes.bool,
   onChangesUpdate: PropTypes.func
-};
-
-CategorizedList.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: "CategorizedList"
 };
 
 export default CategorizedList;

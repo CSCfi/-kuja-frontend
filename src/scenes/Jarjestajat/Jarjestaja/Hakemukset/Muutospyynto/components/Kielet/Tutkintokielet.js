@@ -4,16 +4,18 @@ import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getActiveCheckboxes } from "../../../../../../../services/lomakkeet/utils";
 import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
-const Tutkintokielet = React.memo(props => {
+const Tutkintokielet = props => {
+  const [changeObjects] = useChangeObjects();
   const sectionId = "kielet_tutkintokielet";
   const { onChangesRemove, onChangesUpdate } = props;
 
   useEffect(() => {
-    if (props.unselectedAnchors.length && props.changeObjects.tutkintokielet) {
+    if (props.unselectedAnchors.length && changeObjects.kielet.tutkintokielet) {
       let tutkintokielichangesWithoutRemovedOnes = Object.assign(
         {},
-        props.changeObjects.tutkintokielet
+        changeObjects.kielet.tutkintokielet
       );
       R.forEach(anchor => {
         const areaCode = R.compose(
@@ -39,7 +41,7 @@ const Tutkintokielet = React.memo(props => {
       if (
         !R.equals(
           tutkintokielichangesWithoutRemovedOnes,
-          props.changeObjects.tutkintokielet
+          changeObjects.kielet.tutkintokielet
         )
       ) {
         onChangesUpdate({
@@ -50,7 +52,7 @@ const Tutkintokielet = React.memo(props => {
     }
   }, [
     onChangesUpdate,
-    props.changeObjects.tutkintokielet,
+    changeObjects.kielet.tutkintokielet,
     props.unselectedAnchors
   ]);
 
@@ -60,13 +62,16 @@ const Tutkintokielet = React.memo(props => {
         const tutkintolomake = props.tutkintolomakkeet[areaCode].categories;
         const actives = getActiveCheckboxes(
           tutkintolomake,
-          props.changeObjects.tutkinnot[areaCode]
+          changeObjects.tutkinnot[areaCode]
         );
         return actives.length > 0 ? (
           <ExpandableRowRoot
             anchor={`${sectionId}_${areaCode}`}
             categories={[]}
-            changes={R.prop(areaCode, props.changeObjects.tutkintokielet)}
+            changes={R.path(
+              ["kielet", "tutkintokielet", areaCode],
+              changeObjects
+            )}
             code={areaCode}
             key={`expandable-row-root-${areaCode}`}
             onChangesRemove={onChangesRemove}
@@ -77,15 +82,15 @@ const Tutkintokielet = React.memo(props => {
             <Lomake
               action="modification"
               anchor={`${sectionId}_${areaCode}`}
-              changeObjects={R.prop(
-                areaCode,
-                props.changeObjects.tutkintokielet
+              changeObjects={R.path(
+                ["kielet", "tutkintokielet", areaCode],
+                changeObjects
               )}
               data={{
                 kielet: props.kielet,
                 maaraykset: props.lupa.maaraykset,
                 tutkintolomake,
-                tutkintomuutokset: props.changeObjects.tutkinnot[areaCode]
+                tutkintomuutokset: changeObjects.tutkinnot[areaCode]
               }}
               onChangesUpdate={onChangesUpdate}
               path={["kielet", "tutkintokielet"]}
@@ -96,7 +101,7 @@ const Tutkintokielet = React.memo(props => {
       }, R.keys(props.tutkintolomakkeet).sort())}
     </React.Fragment>
   );
-});
+};
 
 Tutkintokielet.defaultProps = {
   changeObjects: {

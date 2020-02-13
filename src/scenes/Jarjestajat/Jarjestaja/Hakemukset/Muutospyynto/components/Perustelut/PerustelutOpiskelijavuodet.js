@@ -76,7 +76,10 @@ const PerustelutOpiskelijavuodet = props => {
         <ExpandableRowRoot
           anchor={`${sectionId}_sisaoppilaitos`}
           key={`expandable-row-root-sisaoppilaitos`}
-          changes={changeObjects.perustelut.sisaoppilaitos}
+          changes={path(
+            ["perustelut", "opiskelijavuodet", "sisaoppilaitos"],
+            changeObjects
+          )}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -84,7 +87,10 @@ const PerustelutOpiskelijavuodet = props => {
           <Lomake
             action="reasoning"
             anchor={`${sectionId}_sisaoppilaitos`}
-            changeObjects={changeObjects.perustelut.sisaoppilaitos}
+            changeObjects={path(
+              ["perustelut", "opiskelijavuodet", "sisaoppilaitos"],
+              changeObjects
+            )}
             data={{
               changeObject: valueChanges.sisaoppilaitos.properties,
               differenceTitles
@@ -99,7 +105,10 @@ const PerustelutOpiskelijavuodet = props => {
         <ExpandableRowRoot
           anchor={`${sectionId}_vaativatuki`}
           key={`expandable-row-root-vaativatuki`}
-          changes={changeObjects.perustelut.vaativatuki}
+          changes={path(
+            ["perustelut", "opiskelijavuodet", "vaativatuki"],
+            changeObjects
+          )}
           isExpanded={true}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
@@ -107,7 +116,10 @@ const PerustelutOpiskelijavuodet = props => {
           <Lomake
             action="reasoning"
             anchor={`${sectionId}_vaativatuki`}
-            changeObjects={changeObjects.perustelut.vaativatuki}
+            changeObjects={path(
+              ["perustelut", "opiskelijavuodet", "vaativatuki"],
+              changeObjects
+            )}
             data={{
               changeObject: valueChanges.vaativatuki.properties,
               differenceTitles

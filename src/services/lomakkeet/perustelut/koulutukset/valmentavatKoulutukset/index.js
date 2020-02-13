@@ -73,7 +73,7 @@ export default function getValmentavatKoulutuksetPerustelulomake(
         isReadOnly
       );
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }

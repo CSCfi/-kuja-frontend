@@ -6,9 +6,11 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { toUpper, values } from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
 const ValmentavatKoulutukset = React.memo(
-  ({ changeObjects, koulutukset, onChangesRemove, onChangesUpdate }) => {
+  ({ koulutukset, onChangesRemove, onChangesUpdate }) => {
+    const [changeObjects] = useChangeObjects();
     const intl = useIntl();
     const sectionId = "koulutukset_valmentavatKoulutukset";
 
@@ -24,7 +26,7 @@ const ValmentavatKoulutukset = React.memo(
         anchor={sectionId}
         key={`expandable-row-root`}
         categories={[]}
-        changes={changeObjects}
+        changes={changeObjects.koulutukset.valmentavatKoulutukset}
         title={intl.formatMessage(wizardMessages.preparatoryTraining)}
         index={0}
         onChangesRemove={onChangesRemove}
@@ -34,7 +36,7 @@ const ValmentavatKoulutukset = React.memo(
           <Lomake
             action="modification"
             anchor={sectionId}
-            changeObjects={changeObjects}
+            changeObjects={changeObjects.koulutukset.valmentavatKoulutukset}
             data={{
               koulutusdata
             }}
@@ -49,7 +51,6 @@ const ValmentavatKoulutukset = React.memo(
 );
 
 ValmentavatKoulutukset.propTypes = {
-  changeObjects: PropTypes.array,
   koulutukset: PropTypes.object
 };
 

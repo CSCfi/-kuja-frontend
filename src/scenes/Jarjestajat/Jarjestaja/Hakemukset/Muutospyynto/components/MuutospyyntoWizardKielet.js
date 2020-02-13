@@ -5,8 +5,10 @@ import { KIELET_SECTIONS } from "../../../modules/constants";
 import Tutkintokielet from "./Kielet/Tutkintokielet";
 import * as R from "ramda";
 import _ from "lodash";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
-const MuutospyyntoWizardKielet = React.memo(props => {
+const MuutospyyntoWizardKielet = props => {
+  const [changeObjects] = useChangeObjects();
   const prevTutkinnotItemsRef = useRef();
 
   const { lupa } = props;
@@ -38,7 +40,7 @@ const MuutospyyntoWizardKielet = React.memo(props => {
             return R.filter(changeObj => {
               const isInCurrentChanges = !!R.find(
                 R.propEq("anchor", changeObj.anchor),
-                props.changeObjects.tutkinnot[key] || []
+                changeObjects.tutkinnot[key] || []
               );
               return changeObj.properties.isChecked && !isInCurrentChanges;
             }, value);
@@ -52,23 +54,21 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       R.prop("anchor"),
       R.filter(
         R.compose(R.equals(false), R.path(["properties", "isChecked"])),
-        R.flatten(R.values(props.changeObjects.tutkinnot))
+        R.flatten(R.values(changeObjects.tutkinnot))
       )
     );
 
-    prevTutkinnotItemsRef.current = props.changeObjects.tutkinnot;
+    prevTutkinnotItemsRef.current = changeObjects.tutkinnot;
 
     // Here we combine the arrays 1 and 2
     return R.concat(wereSelected, wereSelectedByDefault);
-  }, [props.changeObjects.tutkinnot]);
+  }, [changeObjects.tutkinnot]);
 
   return (
     <React.Fragment>
       <Opetuskielet
-        changeObjects={props.changeObjects.kielet.opetuskielet}
         opetuskielet={props.kielet.opetuskielet}
         lupakohde={props.lupaKohteet[2]}
-        lupa={lupa}
         maaraystyyppi={props.maaraystyyppi}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
@@ -78,10 +78,6 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       {/* Language options for degrees can't be shown without degrees.  */}
       {!R.isEmpty(props.tutkintolomakkeet) && (
         <Tutkintokielet
-          changeObjects={{
-            tutkintokielet: props.changeObjects.kielet.tutkintokielet,
-            tutkinnot: props.changeObjects.tutkinnot
-          }}
           kielet={props.kielet.kielet}
           lupa={lupa}
           onChangesRemove={props.onChangesRemove}
@@ -92,14 +88,9 @@ const MuutospyyntoWizardKielet = React.memo(props => {
       )}
     </React.Fragment>
   );
-});
-
-MuutospyyntoWizardKielet.defaultProps = {
-  changeObjects: { tutkinnot: [] }
 };
 
 MuutospyyntoWizardKielet.propTypes = {
-  changeObjects: PropTypes.object,
   kielet: PropTypes.object,
   koulutukset: PropTypes.object,
   lupa: PropTypes.object,

@@ -71,7 +71,7 @@ export default function getATVKoulutuksetPerustelulomake(
         isReadOnly
       );
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }

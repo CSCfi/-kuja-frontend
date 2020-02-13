@@ -12,7 +12,7 @@ export function getKuljettajienJatkokoulutuslomake(
     case "addition":
       return getAdditionFormJatkokoulutus(isReadOnly, data);
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }
@@ -28,7 +28,7 @@ export function getKuljettajienPeruskoulutuslomake(
     case "addition":
       return getAdditionFormPeruskoulutus(isReadOnly, data);
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }

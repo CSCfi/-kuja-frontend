@@ -424,7 +424,6 @@ const MuutospyyntoWizard = ({
                   lupa={lupa}
                   changeObjects={cos}>
                   <MuutospyyntoWizardMuutokset
-                    changeObjects={cos}
                     kielet={kieletAndOpetuskielet}
                     kohteet={kohteet}
                     koulutukset={parsedKoulutukset}

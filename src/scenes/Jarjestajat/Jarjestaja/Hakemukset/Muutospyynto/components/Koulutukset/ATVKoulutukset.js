@@ -6,13 +6,10 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { toUpper } from "ramda";
+import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
-const ATVKoulutukset = ({
-  changeObjects,
-  koulutukset,
-  onChangesRemove,
-  onChangesUpdate
-}) => {
+const ATVKoulutukset = ({ koulutukset, onChangesRemove, onChangesUpdate }) => {
+  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const sectionId = "koulutukset_atvKoulutukset";
 
@@ -28,7 +25,7 @@ const ATVKoulutukset = ({
       anchor={sectionId}
       key={`expandable-row-root`}
       categories={[]}
-      changes={changeObjects}
+      changes={changeObjects.koulutukset.atvKoulutukset}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       title={intl.formatMessage(wizardMessages.vocationalTraining)}>
@@ -36,7 +33,7 @@ const ATVKoulutukset = ({
         <Lomake
           action="modification"
           anchor={sectionId}
-          changeObjects={changeObjects}
+          changeObjects={changeObjects.koulutukset.atvKoulutukset}
           data={{
             koulutusdata
           }}

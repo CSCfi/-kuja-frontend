@@ -186,7 +186,7 @@ export default function getTyovoimakoulutuksetPerustelulomake(
         R.toUpper(locale)
       );
     case "removal":
-      return getDefaultRemovalForm(prefix);
+      return getDefaultRemovalForm(isReadOnly, prefix);
     default:
       return [];
   }

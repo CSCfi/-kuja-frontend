@@ -3,13 +3,13 @@ import * as R from "ramda";
 export function getDataForKoulutusList(
   koulutukset,
   locale,
-  lupa = {},
+  maaraykset = [],
   koodisto
 ) {
   const luvassaOlevatKoodiarvot = koodisto
     ? R.map(maarays => {
         return maarays.koodisto === koodisto ? maarays.koodiarvo : null;
-      }, lupa.maaraykset).filter(Boolean)
+      }, maaraykset).filter(Boolean)
     : [];
 
   let isInLupaTrueFound = false;

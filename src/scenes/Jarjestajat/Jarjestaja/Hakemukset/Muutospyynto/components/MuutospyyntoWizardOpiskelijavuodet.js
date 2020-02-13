@@ -3,6 +3,7 @@ import ExpandableRowRoot from "../../../../../../components/02-organisms/Expanda
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
 const getArvoFromKohdeArray = (tyyppi, kohde) => {
   return parseInt(
@@ -29,7 +30,8 @@ const defaultConstraintFlags = {
   isSisaoppilaitosValueRequired: false
 };
 
-const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
+const MuutospyyntoWizardOpiskelijavuodet = props => {
+  const [changeObjects] = useChangeObjects();
   const { onChangesRemove, onChangesUpdate } = props;
   const { opiskelijavuodet, rajoitukset } = props.lupaKohteet[4];
 
@@ -72,7 +74,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
 
   useEffect(() => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
-      props.lupa.maaraykset
+      props.maaraykset
     );
     if (maarays) {
       setKoodiarvot(prevState => {
@@ -82,7 +84,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.lupa.maaraykset]);
+  }, [props.maaraykset]);
 
   // This effect is run depending on changes in section 5
   useEffect(() => {
@@ -93,9 +95,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       // Mikäli jokin alla olevista koodeista on valittuna osiossa 5, näytetään vaativaa tukea koskevat kentät osiossa 4.
       const vaativatCodes = [2, 16, 17, 18, 19, 20, 21];
 
-      const flattenChangesOfMuut = R.flatten(
-        R.values(props.changeObjects.muut)
-      );
+      const flattenChangesOfMuut = R.flatten(R.values(changeObjects.muut));
 
       // 03 = Sisäoppilaitosmuotoinen koulutus (section 5)
       const sisaoppilaitosState = props.lomakkeet.muut["03"].categories[0];
@@ -219,14 +219,14 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         };
       });
     }
-  }, [props.changeObjects.muut, props.muut, props.lomakkeet.muut]);
+  }, [changeObjects.muut, props.muut, props.lomakkeet.muut]);
 
   // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
   useEffect(() => {
-    let filteredChanges = props.changeObjects.opiskelijavuodet;
+    let filteredChanges = changeObjects.opiskelijavuodet;
     if (
       !constraintFlags.isSisaoppilaitosVisible &&
-      props.changeObjects.opiskelijavuodet
+      changeObjects.opiskelijavuodet
     ) {
       filteredChanges = filterOpiskelijavuodet(
         filteredChanges,
@@ -235,12 +235,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     }
     if (
       !constraintFlags.isVaativaTukiVisible &&
-      props.changeObjects.opiskelijavuodet
+      changeObjects.opiskelijavuodet
     ) {
       filteredChanges = filterOpiskelijavuodet(filteredChanges, "vaativatuki");
     }
 
-    if (!R.equals(filteredChanges, props.changeObjects.opiskelijavuodet)) {
+    if (!R.equals(filteredChanges, changeObjects.opiskelijavuodet)) {
       onChangesUpdate({
         anchor: props.sectionId,
         changes: filteredChanges
@@ -249,7 +249,7 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
   }, [
     constraintFlags,
     onChangesUpdate,
-    props.changeObjects.opiskelijavuodet,
+    changeObjects.opiskelijavuodet,
     props.sectionId
   ]);
 
@@ -258,17 +258,16 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       anchor={props.sectionId}
       key={`expandable-row-root`}
       categories={[]}
-      changes={props.changeObjects.opiskelijavuodet}
+      changes={changeObjects.opiskelijavuodet}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       sectionId={props.sectionId}
       showCategoryTitles={true}
-      title={""}
       isExpanded={true}>
       <Lomake
         action="modification"
         anchor={props.sectionId}
-        changeObjects={props.changeObjects.opiskelijavuodet}
+        changeObjects={changeObjects.opiskelijavuodet}
         data={{
           applyFor,
           applyForSisaoppilaitos,
@@ -291,19 +290,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>
   );
-});
-
-MuutospyyntoWizardOpiskelijavuodet.defaultProps = {
-  changeObjects: {}
 };
 
 MuutospyyntoWizardOpiskelijavuodet.propTypes = {
-  changeObjects: PropTypes.object,
-  kohde: PropTypes.object,
   lomakkeet: PropTypes.object,
-  lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
-  maaraystyyppi: PropTypes.object,
+  maaraykset: PropTypes.array,
   muut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func

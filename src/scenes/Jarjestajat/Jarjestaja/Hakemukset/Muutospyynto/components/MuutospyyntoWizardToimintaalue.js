@@ -9,8 +9,10 @@ import {
 } from "../../../../../../utils/common";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
+import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
+  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const { onChangesUpdate } = props;
 
@@ -24,9 +26,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects.muutokset || []).filter(Boolean)
+      }, changeObjects.toimintaalue || []).filter(Boolean)
     );
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   const lisattavatMaakunnat = useMemo(() => {
     return R.sortBy(
@@ -38,9 +40,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         )
           ? changeObj.properties
           : null;
-      }, props.changeObjects.muutokset || []).filter(Boolean)
+      }, changeObjects.toimintaalue || []).filter(Boolean)
     );
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   const kunnatInLupa = useMemo(() => {
     return R.sortBy(
@@ -129,7 +131,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   const isValtakunnallinenChecked = useMemo(() => {
     const valtakunnallinenChangeObject = R.find(changeObj => {
       return R.equals(getAnchorPart(changeObj.anchor, 1), "valtakunnallinen");
-    }, props.changeObjects.muutokset || []);
+    }, changeObjects.toimintaalue || []);
     return (
       (props.lupakohde.valtakunnallinen &&
         props.lupakohde.valtakunnallinen.arvo === "FI1" &&
@@ -137,7 +139,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       (valtakunnallinenChangeObject &&
         valtakunnallinenChangeObject.properties.isChecked)
     );
-  }, [props.changeObjects.muutokset, props.lupakohde.valtakunnallinen]);
+  }, [changeObjects.toimintaalue, props.lupakohde.valtakunnallinen]);
 
   const isEiMaariteltyaToimintaaluettaChecked = useMemo(() => {
     const changeObject = R.find(changeObj => {
@@ -145,9 +147,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         getAnchorPart(changeObj.anchor, 1),
         "ei-maariteltya-toiminta-aluetta"
       );
-    }, props.changeObjects.muutokset || []);
+    }, changeObjects.toimintaalue || []);
     return changeObject && changeObject.properties.isChecked;
-  }, [props.changeObjects.muutokset]);
+  }, [changeObjects.toimintaalue]);
 
   /**
    * There are three radio buttons in Toiminta-alue section: 1) Maakunnat and kunnat
@@ -160,9 +162,9 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       // Let's check if updating is necessary.
       const radioButtonChangeObjects = R.filter(
         R.compose(R.includes("radio"), R.prop("anchor")),
-        props.changeObjects.muutokset || []
+        changeObjects.toimintaalue || []
       );
-      if (!R.equals(radioButtonChangeObjects, props.changeObjects.muutokset)) {
+      if (!R.equals(radioButtonChangeObjects, changeObjects.toimintaalue)) {
         // Fist we are going to update the change objects of Toiminta-alue section
         // on form page one.
         onChangesUpdate({
@@ -180,7 +182,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     isEiMaariteltyaToimintaaluettaChecked,
     isValtakunnallinenChecked,
     onChangesUpdate,
-    props.changeObjects.muutokset,
+    changeObjects.toimintaalue,
     props.sectionId
   ]);
 
@@ -215,7 +217,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
                 "anchor",
                 `toimintaalue.maakunnat-ja-kunnat.lupaan-kuuluvat-kunnat.${kunta.koodiArvo}`
               ),
-              props.changeObjects.muutokset || []
+              changeObjects.toimintaalue || []
             );
             const isKuntaAlreadyUnchecked =
               kuntaChangeObj && kuntaChangeObj.properties.isChecked === false;
@@ -283,7 +285,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     [
       onChangesUpdate,
       kunnatInLupa,
-      props.changeObjects.muutokset,
+      changeObjects.toimintaalue,
       props.maakuntakunnatList
     ]
   );
@@ -293,7 +295,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       anchor={props.sectionId}
       key={`expandable-row-root`}
       categories={[]}
-      changes={props.changeObjects.muutokset}
+      changes={changeObjects.toimintaalue}
       isExpanded={true}
       showCategoryTitles={true}
       onChangesRemove={props.onChangesRemove}
@@ -302,7 +304,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       <Lomake
         action="modification"
         anchor={props.sectionId}
-        changeObjects={props.changeObjects.muutokset}
+        changeObjects={changeObjects.toimintaalue}
         data={{
           isEiMaariteltyaToimintaaluettaChecked,
           isValtakunnallinenChecked,
@@ -323,7 +325,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 });
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
-  changeObjects: {},
   kunnat: [],
   lupakohde: {},
   maakunnat: [],
@@ -331,7 +332,6 @@ MuutospyyntoWizardToimintaalue.defaultProps = {
 };
 
 MuutospyyntoWizardToimintaalue.propTypes = {
-  changeObjects: PropTypes.object,
   kunnat: PropTypes.array,
   lupakohde: PropTypes.object,
   maakunnat: PropTypes.array,

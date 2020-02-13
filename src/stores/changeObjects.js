@@ -36,7 +36,7 @@ const Store = createStore({
     },
     taloudelliset: {
       yleisettiedot: [],
-      investoinnit: {},
+      investoinnit: [],
       tilinpaatostiedot: [],
       liitteet: []
     },

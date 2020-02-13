@@ -75,7 +75,15 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
                   anchor: "A",
                   name: "TextBox",
                   properties: {
-                    placeholder: __("other_placeholder")
+                    forChangeObject: {
+                      key: configObj.key,
+                      code: configObj.code,
+                      title: configObj.title,
+                      isInLupa: isInLupaBool,
+                      koodiarvo: article.koodiArvo,
+                      koodisto: article.koodisto
+                    },
+                    placeholder: __("other.placeholder")
                   }
                 }
               ]

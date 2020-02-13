@@ -14,9 +14,6 @@ import * as R from "ramda";
 import DialogTitle from "../DialogTitle";
 import { downloadFileFn } from "../../../utils/common";
 
-const whyDidYouRender = require("@welldone-software/why-did-you-render/dist/no-classes-transpile/umd/whyDidYouRender.min.js");
-whyDidYouRender(React);
-
 const Error = styled.div`
   color: ${COLORS.OIVA_RED};
   margin-bottom: 8px;
@@ -537,11 +534,6 @@ Attachments.propTypes = {
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
   showListOnly: PropTypes.bool
-};
-
-Attachments.whyDidYouRender = {
-  logOnDifferentValues: true,
-  customName: "Attachments"
 };
 
 export default injectIntl(Attachments);
