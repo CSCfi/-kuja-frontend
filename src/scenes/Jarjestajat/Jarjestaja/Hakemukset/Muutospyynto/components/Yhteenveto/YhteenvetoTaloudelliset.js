@@ -77,20 +77,7 @@ const YhteenvetoTaloudelliset = ({
             id="taloudelliset_liitteet"
             render={_props => (
               <React.Fragment>
-                <TaloudellisetLiitteet
-                  stateObject={R.path(
-                    ["taloudelliset", "liitteet"],
-                    muutoshakemus
-                  )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "liitteet"],
-                      changeObjects
-                    )
-                  }}
-                  {..._props}
-                  isReadOnly={true}
-                />
+                <TaloudellisetLiitteet {..._props} isReadOnly={true} />
               </React.Fragment>
             )}
             runOnChanges={onChangesUpdate}

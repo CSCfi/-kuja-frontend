@@ -211,6 +211,31 @@ function getTilinpaatostiedotForm(isReadOnly) {
     }
   ];
 }
+
+function getLiitteetForm(isReadOnly) {
+  return [
+    {
+      anchor: "liitteet",
+      components: [
+        {
+          name: "StatusTextRow",
+          styleClasses: ["w-full"],
+          properties: {
+            title:
+              "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muistakaa merkitä salassa pidettävät liitteet.",
+            isHidden: isReadOnly
+          }
+        },
+        {
+          anchor: "A",
+          styleClasses: ["w-full"],
+          name: "Attachments"
+        }
+      ]
+    }
+  ];
+}
+
 export function getTaloudellisetlomake(action, data, isReadOnly) {
   switch (action) {
     case "yleisettiedot":
@@ -219,6 +244,8 @@ export function getTaloudellisetlomake(action, data, isReadOnly) {
       return getInvestoinnitForm(isReadOnly);
     case "tilinpaatostiedot":
       return getTilinpaatostiedotForm(isReadOnly);
+    case "liitteet":
+      return getLiitteetForm(isReadOnly);
     default:
       return [];
   }

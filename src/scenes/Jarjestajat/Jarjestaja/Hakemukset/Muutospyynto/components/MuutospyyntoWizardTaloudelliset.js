@@ -82,19 +82,7 @@ const MuutospyyntoWizardTaloudelliset = ({
             id="taloudelliset_liitteet"
             render={_props => (
               <React.Fragment>
-                <TaloudellisetLiitteet
-                  stateObject={R.path(
-                    ["taloudelliset", "liitteet"],
-                    muutoshakemus
-                  )}
-                  changeObjects={{
-                    taloudelliset: R.path(
-                      ["taloudelliset", "liitteet"],
-                      changeObjects
-                    )
-                  }}
-                  {..._props}
-                />
+                <TaloudellisetLiitteet {..._props} />
               </React.Fragment>
             )}
             runOnChanges={onChangesUpdate}
