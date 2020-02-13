@@ -48,9 +48,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
     <React.Fragment>
       <div>
         <h2 className="my-6">
-          {props.intl.formatMessage(wizardMessages.pageTitle_1)}
+          {intl.formatMessage(wizardMessages.pageTitle_1)}
         </h2>
-        <p>{props.intl.formatMessage(wizardMessages.info_01)}</p>
+        <p>{intl.formatMessage(wizardMessages.info_01)}</p>
 
         <form onSubmit={props.handleSubmit}>
           {R.is(Object, maaraystyypit) ? (

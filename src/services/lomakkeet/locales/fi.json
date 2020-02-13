@@ -23,5 +23,13 @@
   "taloudelliset.tooltipTaloudellisetInvestoinnitKentta3": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
   "current": "Nykyinen",
   "toBeAdded": "Lisättävä",
-  "toBeRemoved": "Poistettava"
+  "toBeRemoved": "Poistettava",
+  "common.ok": "Ok",
+  "common.clear": "Tyhjennä",
+  "common.cancel": "Peruuta",
+  "common.today": "Tänään",
+  "common.date": "Päivämäärä",
+  "common.datemax": "Päiväys on liian suuri",
+  "common.datemin": "Päiväys on liian pieni",
+  "common.dateinvalid": "Päiväys on virheellinen"
 }

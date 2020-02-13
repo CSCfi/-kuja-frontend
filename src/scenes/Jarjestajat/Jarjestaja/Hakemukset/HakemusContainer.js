@@ -55,7 +55,7 @@ import { useChangeObjects } from "../../../../stores/changeObjects";
 const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
   const intl = useIntl();
 
-  const [cos, coActions] = useChangeObjects();
+  const [, coActions] = useChangeObjects();
   const [elykeskukset, elykeskuksetActions] = useElykeskukset();
   const [kohteet, kohteetActions] = useKohteet();
   const [koulutukset, koulutuksetActions] = useKoulutukset();
@@ -149,7 +149,7 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
       const files = path(["properties", "attachments"], changeObj)
         ? map(file => {
             const fileFromBackend =
-              find(propEq("tiedostoId", file.tiedostoId), filesFromMuutokset) ||
+              find(propEq("tiedostoId", file.tiedostoId), filesFromMuutokset || {}) ||
               {};
             return Object.assign({}, file, fileFromBackend);
           }, changeObj.properties.attachments || [])

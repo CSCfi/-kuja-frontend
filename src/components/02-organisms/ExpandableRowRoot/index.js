@@ -6,7 +6,6 @@ import CategorizedListRoot from "../CategorizedListRoot";
 import NumberOfChanges from "okm-frontend-components/dist/components/00-atoms/NumberOfChanges";
 import { makeStyles } from "@material-ui/core/styles";
 import UndoIcon from "@material-ui/icons/Undo";
-import * as R from "ramda";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import commonMessages from "../../../i18n/definitions/common";
@@ -16,13 +15,6 @@ const useStyles = makeStyles(() => ({
     padding: 0
   }
 }));
-
-const compare = (prevProps, nextProps) => {
-  const sameCategories = R.equals(prevProps.categories, nextProps.categories);
-  const sameChanges = R.equals(prevProps.changes, nextProps.changes);
-  const sameTitle = R.equals(prevProps.title, nextProps.title);
-  return sameCategories && sameChanges && sameTitle;
-};
 
 const defaultProps = {
   categories: [],
@@ -117,9 +109,6 @@ const ExpandableRowRoot = ({
     </React.Fragment>
   );
 };
-// ,
-// compare
-// );
 
 ExpandableRowRoot.propTypes = {
   anchor: PropTypes.string,

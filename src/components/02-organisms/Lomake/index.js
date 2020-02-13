@@ -66,6 +66,7 @@ const Lomake = React.memo(
       data,
       intl.locale,
       isReadOnly,
+      metadata,
       path,
       prefix,
       rules,

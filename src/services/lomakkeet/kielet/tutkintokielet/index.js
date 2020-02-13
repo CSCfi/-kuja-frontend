@@ -1,5 +1,4 @@
 import * as R from "ramda";
-import { cloneDeep } from "lodash";
 
 function getModificationForm(
   tutkintolomake,

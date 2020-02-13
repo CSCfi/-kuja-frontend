@@ -1,12 +1,7 @@
-import React, { useEffect, useMemo } from "react";
-import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
+import React, { useMemo } from "react";
 import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
-import {
-  curriedGetAnchorPartsByIndex,
-  getAnchorPart
-} from "../../../../../../../utils/common";
-import { isInLupa, isAdded, isRemoved } from "../../../../../../../css/label";
+import { getAnchorPart } from "../../../../../../../utils/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
@@ -16,66 +11,7 @@ import { rules } from "../../../../../../../services/lomakkeet/perustelut/koulut
 const PerustelutTyovoimakoulutukset = React.memo(props => {
   const intl = useIntl();
   const sectionId = "perustelut_koulutukset_tyovoimakoulutukset";
-  const koodisto = "oivatyovoimakoulutus";
   const { onChangesRemove, onChangesUpdate } = props;
-
-  const getCategories = useMemo(() => {
-    const getAnchorPartsByIndex = curriedGetAnchorPartsByIndex(
-      props.changeObjects.koulutukset.tyovoimakoulutukset
-    );
-
-    return (koulutusData, kohde, maaraystyyppi) => {
-      const categories = R.map(item => {
-        let structure = null;
-        if (R.includes(item.code, getAnchorPartsByIndex(1))) {
-          structure = {
-            anchor: item.code,
-            components: [
-              {
-                anchor: "A",
-                name: "StatusTextRow",
-                properties: {
-                  name: "StatusTextRow",
-                  code: item.code,
-                  title: item.title,
-                  labelStyles: {
-                    addition: isAdded,
-                    removal: isRemoved,
-                    custom: Object({}, item.isInLupa ? isInLupa : {})
-                  }
-                }
-              }
-            ],
-            meta: {
-              kohde,
-              maaraystyyppi,
-              isInLupa: item.isInLupa,
-              koodisto: item.koodisto,
-              metadata: item.metadata
-            },
-            categories: [
-              {
-                anchor: "perustelut",
-                title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
-                components: [
-                  {
-                    anchor: "A",
-                    name: "TextBox",
-                    properties: {
-                      isReadOnly: props.isReadOnly,
-                      placeholder: "Perustelut..."
-                    }
-                  }
-                ]
-              }
-            ]
-          };
-        }
-        return structure;
-      }, koulutusData.items);
-      return categories.filter(Boolean);
-    };
-  }, [props.isReadOnly, props.changeObjects.koulutukset.tyovoimakoulutukset]);
 
   const lomakkeet = useMemo(() => {
     return (

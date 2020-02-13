@@ -340,9 +340,12 @@ const MuutospyyntoWizard = ({
       getFiles,
       muutoshakemusDispatch,
       backendMuutokset,
-      lomakkeet,
       lupa,
-      match.params.uuid
+      match.params.uuid,
+      kohteet,
+      lupaKohteet,
+      maaraystyypit,
+      muut
     ]
   );
 
@@ -370,7 +373,7 @@ const MuutospyyntoWizard = ({
     return history.push(
       `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
     );
-  }, [history, match.params.ytunnus]);
+  }, [coActions, history, match.params.ytunnus]);
 
   useEffect(() => {
     setPage(parseInt(match.params.page, 10));
@@ -414,24 +417,16 @@ const MuutospyyntoWizard = ({
           <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
             {intl.formatMessage(wizardMessages.formTitle_new)}
           </DialogTitle>
+          <div className="lg:px-16 max-w-6xl mx-auto w-full">
+            <StepperNavigation
+              activeStep={page - 1}
+              stepProps={steps}
+              handleStepChange={handleStep}
+            />
+          </div>
+          <div className="border-b border-gray-400 w-full" />
           <DialogContent>
-            <div className="lg:px-16 lg:py-4 max-w-6xl m-auto mb-10">
-              <Stepper
-                activeStep={page - 1}
-                orientation={
-                  window.innerWidth >= 768 ? "horizontal" : "vertical"
-                }
-                style={{ backgroundColor: "transparent" }}>
-                {steps.map(label => {
-                  const stepProps = {};
-                  const labelProps = {};
-                  return (
-                    <Step key={label} {...stepProps}>
-                      <StepLabel {...labelProps}>{label}</StepLabel>
-                    </Step>
-                  );
-                })}
-              </Stepper>
+            <div className="lg:px-16 max-w-6xl m-auto mb-20">
               {page === 1 && (
                 <WizardPage
                   pageNumber={1}
@@ -531,6 +526,8 @@ const MuutospyyntoWizard = ({
           isConfirmDialogVisible={isConfirmDialogVisible}
           title={"Poistutaanko?"}
           content={HAKEMUS_VIESTI.VARMISTUS.FI}
+          yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
+          noMessage={HAKEMUS_VIESTI.EI.FI}
           handleOk={closeWizard}
           handleCancel={handleCancel}
         />

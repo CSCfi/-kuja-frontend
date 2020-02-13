@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import TextBox from "okm-frontend-components/dist/components/00-atoms/TextBox";
 import { useChangeObjects } from "../../../../../stores/changeObjects";
 import * as R from "ramda";
@@ -16,7 +16,7 @@ export const CategorizedListTextBox = ({
   rowsMax,
   tooltip
 }) => {
-  const [cos, coActions] = useChangeObjects();
+  const [, coActions] = useChangeObjects();
 
   let isDisabled = false;
   if (parentComponent) {

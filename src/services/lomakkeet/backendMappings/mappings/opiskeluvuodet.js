@@ -1,4 +1,4 @@
-import { map, path } from "ramda";
+import { path } from "ramda";
 
 /**
  * Function contains mapping data for backend related to opiskeluvuodet lomake.
