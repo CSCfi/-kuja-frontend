@@ -141,7 +141,8 @@ const YhteenvetoKooste = ({
                 title={kohdetiedot[0].title}
               />
             )}
-          {!!R.prop(["kielet"], changeObjects) ? (
+          {!R.isEmpty(changeObjects.kielet.opetuskielet) ||
+          !R.isEmpty(changeObjects.kielet.tutkintokielet) ? (
             <FormSection
               code={2}
               id="perustelut_kielet"
@@ -203,7 +204,7 @@ const YhteenvetoKooste = ({
           ) : null}
 
           {/* TOIMINTA-ALUE */}
-          {!!changeObjects.toimintaalue ? (
+          {!R.isEmpty(changeObjects.toimintaalue) ? (
             <FormSection
               code={3}
               id="perustelut_toimintaalue"
@@ -231,7 +232,7 @@ const YhteenvetoKooste = ({
           ) : null}
 
           {/* OPISKELIJAVUODET */}
-          {muutosperusteluList ? (
+          {!R.isEmpty(changeObjects.opiskelijavuodet) && muutosperusteluList ? (
             <FormSection
               code={4}
               id="perustelut_opiskelijavuodet"
@@ -250,7 +251,7 @@ const YhteenvetoKooste = ({
           ) : null}
 
           {/* MUUT */}
-          {!!changeObjects.muut ? (
+          {!R.isEmpty(changeObjects.muut) ? (
             <FormSection
               code={5}
               id="perustelut_muut"
