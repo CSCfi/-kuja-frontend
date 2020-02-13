@@ -25,7 +25,7 @@ const VapaaSivistystyo = ({ history }) => {
     6: "6"
   });
   const [vstTypeOptions, setvstTypeOptions] = useState([]);
-  const [searchFilter, updateSearchFilter] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
   const [vstTypeSelection, setvstTypeSelection] = useState(null);
   const [allDataLength, setAllDataLength] = useState(0);
   const [filteredDataLength, setFilteredDataLength] = useState(0);
@@ -96,18 +96,22 @@ const VapaaSivistystyo = ({ history }) => {
   }, [vstRaw]);
 
   const tableStructure = generateVSTTableStructure(luvat, intl, vstMap);
-  const onTypeSelectionChange = selection => {
-    if (selection) {
-      setvstTypeSelection(selection.value);
+  const onTypeSelectionChange = (payload, selection) => {
+    if (selection && selection.selectedOption) {
+      setvstTypeSelection(selection.selectedOption.value);
     } else {
       setvstTypeSelection(null);
     }
+  };
+  const updateSearchFilter = (payload, filter) => {
+    console.log(payload);
+    console.log(filter);
+    setSearchFilter(filter);
   };
   const vstTypeSelectionPlaceholder = intl.formatMessage(
     common.filterByOppilaitostyyppi
   );
 
-  // TODO: SearchFilter's container needs to be styled properly
   return (
     <React.Fragment>
       <Helmet>
