@@ -11,7 +11,6 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
-import Select from "react-select";
 const VapaaSivistystyo = ({ history }) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -137,7 +136,7 @@ const VapaaSivistystyo = ({ history }) => {
           </div>
           <div className="mt-2 lg:mt-0 lg:mr-2 h-13">
             <Dropdown
-              onChange={onTypeSelectionChange}
+              onChanges={onTypeSelectionChange}
               isClearable={true}
               options={vstTypeOptions}
               placeholder={vstTypeSelectionPlaceholder}
