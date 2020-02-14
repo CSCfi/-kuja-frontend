@@ -93,7 +93,7 @@ const VapaaSivistystyo = ({history}) => {
     }
   }, [vstRaw])
 
-  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap);
+  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap, history);
   const onTypeSelectionChange = (selection) => {
     if(selection) {
       setvstTypeSelection(selection.value)

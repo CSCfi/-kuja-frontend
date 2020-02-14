@@ -44,6 +44,8 @@ import Navigation from "./components/02-organisms/Navigation";
 import SideNavigation from "./components/02-organisms/SideNavigation";
 import { useOrganisation } from "./stores/organisation";
 import * as R from "ramda";
+import Paatokset from "./scenes/VapaaSivistystyo/components/Paatokset";
+import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
 
 const history = createBrowserHistory();
 
@@ -286,7 +288,27 @@ const App = ({ user }) => {
                   <Route
                     exact
                     path="/vapaa-sivistystyo"
-                    component={VapaaSivistystyo}
+                    render={props => {
+                      return(
+                        <VapaaSivistystyo
+                          history={history}
+                        />
+                      )
+                    }}
+                  />
+                  <Route
+                    exact
+                    path = "/vapaa-sivistystyo/luvat/:ytunnus"
+                    render={props => {
+                      console.log(props.match)
+                      return(
+                        <Jarjestaja
+                          history={history}
+                          ytunnus={props.match.params.ytunnus}
+                          url={props.match.url}
+                        />
+                      )
+                    }}
                   />
                   <Route
                     exact
