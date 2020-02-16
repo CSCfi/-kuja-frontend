@@ -1,30 +1,13 @@
 import React from "react";
 import { useIntl } from "react-intl";
-import { LUPA_EXCEPTION_PATH } from "../../../modules/constants";
 import CurrentLupa from "./CurrentLupa";
 import Typography from "@material-ui/core/Typography";
 import LupaHistory from "./LupaHistory";
 import PropTypes from "prop-types";
 import common from "../../../i18n/definitions/common";
 
-
-/*
- lupaException mechanism from oiva. Can be used to override a backend lupa with hardcoded data. Example
- is Ammatillinen, not applicable in Kuja.
- */
-const LUPA_LISAKOULUTTAJAT = {
-  // '0763403-0' : { 'nimi' : 'ABB Oy', 'diaarinumero' : '38/530/2007', 'pvm' : '2007-02-21', 'pdflink' : 'ABB.pdf' },
-};
-
 const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
   const intl = useIntl();
-  const lupaException = useMemo(() => {
-    return LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus];
-  }, [jarjestaja.ytunnus]);
-
-  const alkupvm = useMemo(() => {
-    return lupaException ? lupaException.pvm : lupa.alkupvm;
-  }, [lupa, lupaException]);
 
   return (
     <div className="bg-white p-8">
@@ -41,12 +24,7 @@ const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
       <CurrentLupa
         diaarinumero={lupa.diaarinumero}
         jarjestaja={jarjestaja.nimi}
-        voimassaolo={alkupvm}
-        lupaExceptionUrl={
-          lupaException
-            ? `${LUPA_EXCEPTION_PATH}${lupaException.pdflink}`
-            : null
-        }
+        voimassaolo={lupa.alkupvm}
       />
 
       <h3>{intl.formatMessage(common.lupaHistoria)}</h3>

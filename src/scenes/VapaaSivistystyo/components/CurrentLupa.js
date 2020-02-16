@@ -34,13 +34,13 @@ const CurrentLupaWrapper = styled.div`
   @media ${MEDIA_QUERIES.MOBILE} {
     padding: 14px;
   }
-`
+`;
 
 const OuterWrapper = styled.div`
   display: inline-block;
   margin-bottom: 40px;
   max-width: 100%;
-`
+`;
 
 const LupaTextWrapper = styled.div`
   margin-left: 20px;
@@ -55,15 +55,11 @@ const LupaTextWrapper = styled.div`
     -ms-hyphens: auto;
     hyphens: auto;
   }
-`
+`;
 
 const CurrentLupa = (props) => {
-  const { diaarinumero, jarjestaja, voimassaolo, lupaExceptionUrl } = props
-  let url = `${API_BASE_URL}/pdf/${diaarinumero}`
-
-  if (lupaExceptionUrl) {
-    url = lupaExceptionUrl
-  }
+  const { diaarinumero, jarjestaja, voimassaolo } = props;
+  const url = `${API_BASE_URL}/pdf/${diaarinumero}`;
 
   return (
     <a href={url} target="_blank" rel="noopener noreferrer">
@@ -79,6 +75,6 @@ const CurrentLupa = (props) => {
       </OuterWrapper>
     </a>
   )
-}
+};
 
 export default CurrentLupa
