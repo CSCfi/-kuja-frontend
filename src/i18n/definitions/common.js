@@ -189,6 +189,10 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  since: {
+    id: "common.since",
+    defaultMessage: "{date} lukien"
+  },
   jarjestaja: {
     id: "common.jarjestaja",
     defaultMessage: "Koulutuksen järjestäjä"

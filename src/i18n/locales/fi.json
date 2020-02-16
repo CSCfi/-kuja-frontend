@@ -86,6 +86,7 @@
   "common.undo": "Peruuta muutokset",
   "common.welcome": "Tervetuloa Oiva-palveluun",
   "common.frontpage": "Etusivu",
+  "common.since": "{date} lukien",
   "education.highSchoolEducation": "Lukiokoulutus",
   "education.preAndBasicEducation": "Esi- ja perusopetus",
   "education.vocationalEducation": "Ammatillinen koulutus",
