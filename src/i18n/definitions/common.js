@@ -25,10 +25,6 @@ export default defineMessages({
     id: "common.ok",
     defaultMessage: "Ok"
   },
-  paatokset: {
-    id: "common.paatokset",
-    defaultMessage: "Paatokset"
-  },
   clear: {
     id: "common.clear",
     defaultMessage: "Tyhjennä"
@@ -266,5 +262,17 @@ export default defineMessages({
   toBeRemoved: {
     id: "common.toBeRemoved",
     defaultMessage: "Poistettava"
+  },
+  lupaLatest: {
+    id: "common.lupaLatest",
+    defaultMessage: "Viimeisin päätös"
+  },
+  lupaPaatokset: {
+    id: "common.paatokset",
+    defaultMessage: "Paatokset"
+  },
+  lupaHistoria: {
+    id: "common.lupahistoria",
+    defaultMessage: "Historiatiedot"
   }
 });

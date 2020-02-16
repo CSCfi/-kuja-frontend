@@ -1,10 +1,11 @@
-import React, { useMemo } from "react";
+import React, {useMemo} from "react";
+import { useIntl } from "react-intl";
 import { LUPA_EXCEPTION_PATH } from "../../../modules/constants";
 import CurrentLupa from "./CurrentLupa";
 import Typography from "@material-ui/core/Typography";
-import { LUPA_TEKSTIT } from "../../../modules/lupaConstants";
 import LupaHistory from "./LupaHistory";
 import PropTypes from "prop-types";
+import common from "../../../i18n/definitions/common";
 
 
 /*
@@ -16,6 +17,7 @@ const LUPA_LISAKOULUTTAJAT = {
 };
 
 const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
+  const intl = useIntl();
   const lupaException = useMemo(() => {
     return LUPA_LISAKOULUTTAJAT[jarjestaja.ytunnus];
   }, [jarjestaja.ytunnus]);
@@ -28,11 +30,11 @@ const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
     <div className="bg-white p-8">
       <div>
         <Typography component="h1" variant="h5">
-          {LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI}
+          {intl.formatMessage(common.lupaPaatokset)}
         </Typography>
         <br />
         <Typography paragraph={true} variant="h6">
-          {LUPA_TEKSTIT.PAATOKSET.VIIMEISIN.FI}
+          {intl.formatMessage(common.lupaLatest)}
         </Typography>
       </div>
 
@@ -47,7 +49,7 @@ const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
         }
       />
 
-      <h3>{LUPA_TEKSTIT.PAATOKSET.HISTORIATIEDOT.FI}</h3>
+      <h3>{intl.formatMessage(common.lupaHistoria)}</h3>
       <br />
 
       <LupaHistory history={history} jarjestajaOid={jarjestaja.oid} />

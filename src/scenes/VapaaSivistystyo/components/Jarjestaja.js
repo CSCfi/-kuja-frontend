@@ -60,7 +60,7 @@ const Jarjestaja = React.memo(
       {
         path: url,
         exact: true,
-        text: intl.formatMessage(common.paatokset)
+        text: intl.formatMessage(common.lupaPaatokset)
       }
     ];
 
