@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import { LUPA_EXCEPTION_PATH } from "../../../modules/constants";
 import CurrentLupa from "./CurrentLupa";
