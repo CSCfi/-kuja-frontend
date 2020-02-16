@@ -6,12 +6,12 @@ import { Route } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import JarjestajaBasicInfo from "./JarjestajaBasicInfo";
 import ProfileMenu from "./ProfileMenu";
-import { LUPA_TEKSTIT } from "../../../modules/lupaConstants";
 import { COLORS } from "../../../modules/styles";
 import { FullWidthWrapper } from "../../../modules/elements";
 import * as R from "ramda";
 import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
+import common from "../../../i18n/definitions/common";
 
 const Separator = styled.div`
   &:after {
@@ -60,7 +60,7 @@ const Jarjestaja = React.memo(
       {
         path: url,
         exact: true,
-        text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI
+        text: intl.formatMessage(common.paatokset)
       }
     ];
 
@@ -68,7 +68,7 @@ const Jarjestaja = React.memo(
       <React.Fragment>
         <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
           <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
-          <BreadcrumbsItem to="/vapaa-sivistystyo">Vapaa sivistystyö</BreadcrumbsItem>
+          <BreadcrumbsItem to="/vapaa-sivistystyo">{intl.formatMessage(common.vst.titleName)}</BreadcrumbsItem>
           <BreadcrumbsItem to={breadcrumb}>{jarjestaja.nimi}</BreadcrumbsItem>
 
           <JarjestajaBasicInfo jarjestaja={jarjestaja} />

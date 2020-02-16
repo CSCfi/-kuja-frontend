@@ -25,6 +25,10 @@ export default defineMessages({
     id: "common.ok",
     defaultMessage: "Ok"
   },
+  paatokset: {
+    id: "common.paatokset",
+    defaultMessage: "Paatokset"
+  },
   clear: {
     id: "common.clear",
     defaultMessage: "Tyhjennä"
@@ -51,8 +55,7 @@ export default defineMessages({
   },
   attachmentInfo: {
     id: "common.attachmentInfo",
-    defaultMessage:
-      "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
+    defaultMessage: "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
   },
   attachmentNone: {
     id: "common.attachmentNone",
@@ -60,8 +63,7 @@ export default defineMessages({
   },
   attachmentError: {
     id: "common.attachmentError",
-    defaultMessage:
-      "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
+    defaultMessage: "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
   },
   attachmentAdd: {
     id: "common.attachmentAdd",
@@ -211,11 +213,11 @@ export default defineMessages({
     id: "common.displayingPortion",
     defaultMessage: "Näytetään {selectedCount}/{allCount}"
   },
-  activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
-  searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
+  activeLuvatCount: {id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)"},
+  searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {
-    titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
-    jarjestajatHeading: { id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
+    titleName: {id: "vst.titleName", defaultMessage: "Vapaa sivistystyö"},
+    jarjestajatHeading: {id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
   },
   asiaTable: {
     headers: {
