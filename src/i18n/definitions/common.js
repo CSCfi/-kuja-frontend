@@ -292,7 +292,7 @@ export default defineMessages({
     defaultMessage: "Päätökset"
   },
   lupaHistoria: {
-    id: "common.lupahistoria",
+    id: "common.lupaHistoria",
     defaultMessage: "Historiatiedot"
   },
   diaarinumero: {

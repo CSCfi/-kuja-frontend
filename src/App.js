@@ -300,7 +300,6 @@ const App = ({ user }) => {
                     exact
                     path = "/vapaa-sivistystyo/luvat/:ytunnus"
                     render={props => {
-                      console.log(props.match)
                       return(
                         <Jarjestaja
                           history={history}
