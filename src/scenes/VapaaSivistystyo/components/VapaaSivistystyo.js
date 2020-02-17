@@ -103,10 +103,8 @@ const VapaaSivistystyo = ({ history }) => {
       setvstTypeSelection(null);
     }
   };
-  const updateSearchFilter = (payload, filter) => {
-    console.log(payload);
-    console.log(filter);
-    setSearchFilter(filter);
+  const updateSearchFilter = payload => {
+    setSearchFilter(payload);
   };
   const vstTypeSelectionPlaceholder = intl.formatMessage(
     common.filterByOppilaitostyyppi
