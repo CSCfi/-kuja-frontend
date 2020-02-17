@@ -12,6 +12,7 @@ import * as R from "ramda";
 import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
+import Loading from "../../../modules/Loading";
 
 const Separator = styled.div`
   &:after {
@@ -82,9 +83,15 @@ const Jarjestaja = React.memo(
             <Route
               exact
               path={url}
-              render={(props) => (
-                <Paatokset lupa={lupa.data} jarjestaja={jarjestaja} />
-              )}
+              render={(props) => {
+
+                if(lupa.isLoading === false && lupa.fetchedAt) {
+                  return (<Paatokset lupa={lupa.data} jarjestaja={jarjestaja} />)
+                }
+                else {
+                  return <Loading />
+                }
+              }}
             />
 
           </div>
