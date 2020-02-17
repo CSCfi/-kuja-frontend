@@ -1,5 +1,6 @@
 import React from "react";
-import Moment from "react-moment";
+import {useIntl} from "react-intl";
+import moment from 'moment';
 import styled from "styled-components";
 import Media from "react-media";
 
@@ -7,6 +8,7 @@ import { MEDIA_QUERIES } from "../../../modules/styles";
 
 import { API_BASE_URL } from "../../../modules/constants";
 import { Td, Tr } from "../../../modules/Table";
+import common from "../../../i18n/definitions/common";
 
 const LupaText = styled.span`
   margin: 10px;
@@ -30,6 +32,12 @@ const LupaHistoryItem = props => {
     paatospvm
   } = props.lupaHistoria;
 
+  const intl = useIntl();
+
+  const voimassaoloalkupvmFormatted = (new moment(voimassaoloalkupvm,'YYYY-MM-DD')).format('D.M.YYYY');
+  const voimassaololoppupvmFormatted = (new moment(voimassaololoppupvm,'YYYY-MM-DD')).format('D.M.YYYY');
+  const paatospvmFormatted = (new moment(paatospvm,'YYYY-MM-DD')).format('D.M.YYYY');
+
   let path = "/pebble/resources/liitteet/lupahistoria/";
   if (voimassaololoppupvm.split("-").join("") > "20181230") {
     path = "/pdf/";
@@ -45,23 +53,25 @@ const LupaHistoryItem = props => {
         render={() => (
           <Tr role="row">
             <LupaText>
-              <TextPartial>Diaarinumero: {diaarinumero}</TextPartial>
+              <TextPartial>{intl.formatMessage(common.diaarinumero)}: {diaarinumero}</TextPartial>
               <TextPartial>
-                Päätös tehty:&nbsp;
-                <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
+                {intl.formatMessage(common.lupaHistoriaPaatosDateMobile, {
+                  date: paatospvmFormatted
+                })}
               </TextPartial>
-              {voimassaoloalkupvm === "2018-01-01" &&
-              voimassaololoppupvm === "2018-01-01" ? (
+              {
+                voimassaoloalkupvm === voimassaololoppupvm ? (
                 <TextPartial>
-                  Kumottu:{" "}
-                  <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+                  {intl.formatMessage(common.lupaHistoriaKumottuDateMobile, {
+                    date: voimassaololoppupvm
+                  })}
                 </TextPartial>
               ) : (
                 <TextPartial>
-                  Voimassa:&nbsp;
-                  <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-                  &nbsp;-&nbsp;
-                  <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
+                  {intl.formatMessage(common.lupaHistoriaValidDateRangeMobile, {
+                    date1: voimassaoloalkupvmFormatted,
+                    date2: voimassaololoppupvmFormatted
+                  })}
                 </TextPartial>
               )}
             </LupaText>
@@ -75,27 +85,17 @@ const LupaHistoryItem = props => {
             {voimassaoloalkupvm === voimassaololoppupvm ? (
               <Tr role="row">
                 <Td role="cell">{diaarinumero}</Td>
-                <Td role="cell">
-                  <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
-                </Td>
+                <Td role="cell">{paatospvmFormatted}</Td>
                 <Td role="cell"></Td>
                 <Td role="cell"></Td>
-                <Td role="cell">
-                  <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-                </Td>
+                <Td role="cell">{voimassaololoppupvmFormatted}</Td>
               </Tr>
             ) : (
               <Tr role="row">
                 <Td role="cell">{diaarinumero}</Td>
-                <Td role="cell">
-                  <Moment format="DD.MM.YYYY">{paatospvm}</Moment>
-                </Td>
-                <Td role="cell">
-                  <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>
-                </Td>
-                <Td role="cell">
-                  <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>
-                </Td>
+                <Td role="cell">{paatospvmFormatted}</Td>
+                <Td role="cell">{voimassaoloalkupvmFormatted}</Td>
+                <Td role="cell">{voimassaololoppupvmFormatted}</Td>
                 <Td role="cell"></Td>
               </Tr>
             )}

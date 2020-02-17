@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useIntl } from "react-intl";
 import Media from "react-media";
 import styled from "styled-components";
 import { Table as OldTable, Tbody } from "../../../modules/Table";
@@ -13,6 +14,7 @@ import { downloadFileFn } from "../../../utils/common";
 import { useLupahistoria } from "../../../stores/lupahistoria";
 import _ from "lodash";
 import * as R from "ramda";
+import common from "../../../i18n/definitions/common";
 
 const WrapTable = styled.div``;
 
@@ -26,6 +28,7 @@ const colWidths = {
 
 const LupaHistory = ({ history, jarjestajaOid }) => {
   const [lupahistoria, actions] = useLupahistoria();
+  const intl = useIntl();
 
   // Let's fetch LUPAHISTORIA
   useEffect(() => {
@@ -48,15 +51,15 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                     truncate: false,
                     styleClasses: [colWidths[ii]],
                     text: title,
-                    sortingTooltip: "Järjestä sarakkeen mukaan"
+                    sortingTooltip: intl.formatMessage(common.sort)
                   };
                 },
                 [
-                  LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.DIAARINUMERO.FI,
-                  LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATOSPVM.FI,
-                  LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.VOIMAANTULOPVM.FI,
-                  LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.PAATTAMISPVM.FI,
-                  LUPA_TEKSTIT.PAATOKSET.HISTORIA_TAULUKKO.KUMOTTU.FI
+                  intl.formatMessage(common.lupaHistoriaDiaarinumeroHeading),
+                  intl.formatMessage(common.lupaHistoriaPaatosDateHeading),
+                  intl.formatMessage(common.lupaHistoriaStartDateHeading),
+                  intl.formatMessage(common.lupaHistoriaEndDateHeading),
+                  intl.formatMessage(common.lupaHistoriaKumottuDateHeading)
                 ]
               )
             }
@@ -97,10 +100,10 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                       url: `${API_BASE_URL}${pathToPDF}`
                     })();
                   } else {
-                    console.error("PDF:n avaaminen ei onnistunut.");
+                    console.error(intl.formatMessage(common.errorOpeningPDF));
                   }
                 } else {
-                  console.error("Virhe haettaessa valitun rivin tietoja.");
+                  console.error(intl.formatMessage(common.errorFetchingRow));
                 }
               },
               cells: R.addIndex(R.map)(
@@ -164,7 +167,7 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
         </WrapTable>
       )}
       {lupahistoria.fetchedAt && !lupahistoria.data && (
-        <h2>{LUPA_TEKSTIT.PAATOKSET.VIRHE.FI}</h2>
+        <h2>{intl.formatMessage(common.errorLoadingLupaHistory)}</h2>
       )}
     </React.Fragment>
   );
