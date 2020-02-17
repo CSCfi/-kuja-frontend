@@ -51,10 +51,10 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
 
               onClick: row => {
                 if (history) {
-                  history.push(`luvat/${row.id}`);
+                  history.push(`/vapaa-sivistystyo/luvat/${row.id}`);
                 } else {
                   console.error(
-                    "Järjestämislupatietojen näyttäminen epäonnistui."
+                    intl.formatMessage(common.errorLoadingLupa)
                   );
                 }
               },

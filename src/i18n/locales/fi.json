@@ -91,6 +91,7 @@
   "common.errorFetchingRow": "Virhe haettaessa valitun rivin tietoja.",
   "common.errorOpeningPDF": "PDF:n avaaminen ei onnistunut.",
   "common.errorLoadingLupaHistory": "Lupahistoriaa ladattaessa tapahtui virhe.",
+  "common.errorLoadingLupa": "Järjestämislupatietojen näyttäminen epäonnistui.",
   "common.lupaHistoriaDiaarinumeroHeading": "Diaarinumero",
   "common.lupaHistoriaPaatosDateHeading":  "Päätöspvm",
   "common.lupaHistoriaStartDateHeading":  "Voimaantulopvm",

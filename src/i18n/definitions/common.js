@@ -225,6 +225,10 @@ export default defineMessages({
     id: "common.errorLoadingLupaHistory",
     defaultMessage: "Lupahistoriaa ladattaessa tapahtui virhe."
   },
+  errorLoadingLupa: {
+    id: "common.errorLoadingLupa",
+    defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
+  },
   activeLuvatCount: {id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)"},
   searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {
@@ -285,7 +289,7 @@ export default defineMessages({
   },
   lupaPaatokset: {
     id: "common.paatokset",
-    defaultMessage: "Paatokset"
+    defaultMessage: "Päätökset"
   },
   lupaHistoria: {
     id: "common.lupahistoria",
@@ -312,7 +316,7 @@ export default defineMessages({
     defaultMessage: "Päättämispvm"
   },
   lupaHistoriaKumottuDateHeading: {
-    id: "common.lupaHistoriaKumottuHeading",
+    id: "common.lupaHistoriaKumottuDateHeading",
     defaultMessage: "Kumottu"
   },
   lupaHistoriaPaatosDateMobile: {
