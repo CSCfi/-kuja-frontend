@@ -88,20 +88,7 @@ const Lomake = React.memo(
     ) {
       return (
         <React.Fragment>
-          <div
-            className={`${
-              lomake.invalidFields && lomake.ruleCount > 0
-                ? "border border-red-800"
-                : ""
-            } p-8`}>
-            {lomake.invalidFields && lomake.ruleCount > 0 ? (
-              <p className="mb-4 text-red-800">Lomake kaipaa täydentämistä.</p>
-            ) : null}
-
-            {!lomake.invalidFields && lomake.ruleCount > 0 ? (
-              <p className="mb-4 text-green-600">Lomake on täytetty oikein!</p>
-            ) : null}
-
+          <div className="p-8">
             <CategorizedListRoot
               anchor={anchor}
               categories={lomake.categories}
