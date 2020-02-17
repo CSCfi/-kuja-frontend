@@ -54,7 +54,7 @@ const Jarjestaja = React.memo(
     }, [intl.locale, lupa.data]);
 
     const breadcrumb = useMemo(() => {
-      return jarjestaja ? `/luvat/${ytunnus}` : "";
+      return jarjestaja ? `/vapaa-sivistystyo/luvat/${ytunnus}` : "";
     }, [jarjestaja]);
 
     const basicRoutes = [
