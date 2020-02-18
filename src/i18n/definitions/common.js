@@ -191,6 +191,32 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  jarjestaja: {
+    id: "common.jarjestaja",
+    defaultMessage: "Koulutuksen järjestäjä"
+  },
+  homeCounty: {
+    id: "common.homeCounty",
+    defaultMessage: "Kotipaikan maakunta"
+  },
+  oppilaitostyyppi: {
+    id: "common.oppilaitostyyppi",
+    defaultMessage: "Oppilaitostyyppi"
+  },
+  filterByOppilaitostyyppi: {
+    id: "common.filterByOppilaitostyyppi",
+    defaultMessage: "Rajaa oppilaitostyypin mukaan"
+  },
+  displayingPortion: {
+    id: "common.displayingPortion",
+    defaultMessage: "Näytetään {selectedCount}/{allCount}"
+  },
+  activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
+  searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
+  vst: {
+    titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
+    jarjestajatHeading: { id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
+  },
   asiaTable: {
     headers: {
       asianumero: {id: "asiaTable.headers.asianumero", defaultMessage: "Asianumero"},
