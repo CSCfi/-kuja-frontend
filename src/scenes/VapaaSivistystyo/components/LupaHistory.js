@@ -4,7 +4,6 @@ import Media from "react-media";
 import styled from "styled-components";
 import { Table as OldTable, Tbody } from "../../../modules/Table";
 import { MEDIA_QUERIES } from "../../../modules/styles";
-import { LUPA_TEKSTIT } from "../../../modules/lupaConstants";
 import LupaHistoryItem from "./LupaHistoryItem";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import moment from "moment";
