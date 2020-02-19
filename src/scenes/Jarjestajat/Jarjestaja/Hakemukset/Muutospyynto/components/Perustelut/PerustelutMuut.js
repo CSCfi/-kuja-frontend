@@ -29,10 +29,9 @@ const PerustelutMuut = React.memo(
     return (
       <React.Fragment>
         {addIndex(map)((areaCode, i) => {
-          return (
+          return changeObjects.muut[areaCode].length ? (
             <ExpandableRowRoot
               anchor={`${sectionId}_${areaCode}`}
-              categories={[]}
               changes={prop(areaCode, changeObjects.perustelut)}
               code={areaCode}
               disableReverting={isReadOnly}
@@ -64,8 +63,8 @@ const PerustelutMuut = React.memo(
                 rulesFn={getRules}
                 showCategoryTitles={true}></Lomake>
             </ExpandableRowRoot>
-          );
-        }, keys(changeObjects.muut))}
+          ) : null;
+        }, keys(changeObjects.muut).sort())}
       </React.Fragment>
     );
   }

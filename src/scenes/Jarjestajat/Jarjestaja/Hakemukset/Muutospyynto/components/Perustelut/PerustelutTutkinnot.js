@@ -47,7 +47,7 @@ const PerustelutTutkinnot = React.memo(
               ["tutkinnot", koulutusala.koodiArvo],
               changeObjects
             );
-            return changeObjectsPage1 ? (
+            return changeObjectsPage1 && changeObjectsPage1.length ? (
               <ExpandableRowRoot
                 anchor={anchorInitial}
                 key={`expandable-row-root-${i}`}

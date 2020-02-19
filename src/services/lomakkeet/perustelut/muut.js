@@ -36,8 +36,9 @@ export const getVankilaopetusPerustelulomake = (
                   isReadOnly,
                   name: "TextBox",
                   properties: {
-                    placeholder:
-                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                    title:
+                      "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+                    value: ""
                   }
                 }
               ]
@@ -56,7 +57,7 @@ export const getVankilaopetusPerustelulomake = (
           title: "Toiminnalliset edellytykset vankilaopetuksen järjestämiseksi",
           categories: [
             {
-              anchor: "resurssit-field",
+              anchor: "resurssit-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -66,13 +67,14 @@ export const getVankilaopetusPerustelulomake = (
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. kelpoisuusehdot täyttävän opetushenkilöstön tai muu tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
-                    title: "Henkilöstöresurssit"
+                    title: "Henkilöstöresurssit",
+                    value: ""
                   }
                 }
               ]
             },
             {
-              anchor: "osaaminen-field",
+              anchor: "osaaminen-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -82,13 +84,14 @@ export const getVankilaopetusPerustelulomake = (
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen vaativasta erityisestä tuesta (mm. HOKS-prosessi, tuki- ja ohjauspalvelut).",
-                    title: "Osaaminen"
+                    title: "Osaaminen",
+                    value: ""
                   }
                 }
               ]
             },
             {
-              anchor: "jarjestelyt-field",
+              anchor: "jarjestelyt-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -98,13 +101,14 @@ export const getVankilaopetusPerustelulomake = (
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät pedagogiset järjestelyt (mm. opetusjärjestelyt, oppimisympäristöt, tilat ja välineet).",
-                    title: "Pedagogiset järjestelyt"
+                    title: "Pedagogiset järjestelyt",
+                    value: ""
                   }
                 }
               ]
             },
             {
-              anchor: "yhteistyo-field",
+              anchor: "yhteistyo-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -114,7 +118,8 @@ export const getVankilaopetusPerustelulomake = (
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämä työelämäpalvelu ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
-                    title: "Sidosryhmäyhteistyö"
+                    title: "Sidosryhmäyhteistyö",
+                    value: ""
                   }
                 }
               ]
@@ -128,7 +133,7 @@ export const getVankilaopetusPerustelulomake = (
           title: "Vankilaopetuksen toteuttaminen",
           categories: [
             {
-              anchor: "autocomplete",
+              anchor: "autocomplete-perustelut",
               styleClasses: ["pl-6 pt-6"],
               components: [
                 {
@@ -150,7 +155,8 @@ export const getVankilaopetusPerustelulomake = (
                       }, vankilat)
                     ),
                     title:
-                      "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta."
+                      "Valitkaa listasta ne vankilat, joissa suunnittelette järjestävänne vankilaopetusta.",
+                    value: ""
                   }
                 }
               ]
@@ -313,7 +319,7 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
       styleClasses: ["px-10 py-10"],
       categories: [
         {
-          anchor: `${code}-1`,
+          anchor: `${code}-1-perustelut`,
           code: 1,
           styleClasses: ["border-t px-4 py-8 hover:bg-gray-100"],
           title: "Tehtävän tarpeellisuus",
@@ -323,8 +329,9 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
               name: "TextBox",
               properties: {
                 isReadOnly,
-                placeholder:
-                  "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne"
+                title:
+                  "Perustelkaa tehtävän tarpeellisuus ensisijaisella toiminta-alueellanne",
+                value: ""
               }
             }
           ]
@@ -337,7 +344,7 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
             "Toiminnalliset edellytykset laajennetun oppisopimus järjestämistehtävän järjestämiseksi",
           categories: [
             {
-              anchor: "henkilostoresurssit-textbox",
+              anchor: "henkilostoresurssit-perustelut",
               components: [
                 {
                   anchor: "A",
@@ -346,13 +353,14 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät henkilöstöresurssit (mm. tehtävän edellyttämä henkilöstön määrä, sekä rekrytoitavien määrä). Huom. Henkilötietoja ei tule antaa lomakkeella.",
-                    title: "Henkilöstöresurssit"
+                    title: "Henkilöstöresurssit",
+                    value: ""
                   }
                 }
               ]
             },
             {
-              anchor: "osaaminen-textbox",
+              anchor: "osaaminen-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -362,13 +370,14 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän järjestämisen edellyttämä osaaminen (mm. palveluprosessi, hankintaosaaminen, johtaminen ja sopimusten valvonta).",
-                    title: "Osaaminen"
+                    title: "Osaaminen",
+                    value: ""
                   }
                 }
               ]
             },
             {
-              anchor: "sidosryhmayhteistyo-textbox",
+              anchor: "sidosryhmayhteistyo-perustelut",
               styleClasses: ["pl-6"],
               components: [
                 {
@@ -378,7 +387,8 @@ export const getOppisopimusPerusteluLomake = isReadOnly => {
                     isReadOnly,
                     placeholder:
                       "Haetun tehtävän edellyttämät toimivat ja kokonaisvaltaiset työelämäyhteydet ja -palvelut ja muu sidosryhmäyhteistyö (mm. toimijat, toiminta- ja yhteistyömuodot).",
-                    title: "Sidosryhmäyhteistyö"
+                    title: "Sidosryhmäyhteistyö",
+                    value: ""
                   }
                 }
               ]
