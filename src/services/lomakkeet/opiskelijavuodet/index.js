@@ -1,12 +1,6 @@
 import "../i18n-config";
 import { __ } from "i18n-for-browser";
 
-const title1 = __("current");
-const title2 = __("applyFor");
-const title3 = __("difference");
-
-const titles = [title1, title2, title3];
-
 function getModificationForm(
   applyFor,
   applyForSisaoppilaitos,
@@ -21,6 +15,7 @@ function getModificationForm(
   koodiarvot,
   sectionId
 ) {
+  const titles = [__("current"), __("applyFor"), __("difference")];
   return [
     {
       anchor: "vahimmaisopiskelijavuodet",
