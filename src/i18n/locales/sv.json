@@ -107,5 +107,6 @@
   "wizard.tooltipTaloudellisetYleisetTiedotKentta2": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
   "wizard.tooltipTaloudellisetYleisetTiedotKentta3": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
   "wizard.vocationalTraining": "Yrkesutbildning",
-  "wizard.workforceTraining": "Arbetsträning"
+  "wizard.workforceTraining": "Arbetsträning",
+  "wizard.otherAttachments": "SV: Muut liitteet"
 }

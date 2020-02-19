@@ -109,5 +109,6 @@
   "wizard.tooltipTaloudellisetYleisetTiedotKentta3": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
   "wizard.vocationalTraining": "Ammatilliseen tehtävään valmistavat koulutukset",
   "wizard.workforceTraining": "Työvoimakoulutukset",
-  "wizard.tutkintokielet": "Tutkintokielet"
+  "wizard.tutkintokielet": "Tutkintokielet",
+  "wizard.otherAttachments": "Muut liitteet"
 }
