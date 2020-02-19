@@ -22,6 +22,7 @@ const Paatokset = ({ history, jarjestaja = {}, lupa = {} }) => {
       </div>
 
       <CurrentLupa
+        filename={lupa.meta.liitetiedosto}
         diaarinumero={lupa.diaarinumero}
         jarjestaja={jarjestaja.nimi}
         voimassaolo={lupa.alkupvm}

@@ -59,8 +59,8 @@ const LupaTextWrapper = styled.div`
 `;
 
 const CurrentLupa = (props) => {
-  const { diaarinumero, jarjestaja, voimassaolo } = props;
-  const url = `${API_BASE_URL}/pdf/${diaarinumero}`;
+  const { filename, diaarinumero, jarjestaja, voimassaolo } = props;
+  const url = `${API_BASE_URL}/pebble/resources/liitteet/${filename}`;
   const sinceDate = new moment(voimassaolo, 'YYYY-MM-DD');
   const intl = useIntl();
 
