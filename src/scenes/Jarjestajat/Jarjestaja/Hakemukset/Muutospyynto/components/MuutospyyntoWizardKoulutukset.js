@@ -1,17 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useIntl } from "react-intl";
-import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import ValmentavatKoulutukset from "./Koulutukset/ValmentavatKoulutukset";
 import ATVKoulutukset from "./Koulutukset/ATVKoulutukset";
 import Tyovoimakoulutukset from "./Koulutukset/Tyovoimakoulutukset";
 import Kuljettajakoulutukset from "./Koulutukset/Kuljettajakoulutukset";
 
 const MuutospyyntoWizardKoulutukset = props => {
-  const intl = useIntl();
   return (
-    <div className="md:pl-16 pb-10">
-      <p className="pt-4 pb-10">{intl.formatMessage(wizardMessages.info_02)}</p>
+    <div className="md:pl-16 py-10">
 
       <ValmentavatKoulutukset
         koulutukset={props.koulutukset}
