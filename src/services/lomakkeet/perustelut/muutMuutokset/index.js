@@ -6,6 +6,7 @@ import {
   getOppisopimusPerusteluLomake
 } from "../muut";
 import { parseLocalizedField } from "../../../../modules/helpers";
+import { sortArticlesByHuomioitavaKoodi } from "../../utils";
 
 function getStructureByKoodiarvo(
   perusteltavaTeksti,
@@ -122,6 +123,7 @@ function divideArticles(
 ) {
   const localeUpper = R.toUpper(locale);
   const dividedArticles = {};
+  const sortedArticles = sortArticlesByHuomioitavaKoodi(articles, locale);
   R.forEach(article => {
     const { metadata } = article;
     const kasite = parseLocalizedField(metadata, localeUpper, "kasite");
@@ -147,7 +149,7 @@ function divideArticles(
         )
       });
     }
-  }, articles);
+  }, sortedArticles);
   return dividedArticles;
 }
 
@@ -211,7 +213,6 @@ function getReasoningForm(
   maaraykset,
   mapping,
   muut,
-  vankilat,
   isReadOnly,
   locale
 ) {
@@ -235,9 +236,7 @@ function getReasoningForm(
     {
       anchor: item.key,
       categories: R.map(({ article, lomakkeet }) => {
-        const metadata = R.find(m => {
-          return m.kieli === locale;
-        }, article.metadata);
+        const metadata = R.find(R.propEq("kieli", locale), article.metadata);
         const title = metadata.kuvaus || metadata.nimi;
         const isInLupaBool = article
           ? !!R.find(koulutusala => {
@@ -344,7 +343,6 @@ export default function getMuutPerustelulomake(
         data.maaraykset,
         mapping,
         data.muut,
-        data.vankilat,
         isReadOnly,
         R.toUpper(locale)
       );

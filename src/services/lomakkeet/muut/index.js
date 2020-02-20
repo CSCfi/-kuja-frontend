@@ -3,6 +3,7 @@ import "../i18n-config";
 import { __ } from "i18n-for-browser";
 import * as R from "ramda";
 import _ from "lodash";
+import { sortArticlesByHuomioitavaKoodi } from "../utils";
 
 function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
   return R.map(item => {
@@ -10,24 +11,7 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
     const isVaativatukiRadios =
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
-    const sortedArticles = R.sort((a, b) => {
-      const metadataA = R.find(R.propEq("kieli", locale), a.metadata);
-      const metadataB = R.find(R.propEq("kieli", locale), b.metadata);
-      /**
-       * List items will be arranged by huomioitava koodi. If it isn't
-       * available we use value 0 instead of it. That's why undefined
-       * ones go on top of the list.
-       */
-      const numberValueA = parseInt(metadataA.huomioitavaKoodi, 10) || 0;
-      const numberValueB = parseInt(metadataB.huomioitavaKoodi, 10) || 0;
-      if (numberValueA > numberValueB) {
-        return 1;
-      } else if (numberValueA < numberValueB) {
-        return -1;
-      } else {
-        return -1;
-      }
-    }, item.articles);
+    const sortedArticles = sortArticlesByHuomioitavaKoodi(item.articles, locale);
     return {
       anchor: configObj.key,
       title: item.title,

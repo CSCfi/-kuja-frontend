@@ -151,3 +151,25 @@ export function getActiveCheckboxes(lomake, changeObjects = []) {
     );
   }, components);
 }
+
+export function sortArticlesByHuomioitavaKoodi(articles, locale) {
+  const sortedArticles = R.sort((a, b) => {
+    const metadataA = R.find(R.propEq("kieli", locale), a.metadata);
+    const metadataB = R.find(R.propEq("kieli", locale), b.metadata);
+    /**
+     * List items will be arranged by huomioitava koodi. If it isn't
+     * available we use value 0 instead of it. That's why undefined
+     * ones go on top of the list.
+     */
+    const numberValueA = parseInt(metadataA.huomioitavaKoodi, 10) || 0;
+    const numberValueB = parseInt(metadataB.huomioitavaKoodi, 10) || 0;
+    if (numberValueA > numberValueB) {
+      return 1;
+    } else if (numberValueA < numberValueB) {
+      return -1;
+    } else {
+      return -1;
+    }
+  }, articles);
+  return sortedArticles;
+}
