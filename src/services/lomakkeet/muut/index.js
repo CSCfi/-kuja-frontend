@@ -11,8 +11,15 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
     const sortedArticles = R.sort((a, b) => {
-      const numberValueA = parseInt(a.koodiArvo, 10);
-      const numberValueB = parseInt(b.koodiArvo, 10);
+      const metadataA = R.find(R.propEq("kieli", locale), a.metadata);
+      const metadataB = R.find(R.propEq("kieli", locale), b.metadata);
+      /**
+       * List items will be arranged by huomioitava koodi. If it isn't
+       * available we use value 0 instead of it. That's why undefined
+       * ones go on top of the list.
+       */
+      const numberValueA = parseInt(metadataA.huomioitavaKoodi, 10) || 0;
+      const numberValueB = parseInt(metadataB.huomioitavaKoodi, 10) || 0;
       if (numberValueA > numberValueB) {
         return 1;
       } else if (numberValueA < numberValueB) {
