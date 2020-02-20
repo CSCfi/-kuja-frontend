@@ -10,7 +10,17 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
     const isVaativatukiRadios =
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
-    const sortedArticles = R.sortBy(R.prop("koodiArvo"), item.articles);
+    const sortedArticles = R.sort((a, b) => {
+      const numberValueA = parseInt(a.koodiArvo, 10);
+      const numberValueB = parseInt(b.koodiArvo, 10);
+      if (numberValueA > numberValueB) {
+        return 1;
+      } else if (numberValueA < numberValueB) {
+        return -1;
+      } else {
+        return -1;
+      }
+    }, item.articles);
     return {
       anchor: configObj.key,
       title: item.title,
