@@ -20,11 +20,6 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
-    "id": "common.current",
-    "defaultMessage": "Nykyinen",
-    "filepath": "src/i18n/definitions/common.js"
-  },
-  {
     "id": "common.applyFor",
     "defaultMessage": "Haettava",
     "filepath": "src/i18n/definitions/common.js"
@@ -62,6 +57,11 @@
   {
     "id": "common.today",
     "defaultMessage": "Tänään",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.date",
+    "defaultMessage": "Päivämäärä",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -170,6 +170,16 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.asiat",
+    "defaultMessage": "Asia",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.asiatOpen",
+    "defaultMessage": "Avoimet asiat",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "common.document",
     "defaultMessage": "Asiakirja",
     "filepath": "src/i18n/definitions/common.js"
@@ -237,6 +247,121 @@
   {
     "id": "common.sort",
     "defaultMessage": "Järjestä sarakkeen mukaan",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.frontpage",
+    "defaultMessage": "Etusivu",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.asianumero",
+    "defaultMessage": "Asianumero",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.tila",
+    "defaultMessage": "Tila",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.asia",
+    "defaultMessage": "Asia",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.asiakas",
+    "defaultMessage": "Asiakkaan nimi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.maakunta",
+    "defaultMessage": "Maakunta",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.saapunut",
+    "defaultMessage": "Saapunut",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.hakupvm",
+    "defaultMessage": "Haettu voimaantulo",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.headers.actions",
+    "defaultMessage": "Toiminnot",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.LUONNOS",
+    "defaultMessage": "Luonnos",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.AVOIN",
+    "defaultMessage": "Lähetetty",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.VALMISTELUSSA",
+    "defaultMessage": "Lähetetty",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.TAYDENNETTAVA",
+    "defaultMessage": "Täydennettävä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.PAATETTY",
+    "defaultMessage": "Päätetty",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.kj.PASSIVOITU",
+    "defaultMessage": "Poistettu",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.LUONNOS",
+    "defaultMessage": "Luonnos",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.AVOIN",
+    "defaultMessage": "Saapunut",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.VALMISTELUSSA",
+    "defaultMessage": "Valmistelussa",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.TAYDENNETTAVA",
+    "defaultMessage": "Täydennettävä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.PAATETTY",
+    "defaultMessage": "Päätetty",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaStates.esittelija.PASSIVOITU",
+    "defaultMessage": "Poistettu",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTypes.lupaChange",
+    "defaultMessage": "Järjestämisluvan muutos",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.current",
+    "defaultMessage": "Nykyinen",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -495,33 +620,18 @@
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
-    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta1",
-    "defaultMessage": "Esittäkää taloudelliset edellytyksenne järjestää haettuja tehtäviä huomioiden, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+    "id": "wizard.tutkintokielet",
+    "defaultMessage": "Tutkintokielet",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
-    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta2",
-    "defaultMessage": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
+    "id": "wizard.allFieldsRequired",
+    "defaultMessage": "Täydennä kaikki tämän sivun kentät.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
-    "id": "wizard.tooltipTaloudellisetYleisetTiedotKentta3",
-    "defaultMessage": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
-    "filepath": "src/i18n/definitions/wizard.js"
-  },
-  {
-    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta1",
-    "defaultMessage": "Esittäkää haetun tehtävän mukaisen toiminnan käynnistämiseksi tarvittavat investoinnit.",
-    "filepath": "src/i18n/definitions/wizard.js"
-  },
-  {
-    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta2",
-    "defaultMessage": "Arvioikaa edellä esittämienne investointien kustannukset yhteensä.",
-    "filepath": "src/i18n/definitions/wizard.js"
-  },
-  {
-    "id": "wizard.tooltipTaloudellisetInvestoinnitKentta3",
-    "defaultMessage": "Esittäkää, miten rahoitatte edellä esittämänne investoinnit. Huomioikaa, että muutokset toiminnassa vaikuttavat rahoitukseen viiveellä.",
+    "id": "wizard.allPerustelutRequired",
+    "defaultMessage": "Perustele kaikki muutokset.",
     "filepath": "src/i18n/definitions/wizard.js"
   },
   {
