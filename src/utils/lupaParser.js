@@ -6,7 +6,7 @@ import {
   TUTKINTO_TEKSTIT,
   LUPA_SECTIONS,
   LUPA_TEKSTIT
-} from "../scenes/Jarjestajat/Jarjestaja/modules/constants";
+} from "../scenes/VapaaSivistystyo/modules/constants";
 import { parseLocalizedField } from "../modules/helpers";
 
 /**

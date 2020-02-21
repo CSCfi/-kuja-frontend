@@ -13,6 +13,8 @@ import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
+import {parseLupa} from "../../../utils/lupaParser";
+import Jarjestamislupa from "./Jarjestamislupa";
 
 const Separator = styled.div`
   &:after {
@@ -26,7 +28,7 @@ const Separator = styled.div`
 `;
 
 const Jarjestaja = React.memo(
-  ({ ytunnus, history, path, url, user }) => {
+  ({ ytunnus, history, match, user }) => {
 
     const intl = useIntl();
     const [lupa, lupaActions] = useLupa();
@@ -59,11 +61,20 @@ const Jarjestaja = React.memo(
 
     const basicRoutes = [
       {
-        path: url,
+        path: `${match.url}/jarjestamislupa`,
+        exact: true,
+        text: 'Järjestämislupa',
+      },
+      {
+        path: match.url,
         exact: true,
         text: intl.formatMessage(common.lupaPaatokset)
       }
     ];
+
+    const lupaKohteet = useMemo(() => {
+      return !lupa.data ? {} : parseLupa({ ...lupa.data }, intl.formatMessage);
+    }, [lupa.data, intl.formatMessage]);
 
     return (
       <React.Fragment>
@@ -81,9 +92,22 @@ const Jarjestaja = React.memo(
         <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
           <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
             <Route
+              path={`${match.path}/jarjestamislupa`}
               exact
-              path={url}
               render={(props) => {
+                return (
+                  <Jarjestamislupa
+                    lupaKohteet={lupaKohteet}
+                    lupa={lupa}
+                    ytunnus={jarjestaja.ytunnus}
+                  />
+                )
+              }}
+            />
+            <Route
+              path={match.path}
+              exact
+              render={() => {
 
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (<Paatokset lupa={lupa.data} jarjestaja={jarjestaja} />)
@@ -93,7 +117,6 @@ const Jarjestaja = React.memo(
                 }
               }}
             />
-
           </div>
         </FullWidthWrapper>
       </React.Fragment>

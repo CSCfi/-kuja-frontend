@@ -297,14 +297,13 @@ const App = ({ user }) => {
                     }}
                   />
                   <Route
-                    exact
                     path = "/vapaa-sivistystyo/luvat/:ytunnus"
                     render={props => {
                       return(
                         <Jarjestaja
                           history={history}
                           ytunnus={props.match.params.ytunnus}
-                          url={props.match.url}
+                          match={props.match}
                         />
                       )
                     }}
