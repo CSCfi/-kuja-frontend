@@ -319,13 +319,13 @@ export default defineMessages({
     id: "common.toBeRemoved",
     defaultMessage: "Poistettava"
   },
-  lupaLatest: {
-    id: "common.lupaLatest",
-    defaultMessage: "Viimeisin päätös"
+  ammatillisenKoulutuksenJarjestajat: {
+    id: "common.ammatillisenKoulutuksenJarjestajat",
+    defaultMessage: "Ammatillisen koulutuksen järjestäjät"
   },
-  lupaPaatokset: {
-    id: "common.lupaPaatokset",
-    defaultMessage: "Päätökset"
+  voimassaOlevatJarjestamisluvat: {
+    id: "common.voimassaOlevatJarjestamisluvat",
+    defaultMessage: "Voimassa olevat järjestämisluvat ({amount} kpl)"
   },
   lupaHistoria: {
     id: "common.lupaHistoria",
