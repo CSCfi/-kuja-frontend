@@ -127,5 +127,7 @@
   "wizard.teachingLanguages": "Opetuskielet",
   "wizard.tutkintokielet": "Tutkintokielet",
   "wizard.vocationalTraining": "Ammatilliseen tehtävään valmistavat koulutukset",
-  "wizard.workforceTraining": "Työvoimakoulutukset"
+  "wizard.workforceTraining": "Työvoimakoulutukset",
+  "wizard.tutkintokielet": "Tutkintokielet",
+  "wizard.otherAttachments": "Muut liitteet"
 }
