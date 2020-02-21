@@ -1,4 +1,4 @@
-import {defineMessages} from "react-intl";
+import { defineMessages } from "react-intl";
 
 export default defineMessages({
   statistics: {
@@ -195,41 +195,93 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
-  asiaTable: {
-    headers: {
-      asianumero: {id: "asiaTable.headers.asianumero", defaultMessage: "Asianumero"},
-      tila: {id: "asiaTable.headers.tila", defaultMessage: "Tila"},
-      asia: {id: "asiaTable.headers.asia", defaultMessage: "Asia"},
-      asiakas: {id: "asiaTable.headers.asiakas", defaultMessage: "Asiakkaan nimi"},
-      maakunta: {id: "asiaTable.headers.maakunta", defaultMessage: "Maakunta"},
-      saapunut: {id: "asiaTable.headers.saapunut", defaultMessage: "Saapunut"},
-      hakupvm: {id: "asiaTable.headers.hakupvm", defaultMessage: "Haettu voimaantulo"},
-      actions: {id: "asiaTable.headers.actions", defaultMessage: "Toiminnot"},
-    },
-    actions: {
-      handle: {id: "asiaTable.actions.handle", defaultMessage: "Ota valmisteluun"}
-    }
+  "asiaTable.headers.asianumero": {
+    id: "asiaTable.headers.asianumero",
+    defaultMessage: "Asianumero"
   },
-  asiaStates: {
-    kj: {
-      LUONNOS: {id: "asiaStates.kj.LUONNOS", defaultMessage: "Luonnos"},
-      AVOIN: {id: "asiaStates.kj.AVOIN", defaultMessage: "Lähetetty"},
-      VALMISTELUSSA: {id: "asiaStates.kj.VALMISTELUSSA", defaultMessage: "Lähetetty"},
-      TAYDENNETTAVA: {id: "asiaStates.kj.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
-      PAATETTY: {id: "asiaStates.kj.PAATETTY", defaultMessage: "Päätetty"},
-      PASSIVOITU: {id: "asiaStates.kj.PASSIVOITU", defaultMessage: "Poistettu"}
-    },
-    esittelija: {
-      LUONNOS: {id: "asiaStates.esittelija.LUONNOS", defaultMessage: "Luonnos"},
-      AVOIN: {id: "asiaStates.esittelija.AVOIN", defaultMessage: "Saapunut"},
-      VALMISTELUSSA: {id: "asiaStates.esittelija.VALMISTELUSSA", defaultMessage: "Valmistelussa"},
-      TAYDENNETTAVA: {id: "asiaStates.esittelija.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
-      PAATETTY: {id: "asiaStates.esittelija.PAATETTY", defaultMessage: "Päätetty"},
-      PASSIVOITU: {id: "asiaStates.esittelija.PASSIVOITU", defaultMessage: "Poistettu"}
-    }
+  "asiaTable.headers.tila": {
+    id: "asiaTable.headers.tila",
+    defaultMessage: "Tila"
   },
-  asiaTypes: {
-    lupaChange: {id: "asiaTypes.lupaChange", defaultMessage: "Järjestämisluvan muutos"}
+  "asiaTable.headers.asia": {
+    id: "asiaTable.headers.asia",
+    defaultMessage: "Asia"
+  },
+  "asiaTable.headers.asiakas": {
+    id: "asiaTable.headers.asiakas",
+    defaultMessage: "Asiakkaan nimi"
+  },
+  "asiaTable.headers.maakunta": {
+    id: "asiaTable.headers.maakunta",
+    defaultMessage: "Maakunta"
+  },
+  "asiaTable.headers.saapunut": {
+    id: "asiaTable.headers.saapunut",
+    defaultMessage: "Saapunut"
+  },
+  "asiaTable.headers.hakupvm": {
+    id: "asiaTable.headers.hakupvm",
+    defaultMessage: "Haettu voimaantulo"
+  },
+  "asiaTable.headers.actions": {
+    id: "asiaTable.headers.actions",
+    defaultMessage: "Toiminnot"
+  },
+  "asiaTable.actions.handle": {
+    id: "asiaTable.headers.actions",
+    defaultMessage: "Toiminnot"
+  },
+  "asiaStates.kj.LUONNOS": {
+    id: "asiaStates.kj.LUONNOS",
+    defaultMessage: "Luonnos"
+  },
+  "asiaStates.kj.AVOIN": {
+    id: "asiaStates.kj.AVOIN",
+    defaultMessage: "Lähetetty"
+  },
+  "asiaStates.kj.VALMISTELUSSA": {
+    id: "asiaStates.kj.VALMISTELUSSA",
+    defaultMessage: "Lähetetty"
+  },
+  "asiaStates.kj.TAYDENNETTAVA": {
+    id: "asiaStates.kj.TAYDENNETTAVA",
+    defaultMessage: "Täydennettävä"
+  },
+  "asiaStates.kj.PAATETTY": {
+    id: "asiaStates.kj.PAATETTY",
+    defaultMessage: "Päätetty"
+  },
+  "asiaStates.kj.PASSIVOITU": {
+    id: "asiaStates.kj.PASSIVOITU",
+    defaultMessage: "Poistettu"
+  },
+  "asiaStates.esittelija.LUONNOS": {
+    id: "asiaStates.esittelija.LUONNOS",
+    defaultMessage: "Luonnos"
+  },
+  "asiaStates.esittelija.AVOIN": {
+    id: "asiaStates.esittelija.AVOIN",
+    defaultMessage: "Saapunut"
+  },
+  "asiaStates.esittelija.VALMISTELUSSA": {
+    id: "asiaStates.esittelija.VALMISTELUSSA",
+    defaultMessage: "Valmistelussa"
+  },
+  "asiaStates.esittelija.TAYDENNETTAVA": {
+    id: "asiaStates.esittelija.TAYDENNETTAVA",
+    defaultMessage: "Täydennettävä"
+  },
+  "asiaStates.esittelija.PAATETTY": {
+    id: "asiaStates.esittelija.PAATETTY",
+    defaultMessage: "Päätetty"
+  },
+  "asiaStates.esittelija.PASSIVOITU": {
+    id: "asiaStates.esittelija.PASSIVOITU",
+    defaultMessage: "Poistettu"
+  },
+  "asiaTypes.lupaChange": {
+    id: "asiaTypes.lupaChange",
+    defaultMessage: "Järjestämisluvan muutos"
   },
   current: {
     id: "common.current",
