@@ -326,6 +326,7 @@ const johtaja = (orderCode, isReadOnly) => {
                   title: "C-luokka",
                   forChangeObject: {
                     fieldName: "C-luokka"
+                  }
                 }
               }
             ]
@@ -453,7 +454,8 @@ const johtaja = (orderCode, isReadOnly) => {
                   title:
                     "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto",
                   forChangeObject: {
-                    fieldName: "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
+                    fieldName:
+                      "Kuljetuspalvelujen koulutusohjelmassa suoritettu logistiikan perustutkinto"
                   }
                 }
               }

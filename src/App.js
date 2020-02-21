@@ -122,18 +122,27 @@ const App = ({ user }) => {
 
   const organisationLink = useMemo(() => {
     const orgNimi = R.prop("nimi", organisation.data);
-    return {
+    const isEsittelija = user
+      ? R.includes("OIVA_APP_ESITTELIJA", user.roles)
+      : false;
+    const result = {
       // Select name by locale or first in nimi object
       text: R.or(
-          R.prop(intl.locale, orgNimi),
-          R.tail(R.head(R.toPairs(orgNimi)) || [])
-      ),
-      path: `/jarjestajat/${R.prop(
-        "ytunnus",
-        organisation.data
-      )}/jarjestamislupa-asia`
+        R.prop(intl.locale, orgNimi),
+        R.tail(R.head(R.toPairs(orgNimi)) || [])
+      )
     };
-  }, [intl, organisation.data]);
+    return isEsittelija
+      ? result
+      : R.assoc(
+          "path",
+          `/jarjestajat/${R.prop(
+            "ytunnus",
+            organisation.data
+          )}/jarjestamislupa-asia`,
+          result
+        );
+  }, [intl, organisation.data, user]);
 
   const shortDescription = useMemo(() => {
     return {
@@ -296,16 +305,16 @@ const App = ({ user }) => {
                     component={EsiJaPerusopetus}
                   />
                   <Route
-                        path="/asiat"
-                        render={props => (
-                          <Esittelijat
-                            history={props.history}
-                            match={props.match}
-                            user={user}
-                          />
-                        )}
+                    path="/asiat"
+                    render={props => (
+                      <Esittelijat
+                        history={props.history}
+                        match={props.match}
+                        user={user}
                       />
-                      <Route
+                    )}
+                  />
+                  <Route
                     path="/jarjestajat/:ytunnus"
                     render={props => (
                       <JarjestajaSwitch
