@@ -3,6 +3,7 @@ import "../i18n-config";
 import { __ } from "i18n-for-browser";
 import * as R from "ramda";
 import _ from "lodash";
+import { sortArticlesByHuomioitavaKoodi } from "../utils";
 
 function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
   return R.map(item => {
@@ -10,7 +11,7 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
     const isVaativatukiRadios =
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
-    const sortedArticles = R.sortBy(R.prop("koodiArvo"), item.articles);
+    const sortedArticles = sortArticlesByHuomioitavaKoodi(item.articles, locale);
     return {
       anchor: configObj.key,
       title: item.title,
