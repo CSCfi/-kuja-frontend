@@ -28,7 +28,7 @@ const Separator = styled.div`
 `;
 
 const Jarjestaja = React.memo(
-  ({ ytunnus, history, match, user }) => {
+  ({ ytunnus,  match }) => {
 
     const intl = useIntl();
     const [lupa, lupaActions] = useLupa();
@@ -125,11 +125,8 @@ const Jarjestaja = React.memo(
 );
 
 Jarjestaja.propTypes = {
-  lupaKohteet: PropTypes.object,
-  lupa: PropTypes.object,
-  path: PropTypes.string,
-  url: PropTypes.string,
-  user: PropTypes.object
+  match: PropTypes.object,
+  ytunnus: PropTypes.string
 };
 
 export default Jarjestaja;

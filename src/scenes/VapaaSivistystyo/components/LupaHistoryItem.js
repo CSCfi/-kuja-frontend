@@ -11,16 +11,10 @@ import { Td, Tr } from "../../../modules/Table";
 import common from "../../../i18n/definitions/common";
 
 const LupaText = styled.span`
-  margin: 10px;
-
   @media ${MEDIA_QUERIES.MOBILE} {
     display: flex;
     flex-direction: column;
   }
-`;
-
-const TextPartial = styled.span`
-  margin-right: 10px;
 `;
 
 const LupaHistoryItem = props => {
@@ -52,27 +46,27 @@ const LupaHistoryItem = props => {
         query={MEDIA_QUERIES.MOBILE}
         render={() => (
           <Tr role="row">
-            <LupaText>
-              <TextPartial>{intl.formatMessage(common.diaarinumero)}: {diaarinumero}</TextPartial>
-              <TextPartial>
+            <LupaText className="m-3">
+              <span className="mr-3">{intl.formatMessage(common.diaarinumero)}: {diaarinumero}</span>
+              <span className="mr-3">
                 {intl.formatMessage(common.lupaHistoriaPaatosDateMobile, {
                   date: paatospvmFormatted
                 })}
-              </TextPartial>
+              </span>
               {
                 voimassaoloalkupvm === voimassaololoppupvm ? (
-                <TextPartial>
+                <span className="mr-3">
                   {intl.formatMessage(common.lupaHistoriaKumottuDateMobile, {
                     date: voimassaololoppupvm
                   })}
-                </TextPartial>
+                </span>
               ) : (
-                <TextPartial>
+                <span className="mr-3">
                   {intl.formatMessage(common.lupaHistoriaValidDateRangeMobile, {
                     date1: voimassaoloalkupvmFormatted,
                     date2: voimassaololoppupvmFormatted
                   })}
-                </TextPartial>
+                </span>
               )}
             </LupaText>
           </Tr>
