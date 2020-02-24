@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import { sortArticlesByHuomioitavaKoodi } from "../services/lomakkeet/utils";
 
 export function getDataForKoulutusList(
   koulutukset,
@@ -13,7 +14,7 @@ export function getDataForKoulutusList(
     : [];
 
   let isInLupaTrueFound = false;
-
+  const sortedKoulutukset = sortArticlesByHuomioitavaKoodi(koulutukset, locale);
   return {
     items: R.addIndex(R.map)((koulutus, index) => {
       const isInLupa = !!(
@@ -40,6 +41,6 @@ export function getDataForKoulutusList(
             }, koulutus.metadata)
           ) || "[Koulutuksen otsikko tähän]"
       };
-    }, koulutukset)
+    }, sortedKoulutukset)
   };
 }
