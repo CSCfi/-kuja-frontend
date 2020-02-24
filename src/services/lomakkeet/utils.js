@@ -168,7 +168,7 @@ export function sortArticlesByHuomioitavaKoodi(articles, locale) {
     } else if (numberValueA < numberValueB) {
       return -1;
     } else {
-      return -1;
+      return 0;
     }
   }, articles);
   return sortedArticles;
