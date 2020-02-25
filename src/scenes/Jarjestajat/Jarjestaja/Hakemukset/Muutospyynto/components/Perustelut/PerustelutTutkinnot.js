@@ -22,6 +22,7 @@ const PerustelutTutkinnot = React.memo(
   ({
     changeObjects = defaultProps.changeObjects,
     isReadOnly = defaultProps.isReadOnly,
+    isFirstVisit,
     kohde = defaultProps.kohde,
     tutkinnot = defaultProps.tutkinnot,
     lupaKohteet = defaultProps.lupaKohteet,
@@ -84,6 +85,7 @@ const PerustelutTutkinnot = React.memo(
                     muutosperustelut
                   }}
                   key={`form-${koulutusala.koodiArvo}`}
+                  showValidationErrors={!isFirstVisit}
                   isReadOnly={isReadOnly}
                   onChangesUpdate={onChangesUpdate}
                   path={["perustelut", "tutkinnot"]}
@@ -99,6 +101,7 @@ const PerustelutTutkinnot = React.memo(
 PerustelutTutkinnot.propTypes = {
   changeObjects: PropTypes.object,
   isReadOnly: PropTypes.bool,
+  isFirstVisit: PropTypes.bool,
   kohde: PropTypes.object,
   lupaKohteet: PropTypes.object,
   maaraystyyppi: PropTypes.object,

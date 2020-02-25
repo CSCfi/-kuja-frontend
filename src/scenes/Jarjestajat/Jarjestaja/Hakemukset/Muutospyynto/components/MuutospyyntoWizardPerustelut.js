@@ -17,6 +17,7 @@ import * as R from "ramda";
 const MuutospyyntoWizardPerustelut = ({
   changeObjects = {},
   elykeskukset = [],
+  isFirstVisit = false,
   kielet,
   kohteet = [],
   koulutukset,
@@ -143,6 +144,7 @@ const MuutospyyntoWizardPerustelut = ({
                             ) || {}
                         }
                       }}
+                      isFirstVisit={isFirstVisit}
                       kohde={R.find(
                         R.propEq("tunniste", "tutkinnotjakoulutukset")
                       )(kohteet)}
@@ -362,6 +364,7 @@ const MuutospyyntoWizardPerustelut = ({
 MuutospyyntoWizardPerustelut.propTypes = {
   changeObjects: PropTypes.object,
   elykeskukset: PropTypes.array,
+  isFirstVisit: PropTypes.bool,
   kielet: PropTypes.object,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,

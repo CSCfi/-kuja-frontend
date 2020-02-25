@@ -88,6 +88,17 @@ const MuutospyyntoWizard = ({
   const intl = useIntl();
 
   /**
+   * Visits per page is used for showing or hiding validation errors of the
+   * current page.
+   */
+  const [visitsPerPage, setVisitsPerPage] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0
+  });
+
+  /**
    * We are going to create new objects based on these definitions.
    */
   const [cos, coActions] = useChangeObjects(); // cos means change objects
@@ -155,7 +166,6 @@ const MuutospyyntoWizard = ({
     isHelpVisible: false
   });
   const [steps, setSteps] = useState([]);
-  const [page, setPage] = useState(1);
 
   /**
    * The function is mainly called by FormSection.
@@ -375,9 +385,15 @@ const MuutospyyntoWizard = ({
     );
   }, [coActions, history, match.params.ytunnus]);
 
-  useEffect(() => {
-    setPage(parseInt(match.params.page, 10));
+  const page = useMemo(() => {
+    return parseInt(match.params.page, 10);
   }, [match.params.page]);
+
+  useEffect(() => {
+    setVisitsPerPage(prevVisits => {
+      return R.assoc(page, prevVisits[page] + 1, prevVisits);
+    });
+  }, [page]);
 
   useEffect(() => {
     if (muutoshakemus.readyToCloseWizard === true) {
@@ -476,6 +492,7 @@ const MuutospyyntoWizard = ({
                       onChangesUpdate={onSectionChangesUpdate}
                       tutkinnot={parsedTutkinnot}
                       vankilat={vankilat}
+                      isFirstVisit={visitsPerPage[2] === 1}
                     />
                   </LomakkeetProvider>
                 </WizardPage>
@@ -492,6 +509,7 @@ const MuutospyyntoWizard = ({
                     changeObjects={cos}
                     lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
+                    isFirstVisit={visitsPerPage[3] === 1}
                   />
                 </WizardPage>
               )}
@@ -515,6 +533,7 @@ const MuutospyyntoWizard = ({
                       muutosperusteluList={muutosperusteluList}
                       onChangesUpdate={onSectionChangesUpdate}
                       tutkinnot={parsedTutkinnot}
+                      isFirstVisit={visitsPerPage[4] === 1}
                     />
                   </LomakkeetProvider>
                 </WizardPage>
