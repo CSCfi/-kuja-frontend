@@ -13,6 +13,8 @@ import common from "../../../i18n/definitions/common";
 import * as R from "ramda";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import { downloadFileFn } from "../../../utils/common";
+import { FormHelperText } from "@material-ui/core";
+import Incomplete from "@material-ui/icons/ErrorOutlined";
 
 const Error = styled.div`
   color: ${COLORS.OIVA_RED};
@@ -462,6 +464,23 @@ const Attachments = React.memo(
           />
         )}
         {fileError && <Error>{formatMessage(common.attachmentError)}</Error>}
+        {props.requiredMessage &&
+          props.isRequired &&
+          props.showValidationErrors &&
+          (!attachments || (attachments && attachments.length === 0)) && (
+            <FormHelperText
+              id="component-message-text"
+              style={{
+                marginTop: "0.1em",
+                marginBottom: "0.5em",
+                color: "#757600"
+              }}>
+              <Incomplete
+                style={{ fontSize: 24, color: "#e5c317", marginRight: "0.2em" }}
+              />
+              {props.requiredMessage}
+            </FormHelperText>
+          )}
         {!props.listHidden && !props.isReadOnly && <LiiteList />}
         {!props.listHidden && props.isReadOnly && <LiiteListReadOnly />}
         <Dialog
@@ -471,6 +490,7 @@ const Attachments = React.memo(
           maxWidth="sm">
           <DialogTitle id="name-dialog">
             {formatMessage(common.attachmentName)}
+            {props.isRequired && <span>*</span>}
           </DialogTitle>
           <DialogContent>
             <Input
@@ -533,7 +553,10 @@ Attachments.propTypes = {
   payload: PropTypes.object,
   placement: PropTypes.string,
   selectedAttachment: PropTypes.object,
-  showListOnly: PropTypes.bool
+  showListOnly: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  requiredMessage: PropTypes.string,
+  showValidationErrors: PropTypes.boolean
 };
 
 export default injectIntl(Attachments);

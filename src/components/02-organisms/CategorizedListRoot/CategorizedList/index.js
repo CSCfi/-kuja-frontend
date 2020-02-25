@@ -16,7 +16,6 @@ import _ from "lodash";
 import CategorizedListTextBox from "./components/CategorizedListTextBox";
 import ActionList from "okm-frontend-components/dist/components/02-organisms/ActionList";
 import { flattenObj } from "../../../../utils/common";
-import CheckIcon from "@material-ui/icons/Check";
 
 /** @namespace components */
 
@@ -246,17 +245,6 @@ const CategorizedList = React.memo(
               {isCategoryTitleVisible && (
                 <div className={categoryTitleClasses}>
                   <h4>
-                    {category.isRequired && (
-                      <span
-                        className={`text-${
-                          category.isValid ? "green" : "red"
-                        }-500 text-2xl pr-4`}>
-                        {category.isValid && (
-                          <CheckIcon fontSize="small"></CheckIcon>
-                        )}
-                        {!category.isValid && <span>*</span>}
-                      </span>
-                    )}
                     {category.code && (
                       <span className="mr-4">{category.code}</span>
                     )}
@@ -468,6 +456,10 @@ const CategorizedList = React.memo(
                                   isHidden={isDisabled}
                                   isReadOnly={propsObj.isReadOnly}
                                   isRequired={propsObj.isRequired}
+                                  requiredMessage={propsObj.requiredMessage}
+                                  showValidationErrors={
+                                    propsObj.showValidationErrors
+                                  }
                                   isValid={propsObj.isValid}
                                   label={propsObj.label}
                                   onChanges={handleChanges}
@@ -532,6 +524,17 @@ const CategorizedList = React.memo(
                                   placement={props.placement}
                                   isReadOnly={
                                     propsObj.isReadOnly || props.isReadOnly
+                                  }
+                                  isRequired={
+                                    propsObj.isRequired || props.isRequired
+                                  }
+                                  requiredMessage={
+                                    propsObj.requiredMessage ||
+                                    props.requiredMessage
+                                  }
+                                  showValidationErrors={
+                                    propsObj.showValidationErrors ||
+                                    props.showValidationErrors
                                   }
                                 />
                               </div>
