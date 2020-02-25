@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getActiveCheckboxes } from "../../../../../../../services/lomakkeet/utils";

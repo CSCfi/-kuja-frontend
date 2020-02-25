@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import ExpandableRowRoot from "../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../modules/helpers";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import Lomake from "../../../../../../components/02-organisms/Lomake";

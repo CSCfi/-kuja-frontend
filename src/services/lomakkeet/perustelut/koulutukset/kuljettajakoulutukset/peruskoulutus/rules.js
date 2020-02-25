@@ -1,9 +1,5 @@
-import {
-  ifOneTerm,
-  getPathByAnchor
-} from "../../../../../../components/02-organisms/CategorizedListRoot/utils";
 import * as R from "ramda";
-import { createRules } from "../../../../utils";
+import { createRules, getPathByAnchor, ifOneTerm } from "../../../../utils";
 import { requiredFields } from "./requiredFields";
 
 const basicRules = createRules(requiredFields);
