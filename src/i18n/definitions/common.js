@@ -51,8 +51,7 @@ export default defineMessages({
   },
   attachmentInfo: {
     id: "common.attachmentInfo",
-    defaultMessage:
-      "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
+    defaultMessage: "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
   },
   attachmentNone: {
     id: "common.attachmentNone",
@@ -60,8 +59,7 @@ export default defineMessages({
   },
   attachmentError: {
     id: "common.attachmentError",
-    defaultMessage:
-      "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
+    defaultMessage: "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
   },
   attachmentAdd: {
     id: "common.attachmentAdd",
@@ -191,6 +189,10 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  since: {
+    id: "common.since",
+    defaultMessage: "{date} lukien"
+  },
   jarjestaja: {
     id: "common.jarjestaja",
     defaultMessage: "Koulutuksen järjestäjä"
@@ -211,11 +213,27 @@ export default defineMessages({
     id: "common.displayingPortion",
     defaultMessage: "Näytetään {selectedCount}/{allCount}"
   },
-  activeLuvatCount: { id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)" },
-  searchByJarjestaja: { id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
+  errorFetchingRow: {
+    id: "common.errorFetchingRow",
+    defaultMessage: "Virhe haettaessa valitun rivin tietoja."
+  },
+  errorOpeningPDF: {
+    id: "common.errorOpeningPDF",
+    defaultMessage: "PDF:n avaaminen ei onnistunut."
+  },
+  errorLoadingLupaHistory: {
+    id: "common.errorLoadingLupaHistory",
+    defaultMessage: "Lupahistoriaa ladattaessa tapahtui virhe."
+  },
+  errorLoadingLupa: {
+    id: "common.errorLoadingLupa",
+    defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
+  },
+  activeLuvatCount: {id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)"},
+  searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   vst: {
-    titleName: { id: "vst.titleName", defaultMessage: "Vapaa sivistystyö" },
-    jarjestajatHeading: { id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
+    titleName: {id: "vst.titleName", defaultMessage: "Vapaa sivistystyö"},
+    jarjestajatHeading: {id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
   },
   asiaTable: {
     headers: {
@@ -264,5 +282,53 @@ export default defineMessages({
   toBeRemoved: {
     id: "common.toBeRemoved",
     defaultMessage: "Poistettava"
+  },
+  lupaLatest: {
+    id: "common.lupaLatest",
+    defaultMessage: "Viimeisin päätös"
+  },
+  lupaPaatokset: {
+    id: "common.paatokset",
+    defaultMessage: "Päätökset"
+  },
+  lupaHistoria: {
+    id: "common.lupaHistoria",
+    defaultMessage: "Historiatiedot"
+  },
+  diaarinumero: {
+    id: "common.diaarinumero",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaDiaarinumeroHeading: {
+    id: "common.lupaHistoriaDiaarinumeroHeading",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaPaatosDateHeading: {
+    id: "common.lupaHistoriaPaatosDateHeading",
+    defaultMessage: "Päätöspvm"
+  },
+  lupaHistoriaStartDateHeading: {
+    id: "common.lupaHistoriaStartDateHeading",
+    defaultMessage: "Voimaantulopvm"
+  },
+  lupaHistoriaEndDateHeading: {
+    id: "common.lupaHistoriaEndDateHeading",
+    defaultMessage: "Päättämispvm"
+  },
+  lupaHistoriaKumottuDateHeading: {
+    id: "common.lupaHistoriaKumottuDateHeading",
+    defaultMessage: "Kumottu"
+  },
+  lupaHistoriaPaatosDateMobile: {
+    id: "common.lupaHistoriaPaatosDateMobile",
+    defaultMessage: "Päätös tehty: {date}"
+  },
+  lupaHistoriaValidDateRangeMobile: {
+    id: "common.lupaHistoriaValidDateRangeMobile",
+    defaultMessage: "Voimassa: {date1} - {date2}"
+  },
+  lupaHistoriaKumottuDateMobile: {
+    id: "common.lupaHistoriaKumottuDateMobile",
+    defaultMessage: "Kumottu: {date}"
   }
 });

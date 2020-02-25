@@ -6,7 +6,7 @@ const colWidths = {
   1: "w-2/6"
 };
 
-export const generateVSTTableStructure = (tableData = [], intl, vstMap) => {
+export const generateVSTTableStructure = (tableData = [], intl, vstMap, history) => {
   return [
     {
       role: "thead",
@@ -48,18 +48,17 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap) => {
             );
             return {
               id: row.jarjestajaYtunnus,
-              /*
-              TODO: onclick handler for VST lupa
+
               onClick: row => {
                 if (history) {
-                  history.push(`vapaa-sivistystyo/${row.id}/jarjestamislupa`);
+                  history.push(`/vapaa-sivistystyo/luvat/${row.id}`);
                 } else {
                   console.error(
-                    "Järjestämislupatietojen näyttäminen epäonnistui."
+                    intl.formatMessage(common.errorLoadingLupa)
                   );
                 }
               },
-               */
+
               cells: R.addIndex(R.map)(
                 (col, ii) => {
                   return {

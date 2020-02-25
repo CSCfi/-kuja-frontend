@@ -95,7 +95,7 @@ const VapaaSivistystyo = ({ history }) => {
     }
   }, [vstRaw]);
 
-  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap);
+  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap, history);
   const onTypeSelectionChange = (payload, selection) => {
     if (selection && selection.selectedOption) {
       setvstTypeSelection(selection.selectedOption.value);
