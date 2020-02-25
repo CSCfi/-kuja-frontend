@@ -330,5 +330,41 @@ export default defineMessages({
   lupaHistoriaKumottuDateMobile: {
     id: "common.lupaHistoriaKumottuDateMobile",
     defaultMessage: "Kumottu: {date}"
+  },
+  lupaPageTitleAmmatillinen: {
+    id: "common.lupaPageTitleAmmatillinen",
+    defaultMessage: "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}"
+  },
+  lupaPageTitleEsiJaPerusopeutus: {
+    id: "common.lupaPageTitleEsiJaPerusopeutus",
+    defaultMessage: "Ajantasainen esi- ja perusopetuksen järjestämislupa {date}"
+  },
+  lupaPageTitleLukio: {
+    id: "common.lupaPageTitleLukio",
+    defaultMessage: "Ajantasainen lukiokoulutuksen järjestämislupa {date}"
+  },
+  lupaPageTitleVSTKansalaisopisto: {
+    id: "common.lupaPageTitleVSTKansalaisopisto",
+    defaultMessage: "Ajantasainen kansalaisopiston ylläpitämislupa {date}"
+  },
+  lupaPageTitleVSTMuut: {
+    id: "common.lupaPageTitleVSTMuut",
+    defaultMessage: "Ajantasainen Snellman-korkeakoulun ylläpitämislupa {date}"
+  },
+  lupaPageTitleVSTOpintokeskus: {
+    id: "common.lupaPageTitleVSTOpintokeskus",
+    defaultMessage: "Ajantasainen opintokeskuksen ylläpitämislupa {date}"
+  },
+  lupaPageTitleVSTKansanopisto: {
+    id: "common.lupaPageTitleVSTKansanopisto",
+    defaultMessage: "Ajantasainen kansanopiston ylläpitämislupa {date}"
+  },
+  lupaPageTitleVSTKesayliopisto: {
+    id: "common.lupaPageTitleVSTKesäyliopisto",
+    defaultMessage: "Ajantasainen kesäyliopiston ylläpitämislupa {date}"
+  },
+  lupaPageTitleVSTLiikunnanKoulutuskeskus: {
+    id: "common.lupaPageTitleVSTLiikunnanKoulutuskeskus",
+    defaultMessage: "Ajantasainen liikunnan koulutuskeskuksen ylläpitämislupa {date}"
   }
 });

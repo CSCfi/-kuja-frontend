@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Moment from "react-moment";
+import moment from "moment";
 import LupaSection from "./LupaSection";
 import Typography from "@material-ui/core/Typography";
 import { LUPA_SECTIONS } from "../modules/constants";
 import { COLORS } from "../../../modules/styles";
 import PropTypes from "prop-types";
+import common from "../../../i18n/definitions/common";
+import {useIntl} from "react-intl";
 
 const TopSectionWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
@@ -17,13 +19,47 @@ const InnerContentContainer = styled.div`
   box-shadow: 0 2px 4px 3px rgba(219, 219, 219, 0.2);
 `;
 
+const getTyyppiMessage = (lupa) => {
+  const koulutustyyppi = lupa.koulutustyyppi;
+  const vstTyyppi = lupa.oppilaitostyyppi;
+
+  if(!koulutustyyppi) {
+    return common.lupaPageTitleAmmatillinen;
+  }
+
+  switch(koulutustyyppi) {
+    case "1":
+      return common.lupaPageTitleEsiJaPerusopeutus;
+    case "2":
+      return common.lupaPageTitleLukio;
+    case "3":
+      switch(vstTyyppi) {
+        case "1":
+          return common.lupaPageTitleVSTKansanopisto;
+        case "2":
+          return common.lupaPageTitleVSTKansalaisopisto;
+        case "3":
+          return common.lupaPageTitleVSTOpintokeskus;
+        case "4":
+          return common.lupaPageTitleVSTKesayliopisto;
+        case "5":
+          return common.lupaPageTitleVSTLiikunnanKoulutuskeskus;
+        case "6":
+          return common.lupaPageTitleVSTMuut;
+      }
+  }
+};
+
 const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
+  const intl = useIntl();
+  const titleMessageKey = getTyyppiMessage(lupa);
+  const dateString = new moment().format('D.M.YYYY');
   return (
     <InnerContentContainer>
       <div>
         <TopSectionWrapper className="p-8">
             <Typography component="h1" variant="h5">
-              {'LOKALISOI Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa'} <Moment format="DD.MM.YYYY" />
+              {intl.formatMessage(titleMessageKey, {date: dateString})}
             </Typography>
           </TopSectionWrapper>
 
