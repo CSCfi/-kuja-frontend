@@ -1,5 +1,6 @@
 import "../../i18n-config";
 import { __ } from "i18n-for-browser";
+import { messages } from "../../utils";
 
 function getModificationForm(locale) {
   return [
@@ -141,6 +142,7 @@ function getModificationForm(locale) {
           styleClasses: ["w-full"],
           anchor: "A",
           name: "Attachments",
+          messages: messages.attachments,
           value: ""
         }
       ]

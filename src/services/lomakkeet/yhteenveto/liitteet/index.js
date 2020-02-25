@@ -1,3 +1,5 @@
+import { messages } from "../../utils";
+
 function getLiitteetForm() {
   return [
     {
@@ -14,7 +16,8 @@ function getLiitteetForm() {
         {
           anchor: "A",
           styleClasses: ["w-full"],
-          name: "Attachments"
+          name: "Attachments",
+          messages: messages.attachments
         }
       ]
     }
