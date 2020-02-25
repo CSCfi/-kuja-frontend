@@ -5,6 +5,7 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { useChangeObjects } from "../../../../../../../stores/changeObjects";
+import common from "../../../../../../../i18n/definitions/common";
 import * as R from "ramda";
 
 const getArticle = (areaCode, articles = []) => {
@@ -36,6 +37,7 @@ const Tutkinnot = props => {
             key={`expandable-row-root-${i}`}
             changes={changeObjects.tutkinnot[areaCode]}
             code={areaCode}
+            messages={{ undo: intl.formatMessage(common.undo) }}
             onChangesRemove={props.onChangesRemove}
             onUpdate={props.onChangesUpdate}
             sectionId={sectionId}
