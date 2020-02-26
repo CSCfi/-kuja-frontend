@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import moment from "moment";
-import LupaSection from "./LupaSection";
 import Typography from "@material-ui/core/Typography";
-import { LUPA_SECTIONS } from "../modules/constants";
 import { COLORS } from "../../../modules/styles";
 import PropTypes from "prop-types";
 import common from "../../../i18n/definitions/common";
 import {useIntl} from "react-intl";
+import {LUPA_SECTIONS} from "../modules/constants";
+import LupaSection from "./LupaSection";
 
 const TopSectionWrapper = styled.div`
   border-bottom: 1px solid ${COLORS.BORDER_GRAY};
@@ -63,15 +63,15 @@ const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
             </Typography>
           </TopSectionWrapper>
 
-          <div className="p-8">
-            {Object.keys(LUPA_SECTIONS).map((k, i) => (
-              <LupaSection
-                key={i}
-                kohde={lupaKohteet[k]}
-                ytunnus={lupa.jarjestajaYtunnus}
-              />
-            ))}
-          </div>
+        <div className="p-8">
+          {Object.keys(LUPA_SECTIONS).map((k, i) => (
+            <LupaSection
+              key={i}
+              kohde={lupaKohteet[k]}
+              ytunnus={lupa.jarjestajaYtunnus}
+            />
+          ))}
+        </div>
       </div>
     </InnerContentContainer>
   );

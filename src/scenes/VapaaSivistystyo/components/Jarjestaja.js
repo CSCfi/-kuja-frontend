@@ -73,8 +73,8 @@ const Jarjestaja = React.memo(
     ];
 
     const lupaKohteet = useMemo(() => {
-      return !lupa.data ? {} : parseLupa({ ...lupa.data }, intl.formatMessage);
-    }, [lupa.data, intl.formatMessage]);
+      return !lupa.data ? {} : parseLupa(lupa.data);
+    }, [lupa.data]);
 
     return (
       <React.Fragment>
@@ -95,13 +95,18 @@ const Jarjestaja = React.memo(
               path={`${match.path}/jarjestamislupa`}
               exact
               render={(props) => {
-                return (
-                  <Jarjestamislupa
-                    lupaKohteet={lupaKohteet}
-                    lupa={lupa}
-                    ytunnus={jarjestaja.ytunnus}
-                  />
-                )
+                if(lupa.isLoading === false && lupa.fetchedAt) {
+                  return (
+                    <Jarjestamislupa
+                      lupaKohteet={lupaKohteet}
+                      lupa={lupa.data}
+                      ytunnus={jarjestaja.ytunnus}
+                    />
+                  )
+                }
+                else {
+                  return <Loading />
+                }
               }}
             />
             <Route
