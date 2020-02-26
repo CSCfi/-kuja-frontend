@@ -67,7 +67,7 @@ const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
           {Object.keys(LUPA_SECTIONS).map((k, i) => (
             <LupaSection
               key={i}
-              kohde={lupaKohteet[k]}
+              kohde={lupaKohteet[k] || {}}
               ytunnus={lupa.jarjestajaYtunnus}
             />
           ))}
