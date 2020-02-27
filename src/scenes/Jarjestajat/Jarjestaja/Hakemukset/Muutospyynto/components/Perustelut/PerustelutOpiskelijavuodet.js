@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import { findAnchoredElement } from "../../../../../../../utils/common";

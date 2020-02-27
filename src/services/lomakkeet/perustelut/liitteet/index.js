@@ -1,3 +1,5 @@
+import { messages } from "../../utils";
+
 function getReasoningForm(isReadOnly) {
   return [
     {
@@ -16,6 +18,7 @@ function getReasoningForm(isReadOnly) {
           anchor: "A",
           styleClasses: ["w-full"],
           name: "Attachments",
+          messages: messages.attachments,
           properties: {
             isReadOnly: false
           }

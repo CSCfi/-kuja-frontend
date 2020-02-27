@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import { getAnchorPart } from "../../../../../../../utils/common";
 import { useIntl } from "react-intl";

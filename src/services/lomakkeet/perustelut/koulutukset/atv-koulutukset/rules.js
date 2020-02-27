@@ -1,9 +1,5 @@
 import * as R from "ramda";
-import {
-  getPathByAnchor,
-  ifTerm
-} from "../../../../../components/02-organisms/CategorizedListRoot/utils";
-import { getCategoriesByProps } from "../../../utils";
+import { getCategoriesByProps, getPathByAnchor, ifTerm } from "../../../utils";
 
 export function getRules(_lomake) {
   const perustelukentatCategories = R.uniq(

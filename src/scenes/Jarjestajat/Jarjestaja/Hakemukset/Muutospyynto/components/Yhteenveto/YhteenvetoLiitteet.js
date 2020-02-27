@@ -1,14 +1,17 @@
 import React from "react";
-import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
+import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import { useIntl } from "react-intl";
 
 const YhteenvetoLiitteet = React.memo(props => {
+  const intl = useIntl();
   return (
     <React.Fragment>
       <hr />
       <ExpandableRowRoot
-        title={"Hakemuksen yleiset liitteet"}
+        title={intl.formatMessage(wizardMessages.otherAttachments)}
         anchor={props.sectionId}
         key={`yhteenveto-hakemuksenLiitteet`}
         categories={[]}

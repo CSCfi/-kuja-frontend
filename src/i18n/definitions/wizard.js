@@ -191,5 +191,9 @@ export default defineMessages({
   allPerustelutRequired: {
     id: "wizard.allPerustelutRequired",
     defaultMessage: "Perustele kaikki muutokset."
+  },
+  otherAttachments: {
+    id: "wizard.otherAttachments",
+    defaultMessage: "Muut liitteet"
   }
 });

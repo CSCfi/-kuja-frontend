@@ -1,9 +1,24 @@
 import * as R from "ramda";
-import {
-  getPathByAnchor,
-  ifOneTerm
-} from "../../components/02-organisms/CategorizedListRoot/utils";
-import { findObjectWithKey } from "../../utils/common";
+import "./i18n-config";
+import { __ } from "i18n-for-browser";
+import { findObjectWithKey, removeAnchorPart } from "../../utils/common";
+
+export const messages = {
+  attachments: {
+    attachmentAdd: __("attachments.attachmentAdd"),
+    attachmentDownload: __("attachmentDownload"),
+    attachmentError: __("attachments.attachmentError"),
+    attachmentErrorName: __("attachments.attachmentErrorName"),
+    attachmentName: __("attachments.attachmentName"),
+    attachmentNone: __("attachments.attachmentNone"),
+    attachmentRemove: __("attachments.attachmentRemove"),
+    attachmentSecretSelect: __("attachments.attachmentSecretSelect"),
+    attachmentSecretUnselect: __("attachments.attachmentSecretUnselect"),
+    attachmentSecret: __("attachments.attachmentSecret"),
+    cancel: __("common.cancel"),
+    ok: __("common.ok")
+  }
+};
 
 export function createRules(requiredFields = []) {
   return R.map(rule => {
@@ -168,8 +183,121 @@ export function sortArticlesByHuomioitavaKoodi(articles, locale) {
     } else if (numberValueA < numberValueB) {
       return -1;
     } else {
-      return -1;
+      return 0;
     }
   }, articles);
   return sortedArticles;
 }
+
+/**
+ * Function returns an array of path parts. User can access the
+ * related component on the given form e.g. using Ramda's
+ * (ramdajs.com) path related functions.
+ * @param {*} anchorArr - Splitted anchor.
+ * @param {*} lomake - A categories structure.
+ * @param {*} anchorPartIndex - Initial value 0. Used for recursion.
+ * @param {*} _path - Return value. Initial value is "".
+ */
+export function getPathByAnchor(
+  anchorArr = [],
+  lomake,
+  anchorPartIndex = 0,
+  _path = []
+) {
+  const anchorPart = anchorArr[anchorPartIndex];
+  if (typeof anchorPart === "number") {
+    console.error(
+      `Anchor must be a string not a number.`,
+      anchorPart,
+      anchorArr
+    );
+  }
+  let pathPart = [];
+  if (anchorPartIndex === 0) {
+    pathPart = [R.findIndex(R.propEq("anchor", anchorPart), lomake)];
+  } else if (anchorPartIndex + 1 < anchorArr.length) {
+    const updatedPath = R.append("categories", _path);
+    const lomakePart = R.path(updatedPath, lomake);
+    const index = R.findIndex(R.propEq("anchor", anchorPart), lomakePart);
+    if (index !== -1 && lomakePart) {
+      pathPart = ["categories", index];
+    } else {
+      console.error("Can't find the requested part of the form.");
+      console.info(
+        "Make sure that there aren't duplicate anchor values on the same level of form definition."
+      );
+    }
+  } else {
+    const updatedPath = R.append("components", _path);
+    const lomakePart = R.path(updatedPath, lomake);
+    if (lomakePart) {
+      const componentPathPart = R.findIndex(
+        R.propEq("anchor", anchorPart),
+        lomakePart
+      );
+      if (componentPathPart !== -1) {
+        pathPart = [
+          "components",
+          R.findIndex(R.propEq("anchor", anchorPart), lomakePart)
+        ];
+      }
+    } else {
+      console.error(`Can't find anchor ${anchorPart} of ${lomakePart}.`);
+    }
+  }
+
+  if (R.head(pathPart) !== -1) {
+    _path = R.concat(_path, pathPart);
+
+    if (anchorArr[anchorPartIndex + 1]) {
+      return getPathByAnchor(anchorArr, lomake, anchorPartIndex + 1, _path);
+    }
+  } else {
+    console.error(
+      `Can't calculate the path for ${anchorArr} of the form ${lomake}.`
+    );
+  }
+  return _path;
+}
+
+const checkTerms = (terms, lomake, changeObjects) => {
+  return R.map(term => {
+    const _path = getPathByAnchor(R.split(".", term.anchor), lomake);
+    const component = R.path(_path, lomake);
+    let isValid = true;
+    if (component) {
+      const changeObject = R.find(changeObj => {
+        const anchor = removeAnchorPart(changeObj.anchor, 0);
+        return R.equals(anchor, term.anchor);
+      }, changeObjects);
+      /**
+       * Let's loop through the properties of the component.
+       **/
+      R.mapObjIndexed((value, key) => {
+        const source = changeObject || component;
+        if (
+          (value instanceof Function && !value(source.properties[key])) ||
+          (!(value instanceof Function) &&
+            !R.equals(value, component.properties[key]) &&
+            (!changeObject || !R.equals(changeObject.properties[key], value)))
+        ) {
+          isValid = false;
+        }
+      }, term.properties);
+    } else {
+      isValid = false;
+    }
+
+    return isValid;
+  }, terms);
+};
+
+const checkTerm = (term, lomake, changeObjects) => {
+  return checkTerms([term], lomake, changeObjects);
+};
+
+export const ifOne = R.includes(true);
+export const ifAll = R.all(R.equals(true));
+export const ifAllTerms = R.compose(ifAll, checkTerms);
+export const ifOneTerm = R.compose(R.includes(true), checkTerms);
+export const ifTerm = R.compose(R.includes(true), checkTerm);

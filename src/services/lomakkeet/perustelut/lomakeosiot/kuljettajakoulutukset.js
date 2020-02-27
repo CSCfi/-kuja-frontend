@@ -1,4 +1,5 @@
 import { HAKEMUS_OTSIKOT } from "../../../../locales/uusiHakemusFormConstants";
+import { messages } from "../../utils";
 
 function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
   return [
@@ -345,6 +346,7 @@ function kelpoisuusJaTyokokemusCategories(helpText, isReadOnly) {
               anchor: "A",
               styleClasses: ["w-full"],
               name: "Attachments",
+              messages: messages.attachments,
               properties: {
                 isReadOnly
               }
@@ -554,6 +556,7 @@ export function johtaja(orderCode, isReadOnly) {
                 anchor: "A",
                 styleClasses: ["w-full"],
                 name: "Attachments",
+                messages: messages.attachments,
                 properties: {
                   isReadOnly
                 }
@@ -686,6 +689,7 @@ export function ajoneuvoKanta(orderCode, isReadOnly) {
                 anchor: "A",
                 styleClasses: ["w-full"],
                 name: "Attachments",
+                messages: messages.attachments,
                 properties: {
                   isReadOnly
                 }
