@@ -1,4 +1,4 @@
-import { messages } from "../../utils";
+import { getMessages } from "../../utils";
 
 function getReasoningForm(isReadOnly) {
   return [
@@ -18,7 +18,7 @@ function getReasoningForm(isReadOnly) {
           anchor: "A",
           styleClasses: ["w-full"],
           name: "Attachments",
-          messages: messages.attachments,
+          messages: getMessages("attachments"),
           properties: {
             isReadOnly: false
           }

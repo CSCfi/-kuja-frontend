@@ -1,6 +1,6 @@
 import "../i18n-config";
 import { __ } from "i18n-for-browser";
-import { messages } from "../utils";
+import { getMessages } from "../utils";
 
 function getYleisetTiedotForm(isReadOnly) {
   return [
@@ -231,7 +231,7 @@ function getLiitteetForm(isReadOnly) {
           anchor: "A",
           styleClasses: ["w-full"],
           name: "Attachments",
-          messages: messages.attachments
+          messages: getMessages("attachments"),
         }
       ]
     }
