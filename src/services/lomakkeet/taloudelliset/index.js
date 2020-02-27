@@ -85,20 +85,6 @@ export function getInvestoinnitForm(isReadOnly) {
       ]
     },
     {
-      anchor: "kustannukset-header",
-      styleClasses: [""],
-      components: [
-        {
-          anchor: "label",
-          name: "StatusTextRow",
-          properties: {
-            title: "Investoinnin kustannukset"
-          },
-          value: ""
-        }
-      ]
-    },
-    {
       anchor: "kustannukset-Input",
       styleClasses: ["flex sm:row mb-6"],
       components: [
@@ -114,7 +100,7 @@ export function getInvestoinnitForm(isReadOnly) {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")
             },
             value: "",
-            title: "Investoinnin kustannukset"
+            label: "Investoinnin kustannukset"
           }
         }
       ]

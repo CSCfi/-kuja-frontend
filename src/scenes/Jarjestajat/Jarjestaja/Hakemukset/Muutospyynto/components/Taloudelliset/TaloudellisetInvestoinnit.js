@@ -34,6 +34,7 @@ const TaloudellisetInvestoinnit = React.memo(
           onChangesUpdate={onChangesUpdate}
           path={["taloudelliset"]}
           rules={investoinnit}
+          isReadOnly={isReadOnly}
           showCategoryTitles={true}></Lomake>
       </ExpandableRowRoot>
     );
