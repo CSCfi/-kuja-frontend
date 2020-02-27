@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PerustelutKoulutukset from "../Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "../Perustelut/PerustelutMuut";
 import PerustelutOpiskelijavuodet from "../Perustelut/PerustelutOpiskelijavuodet";
@@ -6,7 +6,6 @@ import PerustelutOpetuskielet from "../Perustelut/PerustelutOpetuskielet";
 import PerustelutTutkintokielet from "../Perustelut/PerustelutTutkintokielet";
 import PerustelutTutkinnot from "../Perustelut/PerustelutTutkinnot";
 import PerustelutLiitteet from "../Perustelut/PerustelutLiitteet";
-import { LomakkeetContext } from "../../../../../../../context/lomakkeetContext";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import PerustelutToimintaalue from "../Perustelut/PerustelutToimintaalue";
@@ -30,7 +29,6 @@ const YhteenvetoKooste = ({
   const intl = useIntl();
   const [kohdetiedot, setKohdetiedot] = useState(null);
   const [maaraystyypitState, setMaaraystyypitState] = useState({});
-  const { state: lomakkeet } = useContext(LomakkeetContext);
 
   const muutosperusteluListSorted = useMemo(() => {
     return R.sortBy(R.prop("koodiArvo"))(muutosperusteluList);
@@ -96,7 +94,7 @@ const YhteenvetoKooste = ({
                         {..._props}
                       />
                     )}
-                    {!!R.path(["perustelut", "koulutukset"], lomakkeet) ? (
+                    {!!R.path(["perustelut", "koulutukset"], changeObjects) ? (
                       <PerustelutKoulutukset
                         changeObjects={{
                           koulutukset: R.prop("koulutukset", changeObjects),
@@ -112,7 +110,6 @@ const YhteenvetoKooste = ({
                         )(kohteet)}
                         koulutukset={koulutukset}
                         maaraystyyppi={maaraystyypitState.OIKEUS}
-                        lomakkeet={lomakkeet.perustelut.koulutukset}
                         isReadOnly={true}
                         {..._props}
                       />

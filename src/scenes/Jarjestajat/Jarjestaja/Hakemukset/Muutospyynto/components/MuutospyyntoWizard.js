@@ -13,7 +13,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { MessageWrapper } from "modules/elements";
 import { ROLE_MUOKKAAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
 import {
   saveAndSubmitMuutospyynto,
   saveMuutospyynto
@@ -476,25 +475,23 @@ const MuutospyyntoWizard = ({
                   onSave={save}
                   lupa={lupa}
                   changeObjects={cos}>
-                  <LomakkeetProvider>
-                    <MuutospyyntoWizardPerustelut
-                      changeObjects={cos}
-                      elykeskukset={elykeskukset}
-                      kielet={kieletAndOpetuskielet}
-                      kohteet={kohteet}
-                      koulutukset={parsedKoulutukset}
-                      lupa={lupa}
-                      lupaKohteet={lupaKohteet}
-                      maaraystyypit={maaraystyypit}
-                      muut={muut}
-                      lomakkeet={lomakkeet}
-                      muutosperusteluList={muutosperusteluList}
-                      onChangesUpdate={onSectionChangesUpdate}
-                      tutkinnot={parsedTutkinnot}
-                      vankilat={vankilat}
-                      isFirstVisit={visitsPerPage[2] === 1}
-                    />
-                  </LomakkeetProvider>
+                  <MuutospyyntoWizardPerustelut
+                    changeObjects={cos}
+                    elykeskukset={elykeskukset}
+                    kielet={kieletAndOpetuskielet}
+                    kohteet={kohteet}
+                    koulutukset={parsedKoulutukset}
+                    lupa={lupa}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    lomakkeet={lomakkeet}
+                    muutosperusteluList={muutosperusteluList}
+                    onChangesUpdate={onSectionChangesUpdate}
+                    tutkinnot={parsedTutkinnot}
+                    vankilat={vankilat}
+                    isFirstVisit={visitsPerPage[2] === 1}
+                  />
                 </WizardPage>
               )}
               {page === 3 && (
@@ -519,23 +516,21 @@ const MuutospyyntoWizard = ({
                   onPrev={handlePrev}
                   onSave={save}
                   lupa={lupa}>
-                  <LomakkeetProvider>
-                    <MuutospyyntoWizardYhteenveto
-                      changeObjects={cos}
-                      kielet={kieletAndOpetuskielet}
-                      kohteet={kohteet}
-                      koulutukset={parsedKoulutukset}
-                      lupa={lupa}
-                      lupaKohteet={lupaKohteet}
-                      maaraystyypit={maaraystyypit}
-                      muut={muut}
-                      lomakkeet={lomakkeet}
-                      muutosperusteluList={muutosperusteluList}
-                      onChangesUpdate={onSectionChangesUpdate}
-                      tutkinnot={parsedTutkinnot}
-                      isFirstVisit={visitsPerPage[4] === 1}
-                    />
-                  </LomakkeetProvider>
+                  <MuutospyyntoWizardYhteenveto
+                    changeObjects={cos}
+                    kielet={kieletAndOpetuskielet}
+                    kohteet={kohteet}
+                    koulutukset={parsedKoulutukset}
+                    lupa={lupa}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    lomakkeet={lomakkeet}
+                    muutosperusteluList={muutosperusteluList}
+                    onChangesUpdate={onSectionChangesUpdate}
+                    tutkinnot={parsedTutkinnot}
+                    isFirstVisit={visitsPerPage[4] === 1}
+                  />
                 </WizardPage>
               )}
             </div>
