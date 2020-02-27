@@ -1,12 +1,13 @@
-import { getCategoriesByProps, createTerms } from "../../utils";
-import * as R from "ramda";
 import {
-  ifAll,
+  getCategoriesByProps,
+  createTerms,
   getPathByAnchor,
+  ifAll,
   ifOne,
   ifOneTerm,
   ifTerm
-} from "../../../../components/02-organisms/CategorizedListRoot/utils";
+} from "../../utils";
+import * as R from "ramda";
 
 export function getRules(_lomake) {
   const muutosperusteluCategories = R.uniq(

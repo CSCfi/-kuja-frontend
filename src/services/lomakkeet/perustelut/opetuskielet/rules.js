@@ -1,9 +1,5 @@
-import { getCategoriesByProps } from "../../utils";
+import { getCategoriesByProps, getPathByAnchor, ifOneTerm } from "../../utils";
 import * as R from "ramda";
-import {
-  ifOneTerm,
-  getPathByAnchor
-} from "../../../../components/02-organisms/CategorizedListRoot/utils";
 
 export function getRules(_lomake) {
   // Let's fetch all categories with TextBox element of the reasoning form.

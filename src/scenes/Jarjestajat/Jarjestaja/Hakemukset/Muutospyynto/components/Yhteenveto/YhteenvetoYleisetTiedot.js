@@ -1,5 +1,5 @@
 import React from "react";
-import ExpandableRowRoot from "../../../../../../../components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { rules } from "../../../../../../../services/lomakkeet/yhteenveto/yleisetTiedot/rules";

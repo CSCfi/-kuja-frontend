@@ -1,5 +1,5 @@
 import { HAKEMUS_OTSIKOT } from "../../../locales/uusiHakemusFormConstants";
-// import { injectIntl } from "react-intl";
+import { messages } from "../utils";
 
 export const getKuljettajienJatkokoulutuslomake = (
   addPeopleFormCallback,
@@ -501,6 +501,7 @@ const johtaja = (orderCode, isReadOnly) => {
             anchor: "A",
             styleClasses: ["w-full"],
             name: "Attachments",
+            messages: messages.attachments,
             properties: {
               isReadOnly
             }
@@ -634,6 +635,7 @@ const ajoneuvoKanta = (orderCode, isReadOnly) => {
             anchor: "A",
             styleClasses: ["w-full"],
             name: "Attachments",
+            messages: messages.attachments,
             properties: {
               isReadOnly
             }
