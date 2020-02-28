@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
-import CategorizedListRoot from "OKM-frontend-components/dist/components/02-organisms/CategorizedListRoot";
+import CategorizedListRoot from "okm-frontend-components/dist/components/02-organisms/CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
 import { equals, map, split } from "ramda";
 import { cloneDeep } from "lodash";

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useCallback } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
-import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import {
   getAnchorPart,
   replaceAnchorPartWith,
