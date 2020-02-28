@@ -75,7 +75,6 @@ function getModificationForm(locale) {
               datemin: __("common.datemin"),
               dateinvalid: __("common.dateinvalid")
             },
-            label: "Pvm",
             value: ""
           }
         }

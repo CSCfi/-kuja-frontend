@@ -68,7 +68,7 @@ export function getInvestoinnitForm(isReadOnly) {
   return [
     {
       anchor: "investoinnit-tekstikentta",
-      styleClasses: ["mb-6 font-normal"],
+      styleClasses: ["font-normal"],
       components: [
         {
           anchor: "A",
@@ -87,7 +87,7 @@ export function getInvestoinnitForm(isReadOnly) {
     },
     {
       anchor: "kustannukset-Input",
-      styleClasses: ["flex sm:row mb-6"],
+      styleClasses: ["flex sm:row"],
       components: [
         {
           anchor: "A",
@@ -108,7 +108,7 @@ export function getInvestoinnitForm(isReadOnly) {
     },
     {
       anchor: "rahoitus-tekstikentta",
-      styleClasses: [""],
+      styleClasses: ["flex sm:row"],
       components: [
         {
           anchor: "A",
