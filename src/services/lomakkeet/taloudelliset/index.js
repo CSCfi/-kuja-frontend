@@ -68,7 +68,7 @@ export function getInvestoinnitForm(isReadOnly) {
   return [
     {
       anchor: "investoinnit-tekstikentta",
-      styleClasses: ["mb-6 font-normal"],
+      styleClasses: ["font-normal"],
       components: [
         {
           anchor: "A",
@@ -86,22 +86,8 @@ export function getInvestoinnitForm(isReadOnly) {
       ]
     },
     {
-      anchor: "kustannukset-header",
-      styleClasses: [""],
-      components: [
-        {
-          anchor: "label",
-          name: "StatusTextRow",
-          properties: {
-            title: "Investoinnin kustannukset"
-          },
-          value: ""
-        }
-      ]
-    },
-    {
       anchor: "kustannukset-Input",
-      styleClasses: ["flex sm:row mb-6"],
+      styleClasses: ["flex sm:row"],
       components: [
         {
           anchor: "A",
@@ -115,14 +101,14 @@ export function getInvestoinnitForm(isReadOnly) {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")
             },
             value: "",
-            title: "Investoinnin kustannukset"
+            label: "Investoinnin kustannukset"
           }
         }
       ]
     },
     {
       anchor: "rahoitus-tekstikentta",
-      styleClasses: [""],
+      styleClasses: ["flex sm:row"],
       components: [
         {
           anchor: "A",
