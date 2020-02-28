@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import ExpandableRowRoot from "OKM-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
+import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 
 import "./perustelut-toiminta-alue.module.css";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
