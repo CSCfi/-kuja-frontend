@@ -229,10 +229,10 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
   }, [oivaperustelut.fetchedAt, oivaperustelut.data, intl.locale]);
 
   const onNewDocSave = useCallback(
-    muutoshakemus => {
+    muutospyynto => {
       const page = parseInt(match.params.page, 10);
       const url = `/jarjestajat/${match.params.ytunnus}`;
-      const uuid = muutoshakemus.save.data.data.uuid;
+      const uuid = muutospyynto.data.uuid;
       let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
 
       /**

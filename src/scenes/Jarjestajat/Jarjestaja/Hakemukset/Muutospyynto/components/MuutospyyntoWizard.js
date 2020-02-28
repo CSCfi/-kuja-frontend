@@ -13,10 +13,7 @@ import { withStyles } from "@material-ui/core/styles";
 import { MessageWrapper } from "modules/elements";
 import { ROLE_MUOKKAAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import {
-  saveAndSubmitMuutospyynto,
-  saveMuutospyynto
-} from "../../../../../../services/muutoshakemus/actions";
+import { saveAndSubmitMuutospyynto } from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
@@ -52,6 +49,7 @@ import { useKoulutukset } from "../../../../../../stores/koulutukset";
 import { mapObjIndexed, prop, sortBy } from "ramda";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useLomakkeet } from "../../../../../../stores/lomakkeet";
+import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
 
 const FormDialog = withStyles(() => ({
   paper: {
@@ -106,6 +104,7 @@ const MuutospyyntoWizard = ({
   const [koulutusalat] = useKoulutusalat();
   const [tutkinnot] = useTutkinnot();
   const [koulutukset] = useKoulutukset();
+  const [muutospyynto, muutospyyntoActions] = useMuutospyynto();
 
   /**
    * Muutoshakemus context is used only for some actions so we might get rid of
@@ -213,18 +212,22 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
-    if (R.path(["save", "hasErrored"], muutoshakemus) === true) {
+    console.info(muutospyynto, match.params.uuid);
+    if (muutospyynto.isErroneous) {
       toast.error("Virhe muutospyynnön käsittelyssä", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
-    } else if (R.path(["save", "saved"], muutoshakemus) === true) {
+    } else if (muutospyynto.savedAt) {
       toast.success("Muutospyyntö tallennettu!", {
         autoClose: 2000,
         position: toast.POSITION.TOP_LEFT
       });
+      if (!match.params.uuid) {
+        onNewDocSave(muutospyynto);
+      }
     }
-  }, [muutoshakemus]);
+  }, [match.params.uuid, muutospyynto.savedAt, muutospyynto.isErroneous]);
 
   useEffect(() => {
     if (muutoshakemus.save && muutoshakemus.save.saved) {
@@ -324,25 +327,24 @@ const MuutospyyntoWizard = ({
 
   const save = useCallback(
     options => {
-      let saveFunction = saveMuutospyynto;
-      if (options.setAsSent === true) {
-        saveFunction = saveAndSubmitMuutospyynto;
-      }
-      const attachments = getFiles();
-      saveFunction(
-        createObjectToSave(
-          lupa,
-          cos,
-          backendMuutokset,
-          match.params.uuid,
-          kohteet,
-          maaraystyypit,
-          muut,
-          lupaKohteet
-        ),
-        attachments,
+      const objectToSave = createObjectToSave(
+        lupa,
+        cos,
+        backendMuutokset,
+        match.params.uuid,
+        kohteet,
+        maaraystyypit,
+        muut,
+        lupaKohteet
+      );
+      muutospyyntoActions.save(
+        objectToSave,
+        getFiles(),
         options.triggerPreview
-      )(muutoshakemusDispatch);
+      );
+      // if (options.setAsSent) {
+      muutospyyntoActions.send();
+      // }
     },
     [
       cos,
@@ -356,13 +358,6 @@ const MuutospyyntoWizard = ({
       maaraystyypit,
       muut
     ]
-  );
-
-  const setChangesBySection = useCallback(
-    (sectionId, changes) => {
-      setChangesBySection(sectionId, changes)(muutoshakemusDispatch);
-    },
-    [muutoshakemusDispatch]
   );
 
   const openCancelModal = () => {
@@ -462,7 +457,6 @@ const MuutospyyntoWizard = ({
                     muut={muut}
                     lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
-                    setChangesBySection={setChangesBySection}
                     tutkinnot={parsedTutkinnot}
                   />
                 </WizardPage>
