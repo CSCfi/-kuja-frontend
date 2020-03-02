@@ -307,6 +307,58 @@ export default defineMessages({
     id: "common.lupaHistoria",
     defaultMessage: "Historiatiedot"
   },
+  errorFetchingRow: {
+    id: "common.errorFetchingRow",
+    defaultMessage: "Virhe haettaessa valitun rivin tietoja."
+  },
+  errorOpeningPDF: {
+    id: "common.errorOpeningPDF",
+    defaultMessage: "PDF:n avaaminen ei onnistunut."
+  },
+  errorLoadingLupaHistory: {
+    id: "common.errorLoadingLupaHistory",
+    defaultMessage: "Lupahistoriaa ladattaessa tapahtui virhe."
+  },
+  errorLoadingLupa: {
+    id: "common.errorLoadingLupa",
+    defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
+  },
+  diaarinumero: {
+    id: "common.diaarinumero",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaDiaarinumeroHeading: {
+    id: "common.lupaHistoriaDiaarinumeroHeading",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaPaatosDateHeading: {
+    id: "common.lupaHistoriaPaatosDateHeading",
+    defaultMessage: "Päätöspvm"
+  },
+  lupaHistoriaStartDateHeading: {
+    id: "common.lupaHistoriaStartDateHeading",
+    defaultMessage: "Voimaantulopvm"
+  },
+  lupaHistoriaEndDateHeading: {
+    id: "common.lupaHistoriaEndDateHeading",
+    defaultMessage: "Päättämispvm"
+  },
+  lupaHistoriaKumottuDateHeading: {
+    id: "common.lupaHistoriaKumottuDateHeading",
+    defaultMessage: "Kumottu"
+  },
+  lupaHistoriaPaatosDateMobile: {
+    id: "common.lupaHistoriaPaatosDateMobile",
+    defaultMessage: "Päätös tehty: {date}"
+  },
+  lupaHistoriaValidDateRangeMobile: {
+    id: "common.lupaHistoriaValidDateRangeMobile",
+    defaultMessage: "Voimassa: {date1} - {date2}"
+  },
+  lupaHistoriaKumottuDateMobile: {
+    id: "common.lupaHistoriaKumottuDateMobile",
+    defaultMessage: "Kumottu: {date}"
+  },
   omatTiedotTitle: {
     id: "common.omatTiedotTitle",
     defaultMessage: "Omat tiedot"
