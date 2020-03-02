@@ -387,6 +387,26 @@ export default defineMessages({
     id: "common.lupaSectionTitleSupplementary",
     defaultMessage: "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun lain\n (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
   },
+  lupaSectionTutkinnotValmaTitle: {
+    id: "common.lupaSectionTutkinnotValmaTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa valmentavaa koulutusta:"
+  },
+  lupaSectionTutkinnotTelmaTitle: {
+    id: "common.lupaSectionTutkinnotTelmaTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa valmentavaa koulutusta:"
+  },
+  lupaSectionTutkinnotAmmatillinenTitle: {
+    id: "common.lupaSectionTutkinnotAmmatillinenTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa ammatilliseen tehtävään valmistavaa koulutusta:"
+  },
+  lupaSectionOpetuskieliSingular: {
+    id: "common.lupaSectionOpetuskieliSingular",
+    defaultMessage: "Koulutuksen järjestäjän on annettava opetusta seuraavalla opetuskielellä:"
+  },
+  lupaSectionOpetuskieliPlural: {
+    id: "common.lupaSectionOpetuskieliPlural",
+    defaultMessage: "Koulutuksen järjestäjän on annettava opetusta seuraavilla opetuskielillä:"
+  },
   lupaSectionExtraLanguageEnglishSingular: {
     id: "common.lupaSectionExtraLanguageEnglishSingular",
     defaultMessage: "Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa"
@@ -423,6 +443,46 @@ export default defineMessages({
     id: "common.lupaSectionToimintaAlueNational",
     defaultMessage: "Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa."
   },
+  lupaSectionToimintaAlueNationalAlternative: {
+    id: "common.lupaSectionToimintaAlueNational",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen."
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja kuntien alueen osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja seuraavien kuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaNoneKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaNoneKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien kuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja seuraavan kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaNoneKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaNoneKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaNone: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaNone",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaNone: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaNone",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueNone: {
+    id: "common.lupaSectionToimintaAlueNone",
+    defaultMessage: "Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta."
+  },
   lupaSectionOpiskelijavuodetMinimum: {
     id: "common.lupaSectionOpiskelijavuodetMinimum",
     defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on {arvo}"
@@ -434,6 +494,18 @@ export default defineMessages({
   lupaSectionOpiskelijavuodetValtio: {
     id: "common.lupaSectionOpiskelijavuodetValtio",
     defaultMessage: "Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää."
+  },
+  lupaSectionOpiskelijavuodetLimitationSingular: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationSingular",
+    defaultMessage: "Opiskelijavuosien vähimmäismäärää koskee seuraava rajoitus:"
+  },
+  lupaSectionOpiskelijavuodetLimitationPlural: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationPlural",
+    defaultMessage: "Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:"
+  },
+  lupaSectionOpiskelijavuodetLimitationNone: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationNone",
+    defaultMessage: "Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää."
   },
   lupaSectionMuutEiMaarayksia: {
     id: "common.lupaSectionMuutEiMaarayksia",
