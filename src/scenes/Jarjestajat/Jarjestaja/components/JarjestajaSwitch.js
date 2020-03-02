@@ -31,7 +31,7 @@ const JarjestajaSwitch = React.memo(({ history, path, user, ytunnus }) => {
 
   const lupaKohteet = useMemo(() => {
     return !lupa.data ? {} : parseLupa({ ...lupa.data }, intl.formatMessage, intl.locale.toUpperCase());
-  }, [lupa.data, intl.formatMessage]);
+  }, [lupa.data, intl]);
 
   return (
     <Switch>
