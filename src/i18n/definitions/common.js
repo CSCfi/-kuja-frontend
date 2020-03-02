@@ -307,4 +307,16 @@ export default defineMessages({
     id: "common.lupaHistoria",
     defaultMessage: "Historiatiedot"
   },
+  omatTiedotTitle: {
+    id: "common.omatTiedotTitle",
+    defaultMessage: "Omat tiedot"
+  },
+  asiatTitle: {
+    id: "common.asiatTitle",
+    defaultMessage: "Järjestämislupa-asiat"
+  },
+  lupaTitle: {
+    id: "common.lupaTitle",
+    defaultMessage: "Järjestämislupa"
+  }
 });
