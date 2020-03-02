@@ -63,7 +63,7 @@ const Jarjestaja = React.memo(
       {
         path: `${match.url}/jarjestamislupa`,
         exact: true,
-        text: 'Järjestämislupa',
+        text: intl.formatMessage(common.lupaTitle),
       },
       {
         path: match.url,

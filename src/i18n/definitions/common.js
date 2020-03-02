@@ -366,5 +366,9 @@ export default defineMessages({
   lupaPageTitleVSTLiikunnanKoulutuskeskus: {
     id: "common.lupaPageTitleVSTLiikunnanKoulutuskeskus",
     defaultMessage: "Ajantasainen liikunnan koulutuskeskuksen ylläpitämislupa {date}"
+  },
+  lupaTitle: {
+    id: "common.lupaTitle",
+    defaultMessage: "Järjestämislupa"
   }
 });
