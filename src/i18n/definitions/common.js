@@ -300,7 +300,7 @@ export default defineMessages({
     defaultMessage: "Viimeisin päätös"
   },
   lupaPaatokset: {
-    id: "common.paatokset",
+    id: "common.lupaPaatokset",
     defaultMessage: "Päätökset"
   },
   lupaHistoria: {
@@ -314,6 +314,10 @@ export default defineMessages({
   asiatTitle: {
     id: "common.asiatTitle",
     defaultMessage: "Järjestämislupa-asiat"
+  },
+  lupaPageTitleAmmatillinen: {
+    id: "common.lupaPageTitleAmmatillinen",
+    defaultMessage: "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}"
   },
   lupaTitle: {
     id: "common.lupaTitle",

@@ -65,6 +65,7 @@
   "common.newHakemus": "Tee uusi muutoshakemus",
   "common.ok": "Ok",
   "common.lupaPaatokset": "Päätökset",
+  "common.lupaPageTitleAmmatillinen": "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}",
   "common.lupaLatest": "Viimeisin päätös",
   "common.lupaHistoria": "Historiatiedot",
   "common.omatTiedotTitle": "Omat tiedot",
