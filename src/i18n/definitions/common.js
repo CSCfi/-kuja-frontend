@@ -294,5 +294,17 @@ export default defineMessages({
   toBeRemoved: {
     id: "common.toBeRemoved",
     defaultMessage: "Poistettava"
-  }
+  },
+  lupaLatest: {
+    id: "common.lupaLatest",
+    defaultMessage: "Viimeisin päätös"
+  },
+  lupaPaatokset: {
+    id: "common.paatokset",
+    defaultMessage: "Päätökset"
+  },
+  lupaHistoria: {
+    id: "common.lupaHistoria",
+    defaultMessage: "Historiatiedot"
+  },
 });
