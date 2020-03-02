@@ -288,7 +288,7 @@ export default defineMessages({
     defaultMessage: "Viimeisin päätös"
   },
   lupaPaatokset: {
-    id: "common.paatokset",
+    id: "common.lupaPaatokset",
     defaultMessage: "Päätökset"
   },
   lupaHistoria: {

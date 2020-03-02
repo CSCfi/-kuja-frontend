@@ -101,7 +101,7 @@
   "common.lupaHistoriaPaatosDateMobile": "Päätös tehty: {date}",
   "common.lupaHistoriaValidDateRangeMobile": "Voimassa: {date1} - {date2}",
   "common.lupaHistoriaKumottuDateMobile": "Kumottu: {date}",
-  "common.paatokset": "Päätökset",
+  "common.lupaPaatokset": "Päätökset",
   "common.lupaPageTitleAmmatillinen": "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}",
   "common.lupaPageTitleEsiJaPerusopeutus": "Ajantasainen esi- ja perusopetuksen järjestämislupa {date}",
   "common.lupaPageTitleLukio": "Ajantasainen lukiokoulutuksen järjestämislupa {date}",
