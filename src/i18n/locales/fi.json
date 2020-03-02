@@ -58,6 +58,7 @@
   "common.fetchFailure": "Tietoja ei voitu noutaa.",
   "common.fetchFailureAuthInfo": "Tämä voi johtua siitä, ettet ole kirjautunut sisään.",
   "common.frontpage": "Etusivu",
+  "common.since": "{date} lukien",
   "common.functions": "Toiminnot",
   "common.hakemusAsiakirjat": "Hakemuksen asiakirjat",
   "common.loading": "Ladataan",

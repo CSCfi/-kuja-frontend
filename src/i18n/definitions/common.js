@@ -195,6 +195,10 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  since: {
+    id: "common.since",
+    defaultMessage: "{date} lukien"
+  },
   "asiaTable.headers.asianumero": {
     id: "asiaTable.headers.asianumero",
     defaultMessage: "Asianumero"
