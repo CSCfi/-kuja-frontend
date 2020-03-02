@@ -367,6 +367,38 @@ export default defineMessages({
     id: "common.omatTiedotTitle",
     defaultMessage: "Omat tiedot"
   },
+  omatTiedotVisitAddress: {
+    id: "common.omatTiedotVisitAddress",
+    defaultMessage: "Käyntiosoite"
+  },
+  omatTiedotMailAddress: {
+    id: "common.omatTiedotMailAddress",
+    defaultMessage: "Postiosoite"
+  },
+  omatTiedotMunicipality: {
+    id: "common.omatTiedotMunicipality",
+    defaultMessage: "Kotipaikka"
+  },
+  omatTiedotContactInfo: {
+    id: "common.omatTiedotContactInfo",
+    defaultMessage: "Yhteystiedot"
+  },
+  omatTiedotPhoneNumber: {
+    id: "common.omatTiedotPhoneNumber",
+    defaultMessage: "Puhelinnumero"
+  },
+  omatTiedotWwwAddress: {
+    id: "common.omatTiedotWwwAddress",
+    defaultMessage: "Www-osoite"
+  },
+  omatTiedotEmailAddress: {
+    id: "common.omatTiedotEmailAddress",
+    defaultMessage: "Sähköpostiosoite"
+  },
+  omatTiedotInfo: {
+    id: "common.omatTiedotInfo",
+    defaultMessage: "Tiedot tulevat Opetushallituksen organisaatiotietopalvelusta, joka päivittää ne yritys- ja yhteisötietojärjestelmästä (YTJ). Muutokset tietoihin tulee tehdä sitä kautta."
+  },
   asiatTitle: {
     id: "common.asiatTitle",
     defaultMessage: "Järjestämislupa-asiat"
