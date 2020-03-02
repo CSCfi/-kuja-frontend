@@ -322,5 +322,69 @@ export default defineMessages({
   lupaTitle: {
     id: "common.lupaTitle",
     defaultMessage: "Järjestämislupa"
+  },
+  lupaSectionTitleAllLupas: {
+    id: "commmon.lupaSectionTitleAllLupas",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus myöntää seuraavia tutkintoja ja antaa niihin tutkintokoulutusta:"
+  },
+  lupaSectionTitleSupplementary: {
+    id: "common.lupaSectionTitleSupplementary",
+    defaultMessage: "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun lain\n (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
+  },
+  lupaSectionExtraLanguageEnglishSingular: {
+    id: "common.lupaSectionExtraLanguageEnglishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageEnglishPlural: {
+    id: "common.lupaSectionExtraLanguageEnglishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi englanti seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageSwedishSingular: {
+    id: "common.lupaSectionExtraLanguageSwedishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageSwedishPlural: {
+    id: "common.lupaSectionExtraLanguageSwedishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageFinnishSingular: {
+    id: "common.lupaSectionExtraLanguageFinnishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi suomi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageFinnishPlural: {
+    id: "common.lupaSectionExtraLanguageFinnishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi suomi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageRussianSingular: {
+    id: "common.lupaSectionExtraLanguageRussianSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageRussianPlural: {
+    id: "common.lupaSectionExtraLanguageRussianPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavassa tutkinnossa"
+  },
+  lupaSectionToimintaAlueNational: {
+    id: "common.lupaSectionToimintaAlueNational",
+    defaultMessage: "Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa."
+  },
+  lupaSectionOpiskelijavuodetMinimum: {
+    id: "common.lupaSectionOpiskelijavuodetMinimum",
+    defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on {arvo}"
+  },
+  lupaSectionOpiskelijavuodetMaximum: {
+    id: "common.lupaSectionOpiskelijavuodetMaximum",
+    defaultMessage: "{tyyppi} enintään {arvo} opiskelijavuotta"
+  },
+  lupaSectionOpiskelijavuodetValtio: {
+    id: "common.lupaSectionOpiskelijavuodetValtio",
+    defaultMessage: "Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää."
+  },
+  lupaSectionMuutEiMaarayksia: {
+    id: "common.lupaSectionMuutEiMaarayksia",
+    defaultMessage: "Koulutuksen järjestäjälle ei tässä järjestämisluvassa määrätä muita oikeuksia, velvollisuuksia, ehtoja tai tehtäviä."
+  },
+  lupaSectionNoInfo: {
+    id: "common.lupaSectionNoInfo",
+    defaultMessage: "Ei kohdetietoja"
   }
 });
