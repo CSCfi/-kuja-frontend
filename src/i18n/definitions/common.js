@@ -387,6 +387,10 @@ export default defineMessages({
     id: "common.lupaSectionTitleSupplementary",
     defaultMessage: "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun lain\n (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
   },
+  lupaSectionTutkinnotMainTitle: {
+    id: "common.lupaSectionTutkinnotMainTitle",
+    defaultMessage: "Tutkinnot ja koulutukset"
+  },
   lupaSectionTutkinnotValmaTitle: {
     id: "common.lupaSectionTutkinnotValmaTitle",
     defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa valmentavaa koulutusta:"
@@ -398,6 +402,10 @@ export default defineMessages({
   lupaSectionTutkinnotAmmatillinenTitle: {
     id: "common.lupaSectionTutkinnotAmmatillinenTitle",
     defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa ammatilliseen tehtävään valmistavaa koulutusta:"
+  },
+  lupaSectionOpetuskieliMainTitle: {
+    id: "common.lupaSectionOpetuskieliMainTitle",
+    defaultMessage: "Opetus- ja tutkintokieli"
   },
   lupaSectionOpetuskieliSingular: {
     id: "common.lupaSectionOpetuskieliSingular",
@@ -438,6 +446,10 @@ export default defineMessages({
   lupaSectionExtraLanguageRussianPlural: {
     id: "common.lupaSectionExtraLanguageRussianPlural",
     defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavassa tutkinnossa"
+  },
+  lupaSectionToimintaAlueMainTitle: {
+    id: "common.lupaSectionToimintaAlueMainTitle",
+    defaultMessage: "Toiminta-alue"
   },
   lupaSectionToimintaAlueNational: {
     id: "common.lupaSectionToimintaAlueNational",
@@ -483,6 +495,10 @@ export default defineMessages({
     id: "common.lupaSectionToimintaAlueNone",
     defaultMessage: "Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta."
   },
+  lupaSectionOpiskelijavuodetMainTitle: {
+    id: "common.lupaSectionOpiskelijavuodetMainTitle",
+    defaultMessage: "Opiskelijavuodet ja niitä koskevat rajoitukset"
+  },
   lupaSectionOpiskelijavuodetMinimum: {
     id: "common.lupaSectionOpiskelijavuodetMinimum",
     defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on {arvo}"
@@ -506,6 +522,10 @@ export default defineMessages({
   lupaSectionOpiskelijavuodetLimitationNone: {
     id: "common.lupaSectionOpiskelijavuodetLimitationNone",
     defaultMessage: "Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää."
+  },
+  lupaSectionMuutMainTitle: {
+    id: "common.lupaSectionMuutMainTitle",
+    defaultMessage: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
   },
   lupaSectionMuutEiMaarayksia: {
     id: "common.lupaSectionMuutEiMaarayksia",

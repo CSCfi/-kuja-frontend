@@ -1,4 +1,3 @@
-import wizardMessages from "../i18n/definitions/wizard";
 import _ from "lodash";
 import {
   KOHTEET,
@@ -22,12 +21,9 @@ export const parseLupa = (lupa, formatMessage, locale) => {
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
         const { tunniste, headingNumber } = LUPA_SECTIONS[key];
-        const heading =
-          formatMessage(wizardMessages.sectionTitle_1) || "[KÄÄNTÄMÄTTÄ]";
         const currentMaaraykset = parseMaaraykset(lupa.maaraykset, tunniste);
 
         lupaObj[key] = parseSectionData(
-          heading,
           tunniste,
           currentMaaraykset,
           headingNumber,
@@ -42,7 +38,6 @@ export const parseLupa = (lupa, formatMessage, locale) => {
 };
 
 const parseSectionData = (
-  heading,
   target,
   maaraykset,
   headingNumber,
@@ -56,6 +51,7 @@ const parseSectionData = (
 
   // kohde 1: Erikoiskäsittely tutkinnoille ja koulutuksille
   if (target === KOHTEET.TUTKINNOT) {
+    returnobj.heading = t(common.lupaSectionTutkinnotMainTitle);
     _.forEach(maaraykset, maarays => {
       const { koodisto, kohde, maaraystyyppi, uuid } = maarays;
 
@@ -233,6 +229,7 @@ const parseSectionData = (
 
     // kohde 2: Opetuskieli
   } else if (target === KOHTEET.KIELI) {
+    returnobj.heading = t(common.lupaSectionOpetuskieliMainTitle);
     let opetuskielet = [];
     let tutkintokielet = [];
     let tutkintokieletEn = [];
@@ -299,6 +296,7 @@ const parseSectionData = (
 
     // kohde 3: Toiminta-alueet
   } else if (target === KOHTEET.TOIMIALUE) {
+    returnobj.heading = t(common.lupaSectionToimintaAlueMainTitle);
     let toimintaalueet = getToimintaalueArvoArray(maaraykset, locale);
 
     let maakunnat = _.filter(toimintaalueet, alue => {
@@ -362,6 +360,7 @@ const parseSectionData = (
 
     // kohde 4: opiskelijavuodet
   } else if (target === KOHTEET.OPISKELIJAVUODET) {
+    returnobj.heading = t(common.lupaSectionOpiskelijavuodetMainTitle);
     let opiskelijavuodet = [];
     let rajoitukset = [];
 
@@ -407,6 +406,7 @@ const parseSectionData = (
 
     // kohde 5: Muut
   } else if (target === KOHTEET.MUUT) {
+    returnobj.heading = t(common.lupaSectionMuutMainTitle)
     let muut = [];
     let vaativat = [];
     let vankilat = [];
@@ -517,7 +517,6 @@ const parseSectionData = (
     returnobj.muutCombined = muutCombined;
   }
 
-  returnobj.heading = heading;
   returnobj.tunniste = target;
   returnobj.headingNumber = headingNumber;
 

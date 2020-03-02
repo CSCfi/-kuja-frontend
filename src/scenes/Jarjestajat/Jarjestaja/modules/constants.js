@@ -2,27 +2,22 @@
 
 export const LUPA_SECTIONS = {
   1: {
-    heading: "Tutkinnot ja koulutukset",
     tunniste: 'tutkinnotjakoulutukset',
     headingNumber: 1
   },
   2: {
-    heading: "Opetus- ja tutkintokieli",
     tunniste: 'opetusjatutkintokieli',
     headingNumber: 2
   },
   3: {
-    heading: "Toiminta-alue",
     tunniste: 'toimintaalue',
     headingNumber: 3
   },
   4: {
-    heading: "Opiskelijavuodet ja niitä koskevat rajoitukset",
     tunniste: 'opiskelijavuodet',
     headingNumber: 4
   },
   5: {
-    heading: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät",
     tunniste: 'muut',
     headingNumber: 5
   }
@@ -277,7 +272,7 @@ export const LUPA_TEKSTIT = {
         JARJESTAMISLUVAN_PERUUTUS: {
             FI: 'Järjestämisluvan peruutus',
             SV: 'JARJESTAMISLUVAN_PERUUTUS'
-        },     
+        },
         ASIAT_TAULUKKO: {
             DNRO: {
                 FI: 'OKM:n Dnro',
@@ -334,7 +329,7 @@ export const LUPA_TEKSTIT = {
             FI: 'Järjestämislupa-asian asiakirjat',
             SV: 'ASIAKIRJAT_OTSIKKO'
         }
-    },   
+    },
     OMATTIEDOT: {
         OTSIKKO: {
             FI: 'Omat tiedot',
