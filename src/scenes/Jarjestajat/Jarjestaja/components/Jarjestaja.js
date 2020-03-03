@@ -142,6 +142,10 @@ const Jarjestaja = React.memo(
                     history={props.history}
                     intl={intl}
                     match={props.match}
+                    isForceReloadRequested={R.includes(
+                      "force=true",
+                      props.location.search
+                    )}
                     newApplicationRouteItem={newApplicationRouteItem}
                   />
                 )}
@@ -163,7 +167,9 @@ const Jarjestaja = React.memo(
               <Route
                 path={`${url}`}
                 exact
-                render={() => <JulkisetTiedot lupa={lupa} jarjestaja={jarjestaja} />}
+                render={() => (
+                  <JulkisetTiedot lupa={lupa} jarjestaja={jarjestaja} />
+                )}
               />
             </div>
           )}
