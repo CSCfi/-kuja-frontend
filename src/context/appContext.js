@@ -12,7 +12,8 @@ const currentLocale =
     : "fi");
 
 const initialState = {
-  locale: currentLocale
+  locale: currentLocale,
+  isDebugModeOn: process.env.REACT_APP_DEBUG === "true"
 };
 
 const AppContext = React.createContext(initialState);
