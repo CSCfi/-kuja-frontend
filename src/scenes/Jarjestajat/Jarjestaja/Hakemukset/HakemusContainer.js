@@ -232,7 +232,7 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
     muutospyynto => {
       const page = parseInt(match.params.page, 10);
       const url = `/jarjestajat/${match.params.ytunnus}`;
-      const uuid = muutospyynto.data.uuid;
+      const uuid = muutospyynto.uuid;
       let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
 
       /**
