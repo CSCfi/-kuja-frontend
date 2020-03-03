@@ -199,6 +199,14 @@ export default defineMessages({
     id: "common.since",
     defaultMessage: "{date} lukien"
   },
+  jarjestaja: {
+    id: "common.jarjestaja",
+    defaultMessage: "Koulutuksen järjestäjä"
+  },
+  homeCounty: {
+    id: "common.homeCounty",
+    defaultMessage: "Kotipaikan maakunta"
+  },
   kjAsiaTableDnro: {
     id: "common.kjAsiaTableDnro",
     defaultMessage: "OKM:n Dnro"
