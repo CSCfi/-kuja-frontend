@@ -134,7 +134,7 @@ const JarjestamislupaAsiatList = ({
           rows: R.addIndex(R.map)((row, i) => {
             const tilaText =
               row.tila && states.includes(row.tila)
-                ? intl.formatMessage(asiaStateToLocalizationKeyMap[row.tila])
+                ? intl.formatMessage(common[asiaStateToLocalizationKeyMap[row.tila]])
                 : row.tila;
             let cells = R.addIndex(R.map)(
               (col, ii) => {

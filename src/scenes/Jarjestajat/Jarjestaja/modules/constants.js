@@ -1,5 +1,3 @@
-import common from "../../../../i18n/definitions/common";
-
 export const LUPA_SECTIONS = {
   1: {
     tunniste: 'tutkinnotjakoulutukset',
@@ -48,12 +46,12 @@ export const KOODISTOT = {
 }
 
 export const asiaStateToLocalizationKeyMap = {
-    LUONNOS: common["asiaStates.kj.LUONNOS"],
-    AVOIN: common["asiaStates.kj.AVOIN"],
-    VALMISTELUSSA: common["asiaStates.kj.VALMISTELUSSA"],
-    TAYDENNETTAVA: common["asiaStates.kj.TAYDENNETTAVA"],
-    PAATETTY: common["asiaStates.kj.PAATETTY"],
-    PASSIVOITU: common["asiaStates.kj.PASSIVOITU"]
+    LUONNOS: "asiaStates.kj.LUONNOS",
+    AVOIN: "asiaStates.kj.AVOIN",
+    VALMISTELUSSA: "asiaStates.kj.VALMISTELUSSA",
+    TAYDENNETTAVA: "asiaStates.kj.TAYDENNETTAVA",
+    PAATETTY: "asiaStates.kj.PAATETTY",
+    PASSIVOITU: "asiaStates.kj.PASSIVOITU"
 }
 
 export const LUPA_VOIMASSAOLO_20181231_ASTI =

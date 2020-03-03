@@ -36,7 +36,7 @@ const JarjestamislupaAsiaListItem = props => {
             <TextPartial>
               {intl.formatMessage(common.stateAsia)}:&nbsp;
               {tila && states.includes(tila)
-                ? intl.formatMessage(asiaStateToLocalizationKeyMap[tila])
+                ? intl.formatMessage(common[asiaStateToLocalizationKeyMap[tila]])
                 : tila}
             </TextPartial>
           </LupaText>
@@ -66,7 +66,7 @@ const JarjestamislupaAsiaListItem = props => {
         <Td role="cell" size="small">
           <Typography component="span">
             {tila && states.includes(tila)
-              ? intl.formatMessage(asiaStateToLocalizationKeyMap[tila])
+              ? intl.formatMessage(common[asiaStateToLocalizationKeyMap[tila]])
               : tila}
           </Typography>
         </Td>

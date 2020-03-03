@@ -58,7 +58,7 @@ const JarjestamislupaAsiakirjat = ({ muutospyynto }) => {
 
   const baseRow = [
     muutospyynto.tila && states.includes(muutospyynto.tila)
-      ? intl.formatMessage(asiaStateToLocalizationKeyMap[muutospyynto.tila])
+      ? intl.formatMessage(common[asiaStateToLocalizationKeyMap[muutospyynto.tila]])
       : muutospyynto.tila,
     R.path(["nimi", intl.locale], organisation.data)
   ];
