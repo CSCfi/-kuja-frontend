@@ -56,7 +56,7 @@ const logo = { text: "Oiva", path: "/" };
  *
  * @param {props} - Properties object.
  */
-const App = ({ user }) => {
+const App = ({ isDebugModeOn, user }) => {
   const intl = useIntl();
 
   const [organisation, organisationActions] = useOrganisation();
@@ -231,7 +231,10 @@ const App = ({ user }) => {
     <React.Fragment>
       <Router history={history}>
         <div className="flex flex-col min-h-screen">
-          <div className="fixed z-50 w-full">
+          <div
+            className={`fixed z-50 ${
+              appState.isDebugModeOn ? "w-2/3" : "w-full"
+            }`}>
             <ReactResizeDetector handleHeight onResize={onHeaderResize} />
             {getHeader()}
 
@@ -337,7 +340,6 @@ const App = ({ user }) => {
           </footer>
         </div>
       </Router>
-      }
     </React.Fragment>
   );
 };

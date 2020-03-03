@@ -20,7 +20,8 @@ function markRequiredFields(lomake, changeObjects = [], rules = []) {
 }
 
 const defaultProps = {
-  changeObjects: []
+  changeObjects: [],
+  showValidationErrors: false
 };
 
 const Lomake = React.memo(
@@ -31,6 +32,7 @@ const Lomake = React.memo(
     data,
     metadata,
     isReadOnly,
+    showValidationErrors = defaultProps.showValidationErrors,
     onChangesUpdate,
     path,
     prefix = "",
@@ -95,6 +97,7 @@ const Lomake = React.memo(
               changes={changeObjects}
               onUpdate={onChangesUpdate}
               showCategoryTitles={showCategoryTitles}
+              showValidationErrors={showValidationErrors}
             />
           </div>
         </React.Fragment>

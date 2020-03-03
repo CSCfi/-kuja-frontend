@@ -60,6 +60,7 @@ const states = [
 
 const JarjestamislupaAsiatList = ({
   history,
+  isForceReloadRequested,
   match,
   newApplicationRouteItem
 }) => {
@@ -78,7 +79,10 @@ const JarjestamislupaAsiatList = ({
     if (lupa.fetchedAt) {
       const ytunnus = R.path(["jarjestaja", "ytunnus"], lupa.data);
       if (ytunnus) {
-        abortController = muutospyynnotActions.load(ytunnus);
+        abortController = muutospyynnotActions.load(
+          ytunnus,
+          isForceReloadRequested
+        );
       }
     }
     return function cancel() {
@@ -86,7 +90,13 @@ const JarjestamislupaAsiatList = ({
         abortController.abort();
       }
     };
-  }, [lupa.data, lupa.fetchedAt, muutospyynnotActions]);
+  }, [
+    isForceReloadRequested,
+    lupa.data,
+    lupa.fetchedAt,
+    muutospyynnotActions,
+    match
+  ]);
 
   const tableData = useMemo(() => {
     if (muutospyynnot.fetchedAt && muutospyynnot.data) {

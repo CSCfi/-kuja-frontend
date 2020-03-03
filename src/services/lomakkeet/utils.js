@@ -3,22 +3,25 @@ import "./i18n-config";
 import { __ } from "i18n-for-browser";
 import { findObjectWithKey, removeAnchorPart } from "../../utils/common";
 
-export const messages = {
-  attachments: {
-    attachmentAdd: __("attachments.attachmentAdd"),
-    attachmentDownload: __("attachmentDownload"),
-    attachmentError: __("attachments.attachmentError"),
-    attachmentErrorName: __("attachments.attachmentErrorName"),
-    attachmentName: __("attachments.attachmentName"),
-    attachmentNone: __("attachments.attachmentNone"),
-    attachmentRemove: __("attachments.attachmentRemove"),
-    attachmentSecretSelect: __("attachments.attachmentSecretSelect"),
-    attachmentSecretUnselect: __("attachments.attachmentSecretUnselect"),
-    attachmentSecret: __("attachments.attachmentSecret"),
-    cancel: __("common.cancel"),
-    ok: __("common.ok")
-  }
-};
+export function getMessages(key) {
+  const messages = {
+    attachments: {
+      attachmentAdd: __("attachments.attachmentAdd"),
+      attachmentDownload: __("attachmentDownload"),
+      attachmentError: __("attachments.attachmentError"),
+      attachmentErrorName: __("attachments.attachmentErrorName"),
+      attachmentName: __("attachments.attachmentName"),
+      attachmentNone: __("attachments.attachmentNone"),
+      attachmentRemove: __("attachments.attachmentRemove"),
+      attachmentSecretSelect: __("attachments.attachmentSecretSelect"),
+      attachmentSecretUnselect: __("attachments.attachmentSecretUnselect"),
+      attachmentSecret: __("attachments.attachmentSecret"),
+      cancel: __("common.cancel"),
+      ok: __("common.ok")
+    }
+  };
+  return key ? messages[key] : {};
+}
 
 export function createRules(requiredFields = []) {
   return R.map(rule => {

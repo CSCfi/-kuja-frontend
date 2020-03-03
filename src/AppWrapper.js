@@ -47,7 +47,21 @@ const AppWrapper = () => {
 
   return (
     <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
-      {user.fetchedAt && <App user={user.data} />}
+      {state.isDebugModeOn ? (
+        <div className="flex">
+          <div
+            id="cy"
+            className="z-50 r-0 t-0 bg-gray-100 w-1/3 h-auto border border-black"
+            style={{ zIndex: 9000 }}></div>
+          <div className="w-2/3 relative">
+            {user.fetchedAt && <App user={user.data} />}
+          </div>
+        </div>
+      ) : (
+        <React.Fragment>
+          {user.fetchedAt && <App user={user.data} />}
+        </React.Fragment>
+      )}
     </IntlProvider>
   );
 };

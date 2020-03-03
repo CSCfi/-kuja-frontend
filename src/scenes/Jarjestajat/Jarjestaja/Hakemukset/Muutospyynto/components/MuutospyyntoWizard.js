@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useCallback,
-  useMemo,
-  useState
-} from "react";
+import React, { useEffect, useCallback, useMemo, useState } from "react";
 import StepperNavigation from "okm-frontend-components/dist/components/01-molecules/Stepper";
 import WizardPage from "./WizardPage";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -13,24 +7,16 @@ import { withStyles } from "@material-ui/core/styles";
 import { MessageWrapper } from "modules/elements";
 import { ROLE_MUOKKAAJA, ROLE_NIMENKIRJOITTAJA } from "modules/constants";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
-import { LomakkeetProvider } from "../../../../../../context/lomakkeetContext";
-import {
-  saveAndSubmitMuutospyynto,
-  saveMuutospyynto
-} from "../../../../../../services/muutoshakemus/actions";
 import { createObjectToSave } from "../../../../../../services/muutoshakemus/utils/saving";
 import { HAKEMUS_VIESTI } from "../modules/uusiHakemusFormConstants";
 import Dialog from "@material-ui/core/Dialog";
-import { toast } from "react-toastify";
 import { useIntl } from "react-intl";
-import { MuutoshakemusContext } from "../../../../../../context/muutoshakemusContext";
 import * as R from "ramda";
 import PropTypes from "prop-types";
 import "react-toastify/dist/ReactToastify.css";
 import MuutospyyntoWizardPerustelut from "./MuutospyyntoWizardPerustelut";
 import MuutospyyntoWizardTaloudelliset from "./MuutospyyntoWizardTaloudelliset";
 import MuutospyyntoWizardYhteenveto from "./MuutospyyntoWizardYhteenveto";
-
 import {
   setAttachmentUuids,
   combineArrays
@@ -53,10 +39,16 @@ import { useKoulutukset } from "../../../../../../stores/koulutukset";
 import { mapObjIndexed, prop, sortBy } from "ramda";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useLomakkeet } from "../../../../../../stores/lomakkeet";
+import ProcedureHandler from "../../../../../../components/02-organisms/procedureHandler";
+import { createMuutospyyntoOutput } from "../../../../../../services/muutoshakemus/utils/common";
+
+const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
 const FormDialog = withStyles(() => ({
   paper: {
-    background: "#f8faf8"
+    background: "#f8faf8",
+    marginLeft: isDebugOn ? "33%" : 0,
+    width: isDebugOn ? "66%" : "100%"
   }
 }))(props => {
   return <Dialog {...props}>{props.children}</Dialog>;
@@ -88,6 +80,17 @@ const MuutospyyntoWizard = ({
   const intl = useIntl();
 
   /**
+   * Visits per page is used for showing or hiding validation errors of the
+   * current page.
+   */
+  const [visitsPerPage, setVisitsPerPage] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0
+  });
+
+  /**
    * We are going to create new objects based on these definitions.
    */
   const [cos, coActions] = useChangeObjects(); // cos means change objects
@@ -96,14 +99,6 @@ const MuutospyyntoWizard = ({
   const [koulutusalat] = useKoulutusalat();
   const [tutkinnot] = useTutkinnot();
   const [koulutukset] = useKoulutukset();
-
-  /**
-   * Muutoshakemus context is used only for some actions so we might get rid of
-   * this at some point. Form data is saved in to dataBySection state.
-   */
-  const { state: muutoshakemus, dispatch: muutoshakemusDispatch } = useContext(
-    MuutoshakemusContext
-  );
 
   /**
    * Basic data for the wizard is created here. The following functions modify
@@ -155,7 +150,6 @@ const MuutospyyntoWizard = ({
     isHelpVisible: false
   });
   const [steps, setSteps] = useState([]);
-  const [page, setPage] = useState(1);
 
   /**
    * The function is mainly called by FormSection.
@@ -204,71 +198,6 @@ const MuutospyyntoWizard = ({
   };
 
   useEffect(() => {
-    if (R.path(["save", "hasErrored"], muutoshakemus) === true) {
-      toast.error("Virhe muutospyynnön käsittelyssä", {
-        autoClose: 2000,
-        position: toast.POSITION.TOP_LEFT
-      });
-    } else if (R.path(["save", "saved"], muutoshakemus) === true) {
-      toast.success("Muutospyyntö tallennettu!", {
-        autoClose: 2000,
-        position: toast.POSITION.TOP_LEFT
-      });
-    }
-  }, [muutoshakemus]);
-
-  useEffect(() => {
-    if (muutoshakemus.save && muutoshakemus.save.saved) {
-      if (muutoshakemus.save.triggerPreview) {
-        showPreviewFile(
-          `/api/pdf/esikatsele/muutospyynto/${muutoshakemus.save.data.data.uuid}`
-        );
-      }
-      if (!match.params.uuid) {
-        onNewDocSave(muutoshakemus);
-      } else {
-        const setAttachments = R.curry(setAttachmentUuids)(
-          R.path(["save", "data", "data", "liitteet"], muutoshakemus)
-        );
-
-        const selectionChanged = (path, key) => {
-          const objs = R.path(path, cos);
-          if (objs) {
-            onSectionChangesUpdate(key, setAttachments(objs));
-          }
-        };
-
-        selectionChanged(["perustelut", "liitteet"], "perustelut_liitteet");
-        selectionChanged(
-          ["taloudelliset", "liitteet"],
-          "taloudelliset_liitteet"
-        );
-        selectionChanged(
-          ["yhteenveto", "hakemuksenLiitteet"],
-          "yhteenveto_hakemuksenLiitteet"
-        );
-        selectionChanged(
-          ["yhteenveto", "yleisetliitteet"],
-          "yhteenveto_yleisettiedot"
-        );
-      }
-      muutoshakemus.save.saved = false; // TODO: Check if needs other state?
-    }
-  }, [
-    muutoshakemus,
-    onSectionChangesUpdate,
-    history,
-    lupa,
-    match.params,
-    onNewDocSave,
-    cos
-    // cannot add these, as some might be empty
-    // changeObjects.perustelut,
-    // changeObjects.taloudelliset,
-    // changeObjects.yhteenveto
-  ]);
-
-  useEffect(() => {
     // TODO: add isCompleted, isFailed for validation
     setSteps([
       {
@@ -314,13 +243,9 @@ const MuutospyyntoWizard = ({
   }, [cos]);
 
   const save = useCallback(
-    options => {
-      let saveFunction = saveMuutospyynto;
-      if (options.setAsSent === true) {
-        saveFunction = saveAndSubmitMuutospyynto;
-      }
-      const attachments = getFiles();
-      saveFunction(
+    async options => {
+      // There must be something to save.
+      const formData = createMuutospyyntoOutput(
         createObjectToSave(
           lupa,
           cos,
@@ -331,15 +256,140 @@ const MuutospyyntoWizard = ({
           muut,
           lupaKohteet
         ),
-        attachments,
-        options.triggerPreview
-      )(muutoshakemusDispatch);
+        getFiles()
+      );
+      /**
+       * Instance of ProcedureHandler can be used to run procedures.
+       * A procedure can be linked with other procedures forming a tree. The
+       * tree will parsed by a procedure handler.
+       *
+       * We are going to send the current form (muutoshakemus) and for that
+       * we will call the procedure called "tallennaJaLahetaMuutospyynto".
+       * It connects with the following procedures:
+       *
+       *  tallennaJaLahetaMuutospyynto
+       *     -- on success --> muutospyynnonTallennusOnnistui
+       *                   --> asetaMuutospyynnonTilaksiAvoin
+       *     -- on error   --> muutospyynnonLahettaminenEpaonnistui
+       *
+       *  asetaMuutospyynnonTilaksiAvoin
+       *     -- on success --> muutospyynnonLahettaminenOnnistui
+       *     -- on error   --> muutospyynnonLahettaminenEpaonnistui
+       *
+       *  muutospyynnonLahettaminenOnnistui
+       *     -- on success --> getUrlOfMuutospyyntojenListaus
+       *
+       *  For more details see the procedures folder of this project.
+       **/
+      const procedureHandler = new ProcedureHandler();
+
+      /**
+       * Depending on the required action we either call only the saving
+       * procedure or the procedure that sends the form too.
+       * setAsSent = false -> save
+       * setAsSent = true -> save and send
+       */
+      let muutospyynto;
+      let tallennusResults;
+
+      if (options.triggerPreview || options.setAsSent) {
+        /**
+         * Let's save the form without notification. We don't want to notify
+         * about saving if we are going to show a notification related to the
+         * preview or sending the form.
+        */
+        tallennusResults = await procedureHandler.run("tallennaMuutospyynto", [
+          formData
+        ]);
+        muutospyynto = procedureHandler.getOutput(
+          "tallennaMuutospyynto",
+          tallennusResults
+        );
+      } else {
+        tallennusResults = await procedureHandler.run(
+          "muutospyynnonTallennusJaIlmoitus",
+          [formData]
+        );
+        muutospyynto = procedureHandler.getOutput(
+          "muutospyynnonTallennusJaIlmoitus",
+          tallennusResults
+        );
+      }
+
+      procedureHandler.draw(tallennusResults);
+
+      if (options.triggerPreview) {
+        // Preview action is handled here.
+        const results = await procedureHandler.run("getUrlOfEsikatselu", [
+          muutospyynto
+        ]);
+        procedureHandler.draw(results);
+        const output = procedureHandler.getOutput(
+          "getUrlOfEsikatselu",
+          results
+        );
+        if (output) {
+          showPreviewFile(output);
+        }
+      }
+
+      if (options.setAsSent) {
+        // Let's save and send the form.
+        const results = await procedureHandler.run(
+          "asetaMuutospyynnonTilaksiAvoin", // name of the procedure
+          [muutospyynto] // input array
+        );
+        const nextUrl = procedureHandler.getOutput(
+          "getUrlOfMuutospyyntojenListaus"
+        );
+        procedureHandler.draw(results);
+        if (nextUrl) {
+          history.push(`${nextUrl}?force=true`);
+        }
+      }
+
+      /**
+       * The form is saved now. Let's check out if this was the first save.
+       * If it was we need to update the url so that the user can get the
+       * unique url of the freshly saved document and come back to the form
+       * later.
+       **/
+      if (!match.params.uuid && !options.setAsSent) {
+        if (muutospyynto.uuid) {
+          onNewDocSave(muutospyynto);
+        } else {
+          const setAttachments = R.curry(setAttachmentUuids)(
+            muutospyynto.liitteet
+          );
+
+          const selectionChanged = (path, key) => {
+            const objs = R.path(path, cos);
+            if (objs) {
+              onSectionChangesUpdate(key, setAttachments(objs));
+            }
+          };
+
+          selectionChanged(["perustelut", "liitteet"], "perustelut_liitteet");
+          selectionChanged(
+            ["taloudelliset", "liitteet"],
+            "taloudelliset_liitteet"
+          );
+          selectionChanged(
+            ["yhteenveto", "hakemuksenLiitteet"],
+            "yhteenveto_hakemuksenLiitteet"
+          );
+          selectionChanged(
+            ["yhteenveto", "yleisetliitteet"],
+            "yhteenveto_yleisettiedot"
+          );
+        }
+      }
     },
     [
       cos,
-      getFiles,
-      muutoshakemusDispatch,
       backendMuutokset,
+      getFiles,
+      history,
       lupa,
       match.params.uuid,
       kohteet,
@@ -347,13 +397,6 @@ const MuutospyyntoWizard = ({
       maaraystyypit,
       muut
     ]
-  );
-
-  const setChangesBySection = useCallback(
-    (sectionId, changes) => {
-      setChangesBySection(sectionId, changes)(muutoshakemusDispatch);
-    },
-    [muutoshakemusDispatch]
   );
 
   const openCancelModal = () => {
@@ -375,15 +418,15 @@ const MuutospyyntoWizard = ({
     );
   }, [coActions, history, match.params.ytunnus]);
 
-  useEffect(() => {
-    setPage(parseInt(match.params.page, 10));
+  const page = useMemo(() => {
+    return parseInt(match.params.page, 10);
   }, [match.params.page]);
 
   useEffect(() => {
-    if (muutoshakemus.readyToCloseWizard === true) {
-      setTimeout(closeWizard, 2000);
-    }
-  }, [muutoshakemus.readyToCloseWizard, closeWizard]);
+    setVisitsPerPage(prevVisits => {
+      return R.assoc(page, prevVisits[page] + 1, prevVisits);
+    });
+  }, [page]);
 
   if (!sessionStorage.getItem("role")) {
     return (
@@ -447,7 +490,6 @@ const MuutospyyntoWizard = ({
                     muut={muut}
                     lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
-                    setChangesBySection={setChangesBySection}
                     tutkinnot={parsedTutkinnot}
                   />
                 </WizardPage>
@@ -460,24 +502,23 @@ const MuutospyyntoWizard = ({
                   onSave={save}
                   lupa={lupa}
                   changeObjects={cos}>
-                  <LomakkeetProvider>
-                    <MuutospyyntoWizardPerustelut
-                      changeObjects={cos}
-                      elykeskukset={elykeskukset}
-                      kielet={kieletAndOpetuskielet}
-                      kohteet={kohteet}
-                      koulutukset={parsedKoulutukset}
-                      lupa={lupa}
-                      lupaKohteet={lupaKohteet}
-                      maaraystyypit={maaraystyypit}
-                      muut={muut}
-                      lomakkeet={lomakkeet}
-                      muutosperusteluList={muutosperusteluList}
-                      onChangesUpdate={onSectionChangesUpdate}
-                      tutkinnot={parsedTutkinnot}
-                      vankilat={vankilat}
-                    />
-                  </LomakkeetProvider>
+                  <MuutospyyntoWizardPerustelut
+                    changeObjects={cos}
+                    elykeskukset={elykeskukset}
+                    kielet={kieletAndOpetuskielet}
+                    kohteet={kohteet}
+                    koulutukset={parsedKoulutukset}
+                    lupa={lupa}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    lomakkeet={lomakkeet}
+                    muutosperusteluList={muutosperusteluList}
+                    onChangesUpdate={onSectionChangesUpdate}
+                    tutkinnot={parsedTutkinnot}
+                    vankilat={vankilat}
+                    isFirstVisit={visitsPerPage[2] === 1}
+                  />
                 </WizardPage>
               )}
               {page === 3 && (
@@ -492,6 +533,7 @@ const MuutospyyntoWizard = ({
                     changeObjects={cos}
                     lomakkeet={lomakkeet}
                     onChangesUpdate={onSectionChangesUpdate}
+                    isFirstVisit={visitsPerPage[3] === 1}
                   />
                 </WizardPage>
               )}
@@ -501,22 +543,21 @@ const MuutospyyntoWizard = ({
                   onPrev={handlePrev}
                   onSave={save}
                   lupa={lupa}>
-                  <LomakkeetProvider>
-                    <MuutospyyntoWizardYhteenveto
-                      changeObjects={cos}
-                      kielet={kieletAndOpetuskielet}
-                      kohteet={kohteet}
-                      koulutukset={parsedKoulutukset}
-                      lupa={lupa}
-                      lupaKohteet={lupaKohteet}
-                      maaraystyypit={maaraystyypit}
-                      muut={muut}
-                      lomakkeet={lomakkeet}
-                      muutosperusteluList={muutosperusteluList}
-                      onChangesUpdate={onSectionChangesUpdate}
-                      tutkinnot={parsedTutkinnot}
-                    />
-                  </LomakkeetProvider>
+                  <MuutospyyntoWizardYhteenveto
+                    changeObjects={cos}
+                    kielet={kieletAndOpetuskielet}
+                    kohteet={kohteet}
+                    koulutukset={parsedKoulutukset}
+                    lupa={lupa}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    lomakkeet={lomakkeet}
+                    muutosperusteluList={muutosperusteluList}
+                    onChangesUpdate={onSectionChangesUpdate}
+                    tutkinnot={parsedTutkinnot}
+                    isFirstVisit={visitsPerPage[4] === 1}
+                  />
                 </WizardPage>
               )}
             </div>

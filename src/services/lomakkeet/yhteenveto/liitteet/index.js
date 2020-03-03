@@ -1,4 +1,4 @@
-import { messages } from "../../utils";
+import { getMessages } from "../../utils";
 
 function getLiitteetForm() {
   return [
@@ -17,7 +17,7 @@ function getLiitteetForm() {
           anchor: "A",
           styleClasses: ["w-full"],
           name: "Attachments",
-          messages: messages.attachments
+          messages: getMessages("attachments")
         }
       ]
     }
