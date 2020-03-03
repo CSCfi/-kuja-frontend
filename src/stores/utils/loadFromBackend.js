@@ -2,26 +2,11 @@ import { API_BASE_URL } from "../../modules/constants";
 import { backendRoutes } from "./backendRoutes";
 import { equals, includes, join, map, mergeDeepLeft } from "ramda";
 
-async function postData(url = "", formData, options, callbackFn) {
-  const response = await fetch(url, {
-    ...options,
-    method: "POST",
-    body: formData
-  }).catch(err => {
-    console.info(err);
-    callbackFn(null, true);
-  });
-
-  if (response) {
-    return await response.json(); // parses JSON response into native JavaScript objects
-  }
-}
-
-async function run(abortController, config, callbackFn, payload) {
+async function run(abortController, config, callbackFn) {
   // key is used to resolve path parameters from backendRoutes
   // queryParameters is a list of key-value pairs
   // urlEnding is a string of supplementary path parameters
-  const { key, urlEnding, queryParameters = [] } = config;
+  const { key, urlEnding, queryParameters = [], method } = config;
   const queryString = join(
     "&",
     map(item => `${item.key}=${item.value}`)(queryParameters)
@@ -36,33 +21,26 @@ async function run(abortController, config, callbackFn, payload) {
     routeObj.postfix,
     queryString.length > 0 ? `?${queryString}` : ""
   ])}`;
-  if (payload) {
-    callbackFn(
-      await postData(url, payload, options, callbackFn),
-      false,
-      "POST"
-    );
-  } else {
-    const response = await fetch(
-      url,
-      // add 'accept' header if it does not exist
-      mergeDeepLeft(options, {
-        headers: { Accept: "application/json" }
-      })
-    ).catch(err => {
-      console.info(err);
-      callbackFn(null, true);
-    });
 
-    if (response) {
-      if (response.ok) {
-        const contentType = response.headers.get("content-type");
-        if (includes("application/json", contentType)) {
-          callbackFn(await response.json(), false);
-        }
-      } else {
-        callbackFn(null, true);
+  const response = await fetch(
+    url,
+    // add 'accept' header if it does not exist
+    mergeDeepLeft(options, {
+      headers: { Accept: "application/json" }
+    })
+  ).catch(err => {
+    console.info(err);
+    callbackFn(null, true);
+  });
+
+  if (response) {
+    if (response.ok) {
+      const contentType = response.headers.get("content-type");
+      if (includes("application/json", contentType)) {
+        callbackFn(await response.json(), false);
       }
+    } else {
+      callbackFn(null, true);
     }
   }
 }
@@ -98,21 +76,14 @@ export function execute(
 
     const abortController = loadFromBackend(
       config,
-      (data, isErroneous, method) => {
-        const fetchedAt =
-          method === "POST" ? getState().fetchedAt : new Date().getTime();
-        const savedAt =
-          method === "POST" ? new Date().getTime() : getState().savedAt;
+      (data, isErroneous) => {
         setState({
           ...{ keyParams: propsToState },
           data,
-          fetchedAt,
-          savedAt,
+          fetchedAt: new Date().getTime(),
           isErroneous,
           isLoading: false
         });
-
-        return data;
       },
       payload
     );
