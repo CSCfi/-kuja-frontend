@@ -412,7 +412,7 @@ export default defineMessages({
     defaultMessage: "Järjestämislupa"
   },
   lupaSectionTitleAllLupas: {
-    id: "commmon.lupaSectionTitleAllLupas",
+    id: "common.lupaSectionTitleAllLupas",
     defaultMessage: "Koulutuksen järjestäjällä on oikeus myöntää seuraavia tutkintoja ja antaa niihin tutkintokoulutusta:"
   },
   lupaSectionTitleSupplementary: {
