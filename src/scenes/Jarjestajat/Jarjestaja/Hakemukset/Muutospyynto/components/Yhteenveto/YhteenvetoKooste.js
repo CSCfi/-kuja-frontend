@@ -18,7 +18,7 @@ const YhteenvetoKooste = ({
   kielet,
   kohteet = [],
   koulutukset,
-  maaraystyypit,
+  maaraystyypit = [],
   muut,
   muutosperusteluList = [],
   lupa,
