@@ -199,6 +199,26 @@ export default defineMessages({
     id: "common.since",
     defaultMessage: "{date} lukien"
   },
+  kjAsiaTableDnro: {
+    id: "common.kjAsiaTableDnro",
+    defaultMessage: "OKM:n Dnro"
+  },
+  kjAsiaTableAsia: {
+    id: "common.kjAsiaTableAsia",
+    defaultMessage: "Asia"
+  },
+  kjAsiaTableState: {
+    id: "common.kjAsiaTableState",
+    defaultMessage: "Tila"
+  },
+  kjAsiaTableDueDate: {
+    id: "common.kjAsiaTableDueDate",
+    defaultMessage: "Määräaika"
+  },
+  kjAsiaTablePaatetty: {
+    id: "common.kjAsiaTablePaatetty",
+    defaultMessage: "Päätetty"
+  },
   "asiaTable.headers.asianumero": {
     id: "asiaTable.headers.asianumero",
     defaultMessage: "Asianumero"

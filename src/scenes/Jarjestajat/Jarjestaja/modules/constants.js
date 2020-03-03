@@ -1,4 +1,4 @@
-// import wizardMessages from "../../../../i18n/definitions/wizard";
+import common from "../../../../i18n/definitions/common";
 
 export const LUPA_SECTIONS = {
   1: {
@@ -62,6 +62,14 @@ export const MAARAYSTYYPIT = {
   POIKKEUS: 'POIKKEUS'
 }
 
+export const asiaStateToLocalizationKeyMap = {
+    LUONNOS: common["asiaStates.kj.LUONNOS"],
+    AVOIN: common["asiaStates.kj.AVOIN"],
+    VALMISTELUSSA: common["asiaStates.kj.VALMISTELUSSA"],
+    TAYDENNETTAVA: common["asiaStates.kj.TAYDENNETTAVA"],
+    PAATETTY: common["asiaStates.kj.PAATETTY"],
+    PASSIVOITU: common["asiaStates.kj.PASSIVOITU"]
+}
 
 export const LUPA_TEKSTIT = {
 
