@@ -335,6 +335,14 @@ export default defineMessages({
     id: "common.voimassaOlevatJarjestamisluvat",
     defaultMessage: "Voimassa olevat järjestämisluvat ({amount} kpl)"
   },
+  lupaLatest: {
+    id: "common.lupaLatest",
+    defaultMessage: "Viimeisin päätös"
+  },
+  lupaPaatokset: {
+    id: "common.lupaPaatokset",
+    defaultMessage: "Päätökset"
+  },
   lupaHistoria: {
     id: "common.lupaHistoria",
     defaultMessage: "Historiatiedot"
