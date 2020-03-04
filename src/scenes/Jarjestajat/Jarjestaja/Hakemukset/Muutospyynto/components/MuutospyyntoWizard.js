@@ -47,6 +47,7 @@ import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useLomakkeet } from "../../../../../../stores/lomakkeet";
 import ProcedureHandler from "../../../../../../components/02-organisms/procedureHandler";
 import { createMuutospyyntoOutput } from "../../../../../../services/muutoshakemus/utils/common";
+import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -107,6 +108,7 @@ const MuutospyyntoWizard = ({
   const [koulutusalat] = useKoulutusalat();
   const [tutkinnot] = useTutkinnot();
   const [koulutukset] = useKoulutukset();
+  const [, muutospyyntoActions] = useMuutospyynto();
 
   /**
    * Basic data for the wizard is created here. The following functions modify
@@ -222,8 +224,9 @@ const MuutospyyntoWizard = ({
       }
     ]);
     return function cancel() {
-      // Let's empty the store of changes on close.
+      // Let's empty some store content on close.
       coActions.reset();
+      muutospyyntoActions.reset();
     };
   }, [coActions, intl]);
 
