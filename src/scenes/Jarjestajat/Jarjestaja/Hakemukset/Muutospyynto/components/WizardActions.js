@@ -83,7 +83,7 @@ const WizardActions = props => {
             !props.onNext && (
               <Button
                 color="primary"
-                // disabled={!!lomakkeet.yhteenveto.yleisettiedot.invalidFields}
+                disabled={!!lomakkeet.yhteenveto.yleisettiedot.invalidFields}
                 variant="contained"
                 className={`next button-right`}
                 onClick={() => setConfirmDialogVisible(true)}>
