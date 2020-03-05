@@ -8,6 +8,7 @@ import { eiAvaudu as esikatseluEiAvaudu } from "./procedures/muutospyynto/esikat
 import { latauspolku as esikatselunLatauspolku } from "./procedures/muutospyynto/esikatselu/latauspolku";
 import { onKatsottavissa as esikatseluOnKatsottavissa } from "./procedures/muutospyynto/esikatselu/onKatsottavissa";
 import { listaus as muutospyyntojenListaus } from "./procedures/muutospyynnot/listaus";
+import { poista as poistaWizardinMuutokset } from "./procedures/muutospyynto/muutokset/poista";
 
 export const procedures = {
   muutospyynnot: {
@@ -23,6 +24,9 @@ export const procedures = {
       epaonnistui: lahetysEpaonnistui,
       laheta: lahetaMuutospyynto,
       onnistui: lahetysOnnistui
+    },
+    muutokset: {
+      poista: poistaWizardinMuutokset
     },
     tallennus: {
       epaonnistui: tallennusEpaonnistui,

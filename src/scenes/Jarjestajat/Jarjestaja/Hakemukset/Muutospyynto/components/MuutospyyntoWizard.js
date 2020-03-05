@@ -225,7 +225,8 @@ const MuutospyyntoWizard = ({
     ]);
     return function cancel() {
       // Let's empty some store content on close.
-      coActions.reset();
+      const procedureHandler = new ProcedureHandler();
+      procedureHandler.run("muutospyynto.muutokset.poista", [coActions]);
       muutospyyntoActions.reset();
     };
   }, [coActions, intl, muutospyyntoActions]);
