@@ -1,9 +1,11 @@
 import { toast } from "react-toastify";
 
-export const muutospyynnonTallennusOnnistui = {
+// muutospyynto.tallennus.onnistui
+export const onnistui = {
+  label: "Ilmoitus onnistumisesta",
   run: async () => {
     toast.success("Muutospyyntö tallennettu!", {
-      autoClose: 2000,
+      autoClose: 5000,
       position: toast.POSITION.TOP_LEFT
     });
     return true;

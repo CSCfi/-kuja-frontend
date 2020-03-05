@@ -225,10 +225,11 @@ const MuutospyyntoWizard = ({
     ]);
     return function cancel() {
       // Let's empty some store content on close.
-      coActions.reset();
+      const procedureHandler = new ProcedureHandler();
+      procedureHandler.run("muutospyynto.muutokset.poista", [coActions]);
       muutospyyntoActions.reset();
     };
-  }, [coActions, intl]);
+  }, [coActions, intl, muutospyyntoActions]);
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
@@ -278,11 +279,17 @@ const MuutospyyntoWizard = ({
      * Let's save the form without notification. Notification about saving isn't
      * needed when we're going to show a notification related to the preview.
      */
-    await procedureHandler.run("tallennaMuutospyynto", [formData]);
-    const muutospyynto = procedureHandler.getOutput("tallennaMuutospyynto");
+    const outputs = await procedureHandler.run(
+      "muutospyynto.tallennus.tallenna",
+      [formData, false] // false = Notification of save success won't be shown.
+    );
+    const muutospyynto = outputs.muutospyynto.tallennus.tallenna.output.result;
     // Let's get the url of preview (PDF) document and download the file.
-    await procedureHandler.run("getUrlOfEsikatselu", [muutospyynto]);
-    const url = procedureHandler.getOutput("getUrlOfEsikatselu");
+    const outputs2 = await procedureHandler.run(
+      "muutospyynto.esikatselu.latauspolku",
+      [muutospyynto]
+    );
+    const url = outputs2.muutospyynto.esikatselu.latauspolku.output;
     if (url) {
       showPreviewFile(url);
     }
@@ -292,14 +299,15 @@ const MuutospyyntoWizard = ({
   /**
    * Saves the form.
    * @param {object} formData
+   * @returns {object} - Muutospyyntö
    */
   const onSave = useCallback(async formData => {
     const procedureHandler = new ProcedureHandler();
-    await procedureHandler.run("muutospyynnonTallennusJaIlmoitus", [formData]);
-    const muutospyynto = procedureHandler.getOutput(
-      "muutospyynnonTallennusJaIlmoitus"
+    const outputs = await procedureHandler.run(
+      "muutospyynto.tallennus.tallenna",
+      [formData]
     );
-    return muutospyynto;
+    return outputs.muutospyynto.tallennus.tallenna.output.result;
   }, []);
 
   /**
@@ -310,23 +318,34 @@ const MuutospyyntoWizard = ({
     async formData => {
       const procedureHandler = new ProcedureHandler();
       // Let's save the form without notification.
-      await procedureHandler.run("tallennaMuutospyynto", [formData]);
-      const muutospyynto = procedureHandler.getOutput("tallennaMuutospyynto");
-      // It's time to send the form now.
-      await procedureHandler.run("asetaMuutospyynnonTilaksiAvoin", [
-        muutospyynto
-      ]);
-      // User will be redirected to the list of muutospyynnöt.
-      const nextUrl = procedureHandler.getOutput(
-        "getUrlOfMuutospyyntojenListaus"
+      const outputs = await procedureHandler.run(
+        "muutospyynto.tallennus.tallenna",
+        [formData, false]
       );
-      if (nextUrl) {
-        // Forcing means that the list will be reloaded when landing on the page.
-        history.push(`${nextUrl}?force=true`);
+      if (outputs.muutospyynto.tallennus.tallenna.output.status === 200) {
+        const muutospyynto =
+          outputs.muutospyynto.tallennus.tallenna.output.result;
+        // It's time to send the form now.
+        const outputs2 = await procedureHandler.run(
+          "muutospyynto.lahetys.laheta",
+          [muutospyynto]
+        );
+        // User will be redirected to the list of muutospyynnöt.
+        const nextUrl = R.path(
+          ["muutospyynnot", "listaus", "output"],
+          outputs2
+        );
+        if (nextUrl) {
+          // Forcing means that the list will be reloaded when landing on the page.
+          setTimeout(() => {
+            history.push(`${nextUrl}?force=true`);
+          });
+        }
+        return muutospyynto;
       } else {
-        console.warn("Muutospyyntöjen listaukseen ei voitu siirtyä.", nextUrl);
+        await procedureHandler.run("muutospyynto.lahetys.epaonnistui");
       }
-      return muutospyynto;
+      return false;
     },
     [history]
   );

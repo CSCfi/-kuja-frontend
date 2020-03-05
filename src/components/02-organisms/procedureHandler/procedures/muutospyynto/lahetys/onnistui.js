@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 
-export const muutospyynnonLahettaminenOnnistui = {
+// muutospyynto.lahetys.onnistui
+export const onnistui = {
+  label: "Lähettäminen onnistui",
   input: ["muutospyynto"],
   run: async ({ muutospyynto }) => {
     toast.success("Muutospyyntö lähetetty!", {
@@ -9,10 +11,7 @@ export const muutospyynnonLahettaminenOnnistui = {
     });
     return muutospyynto.jarjestajaYtunnus;
   },
-  output: async ytunnus => {
-    return ytunnus;
-  },
   next: () => {
-    return ["getUrlOfMuutospyyntojenListaus"];
+    return ["muutospyynnot.listaus"];
   }
 };

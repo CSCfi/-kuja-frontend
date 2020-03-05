@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
-import { MuutoshakemusProvider } from "context/muutoshakemusContext";
 import { getAnchorPart, findObjectWithKey } from "../../../../utils/common";
 import { getMuutosperusteluList } from "../../../../utils/muutosperusteluUtil";
 import { setAttachmentUuids } from "../../../../utils/muutospyyntoUtil";
@@ -149,8 +148,10 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
       const files = path(["properties", "attachments"], changeObj)
         ? map(file => {
             const fileFromBackend =
-              find(propEq("tiedostoId", file.tiedostoId), filesFromMuutokset || {}) ||
-              {};
+              find(
+                propEq("tiedostoId", file.tiedostoId),
+                filesFromMuutokset || {}
+              ) || {};
             return Object.assign({}, file, fileFromBackend);
           }, changeObj.properties.attachments || [])
         : null;
@@ -276,27 +277,25 @@ const HakemusContainer = React.memo(({ history, lupa, lupaKohteet, match }) => {
     (!match.params.uuid || (muutospyynto.fetchedAt && isHandled))
   ) {
     return (
-      <MuutoshakemusProvider>
-        <MuutospyyntoWizard
-          backendMuutokset={backendMuutokset}
-          elykeskukset={elykeskukset.data}
-          history={history}
-          kohteet={kohteet.data}
-          koulutustyypit={koulutustyypit.data}
-          kunnat={kunnat.data}
-          lupa={lupa}
-          lupaKohteet={lupaKohteet}
-          maakunnat={maakunnat.data}
-          maakuntakunnat={maakuntakunnat.data}
-          maaraystyypit={maaraystyypit.data}
-          match={match}
-          muut={muut.data}
-          muutosperusteluList={muutosperusteluList}
-          muutospyynto={muutospyynto.data}
-          vankilat={vankilat.data}
-          onNewDocSave={onNewDocSave}
-        />
-      </MuutoshakemusProvider>
+      <MuutospyyntoWizard
+        backendMuutokset={backendMuutokset}
+        elykeskukset={elykeskukset.data}
+        history={history}
+        kohteet={kohteet.data}
+        koulutustyypit={koulutustyypit.data}
+        kunnat={kunnat.data}
+        lupa={lupa}
+        lupaKohteet={lupaKohteet}
+        maakunnat={maakunnat.data}
+        maakuntakunnat={maakuntakunnat.data}
+        maaraystyypit={maaraystyypit.data}
+        match={match}
+        muut={muut.data}
+        muutosperusteluList={muutosperusteluList}
+        muutospyynto={muutospyynto.data}
+        vankilat={vankilat.data}
+        onNewDocSave={onNewDocSave}
+      />
     );
   } else {
     return (
