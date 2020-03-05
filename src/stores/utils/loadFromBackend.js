@@ -6,7 +6,7 @@ async function run(abortController, config, callbackFn) {
   // key is used to resolve path parameters from backendRoutes
   // queryParameters is a list of key-value pairs
   // urlEnding is a string of supplementary path parameters
-  const { key, urlEnding, queryParameters = [], method } = config;
+  const { key, urlEnding, queryParameters = [] } = config;
   const queryString = join(
     "&",
     map(item => `${item.key}=${item.value}`)(queryParameters)

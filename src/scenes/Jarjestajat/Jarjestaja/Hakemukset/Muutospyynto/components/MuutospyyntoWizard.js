@@ -213,7 +213,12 @@ const MuutospyyntoWizard = ({
         title: intl.formatMessage(wizardMessages.pageTitle_4)
       }
     ]);
-  }, [intl]);
+    return function cancel() {
+      // Let's empty some store content on close.
+      coActions.reset();
+      muutospyyntoActions.reset();
+    };
+  }, [coActions, intl, muutospyyntoActions]);
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
@@ -242,8 +247,100 @@ const MuutospyyntoWizard = ({
     return R.concat(attachments, files);
   }, [cos]);
 
-  const save = useCallback(
-    async options => {
+  const anchors = useMemo(() => {
+    return findObjectWithKey(cos, "anchor");
+  }, [cos]);
+
+  const prevAnchorsRef = useRef(anchors);
+
+  useEffect(() => {
+    // If user has made changes on the form the save action must be available.
+    setIsSavingEnabled(!R.equals(prevAnchorsRef.current, anchors));
+  }, [anchors]);
+
+  /**
+   * Opens the preview.
+   * @param {object} formData
+   */
+  const onPreview = useCallback(async formData => {
+    const procedureHandler = new ProcedureHandler();
+    /**
+     * Let's save the form without notification. Notification about saving isn't
+     * needed when we're going to show a notification related to the preview.
+     */
+    const outputs = await procedureHandler.run(
+      "muutospyynto.tallennus.tallenna",
+      [formData, false] // false = Notification of save success won't be shown.
+    );
+    const muutospyynto = outputs.muutospyynto.tallennus.tallenna.output.result;
+    // Let's get the url of preview (PDF) document and download the file.
+    const outputs2 = await procedureHandler.run(
+      "muutospyynto.esikatselu.latauspolku",
+      [muutospyynto]
+    );
+    const url = outputs2.muutospyynto.esikatselu.latauspolku.output;
+    if (url) {
+      showPreviewFile(url);
+    }
+    return muutospyynto;
+  }, []);
+
+  /**
+   * Saves the form.
+   * @param {object} formData
+   * @returns {object} - Muutospyyntö
+   */
+  const onSave = useCallback(async formData => {
+    const procedureHandler = new ProcedureHandler();
+    const outputs = await procedureHandler.run(
+      "muutospyynto.tallennus.tallenna",
+      [formData]
+    );
+    return outputs.muutospyynto.tallennus.tallenna.output.result;
+  }, []);
+
+  /**
+   * Sends the form.
+   * @param {object} formData
+   */
+  const onSend = useCallback(
+    async formData => {
+      const procedureHandler = new ProcedureHandler();
+      // Let's save the form without notification.
+      const outputs = await procedureHandler.run(
+        "muutospyynto.tallennus.tallenna",
+        [formData, false]
+      );
+      if (outputs.muutospyynto.tallennus.tallenna.output.status === 200) {
+        const muutospyynto =
+          outputs.muutospyynto.tallennus.tallenna.output.result;
+        // It's time to send the form now.
+        const outputs2 = await procedureHandler.run(
+          "muutospyynto.lahetys.laheta",
+          [muutospyynto]
+        );
+        // User will be redirected to the list of muutospyynnöt.
+        const nextUrl = R.path(
+          ["muutospyynnot", "listaus", "output"],
+          outputs2
+        );
+        if (nextUrl) {
+          // Forcing means that the list will be reloaded when landing on the page.
+          setTimeout(() => {
+            history.push(`${nextUrl}?force=true`);
+          });
+        }
+        return muutospyynto;
+      } else {
+        await procedureHandler.run("muutospyynto.lahetys.epaonnistui");
+      }
+      return false;
+    },
+    [history]
+  );
+
+  const onAction = useCallback(
+    async action => {
       // There must be something to save.
       const formData = createMuutospyyntoOutput(
         createObjectToSave(

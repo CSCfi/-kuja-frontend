@@ -1,29 +1,33 @@
-import { muutospyynnonTallennusEpaonnistui } from "./procedures/muutospyynto/tallennusEpaonnistui";
-import { muutospyynnonTallennusOnnistui } from "./procedures/muutospyynto/tallennusOnnistui";
-import { tallennaMuutospyynto } from "./procedures/muutospyynto/tallenna";
-import { tallennaJaLahetaMuutospyynto } from "./procedures/muutospyynto/tallennaJaLaheta";
-import { muutospyynnonLahettaminenEpaonnistui } from "./procedures/muutospyynto/lahettaminenEpaonnistui";
-import { muutospyynnonLahettaminenOnnistui } from "./procedures/muutospyynto/lahettaminenOnnistui";
-import { asetaMuutospyynnonTilaksiAvoin } from "./procedures/muutospyynto/asetaTilaksiAvoin";
-import { getUrlOfMuutospyyntojenListaus } from "./procedures/muutospyynnot/getUrlOfMuutospyyntojenListaus";
-import { esikatseluvirhe } from "./procedures/muutospyynto/esikatseluvirhe";
-import { tallennusJaEsikatselu } from "./procedures/muutospyynto/tallennusJaEsikatselu";
-import { getUrlOfEsikatselu } from "./procedures/muutospyynto/getUrlOfEsikatselu";
-import { PDFEsikatseludokumenttiValmis } from "./procedures/muutospyynto/esikatseluPDFKatsottavissa";
-import { muutospyynnonTallennusJaIlmoitus } from "./procedures/muutospyynto/tallennusJaIlmoitus";
+import { epaonnistui as tallennusEpaonnistui } from "./procedures/muutospyynto/tallennus/epaonnistui";
+import { onnistui as tallennusOnnistui } from "./procedures/muutospyynto/tallennus/onnistui";
+import { tallenna as tallennaMuutospyynto } from "./procedures/muutospyynto/tallennus/tallenna";
+import { epaonnistui as lahetysEpaonnistui } from "./procedures/muutospyynto/lahetys/epaonnistui";
+import { onnistui as lahetysOnnistui } from "./procedures/muutospyynto/lahetys/onnistui";
+import { laheta as lahetaMuutospyynto } from "./procedures/muutospyynto/lahetys/laheta";
+import { eiAvaudu as esikatseluEiAvaudu } from "./procedures/muutospyynto/esikatselu/eiAvaudu";
+import { latauspolku as esikatselunLatauspolku } from "./procedures/muutospyynto/esikatselu/latauspolku";
+import { onKatsottavissa as esikatseluOnKatsottavissa } from "./procedures/muutospyynto/esikatselu/onKatsottavissa";
+import { listaus as muutospyyntojenListaus } from "./procedures/muutospyynnot/listaus";
 
 export const procedures = {
-  asetaMuutospyynnonTilaksiAvoin,
-  getUrlOfEsikatselu,
-  getUrlOfMuutospyyntojenListaus,
-  esikatseluvirhe,
-  muutospyynnonLahettaminenEpaonnistui,
-  muutospyynnonLahettaminenOnnistui,
-  muutospyynnonTallennusEpaonnistui,
-  muutospyynnonTallennusJaIlmoitus,
-  muutospyynnonTallennusOnnistui,
-  PDFEsikatseludokumenttiValmis,
-  tallennaJaLahetaMuutospyynto,
-  tallennaMuutospyynto,
-  tallennusJaEsikatselu
+  muutospyynnot: {
+    listaus: muutospyyntojenListaus
+  },
+  muutospyynto: {
+    esikatselu: {
+      eiAvaudu: esikatseluEiAvaudu,
+      latauspolku: esikatselunLatauspolku,
+      onKatsottavissa: esikatseluOnKatsottavissa
+    },
+    lahetys: {
+      epaonnistui: lahetysEpaonnistui,
+      laheta: lahetaMuutospyynto,
+      onnistui: lahetysOnnistui
+    },
+    tallennus: {
+      epaonnistui: tallennusEpaonnistui,
+      onnistui: tallennusOnnistui,
+      tallenna: tallennaMuutospyynto
+    }
+  }
 };

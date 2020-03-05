@@ -1,8 +1,10 @@
 import { createStore, createHook } from "react-sweet-state";
 import { execute } from "./utils/loadFromBackend";
 
+const initialState = {};
+
 const Store = createStore({
-  initialState: {},
+  initialState,
   actions: {
     load: uuid => ({ getState, setState }) => {
       return execute(
@@ -13,6 +15,9 @@ const Store = createStore({
         },
         { uuid }
       );
+    },
+    reset: () => ({ setState }) => {
+      setState(initialState);
     }
   },
   name: "Muutospyyntö"
