@@ -1,4 +1,10 @@
-import React, { useEffect, useCallback, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+  useRef
+} from "react";
 import StepperNavigation from "okm-frontend-components/dist/components/01-molecules/Stepper";
 import WizardPage from "./WizardPage";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -41,6 +47,7 @@ import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useLomakkeet } from "../../../../../../stores/lomakkeet";
 import ProcedureHandler from "../../../../../../components/02-organisms/procedureHandler";
 import { createMuutospyyntoOutput } from "../../../../../../services/muutoshakemus/utils/common";
+import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -79,6 +86,8 @@ const MuutospyyntoWizard = ({
 }) => {
   const intl = useIntl();
 
+  const [isSavingEnabled, setIsSavingEnabled] = useState(false);
+
   /**
    * Visits per page is used for showing or hiding validation errors of the
    * current page.
@@ -99,6 +108,7 @@ const MuutospyyntoWizard = ({
   const [koulutusalat] = useKoulutusalat();
   const [tutkinnot] = useTutkinnot();
   const [koulutukset] = useKoulutukset();
+  const [, muutospyyntoActions] = useMuutospyynto();
 
   /**
    * Basic data for the wizard is created here. The following functions modify
@@ -268,17 +278,11 @@ const MuutospyyntoWizard = ({
      * Let's save the form without notification. Notification about saving isn't
      * needed when we're going to show a notification related to the preview.
      */
-    const outputs = await procedureHandler.run(
-      "muutospyynto.tallennus.tallenna",
-      [formData, false] // false = Notification of save success won't be shown.
-    );
-    const muutospyynto = outputs.muutospyynto.tallennus.tallenna.output.result;
+    await procedureHandler.run("tallennaMuutospyynto", [formData]);
+    const muutospyynto = procedureHandler.getOutput("tallennaMuutospyynto");
     // Let's get the url of preview (PDF) document and download the file.
-    const outputs2 = await procedureHandler.run(
-      "muutospyynto.esikatselu.latauspolku",
-      [muutospyynto]
-    );
-    const url = outputs2.muutospyynto.esikatselu.latauspolku.output;
+    await procedureHandler.run("getUrlOfEsikatselu", [muutospyynto]);
+    const url = procedureHandler.getOutput("getUrlOfEsikatselu");
     if (url) {
       showPreviewFile(url);
     }
@@ -288,15 +292,14 @@ const MuutospyyntoWizard = ({
   /**
    * Saves the form.
    * @param {object} formData
-   * @returns {object} - Muutospyyntö
    */
   const onSave = useCallback(async formData => {
     const procedureHandler = new ProcedureHandler();
-    const outputs = await procedureHandler.run(
-      "muutospyynto.tallennus.tallenna",
-      [formData]
+    await procedureHandler.run("muutospyynnonTallennusJaIlmoitus", [formData]);
+    const muutospyynto = procedureHandler.getOutput(
+      "muutospyynnonTallennusJaIlmoitus"
     );
-    return outputs.muutospyynto.tallennus.tallenna.output.result;
+    return muutospyynto;
   }, []);
 
   /**
@@ -307,34 +310,23 @@ const MuutospyyntoWizard = ({
     async formData => {
       const procedureHandler = new ProcedureHandler();
       // Let's save the form without notification.
-      const outputs = await procedureHandler.run(
-        "muutospyynto.tallennus.tallenna",
-        [formData, false]
+      await procedureHandler.run("tallennaMuutospyynto", [formData]);
+      const muutospyynto = procedureHandler.getOutput("tallennaMuutospyynto");
+      // It's time to send the form now.
+      await procedureHandler.run("asetaMuutospyynnonTilaksiAvoin", [
+        muutospyynto
+      ]);
+      // User will be redirected to the list of muutospyynnöt.
+      const nextUrl = procedureHandler.getOutput(
+        "getUrlOfMuutospyyntojenListaus"
       );
-      if (outputs.muutospyynto.tallennus.tallenna.output.status === 200) {
-        const muutospyynto =
-          outputs.muutospyynto.tallennus.tallenna.output.result;
-        // It's time to send the form now.
-        const outputs2 = await procedureHandler.run(
-          "muutospyynto.lahetys.laheta",
-          [muutospyynto]
-        );
-        // User will be redirected to the list of muutospyynnöt.
-        const nextUrl = R.path(
-          ["muutospyynnot", "listaus", "output"],
-          outputs2
-        );
-        if (nextUrl) {
-          // Forcing means that the list will be reloaded when landing on the page.
-          setTimeout(() => {
-            history.push(`${nextUrl}?force=true`);
-          });
-        }
-        return muutospyynto;
+      if (nextUrl) {
+        // Forcing means that the list will be reloaded when landing on the page.
+        history.push(`${nextUrl}?force=true`);
       } else {
-        await procedureHandler.run("muutospyynto.lahetys.epaonnistui");
+        console.warn("Muutospyyntöjen listaukseen ei voitu siirtyä.", nextUrl);
       }
-      return false;
+      return muutospyynto;
     },
     [history]
   );
@@ -355,104 +347,32 @@ const MuutospyyntoWizard = ({
         ),
         getFiles()
       );
-      /**
-       * Instance of ProcedureHandler can be used to run procedures.
-       * A procedure can be linked with other procedures forming a tree. The
-       * tree will parsed by a procedure handler.
-       *
-       * We are going to send the current form (muutoshakemus) and for that
-       * we will call the procedure called "tallennaJaLahetaMuutospyynto".
-       * It connects with the following procedures:
-       *
-       *  tallennaJaLahetaMuutospyynto
-       *     -- on success --> muutospyynnonTallennusOnnistui
-       *                   --> asetaMuutospyynnonTilaksiAvoin
-       *     -- on error   --> muutospyynnonLahettaminenEpaonnistui
-       *
-       *  asetaMuutospyynnonTilaksiAvoin
-       *     -- on success --> muutospyynnonLahettaminenOnnistui
-       *     -- on error   --> muutospyynnonLahettaminenEpaonnistui
-       *
-       *  muutospyynnonLahettaminenOnnistui
-       *     -- on success --> getUrlOfMuutospyyntojenListaus
-       *
-       *  For more details see the procedures folder of this project.
-       **/
-      const procedureHandler = new ProcedureHandler();
+
+      let muutospyynto = null;
+
+      if (action === "save") {
+        muutospyynto = await onSave(formData);
+      } else if (action === "preview") {
+        muutospyynto = await onPreview(formData);
+      } else if (action === "send") {
+        muutospyynto = await onSend(formData);
+      }
 
       /**
-       * Depending on the required action we either call only the saving
-       * procedure or the procedure that sends the form too.
-       * setAsSent = false -> save
-       * setAsSent = true -> save and send
+       * The form is saved and the requested action is run. Let's disable the
+       * save button. It will be enabled after new changes.
        */
-      let muutospyynto;
-      let tallennusResults;
-
-      if (options.triggerPreview || options.setAsSent) {
-        /**
-         * Let's save the form without notification. We don't want to notify
-         * about saving if we are going to show a notification related to the
-         * preview or sending the form.
-        */
-        tallennusResults = await procedureHandler.run("tallennaMuutospyynto", [
-          formData
-        ]);
-        muutospyynto = procedureHandler.getOutput(
-          "tallennaMuutospyynto",
-          tallennusResults
-        );
-      } else {
-        tallennusResults = await procedureHandler.run(
-          "muutospyynnonTallennusJaIlmoitus",
-          [formData]
-        );
-        muutospyynto = procedureHandler.getOutput(
-          "muutospyynnonTallennusJaIlmoitus",
-          tallennusResults
-        );
-      }
-
-      procedureHandler.draw(tallennusResults);
-
-      if (options.triggerPreview) {
-        // Preview action is handled here.
-        const results = await procedureHandler.run("getUrlOfEsikatselu", [
-          muutospyynto
-        ]);
-        procedureHandler.draw(results);
-        const output = procedureHandler.getOutput(
-          "getUrlOfEsikatselu",
-          results
-        );
-        if (output) {
-          showPreviewFile(output);
-        }
-      }
-
-      if (options.setAsSent) {
-        // Let's save and send the form.
-        const results = await procedureHandler.run(
-          "asetaMuutospyynnonTilaksiAvoin", // name of the procedure
-          [muutospyynto] // input array
-        );
-        const nextUrl = procedureHandler.getOutput(
-          "getUrlOfMuutospyyntojenListaus"
-        );
-        procedureHandler.draw(results);
-        if (nextUrl) {
-          history.push(`${nextUrl}?force=true`);
-        }
-      }
+      setIsSavingEnabled(false);
+      prevAnchorsRef.current = anchors;
 
       /**
-       * The form is saved now. Let's check out if this was the first save.
-       * If it was we need to update the url so that the user can get the
-       * unique url of the freshly saved document and come back to the form
-       * later.
+       * Next thing is to check out if this was the first save. If so we need
+       * to update the url so that the user can get the unique url of the
+       * freshly saved document and come back to the form later.
        **/
-      if (!match.params.uuid && !options.setAsSent) {
-        if (muutospyynto.uuid) {
+      if (!match.params.uuid && action !== "send") {
+        if (muutospyynto && muutospyynto.uuid) {
+          // It was the first save...
           onNewDocSave(muutospyynto);
         } else {
           const setAttachments = R.curry(setAttachmentUuids)(
@@ -483,16 +403,21 @@ const MuutospyyntoWizard = ({
       }
     },
     [
+      anchors,
       cos,
       backendMuutokset,
       getFiles,
-      history,
-      lupa,
-      match.params.uuid,
       kohteet,
+      lupa,
       lupaKohteet,
       maaraystyypit,
-      muut
+      match.params.uuid,
+      muut,
+      onNewDocSave,
+      onPreview,
+      onSave,
+      onSectionChangesUpdate,
+      onSend
     ]
   );
 
@@ -508,12 +433,10 @@ const MuutospyyntoWizard = ({
    * User is redirected to the following path when the form is closed.
    */
   const closeWizard = useCallback(() => {
-    // Let's empty the store of changes first
-    coActions.reset();
     return history.push(
       `/jarjestajat/${match.params.ytunnus}/jarjestamislupa-asia`
     );
-  }, [coActions, history, match.params.ytunnus]);
+  }, [history, match.params.ytunnus]);
 
   const page = useMemo(() => {
     return parseInt(match.params.page, 10);
@@ -570,10 +493,11 @@ const MuutospyyntoWizard = ({
               {page === 1 && (
                 <WizardPage
                   pageNumber={1}
+                  onAction={onAction}
                   onNext={handleNext}
-                  onSave={save}
                   lupa={lupa}
-                  changeObjects={cos}>
+                  changeObjects={cos}
+                  isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardMuutokset
                     kielet={kieletAndOpetuskielet}
                     kohteet={kohteet}
@@ -594,11 +518,12 @@ const MuutospyyntoWizard = ({
               {page === 2 && (
                 <WizardPage
                   pageNumber={2}
+                  onAction={onAction}
                   onPrev={handlePrev}
                   onNext={handleNext}
-                  onSave={save}
                   lupa={lupa}
-                  changeObjects={cos}>
+                  changeObjects={cos}
+                  isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardPerustelut
                     changeObjects={cos}
                     elykeskukset={elykeskukset}
@@ -614,18 +539,19 @@ const MuutospyyntoWizard = ({
                     onChangesUpdate={onSectionChangesUpdate}
                     tutkinnot={parsedTutkinnot}
                     vankilat={vankilat}
-                    isFirstVisit={visitsPerPage[2] === 1}
+                    visits={visitsPerPage[2]}
                   />
                 </WizardPage>
               )}
               {page === 3 && (
                 <WizardPage
                   pageNumber={3}
+                  onAction={onAction}
                   onPrev={handlePrev}
                   onNext={handleNext}
-                  onSave={save}
                   lupa={lupa}
-                  changeObjects={cos}>
+                  changeObjects={cos}
+                  isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardTaloudelliset
                     changeObjects={cos}
                     lomakkeet={lomakkeet}
@@ -637,9 +563,10 @@ const MuutospyyntoWizard = ({
               {page === 4 && (
                 <WizardPage
                   pageNumber={4}
+                  onAction={onAction}
                   onPrev={handlePrev}
-                  onSave={save}
-                  lupa={lupa}>
+                  lupa={lupa}
+                  isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardYhteenveto
                     changeObjects={cos}
                     kielet={kieletAndOpetuskielet}
