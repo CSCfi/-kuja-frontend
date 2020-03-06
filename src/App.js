@@ -297,12 +297,14 @@ const App = ({ user }) => {
                     }}
                   />
                   <Route
-                    path = "/vapaa-sivistystyo/luvat/:ytunnus"
+                    path = "/vapaa-sivistystyo/luvat/:ytunnus/:koulutustyyppi/:oppilaitostyyppi"
                     render={props => {
                       return(
                         <Jarjestaja
                           history={history}
                           ytunnus={props.match.params.ytunnus}
+                          koulutustyyppi={props.match.params.koulutustyyppi}
+                          oppilaitostyyppi={props.match.params.oppilaitostyyppi}
                           match={props.match}
                         />
                       )
