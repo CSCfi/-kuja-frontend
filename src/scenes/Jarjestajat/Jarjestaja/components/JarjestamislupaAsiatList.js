@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import JarjestamislupaAsiatListItem from "./JarjestamislupaAsiatListItem";
-import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
+import {asiaStateToLocalizationKeyMap} from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import Button from "@material-ui/core/Button";
 import Add from "@material-ui/icons/AddCircleOutline";
 import ArrowBack from "@material-ui/icons/ArrowBack";
@@ -39,14 +39,6 @@ const colWidths = {
   4: "w-2/12",
   5: "w-2/12 justify-center"
 };
-
-const columnTitles = [
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.DNRO.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.ASIA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.TILA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.MAARAAIKA.FI,
-  LUPA_TEKSTIT.ASIAT.ASIAT_TAULUKKO.PAATETTY.FI
-];
 
 // States of hakemus
 const states = [
@@ -114,6 +106,14 @@ const JarjestamislupaAsiatList = ({
     return [];
   }, [muutospyynnot.fetchedAt, muutospyynnot.data]);
 
+  const columnTitles = [
+    intl.formatMessage(common.kjAsiaTableDnro),
+    intl.formatMessage(common.kjAsiaTableAsia),
+    intl.formatMessage(common.kjAsiaTableState),
+    intl.formatMessage(common.kjAsiaTableDueDate),
+    intl.formatMessage(common.kjAsiaTablePaatetty)
+  ];
+
   const mainTable = [
     {
       role: "thead",
@@ -144,7 +144,7 @@ const JarjestamislupaAsiatList = ({
           rows: R.addIndex(R.map)((row, i) => {
             const tilaText =
               row.tila && states.includes(row.tila)
-                ? LUPA_TEKSTIT.MUUTOSPYYNTO.TILA[row.tila].FI
+                ? intl.formatMessage(common[asiaStateToLocalizationKeyMap[row.tila]])
                 : row.tila;
             let cells = R.addIndex(R.map)(
               (col, ii) => {

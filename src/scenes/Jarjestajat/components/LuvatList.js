@@ -3,6 +3,7 @@ import * as R from "ramda";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
+import common from "../../../i18n/definitions/common";
 
 const colWidths = {
   0: "w-4/6",
@@ -28,8 +29,8 @@ function LuvatList({ history, luvat = [] }) {
                   };
                 },
                 [
-                  { text: "Koulutuksen järjestäjä" },
-                  { text: "Kotipaikan maakunta" }
+                  { text: intl.formatMessage(common.jarjestaja) },
+                  { text: intl.formatMessage(common.homeCounty) }
                 ]
               )
             }
