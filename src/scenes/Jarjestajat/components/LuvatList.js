@@ -10,7 +10,7 @@ const colWidths = {
   1: "w-2/6"
 };
 
-function LuvatList({ history, luvat = [], }) {
+function LuvatList({ history, luvat = [] }) {
   const intl = useIntl();
   const tableStructure = [
     {
