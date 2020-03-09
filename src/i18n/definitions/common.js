@@ -524,7 +524,7 @@ export default defineMessages({
     defaultMessage: "Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa."
   },
   lupaSectionToimintaAlueNationalAlternative: {
-    id: "common.lupaSectionToimintaAlueNational",
+    id: "common.lupaSectionToimintaAlueNationalAlternative",
     defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen."
   },
   lupaSectionToimintaAlueMaakuntaPluralKuntaPlural: {
