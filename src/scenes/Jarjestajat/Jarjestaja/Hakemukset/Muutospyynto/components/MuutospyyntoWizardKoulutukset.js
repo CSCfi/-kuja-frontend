@@ -7,8 +7,7 @@ import Kuljettajakoulutukset from "./Koulutukset/Kuljettajakoulutukset";
 
 const MuutospyyntoWizardKoulutukset = props => {
   return (
-    <div className="md:pl-16 py-10">
-
+    <div>
       <ValmentavatKoulutukset
         koulutukset={props.koulutukset}
         onChangesRemove={props.onChangesRemove}

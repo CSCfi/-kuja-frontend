@@ -48,7 +48,6 @@ const PerustelutTutkintokielet = React.memo(props => {
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
                 showCategoryTitles={true}
-                code={areaCode}
                 title={title}
                 isExpanded={true}
                 hideAmountOfChanges={false}>
