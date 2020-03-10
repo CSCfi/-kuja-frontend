@@ -43,7 +43,6 @@ const MuutospyyntoWizardPerustelut = ({
     const kohdeTiedot = R.map(kohde => {
       return {
         title: R.path(["meta", "otsikko", [intl.locale]], kohde),
-
         code: R.find(R.propEq("tunniste", kohde.tunniste))(lupaKohteet)
       };
     }, kohteet);
