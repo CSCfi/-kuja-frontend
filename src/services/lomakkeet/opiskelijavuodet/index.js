@@ -16,6 +16,11 @@ function getModificationForm(
   sectionId
 ) {
   const titles = [__("current"), __("applyFor"), __("difference")];
+  const titlesSisaoppilaitosAndVaativa = [
+    __("current"),
+    __("applyForVaativaAndSisaoppilaitos"),
+    __("difference")
+  ];
   return [
     {
       anchor: "vahimmaisopiskelijavuodet",
@@ -52,7 +57,7 @@ function getModificationForm(
                 initialValue: initialValueVaativa,
                 applyForValue: applyForVaativa,
                 name: `${sectionId}-difference-2`,
-                titles
+                titles: titlesSisaoppilaitosAndVaativa
               }
             }
           ]
@@ -74,7 +79,7 @@ function getModificationForm(
                 initialValue: initialValueSisaoppilaitos,
                 applyForValue: applyForSisaoppilaitos,
                 name: `${sectionId}-difference-3`,
-                titles
+                titles: titlesSisaoppilaitosAndVaativa
               }
             }
           ]
