@@ -72,7 +72,6 @@ const Tutkintokielet = props => {
               ["kielet", "tutkintokielet", areaCode],
               changeObjects
             )}
-            code={areaCode}
             key={`expandable-row-root-${areaCode}`}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}

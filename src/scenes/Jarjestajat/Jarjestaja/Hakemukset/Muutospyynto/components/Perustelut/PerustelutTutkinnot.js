@@ -57,7 +57,6 @@ const PerustelutTutkinnot = React.memo(
                   ["perustelut", "tutkinnot", koulutusala.koodiArvo],
                   changeObjects
                 )}
-                code={koulutusala.koodiArvo}
                 disableReverting={isReadOnly}
                 hideAmountOfChanges={true}
                 index={i}

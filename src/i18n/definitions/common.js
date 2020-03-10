@@ -602,5 +602,13 @@ export default defineMessages({
   lupaSectionNoInfo: {
     id: "common.lupaSectionNoInfo",
     defaultMessage: "Ei kohdetietoja"
+  },
+  tutkinnot: {
+    id: "common.tutkinnot",
+    defaultMessage: "Tutkinnot"
+  },
+  koulutukset: {
+    id: "common.koulutukset",
+    defaultMessage: "Koulutukset"
   }
 });
