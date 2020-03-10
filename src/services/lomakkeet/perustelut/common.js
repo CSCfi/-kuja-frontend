@@ -40,7 +40,8 @@ export const getMuutostarveCheckboxes = (
                 isReadOnly,
                 title:
                   "Perustele lyhyesti miksi tutkintoon johtavaa koulutusta halutaan järjestää",
-                value: ""
+                value: "",
+                requiredMessage: "Pakollinen tieto puuttuu"
               }
             }
           ]
