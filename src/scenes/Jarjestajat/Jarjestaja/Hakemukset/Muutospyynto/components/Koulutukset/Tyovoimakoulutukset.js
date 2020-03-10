@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
@@ -34,6 +35,8 @@ const Tyovoimakoulutukset = ({
       key={`expandable-row-root`}
       categories={[]}
       changes={changeObjects.koulutukset.tyovoimakoulutukset}
+      hideAmountOfChanges={true}
+      messages={{ undo: intl.formatMessage(common.undo) }}
       onUpdate={onChangesUpdate}
       onChangesRemove={onChangesRemove}
       title={intl.formatMessage(wizardMessages.workforceTraining)}>

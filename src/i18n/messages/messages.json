@@ -31,7 +31,7 @@
   },
   {
     "id": "common.undo",
-    "defaultMessage": "Peruuta muutokset",
+    "defaultMessage": "Kumoa muutokset",
     "filepath": "src/i18n/definitions/common.js"
   },
   {

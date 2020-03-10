@@ -36,6 +36,7 @@ const Tutkinnot = props => {
             anchor={anchorInitial}
             key={`expandable-row-root-${i}`}
             changes={changeObjects.tutkinnot[areaCode]}
+            hideAmountOfChanges={true}
             messages={{ undo: intl.formatMessage(common.undo) }}
             onChangesRemove={props.onChangesRemove}
             onUpdate={props.onChangesUpdate}

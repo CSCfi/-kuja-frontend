@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../../i18n/definitions/common";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
@@ -34,6 +35,8 @@ const Kuljettajakoulutukset = ({
       key={`expandable-row-root`}
       categories={[]}
       changes={changeObjects.koulutukset.kuljettajakoulutukset}
+      hideAmountOfChanges={true}
+      messages={{ undo: intl.formatMessage(common.undo) }}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       title={intl.formatMessage(wizardMessages.driverTraining)}>
