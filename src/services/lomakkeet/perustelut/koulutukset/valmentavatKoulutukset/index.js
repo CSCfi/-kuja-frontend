@@ -46,7 +46,7 @@ function getAdditionForm(koulutusdata, changeObjectsPage1, isReadOnly) {
                   isReadOnly,
                   title: __("reasoning.title.default"),
                   value: "",
-                  requiredMessage: "Pakkollinen tieto puuttuu"
+                  requiredMessage: "Pakollinen tieto puuttuu"
                 }
               }
             ]
