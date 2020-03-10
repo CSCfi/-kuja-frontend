@@ -41,7 +41,7 @@ function getAdditionForm(koulutusdata, changeObjectsPage1 = [], isReadOnly) {
                     metadata: item.metadata
                   },
                   isReadOnly: isReadOnly,
-                  placeholder: "Perustelut...",
+                  requiredMessage: "Pakkollinen tieto puuttuu",
                   title:
                     "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
                   value: ""
