@@ -37,7 +37,7 @@ export const getRemovalForm = isReadOnly => {
             title:
               "Perustele lyhyesti miksi tutkintoon tähtäävää koulutusta ei haluta enää järjestää",
             value: "",
-            requiredMessage: "Pakkollinen tieto puuttuu"
+            requiredMessage: "Pakollinen tieto puuttuu"
           }
         }
       ]
@@ -57,7 +57,7 @@ export const getOsaamisalaForm = isReadOnly => {
             isReadOnly,
             title: "Perustele lyhyesti miksi tälle muutokselle on tarvetta",
             value: "",
-            requiredMessage: "Pakkollinen tieto puuttuu"
+            requiredMessage: "Pakollinen tieto puuttuu"
           }
         }
       ]

@@ -88,7 +88,7 @@ export const HAKEMUS_VIESTI = {
     SV: "PERUUTA"
   },
   TIEDOSTO_NIMI_ERROR: {
-    FI: "Nimi on pakkollinen",
+    FI: "Nimi on pakollinen",
     SV: "TIEDOSTO_NIMI_ERROR"
   }
 };

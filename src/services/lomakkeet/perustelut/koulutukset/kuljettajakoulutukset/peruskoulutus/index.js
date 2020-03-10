@@ -44,7 +44,7 @@ export function getAdditionForm(isReadOnly) {
                     title:
                       "Esittäkää suunnitelma ammattipätevyyskoulutuksen toteutuksesta",
                     value: "",
-                    requiredMessage: "Pakkollinen tieto puuttuu"
+                    requiredMessage: "Pakollinen tieto puuttuu"
                   }
                 }
               ]
@@ -70,7 +70,7 @@ export function getAdditionForm(isReadOnly) {
                       "Esittäkää selvitys koulutuksen järjestämispaikoista",
                     title: "Ammattipätevyyskoulutuksen järjestämispaikat",
                     value: "",
-                    requiredMessage: "Pakkollinen tieto puuttuu"
+                    requiredMessage: "Pakollinen tieto puuttuu"
                   }
                 }
               ]

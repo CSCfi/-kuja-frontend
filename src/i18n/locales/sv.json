@@ -35,7 +35,7 @@
   "common.attachmentAdd": "Lisää liite",
   "common.attachmentDownload": "Lataa liite tietokoneelle",
   "common.attachmentError": "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi",
-  "common.attachmentErrorName": "Nimi on pakkollinen",
+  "common.attachmentErrorName": "Nimi on pakollinen",
   "common.attachmentInfo": "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet.",
   "common.attachmentName": "Liitteen nimi *",
   "common.attachmentNone": "Ei lisättyjä liitteitä",
