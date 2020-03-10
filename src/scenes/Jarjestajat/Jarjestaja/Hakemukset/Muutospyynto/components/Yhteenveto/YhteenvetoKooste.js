@@ -58,13 +58,16 @@ const YhteenvetoKooste = ({
     );
   }, [maaraystyypit]);
 
+  const isKoulutuksetChanges = useMemo(() => {
+    return R.not(R.isEmpty(R.flatten(R.values(changeObjects.koulutukset))));
+  }, [changeObjects.koulutukset]);
+
   return (
     <React.Fragment>
       {kohdetiedot && kohdetiedot.length ? (
         <React.Fragment>
           {muutosperusteluList &&
-            (!!R.path(["tutkinnot"], changeObjects) ||
-              !!R.path(["koulutukset"], changeObjects)) && (
+            (!R.isEmpty(changeObjects.tutkinnot) || isKoulutuksetChanges) && (
               <FormSection
                 code={1}
                 id="perustelut_tutkinnot"
