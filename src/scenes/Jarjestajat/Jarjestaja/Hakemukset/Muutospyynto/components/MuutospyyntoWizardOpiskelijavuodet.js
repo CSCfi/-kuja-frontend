@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
+import common from "../../../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
+import { useIntl } from "react-intl";
 
 const getArvoFromKohdeArray = (tyyppi, kohde) => {
   return parseInt(
@@ -31,6 +33,7 @@ const defaultConstraintFlags = {
 };
 
 const MuutospyyntoWizardOpiskelijavuodet = props => {
+  const intl = useIntl();
   const [changeObjects] = useChangeObjects();
   const { onChangesRemove, onChangesUpdate } = props;
   const { opiskelijavuodet, rajoitukset } = props.lupaKohteet[4];
@@ -265,6 +268,8 @@ const MuutospyyntoWizardOpiskelijavuodet = props => {
       key={`expandable-row-root`}
       categories={[]}
       changes={changeObjects.opiskelijavuodet}
+      hideAmountOfChanges={true}
+      messages={{ undo: intl.formatMessage(common.undo) }}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       sectionId={props.sectionId}
