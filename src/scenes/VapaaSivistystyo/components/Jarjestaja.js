@@ -73,7 +73,7 @@ const Jarjestaja = React.memo(
     ];
 
     const lupaKohteet = useMemo(() => {
-      return !lupa.data ? {} : parseLupa(lupa.data);
+      return !lupa.data ? {} : parseLupa(lupa.data, intl.locale);
     }, [lupa.data]);
 
     return (
