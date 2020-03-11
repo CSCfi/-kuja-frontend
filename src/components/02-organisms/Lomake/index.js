@@ -2,10 +2,11 @@ import React, { useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import CategorizedListRoot from "okm-frontend-components/dist/components/02-organisms/CategorizedListRoot";
 import { getLomake } from "../../../services/lomakkeet";
-import { equals, map, split } from "ramda";
+import { equals, join, map, path, split } from "ramda";
 import { cloneDeep } from "lodash";
 import { useIntl } from "react-intl";
 import { useLomakkeet } from "../../../stores/lomakkeet";
+import { useMetadata } from "../../../stores/metadata";
 
 function markRequiredFields(lomake, changeObjects = [], rules = []) {
   let modifiedLomake = cloneDeep(lomake);
@@ -20,8 +21,7 @@ function markRequiredFields(lomake, changeObjects = [], rules = []) {
 }
 
 const defaultProps = {
-  changeObjects: [],
-  showValidationErrors: false
+  changeObjects: []
 };
 
 const Lomake = React.memo(
@@ -32,16 +32,25 @@ const Lomake = React.memo(
     data,
     metadata,
     isReadOnly,
-    showValidationErrors = defaultProps.showValidationErrors,
     onChangesUpdate,
-    path,
+    path: _path,
     prefix = "",
     rules = [],
     rulesFn,
     showCategoryTitles = true
   }) => {
     const intl = useIntl();
+    const [meta, metadataActions] = useMetadata();
     const [, lomakkeetActions] = useLomakkeet();
+
+    const lomakeId = `${anchor}.${prefix}.${join(".", _path || [])}.${action}`;
+
+    const showValidationErrors =
+      path(["lomakkeet", "latauskerrat", lomakeId], meta) > 1;
+
+    useEffect(() => {
+      metadataActions.registerLomakeLoad(lomakeId);
+    }, [lomakeId, metadataActions]);
 
     const lomake = useMemo(() => {
       let categories = getLomake(
@@ -49,7 +58,7 @@ const Lomake = React.memo(
         data,
         isReadOnly,
         intl.locale,
-        path,
+        _path,
         prefix
       );
       let result = { categories, invalidFields: [], ruleCount: 0 };
@@ -73,7 +82,7 @@ const Lomake = React.memo(
       intl.locale,
       isReadOnly,
       metadata,
-      path,
+      _path,
       prefix,
       rules,
       rulesFn
@@ -125,5 +134,10 @@ Lomake.propTypes = {
   // This is useful for dynamic forms.
   rulesFn: PropTypes.func
 };
+
+// Lomake.whyDidYouRender = {
+//   logOnDifferentValues: false,
+//   customName: "Lomake"
+// }
 
 export default Lomake;

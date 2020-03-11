@@ -1,5 +1,3 @@
-import { toast } from "react-toastify";
-
 // muutospyynto.muutokset.poista
 export const poista = {
   label: "Muutosten poistaminen",

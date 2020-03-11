@@ -33,7 +33,7 @@ const Store = createStore({
       liitteet: []
     },
     toimintaalue: [],
-    opiskelijavuodet: [],
+    opiskelijavuodet: [],
     muut: {},
     tutkinnot: {},
     yhteenveto: {
