@@ -13,6 +13,7 @@ import { prop } from "ramda";
 const JarjestajaSwitch = React.memo(({ history, path, user, ytunnus }) => {
   const intl = useIntl();
 
+
   const [lupa, lupaActions] = useLupa();
 
   // Let's fetch LUPA
@@ -29,8 +30,8 @@ const JarjestajaSwitch = React.memo(({ history, path, user, ytunnus }) => {
   }, [lupaActions, ytunnus, user]);
 
   const lupaKohteet = useMemo(() => {
-    return !lupa.data ? {} : parseLupa({ ...lupa.data }, intl.formatMessage);
-  }, [lupa.data, intl.formatMessage]);
+    return !lupa.data ? {} : parseLupa({ ...lupa.data }, intl.formatMessage, intl.locale.toUpperCase());
+  }, [lupa.data, intl]);
 
   return (
     <Switch>

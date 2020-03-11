@@ -44,9 +44,9 @@ function getAdditionForm(koulutusdata, changeObjectsPage1, isReadOnly) {
                     metadata: item.metadata
                   },
                   isReadOnly,
-                  placeholder: "Perustelut...",
                   title: __("reasoning.title.default"),
-                  value: ""
+                  value: "",
+                  requiredMessage: "Pakollinen tieto puuttuu"
                 }
               }
             ]

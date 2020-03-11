@@ -1,5 +1,4 @@
 import React, { useMemo, useEffect } from "react";
-import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import {
   InnerContentContainer,
   InnerContentWrapper
@@ -10,6 +9,7 @@ import { useKunnat } from "../../../../stores/kunnat";
 import { useMaakunnat } from "../../../../stores/maakunnat";
 import { useOrganisation } from "../../../../stores/organisation";
 import * as R from "ramda";
+import common from "../../../../i18n/definitions/common";
 
 const OmatTiedot = () => {
   const intl = useIntl();
@@ -88,10 +88,10 @@ const OmatTiedot = () => {
             <InnerContentContainer>
               <InnerContentWrapper>
                 <Typography component="h2" variant="h5" className="pb-4">
-                  {LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI}
+                  {intl.formatMessage(common.omatTiedotTitle)}
                 </Typography>
                 <Typography component="h3" variant="h6">
-                  {LUPA_TEKSTIT.OMATTIEDOT.KAYNTIOSOITE.FI}
+                  {intl.formatMessage(common.omatTiedotVisitAddress)}
                 </Typography>
                 <p className="pb-4">
                   {organisation.data.kayntiosoite.osoite}
@@ -103,7 +103,7 @@ const OmatTiedot = () => {
                   {organisation.data.kayntiosoite.postitoimipaikka}
                 </p>
                 <Typography component="h3" variant="h6">
-                  {LUPA_TEKSTIT.OMATTIEDOT.POSTIOSOITE.FI}
+                  {intl.formatMessage(common.omatTiedotMailAddress)}
                 </Typography>
                 <p className="pb-4">
                   {organisation.data.postiosoite.osoite &&
@@ -116,18 +116,18 @@ const OmatTiedot = () => {
                   {organisation.data.postiosoite.postitoimipaikka}
                 </p>
                 <Typography component="h3" variant="h6">
-                  {LUPA_TEKSTIT.OMATTIEDOT.KOTIPAIKKA.FI}
+                  {intl.formatMessage(common.omatTiedotMunicipality)}
                 </Typography>
                 <p className="pb-4">
                   {kotipaikka && <span>{kotipaikka}</span>}
                 </p>
                 <Typography component="h3" variant="h6">
-                  {LUPA_TEKSTIT.OMATTIEDOT.YHTEYSTIEDOT.FI}
+                  {intl.formatMessage(common.omatTiedotContactInfo)}
                 </Typography>
                 {numero && (
                   <div className="flex border-b">
                     <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
-                      <p>{LUPA_TEKSTIT.OMATTIEDOT.PUHELINNUMERO.FI}</p>
+                      <p>{intl.formatMessage(common.omatTiedotPhoneNumber)}</p>
                     </div>
                     <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                       <p>
@@ -143,7 +143,7 @@ const OmatTiedot = () => {
                 {www && (
                   <div className="flex border-b">
                     <div className="w-1/2 sm:w-auto md:w-1/4  bg-gray-200 p-2 h-10">
-                      <p>{LUPA_TEKSTIT.OMATTIEDOT.WWWW.FI}</p>
+                      <p>{intl.formatMessage(common.omatTiedotWwwAddress)}</p>
                     </div>
                     <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                       <p>
@@ -157,7 +157,7 @@ const OmatTiedot = () => {
                 {email && (
                   <div className="flex border-b">
                     <div className="w-1/2 sm:w-auto md:w-1/4 bg-gray-200 p-2 h-10">
-                      <p>{LUPA_TEKSTIT.OMATTIEDOT.EMAIL.FI}</p>
+                      <p>{intl.formatMessage(common.omatTiedotEmailAddress)}</p>
                     </div>
                     <div className="w-1/2 sm:w-auto md:w-3/4 bg-gray-100 p-2 h-10">
                       <p>
@@ -169,7 +169,7 @@ const OmatTiedot = () => {
                   </div>
                 )}
                 <br />
-                <p>{LUPA_TEKSTIT.OMATTIEDOT.INFO.FI}</p>
+                <p>{intl.formatMessage(common.omatTiedotInfo)}</p>
               </InnerContentWrapper>
             </InnerContentContainer>
           );

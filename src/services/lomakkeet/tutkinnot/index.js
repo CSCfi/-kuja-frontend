@@ -20,7 +20,6 @@ function getModificationForm(
       R.addIndex(R.map)((koulutustyyppi, i) => {
         return {
           anchor: koulutustyyppi.koodiArvo,
-          code: koulutustyyppi.koodiArvo,
           meta: {
             areaCode,
             title

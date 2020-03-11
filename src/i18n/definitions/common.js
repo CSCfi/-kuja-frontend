@@ -195,6 +195,38 @@ export default defineMessages({
     id: "common.frontpage",
     defaultMessage: "Etusivu"
   },
+  since: {
+    id: "common.since",
+    defaultMessage: "{date} lukien"
+  },
+  jarjestaja: {
+    id: "common.jarjestaja",
+    defaultMessage: "Koulutuksen järjestäjä"
+  },
+  homeCounty: {
+    id: "common.homeCounty",
+    defaultMessage: "Kotipaikan maakunta"
+  },
+  kjAsiaTableDnro: {
+    id: "common.kjAsiaTableDnro",
+    defaultMessage: "OKM:n Dnro"
+  },
+  kjAsiaTableAsia: {
+    id: "common.kjAsiaTableAsia",
+    defaultMessage: "Asia"
+  },
+  kjAsiaTableState: {
+    id: "common.kjAsiaTableState",
+    defaultMessage: "Tila"
+  },
+  kjAsiaTableDueDate: {
+    id: "common.kjAsiaTableDueDate",
+    defaultMessage: "Määräaika"
+  },
+  kjAsiaTablePaatetty: {
+    id: "common.kjAsiaTablePaatetty",
+    defaultMessage: "Päätetty"
+  },
   "asiaTable.headers.asianumero": {
     id: "asiaTable.headers.asianumero",
     defaultMessage: "Asianumero"
@@ -294,5 +326,289 @@ export default defineMessages({
   toBeRemoved: {
     id: "common.toBeRemoved",
     defaultMessage: "Poistettava"
+  },
+  ammatillisenKoulutuksenJarjestajat: {
+    id: "common.ammatillisenKoulutuksenJarjestajat",
+    defaultMessage: "Ammatillisen koulutuksen järjestäjät"
+  },
+  voimassaOlevatJarjestamisluvat: {
+    id: "common.voimassaOlevatJarjestamisluvat",
+    defaultMessage: "Voimassa olevat järjestämisluvat ({amount} kpl)"
+  },
+  lupaLatest: {
+    id: "common.lupaLatest",
+    defaultMessage: "Viimeisin päätös"
+  },
+  lupaPaatokset: {
+    id: "common.lupaPaatokset",
+    defaultMessage: "Päätökset"
+  },
+  lupaHistoria: {
+    id: "common.lupaHistoria",
+    defaultMessage: "Historiatiedot"
+  },
+  errorFetchingRow: {
+    id: "common.errorFetchingRow",
+    defaultMessage: "Virhe haettaessa valitun rivin tietoja."
+  },
+  errorOpeningPDF: {
+    id: "common.errorOpeningPDF",
+    defaultMessage: "PDF:n avaaminen ei onnistunut."
+  },
+  errorLoadingLupaHistory: {
+    id: "common.errorLoadingLupaHistory",
+    defaultMessage: "Lupahistoriaa ladattaessa tapahtui virhe."
+  },
+  errorLoadingLupa: {
+    id: "common.errorLoadingLupa",
+    defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
+  },
+  diaarinumero: {
+    id: "common.diaarinumero",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaDiaarinumeroHeading: {
+    id: "common.lupaHistoriaDiaarinumeroHeading",
+    defaultMessage: "Diaarinumero"
+  },
+  lupaHistoriaPaatosDateHeading: {
+    id: "common.lupaHistoriaPaatosDateHeading",
+    defaultMessage: "Päätöspvm"
+  },
+  lupaHistoriaStartDateHeading: {
+    id: "common.lupaHistoriaStartDateHeading",
+    defaultMessage: "Voimaantulopvm"
+  },
+  lupaHistoriaEndDateHeading: {
+    id: "common.lupaHistoriaEndDateHeading",
+    defaultMessage: "Päättämispvm"
+  },
+  lupaHistoriaKumottuDateHeading: {
+    id: "common.lupaHistoriaKumottuDateHeading",
+    defaultMessage: "Kumottu"
+  },
+  lupaHistoriaPaatosDateMobile: {
+    id: "common.lupaHistoriaPaatosDateMobile",
+    defaultMessage: "Päätös tehty: {date}"
+  },
+  lupaHistoriaValidDateRangeMobile: {
+    id: "common.lupaHistoriaValidDateRangeMobile",
+    defaultMessage: "Voimassa: {date1} - {date2}"
+  },
+  lupaHistoriaKumottuDateMobile: {
+    id: "common.lupaHistoriaKumottuDateMobile",
+    defaultMessage: "Kumottu: {date}"
+  },
+  omatTiedotTitle: {
+    id: "common.omatTiedotTitle",
+    defaultMessage: "Omat tiedot"
+  },
+  omatTiedotVisitAddress: {
+    id: "common.omatTiedotVisitAddress",
+    defaultMessage: "Käyntiosoite"
+  },
+  omatTiedotMailAddress: {
+    id: "common.omatTiedotMailAddress",
+    defaultMessage: "Postiosoite"
+  },
+  omatTiedotMunicipality: {
+    id: "common.omatTiedotMunicipality",
+    defaultMessage: "Kotipaikka"
+  },
+  omatTiedotContactInfo: {
+    id: "common.omatTiedotContactInfo",
+    defaultMessage: "Yhteystiedot"
+  },
+  omatTiedotPhoneNumber: {
+    id: "common.omatTiedotPhoneNumber",
+    defaultMessage: "Puhelinnumero"
+  },
+  omatTiedotWwwAddress: {
+    id: "common.omatTiedotWwwAddress",
+    defaultMessage: "Www-osoite"
+  },
+  omatTiedotEmailAddress: {
+    id: "common.omatTiedotEmailAddress",
+    defaultMessage: "Sähköpostiosoite"
+  },
+  omatTiedotInfo: {
+    id: "common.omatTiedotInfo",
+    defaultMessage: "Tiedot tulevat Opetushallituksen organisaatiotietopalvelusta, joka päivittää ne yritys- ja yhteisötietojärjestelmästä (YTJ). Muutokset tietoihin tulee tehdä sitä kautta."
+  },
+  asiatTitle: {
+    id: "common.asiatTitle",
+    defaultMessage: "Järjestämislupa-asiat"
+  },
+  lupaPageTitleAmmatillinen: {
+    id: "common.lupaPageTitleAmmatillinen",
+    defaultMessage: "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}"
+  },
+  lupaTitle: {
+    id: "common.lupaTitle",
+    defaultMessage: "Järjestämislupa"
+  },
+  lupaSectionTitleAllLupas: {
+    id: "common.lupaSectionTitleAllLupas",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus myöntää seuraavia tutkintoja ja antaa niihin tutkintokoulutusta:"
+  },
+  lupaSectionTitleSupplementary: {
+    id: "common.lupaSectionTitleSupplementary",
+    defaultMessage: "Koulutuksen järjestäjä voi järjestää myös em. tutkintoihin liittyvää ammatillisesta koulutuksesta annetun lain\n (531/2017) 8 §:n 1 kohdassa tarkoitettua ammatillista osaamista syventävää tai täydentävää koulutusta."
+  },
+  lupaSectionTutkinnotMainTitle: {
+    id: "common.lupaSectionTutkinnotMainTitle",
+    defaultMessage: "Tutkinnot ja koulutukset"
+  },
+  lupaSectionTutkinnotValmaTitle: {
+    id: "common.lupaSectionTutkinnotValmaTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa valmentavaa koulutusta:"
+  },
+  lupaSectionTutkinnotTelmaTitle: {
+    id: "common.lupaSectionTutkinnotTelmaTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa valmentavaa koulutusta:"
+  },
+  lupaSectionTutkinnotAmmatillinenTitle: {
+    id: "common.lupaSectionTutkinnotAmmatillinenTitle",
+    defaultMessage: "Koulutuksen järjestäjällä on oikeus järjestää seuraavaa ammatilliseen tehtävään valmistavaa koulutusta:"
+  },
+  lupaSectionOpetuskieliMainTitle: {
+    id: "common.lupaSectionOpetuskieliMainTitle",
+    defaultMessage: "Opetus- ja tutkintokieli"
+  },
+  lupaSectionOpetuskieliSingular: {
+    id: "common.lupaSectionOpetuskieliSingular",
+    defaultMessage: "Koulutuksen järjestäjän on annettava opetusta seuraavalla opetuskielellä:"
+  },
+  lupaSectionOpetuskieliPlural: {
+    id: "common.lupaSectionOpetuskieliPlural",
+    defaultMessage: "Koulutuksen järjestäjän on annettava opetusta seuraavilla opetuskielillä:"
+  },
+  lupaSectionExtraLanguageEnglishSingular: {
+    id: "common.lupaSectionExtraLanguageEnglishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielen lisäksi englanti seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageEnglishPlural: {
+    id: "common.lupaSectionExtraLanguageEnglishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi englanti seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageSwedishSingular: {
+    id: "common.lupaSectionExtraLanguageSwedishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageSwedishPlural: {
+    id: "common.lupaSectionExtraLanguageSwedishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi ruotsi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageFinnishSingular: {
+    id: "common.lupaSectionExtraLanguageFinnishSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi suomi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageFinnishPlural: {
+    id: "common.lupaSectionExtraLanguageFinnishPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi suomi seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageRussianSingular: {
+    id: "common.lupaSectionExtraLanguageRussianSingular",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavassa tutkinnossa"
+  },
+  lupaSectionExtraLanguageRussianPlural: {
+    id: "common.lupaSectionExtraLanguageRussianPlural",
+    defaultMessage: "Tutkintokieli on em. opetuskielten lisäksi venäjä seuraavassa tutkinnossa"
+  },
+  lupaSectionToimintaAlueMainTitle: {
+    id: "common.lupaSectionToimintaAlueMainTitle",
+    defaultMessage: "Toiminta-alue"
+  },
+  lupaSectionToimintaAlueNational: {
+    id: "common.lupaSectionToimintaAlueNational",
+    defaultMessage: "Tutkintoja ja koulutusta saa lisäksi järjestää Ahvenanmaan maakuntaa lukuun ottamatta myös muualla Suomessa."
+  },
+  lupaSectionToimintaAlueNationalAlternative: {
+    id: "common.lupaSectionToimintaAlueNationalAlternative",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta Ahvenanmaan maakuntaa lukuun ottamatta koko Suomen osaamis- ja koulutustarpeeseen."
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja kuntien alueen osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja seuraavien kuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaNoneKuntaPlural: {
+    id: "common.lupaSectionToimintaAlueMaakuntaNoneKuntaPlural",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien kuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien ja seuraavan kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan ja kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaNoneKuntaSingular: {
+    id: "common.lupaSectionToimintaAlueMaakuntaNoneKuntaSingular",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan kunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaPluralKuntaNone: {
+    id: "common.lupaSectionToimintaAlueMaakuntaPluralKuntaNone",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavien maakuntien osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueMaakuntaSingularKuntaNone: {
+    id: "common.lupaSectionToimintaAlueMaakuntaSingularKuntaNone",
+    defaultMessage: "Koulutuksen järjestäjällä on velvollisuus järjestää tutkintoja ja koulutusta ensisijaisesti seuraavan maakunnan osaamis- ja koulutustarpeeseen:"
+  },
+  lupaSectionToimintaAlueNone: {
+    id: "common.lupaSectionToimintaAlueNone",
+    defaultMessage: "Koulutuksen järjestäjällä ei ole alueellista velvoitetta järjestää tutkintoja ja koulutusta. Koulutuksen järjestäjä saa järjestää tutkintoja ja koulutusta koko Suomessa Ahvenanmaan maakuntaa lukuun ottamatta."
+  },
+  lupaSectionOpiskelijavuodetMainTitle: {
+    id: "common.lupaSectionOpiskelijavuodetMainTitle",
+    defaultMessage: "Opiskelijavuodet ja niitä koskevat rajoitukset"
+  },
+  lupaSectionOpiskelijavuodetMinimum: {
+    id: "common.lupaSectionOpiskelijavuodetMinimum",
+    defaultMessage: "Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä on {arvo}"
+  },
+  lupaSectionOpiskelijavuodetMaximum: {
+    id: "common.lupaSectionOpiskelijavuodetMaximum",
+    defaultMessage: "{tyyppi} enintään {arvo} opiskelijavuotta"
+  },
+  lupaSectionOpiskelijavuodetValtio: {
+    id: "common.lupaSectionOpiskelijavuodetValtio",
+    defaultMessage: "Valtion oppilaitokselle ei määritetä opiskelijavuosien määrää."
+  },
+  lupaSectionOpiskelijavuodetLimitationSingular: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationSingular",
+    defaultMessage: "Opiskelijavuosien vähimmäismäärää koskee seuraava rajoitus:"
+  },
+  lupaSectionOpiskelijavuodetLimitationPlural: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationPlural",
+    defaultMessage: "Opiskelijavuosien vähimmäismäärää koskevat seuraavat velvollisuudet:"
+  },
+  lupaSectionOpiskelijavuodetLimitationNone: {
+    id: "common.lupaSectionOpiskelijavuodetLimitationNone",
+    defaultMessage: "Koulutuksen järjestäjälle ei määritetä opiskelijavuosien vähimmäismäärää."
+  },
+  lupaSectionMuutMainTitle: {
+    id: "common.lupaSectionMuutMainTitle",
+    defaultMessage: "Muut oikeudet, velvollisuudet, ehdot ja tehtävät"
+  },
+  lupaSectionMuutEiMaarayksia: {
+    id: "common.lupaSectionMuutEiMaarayksia",
+    defaultMessage: "Koulutuksen järjestäjälle ei tässä järjestämisluvassa määrätä muita oikeuksia, velvollisuuksia, ehtoja tai tehtäviä."
+  },
+  lupaSectionNoInfo: {
+    id: "common.lupaSectionNoInfo",
+    defaultMessage: "Ei kohdetietoja"
+  },
+  tutkinnot: {
+    id: "common.tutkinnot",
+    defaultMessage: "Tutkinnot"
+  },
+  koulutukset: {
+    id: "common.koulutukset",
+    defaultMessage: "Koulutukset"
   }
 });

@@ -1,9 +1,10 @@
 {
-  "applyFor": "SV: Haettava",
+  "applyFor": "SV: Uusi vähimmäismäärä",
+  "applyForVaativaAndSisaoppilaitos": "SV: Uusi enimmäismäärä",
   "difference": "SV: Muutos",
   "except": "SV: lukuun ottamatta",
-  "limitForBoardingSchool": "SV: Vähimmäisopiskelijavuosimäärän rajoitus koskien sisäoppilaitosmuotoista koulutusta (27 §)",
-  "limitForSpecialSupport": "SV: Vähimmäisopiskelijavuosimäärän rajoitus koskien vaativaa erityistä tukea (65 §)",
+  "limitForBoardingSchool": "SV: Sisäoppilaitosmuotoiseen koulutukseen käytettävien opiskelijavuosien enimmäismäärä",
+  "limitForSpecialSupport": "SV: Vaativan erityisen tuen tehtävään käytettävien opiskelijavuosien enimmäismäärä",
   "minimumAmountOfYears": "SV: Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä",
   "muutospyynnon.taustalla.olevat.syyt": "SV: Muutospyynnön taustalla olevat syyt",
   "osaamisalarajoitus": "SV: Rajoitus",

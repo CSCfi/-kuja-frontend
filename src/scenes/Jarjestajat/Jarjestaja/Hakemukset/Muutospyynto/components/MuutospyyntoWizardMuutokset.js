@@ -6,6 +6,7 @@ import MuutospyyntoWizardToimintaalue from "./MuutospyyntoWizardToimintaalue";
 import MuutospyyntoWizardOpiskelijavuodet from "./MuutospyyntoWizardOpiskelijavuodet";
 import MuutospyyntoWizardMuut from "./MuutospyyntoWizardMuut";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import * as R from "ramda";
@@ -55,11 +56,13 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
           id="tutkinnot"
           render={_props => (
             <React.Fragment>
+              <h4 className="pb-4">{intl.formatMessage(common.tutkinnot)}</h4>
               <Tutkinnot
                 tutkinnot={props.tutkinnot}
                 lupaKohteet={props.lupaKohteet}
                 {..._props}
               />
+              <h4 className="pt-8 pb-4">{intl.formatMessage(common.koulutukset)}</h4>
               <MuutospyyntoWizardKoulutukset
                 koulutukset={props.koulutukset}
                 maaraykset={props.lupa.maaraykset}

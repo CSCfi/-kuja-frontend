@@ -11,7 +11,6 @@ import OmatTiedot from "./OmatTiedot";
 import JarjestamislupaAsiat from "./Jarjestamislupa-asiat";
 import Jarjestamislupa from "./Jarjestamislupa";
 import HakemuksetJaPaatokset from "../Hakemukset/components/HakemuksetJaPaatokset";
-import { LUPA_TEKSTIT } from "../../../Jarjestajat/Jarjestaja/modules/constants";
 import { COLORS } from "../../../../modules/styles";
 import { FullWidthWrapper } from "../../../../modules/elements";
 import common from "../../../../i18n/definitions/common";
@@ -50,13 +49,13 @@ const Jarjestaja = React.memo(
       const basicRoutes = [
         {
           path: `${url}/jarjestamislupa`,
-          text: LUPA_TEKSTIT.LUPA.OTSIKKO_LYHYT.FI,
+          text: intl.formatMessage(common.lupaTitle),
           authenticated: true
         },
         {
           path: `${url}`,
           exact: true,
-          text: LUPA_TEKSTIT.PAATOKSET.OTSIKKO.FI,
+          text: intl.formatMessage(common.lupaPaatokset),
           authenticated: true
         }
       ];
@@ -67,19 +66,19 @@ const Jarjestaja = React.memo(
               {
                 path: `${url}/omattiedot`,
                 exact: true,
-                text: LUPA_TEKSTIT.OMATTIEDOT.OTSIKKO.FI,
+                text: intl.formatMessage(common.omatTiedotTitle),
                 authenticated: !!user
               },
               {
                 id: "jarjestamislupa-asiat",
                 path: `${url}/jarjestamislupa-asia`,
-                text: LUPA_TEKSTIT.ASIAT.OTSIKKO_LYHYT.FI,
+                text: intl.formatMessage(common.asiatTitle),
                 authenticated: !!user
               }
             ]
           : [];
       return R.flatten(R.insert(1, basicRoutes, additionalRoutes));
-    }, [lupa.jarjestaja, url, user]);
+    }, [lupa.jarjestaja, url, user, intl]);
 
     const newApplicationRouteItem = useMemo(() => {
       return {
