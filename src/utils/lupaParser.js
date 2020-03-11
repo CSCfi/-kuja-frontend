@@ -9,7 +9,7 @@ import { parseLocalizedField } from "../modules/helpers";
  * @param lupa
  * @returns {{}}
  */
-export const parseLupa = (lupa) => {
+export const parseLupa = (lupa, locale) => {
   if (lupa) {
     let lupaObj = {};
     console.log(lupa)
@@ -20,7 +20,8 @@ export const parseLupa = (lupa) => {
         const maarayksetByTunniste = lupa.maaraykset.filter(maarays => maarays.kohde.tunniste === tunniste);
         const sectionData = findSectionDataFromMaaraykset(
           tunniste,
-          maarayksetByTunniste
+          maarayksetByTunniste,
+          locale
         );
 
         if(sectionData) {
@@ -32,19 +33,19 @@ export const parseLupa = (lupa) => {
   }
 };
 
-const generateIteratedKoodiData = (maaraykset) => {
+const generateIteratedKoodiData = (maaraykset, locale) => {
   const retval = {}
   retval.values = [];
   for (const maarays of maaraykset) {
-    retval.heading = maarays.kohde.meta.otsikko.fi;
-    retval.values.push(parseLocalizedField(maarays.koodi.metadata))
+    retval.heading = maarays.kohde.meta.otsikko[locale];
+    retval.values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()))
   }
   return retval;
 };
 
-const generateMetaAttributeBasedData = (maarays, attributes) => {
+const generateMetaAttributeBasedData = (maarays, attributes, locale) => {
   const retval = {};
-  retval.heading = maarays.kohde.meta.otsikko.fi;
+  retval.heading = maarays.kohde.meta.otsikko[locale];
   retval.values = [];
   for(const attribute of attributes) {
     if(maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
@@ -52,7 +53,7 @@ const generateMetaAttributeBasedData = (maarays, attributes) => {
   return retval
 };
 
-const generateKoulutustehtavaData = (maarays) => {
+const generateKoulutustehtavaData = (maarays, locale) => {
 
   const attributes = [
     "koulutustehtävämääräys-0",
@@ -60,10 +61,10 @@ const generateKoulutustehtavaData = (maarays) => {
     "koulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maarays, attributes);
+  return generateMetaAttributeBasedData(maarays, attributes, locale);
 };
 
-const generateErityinenKoulutustehtavaData = (maarays) => {
+const generateErityinenKoulutustehtavaData = (maarays, locale) => {
 
   const attributes = [
     "erityinenkoulutustehtävämääräys-0",
@@ -71,10 +72,10 @@ const generateErityinenKoulutustehtavaData = (maarays) => {
     "erityinenkoulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maarays, attributes);
+  return generateMetaAttributeBasedData(maarays, attributes, locale);
 };
 
-const generateOppilaitoksetData = (maarays) => {
+const generateOppilaitoksetData = (maarays, locale) => {
 
   const attributes = [
     "oppilaitosmääräys-0",
@@ -82,10 +83,10 @@ const generateOppilaitoksetData = (maarays) => {
     "oppilaitosmääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maarays, attributes);
+  return generateMetaAttributeBasedData(maarays, attributes, locale);
 };
 
-const generateMuutData = (maarays) => {
+const generateMuutData = (maarays, locale) => {
 
   const attributes = [
     "urn:muumääräys-1",
@@ -93,16 +94,16 @@ const generateMuutData = (maarays) => {
     "urn:oppilaitosmääräys-1"
   ];
 
-  return generateMetaAttributeBasedData(maarays, attributes)
+  return generateMetaAttributeBasedData(maarays, attributes, locale)
 }
 
-const generateTarkoitusData = (maarays) => {
+const generateTarkoitusData = (maarays, locale) => {
 
   const attributes = [
     "oppilaitoksentarkoitus-0"
   ]
 
-  return generateMetaAttributeBasedData(maarays, attributes);
+  return generateMetaAttributeBasedData(maarays, attributes, locale);
 }
 
 
@@ -114,38 +115,39 @@ const generateTarkoitusData = (maarays) => {
  */
 const findSectionDataFromMaaraykset = (
   tunniste,
-  maaraykset
+  maaraykset,
+  locale
 ) => {
   if(maaraykset.length === 0) {
     return null;
   }
 
   if (tunniste === KOHTEET.KUNNAT || tunniste === KOHTEET.KIELET) {
-    return generateIteratedKoodiData(maaraykset);
+    return generateIteratedKoodiData(maaraykset, locale);
   }
   else if (tunniste === KOHTEET.TARKOITUS) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.TARKOITUS);
     console.log(maarays)
-    return generateTarkoitusData(maarays);
+    return generateTarkoitusData(maarays, locale);
   }
   else if (tunniste === KOHTEET.KOULUTUSTEHTAVA) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.KOULUTUSTEHTAVA);
-    return generateKoulutustehtavaData(maarays);
+    return generateKoulutustehtavaData(maarays, locale);
   }
   else if (tunniste === KOHTEET.ERITYINENKOULUTUSTEHTAVA) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.ERITYINENKOULUTUSTEHTAVA);
-    return generateErityinenKoulutustehtavaData(maarays);
+    return generateErityinenKoulutustehtavaData(maarays, locale);
   }
   else if (tunniste === KOHTEET.OPPILAITOKSET) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.OPPILAITOKSET);
-    return generateOppilaitoksetData(maarays);
+    return generateOppilaitoksetData(maarays, locale);
   }
   else if (tunniste === KOHTEET.OPISKELIJAMAARA) {
     //TODO: data source is ambiguous and doesn't appear needed for VST
   }
   else if (tunniste === KOHTEET.MUUT) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.MUUT);
-    return generateMuutData(maarays);
+    return generateMuutData(maarays, locale);
   }
   else {
     return {};
