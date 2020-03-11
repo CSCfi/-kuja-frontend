@@ -6,18 +6,21 @@ export const LUPA_SECTIONS = {
     tunniste: 'kielet',
   },
   3: {
-    tunniste: 'koulutustehtava',
+    tunniste: 'tarkoitus'
   },
   4: {
-    tunniste: 'opiskelijavuodet',
+    tunniste: 'koulutustehtava',
   },
   5: {
-    tunniste: 'oppilaitos',
+    tunniste: 'opiskelijavuodet',
   },
   6: {
-    tunniste: 'opiskelijamaara',
+    tunniste: 'oppilaitos',
   },
   7: {
+    tunniste: 'opiskelijamaara',
+  },
+  8: {
     tunniste: 'muut',
   }
 };
@@ -25,6 +28,7 @@ export const LUPA_SECTIONS = {
 export const KOHTEET = {
   KUNNAT: 'kunnat',
   KIELET: 'kielet',
+  TARKOITUS: 'tarkoitus',
   KOULUTUSTEHTAVA: 'koulutustehtava',
   OPPILAITOKSET: 'oppilaitos',
   OPISKELIJAMAARA: 'opiskelijamaara',

@@ -12,6 +12,7 @@ import { parseLocalizedField } from "../modules/helpers";
 export const parseLupa = (lupa) => {
   if (lupa) {
     let lupaObj = {};
+    console.log(lupa)
 
     for (const key in LUPA_SECTIONS) {
       if (LUPA_SECTIONS.hasOwnProperty(key)) {
@@ -95,6 +96,15 @@ const generateMuutData = (maarays) => {
   return generateMetaAttributeBasedData(maarays, attributes)
 }
 
+const generateTarkoitusData = (maarays) => {
+
+  const attributes = [
+    "oppilaitoksentarkoitus-0"
+  ]
+
+  return generateMetaAttributeBasedData(maarays, attributes);
+}
+
 
 /**
  * return an object with heading and values associated with the given tunniste in lupamääräykset
@@ -112,6 +122,11 @@ const findSectionDataFromMaaraykset = (
 
   if (tunniste === KOHTEET.KUNNAT || tunniste === KOHTEET.KIELET) {
     return generateIteratedKoodiData(maaraykset);
+  }
+  else if (tunniste === KOHTEET.TARKOITUS) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.TARKOITUS);
+    console.log(maarays)
+    return generateTarkoitusData(maarays);
   }
   else if (tunniste === KOHTEET.KOULUTUSTEHTAVA) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.KOULUTUSTEHTAVA);
