@@ -127,7 +127,6 @@ const findSectionDataFromMaaraykset = (
   }
   else if (tunniste === KOHTEET.TARKOITUS) {
     const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.TARKOITUS);
-    console.log(maarays)
     return generateTarkoitusData(maarays, locale);
   }
   else if (tunniste === KOHTEET.KOULUTUSTEHTAVA) {
