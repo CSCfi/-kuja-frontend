@@ -3,15 +3,19 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { rules } from "../../../../../../../services/lomakkeet/yhteenveto/yleisetTiedot/rules";
+import common from "../../../../../../../i18n/definitions/common";
+import { useIntl } from "react-intl";
 
 const YhteenvetoYleisettiedot = React.memo(props => {
+  const intl = useIntl();
   return (
     <ExpandableRowRoot
       title={"Hakemuksen yleiset tiedot"}
       anchor={props.sectionId}
       changes={props.changeObjects.yhteenveto}
       disableReverting={false}
-      hideAmountOfChanges={false}
+      hideAmountOfChanges={true}
+      messages={{ undo: intl.formatMessage(common.undo) }}
       showCategoryTitles={true}
       isExpanded={true}
       sectionId={props.sectionId}

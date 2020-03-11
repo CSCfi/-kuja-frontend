@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { addIndex, keys, map, path, prop } from "ramda";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/muutMuutokset/rules";
+import common from "../../../../../../../i18n/definitions/common";
+import { useIntl } from "react-intl";
 
 const defaultProps = {
   changeObjects: {},
@@ -24,6 +26,7 @@ const PerustelutMuut = React.memo(
     onChangesUpdate,
     vankilat = defaultProps.vankilat
   }) => {
+    const intl = useIntl();
     const sectionId = "perustelut_muut";
 
     return (
@@ -35,8 +38,10 @@ const PerustelutMuut = React.memo(
               changes={prop(areaCode, changeObjects.perustelut)}
               code={areaCode}
               disableReverting={isReadOnly}
+              hideAmountOfChanges={true}
               isExpanded={true}
               key={`expandable-row-root-${i}`}
+              messages={{ undo: intl.formatMessage(common.undo) }}
               onChangesRemove={onChangesRemove}
               onUpdate={onChangesUpdate}
               sectionId={sectionId}
@@ -44,8 +49,7 @@ const PerustelutMuut = React.memo(
               title={path(
                 [areaCode, 0, "properties", "metadata", "title"],
                 changeObjects.muut
-              )}
-              hideAmountOfChanges={false}>
+              )}>
               <Lomake
                 action="reasoning"
                 anchor={`${sectionId}_${areaCode}`}
