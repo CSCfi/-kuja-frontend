@@ -70,8 +70,7 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
       rowGroups: [
         {
           rows: R.addIndex(R.map)((row, i) => {
-            const isKumottu =
-              row.voimassaoloalkupvm === row.voimassaololoppupvm;
+            const isKumottu = row.kumottupvm && row.kumottupvm >= row.voimassaoloalkupvm;
             const voimassaoloalkupvm = moment(row.voimassaoloalkupvm).format(
               "DD.MM.YYYY"
             );
@@ -79,23 +78,18 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
               "DD.MM.YYYY"
             );
             return {
-              id: row.diaarinumero,
+              id: row.uuid,
               onClick: row => {
                 const lupaHistoryObject = R.find(
-                  R.propEq("diaarinumero", row.id),
+                  R.propEq("uuid", row.id),
                   lupahistoria.data
                 );
                 if (lupaHistoryObject) {
-                  const pathToPDF =
-                    moment(lupaHistoryObject.voimassaololoppupvm) >
-                    moment("2018-12-30") // Yeah, hard coded value. Not sure if it's valid anymore.
-                      ? "/pdf/"
-                      : "/pebble/resources/liitteet/lupahistoria/";
                   if (history) {
                     downloadFileFn({
                       filename: lupaHistoryObject.filename,
                       openInNewWindow: true,
-                      url: `${pathToPDF}${lupaHistoryObject.filename}`
+                      url: `/pdf/historia/${lupaHistoryObject.uuid}`
                     })();
                   } else {
                     console.error(intl.formatMessage(common.errorOpeningPDF));
@@ -135,7 +129,7 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
     return _.map(data, (historyData, index) => (
       <LupaHistoryItem
         lupaHistoria={historyData}
-        key={`${historyData.diaarinumero}-${index}`}
+        key={`${historyData.uuid}-${index}`}
       />
     ));
   };
