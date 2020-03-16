@@ -11,7 +11,10 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
     const isVaativatukiRadios =
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
-    const sortedArticles = sortArticlesByHuomioitavaKoodi(item.articles, locale);
+    const sortedArticles = sortArticlesByHuomioitavaKoodi(
+      item.articles,
+      locale
+    );
     return {
       anchor: configObj.key,
       title: item.title,

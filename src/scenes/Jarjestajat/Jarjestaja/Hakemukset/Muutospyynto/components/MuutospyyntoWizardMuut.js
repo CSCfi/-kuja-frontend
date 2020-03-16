@@ -39,6 +39,7 @@ const MuutospyyntoWizardMuut = props => {
           group[kasite].push(article);
         }
       }, props.muut);
+      console.log("group", group);
       return group;
     };
   }, [osiota5koskevatMaaraykset, props.muut]);
