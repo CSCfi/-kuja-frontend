@@ -61,12 +61,12 @@ const Jarjestaja = React.memo(
 
     const basicRoutes = [
       {
-        path: `${match.url}/jarjestamislupa`,
+        path: `${match.url}`,
         exact: true,
         text: intl.formatMessage(common.lupaTitle),
       },
       {
-        path: match.url,
+        path: `${match.url}/paatokset`,
         exact: true,
         text: intl.formatMessage(common.lupaPaatokset)
       }
@@ -92,8 +92,20 @@ const Jarjestaja = React.memo(
         <FullWidthWrapper backgroundColor={COLORS.BG_GRAY} className="mt-4">
           <div className="mx-auto w-full sm:w-3/4 pb-8 sm:py-16">
             <Route
-              path={`${match.path}/jarjestamislupa`}
+              path={`${match.path}/paatokset`}
               exact
+              render={() => {
+
+                if(lupa.isLoading === false && lupa.fetchedAt) {
+                  return (<Paatokset lupa={lupa.data} jarjestaja={jarjestaja} />)
+                }
+                else {
+                  return <Loading />
+                }
+              }}
+            />
+            <Route
+              path={`${match.path}`}
               render={(props) => {
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
@@ -103,19 +115,6 @@ const Jarjestaja = React.memo(
                       ytunnus={jarjestaja.ytunnus}
                     />
                   )
-                }
-                else {
-                  return <Loading />
-                }
-              }}
-            />
-            <Route
-              path={match.path}
-              exact
-              render={() => {
-
-                if(lupa.isLoading === false && lupa.fetchedAt) {
-                  return (<Paatokset lupa={lupa.data} jarjestaja={jarjestaja} />)
                 }
                 else {
                   return <Loading />
