@@ -37,17 +37,6 @@ function getModificationForm(
               : {};
 
             const isInLupaBool = !R.isEmpty(maaraysKoulutukselle);
-            const osaamisalaTitle = {
-              anchor: "lukuun-ottamatta",
-              components: [
-                {
-                  name: "StatusTextRow",
-                  properties: {
-                    title: `${__("except")}:`
-                  }
-                }
-              ]
-            };
 
             const osaamisalat = (koulutus.osaamisalat || []).map(osaamisala => {
               const maaraysOsaamisalalle = article
@@ -120,10 +109,7 @@ function getModificationForm(
                   }
                 }
               ],
-              categories:
-                R.length(osaamisalat) > 0
-                  ? R.prepend(osaamisalaTitle, osaamisalat)
-                  : osaamisalat
+              categories: osaamisalat
             };
           }, koulutustyyppi.koulutukset)
         };
