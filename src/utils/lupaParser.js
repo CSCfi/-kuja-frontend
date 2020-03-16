@@ -39,6 +39,7 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
   for (const maarays of maaraykset) {
     retval.heading = maarays.kohde.meta.otsikko[locale];
     retval.values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()))
+    retval.values.sort();
   }
   return retval;
 };
@@ -50,6 +51,7 @@ const generateMetaAttributeBasedData = (maarays, attributes, locale) => {
   for(const attribute of attributes) {
     if(maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
   }
+  retval.values.sort();
   return retval
 };
 
