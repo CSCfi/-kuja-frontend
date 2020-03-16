@@ -37,21 +37,22 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
       role: "tbody",
       rowGroups: [
         {
-          rows: R.addIndex(R.map)(row => {
+          rows: R.addIndex(R.map)(lupa => {
             const jarjestajanNimi =
-              row.jarjestaja.nimi[intl.locale] ||
-              row.jarjestaja.nimi.fi ||
+              lupa.jarjestaja.nimi[intl.locale] ||
+              lupa.jarjestaja.nimi.fi ||
               "[nimi puuttuu]";
             const maakunta = R.find(
               R.propEq("kieli", R.toUpper(intl.locale)),
-              row.jarjestaja.maakuntaKoodi.metadata
+              lupa.jarjestaja.maakuntaKoodi.metadata
             );
             return {
-              id: row.jarjestajaYtunnus,
+              id: lupa.jarjestajaYtunnus,
 
               onClick: row => {
+                console.log(lupa)
                 if (history) {
-                  history.push(`/vapaa-sivistystyo/luvat/${row.id}`);
+                  history.push(`/vapaa-sivistystyo/luvat/${lupa.jarjestajaYtunnus}/${lupa.koulutustyyppi}/${lupa.oppilaitostyyppi}`);
                 } else {
                   console.error(
                     intl.formatMessage(common.errorLoadingLupa)
@@ -67,7 +68,7 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
                     text: col.text
                   };
                 },
-                [{ text: jarjestajanNimi }, { text: vstMap[row.oppilaitostyyppi] }]
+                [{ text: jarjestajanNimi }, { text: vstMap[lupa.oppilaitostyyppi] }]
               )
             };
           }, tableData)

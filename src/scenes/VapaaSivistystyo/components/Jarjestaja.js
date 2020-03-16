@@ -28,7 +28,7 @@ const Separator = styled.div`
 `;
 
 const Jarjestaja = React.memo(
-  ({ ytunnus,  match }) => {
+  ({ ytunnus, koulutustyyppi, oppilaitostyyppi,  match }) => {
 
     const intl = useIntl();
     const [lupa, lupaActions] = useLupa();
@@ -37,7 +37,7 @@ const Jarjestaja = React.memo(
     useEffect(() => {
       let abortController;
       if (ytunnus) {
-        abortController = lupaActions.load(ytunnus);
+        abortController = lupaActions.load({ytunnus, koulutustyyppi, oppilaitostyyppi});
       }
       return function cancel() {
         if (abortController) {
