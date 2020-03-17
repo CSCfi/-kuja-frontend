@@ -40,6 +40,12 @@ const MuutospyyntoWizardMuut = props => {
         const isInLupa = !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
           osiota5koskevatMaaraykset
         );
+        /**
+         * Article is Määräys and there will be as many rows in section 5
+         * as there are articles. Alert component will be shown for articles
+         * whose code value is one of the values in koodiarvot array. The array
+         * has been defined before this (MuutospyyntoWizardMuut) component.
+         */
         article.showAlert = !!R.find(changeObj => {
           const koodiarvo = R.nth(-2, R.split(".", changeObj.anchor));
           if (
@@ -60,11 +66,14 @@ const MuutospyyntoWizardMuut = props => {
           group[kasite].push(article);
         }
       }, props.muut);
-      console.log("group", group);
       return group;
     };
   }, [changeObjects, osiota5koskevatMaaraykset, props.muut]);
 
+  /**
+   * The config will be looped through and the forms of section 5
+   * will be constructed using the data of this config.
+   */
   const config = useMemo(() => {
     const dividedArticles = divideArticles();
     return [
