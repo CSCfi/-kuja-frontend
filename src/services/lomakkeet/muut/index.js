@@ -4,6 +4,7 @@ import { __ } from "i18n-for-browser";
 import * as R from "ramda";
 import _ from "lodash";
 import { sortArticlesByHuomioitavaKoodi } from "../utils";
+import { scrollToOpiskelijavuodet } from "./utils";
 
 function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
   return R.map(item => {
@@ -11,7 +12,10 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
     const isVaativatukiRadios =
       configObj.key === "vaativatuki" &&
       item.componentName === "RadioButtonWithLabel";
-    const sortedArticles = sortArticlesByHuomioitavaKoodi(item.articles, locale);
+    const sortedArticles = sortArticlesByHuomioitavaKoodi(
+      item.articles,
+      locale
+    );
     return {
       anchor: configObj.key,
       title: item.title,
@@ -67,6 +71,30 @@ function getModificationForm(configObj, osiota5koskevatMaaraykset, locale) {
             }
           ]
         };
+
+        if (article.showAlert) {
+          result.categories = [
+            {
+              anchor: "notification",
+              components: [
+                {
+                  anchor: "A",
+                  name: "Alert",
+                  properties: {
+                    id: `${article.koodiArvo}-notification`,
+                    ariaLabel: "Notification",
+                    message: __("info.osion.4.tayttamisesta"),
+                    linkText: __("ilmoita.opiskelijavuosimaara"),
+                    handleLinkClick: () => {
+                      scrollToOpiskelijavuodet();
+                    }
+                  }
+                }
+              ]
+            }
+          ];
+        }
+
         if (article.koodiArvo === "22") {
           result.categories = [
             {
