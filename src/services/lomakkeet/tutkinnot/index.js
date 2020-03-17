@@ -1,7 +1,5 @@
 import * as R from "ramda";
 import _ from "lodash";
-import "../i18n-config";
-import { __ } from "i18n-for-browser";
 import { isAdded, isRemoved, isInLupa } from "../../../css/label";
 import { findObjectWithKey } from "../../../utils/common";
 
