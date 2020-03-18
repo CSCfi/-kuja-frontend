@@ -1,16 +1,9 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-
 import Section from "../Section";
+
 const FormSection = React.memo(
-  ({
-    children,
-    code,
-    id,
-    render,
-    runOnChanges,
-    title
-  }) => {
+  ({ children, code, id, render, runOnChanges, title }) => {
     const updateChanges = useCallback(
       payload => {
         runOnChanges(payload.anchor, payload.changes);

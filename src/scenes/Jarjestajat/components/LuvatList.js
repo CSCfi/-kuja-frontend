@@ -45,7 +45,7 @@ function LuvatList({ history, luvat = [] }) {
           rows: R.addIndex(R.map)(row => {
             const jarjestajanNimi =
               row.jarjestaja.nimi[intl.locale] ||
-              row.jarjestaja.nimi.fi ||
+              R.head(R.values(row.jarjestaja.nimi)) ||
               "[nimi puuttuu]";
             const maakunta = R.find(
               R.propEq("kieli", R.toUpper(intl.locale)),

@@ -9,8 +9,8 @@ import wizardMessages from "../../../../../../i18n/definitions/wizard";
 import common from "../../../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
-import * as R from "ramda";
 import FormSection from "../../../../../../components/03-templates/FormSection";
+import * as R from "ramda";
 
 const MuutospyyntoWizardMuutokset = React.memo(props => {
   const intl = useIntl();
@@ -62,7 +62,9 @@ const MuutospyyntoWizardMuutokset = React.memo(props => {
                 lupaKohteet={props.lupaKohteet}
                 {..._props}
               />
-              <h4 className="pt-8 pb-4">{intl.formatMessage(common.koulutukset)}</h4>
+              <h4 className="pt-8 pb-4">
+                {intl.formatMessage(common.koulutukset)}
+              </h4>
               <MuutospyyntoWizardKoulutukset
                 koulutukset={props.koulutukset}
                 maaraykset={props.lupa.maaraykset}

@@ -53,7 +53,7 @@ function getDefaultAdditionForm(isReadOnly) {
           name: "TextBox",
           properties: {
             isReadOnly,
-            title: "Perustele muutokset tähän, kiitos.",
+            title: "Perustele",
             value: ""
           }
         }

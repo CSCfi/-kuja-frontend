@@ -6,7 +6,6 @@ import { MEDIA_QUERIES } from "../../../../modules/styles";
 import LupaHistoryItem from "./LupaHistoryItem";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import moment from "moment";
-import { API_BASE_URL } from "../../../../modules/constants";
 import PropTypes from "prop-types";
 import { downloadFileFn } from "../../../../utils/common";
 import { useLupahistoria } from "../../../../stores/lupahistoria";
@@ -96,7 +95,7 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                     downloadFileFn({
                       filename: lupaHistoryObject.filename,
                       openInNewWindow: true,
-                      url: `${API_BASE_URL}${pathToPDF}`
+                      url: `${pathToPDF}${lupaHistoryObject.filename}`
                     })();
                   } else {
                     console.error(intl.formatMessage(common.errorOpeningPDF));

@@ -25,7 +25,6 @@ const PerustelutOpetuskielet = React.memo(props => {
   return (
     <ExpandableRowRoot
       anchor={sectionId}
-      categories={[]}
       changes={props.changeObjects.perustelut}
       disableReverting={props.isReadOnly}
       messages={{ undo: intl.formatMessage(common.undo) }}
