@@ -14,6 +14,8 @@
   "applyForVaativaAndSisaoppilaitos": "Uusi enimmäismäärä",
   "difference": "Muutos",
   "except": "lukuun ottamatta",
+  "ilmoita.opiskelijavuosimaara": "Ilmoita opiskelijavuosimäärä",
+  "info.osion.4.tayttamisesta": "Valinta vaatii opiskelijavuosimäärän ilmoittamista kohdassa 4.",
   "limitForBoardingSchool": "Sisäoppilaitosmuotoiseen koulutukseen käytettävien opiskelijavuosien enimmäismäärä",
   "muutospyynnon.taustalla.olevat.syyt": "Muutospyynnön taustalla olevat syyt",
   "osaamisalarajoitus": "Rajoitus",

@@ -51,6 +51,14 @@ import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
+const DialogContentWithStyles = withStyles(() => ({
+  root: {
+    scrollBehavior: "smooth"
+  }
+}))(props => {
+  return <DialogContent {...props}>{props.children}</DialogContent>;
+});
+
 const FormDialog = withStyles(() => ({
   paper: {
     background: "#f8faf8",
@@ -499,7 +507,7 @@ const MuutospyyntoWizard = ({
           <DialogTitle id="customized-dialog-title" onClose={openCancelModal}>
             {intl.formatMessage(wizardMessages.formTitle_new)}
           </DialogTitle>
-          <div className="lg:px-16 max-w-6xl mx-auto w-full">
+          <div aria-labelledby="navigate-between-pages" className="lg:px-16 max-w-6xl mx-auto w-full">
             <StepperNavigation
               activeStep={page - 1}
               stepProps={steps}
@@ -507,8 +515,10 @@ const MuutospyyntoWizard = ({
             />
           </div>
           <div className="border-b border-gray-400 w-full" />
-          <DialogContent>
-            <div className="lg:px-16 max-w-6xl m-auto mb-20">
+          <DialogContentWithStyles>
+            <div
+              id="wizard-content"
+              className="lg:px-16 max-w-6xl m-auto mb-20">
               {page === 1 && (
                 <WizardPage
                   pageNumber={1}
@@ -604,7 +614,7 @@ const MuutospyyntoWizard = ({
                 </WizardPage>
               )}
             </div>
-          </DialogContent>
+          </DialogContentWithStyles>
         </FormDialog>
         <ConfirmDialog
           isConfirmDialogVisible={isConfirmDialogVisible}
