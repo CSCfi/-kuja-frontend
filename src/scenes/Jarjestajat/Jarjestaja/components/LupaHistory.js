@@ -70,7 +70,7 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
       rowGroups: [
         {
           rows: R.addIndex(R.map)((row, i) => {
-            const isKumottu = row.kumottupvm && row.kumottupvm >= row.voimassaoloalkupvm;
+            const isKumottu = row.kumottupvm && row.kumottupvm < row.voimassaoloalkupvm;
             const voimassaoloalkupvm = moment(row.voimassaoloalkupvm).format(
               "DD.MM.YYYY"
             );
@@ -85,15 +85,11 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                   lupahistoria.data
                 );
                 if (lupaHistoryObject) {
-                  if (history) {
-                    downloadFileFn({
-                      filename: lupaHistoryObject.filename,
-                      openInNewWindow: true,
-                      url: `/pdf/historia/${lupaHistoryObject.uuid}`
-                    })();
-                  } else {
-                    console.error(intl.formatMessage(common.errorOpeningPDF));
-                  }
+                  downloadFileFn({
+                    filename: lupaHistoryObject.filename,
+                    openInNewWindow: true,
+                    url: `/pdf/historia/${lupaHistoryObject.uuid}`
+                  })();
                 } else {
                   console.error(intl.formatMessage(common.errorFetchingRow));
                 }

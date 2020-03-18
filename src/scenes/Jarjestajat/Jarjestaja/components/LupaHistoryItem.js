@@ -9,6 +9,7 @@ import { MEDIA_QUERIES } from "../../../../modules/styles";
 import { API_BASE_URL } from "../../../../modules/constants";
 import { Td, Tr } from "../../../../modules/Table";
 import common from "../../../../i18n/definitions/common";
+import Moment from "react-moment";
 
 const LupaText = styled.span`
   @media ${MEDIA_QUERIES.MOBILE} {
@@ -19,11 +20,12 @@ const LupaText = styled.span`
 
 const LupaHistoryItem = props => {
   const {
-    filename,
     diaarinumero,
     voimassaoloalkupvm,
     voimassaololoppupvm,
-    paatospvm
+    paatospvm,
+    kumottupvm,
+    uuid
   } = props.lupaHistoria;
 
   const intl = useIntl()
@@ -31,14 +33,11 @@ const LupaHistoryItem = props => {
   const voimassaololoppupvmFormatted = (new moment(voimassaololoppupvm,'YYYY-MM-DD')).format('D.M.YYYY');
   const paatospvmFormatted = (new moment(paatospvm,'YYYY-MM-DD')).format('D.M.YYYY');
 
-  let path = "/pebble/resources/liitteet/lupahistoria/";
-  if (voimassaololoppupvm.split("-").join("") > "20181230") {
-    path = "/pdf/";
-  }
+  const showValidityDates = !kumottupvm || kumottupvm >= voimassaoloalkupvm;
 
   return (
     <a
-      href={`${API_BASE_URL}${path}${filename}`}
+      href={`${API_BASE_URL}/pdf/historia/${uuid}`}
       target="_blank"
       rel="noopener noreferrer">
       <Media
@@ -52,21 +51,19 @@ const LupaHistoryItem = props => {
                   date: paatospvmFormatted
                 })}
               </span>
-              {
-                voimassaoloalkupvm === voimassaololoppupvm ? (
-                  <span className="mr-3">
-                  {intl.formatMessage(common.lupaHistoriaKumottuDateMobile, {
-                    date: voimassaololoppupvm
-                  })}
-                </span>
-                ) : (
-                  <span className="mr-3">
-                  {intl.formatMessage(common.lupaHistoriaValidDateRangeMobile, {
-                    date1: voimassaoloalkupvmFormatted,
-                    date2: voimassaololoppupvmFormatted
-                  })}
-                </span>
-                )}
+                {!showValidityDates
+                    ? <span className="mr-3">
+                        {intl.formatMessage(common.lupaHistoriaKumottuDateMobile, {
+                            date: voimassaololoppupvm
+                      })}
+                      </span>
+                    : <span className="mr-3">
+                        {intl.formatMessage(common.lupaHistoriaValidDateRangeMobile, {
+                            date1: voimassaoloalkupvmFormatted,
+                            date2: voimassaololoppupvmFormatted
+                        })}
+                      </span>
+                }
             </LupaText>
           </Tr>
         )}
@@ -75,23 +72,13 @@ const LupaHistoryItem = props => {
         query={MEDIA_QUERIES.TABLET_MIN}
         render={() => (
           <div>
-            {voimassaoloalkupvm === voimassaololoppupvm ? (
               <Tr role="row">
                 <Td role="cell">{diaarinumero}</Td>
                 <Td role="cell">{paatospvmFormatted}</Td>
-                <Td role="cell"></Td>
-                <Td role="cell"></Td>
-                <Td role="cell">{voimassaololoppupvmFormatted}</Td>
+                <Td role="cell">{showValidityDates && <Moment format="DD.MM.YYYY">{voimassaoloalkupvm}</Moment>}</Td>
+                <Td role="cell">{showValidityDates && <Moment format="DD.MM.YYYY">{voimassaololoppupvm}</Moment>}</Td>
+                <Td role="cell">{!showValidityDates && <Moment format="DD.MM.YYYY">{kumottupvm}</Moment>}</Td>
               </Tr>
-            ) : (
-              <Tr role="row">
-                <Td role="cell">{diaarinumero}</Td>
-                <Td role="cell">{paatospvmFormatted}</Td>
-                <Td role="cell">{voimassaoloalkupvmFormatted}</Td>
-                <Td role="cell">{voimassaololoppupvmFormatted}</Td>
-                <Td role="cell"></Td>
-              </Tr>
-            )}
           </div>
         )}
       />
