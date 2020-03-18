@@ -49,7 +49,9 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "vahimmaisopiskelijavuodet"],
             changeObjects
           )}
+          hideAmountOfChanges={true}
           isExpanded={true}
+          messages={{ undo: intl.formatMessage(commonMessages.undo) }}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
           title={"Vähimmäisopiskelijavuosimäärä"}>
@@ -80,7 +82,9 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "sisaoppilaitos"],
             changeObjects
           )}
+          hideAmountOfChanges={true}
           isExpanded={true}
+          messages={{ undo: intl.formatMessage(commonMessages.undo) }}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
           title={"Sisäoppilaitosmuotoinen opetus"}>
@@ -109,7 +113,9 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "vaativatuki"],
             changeObjects
           )}
+          hideAmountOfChanges={true}
           isExpanded={true}
+          messages={{ undo: intl.formatMessage(commonMessages.undo) }}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
           title={"Vaativa koulutus"}>

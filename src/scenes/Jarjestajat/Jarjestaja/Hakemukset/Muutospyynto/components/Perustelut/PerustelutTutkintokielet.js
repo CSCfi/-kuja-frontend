@@ -4,6 +4,7 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/kielet/tutkintokielet/rules";
 
@@ -44,13 +45,14 @@ const PerustelutTutkintokielet = React.memo(props => {
                   props.changeObjects
                 )}
                 disableReverting={props.isReadOnly}
+                hideAmountOfChanges={true}
+                messages={{ undo: intl.formatMessage(common.undo) }}
                 onChangesRemove={onChangesRemove}
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
                 showCategoryTitles={true}
                 title={title}
-                isExpanded={true}
-                hideAmountOfChanges={false}>
+                isExpanded={true}>
                 <Lomake
                   action="reasoning"
                   anchor={`${sectionId}_${areaCode}`}

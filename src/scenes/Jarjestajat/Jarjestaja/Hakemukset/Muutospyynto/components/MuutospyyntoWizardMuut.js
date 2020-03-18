@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import { parseLocalizedField } from "../../../../../../modules/helpers";
 import wizardMessages from "../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../i18n/definitions/common";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
@@ -188,6 +189,8 @@ const MuutospyyntoWizardMuut = props => {
             key={`expandable-row-root-${i}`}
             categories={[]}
             changes={R.prop(configObj.code, changeObjects.muut)}
+            hideAmountOfChanges={true}
+            messages={{ undo: intl.formatMessage(common.undo) }}
             code={configObj.code}
             index={i}
             onUpdate={onChangesUpdate}

@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
-
+import common from "../../../../../../../i18n/definitions/common";
 import "./perustelut-toiminta-alue.module.css";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { rules } from "../../../../../../../services/lomakkeet/perustelut/toiminta-alue/rules";
+import { useIntl } from "react-intl";
 
 const defaultProps = {
   changeObjects: {},
@@ -26,6 +27,7 @@ const PerustelutToimintaalue = React.memo(
     onChangesUpdate,
     sectionId
   }) => {
+    const intl = useIntl();
     return (
       <React.Fragment>
         {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && kohde && (
@@ -36,6 +38,7 @@ const PerustelutToimintaalue = React.memo(
             disableReverting={false}
             hideAmountOfChanges={true}
             isExpanded={true}
+            messages={{ undo: intl.formatMessage(common.undo) }}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}

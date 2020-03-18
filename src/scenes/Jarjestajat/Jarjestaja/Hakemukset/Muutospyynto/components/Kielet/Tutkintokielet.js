@@ -3,10 +3,13 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getActiveCheckboxes } from "../../../../../../../services/lomakkeet/utils";
+import common from "../../../../../../../i18n/definitions/common";
 import * as R from "ramda";
 import { useChangeObjects } from "../../../../../../../stores/changeObjects";
+import { useIntl } from "react-intl";
 
 const Tutkintokielet = props => {
+  const intl = useIntl();
   const [changeObjects] = useChangeObjects();
   const sectionId = "kielet_tutkintokielet";
   const { onChangesRemove, onChangesUpdate } = props;
@@ -72,6 +75,8 @@ const Tutkintokielet = props => {
               ["kielet", "tutkintokielet", areaCode],
               changeObjects
             )}
+            hideAmountOfChanges={true}
+            messages={{ undo: intl.formatMessage(common.undo) }}
             key={`expandable-row-root-${areaCode}`}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}

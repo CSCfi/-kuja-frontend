@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { getDataForKoulutusList } from "../../../../../../../utils/koulutusUtil";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../../i18n/definitions/common";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
@@ -26,6 +27,8 @@ const ATVKoulutukset = ({ koulutukset, onChangesRemove, onChangesUpdate }) => {
       key={`expandable-row-root`}
       categories={[]}
       changes={changeObjects.koulutukset.atvKoulutukset}
+      hideAmountOfChanges={true}
+      messages={{ undo: intl.formatMessage(common.undo) }}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
       title={intl.formatMessage(wizardMessages.vocationalTraining)}>

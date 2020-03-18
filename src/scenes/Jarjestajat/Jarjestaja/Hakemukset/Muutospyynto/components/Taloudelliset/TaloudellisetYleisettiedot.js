@@ -3,6 +3,8 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { yleisettiedot } from "../../../../../../../services/lomakkeet/taloudelliset/rules";
+import common from "../../../../../../../i18n/definitions/common";
+import { useIntl } from "react-intl";
 
 const TaloudellisetYleisettiedot = React.memo(
   ({
@@ -12,6 +14,7 @@ const TaloudellisetYleisettiedot = React.memo(
     onChangesUpdate,
     sectionId
   }) => {
+    const intl = useIntl();
     return (
       <ExpandableRowRoot
         title={"Yleiset tiedot"}
@@ -21,6 +24,7 @@ const TaloudellisetYleisettiedot = React.memo(
         changes={changeObjects}
         disableReverting={isReadOnly}
         hideAmountOfChanges={true}
+        messages={{ undo: intl.formatMessage(common.undo) }}
         showCategoryTitles={true}
         isExpanded={true}
         sectionId={sectionId}

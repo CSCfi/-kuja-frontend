@@ -257,7 +257,8 @@ export function getPathByAnchor(
     }
   } else {
     console.error(
-      `Can't calculate the path for ${anchorArr} of the form ${lomake}.`
+      `Can't calculate the path for ${anchorArr} of the form:`,
+      lomake
     );
   }
   return _path;

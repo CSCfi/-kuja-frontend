@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
+import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
@@ -29,6 +30,8 @@ const Opetuskielet = props => {
         key={`expandable-row-root`}
         categories={[]}
         changes={changeObjects.kielet.opetuskielet}
+        hideAmountOfChanges={true}
+        messages={{ undo: intl.formatMessage(common.undo) }}
         onChangesRemove={onChangesRemove}
         onUpdate={onChangesUpdate}
         sectionId={sectionId}

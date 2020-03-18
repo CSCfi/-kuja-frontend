@@ -7,6 +7,7 @@ import * as R from "ramda";
 import _ from "lodash";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/tutkinnot/rules";
+import common from "../../../../../../../i18n/definitions/common";
 
 const defaultProps = {
   changeObjects: {},
@@ -61,6 +62,7 @@ const PerustelutTutkinnot = React.memo(
                 hideAmountOfChanges={true}
                 index={i}
                 isExpanded={true}
+                messages={{ undo: intl.formatMessage(common.undo) }}
                 onChangesRemove={onChangesRemove}
                 onUpdate={onChangesUpdate}
                 sectionId={sectionId}
