@@ -1,7 +1,5 @@
 import * as R from "ramda";
 import _ from "lodash";
-import "../i18n-config";
-import { __ } from "i18n-for-browser";
 import { isAdded, isRemoved, isInLupa } from "../../../css/label";
 import { findObjectWithKey } from "../../../utils/common";
 
@@ -37,17 +35,6 @@ function getModificationForm(
               : {};
 
             const isInLupaBool = !R.isEmpty(maaraysKoulutukselle);
-            const osaamisalaTitle = {
-              anchor: "lukuun-ottamatta",
-              components: [
-                {
-                  name: "StatusTextRow",
-                  properties: {
-                    title: `${__("except")}:`
-                  }
-                }
-              ]
-            };
 
             const osaamisalat = (koulutus.osaamisalat || []).map(osaamisala => {
               const maaraysOsaamisalalle = article
@@ -120,10 +107,7 @@ function getModificationForm(
                   }
                 }
               ],
-              categories:
-                R.length(osaamisalat) > 0
-                  ? R.prepend(osaamisalaTitle, osaamisalat)
-                  : osaamisalat
+              categories: osaamisalat
             };
           }, koulutustyyppi.koulutukset)
         };

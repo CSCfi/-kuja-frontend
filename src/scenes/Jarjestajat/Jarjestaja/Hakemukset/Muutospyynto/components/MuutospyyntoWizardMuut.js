@@ -9,6 +9,13 @@ import PropTypes from "prop-types";
 import * as R from "ramda";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 
+/**
+ * If anyone of the following codes is active a notification (Alert comp.)
+ * about moving to Opiskelijavuodet section must be shown.
+ * 4 = sisäoppilaitos, other codes are code values of vaativa tuki.
+ */
+const koodiarvot = [2, 16, 17, 18, 19, 20, 21].concat(4);
+
 const MuutospyyntoWizardMuut = props => {
   const [changeObjects] = useChangeObjects();
   const intl = useIntl();
@@ -24,6 +31,9 @@ const MuutospyyntoWizardMuut = props => {
   const divideArticles = useMemo(() => {
     return () => {
       const group = {};
+      const flattenArrayOfChangeObjects = R.flatten(
+        R.values(changeObjects.muut)
+      );
       R.forEach(article => {
         const { metadata } = article;
         const kasite = parseLocalizedField(metadata, "FI", "kasite");
@@ -31,6 +41,23 @@ const MuutospyyntoWizardMuut = props => {
         const isInLupa = !!R.find(R.propEq("koodiarvo", article.koodiArvo))(
           osiota5koskevatMaaraykset
         );
+        /**
+         * Article is Määräys and there will be as many rows in section 5
+         * as there are articles. Alert component will be shown for articles
+         * whose code value is one of the values in koodiarvot array. The array
+         * has been defined before this (MuutospyyntoWizardMuut) component.
+         */
+        article.showAlert = !!R.find(changeObj => {
+          const koodiarvo = R.nth(-2, R.split(".", changeObj.anchor));
+          if (
+            R.equals(koodiarvo, article.koodiArvo) &&
+            changeObj.properties.isChecked &&
+            R.includes(parseInt(koodiarvo, 10), koodiarvot)
+          ) {
+            return true;
+          }
+          return false;
+        }, flattenArrayOfChangeObjects);
         if (
           (kuvaus || article.koodiArvo === "22") &&
           kasite &&
@@ -42,8 +69,12 @@ const MuutospyyntoWizardMuut = props => {
       }, props.muut);
       return group;
     };
-  }, [osiota5koskevatMaaraykset, props.muut]);
+  }, [changeObjects, osiota5koskevatMaaraykset, props.muut]);
 
+  /**
+   * The config will be looped through and the forms of section 5
+   * will be constructed using the data of this config.
+   */
   const config = useMemo(() => {
     const dividedArticles = divideArticles();
     return [
@@ -89,7 +120,8 @@ const MuutospyyntoWizardMuut = props => {
           {
             articles: dividedArticles.sisaoppilaitos || [],
             componentName: "CheckboxWithLabel",
-            title: ""
+            title: "",
+            showAlert: true
           }
         ]
       },

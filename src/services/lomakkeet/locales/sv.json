@@ -3,6 +3,8 @@
   "applyForVaativaAndSisaoppilaitos": "SV: Uusi enimmäismäärä",
   "difference": "SV: Muutos",
   "except": "SV: lukuun ottamatta",
+  "ilmoita.opiskelijavuosimaara": "SV: Ilmoita opiskelijavuosimäärä",
+  "info.osion.4.tayttamisesta": "SV: Valinta vaatii opiskelijavuosimäärän ilmoittamista kohdassa 4.",
   "limitForBoardingSchool": "SV: Sisäoppilaitosmuotoiseen koulutukseen käytettävien opiskelijavuosien enimmäismäärä",
   "limitForSpecialSupport": "SV: Vaativan erityisen tuen tehtävään käytettävien opiskelijavuosien enimmäismäärä",
   "minimumAmountOfYears": "SV: Koulutuksen järjestäjän opiskelijavuosien vähimmäismäärä",

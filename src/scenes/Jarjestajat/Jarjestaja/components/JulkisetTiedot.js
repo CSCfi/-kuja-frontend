@@ -33,6 +33,7 @@ const JulkisetTiedot = ({ history, jarjestaja = {}, lupa = {} }) => {
 
       <CurrentLupa
         diaarinumero={lupa.diaarinumero}
+        uuid={lupa.uuid}
         jarjestaja={jarjestaja.nimi}
         voimassaolo={alkupvm}
         lupaExceptionUrl={
