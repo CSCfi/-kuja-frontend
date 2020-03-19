@@ -36,6 +36,7 @@ const Jarjestaja = React.memo(
         ? {
             ...lupa.jarjestaja,
             nimi: R.prop(intl.locale, lupa.jarjestaja.nimi)
+              || R.head(R.values(lupa.jarjestaja.nimi))
           }
         : {};
     }, [intl.locale, lupa]);
