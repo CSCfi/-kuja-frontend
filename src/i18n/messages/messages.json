@@ -335,6 +335,16 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "asiaTable.actions.esittelyssa",
+    "defaultMessage": "Merkitse esittelyssä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.actions.paatetty",
+    "defaultMessage": "Merkitse päätetyksi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "asiaStates.kj.LUONNOS",
     "defaultMessage": "Luonnos",
     "filepath": "src/i18n/definitions/common.js"

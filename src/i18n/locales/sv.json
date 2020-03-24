@@ -13,6 +13,8 @@
   "asiaStates.kj.PASSIVOITU": "Poistettu",
   "asiaStates.kj.TAYDENNETTAVA": "Täydennettävä",
   "asiaStates.kj.VALMISTELUSSA": "Lähetetty",
+  "asiaTable.actions.esittelyssa": "Merkitse esittelyssä",
+  "asiaTable.actions.paatetty": "Merkitse päätetyksi",
   "asiaTable.headers.actions": "Toiminnot",
   "asiaTable.headers.asia": "Asia",
   "asiaTable.headers.asiakas": "Asiakkaan nimi",
