@@ -31,13 +31,7 @@ const AvoimetAsiat = () => {
       : [];
   }, [intl.formatMessage, muutospyynnotEsittelija.data]);
 
-  return (
-    <React.Fragment>
-      <React.Fragment>
-        <Table structure={tableStructure}></Table>
-      </React.Fragment>
-    </React.Fragment>
-  );
+  return <Table structure={tableStructure} />;
 };
 AvoimetAsiat.propTypes = {
   intl: PropTypes.object

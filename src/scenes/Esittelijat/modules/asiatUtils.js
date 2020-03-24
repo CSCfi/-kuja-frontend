@@ -4,13 +4,16 @@ import moment from "moment";
 
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.tila"], widthClass: "w-1/12" },
+  { titleKey: common["asiaTable.headers.tila"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.asia"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-3/12" },
-  { titleKey: common["asiaTable.headers.maakunta"], widthClass: "w-1/12" },
+  { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-2/12" },
+  { titleKey: common["asiaTable.headers.maakunta"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-1/12" },
-  { titleKey: common["asiaTable.headers.hakupvm"], widthClass: "w-1/12" },
-  { titleKey: common["asiaTable.headers.actions"], widthClass: "w-1/12" }
+  {
+    titleKey: common["asiaTable.headers.actions"],
+    widthClass: "w-1/12",
+    isSortable: false
+  }
 ];
 
 const generateAsiatTableHeaderStructure = t => {
@@ -22,7 +25,7 @@ const generateAsiatTableHeaderStructure = t => {
           {
             cells: R.map(item => {
               return {
-                isSortable: true,
+                isSortable: !(item.isSortable === false),
                 truncate: true,
                 styleClasses: [item.widthClass],
                 text: t(item.titleKey)
@@ -57,11 +60,17 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
             const paivityspvm = row.paivityspvm
               ? moment(row.paivityspvm).format("D.M.YYYY")
               : "";
-            const hakupvm = row.hakupvm
-              ? moment(row.hakupvm, "yyyy-mm-dd").format("D.M.YYYY")
-              : "";
             return {
               id: row.uuid,
+              onClick: (row, action) => {
+                if (action === "esittelyyn") {
+                  // todo: back end call for Merkitse esittelyssä
+                  console.log("Merkitse esittelyssä");
+                } else if (action === "paata") {
+                  // todo: back end call for Merkitse päätetyksi
+                  console.log("Merkitse päätetyksi");
+                }
+              },
               cells: R.addIndex(R.map)(
                 (col, j) => {
                   return {
@@ -78,19 +87,26 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                   { text: t(common["asiaTypes.lupaChange"]) }, // Only one type known in system at this juncture
                   { text: getJarjestajaNimiFromHakemus(row) },
                   { text: getMaakuntaNimiFromHakemus(row) },
-                  { text: paivityspvm },
-                  { text: hakupvm }
+                  { text: paivityspvm }
                 ]
               ).concat({
                 menu: {
                   id: `simple-menu-${i}`,
                   actions: [
                     {
-                      id: "start-preparing",
-                      text: t(common["asiaTable.actions.handle"])
+                      id: "esittelyyn",
+                      text: t(common["asiaTable.actions.esittelyssa"])
+                    },
+                    {
+                      id: "paata",
+                      text: t(common["asiaTable.actions.paatetty"])
                     }
                   ]
-                }
+                },
+                styleClasses: [
+                  asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                    .widthClass
+                ]
               })
             };
           }, hakemusList)
