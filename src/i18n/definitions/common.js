@@ -133,7 +133,11 @@ export default defineMessages({
   },
   asiatOpen: {
     id: "common.asiatOpen",
-    defaultMessage: "Avoimet asiat"
+    defaultMessage: "Avoimet"
+  },
+  asiatReady: {
+    id: "common.asiatReady",
+    defaultMessage: "Päätetyt"
   },
   document: {
     id: "common.document",

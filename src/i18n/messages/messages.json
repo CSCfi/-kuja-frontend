@@ -176,7 +176,12 @@
   },
   {
     "id": "common.asiatOpen",
-    "defaultMessage": "Avoimet asiat",
+    "defaultMessage": "Avoimet",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.asiatReady",
+    "defaultMessage": "Päätetyt",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
