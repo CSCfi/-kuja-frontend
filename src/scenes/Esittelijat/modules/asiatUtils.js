@@ -5,13 +5,13 @@ import moment from "moment";
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.tila"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.asia"], widthClass: "w-3/12" },
+  { titleKey: common["asiaTable.headers.asia"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.maakunta"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-auto" },
+  { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-1/12" },
   {
     titleKey: common["asiaTable.headers.actions"],
-    widthClass: "w-auto",
+    widthClass: "w-1/12",
     isSortable: false
   }
 ];
@@ -102,7 +102,11 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                       text: t(common["asiaTable.actions.paatetty"])
                     }
                   ]
-                }
+                },
+                styleClasses: [
+                  asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                    .widthClass
+                ]
               })
             };
           }, hakemusList)
