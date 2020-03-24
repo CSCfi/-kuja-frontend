@@ -19,10 +19,10 @@ const Esittelijat = ({ match, user, history }) => {
       <Helmet>
         <title>{`Oiva | ${t(common.asiat)}`}</title>
       </Helmet>
-      <div className="w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-8">
+      <div className="w-full max-w-screen-xl mx-auto px-3 lg:px-8 pt-4">
         <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
         <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-        <div className="mx-auto w-full mb-8">
+        <div className="mx-auto w-full mb-6">
           <h1>{t(common.asiat)}</h1>
         </div>
         <Tabs
@@ -35,37 +35,46 @@ const Esittelijat = ({ match, user, history }) => {
           aria-label="Asiat">
           <Tab
             label={t(common.asiatOpen)}
-            component={Link}
             to={`${match.url}/avoimet`}
             value={`${match.url}` || `${match.url}/avoimet`}
           />
           <Tab
             label="Päätetyt"
             label={t(common.asiatReady)}
-            component={Link}
             to={`${match.url}/paatetyt`}
             value={`${match.url}/paatetyt`}
           />
         </Tabs>
       </div>
-      <div className="w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-8">
-        <Switch>
-          <Route
-            authenticated={!!user}
-            path={`${match.url}`}
-            render={() => <AvoimetAsiat />}
-          />
-          <Route
-            authenticated={!!user}
-            path={`${match.url}/avoimet`}
-            render={() => <AvoimetAsiat />}
-          />
-          <Route
-            authenticated={!!user}
-            path={`${match.url}/paatetyt`}
-            render={() => <AvoimetAsiat />}
-          />
-        </Switch>
+      <div
+        className="flex-1 flex w-full"
+        style={{ borderTop: "0.05em solid #E3E3E3", background: "#FAFAFA" }}>
+        <div className="flex-1 flex flex-col w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-12">
+          <div
+            className="flex-1 bg-white"
+            style={{ border: "0.05em solid #E3E3E3" }}>
+            <Switch>
+              <Route
+                authenticated={!!user}
+                exact
+                path={`${match.url}`}
+                render={() => <AvoimetAsiat />}
+              />
+              <Route
+                authenticated={!!user}
+                exacts
+                path={`${match.url}/avoimet`}
+                render={() => <AvoimetAsiat />}
+              />
+              <Route
+                authenticated={!!user}
+                exact
+                path={`${match.url}/paatetyt`}
+                render={() => <p />}
+              />
+            </Switch>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

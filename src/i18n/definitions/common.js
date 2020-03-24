@@ -129,7 +129,7 @@ export default defineMessages({
   },
   asiat: {
     id: "common.asiat",
-    defaultMessage: "Asia"
+    defaultMessage: "Asiat"
   },
   asiatOpen: {
     id: "common.asiatOpen",
