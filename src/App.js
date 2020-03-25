@@ -266,7 +266,7 @@ const App = ({ isDebugModeOn, user }) => {
             className="flex flex-1 flex-col justify-between"
             style={{ marginTop: headerHeight }}>
             <div className="flex flex-col flex-1 bg-white">
-              <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
+              <div className="w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-8">
                 <Breadcrumbs
                   separator={<b> / </b>}
                   item={NavLink}
