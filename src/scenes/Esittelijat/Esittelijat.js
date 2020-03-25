@@ -8,7 +8,34 @@ import { useIntl } from "react-intl";
 import common from "../../i18n/definitions/common";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Link from "@material-ui/core/Link";
+import { withStyles } from "@material-ui/core/styles";
+
+const OivaTab = withStyles(theme => ({
+  root: {
+    minWidth: 0,
+    textTransform: "none",
+    color: "#333 !important",
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    padding: 0,
+    marginRight: "2rem"
+  }
+}))(props => <Tab {...props} />);
+
+const OivaTabs = withStyles(theme => ({
+  root: {},
+  indicator: {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    height: "0.3rem !important",
+    "& > div": {
+      width: "100%",
+      backgroundColor: "green"
+    }
+  }
+}))(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
 
 const Esittelijat = ({ match, user, history }) => {
   const intl = useIntl();
@@ -19,13 +46,16 @@ const Esittelijat = ({ match, user, history }) => {
       <Helmet>
         <title>{`Oiva | ${t(common.asiat)}`}</title>
       </Helmet>
-      <div className="w-full max-w-screen-xl mx-auto px-3 lg:px-8 pt-4">
+      <div className="flex flex-col h-40 w-full max-w-screen-xl mx-auto px-3 lg:px-8">
         <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
         <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-        <div className="mx-auto w-full mb-6">
-          <h1>{t(common.asiat)}</h1>
+        <div
+          style={{ borderTop: "0.05rem solid #E3E3E3", background: "#FAFAFA" }}
+        />
+        <div className="flex-1 flex flex-col w-full justify-center">
+          <h1 style={{ marginBottom: "-1em" }}>{t(common.asiat)}</h1>
         </div>
-        <Tabs
+        <OivaTabs
           value={location.pathname}
           indicatorColor="primary"
           textColor="primary"
@@ -33,26 +63,26 @@ const Esittelijat = ({ match, user, history }) => {
             history.push(val);
           }}
           aria-label="Asiat">
-          <Tab
+          <OivaTab
             label={t(common.asiatOpen)}
             to={`${match.url}/avoimet`}
             value={`${match.url}` || `${match.url}/avoimet`}
           />
-          <Tab
+          <OivaTab
             label="Päätetyt"
             label={t(common.asiatReady)}
             to={`${match.url}/paatetyt`}
             value={`${match.url}/paatetyt`}
           />
-        </Tabs>
+        </OivaTabs>
       </div>
       <div
         className="flex-1 flex w-full"
-        style={{ borderTop: "0.05em solid #E3E3E3", background: "#FAFAFA" }}>
+        style={{ borderTop: "0.05rem solid #E3E3E3", background: "#FAFAFA" }}>
         <div className="flex-1 flex flex-col w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-12">
           <div
             className="flex-1 bg-white"
-            style={{ border: "0.05em solid #E3E3E3" }}>
+            style={{ border: "0.05rem solid #E3E3E3" }}>
             <Switch>
               <Route
                 authenticated={!!user}
