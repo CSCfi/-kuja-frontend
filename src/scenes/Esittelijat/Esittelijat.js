@@ -9,6 +9,7 @@ import common from "../../i18n/definitions/common";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { withStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 
 const OivaTab = withStyles(theme => ({
   root: {
@@ -17,7 +18,6 @@ const OivaTab = withStyles(theme => ({
     color: "#333 !important",
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(1),
     padding: 0,
     marginRight: "2rem"
   }
@@ -46,36 +46,50 @@ const Esittelijat = ({ match, user, history }) => {
       <Helmet>
         <title>{`Oiva | ${t(common.asiat)}`}</title>
       </Helmet>
-      <div className="flex flex-col h-40 w-full max-w-screen-xl mx-auto px-3 lg:px-8">
-        <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
-        <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-        <div
-          style={{ borderTop: "0.05rem solid #E3E3E3", background: "#FAFAFA" }}
-        />
-        <div className="flex-1 flex flex-col w-full justify-center">
-          <h1 style={{ marginBottom: "-1em" }}>{t(common.asiat)}</h1>
+
+      <div
+        className="flex flex-col justify-end w-full max-w-screen-xl mx-auto px-3 lg:px-8"
+        style={{
+          borderTop: "0.05rem solid #E3E3E3"
+        }}>
+        <div className="flex items-center">
+          <div className="flex-1">
+            <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
+            <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
+            <div className="mx-auto w-full my-8 flex flex-row justify-between">
+              <h1 style={{ marginTop: "1rem" }}>{t(common.asiat)}</h1>
+              <Button
+                aria-label={t(common.luoUusiAsia)}
+                color="primary"
+                variant="contained"
+                style={{ marginTop: "1.5rem", marginBottom: "-1.5rem" }}>
+                {t(common.luoUusiAsia)}
+              </Button>
+            </div>
+            <OivaTabs
+              value={location.pathname}
+              indicatorColor="primary"
+              textColor="primary"
+              onChange={(e, val) => {
+                history.push(val);
+              }}>
+              <OivaTab
+                label={t(common.asiatOpen)}
+                aria-label={t(common.asiatReady)}
+                to={`${match.url}/avoimet`}
+                value={`${match.url}` || `${match.url}/avoimet`}
+              />
+              <OivaTab
+                label={t(common.asiatReady)}
+                aria-label={t(common.asiatReady)}
+                to={`${match.url}/paatetyt`}
+                value={`${match.url}/paatetyt`}
+              />
+            </OivaTabs>
+          </div>
         </div>
-        <OivaTabs
-          value={location.pathname}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={(e, val) => {
-            history.push(val);
-          }}
-          aria-label="Asiat">
-          <OivaTab
-            label={t(common.asiatOpen)}
-            to={`${match.url}/avoimet`}
-            value={`${match.url}` || `${match.url}/avoimet`}
-          />
-          <OivaTab
-            label="Päätetyt"
-            label={t(common.asiatReady)}
-            to={`${match.url}/paatetyt`}
-            value={`${match.url}/paatetyt`}
-          />
-        </OivaTabs>
       </div>
+
       <div
         className="flex-1 flex w-full"
         style={{ borderTop: "0.05rem solid #E3E3E3", background: "#FAFAFA" }}>

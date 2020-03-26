@@ -80,6 +80,7 @@
   "common.koulutukset": "SV: Koulutukset",
   "common.loading": "Laddar data",
   "common.loginError": "Kirjautumisessa tapahtui virhe",
+  "common.luoUusiAsia": "SV: Luo uusi asia",
   "common.lupaHistoria": "Historiatiedot",
   "common.lupaHistoriaDiaarinumeroHeading": "Diaarinumero",
   "common.lupaHistoriaEndDateHeading": "Päättämispvm",

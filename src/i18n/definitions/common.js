@@ -656,5 +656,9 @@ export default defineMessages({
   koulutukset: {
     id: "common.koulutukset",
     defaultMessage: "Koulutukset"
+  },
+  luoUusiAsia: {
+    id: "common.luoUusiAsia",
+    defaultMessage: "Luo uusi asia"
   }
 });
