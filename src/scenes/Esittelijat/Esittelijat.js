@@ -48,7 +48,7 @@ const Esittelijat = ({ match, user, history }) => {
       </Helmet>
 
       <div
-        className="flex flex-col justify-end h-40 w-full max-w-screen-xl mx-auto px-3 lg:px-8"
+        className="flex flex-col justify-end w-full max-w-screen-xl mx-auto px-3 lg:px-8"
         style={{
           borderTop: "0.05rem solid #E3E3E3"
         }}>
@@ -56,7 +56,7 @@ const Esittelijat = ({ match, user, history }) => {
           <div className="flex-1">
             <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
             <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-            <div className="mx-auto w-full mb-8">
+            <div className="mx-auto w-full my-10">
               <h1>{t(common.asiat)}</h1>
             </div>
             <OivaTabs
