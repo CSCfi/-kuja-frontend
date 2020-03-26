@@ -6,7 +6,7 @@ import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
 import * as R from "ramda";
 
-const AvoimetAsiat = () => {
+const PaatetytAsiat = () => {
   const intl = useIntl();
   const [
     muutospyynnotEsittelija,
@@ -26,7 +26,7 @@ const AvoimetAsiat = () => {
   const tableStructure = useMemo(() => {
     return !!muutospyynnotEsittelija.data
       ? generateAsiatTableStructure(
-          R.filter(R.propEq("tila", "AVOIN"), muutospyynnotEsittelija.data),
+          R.filter(R.propEq("tila", "PAATETTY"), muutospyynnotEsittelija.data),
           intl.formatMessage
         )
       : [];
@@ -39,8 +39,8 @@ const AvoimetAsiat = () => {
     />
   );
 };
-AvoimetAsiat.propTypes = {
+PaatetytAsiat.propTypes = {
   intl: PropTypes.object
 };
 
-export default AvoimetAsiat;
+export default PaatetytAsiat;

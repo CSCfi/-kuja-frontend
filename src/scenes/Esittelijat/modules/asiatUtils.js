@@ -4,11 +4,11 @@ import moment from "moment";
 
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.tila"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.asia"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.maakunta"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-1/12" },
+  { titleKey: common["asiaTable.headers.tila"], widthClass: "w-1/12" },
+  { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-2/12" },
   {
     titleKey: common["asiaTable.headers.actions"],
     widthClass: "w-1/12",
@@ -81,12 +81,12 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                 },
                 [
                   { text: "" }, //TODO: Fill when mechanism for Asianumero assignment exists. Currently no source.
-                  {
-                    text: t(common[`asiaStates.esittelija.${row.tila}`]) || ""
-                  },
                   { text: t(common["asiaTypes.lupaChange"]) }, // Only one type known in system at this juncture
                   { text: getJarjestajaNimiFromHakemus(row) },
                   { text: getMaakuntaNimiFromHakemus(row) },
+                  {
+                    text: t(common[`asiaStates.esittelija.${row.tila}`]) || ""
+                  },
                   { text: paivityspvm }
                 ]
               ).concat({
