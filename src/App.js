@@ -10,7 +10,6 @@ import Login from "scenes/Login/Login";
 import PropTypes from "prop-types";
 import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
-import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
 import Home from "scenes/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
@@ -40,11 +39,10 @@ import {
 import Header from "./components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
-import Navigation from "./components/02-organisms/Navigation";
-import SideNavigation from "./components/02-organisms/SideNavigation";
+import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
+import SideNavigation from "okm-frontend-components/dist/components/02-organisms/SideNavigation";
 import { useOrganisation } from "./stores/organisation";
 import * as R from "ramda";
-import Paatokset from "./scenes/VapaaSivistystyo/components/Paatokset";
 import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
 
 const history = createBrowserHistory();
