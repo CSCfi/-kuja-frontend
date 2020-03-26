@@ -245,7 +245,7 @@ export default defineMessages({
   },
   "asiaTable.headers.asiakas": {
     id: "asiaTable.headers.asiakas",
-    defaultMessage: "Asiakkaan nimi"
+    defaultMessage: "Koulutuksen järjestäjä"
   },
   "asiaTable.headers.maakunta": {
     id: "asiaTable.headers.maakunta",
@@ -253,7 +253,7 @@ export default defineMessages({
   },
   "asiaTable.headers.saapunut": {
     id: "asiaTable.headers.saapunut",
-    defaultMessage: "Saapunut"
+    defaultMessage: "Saapunut/luotu"
   },
   "asiaTable.headers.hakupvm": {
     id: "asiaTable.headers.hakupvm",

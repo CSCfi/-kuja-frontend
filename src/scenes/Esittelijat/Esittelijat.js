@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { PropTypes } from "prop-types";
 import AvoimetAsiat from "./components/AvoimetAsiat";
+import PaatetytAsiat from "./components/PaatetytAsiat";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { useIntl } from "react-intl";
 import common from "../../i18n/definitions/common";
@@ -114,7 +115,7 @@ const Esittelijat = ({ match, user, history }) => {
                 authenticated={!!user}
                 exact
                 path={`${match.url}/paatetyt`}
-                render={() => <p />}
+                render={() => <PaatetytAsiat />}
               />
             </Switch>
           </div>
