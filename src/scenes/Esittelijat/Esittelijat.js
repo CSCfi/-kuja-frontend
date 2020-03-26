@@ -56,8 +56,15 @@ const Esittelijat = ({ match, user, history }) => {
           <div className="flex-1">
             <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
             <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-            <div className="mx-auto w-full my-10">
-              <h1>{t(common.asiat)}</h1>
+            <div className="mx-auto w-full my-8 flex flex-row justify-between">
+              <h1 style={{ marginTop: "1rem" }}>{t(common.asiat)}</h1>
+              <Button
+                aria-label={t(common.luoUusiAsia)}
+                color="primary"
+                variant="contained"
+                style={{ marginTop: "1.5rem", marginBottom: "-1.5rem" }}>
+                {t(common.luoUusiAsia)}
+              </Button>
             </div>
             <OivaTabs
               value={location.pathname}
@@ -65,24 +72,20 @@ const Esittelijat = ({ match, user, history }) => {
               textColor="primary"
               onChange={(e, val) => {
                 history.push(val);
-              }}
-              aria-label="Asiat">
+              }}>
               <OivaTab
                 label={t(common.asiatOpen)}
+                aria-label={t(common.asiatReady)}
                 to={`${match.url}/avoimet`}
                 value={`${match.url}` || `${match.url}/avoimet`}
               />
               <OivaTab
                 label={t(common.asiatReady)}
+                aria-label={t(common.asiatReady)}
                 to={`${match.url}/paatetyt`}
                 value={`${match.url}/paatetyt`}
               />
             </OivaTabs>
-          </div>
-          <div>
-            <Button color="primary" variant="contained">
-              {t(common.luoUusiAsia)}
-            </Button>
           </div>
         </div>
       </div>
