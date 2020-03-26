@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
-import { generateAsiatTableStructure } from "../modules/asiatUtils";
+import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
@@ -24,9 +24,55 @@ const PaatetytAsiat = () => {
   }, [muutospyynnotEsittelijaActions]);
 
   const tableStructure = useMemo(() => {
-    return !!muutospyynnotEsittelija.data
-      ? generateAsiatTableStructure(
-          R.filter(R.propEq("tila", "PAATETTY"), muutospyynnotEsittelija.data),
+    // return !!muutospyynnotEsittelija.data
+    //   ? generatePaatetytAsiatTableStructure(
+    //       R.filter(R.propEq("tila", "PAATETTY"), muutospyynnotEsittelija.data),
+    //       intl.formatMessage
+    //     )
+    //   : [];
+    const array = [
+      {
+        lupaId: 215,
+        hakupvm: "2019-11-27",
+        voimassaalkupvm: "2019-01-01",
+        voimassaloppupvm: "2019-12-31",
+        paatoskierrosId: 19,
+        tila: "AVOIN",
+        jarjestajaYtunnus: "0208201-1",
+        luoja: "oiva-sanni",
+        luontipvm: 1574812800000,
+        paivittaja: "oiva-sanni",
+        paivityspvm: 1574836496820,
+        uuid: "6b66384c-f613-11e9-b1c2-005056aa7b7b",
+        lupaUuid: "281900a2-fd34-11e8-8d76-005056aa0e66",
+        jarjestaja: {
+          nimi: { fi: "qwerty" },
+          maakuntaKoodi: { metadata: [{ kieli: "FI", nimi: "Esimerkki" }] }
+        }
+      },
+      {
+        lupaId: 315,
+        hakupvm: "2019-11-27",
+        voimassaalkupvm: "2019-01-01",
+        voimassaloppupvm: "2019-12-31",
+        paatoskierrosId: 19,
+        tila: "PAATETTY",
+        jarjestajaYtunnus: "0208201-1",
+        luoja: "oiva-sanni",
+        luontipvm: 1574812800000,
+        paivittaja: "oiva-sanni",
+        paivityspvm: 1574836496820,
+        uuid: "6b66384c-f613-11e9-b1c2-005056aa7b7b",
+        lupaUuid: "281900a2-fd34-11e8-8d76-005056aa0e66",
+        jarjestaja: {
+          nimi: { fi: "qwerty" },
+          maakuntaKoodi: { metadata: [{ kieli: "FI", nimi: "Esimerkki" }] }
+        }
+      }
+    ];
+    return !!array
+      ? generatePaatetytAsiatTableStructure(
+          R.filter(R.propEq("tila", "PAATETTY"), array),
           intl.formatMessage
         )
       : [];

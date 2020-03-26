@@ -316,7 +316,7 @@
   },
   {
     "id": "asiaTable.headers.asiakas",
-    "defaultMessage": "Asiakkaan nimi",
+    "defaultMessage": "Koulutuksen järjestäjä",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -326,7 +326,7 @@
   },
   {
     "id": "asiaTable.headers.saapunut",
-    "defaultMessage": "Saapunut",
+    "defaultMessage": "Saapunut/luotu",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -347,6 +347,11 @@
   {
     "id": "asiaTable.actions.paatetty",
     "defaultMessage": "Merkitse päätetyksi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "asiaTable.actions.lataa",
+    "defaultMessage": "Lataa PDF",
     "filepath": "src/i18n/definitions/common.js"
   },
   {

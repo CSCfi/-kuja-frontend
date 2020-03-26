@@ -49,7 +49,33 @@ const getJarjestajaNimiFromHakemus = hakemus => {
   return R.path(["jarjestaja", "nimi", "fi"], hakemus) || "";
 };
 
-export const generateAsiatTableStructure = (hakemusList, t) => {
+// Generates common row data for all Asiat-tables
+export const generateAsiaTableRows = (row, i, t) => {
+  const paivityspvm = row.paivityspvm
+    ? moment(row.paivityspvm).format("D.M.YYYY")
+    : "";
+  return R.addIndex(R.map)(
+    (col, j) => {
+      return {
+        truncate: true,
+        styleClasses: [asiatTableColumnSetup[j].widthClass],
+        text: col.text
+      };
+    },
+    [
+      { text: "" }, //TODO: Fill when mechanism for Asianumero assignment exists. Currently no source.
+      { text: t(common["asiaTypes.lupaChange"]) }, // Only one type known in system at this juncture
+      { text: getJarjestajaNimiFromHakemus(row) },
+      { text: getMaakuntaNimiFromHakemus(row) },
+      {
+        text: t(common[`asiaStates.esittelija.${row.tila}`]) || ""
+      },
+      { text: paivityspvm }
+    ]
+  );
+};
+
+export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
   return [
     generateAsiatTableHeaderStructure(t),
     {
@@ -57,9 +83,6 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
       rowGroups: [
         {
           rows: R.addIndex(R.map)((row, i) => {
-            const paivityspvm = row.paivityspvm
-              ? moment(row.paivityspvm).format("D.M.YYYY")
-              : "";
             return {
               id: row.uuid,
               onClick: (row, action) => {
@@ -71,25 +94,7 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                   console.log("Merkitse päätetyksi");
                 }
               },
-              cells: R.addIndex(R.map)(
-                (col, j) => {
-                  return {
-                    truncate: true,
-                    styleClasses: [asiatTableColumnSetup[j].widthClass],
-                    text: col.text
-                  };
-                },
-                [
-                  { text: "" }, //TODO: Fill when mechanism for Asianumero assignment exists. Currently no source.
-                  { text: t(common["asiaTypes.lupaChange"]) }, // Only one type known in system at this juncture
-                  { text: getJarjestajaNimiFromHakemus(row) },
-                  { text: getMaakuntaNimiFromHakemus(row) },
-                  {
-                    text: t(common[`asiaStates.esittelija.${row.tila}`]) || ""
-                  },
-                  { text: paivityspvm }
-                ]
-              ).concat({
+              cells: generateAsiaTableRows(row, i, t).concat({
                 menu: {
                   id: `simple-menu-${i}`,
                   actions: [
@@ -100,6 +105,48 @@ export const generateAsiatTableStructure = (hakemusList, t) => {
                     {
                       id: "paata",
                       text: t(common["asiaTable.actions.paatetty"])
+                    }
+                  ]
+                },
+                styleClasses: [
+                  asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                    .widthClass
+                ]
+              })
+            };
+          }, hakemusList)
+        }
+      ]
+    },
+    {
+      role: "tfoot"
+    }
+  ];
+};
+
+export const generatePaatetytAsiatTableStructure = (hakemusList, t) => {
+  return [
+    generateAsiatTableHeaderStructure(t),
+    {
+      role: "tbody",
+      rowGroups: [
+        {
+          rows: R.addIndex(R.map)((row, i) => {
+            return {
+              id: row.uuid,
+              onClick: (row, action) => {
+                if (action === "lataa") {
+                  // todo: back end call for Lataa PDF
+                  console.log("Lataa PDF");
+                }
+              },
+              cells: generateAsiaTableRows(row, i, t).concat({
+                menu: {
+                  id: `simple-menu-${i}`,
+                  actions: [
+                    {
+                      id: "lataa",
+                      text: t(common["asiaTable.actions.lataa"])
                     }
                   ]
                 },

@@ -275,6 +275,10 @@ export default defineMessages({
     id: "asiaTable.actions.paatetty",
     defaultMessage: "Merkitse päätetyksi"
   },
+  "asiaTable.actions.lataa": {
+    id: "asiaTable.actions.lataa",
+    defaultMessage: "Lataa PDF"
+  },
   "asiaStates.kj.LUONNOS": {
     id: "asiaStates.kj.LUONNOS",
     defaultMessage: "Luonnos"
