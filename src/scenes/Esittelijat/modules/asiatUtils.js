@@ -1,6 +1,7 @@
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 import moment from "moment";
+import { downloadFileFn } from "okm-frontend-components/dist/utils/common";
 
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
@@ -136,8 +137,11 @@ export const generatePaatetytAsiatTableStructure = (hakemusList, t) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "lataa") {
-                  // todo: back end call for Lataa PDF
-                  console.log("Lataa PDF");
+                  console.log(row);
+                  downloadFileFn({
+                    url: `../../../api/pdf/esikatsele/muutospyynto/${row.id}`,
+                    openInNewWindow: true
+                  })();
                 }
               },
               cells: generateAsiaTableRows(row, i, t).concat({
