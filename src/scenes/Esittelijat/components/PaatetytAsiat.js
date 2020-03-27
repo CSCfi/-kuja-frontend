@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
-import { generateAsiatTableStructure } from "../modules/asiatUtils";
+import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
@@ -25,7 +25,7 @@ const PaatetytAsiat = () => {
 
   const tableStructure = useMemo(() => {
     return !!muutospyynnotEsittelija.data
-      ? generateAsiatTableStructure(
+      ? generatePaatetytAsiatTableStructure(
           R.filter(R.propEq("tila", "PAATETTY"), muutospyynnotEsittelija.data),
           intl.formatMessage
         )

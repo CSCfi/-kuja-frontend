@@ -275,6 +275,10 @@ export default defineMessages({
     id: "asiaTable.actions.paatetty",
     defaultMessage: "Merkitse päätetyksi"
   },
+  "asiaTable.actions.lataa": {
+    id: "asiaTable.actions.lataa",
+    defaultMessage: "Lataa PDF"
+  },
   "asiaStates.kj.LUONNOS": {
     id: "asiaStates.kj.LUONNOS",
     defaultMessage: "Luonnos"
@@ -309,7 +313,7 @@ export default defineMessages({
   },
   "asiaStates.esittelija.VALMISTELUSSA": {
     id: "asiaStates.esittelija.VALMISTELUSSA",
-    defaultMessage: "Valmistelussa"
+    defaultMessage: "Esittelyssä"
   },
   "asiaStates.esittelija.TAYDENNETTAVA": {
     id: "asiaStates.esittelija.TAYDENNETTAVA",
