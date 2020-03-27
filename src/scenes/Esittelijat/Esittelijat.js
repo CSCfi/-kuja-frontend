@@ -20,7 +20,9 @@ const OivaTab = withStyles(theme => ({
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: theme.typography.pxToRem(15),
     padding: 0,
-    marginRight: "2rem"
+    marginRight: "2rem",
+    marginLeft: "0.3em",
+    marginTop: "0.3em"
   }
 }))(props => <Tab {...props} />);
 
@@ -49,7 +51,7 @@ const Esittelijat = ({ match, user, history }) => {
       </Helmet>
 
       <div
-        className="flex flex-col justify-end w-full max-w-screen-xl mx-auto px-3 lg:px-8"
+        className="flex flex-col justify-end w-full h-40 max-w-screen-xl mx-auto px-3 lg:px-8"
         style={{
           borderTop: "0.05rem solid #E3E3E3"
         }}>
@@ -57,13 +59,15 @@ const Esittelijat = ({ match, user, history }) => {
           <div className="flex-1">
             <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
             <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-            <div className="mx-auto w-full my-8 flex flex-row justify-between">
-              <h1 style={{ marginTop: "1rem" }}>{t(common.asiat)}</h1>
+            <div className="mx-auto w-full my-6 flex flex-row justify-between">
+              <h1 style={{ marginLeft: "0.3rem", marginTop: "1rem" }}>
+                {t(common.asiat)}
+              </h1>
               <Button
                 aria-label={t(common.luoUusiAsia)}
                 color="primary"
                 variant="contained"
-                style={{ marginTop: "1.5rem", marginBottom: "-1.5rem" }}>
+                style={{ marginTop: "1.7rem", marginBottom: "-1.5rem" }}>
                 {t(common.luoUusiAsia)}
               </Button>
             </div>

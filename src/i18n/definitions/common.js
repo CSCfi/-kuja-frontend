@@ -313,7 +313,7 @@ export default defineMessages({
   },
   "asiaStates.esittelija.VALMISTELUSSA": {
     id: "asiaStates.esittelija.VALMISTELUSSA",
-    defaultMessage: "Valmistelussa"
+    defaultMessage: "Esittelyssä"
   },
   "asiaStates.esittelija.TAYDENNETTAVA": {
     id: "asiaStates.esittelija.TAYDENNETTAVA",
