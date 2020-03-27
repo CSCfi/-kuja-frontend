@@ -1,24 +1,25 @@
 import {
-  KOHTEET,
-  LUPA_SECTIONS
+  GENERIC_LUPA_KOHTEET,
+  GENERIC_LUPA_SECTIONS
 } from "../scenes/VapaaSivistystyo/modules/constants";
 import { parseLocalizedField } from "../modules/helpers";
 
 /**
- * Return an object with lupamääräys data categorized into sections as required in Kuja
+ * Return an object with lupamääräys data categorized into sections matching generic Kuja template in
+ * kuja-template/default/paatos
  * @param lupa
  * @returns {{}}
  */
-export const parseLupa = (lupa, locale) => {
+export const parseGenericKujaLupa = (lupa, locale) => {
   if (lupa) {
     let lupaObj = {};
     console.log(lupa)
 
-    for (const key in LUPA_SECTIONS) {
-      if (LUPA_SECTIONS.hasOwnProperty(key)) {
-        const { tunniste } = LUPA_SECTIONS[key];
+    for (const key in GENERIC_LUPA_SECTIONS) {
+      if (GENERIC_LUPA_SECTIONS.hasOwnProperty(key)) {
+        const { tunniste } = GENERIC_LUPA_SECTIONS[key];
         const maarayksetByTunniste = lupa.maaraykset.filter(maarays => maarays.kohde.tunniste === tunniste);
-        const sectionData = findSectionDataFromMaaraykset(
+        const sectionData = findGenericLupaSectionDataFromMaaraykset(
           tunniste,
           maarayksetByTunniste,
           locale
@@ -115,7 +116,7 @@ const generateTarkoitusData = (maarays, locale) => {
  * @param maaraykset
  * @returns {{}}
  */
-const findSectionDataFromMaaraykset = (
+const findGenericLupaSectionDataFromMaaraykset = (
   tunniste,
   maaraykset,
   locale
@@ -124,30 +125,30 @@ const findSectionDataFromMaaraykset = (
     return null;
   }
 
-  if (tunniste === KOHTEET.KUNNAT || tunniste === KOHTEET.KIELET) {
+  if (tunniste === GENERIC_LUPA_KOHTEET.KUNNAT || tunniste === GENERIC_LUPA_KOHTEET.KIELET) {
     return generateIteratedKoodiData(maaraykset, locale);
   }
-  else if (tunniste === KOHTEET.TARKOITUS) {
-    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.TARKOITUS);
+  else if (tunniste === GENERIC_LUPA_KOHTEET.TARKOITUS) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === GENERIC_LUPA_KOHTEET.TARKOITUS);
     return generateTarkoitusData(maarays, locale);
   }
-  else if (tunniste === KOHTEET.KOULUTUSTEHTAVA) {
-    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.KOULUTUSTEHTAVA);
+  else if (tunniste === GENERIC_LUPA_KOHTEET.KOULUTUSTEHTAVA) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === GENERIC_LUPA_KOHTEET.KOULUTUSTEHTAVA);
     return generateKoulutustehtavaData(maarays, locale);
   }
-  else if (tunniste === KOHTEET.ERITYINENKOULUTUSTEHTAVA) {
-    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.ERITYINENKOULUTUSTEHTAVA);
+  else if (tunniste === GENERIC_LUPA_KOHTEET.ERITYINENKOULUTUSTEHTAVA) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === GENERIC_LUPA_KOHTEET.ERITYINENKOULUTUSTEHTAVA);
     return generateErityinenKoulutustehtavaData(maarays, locale);
   }
-  else if (tunniste === KOHTEET.OPPILAITOKSET) {
-    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.OPPILAITOKSET);
+  else if (tunniste === GENERIC_LUPA_KOHTEET.OPPILAITOKSET) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === GENERIC_LUPA_KOHTEET.OPPILAITOKSET);
     return generateOppilaitoksetData(maarays, locale);
   }
-  else if (tunniste === KOHTEET.OPISKELIJAMAARA) {
+  else if (tunniste === GENERIC_LUPA_KOHTEET.OPISKELIJAMAARA) {
     //TODO: data source is ambiguous and doesn't appear needed for VST
   }
-  else if (tunniste === KOHTEET.MUUT) {
-    const maarays = maaraykset.find(item => item.kohde.tunniste === KOHTEET.MUUT);
+  else if (tunniste === GENERIC_LUPA_KOHTEET.MUUT) {
+    const maarays = maaraykset.find(item => item.kohde.tunniste === GENERIC_LUPA_KOHTEET.MUUT);
     return generateMuutData(maarays, locale);
   }
   else {

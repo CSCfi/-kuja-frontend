@@ -1,4 +1,4 @@
-export const LUPA_SECTIONS = {
+export const GENERIC_LUPA_SECTIONS = {
   1: {
     tunniste: 'kunnat',
   },
@@ -25,7 +25,7 @@ export const LUPA_SECTIONS = {
   }
 };
 
-export const KOHTEET = {
+export const GENERIC_LUPA_KOHTEET = {
   KUNNAT: 'kunnat',
   KIELET: 'kielet',
   TARKOITUS: 'tarkoitus',

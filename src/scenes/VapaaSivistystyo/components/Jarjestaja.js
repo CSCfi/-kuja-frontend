@@ -13,8 +13,8 @@ import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
-import {parseLupa} from "../../../utils/lupaParser";
-import Jarjestamislupa from "./Jarjestamislupa";
+import {parseGenericKujaLupa} from "../../../utils/lupaParser";
+import GenericJarjestamislupa from "./GenericJarjestamislupa";
 
 const Separator = styled.div`
   &:after {
@@ -73,7 +73,7 @@ const Jarjestaja = React.memo(
     ];
 
     const lupaKohteet = useMemo(() => {
-      return !lupa.data ? {} : parseLupa(lupa.data, intl.locale);
+      return !lupa.data ? {} : parseGenericKujaLupa(lupa.data, intl.locale);
     }, [lupa.data]);
 
     return (
@@ -109,7 +109,7 @@ const Jarjestaja = React.memo(
               render={(props) => {
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
-                    <Jarjestamislupa
+                    <GenericJarjestamislupa
                       lupaKohteet={lupaKohteet}
                       lupa={lupa.data}
                       ytunnus={jarjestaja.ytunnus}

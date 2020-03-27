@@ -6,7 +6,7 @@ import { COLORS } from "../../../modules/styles";
 import PropTypes from "prop-types";
 import common from "../../../i18n/definitions/common";
 import {useIntl} from "react-intl";
-import {LUPA_SECTIONS} from "../modules/constants";
+import {GENERIC_LUPA_SECTIONS} from "../modules/constants";
 import LupaSection from "./LupaSection";
 
 const TopSectionWrapper = styled.div`
@@ -50,7 +50,7 @@ const getTyyppiMessage = (lupa) => {
   }
 };
 
-const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
+const GenericJarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
   const intl = useIntl();
   const titleMessageKey = getTyyppiMessage(lupa);
   const dateString = new moment().format('D.M.YYYY');
@@ -64,7 +64,7 @@ const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
           </TopSectionWrapper>
 
         <div className="p-8">
-          {Object.keys(LUPA_SECTIONS).map((k, i) => (
+          {Object.keys(GENERIC_LUPA_SECTIONS).map((k, i) => (
             <LupaSection
               key={i}
               kohde={lupaKohteet[k] || {}}
@@ -77,9 +77,9 @@ const Jarjestamislupa = React.memo(({ lupaKohteet, lupa }) => {
   );
 });
 
-Jarjestamislupa.propTypes = {
+GenericJarjestamislupa.propTypes = {
   lupaKohteet: PropTypes.object,
   lupa: PropTypes.object
 };
 
-export default Jarjestamislupa;
+export default GenericJarjestamislupa;
