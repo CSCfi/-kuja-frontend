@@ -15,6 +15,7 @@ import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
 import {parseGenericKujaLupa} from "../../../utils/lupaParser";
 import GenericJarjestamislupa from "./GenericJarjestamislupa";
+import moment from "moment";
 
 const Separator = styled.div`
   &:after {
@@ -26,6 +27,37 @@ const Separator = styled.div`
     margin: 30px 0;
   }
 `;
+
+const getTyyppiMessage = (lupa) => {
+  const koulutustyyppi = lupa.koulutustyyppi;
+  const vstTyyppi = lupa.oppilaitostyyppi;
+
+  if(!koulutustyyppi) {
+    return common.lupaPageTitleAmmatillinen;
+  }
+
+  switch(koulutustyyppi) {
+    case "1":
+      return common.lupaPageTitleEsiJaPerusopeutus;
+    case "2":
+      return common.lupaPageTitleLukio;
+    case "3":
+      switch(vstTyyppi) {
+        case "1":
+          return common.lupaPageTitleVSTKansanopisto;
+        case "2":
+          return common.lupaPageTitleVSTKansalaisopisto;
+        case "3":
+          return common.lupaPageTitleVSTOpintokeskus;
+        case "4":
+          return common.lupaPageTitleVSTKesayliopisto;
+        case "5":
+          return common.lupaPageTitleVSTLiikunnanKoulutuskeskus;
+        case "6":
+          return common.lupaPageTitleVSTMuut;
+      }
+  }
+};
 
 const Jarjestaja = React.memo(
   ({ ytunnus, koulutustyyppi, oppilaitostyyppi,  match }) => {
@@ -76,6 +108,9 @@ const Jarjestaja = React.memo(
       return !lupa.data ? {} : parseGenericKujaLupa(lupa.data, intl.locale);
     }, [lupa.data]);
 
+    const dateString = new moment().format('D.M.YYYY');
+    const lupaTitle = intl.formatMessage(getTyyppiMessage(lupa), {date: dateString});
+
     return (
       <React.Fragment>
         <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
@@ -111,8 +146,7 @@ const Jarjestaja = React.memo(
                   return (
                     <GenericJarjestamislupa
                       lupaKohteet={lupaKohteet}
-                      lupa={lupa.data}
-                      ytunnus={jarjestaja.ytunnus}
+                      lupaTitle={lupaTitle}
                     />
                   )
                 }
@@ -130,7 +164,9 @@ const Jarjestaja = React.memo(
 
 Jarjestaja.propTypes = {
   match: PropTypes.object,
-  ytunnus: PropTypes.string
+  ytunnus: PropTypes.string,
+  koulutustyyppi: PropTypes.string,
+  oppilaitostyyppi: PropTypes.string
 };
 
 export default Jarjestaja;
