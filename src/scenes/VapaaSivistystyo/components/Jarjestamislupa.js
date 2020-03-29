@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import { COLORS } from "../../../modules/styles";
 import PropTypes from "prop-types";
-import {GENERIC_LUPA_SECTIONS} from "../modules/constants";
 import LupaSection from "./LupaSection";
 
 const TopSectionWrapper = styled.div`
@@ -16,7 +15,7 @@ const InnerContentContainer = styled.div`
   box-shadow: 0 2px 4px 3px rgba(219, 219, 219, 0.2);
 `;
 
-const GenericJarjestamislupa = React.memo(({ sections, lupaTitle }) => {
+const Jarjestamislupa = React.memo(({ sections, lupaTitle }) => {
   return (
     <InnerContentContainer>
       <div>
@@ -39,9 +38,9 @@ const GenericJarjestamislupa = React.memo(({ sections, lupaTitle }) => {
   );
 });
 
-GenericJarjestamislupa.propTypes = {
+Jarjestamislupa.propTypes = {
   sections: PropTypes.array,
   lupaTitle: PropTypes.string
 };
 
-export default GenericJarjestamislupa;
+export default Jarjestamislupa;

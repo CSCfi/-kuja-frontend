@@ -14,7 +14,7 @@ import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
 import {parseGenericKujaLupa, parseVSTLupa} from "../../../utils/lupaParser";
-import GenericJarjestamislupa from "./GenericJarjestamislupa";
+import Jarjestamislupa from "./Jarjestamislupa";
 import moment from "moment";
 
 const Separator = styled.div`
@@ -155,7 +155,7 @@ const Jarjestaja = React.memo(
               render={(props) => {
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
-                    <GenericJarjestamislupa
+                    <Jarjestamislupa
                       sections={sections}
                       lupaTitle={lupaTitle}
                     />
