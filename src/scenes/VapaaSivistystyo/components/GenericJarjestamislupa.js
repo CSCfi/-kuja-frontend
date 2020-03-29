@@ -16,7 +16,7 @@ const InnerContentContainer = styled.div`
   box-shadow: 0 2px 4px 3px rgba(219, 219, 219, 0.2);
 `;
 
-const GenericJarjestamislupa = React.memo(({ lupaKohteet, lupaTitle }) => {
+const GenericJarjestamislupa = React.memo(({ sections, lupaTitle }) => {
   return (
     <InnerContentContainer>
       <div>
@@ -27,10 +27,10 @@ const GenericJarjestamislupa = React.memo(({ lupaKohteet, lupaTitle }) => {
           </TopSectionWrapper>
 
         <div className="p-8">
-          {GENERIC_LUPA_SECTIONS.map((k, i) => (
+          {sections.map((sectionData, i) => (
             <LupaSection
               key={i}
-              kohde={lupaKohteet[k] || {}}
+              kohde={sectionData || {}}
             />
           ))}
         </div>
@@ -40,7 +40,7 @@ const GenericJarjestamislupa = React.memo(({ lupaKohteet, lupaTitle }) => {
 });
 
 GenericJarjestamislupa.propTypes = {
-  lupaKohteet: PropTypes.object,
+  sections: PropTypes.array,
   lupaTitle: PropTypes.string
 };
 

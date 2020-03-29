@@ -104,7 +104,7 @@ const Jarjestaja = React.memo(
       }
     ];
 
-    const lupaKohteet = useMemo(() => {
+    const sections = useMemo(() => {
       return !lupa.data ? {} : parseGenericKujaLupa(lupa.data, intl.locale);
     }, [lupa.data]);
 
@@ -146,7 +146,7 @@ const Jarjestaja = React.memo(
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
                     <GenericJarjestamislupa
-                      lupaKohteet={lupaKohteet}
+                      sections={sections}
                       lupaTitle={lupaTitle}
                     />
                   )

@@ -11,7 +11,7 @@ import { parseLocalizedField } from "../modules/helpers";
  */
 export const parseGenericKujaLupa = (lupa, locale) => {
   if (lupa) {
-    let lupaObj = {};
+    let sectionDataList = [];
 
     for (const sectionKey of GENERIC_LUPA_SECTIONS) {
       const maarayksetByTunniste = lupa.maaraykset
@@ -26,9 +26,9 @@ export const parseGenericKujaLupa = (lupa, locale) => {
         );
       }
 
-      lupaObj[sectionKey] = sectionData;
+      sectionDataList.push(sectionData);
     }
-    return lupaObj;
+    return sectionDataList;
   }
 };
 
