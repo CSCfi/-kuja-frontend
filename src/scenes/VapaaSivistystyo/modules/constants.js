@@ -46,7 +46,12 @@ export const VST_LUPA_STRUCTURE = [
     kohdeTunniste: 'koulutustehtava'
   },
   {
-    // 8. Muut koulutuksen järjestämiseen liittyvät ehdot
+    // 8. Koulutustehtävä
+    titleMessageKey: 'common.VSTLupaSectionTitleSchoolPurposeSpecial',
+    kohdeTunniste: 'erityinenkoulutustehtava'
+  },
+  {
+    // 9. Muut koulutuksen järjestämiseen liittyvät ehdot
     // exceptional case requiring special parsing
     titleMessageKey: 'common.VSTLupaSectionTitleOther',
     koodisto: 'kujamuutoikeudetmaarayksetjarajoitukset'
