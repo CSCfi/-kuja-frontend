@@ -39,11 +39,12 @@ export const parseVSTLupa = (lupa, locale) => {
 }
 
 const generateOrganizerSectionData = (lupa, locale) => {
+  const kunta = parseLocalizedField(lupa.jarjestaja.kuntaKoodi.metadata, locale.toUpperCase())
   // Exception sourced from kuja-template/lupahistoria/liikunnankoulutuskeskukset/paatos/content_paatos_fi.html:35
   // TODO: localization of this exception case content
   const value = lupa.jarjestaja.oid === '1.2.246.562.10.13451568789' ?
-    `${lupa.jarjestaja.nimi[locale]}, sekä Humppilan ja Ypäjän kunnat` :
-    `${lupa.jarjestaja.nimi[locale]}`;
+    `${lupa.jarjestaja.nimi[locale]}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
+    `${lupa.jarjestaja.nimi[locale]}, ${kunta}`;
 
   const retval = {
     heading: 'LOCALIZE ME: common.VSTLupaSectionTitleOrganizer',
@@ -91,6 +92,7 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
     retval.values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()))
     retval.values.sort();
   }
+
   return retval;
 };
 
@@ -188,28 +190,18 @@ const getSectionDataGeneratorForGeneric = (tunniste) => {
 };
 
 const generateSopimuskunnatDataForVST = (maaraykset, locale) => {
-  /*
-    <!-- Sopimuskunnat -->
-    <div class="if">
-        {% set kunnat = lupa.maaraykset | filterMaarays(["meta:oppilaitosmaarays=Sopimuskunta"]) %}
-        {% if kunnat is notBlank %}
-            <div class="otsikko">Sopimuskunnat</div>
-            <div class="sisalto">
-                <div class="maaraykset sisennys">
-                    <div class="data">
-                        {% for kunta in kunnat %}
-                            {{ kunta.koodi.nimi | translated | comma }}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    </div>
-   */
-  return {};
+  const targetMaaraykset = maaraykset.filter(item => !!item.meta.oppilaitosmaarays);
+  const data = generateIteratedKoodiData(targetMaaraykset, locale, true);
+
+  if(data.values.length > 1) {
+    data.values = [data.values.join(', ')]
+  }
+
+  return data;
 };
 
 const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
+  console.log(maaraykset)
   /*
     <!-- Oppilaitoksen nimi ja sijainti -->
     <div class="if">
