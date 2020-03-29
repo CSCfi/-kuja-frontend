@@ -23,7 +23,7 @@ export const parseVSTLupa = (lupa, locale) => {
       }
       else if(metaDataObject.koodisto) {
         generateSectionData = getSectionDataGeneratorForVST(metaDataObject.koodisto);
-        maaraykset = lupa.maaraykset.filter(maarays => maarays.koodisto === metaDataObject.kohdeTunniste);
+        maaraykset = lupa.maaraykset.filter(maarays => maarays.koodisto === metaDataObject.koodisto);
       }
 
       let sectionData = {};
