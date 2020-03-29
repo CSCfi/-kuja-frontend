@@ -218,30 +218,20 @@ const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
 };
 
 const generateRegionalDataForVST = (maaraykset, locale) => {
-  /*
-      <!-- Oppilaitoksen valtakunnallisuus tai alueellisuus/toiminta-alue -->
-    <div class="if">
-        {% set aOppilaitoksenToimintaalueet = lupa.maaraykset | filterMaarays(["koodisto:vstoppilaitoksenalueellisuusjavaltakunnallisuus"]) %}
-        {% if aOppilaitoksenToimintaalueet is notBlank %}
-            <div class="otsikko">Oppilaitoksen toiminta-alue</div>
-            <div class="sisalto">
-                {% for maarays in aOppilaitoksenToimintaalueet %}
-                    {% set alueellisuus = maarays.koodi.nimi | translated %}
-                    {% if alueellisuus is notBlank  %}
-                        <div class="sisennys">
-                            {{ alueellisuus }}
-                        </div>
-                        {% if maarays.koodi.koodiArvo == "2" %}
-                        <div class="sisennys">{{ maarays.meta | fieldvalue("urn:oppilaitosmääräys-1") }}</div>
-                        <div class="sisennys">{{ maarays.meta | fieldvalue("urn:muumääräys-2") }}</div>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-   */
-  return {};
+  if(!maaraykset || maaraykset.length === 0) {
+    return {};
+  }
+  const maarays = maaraykset[0];
+
+  let values = [];
+  values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()));
+  if(maarays.koodi.koodiArvo === '2') {
+    const school = maarays.meta["urn:oppilaitosmääräys-1"];
+    const other = maarays.meta["urn:muumääräys-2"]
+    if(school) values.push(school);
+    if(other) values.push(other);
+  }
+  return {values};
 };
 
 const generateOtherDataForVST = (maaraykset, locale) => {
