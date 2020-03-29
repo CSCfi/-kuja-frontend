@@ -7,8 +7,14 @@ import common from "../i18n/definitions/common";
 /**
  * Return an object with lupamääräys data categorized into sections matching VST template in
  * kuja-template/lupahistoria/liikunnankoulutuskeskukset/paatos
- * @param lupa
- * @returns {{}}
+ *
+ * Depends on VST_LUPA_STRUCTURE to guide the order and logic of parsing määräys data and
+ * producting formatted section data, based on kohde or koodisto identifier. Uses react-intl
+ * utilities for primary localization and that based on koodisto data.
+ *
+ * @param lupa lupa with määräys and järjestäjä as given by backend
+ * @param intl react-intl utility object
+ * @returns [{heading: string, values: string[]}]
  */
 export const parseVSTLupa = (lupa, intl) => {
   if(lupa) {
@@ -38,8 +44,8 @@ export const parseVSTLupa = (lupa, intl) => {
 
     }
     return sectionDataList;
-  };
-}
+  }
+};
 
 const generateOrganizerSectionData = (lupa, locale) => {
   const kunta = parseLocalizedField(lupa.jarjestaja.kuntaKoodi.metadata, locale.toUpperCase())
@@ -53,9 +59,9 @@ const generateOrganizerSectionData = (lupa, locale) => {
     values: [
       value
     ]
-  }
+  };
   return retval;
-}
+};
 
 /**
  * Return an object with lupamääräys data categorized into sections matching generic Kuja template in
@@ -162,7 +168,7 @@ const generateTarkoitusData = (maaraykset, locale) => {
 
   const attributes = [
     "oppilaitoksentarkoitus-0"
-  ]
+  ];
 
   return generateMetaAttributeBasedData(maaraykset, attributes, locale);
 };
@@ -242,7 +248,7 @@ const generateOtherDataForVST = (maaraykset, locale) => {
     if(maarays.meta["urn:muumääräys-0"].length > 0)values.push(maarays.meta["urn:muumääräys-0"])
   }
   return {values};
-}
+};
 
 const getSectionDataGeneratorForVST = (key) => {
   switch(key) {
@@ -265,5 +271,5 @@ const getSectionDataGeneratorForVST = (key) => {
     default:
       return () => ({});
   }
-}
+};
 
