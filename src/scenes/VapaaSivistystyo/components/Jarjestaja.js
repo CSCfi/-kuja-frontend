@@ -13,7 +13,7 @@ import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
-import {parseGenericKujaLupa} from "../../../utils/lupaParser";
+import {parseGenericKujaLupa, parseVSTLupa} from "../../../utils/lupaParser";
 import GenericJarjestamislupa from "./GenericJarjestamislupa";
 import moment from "moment";
 
@@ -105,7 +105,17 @@ const Jarjestaja = React.memo(
     ];
 
     const sections = useMemo(() => {
-      return !lupa.data ? {} : parseGenericKujaLupa(lupa.data, intl.locale);
+      if(!lupa.data) {
+        return {};
+      }
+      else {
+        switch(lupa.data.koulutustyyppi) {
+          case '3':
+            return parseVSTLupa(lupa.data, intl.locale);
+          default:
+            return parseGenericKujaLupa(lupa.data, intl.locale);
+        }
+      }
     }, [lupa.data]);
 
     const dateString = new moment().format('D.M.YYYY');

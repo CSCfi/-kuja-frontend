@@ -7,7 +7,7 @@ const LupaSection = props => {
 
   if (kohde.heading && kohde.values && kohde.values.length > 0) {
     const { heading, values } = kohde;
-    const elements = values.map(item => (<p>{item}</p>));
+    const elements = values.map((item,i) => (<p key={i}>{item}</p>));
     return (
       <Section title={heading}>
         {elements}
