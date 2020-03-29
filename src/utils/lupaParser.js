@@ -2,6 +2,7 @@ import {
   GENERIC_LUPA_SECTIONS, VST_LUPA_STRUCTURE
 } from "../scenes/VapaaSivistystyo/modules/constants";
 import { parseLocalizedField } from "../modules/helpers";
+import common from "../i18n/definitions/common";
 
 /**
  * Return an object with lupamääräys data categorized into sections matching VST template in
@@ -9,10 +10,12 @@ import { parseLocalizedField } from "../modules/helpers";
  * @param lupa
  * @returns {{}}
  */
-export const parseVSTLupa = (lupa, locale) => {
+export const parseVSTLupa = (lupa, intl) => {
   if(lupa) {
+    const organizerSectionData = generateOrganizerSectionData(lupa, intl.locale);
+    organizerSectionData.heading = intl.formatMessage(common.VSTLupaSectionTitleOrganizer)
     const sectionDataList = [
-      generateOrganizerSectionData(lupa, locale)
+      organizerSectionData
     ];
     for (const metaDataObject of VST_LUPA_STRUCTURE) {
       let maaraykset = [];
@@ -28,9 +31,9 @@ export const parseVSTLupa = (lupa, locale) => {
 
       let sectionData = {};
       if(maaraykset.length > 0)  {
-        sectionData = generateSectionData(maaraykset, locale);
+        sectionData = generateSectionData(maaraykset, intl.locale);
       }
-      sectionData.heading = metaDataObject.titleMessageKey;
+      sectionData.heading = intl.formatMessage(metaDataObject.titleMessageKey);
       sectionDataList.push(sectionData)
 
     }
@@ -47,7 +50,6 @@ const generateOrganizerSectionData = (lupa, locale) => {
     `${lupa.jarjestaja.nimi[locale]}, ${kunta}`;
 
   const retval = {
-    heading: 'LOCALIZE ME: common.VSTLupaSectionTitleOrganizer',
     values: [
       value
     ]

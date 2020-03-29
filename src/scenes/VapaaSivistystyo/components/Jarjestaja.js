@@ -111,7 +111,7 @@ const Jarjestaja = React.memo(
       else {
         switch(lupa.data.koulutustyyppi) {
           case '3':
-            return parseVSTLupa(lupa.data, intl.locale);
+            return parseVSTLupa(lupa.data, intl);
           default:
             return parseGenericKujaLupa(lupa.data, intl.locale);
         }

@@ -370,5 +370,41 @@ export default defineMessages({
   lupaTitle: {
     id: "common.lupaTitle",
     defaultMessage: "Järjestämislupa"
+  },
+  VSTLupaSectionTitleOrganizer: {
+    id: "common.VSTLupaSectionTitleOrganizer",
+    defaultMessage: "Ylläpitäjän nimi ja kotipaikka"
+  },
+  VSTLupaSectionTitleMunicipality: {
+    id: "common.VSTLupaSectionTitleOrganizer",
+    defaultMessage: "Sopimuskunnat"
+  },
+  VSTLupaSectionTitleSchoolNameAndLocation: {
+    id: "common.VSTLupaSectionTitleSchoolNameAndLocation",
+    defaultMessage: "Oppilaitoksen nimi ja sijainti"
+  },
+  VSTLupaSectionTitleOperationalArea: {
+    id: "common.VSTLupaSectionTitleOperationalArea",
+    defaultMessage: "Oppilaitoksen toiminta-alue"
+  },
+  VSTLupaSectionTitleTeachingLanguage: {
+    id: "common.VSTLupaSectionTitleTeachingLanguage",
+    defaultMessage: "Opetuskieli"
+  },
+  VSTLupaSectionTitleSchoolPurpose: {
+    id: "common.VSTLupaSectionTitleSchoolPurpose",
+    defaultMessage: "Oppilaitoksen tarkoitus"
+  },
+  VSTLupaSectionTitleSchoolMission: {
+    id: "common.VSTLupaSectionTitleSchoolMission",
+    defaultMessage: "Oppilaitoksen koulutustehtävä"
+  },
+  VSTLupaSectionTitleSchoolMissionSpecial: {
+    id: "common.VSTLupaSectionTitleSchoolMissionSpecial",
+    defaultMessage: "Erityinen koulutustehtävä"
+  },
+  VSTLupaSectionTitleOther: {
+    id: "common.VSTLupaSectionTitleOther",
+    defaultMessage: "Muut koulutuksen järjestämiseen liittyvät ehdot"
   }
 });
