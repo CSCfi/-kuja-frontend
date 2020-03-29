@@ -27,7 +27,7 @@ const GenericJarjestamislupa = React.memo(({ lupaKohteet, lupaTitle }) => {
           </TopSectionWrapper>
 
         <div className="p-8">
-          {Object.keys(GENERIC_LUPA_SECTIONS).map((k, i) => (
+          {GENERIC_LUPA_SECTIONS.map((k, i) => (
             <LupaSection
               key={i}
               kohde={lupaKohteet[k] || {}}
