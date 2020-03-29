@@ -201,33 +201,20 @@ const generateSopimuskunnatDataForVST = (maaraykset, locale) => {
 };
 
 const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
-  console.log(maaraykset)
-  /*
-    <!-- Oppilaitoksen nimi ja sijainti -->
-    <div class="if">
-        {% set aOppilaitoksenNimetjaSijainnit = lupa.maaraykset | filterMaarays(["kohde:oppilaitos"]) %}
-        {% if aOppilaitoksenNimetjaSijainnit is notBlank %}
-            <div class="otsikko">Oppilaitoksen nimi ja sijainti</div>
-            <div class="sisalto sisennys">
-                {% for maarays in aOppilaitoksenNimetjaSijainnit %}
-                <div class="data">
-                    {% set oppilaitos = maarays.organisaatio %}
-                    {% set kuntaList = oppilaitos.allKuntaKoodis %}
-                    {{ oppilaitos.nimi | translated }}{% if kuntaList is not empty %}, {% endif %}
-                    {% for kuntaKoodi in kuntaList %}
-                        {{ kuntaKoodi.nimi | translated | comma }}
-                    {% endfor %}
-                    <!-- !!Special case!! Because Nordiska Konstskolan som filial can not be found from organisaatiopalvelu -->
-                    {% if lupa.diaarinumero == "27/532/2011" and maarays.organisaatio is empty %}
-                        {{ maarays.meta | fieldvalue("oppilaitosmääräys-0") }}, Kokkola
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-   */
-  return {};
+  if(!maaraykset || maaraykset.length === 0) {
+    return {};
+  }
+  const maarays = maaraykset[0];
+  const schoolName = maarays.organisaatio.nimi[locale];
+  const municipalities = [schoolName];
+  municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
+  if(!!maarays.organisaatio.muutKuntaKoodit) {
+    for(const other of maarays.organisaatio.muutKuntaKoodit) {
+      municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
+    }
+  }
+
+  return {values: [municipalities.join(', ')]}
 };
 
 const generateRegionalDataForVST = (maaraykset, locale) => {
