@@ -141,6 +141,7 @@ const Jarjestaja = React.memo(
             />
             <Route
               path={`${match.path}`}
+              exact
               render={(props) => {
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
