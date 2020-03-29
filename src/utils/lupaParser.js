@@ -235,24 +235,11 @@ const generateRegionalDataForVST = (maaraykset, locale) => {
 };
 
 const generateOtherDataForVST = (maaraykset, locale) => {
-  /*
-      <!-- Muut koulutuksen järjestämiseen liittyvät ehdot -->
-    <div class="if">
-        {% set maaraykset = lupa.maaraykset | filterMaarays(["koodisto:kujamuutoikeudetmaarayksetjarajoitukset"]) %}
-        {% if maaraykset is notBlank %}
-        <div class="otsikko">Muut koulutuksen järjestämiseen liittyvät ehdot</div>
-        <div class="sisalto">
-            {% include fromDefault("maaraykset_metatiedot") with
-                {
-                    "maaraykset": maaraykset,
-                    "avain": "urn:muumääräys"
-                }
-            %}
-        </div>
-        {% endif %}
-    </div>
-   */
-  return {};
+  let values = [];
+  for(const maarays of maaraykset) {
+    if(maarays.meta["urn:muumääräys-0"].length > 0)values.push(maarays.meta["urn:muumääräys-0"])
+  }
+  return {values};
 }
 
 const getSectionDataGeneratorForVST = (key) => {
