@@ -12,9 +12,9 @@ import common from "../i18n/definitions/common";
  * producting formatted section data, based on kohde or koodisto identifier. Uses react-intl
  * utilities for primary localization and that based on koodisto data.
  *
- * @param lupa lupa with määräys and järjestäjä as given by backend
- * @param intl react-intl utility object
- * @returns [{heading: string, values: string[]}]
+ * @param {Object} lupa lupa with määräys and järjestäjä as given by backend
+ * @param {Object} intl react-intl utility object
+ * @returns {{heading: String, values: String[]}[]} sectionDataList
  */
 export const parseVSTLupa = (lupa, intl) => {
   if(lupa) {
