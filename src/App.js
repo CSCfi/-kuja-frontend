@@ -17,10 +17,7 @@ import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
 import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
 import DestroyCasAuth from "./scenes/Logout/services/DestroyCasAuth";
-import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
-import EsiJaPerusopetus from "./scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
-import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
 import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
@@ -297,21 +294,6 @@ const App = ({ isDebugModeOn, user }) => {
                     exact
                     path="/jarjestajat"
                     render={props => <Jarjestajat history={props.history} />}
-                  />
-                  <Route
-                    exact
-                    path="/lukiokoulutus"
-                    component={Lukiokoulutus}
-                  />
-                  <Route
-                    exact
-                    path="/vapaa-sivistystyo"
-                    component={VapaaSivistystyo}
-                  />
-                  <Route
-                    exact
-                    path="/esi-ja-perusopetus"
-                    component={EsiJaPerusopetus}
                   />
                   <Route
                     path="/asiat"
