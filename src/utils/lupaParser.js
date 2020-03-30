@@ -212,7 +212,6 @@ const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
   let values = [];
 
   for(const maarays of maaraykset) {
-    console.log(maarays)
     const schoolName = maarays.organisaatio.nimi[locale];
     const municipalities = [schoolName];
     municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
