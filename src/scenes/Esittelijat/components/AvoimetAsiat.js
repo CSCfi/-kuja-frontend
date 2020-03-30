@@ -50,7 +50,11 @@ const AvoimetAsiat = () => {
           intl.formatMessage
         )
       : [];
-  }, [intl.formatMessage, muutospyynnotEsittelija.data]);
+  }, [
+    intl.formatMessage,
+    muutospyynnotEsittelija.data,
+    muutospyynnotEsittelijaValmistelussa.data
+  ]);
 
   return (
     <Table
