@@ -67,21 +67,25 @@ const App = ({ isDebugModeOn, user }) => {
 
   const [headerHeight, setHeaderHeight] = useState(0);
 
+  const kujaURL = process.env.REACT_APP_KUJA_URL || 'https://localhost:4433';
+
   const pageLinks = [
     {
-      path: "/esi-ja-perusopetus",
+      url: kujaURL + "/esi-ja-perusopetus",
       text: intl.formatMessage(educationMessages.preAndBasicEducation),
-      isExact: false
     },
     {
-      path: "/lukiokoulutus",
+      url: kujaURL + "/lukiokoulutus",
       text: intl.formatMessage(educationMessages.highSchoolEducation)
     },
     {
       path: "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
-    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
+    {
+      url: kujaURL + "/vapaa-sivistystyo",
+      text: "Vapaa sivistystyö"
+    },
     { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
 
