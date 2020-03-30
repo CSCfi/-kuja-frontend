@@ -209,20 +209,33 @@ const generateSopimuskunnatDataForVST = (maaraykset, locale) => {
 };
 
 const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
-  if(!maaraykset || maaraykset.length === 0) {
-    return {};
-  }
-  const maarays = maaraykset[0];
-  const schoolName = maarays.organisaatio.nimi[locale];
-  const municipalities = [schoolName];
-  municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
-  if(!!maarays.organisaatio.muutKuntaKoodit) {
-    for(const other of maarays.organisaatio.muutKuntaKoodit) {
-      municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
+  let values = [];
+
+  for(const maarays of maaraykset) {
+    console.log(maarays)
+    const schoolName = maarays.organisaatio.nimi[locale];
+    const municipalities = [schoolName];
+    municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
+    if (!!maarays.organisaatio.muutKuntaKoodit) {
+      for (const other of maarays.organisaatio.muutKuntaKoodit) {
+        municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
+      }
     }
+    values.push(municipalities.join(', '));
   }
 
-  return {values: [municipalities.join(', ')]}
+    /*
+    TODO: implementation of following special case, after CSCKUJA-379 has been fixed. Corresponding määräys does
+          not arrive from backend at the moment
+
+        <!-- !!Special case!! Because Nordiska Konstskolan som filial can not be found from organisaatiopalvelu -->
+        {% if lupa.diaarinumero == "27/532/2011" and maarays.organisaatio is empty %}
+            {{ maarays.meta | fieldvalue("oppilaitosmääräys-0") }}, Kokkola
+        {% endif %}
+
+     */
+
+  return {values}
 };
 
 const generateRegionalDataForVST = (maaraykset, locale) => {
