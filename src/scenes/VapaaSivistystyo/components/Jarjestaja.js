@@ -65,7 +65,7 @@ const getTyyppiMessage = (lupaData) => {
 };
 
 const Jarjestaja = React.memo(
-  ({ ytunnus, koulutustyyppi, oppilaitostyyppi,  match }) => {
+  ({ uuid, match }) => {
 
     const intl = useIntl();
     const [lupa, lupaActions] = useLupa();
@@ -73,15 +73,15 @@ const Jarjestaja = React.memo(
     // Let's fetch LUPA
     useEffect(() => {
       let abortController;
-      if (ytunnus) {
-        abortController = lupaActions.load({ytunnus, koulutustyyppi, oppilaitostyyppi});
+      if (uuid) {
+        abortController = lupaActions.load({uuid});
       }
       return function cancel() {
         if (abortController) {
           abortController.abort();
         }
       };
-    }, [lupaActions, ytunnus]);
+    }, [lupaActions, uuid]);
 
     const jarjestaja = useMemo(() => {
       return lupa.data && lupa.data.jarjestaja
@@ -93,7 +93,7 @@ const Jarjestaja = React.memo(
     }, [intl.locale, lupa.data]);
 
     const breadcrumb = useMemo(() => {
-      return jarjestaja ? `/vapaa-sivistystyo/luvat/${ytunnus}` : "";
+      return jarjestaja ? `/vapaa-sivistystyo/luvat/${uuid}` : "";
     }, [jarjestaja]);
 
     const basicRoutes = [
@@ -180,9 +180,7 @@ const Jarjestaja = React.memo(
 
 Jarjestaja.propTypes = {
   match: PropTypes.object,
-  ytunnus: PropTypes.string,
-  koulutustyyppi: PropTypes.string,
-  oppilaitostyyppi: PropTypes.string
+  uuid: PropTypes.string
 };
 
 export default Jarjestaja;

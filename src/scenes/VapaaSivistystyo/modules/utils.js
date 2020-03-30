@@ -52,7 +52,7 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
               onClick: row => {
                 console.log(lupa)
                 if (history) {
-                  history.push(`/vapaa-sivistystyo/luvat/${lupa.jarjestajaYtunnus}/${lupa.koulutustyyppi}/${lupa.oppilaitostyyppi}`);
+                  history.push(`/vapaa-sivistystyo/luvat/${lupa.uuid}`);
                 } else {
                   console.error(
                     intl.formatMessage(common.errorLoadingLupa)

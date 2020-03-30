@@ -4,14 +4,14 @@ import { execute } from "./utils/loadFromBackend";
 const Store = createStore({
   initialState: {},
   actions: {
-    load: ({ytunnus,koulutustyyppi, oppilaitostyyppi}) => ({ getState, setState }) => {
+    load: ({uuid}) => ({ getState, setState }) => {
       return execute(
         { getState, setState },
         {
           key: "lupa",
-          urlEnding: `${ytunnus}/koulutustyyppi/${koulutustyyppi}/oppilaitostyyppi/${oppilaitostyyppi}?with=all`
+          urlEnding: `${uuid}?with=all`
         },
-        { ytunnus }
+        {uuid}
       );
     }
   },
