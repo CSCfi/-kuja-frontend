@@ -28,9 +28,14 @@ const Separator = styled.div`
   }
 `;
 
-const getTyyppiMessage = (lupa) => {
-  const koulutustyyppi = lupa.koulutustyyppi;
-  const vstTyyppi = lupa.oppilaitostyyppi;
+const getTyyppiMessage = (lupaData) => {
+
+  if(!lupaData) {
+    return common.loading;
+  }
+
+  const koulutustyyppi = lupaData.koulutustyyppi;
+  const vstTyyppi = lupaData.oppilaitostyyppi;
 
   if(!koulutustyyppi) {
     return common.lupaPageTitleAmmatillinen;
@@ -119,7 +124,7 @@ const Jarjestaja = React.memo(
     }, [lupa.data]);
 
     const dateString = new moment().format('D.M.YYYY');
-    const lupaTitle = intl.formatMessage(getTyyppiMessage(lupa), {date: dateString});
+    const lupaTitle = intl.formatMessage(getTyyppiMessage(lupa.data), {date: dateString});
 
     return (
       <React.Fragment>
