@@ -4,6 +4,8 @@ import { generateAvoimetAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
+import { useMuutospyynnotEsittelijaValmistelussa } from "../../../stores/muutospyynnotEsittelijaValmistelussa";
+
 import * as R from "ramda";
 
 const AvoimetAsiat = () => {
@@ -12,6 +14,10 @@ const AvoimetAsiat = () => {
     muutospyynnotEsittelija,
     muutospyynnotEsittelijaActions
   ] = useMuutospyynnotEsittelija();
+  const [
+    muutospyynnotEsittelijaValmistelussa,
+    muutospyynnotEsittelijaValmistelussaActions
+  ] = useMuutospyynnotEsittelijaValmistelussa();
 
   useEffect(() => {
     let abortController = muutospyynnotEsittelijaActions.load("avoimet");
@@ -23,70 +29,32 @@ const AvoimetAsiat = () => {
     };
   }, [muutospyynnotEsittelijaActions]);
 
+  useEffect(() => {
+    let abortController = muutospyynnotEsittelijaValmistelussaActions.load();
+
+    return function cancel() {
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, [muutospyynnotEsittelijaValmistelussaActions]);
+
   const tableStructure = useMemo(() => {
-    return !!muutospyynnotEsittelija.data
+    const avoinData = muutospyynnotEsittelija.data || [];
+    const valmistelussaData = muutospyynnotEsittelijaValmistelussa.data || [];
+
+    return !!muutospyynnotEsittelija.data &&
+      !!muutospyynnotEsittelijaValmistelussa.data
       ? generateAvoimetAsiatTableStructure(
-          R.filter(obj => {
-            return R.or(
-              R.equals(obj.tila, "AVOIN"),
-              R.equals(obj.tila, "VALMISTELUSSA")
-            );
-          }, muutospyynnotEsittelija.data),
+          R.concat(avoinData, valmistelussaData),
           intl.formatMessage
         )
       : [];
-    // const array = [
-    //   {
-    //     lupaId: 215,
-    //     hakupvm: "2019-11-27",
-    //     voimassaalkupvm: "2019-01-01",
-    //     voimassaloppupvm: "2019-12-31",
-    //     paatoskierrosId: 19,
-    //     tila: "AVOIN",
-    //     jarjestajaYtunnus: "0208201-1",
-    //     luoja: "oiva-sanni",
-    //     luontipvm: 1574812800000,
-    //     paivittaja: "oiva-sanni",
-    //     paivityspvm: 1574836496820,
-    //     uuid: "6b66384c-f613-11e9-b1c2-005056aa7b7b",
-    //     lupaUuid: "281900a2-fd34-11e8-8d76-005056aa0e66",
-    //     jarjestaja: {
-    //       nimi: { fi: "qwerty" },
-    //       maakuntaKoodi: { metadata: [{ kieli: "FI", nimi: "Esimerkki" }] }
-    //     }
-    //   },
-    //   {
-    //     lupaId: 315,
-    //     hakupvm: "2019-11-27",
-    //     voimassaalkupvm: "2019-01-01",
-    //     voimassaloppupvm: "2019-12-31",
-    //     paatoskierrosId: 19,
-    //     tila: "VALMISTELUSSA",
-    //     jarjestajaYtunnus: "0208201-1",
-    //     luoja: "oiva-sanni",
-    //     luontipvm: 1574812800000,
-    //     paivittaja: "oiva-sanni",
-    //     paivityspvm: 1574836496820,
-    //     uuid: "6b66384c-f613-11e9-b1c2-005056aa7b7b",
-    //     lupaUuid: "281900a2-fd34-11e8-8d76-005056aa0e66",
-    //     jarjestaja: {
-    //       nimi: { fi: "qwerty" },
-    //       maakuntaKoodi: { metadata: [{ kieli: "FI", nimi: "Esimerkki" }] }
-    //     }
-    //   }
-    // ];
-    // return !!array
-    //   ? generateAvoimetAsiatTableStructure(
-    //       R.filter(obj => {
-    //         return R.or(
-    //           R.equals(obj.tila, "AVOIN"),
-    //           R.equals(obj.tila, "VALMISTELUSSA")
-    //         );
-    //       }, array),
-    //       intl.formatMessage
-    //     )
-    //   : [];
-  }, [intl.formatMessage, muutospyynnotEsittelija.data]);
+  }, [
+    intl.formatMessage,
+    muutospyynnotEsittelija.data,
+    muutospyynnotEsittelijaValmistelussa.data
+  ]);
 
   return (
     <Table

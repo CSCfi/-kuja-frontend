@@ -4,7 +4,6 @@ import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
-import * as R from "ramda";
 
 const PaatetytAsiat = () => {
   const intl = useIntl();
@@ -14,7 +13,7 @@ const PaatetytAsiat = () => {
   ] = useMuutospyynnotEsittelija();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load("avoimet");
+    let abortController = muutospyynnotEsittelijaActions.load("paatetyt");
 
     return function cancel() {
       if (abortController) {
@@ -26,7 +25,7 @@ const PaatetytAsiat = () => {
   const tableStructure = useMemo(() => {
     return !!muutospyynnotEsittelija.data
       ? generatePaatetytAsiatTableStructure(
-          R.filter(R.propEq("tila", "PAATETTY"), muutospyynnotEsittelija.data),
+          muutospyynnotEsittelija.data,
           intl.formatMessage
         )
       : [];
