@@ -33,7 +33,7 @@ const ProfileMenu = props => {
 
   return (
     <ul className="flex flex-wrap">
-      {map((item, i) =>
+      {routes.map((item, i) =>
         <li key={i} className={`mr-3 mb-3`}>
           <MenuItem
             id={item.id}
@@ -43,8 +43,8 @@ const ProfileMenu = props => {
           >
             {item.text}
           </MenuItem>
-        </li>
-      , routes)}
+        </li>)
+      }
     </ul>
   );
 };

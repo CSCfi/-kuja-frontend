@@ -13,8 +13,9 @@ import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
 import Loading from "../../../modules/Loading";
-import {parseLupa} from "../../../utils/lupaParser";
+import {parseGenericKujaLupa, parseVSTLupa} from "../../../utils/lupaParser";
 import Jarjestamislupa from "./Jarjestamislupa";
+import moment from "moment";
 
 const Separator = styled.div`
   &:after {
@@ -26,6 +27,42 @@ const Separator = styled.div`
     margin: 30px 0;
   }
 `;
+
+const getTyyppiMessage = (lupaData) => {
+
+  if(!lupaData) {
+    return common.loading;
+  }
+
+  const koulutustyyppi = lupaData.koulutustyyppi;
+  const vstTyyppi = lupaData.oppilaitostyyppi;
+
+  if(!koulutustyyppi) {
+    return common.lupaPageTitleAmmatillinen;
+  }
+
+  switch(koulutustyyppi) {
+    case "1":
+      return common.lupaPageTitleEsiJaPerusopeutus;
+    case "2":
+      return common.lupaPageTitleLukio;
+    case "3":
+      switch(vstTyyppi) {
+        case "1":
+          return common.lupaPageTitleVSTKansanopisto;
+        case "2":
+          return common.lupaPageTitleVSTKansalaisopisto;
+        case "3":
+          return common.lupaPageTitleVSTOpintokeskus;
+        case "4":
+          return common.lupaPageTitleVSTKesayliopisto;
+        case "5":
+          return common.lupaPageTitleVSTLiikunnanKoulutuskeskus;
+        case "6":
+          return common.lupaPageTitleVSTMuut;
+      }
+  }
+};
 
 const Jarjestaja = React.memo(
   ({ ytunnus, koulutustyyppi, oppilaitostyyppi,  match }) => {
@@ -72,9 +109,22 @@ const Jarjestaja = React.memo(
       }
     ];
 
-    const lupaKohteet = useMemo(() => {
-      return !lupa.data ? {} : parseLupa(lupa.data, intl.locale);
+    const sections = useMemo(() => {
+      if(!lupa.data) {
+        return {};
+      }
+      else {
+        switch(lupa.data.koulutustyyppi) {
+          case '3':
+            return parseVSTLupa(lupa.data, intl);
+          default:
+            return parseGenericKujaLupa(lupa.data, intl.locale);
+        }
+      }
     }, [lupa.data]);
+
+    const dateString = new moment().format('D.M.YYYY');
+    const lupaTitle = intl.formatMessage(getTyyppiMessage(lupa.data), {date: dateString});
 
     return (
       <React.Fragment>
@@ -106,13 +156,13 @@ const Jarjestaja = React.memo(
             />
             <Route
               path={`${match.path}`}
+              exact
               render={(props) => {
                 if(lupa.isLoading === false && lupa.fetchedAt) {
                   return (
                     <Jarjestamislupa
-                      lupaKohteet={lupaKohteet}
-                      lupa={lupa.data}
-                      ytunnus={jarjestaja.ytunnus}
+                      sections={sections}
+                      lupaTitle={lupaTitle}
                     />
                   )
                 }
@@ -130,7 +180,9 @@ const Jarjestaja = React.memo(
 
 Jarjestaja.propTypes = {
   match: PropTypes.object,
-  ytunnus: PropTypes.string
+  ytunnus: PropTypes.string,
+  koulutustyyppi: PropTypes.string,
+  oppilaitostyyppi: PropTypes.string
 };
 
 export default Jarjestaja;
