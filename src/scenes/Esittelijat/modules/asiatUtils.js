@@ -2,6 +2,8 @@ import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 import moment from "moment";
 import { downloadFileFn } from "okm-frontend-components/dist/utils/common";
+import axios from "axios/index";
+import { API_BASE_URL } from "../../../modules/constants";
 
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
@@ -88,8 +90,13 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "esittelyyn") {
-                  // todo: back end call for Merkitse esittelyssä
-                  console.log("Merkitse esittelyssä");
+                  return axios.post(
+                    `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
+                    {},
+                    {
+                      withCredentials: true
+                    }
+                  );
                 } else if (action === "paata") {
                   // todo: back end call for Merkitse päätetyksi
                   console.log("Merkitse päätetyksi");
