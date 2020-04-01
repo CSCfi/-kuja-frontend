@@ -37,14 +37,13 @@ import {
   ROLE_NIMENKIRJOITTAJA,
   ROLE_YLLAPITAJA
 } from "./modules/constants";
-import Header from "./components/02-organisms/Header";
+import Header from "okm-frontend-components/dist/components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
-import Navigation from "./components/02-organisms/Navigation";
-import SideNavigation from "./components/02-organisms/SideNavigation";
+import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
+import SideNavigation from "okm-frontend-components/dist/components/02-organisms/SideNavigation";
 import { useOrganisation } from "./stores/organisation";
 import * as R from "ramda";
-import Paatokset from "./scenes/VapaaSivistystyo/components/Paatokset";
 import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
 
 const history = createBrowserHistory();
