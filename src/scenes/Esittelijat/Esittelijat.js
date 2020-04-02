@@ -10,7 +10,7 @@ import common from "../../i18n/definitions/common";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { withStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import SimpleButton from "okm-frontend-components/dist/components/00-atoms/SimpleButton";
 
 const OivaTab = withStyles(theme => ({
   root: {
@@ -22,7 +22,10 @@ const OivaTab = withStyles(theme => ({
     padding: 0,
     marginRight: "2rem",
     marginLeft: "0.3em",
-    marginTop: "0.3em"
+    marginTop: "0.3em",
+    "&:focus": {
+      outline: "0.2rem solid #d1d1d1"
+    }
   }
 }))(props => <Tab {...props} />);
 
@@ -35,7 +38,7 @@ const OivaTabs = withStyles(theme => ({
     height: "0.3rem !important",
     "& > div": {
       width: "100%",
-      backgroundColor: "green"
+      backgroundColor: "#4C7A61"
     }
   }
 }))(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
@@ -51,25 +54,24 @@ const Esittelijat = ({ match, user, history }) => {
       </Helmet>
 
       <div
-        className="flex flex-col justify-end w-full h-40 max-w-screen-xl mx-auto px-3 lg:px-8"
-        style={{
-          borderTop: "0.05rem solid #E3E3E3"
-        }}>
+        className="flex flex-col justify-end w-full h-40 mx-auto px-3 lg:px-8"
+        style={{ maxWidth: "90rem", borderTop: "0.05rem solid #E3E3E3" }}>
         <div className="flex items-center">
           <div className="flex-1">
             <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
             <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-            <div className="mx-auto w-full my-6 flex flex-row justify-between">
-              <h1 style={{ marginLeft: "0.3rem", marginTop: "1rem" }}>
-                {t(common.asiat)}
-              </h1>
-              <Button
-                aria-label={t(common.luoUusiAsia)}
-                color="primary"
-                variant="contained"
-                style={{ marginTop: "1.7rem", marginBottom: "-1.5rem" }}>
-                {t(common.luoUusiAsia)}
-              </Button>
+            <div className="w-full flex flex-row justify-between">
+              <h1 className="mb-5">{t(common.asiat)}</h1>
+              <div className="pt-3 my-auto">
+                <SimpleButton
+                  aria-label={t(common.luoUusiAsia)}
+                  color="primary"
+                  variant="contained"
+                  text={t(common.luoUusiAsia)}
+                  size="large"
+                  onClick={() => console.log("Click")}
+                />
+              </div>
             </div>
             <OivaTabs
               value={location.pathname}
@@ -98,7 +100,9 @@ const Esittelijat = ({ match, user, history }) => {
       <div
         className="flex-1 flex w-full"
         style={{ borderTop: "0.05rem solid #E3E3E3", background: "#FAFAFA" }}>
-        <div className="flex-1 flex flex-col w-full max-w-screen-xl mx-auto px-3 lg:px-8 py-12">
+        <div
+          style={{ maxWidth: "90rem" }}
+          className="flex-1 flex flex-col w-full mx-auto px-3 lg:px-8 py-12">
           <div
             className="flex-1 bg-white"
             style={{ border: "0.05rem solid #E3E3E3" }}>
