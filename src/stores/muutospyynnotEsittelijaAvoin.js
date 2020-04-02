@@ -4,17 +4,17 @@ import { execute } from "./utils/loadFromBackend";
 const Store = createStore({
   initialState: {},
   actions: {
-    load: statusKey => ({ getState, setState }) => {
+    load: () => ({ getState, setState }) => {
       return execute(
         { getState, setState },
         {
           key: "muutospyynnot",
-          urlEnding: statusKey // avoimet, valmistelussa, paatetyt
+          urlEnding: "avoimet" // avoimet, valmistelussa, paatetyt
         }
       );
     }
   },
-  name: "Muutospyynnöt - Esittelijä"
+  name: "Muutospyynnöt - Esittelijä - Avoimet"
 });
 
-export const useMuutospyynnotEsittelija = createHook(Store);
+export const useMuutospyynnotEsittelijaAvoin = createHook(Store);

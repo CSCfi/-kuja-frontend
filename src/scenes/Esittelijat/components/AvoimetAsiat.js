@@ -3,7 +3,7 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { generateAvoimetAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
-import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
+import { useMuutospyynnotEsittelijaAvoin } from "../../../stores/muutospyynnotEsittelijaAvoin";
 import { useMuutospyynnotEsittelijaValmistelussa } from "../../../stores/muutospyynnotEsittelijaValmistelussa";
 
 import * as R from "ramda";
@@ -11,23 +11,23 @@ import * as R from "ramda";
 const AvoimetAsiat = () => {
   const intl = useIntl();
   const [
-    muutospyynnotEsittelija,
-    muutospyynnotEsittelijaActions
-  ] = useMuutospyynnotEsittelija();
+    muutospyynnotEsittelijaAvoin,
+    muutospyynnotEsittelijaAvoinActions
+  ] = useMuutospyynnotEsittelijaAvoin();
   const [
     muutospyynnotEsittelijaValmistelussa,
     muutospyynnotEsittelijaValmistelussaActions
   ] = useMuutospyynnotEsittelijaValmistelussa();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load("avoimet");
+    let abortController = muutospyynnotEsittelijaAvoinActions.load();
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaActions]);
+  }, [muutospyynnotEsittelijaAvoinActions]);
 
   useEffect(() => {
     let abortController = muutospyynnotEsittelijaValmistelussaActions.load();
@@ -40,10 +40,10 @@ const AvoimetAsiat = () => {
   }, [muutospyynnotEsittelijaValmistelussaActions]);
 
   const tableStructure = useMemo(() => {
-    const avoinData = muutospyynnotEsittelija.data || [];
+    const avoinData = muutospyynnotEsittelijaAvoin.data || [];
     const valmistelussaData = muutospyynnotEsittelijaValmistelussa.data || [];
 
-    return !!muutospyynnotEsittelija.data &&
+    return !!muutospyynnotEsittelijaAvoin.data &&
       !!muutospyynnotEsittelijaValmistelussa.data
       ? generateAvoimetAsiatTableStructure(
           R.concat(avoinData, valmistelussaData),
@@ -52,7 +52,7 @@ const AvoimetAsiat = () => {
       : [];
   }, [
     intl.formatMessage,
-    muutospyynnotEsittelija.data,
+    muutospyynnotEsittelijaAvoin.data,
     muutospyynnotEsittelijaValmistelussa.data
   ]);
 

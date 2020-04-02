@@ -3,33 +3,35 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
-import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
+import { useMuutospyynnotEsittelijaPaatetty } from "../../../stores/muutospyynnotEsittelijaPaatetty";
 
 const PaatetytAsiat = () => {
   const intl = useIntl();
   const [
-    muutospyynnotEsittelija,
-    muutospyynnotEsittelijaActions
-  ] = useMuutospyynnotEsittelija();
+    muutospyynnotEsittelijaPaatetty,
+    muutospyynnotEsittelijaPaatettyActions
+  ] = useMuutospyynnotEsittelijaPaatetty();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load("paatetyt");
+    let abortController = muutospyynnotEsittelijaPaatettyActions.load(
+      "paatetyt"
+    );
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaActions]);
+  }, [muutospyynnotEsittelijaPaatettyActions]);
 
   const tableStructure = useMemo(() => {
-    return !!muutospyynnotEsittelija.data
+    return !!muutospyynnotEsittelijaPaatetty.data
       ? generatePaatetytAsiatTableStructure(
-          muutospyynnotEsittelija.data,
+          muutospyynnotEsittelijaPaatetty.data,
           intl.formatMessage
         )
       : [];
-  }, [intl.formatMessage, muutospyynnotEsittelija.data]);
+  }, [intl.formatMessage, muutospyynnotEsittelijaPaatetty.data]);
 
   return (
     <Table
