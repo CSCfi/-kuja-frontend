@@ -61,7 +61,7 @@ const VapaaSivistystyo = ({ history }) => {
         filteredLuvat = filteredLuvat.filter(lupa => {
           const nimi = R.path(["jarjestaja", "nimi", "fi"])(lupa);
           if (nimi) {
-            return nimi.includes(searchFilter);
+            return nimi.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase());
           } else {
             return false;
           }
