@@ -20,7 +20,9 @@ const AvoimetAsiat = props => {
     muutospyynnotEsittelijaValmistelussaActions
   ] = useMuutospyynnotEsittelijaValmistelussa();
 
-  const isForced = R.includes("force=true", location.search);
+  const isForced = useMemo(() => {
+    return R.includes("force=", location.search);
+  }, [location.search]);
 
   useEffect(() => {
     let abortController = muutospyynnotEsittelijaAvoimetActions.load(isForced);
@@ -30,7 +32,7 @@ const AvoimetAsiat = props => {
         abortController.abort();
       }
     };
-  }, [isForced, muutospyynnotEsittelijaAvoimetActions]);
+  }, [isForced, location.search, muutospyynnotEsittelijaAvoimetActions]);
 
   useEffect(() => {
     let abortController = muutospyynnotEsittelijaValmistelussaActions.load(
@@ -42,7 +44,7 @@ const AvoimetAsiat = props => {
         abortController.abort();
       }
     };
-  }, [isForced, muutospyynnotEsittelijaValmistelussaActions]);
+  }, [isForced, location.search, muutospyynnotEsittelijaValmistelussaActions]);
 
   const tableStructure = useMemo(() => {
     const avoinData = muutospyynnotEsittelijaAvoimet.data || [];

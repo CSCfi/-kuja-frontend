@@ -15,7 +15,9 @@ const PaatetytAsiat = props => {
     muutospyynnotEsittelijaPaatettyActions
   ] = useMuutospyynnotEsittelijaPaatetty();
 
-  const isForced = R.includes("force=true", location.search);
+  const isForced = useMemo(() => {
+    return R.includes("force=", location.search);
+  }, [location.search]);
 
   useEffect(() => {
     let abortController = muutospyynnotEsittelijaPaatettyActions.load(isForced);

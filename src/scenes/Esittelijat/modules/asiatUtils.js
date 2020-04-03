@@ -90,6 +90,7 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "esittelyyn") {
+                  const timestamp = new Date().getTime();
                   return axios
                     .post(
                       `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
@@ -100,7 +101,7 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
                     )
                     .then(
                       setTimeout(() => {
-                        history.push("?force=true");
+                        history.push("?force=" + timestamp);
                       })
                     );
                 } else if (action === "paata") {
