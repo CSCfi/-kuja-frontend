@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Helmet, Title } from "react-helmet";
+import { Helmet } from "react-helmet";
 
 import { ContentContainer } from "../../../modules/elements";
 
@@ -12,9 +12,7 @@ class Tilastot extends Component {
   render() {
     return (
       <ContentContainer>
-        <Helmet height="50px">
-          <Title>Oiva | Tilastot</Title>
-        </Helmet>
+        <Helmet height="50px" title={"Oiva | Tilastot"}></Helmet>
         <h1>Tilastot</h1>
         <p>Linkkejä tilastodataan (beta-versio):</p>
         <Linkki>

@@ -10,7 +10,6 @@ import Login from "scenes/Login/Login";
 import PropTypes from "prop-types";
 import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
-import Jarjestajat from "./scenes/Jarjestajat/Jarjestajat";
 import { COLORS } from "./modules/styles";
 import Home from "scenes/Home";
 import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
@@ -66,6 +65,8 @@ const App = ({ user }) => {
 
   const [headerHeight, setHeaderHeight] = useState(0);
 
+  const oivaURL = process.env.REACT_APP_OIVA_URL || 'https://localhost:443';
+
   const pageLinks = [
     {
       path: "/esi-ja-perusopetus",
@@ -77,7 +78,7 @@ const App = ({ user }) => {
       text: intl.formatMessage(educationMessages.highSchoolEducation)
     },
     {
-      path: "/jarjestajat",
+      url: oivaURL + "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
     { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
@@ -245,7 +246,7 @@ const App = ({ user }) => {
                   backgroundColor: "white",
                   color: "black",
                   hoverColor: "white"
-                }}></Navigation>
+                }}/>
             </div>
           </SideNavigation>
 
@@ -274,11 +275,6 @@ const App = ({ user }) => {
                   <Route path="/cas-auth" component={RequireCasAuth} />
                   <Route path="/cas-logout" component={DestroyCasAuth} />
                   <Route path="/cas-ready" component={CasAuthenticated} />
-                  <Route
-                    exact
-                    path="/jarjestajat"
-                        component={Jarjestajat}
-                  />
                   <Route
                     exact
                     path="/lukiokoulutus"
