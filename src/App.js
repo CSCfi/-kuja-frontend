@@ -292,7 +292,7 @@ const App = ({ user }) => {
                     }}
                   />
                   <Route
-                    path = "/vapaa-sivistystyo/luvat/:uuid"
+                    path = "/lupa/:uuid"
                     render={props => {
                       return(
                         <Jarjestaja
