@@ -6,9 +6,9 @@ import axios from "axios/index";
 import { API_BASE_URL } from "../../../modules/constants";
 
 const asiatTableColumnSetup = [
-  { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
+  { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-1/12" },
   { titleKey: common["asiaTable.headers.asia"], widthClass: "w-2/12" },
-  { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-2/12" },
+  { titleKey: common["asiaTable.headers.asiakas"], widthClass: "w-3/12" },
   { titleKey: common["asiaTable.headers.maakunta"], widthClass: "w-2/12" },
   { titleKey: common["asiaTable.headers.tila"], widthClass: "w-1/12" },
   { titleKey: common["asiaTable.headers.saapunut"], widthClass: "w-2/12" },
@@ -106,6 +106,8 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
                 } else if (action === "paata") {
                   // todo: back end call for Merkitse päätetyksi
                   console.log("Merkitse päätetyksi");
+                } else {
+                  console.log("Avaa asian asiakirjat", row);
                 }
               },
               cells: generateAsiaTableRows(row, i, t).concat(
@@ -168,11 +170,12 @@ export const generatePaatetytAsiatTableStructure = (hakemusList, t) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "lataa") {
-                  console.log(row);
                   downloadFileFn({
                     url: `../../../api/pdf/esikatsele/muutospyynto/${row.id}`,
                     openInNewWindow: true
                   })();
+                } else {
+                  console.log("Avaa asian asiakirjat", row);
                 }
               },
               cells: generateAsiaTableRows(row, i, t).concat({
