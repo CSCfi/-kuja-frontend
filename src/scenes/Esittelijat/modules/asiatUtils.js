@@ -108,25 +108,43 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
                   console.log("Merkitse päätetyksi");
                 }
               },
-              cells: generateAsiaTableRows(row, i, t).concat({
-                menu: {
-                  id: `simple-menu-${i}`,
-                  actions: [
-                    {
-                      id: "esittelyyn",
-                      text: t(common["asiaTable.actions.esittelyssa"])
-                    },
-                    {
-                      id: "paata",
-                      text: t(common["asiaTable.actions.paatetty"])
+              cells: generateAsiaTableRows(row, i, t).concat(
+                row.tila !== "VALMISTELUSSA"
+                  ? {
+                      menu: {
+                        id: `simple-menu-${i}`,
+                        actions: [
+                          {
+                            id: "esittelyyn",
+                            text: t(common["asiaTable.actions.esittelyssa"])
+                          },
+                          {
+                            id: "paata",
+                            text: t(common["asiaTable.actions.paatetty"])
+                          }
+                        ]
+                      },
+                      styleClasses: [
+                        asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                          .widthClass
+                      ]
                     }
-                  ]
-                },
-                styleClasses: [
-                  asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
-                    .widthClass
-                ]
-              })
+                  : {
+                      menu: {
+                        id: `simple-menu-${i}`,
+                        actions: [
+                          {
+                            id: "paata",
+                            text: t(common["asiaTable.actions.paatetty"])
+                          }
+                        ]
+                      },
+                      styleClasses: [
+                        asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                          .widthClass
+                      ]
+                    }
+              )
             };
           }, hakemusList)
         }
