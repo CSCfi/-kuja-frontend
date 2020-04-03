@@ -22,7 +22,7 @@
     "jest-dom": "^3.5.0",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
-    "okm-frontend-components": "github:CSCfi/OKM-frontend-components#v0.2.5",
+    "okm-frontend-components": "github:CSCfi/OKM-frontend-components#v0.3.9",
     "postcss-import": "^12.0.1",
     "prop-types": "^15.7.2",
     "ramda": "^0.26.1",
@@ -52,7 +52,7 @@
   },
   "scripts": {
     "tailwind:css": "tailwind build src/css/tailwind.src.pcss -c tailwind.js -o src/css/tailwind.css",
-    "start": "npm-run-all --parallel watch:css watch:component-css start:react",
+    "start": "PORT=3100 npm-run-all --parallel watch:css watch:component-css start:react",
     "build": "npm-run-all build:css build:react build:component-css",
     "build:component-css": "postcss src/scenes/**/*.pcss --base src --dir src --ext module.css",
     "build:css": "tailwind build src/css/tailwind.src.pcss -c tailwind.js -o src/css/tailwind.css",
