@@ -78,7 +78,7 @@ export const generateAsiaTableRows = (row, i, t) => {
   );
 };
 
-export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
+export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
   return [
     generateAsiatTableHeaderStructure(t),
     {
@@ -90,13 +90,18 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "esittelyyn") {
-                  return axios.post(
-                    `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
-                    {},
-                    {
-                      withCredentials: true
-                    }
-                  );
+                  const timestamp = new Date().getTime();
+                  return axios
+                    .post(
+                      `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
+                      {},
+                      {
+                        withCredentials: true
+                      }
+                    )
+                    .then(() => {
+                      history.push("?force=" + timestamp);
+                    });
                 } else if (action === "paata") {
                   // todo: back end call for Merkitse päätetyksi
                   console.log("Merkitse päätetyksi");
@@ -104,25 +109,43 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
                   console.log("Avaa asian asiakirjat", row);
                 }
               },
-              cells: generateAsiaTableRows(row, i, t).concat({
-                menu: {
-                  id: `simple-menu-${i}`,
-                  actions: [
-                    {
-                      id: "esittelyyn",
-                      text: t(common["asiaTable.actions.esittelyssa"])
-                    },
-                    {
-                      id: "paata",
-                      text: t(common["asiaTable.actions.paatetty"])
+              cells: generateAsiaTableRows(row, i, t).concat(
+                row.tila !== "VALMISTELUSSA"
+                  ? {
+                      menu: {
+                        id: `simple-menu-${i}`,
+                        actions: [
+                          {
+                            id: "esittelyyn",
+                            text: t(common["asiaTable.actions.esittelyssa"])
+                          },
+                          {
+                            id: "paata",
+                            text: t(common["asiaTable.actions.paatetty"])
+                          }
+                        ]
+                      },
+                      styleClasses: [
+                        asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                          .widthClass
+                      ]
                     }
-                  ]
-                },
-                styleClasses: [
-                  asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
-                    .widthClass
-                ]
-              })
+                  : {
+                      menu: {
+                        id: `simple-menu-${i}`,
+                        actions: [
+                          {
+                            id: "paata",
+                            text: t(common["asiaTable.actions.paatetty"])
+                          }
+                        ]
+                      },
+                      styleClasses: [
+                        asiatTableColumnSetup[asiatTableColumnSetup.length - 1]
+                          .widthClass
+                      ]
+                    }
+              )
             };
           }, hakemusList)
         }

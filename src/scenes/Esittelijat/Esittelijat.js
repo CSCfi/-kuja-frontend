@@ -111,19 +111,19 @@ const Esittelijat = ({ match, user, history }) => {
                 authenticated={!!user}
                 exact
                 path={`${match.url}`}
-                render={() => <AvoimetAsiat />}
+                render={() => <AvoimetAsiat history={history} />}
               />
               <Route
                 authenticated={!!user}
                 exacts
                 path={`${match.url}/avoimet`}
-                render={() => <AvoimetAsiat />}
+                render={() => <AvoimetAsiat history={history} />}
               />
               <Route
                 authenticated={!!user}
                 exact
                 path={`${match.url}/paatetyt`}
-                render={() => <PaatetytAsiat />}
+                render={() => <PaatetytAsiat history={history} />}
               />
             </Switch>
           </div>

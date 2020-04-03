@@ -4,13 +4,15 @@ import { execute } from "./utils/loadFromBackend";
 const Store = createStore({
   initialState: {},
   actions: {
-    load: () => ({ getState, setState }) => {
+    load: isForceReloadRequested => ({ getState, setState }) => {
       return execute(
         { getState, setState },
         {
           key: "muutospyynnot",
           urlEnding: "paatetyt" // avoimet, valmistelussa, paatetyt
-        }
+        },
+        {},
+        isForceReloadRequested ? 0 : undefined
       );
     }
   },

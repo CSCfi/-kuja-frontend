@@ -3,57 +3,63 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { generateAvoimetAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
-import { useMuutospyynnotEsittelijaAvoin } from "../../../stores/muutospyynnotEsittelijaAvoin";
+import { useMuutospyynnotEsittelijaAvoimet } from "../../../stores/muutospyynnotEsittelijaAvoimet";
 import { useMuutospyynnotEsittelijaValmistelussa } from "../../../stores/muutospyynnotEsittelijaValmistelussa";
-
 import * as R from "ramda";
+import { useLocation } from "react-router-dom";
 
-const AvoimetAsiat = () => {
+const AvoimetAsiat = props => {
   const intl = useIntl();
+  const location = useLocation();
   const [
-    muutospyynnotEsittelijaAvoin,
-    muutospyynnotEsittelijaAvoinActions
-  ] = useMuutospyynnotEsittelijaAvoin();
+    muutospyynnotEsittelijaAvoimet,
+    muutospyynnotEsittelijaAvoimetActions
+  ] = useMuutospyynnotEsittelijaAvoimet();
   const [
     muutospyynnotEsittelijaValmistelussa,
     muutospyynnotEsittelijaValmistelussaActions
   ] = useMuutospyynnotEsittelijaValmistelussa();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaAvoinActions.load();
+    const isForced = R.includes("force=", location.search);
+    let abortController = muutospyynnotEsittelijaAvoimetActions.load(isForced);
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaAvoinActions]);
+  }, [location.search, muutospyynnotEsittelijaAvoimetActions]);
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaValmistelussaActions.load();
+    const isForced = R.includes("force=", location.search);
+    let abortController = muutospyynnotEsittelijaValmistelussaActions.load(
+      isForced
+    );
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaValmistelussaActions]);
+  }, [location.search, muutospyynnotEsittelijaValmistelussaActions]);
 
   const tableStructure = useMemo(() => {
-    const avoinData = muutospyynnotEsittelijaAvoin.data || [];
+    const avoinData = muutospyynnotEsittelijaAvoimet.data || [];
     const valmistelussaData = muutospyynnotEsittelijaValmistelussa.data || [];
-
-    return !!muutospyynnotEsittelijaAvoin.data &&
+    return !!muutospyynnotEsittelijaAvoimet.data &&
       !!muutospyynnotEsittelijaValmistelussa.data
       ? generateAvoimetAsiatTableStructure(
           R.concat(avoinData, valmistelussaData),
-          intl.formatMessage
+          intl.formatMessage,
+          props.history
         )
       : [];
   }, [
     intl.formatMessage,
-    muutospyynnotEsittelijaAvoin.data,
-    muutospyynnotEsittelijaValmistelussa.data
+    muutospyynnotEsittelijaAvoimet.data,
+    muutospyynnotEsittelijaValmistelussa.data,
+    props.history
   ]);
 
   return (
@@ -64,7 +70,8 @@ const AvoimetAsiat = () => {
   );
 };
 AvoimetAsiat.propTypes = {
-  intl: PropTypes.object
+  intl: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default AvoimetAsiat;

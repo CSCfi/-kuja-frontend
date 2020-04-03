@@ -4,34 +4,37 @@ import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
 import { useMuutospyynnotEsittelijaPaatetty } from "../../../stores/muutospyynnotEsittelijaPaatetty";
+import * as R from "ramda";
+import { useLocation } from "react-router-dom";
 
-const PaatetytAsiat = () => {
+const PaatetytAsiat = props => {
   const intl = useIntl();
+  const location = useLocation();
   const [
     muutospyynnotEsittelijaPaatetty,
     muutospyynnotEsittelijaPaatettyActions
   ] = useMuutospyynnotEsittelijaPaatetty();
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaPaatettyActions.load(
-      "paatetyt"
-    );
+    const isForced = R.includes("force=", location.search);
+    let abortController = muutospyynnotEsittelijaPaatettyActions.load(isForced);
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaPaatettyActions]);
+  }, [location.search, muutospyynnotEsittelijaPaatettyActions]);
 
   const tableStructure = useMemo(() => {
     return !!muutospyynnotEsittelijaPaatetty.data
       ? generatePaatetytAsiatTableStructure(
           muutospyynnotEsittelijaPaatetty.data,
-          intl.formatMessage
+          intl.formatMessage,
+          props.history
         )
       : [];
-  }, [intl.formatMessage, muutospyynnotEsittelijaPaatetty.data]);
+  }, [props.history, intl.formatMessage, muutospyynnotEsittelijaPaatetty.data]);
 
   return (
     <Table
@@ -41,7 +44,8 @@ const PaatetytAsiat = () => {
   );
 };
 PaatetytAsiat.propTypes = {
-  intl: PropTypes.object
+  intl: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default PaatetytAsiat;
