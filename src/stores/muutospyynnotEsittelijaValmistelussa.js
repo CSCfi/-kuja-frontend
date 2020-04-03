@@ -11,6 +11,7 @@ const Store = createStore({
           key: "muutospyynnot",
           urlEnding: "valmistelussa" // avoimet, valmistelussa, paatetyt
         },
+        {},
         isForceReloadRequested ? 0 : undefined
       );
     }

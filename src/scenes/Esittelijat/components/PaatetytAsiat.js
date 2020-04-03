@@ -15,11 +15,8 @@ const PaatetytAsiat = props => {
     muutospyynnotEsittelijaPaatettyActions
   ] = useMuutospyynnotEsittelijaPaatetty();
 
-  const isForced = useMemo(() => {
-    return R.includes("force=", location.search);
-  }, [location.search]);
-
   useEffect(() => {
+    const isForced = R.includes("force=", location.search);
     let abortController = muutospyynnotEsittelijaPaatettyActions.load(isForced);
 
     return function cancel() {
@@ -27,22 +24,17 @@ const PaatetytAsiat = props => {
         abortController.abort();
       }
     };
-  }, [isForced, location.search, muutospyynnotEsittelijaPaatettyActions]);
+  }, [location.search, muutospyynnotEsittelijaPaatettyActions]);
 
   const tableStructure = useMemo(() => {
-    return isForced || !!muutospyynnotEsittelijaPaatetty.data
+    return !!muutospyynnotEsittelijaPaatetty.data
       ? generatePaatetytAsiatTableStructure(
           muutospyynnotEsittelijaPaatetty.data,
           intl.formatMessage,
           props.history
         )
       : [];
-  }, [
-    isForced,
-    props.history,
-    intl.formatMessage,
-    muutospyynnotEsittelijaPaatetty.data
-  ]);
+  }, [props.history, intl.formatMessage, muutospyynnotEsittelijaPaatetty.data]);
 
   return (
     <Table

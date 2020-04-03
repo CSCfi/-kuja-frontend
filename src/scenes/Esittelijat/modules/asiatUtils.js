@@ -99,11 +99,9 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
                         withCredentials: true
                       }
                     )
-                    .then(
-                      setTimeout(() => {
-                        history.push("?force=" + timestamp);
-                      })
-                    );
+                    .then(() => {
+                      history.push("?force=" + timestamp);
+                    });
                 } else if (action === "paata") {
                   // todo: back end call for Merkitse päätetyksi
                   console.log("Merkitse päätetyksi");
