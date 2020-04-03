@@ -93,7 +93,7 @@ const Jarjestaja = React.memo(
     }, [intl.locale, lupa.data]);
 
     const breadcrumb = useMemo(() => {
-      return jarjestaja ? `/vapaa-sivistystyo/luvat/${uuid}` : "";
+      return jarjestaja ? `/lupa/${uuid}` : "";
     }, [jarjestaja]);
 
     const basicRoutes = [

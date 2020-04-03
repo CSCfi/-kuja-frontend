@@ -36,7 +36,7 @@ import {
   ROLE_NIMENKIRJOITTAJA,
   ROLE_YLLAPITAJA
 } from "./modules/constants";
-import Header from "./components/02-organisms/Header";
+import Header from "okm-frontend-components/dist/components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
 import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
@@ -292,7 +292,7 @@ const App = ({ user }) => {
                     }}
                   />
                   <Route
-                    path = "/vapaa-sivistystyo/luvat/:uuid"
+                    path = "/lupa/:uuid"
                     render={props => {
                       return(
                         <Jarjestaja
