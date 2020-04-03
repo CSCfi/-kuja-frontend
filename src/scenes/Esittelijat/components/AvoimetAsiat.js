@@ -3,57 +3,65 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { generateAvoimetAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
-import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
+import { useMuutospyynnotEsittelijaAvoimet } from "../../../stores/muutospyynnotEsittelijaAvoimet";
 import { useMuutospyynnotEsittelijaValmistelussa } from "../../../stores/muutospyynnotEsittelijaValmistelussa";
-
 import * as R from "ramda";
+import { useLocation } from "react-router-dom";
 
-const AvoimetAsiat = () => {
+const AvoimetAsiat = props => {
   const intl = useIntl();
+  const location = useLocation();
   const [
-    muutospyynnotEsittelija,
-    muutospyynnotEsittelijaActions
-  ] = useMuutospyynnotEsittelija();
+    muutospyynnotEsittelijaAvoimet,
+    muutospyynnotEsittelijaAvoimetActions
+  ] = useMuutospyynnotEsittelijaAvoimet();
   const [
     muutospyynnotEsittelijaValmistelussa,
     muutospyynnotEsittelijaValmistelussaActions
   ] = useMuutospyynnotEsittelijaValmistelussa();
 
+  const isForced = R.includes("force=true", location.search);
+
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load("avoimet");
+    let abortController = muutospyynnotEsittelijaAvoimetActions.load(isForced);
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaActions]);
+  }, [isForced, muutospyynnotEsittelijaAvoimetActions]);
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaValmistelussaActions.load();
+    let abortController = muutospyynnotEsittelijaValmistelussaActions.load(
+      isForced
+    );
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaValmistelussaActions]);
+  }, [isForced, muutospyynnotEsittelijaValmistelussaActions]);
 
   const tableStructure = useMemo(() => {
-    const avoinData = muutospyynnotEsittelija.data || [];
+    const avoinData = muutospyynnotEsittelijaAvoimet.data || [];
     const valmistelussaData = muutospyynnotEsittelijaValmistelussa.data || [];
-
-    return !!muutospyynnotEsittelija.data &&
-      !!muutospyynnotEsittelijaValmistelussa.data
+    return isForced ||
+      (!!muutospyynnotEsittelijaAvoimet.data &&
+        !!muutospyynnotEsittelijaValmistelussa.data)
       ? generateAvoimetAsiatTableStructure(
           R.concat(avoinData, valmistelussaData),
-          intl.formatMessage
+          intl.formatMessage,
+          props.history
         )
       : [];
   }, [
     intl.formatMessage,
-    muutospyynnotEsittelija.data,
-    muutospyynnotEsittelijaValmistelussa.data
+    muutospyynnotEsittelijaAvoimet.data,
+    muutospyynnotEsittelijaValmistelussa.data,
+    props.history,
+    isForced
   ]);
 
   return (
@@ -64,7 +72,8 @@ const AvoimetAsiat = () => {
   );
 };
 AvoimetAsiat.propTypes = {
-  intl: PropTypes.object
+  intl: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default AvoimetAsiat;

@@ -9,13 +9,13 @@ const Store = createStore({
         { getState, setState },
         {
           key: "muutospyynnot",
-          urlEnding: "valmistelussa" // avoimet, valmistelussa, paatetyt
+          urlEnding: "avoimet" // avoimet, valmistelussa, paatetyt
         },
         isForceReloadRequested ? 0 : undefined
       );
     }
   },
-  name: "Muutospyynnöt - Esittelijä - Valmistelussa"
+  name: "Muutospyynnöt - Esittelijä - Avoimet"
 });
 
-export const useMuutospyynnotEsittelijaValmistelussa = createHook(Store);
+export const useMuutospyynnotEsittelijaAvoimet = createHook(Store);

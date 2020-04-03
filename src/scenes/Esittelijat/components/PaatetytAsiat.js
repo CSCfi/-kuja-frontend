@@ -3,33 +3,44 @@ import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import { generatePaatetytAsiatTableStructure } from "../modules/asiatUtils";
 import { useIntl } from "react-intl";
 import { PropTypes } from "prop-types";
-import { useMuutospyynnotEsittelija } from "../../../stores/muutospyynnotEsittelija";
+import { useMuutospyynnotEsittelijaPaatetty } from "../../../stores/muutospyynnotEsittelijaPaatetty";
+import * as R from "ramda";
+import { useLocation } from "react-router-dom";
 
-const PaatetytAsiat = () => {
+const PaatetytAsiat = props => {
   const intl = useIntl();
+  const location = useLocation();
   const [
-    muutospyynnotEsittelija,
-    muutospyynnotEsittelijaActions
-  ] = useMuutospyynnotEsittelija();
+    muutospyynnotEsittelijaPaatetty,
+    muutospyynnotEsittelijaPaatettyActions
+  ] = useMuutospyynnotEsittelijaPaatetty();
+
+  const isForced = R.includes("force=true", location.search);
 
   useEffect(() => {
-    let abortController = muutospyynnotEsittelijaActions.load("paatetyt");
+    let abortController = muutospyynnotEsittelijaPaatettyActions.load(isForced);
 
     return function cancel() {
       if (abortController) {
         abortController.abort();
       }
     };
-  }, [muutospyynnotEsittelijaActions]);
+  }, [isForced, location.search, muutospyynnotEsittelijaPaatettyActions]);
 
   const tableStructure = useMemo(() => {
-    return !!muutospyynnotEsittelija.data
+    return isForced || !!muutospyynnotEsittelijaPaatetty.data
       ? generatePaatetytAsiatTableStructure(
-          muutospyynnotEsittelija.data,
-          intl.formatMessage
+          muutospyynnotEsittelijaPaatetty.data,
+          intl.formatMessage,
+          props.history
         )
       : [];
-  }, [intl.formatMessage, muutospyynnotEsittelija.data]);
+  }, [
+    isForced,
+    props.history,
+    intl.formatMessage,
+    muutospyynnotEsittelijaPaatetty.data
+  ]);
 
   return (
     <Table
@@ -39,7 +50,8 @@ const PaatetytAsiat = () => {
   );
 };
 PaatetytAsiat.propTypes = {
-  intl: PropTypes.object
+  intl: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default PaatetytAsiat;

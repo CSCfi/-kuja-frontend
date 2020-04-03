@@ -78,7 +78,7 @@ export const generateAsiaTableRows = (row, i, t) => {
   );
 };
 
-export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
+export const generateAvoimetAsiatTableStructure = (hakemusList, t, history) => {
   return [
     generateAsiatTableHeaderStructure(t),
     {
@@ -90,13 +90,19 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, t) => {
               id: row.uuid,
               onClick: (row, action) => {
                 if (action === "esittelyyn") {
-                  return axios.post(
-                    `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
-                    {},
-                    {
-                      withCredentials: true
-                    }
-                  );
+                  return axios
+                    .post(
+                      `${API_BASE_URL}/muutospyynnot/tila/valmistelussa/${row.id}`,
+                      {},
+                      {
+                        withCredentials: true
+                      }
+                    )
+                    .then(
+                      setTimeout(() => {
+                        history.push("?force=true");
+                      })
+                    );
                 } else if (action === "paata") {
                   // todo: back end call for Merkitse päätetyksi
                   console.log("Merkitse päätetyksi");
