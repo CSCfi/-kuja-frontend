@@ -20,11 +20,8 @@ const AvoimetAsiat = props => {
     muutospyynnotEsittelijaValmistelussaActions
   ] = useMuutospyynnotEsittelijaValmistelussa();
 
-  const isForced = useMemo(() => {
-    return R.includes("force=", location.search);
-  }, [location.search]);
-
   useEffect(() => {
+    const isForced = R.includes("force=", location.search);
     let abortController = muutospyynnotEsittelijaAvoimetActions.load(isForced);
 
     return function cancel() {
@@ -32,9 +29,10 @@ const AvoimetAsiat = props => {
         abortController.abort();
       }
     };
-  }, [isForced, location.search, muutospyynnotEsittelijaAvoimetActions]);
+  }, [location.search, muutospyynnotEsittelijaAvoimetActions]);
 
   useEffect(() => {
+    const isForced = R.includes("force=", location.search);
     let abortController = muutospyynnotEsittelijaValmistelussaActions.load(
       isForced
     );
@@ -44,14 +42,13 @@ const AvoimetAsiat = props => {
         abortController.abort();
       }
     };
-  }, [isForced, location.search, muutospyynnotEsittelijaValmistelussaActions]);
+  }, [location.search, muutospyynnotEsittelijaValmistelussaActions]);
 
   const tableStructure = useMemo(() => {
     const avoinData = muutospyynnotEsittelijaAvoimet.data || [];
     const valmistelussaData = muutospyynnotEsittelijaValmistelussa.data || [];
-    return isForced ||
-      (!!muutospyynnotEsittelijaAvoimet.data &&
-        !!muutospyynnotEsittelijaValmistelussa.data)
+    return !!muutospyynnotEsittelijaAvoimet.data &&
+      !!muutospyynnotEsittelijaValmistelussa.data
       ? generateAvoimetAsiatTableStructure(
           R.concat(avoinData, valmistelussaData),
           intl.formatMessage,
@@ -62,8 +59,7 @@ const AvoimetAsiat = props => {
     intl.formatMessage,
     muutospyynnotEsittelijaAvoimet.data,
     muutospyynnotEsittelijaValmistelussa.data,
-    props.history,
-    isForced
+    props.history
   ]);
 
   return (
