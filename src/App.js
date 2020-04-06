@@ -17,10 +17,7 @@ import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
 import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
 import DestroyCasAuth from "./scenes/Logout/services/DestroyCasAuth";
-import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
-import EsiJaPerusopetus from "./scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
-import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
 import JarjestajaSwitch from "./scenes/Jarjestajat/Jarjestaja/components/JarjestajaSwitch";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
@@ -67,21 +64,25 @@ const App = ({ isDebugModeOn, user }) => {
 
   const [headerHeight, setHeaderHeight] = useState(0);
 
+  const kujaURL = process.env.REACT_APP_KUJA_URL || 'https://localhost:4433';
+
   const pageLinks = [
     {
-      path: "/esi-ja-perusopetus",
+      url: kujaURL + "/esi-ja-perusopetus",
       text: intl.formatMessage(educationMessages.preAndBasicEducation),
-      isExact: false
     },
     {
-      path: "/lukiokoulutus",
+      url: kujaURL + "/lukiokoulutus",
       text: intl.formatMessage(educationMessages.highSchoolEducation)
     },
     {
       path: "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
-    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
+    {
+      url: kujaURL + "/vapaa-sivistystyo",
+      text: "Vapaa sivistystyö"
+    },
     { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
 
@@ -293,21 +294,6 @@ const App = ({ isDebugModeOn, user }) => {
                     exact
                     path="/jarjestajat"
                     render={props => <Jarjestajat history={props.history} />}
-                  />
-                  <Route
-                    exact
-                    path="/lukiokoulutus"
-                    component={Lukiokoulutus}
-                  />
-                  <Route
-                    exact
-                    path="/vapaa-sivistystyo"
-                    component={VapaaSivistystyo}
-                  />
-                  <Route
-                    exact
-                    path="/esi-ja-perusopetus"
-                    component={EsiJaPerusopetus}
                   />
                   <Route
                     path="/asiat"
