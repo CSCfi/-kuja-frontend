@@ -59,9 +59,9 @@ const VapaaSivistystyo = ({ history }) => {
       let filteredLuvat = luvatRaw.data;
       if (searchFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {
-          const nimi = R.path(["jarjestaja", "nimi", "fi"])(lupa);
+          const nimi = R.path(["jarjestaja", "nimi", intl.locale])(lupa);
           if (nimi) {
-            return nimi.includes(searchFilter);
+            return nimi.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase());
           } else {
             return false;
           }
