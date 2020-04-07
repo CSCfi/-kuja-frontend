@@ -87,20 +87,10 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                   lupahistoria.data
                 );
                 if (lupaHistoryObject) {
-                  const pathToPDF =
-                    moment(lupaHistoryObject.voimassaololoppupvm) >
-                    moment("2018-12-30") // Yeah, hard coded value. Not sure if it's valid anymore.
-                      ? "/pdf/"
-                      : "/pebble/resources/liitteet/lupahistoria/";
-                  if (history) {
-                    downloadFileFn({
-                      filename: lupaHistoryObject.filename,
-                      openInNewWindow: true,
-                      url: `${API_BASE_URL}${pathToPDF}`
-                    })();
-                  } else {
-                    console.error(intl.formatMessage(common.errorOpeningPDF));
-                  }
+                  downloadFileFn({
+                    openInNewWindow: true,
+                    url: `/pebble/resources/liitteet/${lupaHistoryObject.filename}`
+                  })();
                 } else {
                   console.error(intl.formatMessage(common.errorFetchingRow));
                 }
