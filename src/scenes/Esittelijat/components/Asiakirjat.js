@@ -57,7 +57,6 @@ const Asiakirjat = ({ uuid }) => {
 
   // Let's fetch MUUTOSPYYNNÖN LIITTEET
   useEffect(() => {
-    console.log(uuid);
     if (uuid) {
       muutospyynnonLiitteetAction.load(uuid);
     }
@@ -70,10 +69,10 @@ const Asiakirjat = ({ uuid }) => {
     }
   }, [muutospyyntoAction, uuid]);
 
+  // todo: remove these
   useEffect(() => {
     console.log(muutospyynnonLiitteet);
   }, [muutospyynnonLiitteet]);
-
   useEffect(() => {
     console.log(muutospyynto);
   }, [muutospyynto]);
@@ -210,6 +209,7 @@ const Asiakirjat = ({ uuid }) => {
 
   return (
     <div
+      className="flex flex-col flex-1"
       style={{
         borderTop: "0.05rem solid #E3E3E3",
         background: "#FAFAFA"
@@ -247,7 +247,7 @@ const Asiakirjat = ({ uuid }) => {
       <div className="flex-1 flex w-full">
         <div
           style={{ maxWidth: "90rem" }}
-          className="flex-1 flex flex-col w-full mx-auto px-3 lg:px-8 py-12">
+          className="flex-1 flex flex-col w-full mx-auto px-3 lg:px-8 pb-12">
           <h4 className="mb-1">Järjestämisluvan muutos -asiakirjat</h4>
           <div
             className="flex-1 bg-white"
