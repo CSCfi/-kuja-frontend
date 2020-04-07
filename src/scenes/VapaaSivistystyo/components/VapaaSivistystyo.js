@@ -11,6 +11,7 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
+import Loading from "../../../modules/Loading";
 const VapaaSivistystyo = ({ history }) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -123,38 +124,42 @@ const VapaaSivistystyo = ({ history }) => {
       </BreadcrumbsItem>
       <div className="mx-2 lg:mx-auto w-full sm:w-3/4 mb-16">
         <h1>{intl.formatMessage(common.vst.jarjestajatHeading)}</h1>
-        <div className="my-4">
-          {intl.formatMessage(common.activeLuvatCount, {
-            count: allDataLength
-          })}
-        </div>
+        {luvatRaw.isLoading === false && luvatRaw.fetchedAt
+          ? <div>
+              <div className="my-4">
+                {intl.formatMessage(common.activeLuvatCount, {
+                  count: allDataLength
+                })}
+              </div>
+              <div className="flex flex-col lg:flex-row mb-4">
+                <div className="lg:mr-4 h-13">
+                  <SearchFilter
+                    onValueChanged={updateSearchFilter}
+                    placeholder={intl.formatMessage(common.searchByJarjestaja)}
+                  />
+                </div>
+                <div className="mt-2 lg:mt-0 lg:mr-2 h-13">
+                  <Dropdown
+                    onChanges={onTypeSelectionChange}
+                    isClearable={true}
+                    options={vstTypeOptions}
+                    placeholder={vstTypeSelectionPlaceholder}
+                    isTall={true}
+                    className="w-full lg:w-20"
+                  />
+                </div>
+                <div className="mt-2 lg:ml-4 lg:my-auto">
+                  {intl.formatMessage(common.displayingPortion, {
+                    selectedCount: filteredDataLength,
+                    allCount: allDataLength
+                  })}
+                </div>
+              </div>
 
-        <div className="flex flex-col lg:flex-row mb-4">
-          <div className="lg:mr-4 h-13">
-            <SearchFilter
-              onValueChanged={updateSearchFilter}
-              placeholder={intl.formatMessage(common.searchByJarjestaja)}
-            />
-          </div>
-          <div className="mt-2 lg:mt-0 lg:mr-2 h-13">
-            <Dropdown
-              onChanges={onTypeSelectionChange}
-              isClearable={true}
-              options={vstTypeOptions}
-              placeholder={vstTypeSelectionPlaceholder}
-              isTall={true}
-              className="w-full lg:w-20"
-            />
-          </div>
-          <div className="mt-2 lg:ml-4 lg:my-auto">
-            {intl.formatMessage(common.displayingPortion, {
-              selectedCount: filteredDataLength,
-              allCount: allDataLength
-            })}
-          </div>
-        </div>
-
-        <Table structure={tableStructure} />
+              <Table structure={tableStructure} />
+            </div>
+          : <Loading />
+        }
       </div>
     </React.Fragment>
   );
