@@ -25,16 +25,18 @@ const WrapTable = styled.div``;
 
 const colWidths = {
   0: "w-4/12",
-  1: "w-3/12",
+  1: "w-2/12",
   2: "w-3/12",
-  3: "w-2/12"
+  3: "w-2/12",
+  4: "w-1/12"
 };
 
 const columnTitles = [
   common.document,
   common.documentStatus,
   common.author,
-  common.sent
+  common.sent,
+  common["asiaTable.headers.actions"]
 ];
 
 // States of hakemus
@@ -156,7 +158,7 @@ const Asiakirjat = ({ uuid, history }) => {
             {
               cells: R.addIndex(R.map)((title, ii) => {
                 return {
-                  isSortable: true,
+                  isSortable: ii === 4 ? false : true,
                   truncate: false,
                   styleClasses: [colWidths[ii]],
                   text: intl.formatMessage(title),
@@ -173,11 +175,11 @@ const Asiakirjat = ({ uuid, history }) => {
       rowGroups: [
         {
           rows: R.addIndex(R.map)(
-            row => {
+            (row, i) => {
               return {
                 fileLink: row.fileLink,
                 onClick: (row, action) => {
-                  if (action === "click" && row.fileLink) {
+                  if (action === "lataa" && row.fileLink) {
                     downloadFileFn({
                       url: row.fileLink,
                       openInNewWindow: row.openInNewWindow
@@ -198,7 +200,18 @@ const Asiakirjat = ({ uuid, history }) => {
                     { text: row.items[2] },
                     { text: row.items[3] }
                   ]
-                )
+                ).concat({
+                  menu: {
+                    id: `simple-menu-${i}`,
+                    actions: [
+                      {
+                        id: "lataa",
+                        text: t(common["asiaTable.actions.lataa"])
+                      }
+                    ]
+                  },
+                  styleClasses: ["w-1/12"]
+                })
               };
             },
             [muutospyyntoRowItem, ...liitteetRowItems]
@@ -213,7 +226,9 @@ const Asiakirjat = ({ uuid, history }) => {
 
   if (
     muutospyynnonLiitteet.isLoading === false &&
-    muutospyynnonLiitteet.fetchedAt
+    muutospyynto.isLoading === false &&
+    muutospyynnonLiitteet.fetchedAt &&
+    muutospyynto.fetchedAt
   ) {
     return (
       <div
@@ -273,7 +288,17 @@ const Asiakirjat = ({ uuid, history }) => {
                 />
                 <Media
                   query={MEDIA_QUERIES.TABLET_MIN}
-                  render={() => <Table structure={table} />}
+                  render={() => (
+                    <div
+                      style={{
+                        borderBottom: "0.05rem solid #E3E3E3"
+                      }}>
+                      <Table
+                        structure={table}
+                        sortedBy={{ columnIndex: 3, order: "descending" }}
+                      />
+                    </div>
+                  )}
                 />
               </WrapTable>
             </div>
