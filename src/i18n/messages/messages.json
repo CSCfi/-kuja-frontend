@@ -230,6 +230,16 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.asianAsiakirjat",
+    "defaultMessage": "Järjestämisluvan muutos -asiakirjat",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.asiakirjatTakaisin",
+    "defaultMessage": "Asiat sivulle",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "common.backFromAsiakirjat",
     "defaultMessage": "Takaisin Järjestämislupa asiat -taulukkoon",
     "filepath": "src/i18n/definitions/common.js"
@@ -396,7 +406,7 @@
   },
   {
     "id": "asiaStates.esittelija.VALMISTELUSSA",
-    "defaultMessage": "Valmistelussa",
+    "defaultMessage": "Esittelyssä",
     "filepath": "src/i18n/definitions/common.js"
   },
   {

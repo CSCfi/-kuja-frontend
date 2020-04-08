@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo } from "react";
 import { PropTypes } from "prop-types";
 import Asiat from "./components/Asiat";
 import Asiakirjat from "./components/Asiakirjat";
@@ -23,8 +23,14 @@ const Esittelijat = ({ match, user, history }) => {
         />
         <Route
           authenticated={!!user}
-          exacts
-          path={`${match.url}/`}
+          exact
+          path={`${match.url}/paatetyt`}
+          render={() => <Asiat history={history} match={match} user={user} />}
+        />
+        <Route
+          authenticated={!!user}
+          exact
+          path={`${match.url}/:uuid`}
           render={() => <Asiakirjat history={history} uuid={uuid} />}
         />
       </Switch>

@@ -16,8 +16,10 @@ import { useMuutospyynnonLiitteet } from "../../../stores/muutospyynnonLiitteet"
 import { useMuutospyynto } from "../../../stores/muutospyynto";
 import { Helmet } from "react-helmet";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
-
+import Loading from "../../../modules/Loading";
 import { asiaEsittelijaStateToLocalizationKeyMap } from "../../Jarjestajat/Jarjestaja/modules/constants";
+import Link from "@material-ui/core/Link";
+import BackIcon from "@material-ui/icons/ArrowBack";
 
 const WrapTable = styled.div``;
 
@@ -45,7 +47,7 @@ const states = [
   "PASSIVOITU"
 ];
 
-const Asiakirjat = ({ uuid }) => {
+const Asiakirjat = ({ uuid, history }) => {
   const intl = useIntl();
   const t = intl.formatMessage;
   const [organisation] = useOrganisation();
@@ -69,13 +71,15 @@ const Asiakirjat = ({ uuid }) => {
     }
   }, [muutospyyntoAction, uuid]);
 
-  // todo: remove these
-  useEffect(() => {
-    console.log(muutospyynnonLiitteet);
-  }, [muutospyynnonLiitteet]);
-  useEffect(() => {
-    console.log(muutospyynto);
-  }, [muutospyynto]);
+  const nimi = useMemo(
+    () => muutospyynto.data && muutospyynto.data.jarjestaja.nimi.fi,
+    [muutospyynto.data]
+  );
+
+  const ytunnus = useMemo(
+    () => muutospyynto.data && muutospyynto.data.jarjestaja.ytunnus,
+    [muutospyynto.data]
+  );
 
   const attachmentRow = ["", R.path(["nimi", intl.locale], organisation.data)];
 
@@ -207,74 +211,84 @@ const Asiakirjat = ({ uuid }) => {
     }
   ];
 
-  return (
-    <div
-      className="flex flex-col flex-1"
-      style={{
-        borderTop: "0.05rem solid #E3E3E3",
-        background: "#FAFAFA"
-      }}>
-      <Helmet>
-        <title>{`Oiva | ${t(common.hakemusAsiakirjat)}`}</title> // todo
-      </Helmet>
-      <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
-      <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
-      <BreadcrumbsItem to="/asiakirjat">
-        {muutospyynto &&
-          muutospyynto.data &&
-          muutospyynto.data.jarjestaja.nimi.fi}
-      </BreadcrumbsItem>
+  if (
+    muutospyynnonLiitteet.isLoading === false &&
+    muutospyynnonLiitteet.fetchedAt
+  ) {
+    return (
       <div
-        className="flex flex-col justify-end w-full py-8 mx-auto px-3 lg:px-8"
+        className="flex flex-col flex-1"
         style={{
-          maxWidth: "90rem"
+          borderTop: "0.05rem solid #E3E3E3",
+          background: "#FAFAFA"
         }}>
-        <div className="flex-1 flex items-center">
-          <div className="w-full flex flex-col">
-            <h1>
-              {muutospyynto &&
-                muutospyynto.data &&
-                muutospyynto.data.jarjestaja.nimi.fi}
-            </h1>
-            <p>
-              {muutospyynto &&
-                muutospyynto.data &&
-                muutospyynto.data.jarjestaja.ytunnus}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="flex-1 flex w-full">
+        <Helmet>
+          <title>{`Oiva | ${t(common.asianAsiakirjat)}`}</title>
+        </Helmet>
+        <BreadcrumbsItem to="/">{t(common.frontpage)}</BreadcrumbsItem>
+        <BreadcrumbsItem to="/asiat">{t(common.asiat)}</BreadcrumbsItem>
+        <BreadcrumbsItem to="/asiakirjat">{nimi}</BreadcrumbsItem>
         <div
-          style={{ maxWidth: "90rem" }}
-          className="flex-1 flex flex-col w-full mx-auto px-3 lg:px-8 pb-12">
-          <h4 className="mb-1">Järjestämisluvan muutos -asiakirjat</h4>
+          className="flex flex-col justify-end w-full py-8 mx-auto px-3 lg:px-8"
+          style={{
+            maxWidth: "90rem"
+          }}>
+          <Link
+            onClick={() => {
+              history.push("/asiat");
+            }}
+            style={{ cursor: "pointer" }}>
+            <BackIcon
+              style={{
+                fontSize: 14,
+                marginBottom: "0.1rem",
+                marginRight: "0.4rem"
+              }}
+            />
+            {t(common.asiakirjatTakaisin)}
+          </Link>
+          <div className="flex-1 flex items-center pt-8 pb-2">
+            <div className="w-full flex flex-col">
+              <h1>{nimi}</h1>
+              <h5 className="text-lg mt-1">{ytunnus}</h5>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 flex w-full">
           <div
-            className="flex-1 bg-white"
-            style={{ border: "0.05rem solid #E3E3E3" }}>
-            <WrapTable>
-              <Media
-                query={MEDIA_QUERIES.MOBILE}
-                render={() => (
-                  <OldTable role="table">
-                    <Tbody role="rowgroup">{asiakirjatList()}</Tbody>
-                  </OldTable>
-                )}
-              />
-              <Media
-                query={MEDIA_QUERIES.TABLET_MIN}
-                render={() => <Table structure={table} />}
-              />
-            </WrapTable>
+            style={{ maxWidth: "90rem" }}
+            className="flex-1 flex flex-col w-full mx-auto px-3 lg:px-8 pb-12">
+            <h4 className="mb-2">{t(common.asianAsiakirjat)}</h4>
+            <div
+              className="flex-1 bg-white"
+              style={{ border: "0.05rem solid #E3E3E3" }}>
+              <WrapTable>
+                <Media
+                  query={MEDIA_QUERIES.MOBILE}
+                  render={() => (
+                    <OldTable role="table">
+                      <Tbody role="rowgroup">{asiakirjatList()}</Tbody>
+                    </OldTable>
+                  )}
+                />
+                <Media
+                  query={MEDIA_QUERIES.TABLET_MIN}
+                  render={() => <Table structure={table} />}
+                />
+              </WrapTable>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <Loading />;
+  }
 };
 
 Asiakirjat.propTypes = {
-  muutospyynto: PropTypes.object
+  muutospyynto: PropTypes.object,
+  history: PropTypes.object
 };
 
 export default Asiakirjat;
