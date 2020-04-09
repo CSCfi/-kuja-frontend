@@ -213,13 +213,15 @@ const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
 
   for(const maarays of maaraykset) {
     const schoolName = maarays.organisaatio.nimi[locale];
-    const municipalities = [schoolName];
-    municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
+    const municipalities = [];
     if (!!maarays.organisaatio.muutKuntaKoodit) {
       for (const other of maarays.organisaatio.muutKuntaKoodit) {
         municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
       }
     }
+    municipalities.sort();
+    // Prepend school name and its location
+    municipalities.unshift(schoolName, parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
     values.push(municipalities.join(', '));
   }
 
