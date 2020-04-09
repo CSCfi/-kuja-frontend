@@ -20,6 +20,17 @@ it("should parse a localized field", () => {
   expect(result).toBe("Test FI");
 });
 
+it("should parse a localized field with alt message", () => {
+  const obj = [
+    {
+      kieli: "SV",
+      nimi: "Test SV"
+    }
+  ];
+  const result = resolveKoodiLocalization(obj, "FI", "nimi", "kieli");
+  expect(result).toBe("Test SV");
+});
+
 it("should work with defaults", () => {
   const obj = [
     {
