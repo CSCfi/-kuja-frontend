@@ -25,7 +25,7 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
                   };
                 },
                 [
-                  { text: intl.formatMessage(common.jarjestaja) },
+                  { text: intl.formatMessage(common.yllapitaja) },
                   { text: intl.formatMessage(common.oppilaitostyyppi) }
                 ]
               )
@@ -50,7 +50,6 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
               id: lupa.jarjestajaYtunnus,
 
               onClick: row => {
-                console.log(lupa)
                 if (history) {
                   history.push(`/lupa/${lupa.uuid}`);
                 } else {
