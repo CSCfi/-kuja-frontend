@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { PropTypes } from "prop-types";
@@ -11,6 +11,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import { withStyles } from "@material-ui/core/styles";
 import SimpleButton from "okm-frontend-components/dist/components/00-atoms/SimpleButton";
+import UusiAsiaEsidialog from "./../UusiAsiaEsidialog";
 
 const OivaTab = withStyles(theme => ({
   root: {
@@ -45,6 +46,7 @@ const OivaTabs = withStyles(theme => ({
 
 const Asiat = ({ match, user, history }) => {
   const intl = useIntl();
+  const [isEsidialogVisible, setIsEsidialogVisible] = useState(false);
   const t = intl.formatMessage;
   const location = useLocation();
 
@@ -53,6 +55,15 @@ const Asiat = ({ match, user, history }) => {
       <Helmet>
         <title>{`Oiva | ${t(common.asiat)}`}</title>
       </Helmet>
+
+      {isEsidialogVisible && (
+        <UusiAsiaEsidialog
+          isVisible={isEsidialogVisible}
+          onClose={() => setIsEsidialogVisible(false)}
+          onSelect={selectedItem =>
+            history.push(`asiat/${selectedItem.value}/uusi`)
+          }></UusiAsiaEsidialog>
+      )}
 
       <div
         className="flex flex-col justify-end w-full h-40 mx-auto px-3 lg:px-8"
@@ -70,7 +81,7 @@ const Asiat = ({ match, user, history }) => {
                   variant="contained"
                   text={t(common.luoUusiAsia)}
                   size="large"
-                  onClick={() => console.log("Click")}
+                  onClick={() => setIsEsidialogVisible(true)}
                 />
               </div>
             </div>
