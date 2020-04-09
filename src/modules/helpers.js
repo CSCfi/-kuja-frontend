@@ -27,7 +27,7 @@ export const resolveLocalizedOrganizerName = (lupa, primaryLocale) => {
  * @param primaryLocale
  * @return {*}
  */
-export const parseLocalizedField = (
+export const resolveKoodiLocalization = (
   messageObjects,
   locale = "FI",
 

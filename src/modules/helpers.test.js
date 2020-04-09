@@ -1,7 +1,7 @@
-import { parseLocalizedField, parsePostalCode, slugify } from "./helpers";
+import { resolveKoodiLocalization, parsePostalCode, slugify } from "./helpers";
 
 it("should return undefined", () => {
-  const result = parseLocalizedField({}, "FI", "nimi", "kieli");
+  const result = resolveKoodiLocalization({}, "FI", "nimi", "kieli");
   expect(result).toEqual(undefined);
 });
 
@@ -16,7 +16,7 @@ it("should parse a localized field", () => {
       nimi: "Test SV"
     }
   ];
-  const result = parseLocalizedField(obj, "FI", "nimi", "kieli");
+  const result = resolveKoodiLocalization(obj, "FI", "nimi", "kieli");
   expect(result).toBe("Test FI");
 });
 
@@ -31,7 +31,7 @@ it("should work with defaults", () => {
       nimi: "Test SV"
     }
   ];
-  const result = parseLocalizedField(obj);
+  const result = resolveKoodiLocalization(obj);
   expect(result).toBe("Test FI");
 });
 

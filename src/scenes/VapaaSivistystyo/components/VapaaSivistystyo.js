@@ -11,7 +11,7 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
-import {parseLocalizedField, resolveLocalizedOrganizerName} from "../../../modules/helpers";
+import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../../../modules/helpers";
 const VapaaSivistystyo = ({ history }) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -85,7 +85,7 @@ const VapaaSivistystyo = ({ history }) => {
       const vst = {};
       const vstOptions = [];
       vstRaw.data.forEach(item => {
-        const name = parseLocalizedField(item.metadata, intl.locale);
+        const name = resolveKoodiLocalization(item.metadata, intl.locale);
         vst[item.koodiArvo] = name;
         vstOptions.push({ value: item.koodiArvo, label: name });
       });
