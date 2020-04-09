@@ -2,29 +2,23 @@
  * Helper functions
  */
 
-import _ from "lodash";
+import * as R from "ramda";
 
+/**
+ * Given a koodisto koodi metadata array, return the localized message contained in given primaryLocale, or
+ * alternative locale when locales are assumed to be either 'fi' or 'sv'.
+ * @param messageObjects
+ * @param primaryLocale
+ * @return {*}
+ */
 export const parseLocalizedField = (
-  obj,
+  messageObjects,
   locale = "FI",
-  key = "nimi",
-  localeKey = "kieli"
-) => {
-  const targetObj = _.find(obj, o => {
-    if (o[localeKey] === locale) {
-      return o[key];
-    }
-  });
 
-  if (targetObj) {
-    return _.find(obj, o => {
-      if (o[localeKey] === locale) {
-        return o[key];
-      }
-    })[key];
-  } else {
-    return undefined;
-  }
+) => {
+  const primaryLocale = locale.toUpperCase();
+  const targetObject = R.find(item => item.kieli === primaryLocale, messageObjects);
+  return targetObject ? targetObject.nimi : undefined;
 };
 
 export const slugify = str => {
