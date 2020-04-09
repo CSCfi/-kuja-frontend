@@ -119,12 +119,12 @@ const VapaaSivistystyo = ({ history }) => {
         {intl.formatMessage(common.frontpage)}
       </BreadcrumbsItem>
       <BreadcrumbsItem to="/vapaa-sivistystyo">
-        {intl.formatMessage(common.vst.titleName)}
+        {intl.formatMessage(common.vstTitleName)}
       </BreadcrumbsItem>
       <div className="mx-2 lg:mx-auto w-full sm:w-3/4 mb-16">
-        <h1>{intl.formatMessage(common.vst.jarjestajatHeading)}</h1>
+        <h1>{intl.formatMessage(common.vstYllapitajatHeading)}</h1>
         <div className="my-4">
-          {intl.formatMessage(common.activeLuvatCount, {
+          {intl.formatMessage(common.vstActiveLuvatCount, {
             count: allDataLength
           })}
         </div>
@@ -133,7 +133,7 @@ const VapaaSivistystyo = ({ history }) => {
           <div className="lg:mr-4 h-13">
             <SearchFilter
               onValueChanged={updateSearchFilter}
-              placeholder={intl.formatMessage(common.searchByJarjestaja)}
+              placeholder={intl.formatMessage(common.searchByYllapitaja)}
             />
           </div>
           <div className="mt-2 lg:mt-0 lg:mr-2 h-13">
