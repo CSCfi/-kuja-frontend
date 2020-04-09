@@ -100,7 +100,7 @@ const Jarjestaja = React.memo(
       {
         path: `${match.url}`,
         exact: true,
-        text: intl.formatMessage(common.lupaTitle),
+        text: intl.formatMessage(common.yllapitamisLupaTitle),
       },
       {
         path: `${match.url}/paatokset`,
@@ -130,7 +130,7 @@ const Jarjestaja = React.memo(
       <React.Fragment>
         <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
           <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
-          <BreadcrumbsItem to="/vapaa-sivistystyo">{intl.formatMessage(common.vst.titleName)}</BreadcrumbsItem>
+          <BreadcrumbsItem to="/vapaa-sivistystyo">{intl.formatMessage(common.vstTitleName)}</BreadcrumbsItem>
           <BreadcrumbsItem to={breadcrumb}>{jarjestaja.nimi}</BreadcrumbsItem>
 
           <JarjestajaBasicInfo jarjestaja={jarjestaja} />
