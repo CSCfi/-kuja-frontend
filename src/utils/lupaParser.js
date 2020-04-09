@@ -1,7 +1,7 @@
 import {
   GENERIC_LUPA_SECTIONS, VST_LUPA_STRUCTURE
 } from "../scenes/VapaaSivistystyo/modules/constants";
-import { parseLocalizedField } from "../modules/helpers";
+import {parseLocalizedField, resolveLocalizedOrganizerName} from "../modules/helpers";
 import common from "../i18n/definitions/common";
 
 /**
@@ -52,8 +52,8 @@ const generateOrganizerSectionData = (lupa, locale) => {
   // Exception sourced from kuja-template/lupahistoria/liikunnankoulutuskeskukset/paatos/content_paatos_fi.html:35
   // TODO: localization of this exception case content
   const value = lupa.jarjestaja.oid === '1.2.246.562.10.13451568789' ?
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta}`;
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta}`;
 
   const retval = {
     values: [

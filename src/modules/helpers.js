@@ -5,6 +5,22 @@
 import * as R from "ramda";
 
 /**
+ * Resolve name of the organizer from lupa based on given locale. If it doesn't exist,
+ * resolve into other locale. We assume that only 'fi' and 'sv' locales exist.
+ * @param lupa
+ * @param primaryLocale
+ * @return {any}
+ */
+export const resolveLocalizedOrganizerName = (lupa, primaryLocale) => {
+  const altLocale = primaryLocale === 'fi' ? 'sv' : 'fi';
+  let retval = R.path(["jarjestaja", "nimi", primaryLocale])(lupa);
+  if(!retval) {
+    retval = R.path(["jarjestaja", "nimi", altLocale])(lupa);
+  }
+  return retval;
+};
+
+/**
  * Given a koodisto koodi metadata array, return the localized message contained in given primaryLocale, or
  * alternative locale when locales are assumed to be either 'fi' or 'sv'.
  * @param messageObjects

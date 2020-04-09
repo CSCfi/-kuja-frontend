@@ -11,6 +11,7 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
+import {parseLocalizedField, resolveLocalizedOrganizerName} from "../../../modules/helpers";
 const VapaaSivistystyo = ({ history }) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -59,7 +60,7 @@ const VapaaSivistystyo = ({ history }) => {
       let filteredLuvat = luvatRaw.data;
       if (searchFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {
-          const nimi = R.path(["jarjestaja", "nimi", intl.locale])(lupa);
+          const nimi = resolveLocalizedOrganizerName(lupa, intl.locale);
           if (nimi) {
             return nimi.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase());
           } else {
@@ -79,14 +80,12 @@ const VapaaSivistystyo = ({ history }) => {
   }, [luvatRaw, searchFilter, vstTypeSelection]);
 
   useEffect(() => {
+    // resolve names and selection options for vst oppilaitostyyppi
     if (vstRaw.data) {
       const vst = {};
       const vstOptions = [];
       vstRaw.data.forEach(item => {
-        const name = R.path(
-          ["nimi"],
-          R.find(metadata => metadata.kieli === "FI", item.metadata)
-        );
+        const name = parseLocalizedField(item.metadata, intl.locale);
         vst[item.koodiArvo] = name;
         vstOptions.push({ value: item.koodiArvo, label: name });
       });
