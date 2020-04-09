@@ -24,10 +24,10 @@ import BackIcon from "@material-ui/icons/ArrowBack";
 const WrapTable = styled.div``;
 
 const colWidths = {
-  0: "w-4/12",
+  0: "w-2/12",
   1: "w-2/12",
   2: "w-3/12",
-  3: "w-2/12",
+  3: "w-4/12",
   4: "w-1/12"
 };
 
@@ -190,7 +190,7 @@ const Asiakirjat = ({ uuid, history }) => {
                   (col, ii) => {
                     return {
                       truncate: true,
-                      styleClasses: [colWidths[ii]],
+                      styleClasses: [colWidths[ii] + " cursor-default"],
                       text: col.text
                     };
                   },
@@ -210,7 +210,7 @@ const Asiakirjat = ({ uuid, history }) => {
                       }
                     ]
                   },
-                  styleClasses: ["w-1/12"]
+                  styleClasses: ["w-1/12 cursor-default"]
                 })
               };
             },
@@ -249,10 +249,10 @@ const Asiakirjat = ({ uuid, history }) => {
             maxWidth: "90rem"
           }}>
           <Link
+            className="cursor-pointer"
             onClick={() => {
               history.push("/asiat");
-            }}
-            style={{ cursor: "pointer" }}>
+            }}>
             <BackIcon
               style={{
                 fontSize: 14,
