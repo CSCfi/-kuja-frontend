@@ -17,8 +17,10 @@ export const parseLocalizedField = (
 
 ) => {
   const primaryLocale = locale.toUpperCase();
-  const targetObject = R.find(item => item.kieli === primaryLocale, messageObjects);
-  return targetObject ? targetObject.nimi : undefined;
+  const altLocale = primaryLocale === "FI" ? "SV" : "FI";
+  const primaryObject = R.find(item => item.kieli === primaryLocale, messageObjects);
+  const altObject = R.find(item => item.kieli === altLocale, messageObjects);
+  return primaryObject ? primaryObject.nimi : altObject ? altObject.nimi : undefined;
 };
 
 export const slugify = str => {
