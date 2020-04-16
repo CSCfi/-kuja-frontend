@@ -87,7 +87,7 @@ export function getInvestoinnitForm(isReadOnly) {
     },
     {
       anchor: "kustannukset-Input",
-      styleClasses: ["flex sm:row"],
+      styleClasses: ["flex"],
       components: [
         {
           anchor: "A",
@@ -95,7 +95,6 @@ export function getInvestoinnitForm(isReadOnly) {
           styleClasses: [""],
           properties: {
             isReadOnly: isReadOnly,
-            withoutMargin: true,
             type: "number",
             tooltip: {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")
@@ -217,7 +216,7 @@ function getLiitteetForm(isReadOnly) {
           anchor: "A",
           styleClasses: ["w-full"],
           name: "Attachments",
-          messages: getMessages("attachments"),
+          messages: getMessages("attachments")
         }
       ]
     }
