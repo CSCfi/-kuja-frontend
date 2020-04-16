@@ -92,9 +92,10 @@ export function getInvestoinnitForm(isReadOnly) {
         {
           anchor: "A",
           name: "Input",
-          styleClasses: [""],
+          styleClasses: ["w-full sm:w-1/2 md:w-1/3"],
           properties: {
             isReadOnly: isReadOnly,
+            fullWidth: true,
             type: "number",
             tooltip: {
               text: __("taloudelliset.tooltipTaloudellisetInvestoinnitKentta2")

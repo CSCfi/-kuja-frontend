@@ -60,6 +60,7 @@ function getModificationForm(locale) {
           anchor: "ajankohta",
           name: "Datepicker",
           properties: {
+            isrequired: true,
             fullWidth: false,
             width: "8rem",
             label: __("common.date"),
