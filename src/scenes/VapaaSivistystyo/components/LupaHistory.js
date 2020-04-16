@@ -7,11 +7,9 @@ import { MEDIA_QUERIES } from "../../../modules/styles";
 import LupaHistoryItem from "./LupaHistoryItem";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import moment from "moment";
-import { API_BASE_URL } from "../../../modules/constants";
 import PropTypes from "prop-types";
 import { downloadFileFn } from "../../../utils/common";
 import { useLupahistoria } from "../../../stores/lupahistoria";
-import _ from "lodash";
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 
@@ -122,13 +120,13 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
   ];
 
   const renderLupaHistoryList = data => {
-    data = _.orderBy(data, ["paatospvm"], ["desc"]);
-    return _.map(data, (historyData, index) => (
+    const sorter = R.sortWith([R.descend(R.prop('paatospvm'))]);
+    return R.map((historyData, index) => (
       <LupaHistoryItem
         lupaHistoria={historyData}
         key={`${historyData.diaarinumero}-${index}`}
       />
-    ));
+    ),sorter(data));
   };
 
   return (

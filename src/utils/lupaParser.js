@@ -1,7 +1,7 @@
 import {
   GENERIC_LUPA_SECTIONS, VST_LUPA_STRUCTURE
 } from "../scenes/VapaaSivistystyo/modules/constants";
-import { parseLocalizedField } from "../modules/helpers";
+import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../modules/helpers";
 import common from "../i18n/definitions/common";
 
 /**
@@ -48,12 +48,12 @@ export const parseVSTLupa = (lupa, intl) => {
 };
 
 const generateOrganizerSectionData = (lupa, locale) => {
-  const kunta = parseLocalizedField(lupa.jarjestaja.kuntaKoodi.metadata, locale.toUpperCase())
+  const kunta = resolveKoodiLocalization(lupa.jarjestaja.kuntaKoodi.metadata, locale)
   // Exception sourced from kuja-template/lupahistoria/liikunnankoulutuskeskukset/paatos/content_paatos_fi.html:35
   // TODO: localization of this exception case content
   const value = lupa.jarjestaja.oid === '1.2.246.562.10.13451568789' ?
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta}`;
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta}`;
 
   const retval = {
     values: [
@@ -97,7 +97,7 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
   retval.values = [];
   for (const maarays of maaraykset) {
     retval.heading = maarays.kohde.meta.otsikko[locale];
-    retval.values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()))
+    retval.values.push(resolveKoodiLocalization(maarays.koodi.metadata, locale))
     retval.values.sort();
   }
 
@@ -216,12 +216,12 @@ const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
     const municipalities = [];
     if (!!maarays.organisaatio.muutKuntaKoodit) {
       for (const other of maarays.organisaatio.muutKuntaKoodit) {
-        municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
+        municipalities.push(resolveKoodiLocalization(other.metadata, locale));
       }
     }
     municipalities.sort();
     // Prepend school name and its location
-    municipalities.unshift(schoolName, parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
+    municipalities.unshift(schoolName, resolveKoodiLocalization(maarays.organisaatio.kuntaKoodi.metadata, locale));
     values.push(municipalities.join(', '));
   }
 
@@ -246,7 +246,7 @@ const generateRegionalDataForVST = (maaraykset, locale) => {
   const maarays = maaraykset[0];
 
   let values = [];
-  values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()));
+  values.push(resolveKoodiLocalization(maarays.koodi.metadata, locale));
   if(maarays.koodi.koodiArvo === '2') {
     const school = maarays.meta["urn:oppilaitosmääräys-1"];
     const other = maarays.meta["urn:muumääräys-2"]

@@ -1,5 +1,6 @@
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
+import {resolveLocalizedOrganizerName} from "../../../modules/helpers";
 
 const colWidths = {
   0: "w-4/6",
@@ -39,8 +40,7 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
         {
           rows: R.addIndex(R.map)(lupa => {
             const jarjestajanNimi =
-              lupa.jarjestaja.nimi[intl.locale] ||
-              lupa.jarjestaja.nimi.fi ||
+              resolveLocalizedOrganizerName(lupa, intl.locale) ||
               "[nimi puuttuu]";
             const maakunta = R.find(
               R.propEq("kieli", R.toUpper(intl.locale)),
