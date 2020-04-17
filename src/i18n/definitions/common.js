@@ -237,7 +237,7 @@ export default defineMessages({
   searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän nimellä"},
   vstTitleName: {id: "common.vstTitleName", defaultMessage: "Vapaa sivistystyö"},
-  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen ylläpitäjät"},
+  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön opetuksen ylläpitäjät"},
   current: {
     id: "common.current",
     defaultMessage: "Nykyinen"
@@ -347,7 +347,7 @@ export default defineMessages({
     defaultMessage: "Ylläpitäjän nimi ja kotipaikka"
   },
   VSTLupaSectionTitleMunicipality: {
-    id: "common.VSTLupaSectionTitleOrganizer",
+    id: "common.VSTLupaSectionTitleMunicipality",
     defaultMessage: "Sopimuskunnat"
   },
   VSTLupaSectionTitleSchoolNameAndLocation: {
