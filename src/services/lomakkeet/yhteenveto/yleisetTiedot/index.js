@@ -59,9 +59,10 @@ function getModificationForm(locale) {
         {
           anchor: "ajankohta",
           name: "Datepicker",
-          styleClasses: ["w-full sm:pr-2 sm:w-1/2 md:w-1/4"],
           properties: {
-            fullWidth: true,
+            isrequired: true,
+            fullWidth: false,
+            width: "8rem",
             label: __("common.date"),
             placeholder: __("common.date"),
             disablePast: true,
