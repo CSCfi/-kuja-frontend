@@ -37,7 +37,7 @@ export const parseVSTLupa = (lupa, intl) => {
 
       let sectionData = {};
       if(maaraykset.length > 0)  {
-        sectionData = generateSectionData(maaraykset, intl.locale);
+        sectionData = generateSectionData(maaraykset, intl.locale, lupa.diaarinumero);
       }
       sectionData.heading = intl.formatMessage(metaDataObject.titleMessageKey);
       sectionDataList.push(sectionData)
@@ -208,34 +208,27 @@ const generateSopimuskunnatDataForVST = (maaraykset, locale) => {
   return data;
 };
 
-const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
+const generateOppilaitoksetDataForVST = (maaraykset, locale, diaarinumero) => {
   let values = [];
 
   for(const maarays of maaraykset) {
-    const schoolName = maarays.organisaatio.nimi[locale];
-    const municipalities = [];
-    if (!!maarays.organisaatio.muutKuntaKoodit) {
-      for (const other of maarays.organisaatio.muutKuntaKoodit) {
-        municipalities.push(resolveKoodiLocalization(other.metadata, locale));
+    if (!!maarays.organisaatio) {
+      const schoolName = maarays.organisaatio.nimi[locale];
+      const municipalities = [];
+      if (!!maarays.organisaatio.muutKuntaKoodit) {
+        for (const other of maarays.organisaatio.muutKuntaKoodit) {
+          municipalities.push(resolveKoodiLocalization(other.metadata, locale));
+        }
       }
+      municipalities.sort();
+      // Prepend school name and its location
+      municipalities.unshift(schoolName, resolveKoodiLocalization(maarays.organisaatio.kuntaKoodi.metadata, locale));
+      values.push(municipalities.join(', '));
+    } else if (diaarinumero === '27/532/2011') {
+      //Special case for a school that doesn't have organisaatio information
+      values.push(`${maarays.meta["oppilaitosmääräys-0"]}, ${locale === 'fi' ? 'Kokkola' : 'Karleby'}`);
     }
-    municipalities.sort();
-    // Prepend school name and its location
-    municipalities.unshift(schoolName, resolveKoodiLocalization(maarays.organisaatio.kuntaKoodi.metadata, locale));
-    values.push(municipalities.join(', '));
   }
-
-    /*
-    TODO: implementation of following special case, after CSCKUJA-379 has been fixed. Corresponding määräys does
-          not arrive from backend at the moment
-
-        <!-- !!Special case!! Because Nordiska Konstskolan som filial can not be found from organisaatiopalvelu -->
-        {% if lupa.diaarinumero == "27/532/2011" and maarays.organisaatio is empty %}
-            {{ maarays.meta | fieldvalue("oppilaitosmääräys-0") }}, Kokkola
-        {% endif %}
-
-     */
-
   return {values}
 };
 
