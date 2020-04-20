@@ -113,14 +113,15 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
  */
 const generateMetaAttributeBasedData = (maaraykset, attributes) => {
   const retval = {};
-  const maarays = maaraykset.length > 0 ? maaraykset[0] : null;
-  if(!maarays) {
+  if(maaraykset.length === 0) {
     return retval;
   }
 
   retval.values = [];
-  for(const attribute of attributes) {
-    if(maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+  for(const maarays of maaraykset) {
+    for (const attribute of attributes) {
+      if (maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+    }
   }
   retval.values.sort();
   return retval;
