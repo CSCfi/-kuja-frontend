@@ -96,7 +96,6 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
   const retval = {}
   retval.values = [];
   for (const maarays of maaraykset) {
-    retval.heading = maarays.kohde.meta.otsikko[locale];
     retval.values.push(resolveKoodiLocalization(maarays.koodi.metadata, locale))
     retval.values.sort();
   }
@@ -104,17 +103,25 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
   return retval;
 };
 
-const generateMetaAttributeBasedData = (maaraykset, attributes, locale) => {
+/**
+ * Get meta-attribute values from maaraykset based on meta-attribute names.
+ *
+ * @param maaraykset
+ * @param attributes
+ * @param locale
+ * @return {{}}
+ */
+const generateMetaAttributeBasedData = (maaraykset, attributes) => {
   const retval = {};
-  const maarays = maaraykset.length > 0 ? maaraykset[0] : null;
-  if(!maarays) {
+  if(maaraykset.length === 0) {
     return retval;
   }
 
-  retval.heading = maarays.kohde.meta.otsikko[locale];
   retval.values = [];
-  for(const attribute of attributes) {
-    if(maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+  for(const maarays of maaraykset) {
+    for (const attribute of attributes) {
+      if (maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+    }
   }
   retval.values.sort();
   return retval;
@@ -128,7 +135,7 @@ const generateKoulutustehtavaData = (maaraykset, locale) => {
     "koulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateErityinenKoulutustehtavaData = (maaraykset, locale) => {
@@ -139,7 +146,7 @@ const generateErityinenKoulutustehtavaData = (maaraykset, locale) => {
     "erityinenkoulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateOppilaitoksetData = (maaraykset, locale) => {
@@ -150,7 +157,7 @@ const generateOppilaitoksetData = (maaraykset, locale) => {
     "oppilaitosmääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateMuutData = (maaraykset, locale) => {
@@ -161,7 +168,7 @@ const generateMuutData = (maaraykset, locale) => {
     "urn:oppilaitosmääräys-1"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale)
+  return generateMetaAttributeBasedData(maaraykset, attributes)
 };
 
 const generateTarkoitusData = (maaraykset, locale) => {
@@ -170,7 +177,7 @@ const generateTarkoitusData = (maaraykset, locale) => {
     "oppilaitoksentarkoitus-0"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const getSectionDataGeneratorForGeneric = (tunniste) => {
