@@ -11,7 +11,7 @@ const getMuutos = (changeObj, perustelut, kohde, maaraystyyppi) => {
   const subcode =
     subcodeCandidate && !isNaN(subcodeCandidate) ? subcodeCandidate : undefined;
   const finnishInfo = R.find(R.propEq("kieli", "FI"), metadata.metadata);
-  const maaraysUuid = changeObj.properties.metadata.maaraysId;
+  const maaraysUuid = changeObj.properties.metadata.maaraysUuid;
   const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
   const perusteluteksti = perustelutForBackend
     ? perustelutForBackend.perusteluteksti
@@ -24,6 +24,7 @@ const getMuutos = (changeObj, perustelut, kohde, maaraystyyppi) => {
     koodisto: metadata.koodisto.koodistoUri,
     kuvaus: finnishInfo.kuvaus,
     maaraystyyppi,
+    maaraysUuid,
     meta: {
       changeObjects: R.flatten([[changeObj], perustelut]),
       nimi: finnishInfo.nimi,
@@ -37,10 +38,7 @@ const getMuutos = (changeObj, perustelut, kohde, maaraystyyppi) => {
     type: changeObj.properties.isChecked ? "addition" : "removal"
   };
 
-  if (subcode && maaraysUuid) {
-    // in case parent maarays exists
-    muutos["maaraysUuid"] = maaraysUuid;
-  } else if (subcode) {
+  if (subcode) {
     muutos["parent"] = R.compose(R.join("."), R.dropLast(2))(anchorParts);
   }
   return muutos;
@@ -218,6 +216,7 @@ export function getChangesToSave(
         koodiarvo: code,
         koodisto: metadata.koodisto.koodistoUri,
         maaraystyyppi,
+        maaraysUuid: metadata.maaraysUuid,
         meta,
         nimi: finnishInfo.nimi,
         tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO",
@@ -238,6 +237,7 @@ export function getChangesToSave(
         changeObjects.perustelut
       );
       const meta = R.path(["properties", "metadata"], changeObj) || {};
+
       return {
         koodiarvo: code,
         koodisto: "oppilaitoksenopetuskieli",
@@ -246,6 +246,7 @@ export function getChangesToSave(
         isInLupa: meta.isInLupa,
         kohde, //: meta.kohde.kohdeArvot[0].kohde,
         maaraystyyppi, // : meta.maaraystyyppi,
+        maaraysUuid: meta.maaraysUuid,
         meta: {
           tunniste: "opetuskieli",
           changeObjects: R.flatten([[changeObj], perustelut]),
@@ -357,6 +358,7 @@ export function getChangesToSave(
         isInLupa: R.path(["properties", "metadata", "isInLupa"], changeObj),
         kohde,
         maaraystyyppi,
+        maaraysUuid: changeObj.properties.metadata.maaraysUuid,
         meta,
         tila,
         type
@@ -397,6 +399,7 @@ export function getChangesToSave(
               }
             ]
           },
+          maaraysUuid: changeObj.properties.metadata.maaraysUuid,
           muutosperustelukoodiarvo: null,
           kohde,
           maaraystyyppi,
