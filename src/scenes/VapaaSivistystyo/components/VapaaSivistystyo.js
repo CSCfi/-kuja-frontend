@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import * as R from "ramda";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import { Helmet } from "react-helmet";
 
 import common from "../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
-import SearchFilter from "okm-frontend-components/dist/components/02-organisms/SearchFilter";
 import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown";
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
 import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../../../modules/helpers";
 import Loading from "../../../modules/Loading";
+import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 const VapaaSivistystyo = ({ history }) => {
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
@@ -103,8 +102,8 @@ const VapaaSivistystyo = ({ history }) => {
       setvstTypeSelection(null);
     }
   };
-  const updateSearchFilter = payload => {
-    setSearchFilter(payload);
+  const updateSearchFilter = (_, {value}) => {
+    setSearchFilter(value);
   };
   const vstTypeSelectionPlaceholder = intl.formatMessage(
     common.filterByOppilaitostyyppi
@@ -130,21 +129,24 @@ const VapaaSivistystyo = ({ history }) => {
                   count: allDataLength
                 })}
               </div>
-              <div className="flex flex-col lg:flex-row mb-4">
-                <div className="lg:mr-4 h-13">
-                  <SearchFilter
-                    onValueChanged={updateSearchFilter}
-                    placeholder={intl.formatMessage(common.searchByYllapitaja)}
+              <div className="flex flex-col lg:flex-row mb-6">
+                <div className="lg:mr-4 w-2/6">
+                  <Input
+                    onChanges={updateSearchFilter}
+                    label={intl.formatMessage(common.searchByYllapitaja)}
                   />
                 </div>
-                <div className="mt-2 lg:mt-0 lg:mr-2 h-13">
+                <div className="mt-2 lg:mt-0 lg:mr-2 w-2/6">
                   <Dropdown
                     onChanges={onTypeSelectionChange}
                     isClearable={true}
                     options={vstTypeOptions}
-                    placeholder={vstTypeSelectionPlaceholder}
-                    isTall={true}
+                    value={vstTypeSelection || ''}
+                    fullWidth={true}
+                    label={vstTypeSelectionPlaceholder}
+                    isTall={false}
                     className="w-full lg:w-20"
+                    emptyMessage={intl.formatMessage(common.noSelection)}
                   />
                 </div>
                 <div className="mt-2 lg:ml-4 lg:my-auto">

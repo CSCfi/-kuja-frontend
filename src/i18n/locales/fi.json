@@ -26,6 +26,7 @@
   "auth.logIn": "Kirjaudu sisään",
   "auth.logOut": "Kirjaudu ulos",
   "auth.loggedInInfo": "Olet kirjautunut sisään",
+  "common.noSelection": "Ei valintaa",
   "common.vstActiveLuvatCount": "Voimassa olevat ylläpitämisluvat ({count} kpl)",
   "common.application": "Hakemus",
   "common.applyFor": "Haettava",

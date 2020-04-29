@@ -1,6 +1,10 @@
 import {defineMessages} from "react-intl";
 
 export default defineMessages({
+  noSelection: {
+    id: "common.noSelection",
+    defaultMessage: "Ei valintaa"
+  },
   statistics: {
     id: "common.statistics",
     defaultMessage: "Tilastot"
