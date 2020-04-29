@@ -335,6 +335,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
 
 MuutospyyntoWizardToimintaalue.defaultProps = {
   kunnat: [],
+  kuntamaaraykset: [],
   lupakohde: {},
   maakunnat: [],
   maakuntakunnatList: []
