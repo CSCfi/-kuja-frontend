@@ -64,7 +64,7 @@ const getTyyppiMessage = (lupaData) => {
           return 'undefined';
       }
     default:
-      return 'undefeied'
+      return 'undefined'
   }
 };
 
