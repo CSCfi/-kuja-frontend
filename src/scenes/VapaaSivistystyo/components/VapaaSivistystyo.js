@@ -179,7 +179,7 @@ const VapaaSivistystyo = () => {
                     onChanges={onOppilaitostyyppiSelectionChange}
                     isClearable={true}
                     options={vstTypeOptions}
-                    value={vstOppilaitostyyppiFilter || ''}
+                    value={vstOppilaitostyyppiFilter}
                     fullWidth={true}
                     label={vstTypeSelectionPlaceholder}
                     isTall={false}
