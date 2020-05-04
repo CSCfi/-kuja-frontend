@@ -42,10 +42,6 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
             const jarjestajanNimi =
               resolveLocalizedOrganizerName(lupa, intl.locale) ||
               "[nimi puuttuu]";
-            const maakunta = R.find(
-              R.propEq("kieli", R.toUpper(intl.locale)),
-              lupa.jarjestaja.maakuntaKoodi.metadata
-            );
             return {
               id: lupa.jarjestajaYtunnus,
 

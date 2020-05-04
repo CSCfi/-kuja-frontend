@@ -99,7 +99,7 @@ const VapaaSivistystyo = () => {
       setAllDataLength(luvatRaw.data.length);
       setFilteredDataLength(filteredLuvat.length);
     }
-  }, [luvatRaw, vstYllapitajaFilter, vstOppilaitostyyppiFilter]);
+  }, [luvatRaw, vstYllapitajaFilter, vstOppilaitostyyppiFilter, intl.locale]);
 
   useEffect(() => {
     // resolve names and selection options for vst oppilaitostyyppi
@@ -114,7 +114,7 @@ const VapaaSivistystyo = () => {
       setvstMap(vst);
       setvstTypeOptions(vstOptions);
     }
-  }, [vstRaw]);
+  }, [vstRaw, intl.locale]);
 
   const tableStructure = generateVSTTableStructure(luvat, intl, vstMap, history);
 
