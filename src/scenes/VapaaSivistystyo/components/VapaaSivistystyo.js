@@ -12,7 +12,13 @@ import { useVSTTyypit } from "../../../stores/vsttyypit";
 import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../../../modules/helpers";
 import Loading from "../../../modules/Loading";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
-const VapaaSivistystyo = ({ history }) => {
+import {useLocation, useRouteMatch, useHistory} from "react-router-dom";
+import queryString from 'query-string';
+
+const VapaaSivistystyo = () => {
+  const history = useHistory();
+  const match = useRouteMatch();
+  const location = useLocation();
   const intl = useIntl();
   const [luvatRaw, luvatActions] = useLuvat();
   const [vstRaw, vstActions] = useVSTTyypit();
@@ -26,10 +32,26 @@ const VapaaSivistystyo = ({ history }) => {
     6: "6"
   });
   const [vstTypeOptions, setvstTypeOptions] = useState([]);
-  const [searchFilter, setSearchFilter] = useState("");
-  const [vstTypeSelection, setvstTypeSelection] = useState(null);
+  const [vstYllapitajaFilter, setVstYllapitajaFilter] = useState('');
+  const [vstOppilaitostyyppiFilter, setVstOppilaitostyyppiFilter] = useState('');
   const [allDataLength, setAllDataLength] = useState(0);
   const [filteredDataLength, setFilteredDataLength] = useState(0);
+
+  useEffect(() => {
+    const searchParams = queryString.parse(location.search);
+    if(!!searchParams.yllapitaja) {
+      setVstYllapitajaFilter(searchParams.yllapitaja)
+    }
+    else {
+      setVstYllapitajaFilter('');
+    }
+    if(!!searchParams.oppilaitostyyppi) {
+      setVstOppilaitostyyppiFilter(searchParams.oppilaitostyyppi)
+    }
+    else{
+      setVstOppilaitostyyppiFilter('');
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const queryParameters = [
@@ -58,26 +80,26 @@ const VapaaSivistystyo = ({ history }) => {
   useEffect(() => {
     if (luvatRaw.data) {
       let filteredLuvat = luvatRaw.data;
-      if (searchFilter.length > 0) {
+      if (vstYllapitajaFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {
           const nimi = resolveLocalizedOrganizerName(lupa, intl.locale);
           if (nimi) {
-            return nimi.toLocaleLowerCase().includes(searchFilter.toLocaleLowerCase());
+            return nimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase());
           } else {
             return false;
           }
         });
       }
-      if (vstTypeSelection) {
+      if (vstOppilaitostyyppiFilter) {
         filteredLuvat = filteredLuvat.filter(
-          lupa => lupa.oppilaitostyyppi === vstTypeSelection
+          lupa => lupa.oppilaitostyyppi === vstOppilaitostyyppiFilter
         );
       }
       setLuvat(filteredLuvat);
       setAllDataLength(luvatRaw.data.length);
       setFilteredDataLength(filteredLuvat.length);
     }
-  }, [luvatRaw, searchFilter, vstTypeSelection]);
+  }, [luvatRaw, vstYllapitajaFilter, vstOppilaitostyyppiFilter]);
 
   useEffect(() => {
     // resolve names and selection options for vst oppilaitostyyppi
@@ -95,16 +117,29 @@ const VapaaSivistystyo = ({ history }) => {
   }, [vstRaw]);
 
   const tableStructure = generateVSTTableStructure(luvat, intl, vstMap, history);
-  const onTypeSelectionChange = (payload, selection) => {
-    if (selection && selection.selectedOption) {
-      setvstTypeSelection(selection.selectedOption.value);
-    } else {
-      setvstTypeSelection(null);
+
+  const onOppilaitostyyppiSelectionChange = (_, {selectedOption}) => {
+    const params = {};
+    if(vstYllapitajaFilter !== '') {
+      params.yllapitaja = vstYllapitajaFilter;
     }
+    if (selectedOption.value !== '') {
+      params.oppilaitostyyppi = selectedOption.value;
+    }
+    history.push(`${match.url}?${queryString.stringify(params)}`);
   };
-  const updateSearchFilter = (_, {value}) => {
-    setSearchFilter(value);
+
+  const onYllapitajaFilterChange = (_, {value}) => {
+    const params = {};
+    if(value.length > 0) {
+      params.yllapitaja = value;
+    }
+    if(vstOppilaitostyyppiFilter !== '') {
+      params.oppilaitostyyppi = vstOppilaitostyyppiFilter;
+    }
+    history.push(`${match.url}?${queryString.stringify(params)}`);
   };
+
   const vstTypeSelectionPlaceholder = intl.formatMessage(
     common.filterByOppilaitostyyppi
   );
@@ -132,16 +167,17 @@ const VapaaSivistystyo = ({ history }) => {
               <div className="flex flex-col lg:flex-row mb-6">
                 <div className="lg:mr-4 w-2/6">
                   <Input
-                    onChanges={updateSearchFilter}
+                    onChanges={onYllapitajaFilterChange}
+                    value={vstYllapitajaFilter}
                     label={intl.formatMessage(common.searchByYllapitaja)}
                   />
                 </div>
                 <div className="mt-2 lg:mt-0 lg:mr-2 w-2/6">
                   <Dropdown
-                    onChanges={onTypeSelectionChange}
+                    onChanges={onOppilaitostyyppiSelectionChange}
                     isClearable={true}
                     options={vstTypeOptions}
-                    value={vstTypeSelection || ''}
+                    value={vstOppilaitostyyppiFilter || ''}
                     fullWidth={true}
                     label={vstTypeSelectionPlaceholder}
                     isTall={false}
