@@ -203,7 +203,7 @@ export default defineMessages({
   },
   yllapitaja: {
     id: "common.yllapitaja",
-    defaultMessage: "Koulutuksen ylläpitäjä"
+    defaultMessage: "Oppilaitoksen ylläpitäjä"
   },
   homeCounty: {
     id: "common.homeCounty",
@@ -241,7 +241,7 @@ export default defineMessages({
   searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
   searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän nimellä"},
   vstTitleName: {id: "common.vstTitleName", defaultMessage: "Vapaa sivistystyö"},
-  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön opetuksen ylläpitäjät"},
+  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön oppilaitosten ylläpitäjät"},
   current: {
     id: "common.current",
     defaultMessage: "Nykyinen"
