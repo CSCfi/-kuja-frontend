@@ -60,7 +60,11 @@ const getTyyppiMessage = (lupaData) => {
           return common.lupaPageTitleVSTLiikunnanKoulutuskeskus;
         case "6":
           return common.lupaPageTitleVSTMuut;
+        default:
+          return 'undefined';
       }
+    default:
+      return 'undefeied'
   }
 };
 
@@ -94,7 +98,7 @@ const Jarjestaja = React.memo(
 
     const breadcrumb = useMemo(() => {
       return jarjestaja ? `/lupa/${uuid}` : "";
-    }, [jarjestaja]);
+    }, [jarjestaja, uuid]);
 
     const basicRoutes = [
       {
@@ -121,7 +125,7 @@ const Jarjestaja = React.memo(
             return parseGenericKujaLupa(lupa.data, intl.locale);
         }
       }
-    }, [lupa.data]);
+    }, [lupa.data, intl]);
 
     const dateString = new moment().format('D.M.YYYY');
     const lupaTitle = intl.formatMessage(getTyyppiMessage(lupa.data), {date: dateString});
