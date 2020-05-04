@@ -53,6 +53,7 @@ const VapaaSivistystyo = () => {
     }
   }, [location.search]);
 
+  //fetch raw data for vst lupas
   useEffect(() => {
     const queryParameters = [
       {
@@ -68,6 +69,7 @@ const VapaaSivistystyo = () => {
     };
   }, [luvatActions]);
 
+  // fetch raw data for population vst oppilaitostyypi selections
   useEffect(() => {
     const abortController = vstActions.load();
     return function cancel() {
