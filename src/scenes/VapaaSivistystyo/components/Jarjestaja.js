@@ -8,7 +8,6 @@ import JarjestajaBasicInfo from "./JarjestajaBasicInfo";
 import ProfileMenu from "./ProfileMenu";
 import { COLORS } from "../../../modules/styles";
 import { FullWidthWrapper } from "../../../modules/elements";
-import * as R from "ramda";
 import Paatokset from "./Paatokset";
 import {useLupa} from "../../../stores/lupa";
 import common from "../../../i18n/definitions/common";
@@ -16,6 +15,7 @@ import Loading from "../../../modules/Loading";
 import {parseGenericKujaLupa, parseVSTLupa} from "../../../utils/lupaParser";
 import Jarjestamislupa from "./Jarjestamislupa";
 import moment from "moment";
+import {resolveLocalizedOrganizerName} from "../../../modules/helpers";
 
 const Separator = styled.div`
   &:after {
@@ -91,7 +91,7 @@ const Jarjestaja = React.memo(
       return lupa.data && lupa.data.jarjestaja
         ? {
           ...lupa.data.jarjestaja,
-          nimi: R.prop(intl.locale, lupa.data.jarjestaja.nimi)
+          nimi: resolveLocalizedOrganizerName(lupa.data, intl.locale)
         }
         : {};
     }, [intl.locale, lupa.data]);
