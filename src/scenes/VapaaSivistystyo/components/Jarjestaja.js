@@ -2,10 +2,13 @@ import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { Route, useHistory } from "react-router-dom";
+import {
+  Route,
+  useHistory,
+  useLocation
+} from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import JarjestajaBasicInfo from "./JarjestajaBasicInfo";
-import ProfileMenu from "./ProfileMenu";
 import { COLORS } from "../../../modules/styles";
 import { FullWidthWrapper } from "../../../modules/elements";
 import Paatokset from "./Paatokset";
@@ -105,6 +108,7 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
   const intl = useIntl();
   const [lupa, lupaActions] = useLupa();
   const t = intl.formatMessage;
+  const location = useLocation();
 
   // Let's fetch LUPA
   useEffect(() => {
@@ -131,19 +135,6 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
   const breadcrumb = useMemo(() => {
     return jarjestaja ? `/lupa/${uuid}` : "";
   }, [jarjestaja, uuid]);
-
-  const basicRoutes = [
-    {
-      path: `${match.url}`,
-      exact: true,
-      text: intl.formatMessage(common.yllapitamisLupaTitle)
-    },
-    {
-      path: `${match.url}/paatokset`,
-      exact: true,
-      text: intl.formatMessage(common.lupaPaatokset)
-    }
-  ];
 
   const sections = useMemo(() => {
     if (!lupa.data) {
@@ -177,7 +168,7 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
         <Separator />
 
         <OivaTabs
-          value={match.url}
+          value={location.pathname}
           indicatorColor="primary"
           textColor="primary"
           onChange={(e, val) => {
@@ -186,7 +177,7 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
           <OivaTab
             label={t(common.yllapitamisLupaTitle)}
             aria-label={t(common.yllapitamisLupaTitle)}
-            to={`${match.url}/avoimet`}
+            to={`${match.url}`}
             value={`${match.url}`}
           />
           <OivaTab
