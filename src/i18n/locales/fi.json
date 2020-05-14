@@ -175,6 +175,7 @@
   "common.today": "Tänään",
   "common.tutkinnot": "Tutkinnot",
   "common.undo": "Kumoa muutokset",
+  "common.changesText": "Muutokset:",
   "common.voimassaOlevatJarjestamisluvat": "Voimassa olevat järjestämisluvat ({amount} kpl)",
   "common.welcome": "Tervetuloa Oiva-palveluun",
   "education.highSchoolEducation": "Lukiokoulutus",

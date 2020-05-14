@@ -28,6 +28,11 @@ const PerustelutToimintaalue = React.memo(
     sectionId
   }) => {
     const intl = useIntl();
+    const changesMessages = {
+      undo: intl.formatMessage(common.undo),
+      changesTest: intl.formatMessage(common.changesText)
+    }
+    
     return (
       <React.Fragment>
         {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && kohde && (
@@ -38,7 +43,7 @@ const PerustelutToimintaalue = React.memo(
             disableReverting={false}
             hideAmountOfChanges={true}
             isExpanded={true}
-            messages={{ undo: intl.formatMessage(common.undo) }}
+            messages={changesMessages}
             onChangesRemove={onChangesRemove}
             onUpdate={onChangesUpdate}
             sectionId={sectionId}

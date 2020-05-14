@@ -315,6 +315,11 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     ]
   );
 
+  const changesMessages = {
+    undo: intl.formatMessage(common.undo),
+    changesTest: intl.formatMessage(common.changesText)
+  }
+
   return (
     <ExpandableRowRoot
       anchor={props.sectionId}
@@ -322,7 +327,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
       categories={[]}
       changes={changeObjects.toimintaalue}
       hideAmountOfChanges={true}
-      messages={{ undo: intl.formatMessage(common.undo) }}
+      messages={changesMessages}
       isExpanded={true}
       showCategoryTitles={true}
       onChangesRemove={props.onChangesRemove}
