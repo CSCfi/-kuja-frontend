@@ -17,6 +17,10 @@ export default defineMessages({
     id: "common.undo",
     defaultMessage: "Kumoa muutokset"
   },
+  changesText: {
+    id: "common.changesText",
+    defaultMessage: "Muutokset:"
+  },
   loading: {
     id: "common.loading",
     defaultMessage: "Ladataan"
