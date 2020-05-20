@@ -740,5 +740,17 @@ export default defineMessages({
   downloadPDFAndChangeState: {
     id: "common.downloadPDFAndChangeState",
     defaultMessage: "Lataa PDF ja muuta tila"
-  }
+  },
+  asiaPaatettyConfirmationDialogTitle: {
+    id: "common.asiaPaatettyConfirmationDialogTitle",
+    defaultMessage: "Merkitäänkö asia päätetyksi?"
+  },
+  asiaPaatettyConfirmationDialogContent: {
+    id: "common.asiaPaatettyConfirmationDialogContent",
+    defaultMessage: "Haluatko varmasti merkitä asian päätetyksi? Päätetyksi merkitsemisen jälkeen asiaa ei voi enää muokata."
+  },
+  asiaPaatettyConfirmationDialogOk: {
+    id: "common.asiaPaatettyConfirmationDialogOk",
+    defaultMessage: "Merkitse päätetyksi"
+  },
 });
