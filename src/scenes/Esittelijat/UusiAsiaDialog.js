@@ -232,7 +232,7 @@ const UusiAsiaDialog = React.memo(
           outputs.muutospyynto.tallennus.tallennaEsittelijanToimesta.output
             .result;
         // Let's get the path of preview (PDF) document and download the file.
-        const path = await muutospyyntoActions.getDownloadPath(
+        const path = await muutospyyntoActions.getLupaPreviewDownloadPath(
           muutospyynto.uuid
         );
         if (path) {
