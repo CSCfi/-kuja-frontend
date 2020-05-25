@@ -39,6 +39,7 @@ import ProcedureHandler from "../../components/02-organisms/procedureHandler";
 import Lomake from "../../components/02-organisms/Lomake";
 import { getRules } from "../../services/lomakkeet/esittelija/rules";
 import { useMuutospyynto } from "../../stores/muutospyynto";
+import common from "../../i18n/definitions/common";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -415,10 +416,10 @@ const UusiAsiaDialog = React.memo(
         <ConfirmDialog
           isConfirmDialogVisible={isConfirmDialogVisible}
           messages={{
-            content: HAKEMUS_VIESTI.VARMISTUS.FI,
-            ok: HAKEMUS_VIESTI.KYLLA.FI,
-            cancel: HAKEMUS_VIESTI.EI.FI,
-            title: "Poistutaanko?"
+            content: intl.formatMessage(common.confirmExitMuutoshakemusWizard),
+            ok: intl.formatMessage(common.yes),
+            cancel: intl.formatMessage(common.no),
+            title: intl.formatMessage(common.confirmExitMuutoshakemusWizardTitle)
           }}
           handleOk={closeWizard}
           handleCancel={handleCancel}

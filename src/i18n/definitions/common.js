@@ -29,6 +29,14 @@ export default defineMessages({
     id: "common.ok",
     defaultMessage: "Ok"
   },
+  yes: {
+    id: "common.yes",
+    defaultMessage: "Kyllä"
+  },
+  no: {
+    id: "common.no",
+    defaultMessage: "Ei"
+  },
   clear: {
     id: "common.clear",
     defaultMessage: "Tyhjennä"
@@ -753,4 +761,20 @@ export default defineMessages({
     id: "common.asiaPaatettyConfirmationDialogOk",
     defaultMessage: "Merkitse päätetyksi"
   },
+  confirmExitMuutoshakemusWizard: {
+    id: "common.confirmExitMuutoshakemus",
+    defaultMessage: "Oletko varma, että haluat poistua muutoshakemuksen luonnista? Tekemiäsi muutoksia ei tallenneta."
+  },
+  confirmExitMuutoshakemusWizardTitle: {
+    id: "common.confirmExitMuutoshakemusWizardTitle",
+    defaultMessage: "Poistutaanko?"
+  },
+  confirmSendMuutoshakemus: {
+    id: "common.confirmSendMuutoshakemus",
+    defaultMessage: "Oletko varma, että haluat lähettää hakemuksen käsiteltäväksi?"
+  },
+  confirmSendMuutoshakemusTitle: {
+    id: "common.confirmSendMuutoshakemusTitle",
+    defaultMessage: "Lähetyksen varmistus"
+  }
 });

@@ -10,6 +10,7 @@ import { ROLE_NIMENKIRJOITTAJA } from "../../../../../../modules/constants";
 import { useLomakkeet } from "../../../../../../stores/lomakkeet";
 import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
 import { path } from "ramda";
+import common from "../../../../../../i18n/definitions/common";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -45,10 +46,10 @@ const WizardActions = props => {
       <ConfirmDialog
         isConfirmDialogVisible={isConfirmDialogVisible}
         messages={{
-          content: HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI,
-          ok: HAKEMUS_VIESTI.KYLLA.FI,
-          cancel: HAKEMUS_VIESTI.EI.FI,
-          title: HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI
+          content: intl.formatMessage(common.confirmSendMuutoshakemus),
+          ok: intl.formatMessage(common.yes),
+          cancel: intl.formatMessage(common.no),
+          title: intl.formatMessage(common.confirmSendMuutoshakemusTitle)
         }}
         handleOk={handleOk}
         handleCancel={handleCancel}
