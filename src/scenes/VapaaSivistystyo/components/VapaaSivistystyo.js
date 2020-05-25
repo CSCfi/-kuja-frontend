@@ -9,7 +9,11 @@ import Dropdown from "okm-frontend-components/dist/components/00-atoms/Dropdown"
 import { useLuvat } from "../../../stores/luvat";
 import { generateVSTTableStructure } from "../modules/utils";
 import { useVSTTyypit } from "../../../stores/vsttyypit";
-import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../../../modules/helpers";
+import {
+  resolveKoodiLocalization,
+  resolveLocalizedOrganizerName,
+  resolveVSTOppilaitosNameFromLupa
+} from "../../../modules/helpers";
 import Loading from "../../../modules/Loading";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 import {useLocation, useRouteMatch, useHistory} from "react-router-dom";
@@ -81,13 +85,14 @@ const VapaaSivistystyo = () => {
 
   useEffect(() => {
     if (luvatRaw.data) {
-      console.log(luvatRaw.data)
       let filteredLuvat = luvatRaw.data;
       if (vstYllapitajaFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {
           const nimi = resolveLocalizedOrganizerName(lupa, intl.locale);
+          const oppilaitosnimi = resolveVSTOppilaitosNameFromLupa(lupa, intl.locale) || "";
           if (nimi) {
-            return nimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase());
+            return nimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase()) ||
+              oppilaitosnimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase());
           } else {
             return false;
           }

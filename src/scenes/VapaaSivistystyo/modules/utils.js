@@ -4,8 +4,8 @@ import {resolveLocalizedOrganizerName, resolveVSTOppilaitosNameFromLupa} from ".
 
 const colWidths = {
   0: "w-5/12",
-  1: "w-5/12",
-  2: "w-2/12"
+  1: "w-4/12",
+  2: "w-3/12"
 };
 
 export const generateVSTTableStructure = (tableData = [], intl, vstMap, history) => {

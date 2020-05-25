@@ -239,7 +239,7 @@ export default defineMessages({
   },
   vstActiveLuvatCount: {id: "common.vstActiveLuvatCount", defaultMessage: "Voimassa olevat ylläpitämisluvat ({count} kpl)"},
   searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
-  searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän nimellä"},
+  searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän tai oppilaitoksen nimellä"},
   vstTitleName: {id: "common.vstTitleName", defaultMessage: "Vapaa sivistystyö"},
   vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön oppilaitosten ylläpitäjät"},
   current: {
