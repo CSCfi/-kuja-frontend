@@ -49,6 +49,14 @@ export default defineMessages({
     id: "common.accept",
     defaultMessage: "Hyväksy"
   },
+  save: {
+    id: "common.save",
+    defaultMessage: "Tallenna"
+  },
+  noSave: {
+    id: "common.noSave",
+    defaultMessage: "Älä tallenna"
+  },
   today: {
     id: "common.today",
     defaultMessage: "Tänään"
@@ -776,5 +784,13 @@ export default defineMessages({
   confirmSendMuutoshakemusTitle: {
     id: "common.confirmSendMuutoshakemusTitle",
     defaultMessage: "Lähetyksen varmistus"
+  },
+  confirmExitEsittelijaMuutoshakemusWizard: {
+    id: "common.confirmExitEsittelijaMuutoshakemusWizard",
+    defaultMessage: "Haluatko tallentaa järjestämislupaan tekemäsi muutokset? Voit myöhemmin palata tekemiisi muutoksiin tallennettuasi muutokset."
+  },
+  confirmExitEsittelijaMuutoshakemusWizardTitle: {
+    id: "common.confirmExitEsittelijaMuutoshakemusWizardTitle",
+    defaultMessage: "Tallennetaanko muutokset ennen poistumista?"
   }
 });
