@@ -44,10 +44,12 @@ const WizardActions = props => {
     <WizardBottom>
       <ConfirmDialog
         isConfirmDialogVisible={isConfirmDialogVisible}
-        title={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI}
-        content={HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI}
-        yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
-        noMessage={HAKEMUS_VIESTI.EI.FI}
+        messages={{
+          content: HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ.FI,
+          ok: HAKEMUS_VIESTI.KYLLA.FI,
+          cancel: HAKEMUS_VIESTI.EI.FI,
+          title: HAKEMUS_VIESTI.VARMISTUS_LÄHETÄ_HEADER.FI
+        }}
         handleOk={handleOk}
         handleCancel={handleCancel}
       />

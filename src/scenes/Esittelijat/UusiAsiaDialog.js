@@ -414,10 +414,12 @@ const UusiAsiaDialog = React.memo(
         </FormDialog>
         <ConfirmDialog
           isConfirmDialogVisible={isConfirmDialogVisible}
-          title={"Poistutaanko?"}
-          content={HAKEMUS_VIESTI.VARMISTUS.FI}
-          yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
-          noMessage={HAKEMUS_VIESTI.EI.FI}
+          messages={{
+            content: HAKEMUS_VIESTI.VARMISTUS.FI,
+            ok: HAKEMUS_VIESTI.KYLLA.FI,
+            cancel: HAKEMUS_VIESTI.EI.FI,
+            title: "Poistutaanko?"
+          }}
           handleOk={closeWizard}
           handleCancel={handleCancel}
         />
