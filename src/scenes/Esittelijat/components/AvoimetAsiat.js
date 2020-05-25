@@ -9,6 +9,7 @@ import { useMuutospyynnot } from "../../../stores/muutospyynnot";
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 import ProcedureHandler from "../../../components/02-organisms/procedureHandler";
+import {HAKEMUS_VIESTI} from "../../Jarjestajat/Jarjestaja/Hakemukset/Muutospyynto/modules/uusiHakemusFormConstants";
 
 const AvoimetAsiat = () => {
   const history = useHistory();
@@ -77,14 +78,17 @@ const AvoimetAsiat = () => {
           sortedBy={{ columnIndex: 5, order: "descending" }}
         />
         <ConfirmDialog
-          content={intl.formatMessage(common.asiaPaatettyConfirmationDialogContent)}
-          title={intl.formatMessage(common.asiaPaatettyConfirmationDialogTitle)}
           isConfirmDialogVisible={isPaatettyConfirmationDialogVisible}
           handleCancel={() => setPaatettyConfirmationDialogVisible(false)}
           handleOk={triggerPaatettyActionProcedure}
           onClose={() => setPaatettyConfirmationDialogVisible(false)}
-          yesMessage={intl.formatMessage(common.asiaPaatettyConfirmationDialogOk)}
-          noMessage={intl.formatMessage(common.cancel)}
+          messages={{
+            content: intl.formatMessage(common.asiaPaatettyConfirmationDialogContent),
+            ok: intl.formatMessage(common.asiaPaatettyConfirmationDialogOk),
+            cancel: intl.formatMessage(common.cancel),
+            title: intl.formatMessage(common.asiaPaatettyConfirmationDialogTitle)
+          }}
+
         />
       </div>
     );

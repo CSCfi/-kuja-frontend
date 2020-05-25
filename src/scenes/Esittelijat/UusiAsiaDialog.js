@@ -39,6 +39,7 @@ import ProcedureHandler from "../../components/02-organisms/procedureHandler";
 import Lomake from "../../components/02-organisms/Lomake";
 import { getRules } from "../../services/lomakkeet/esittelija/rules";
 import { useMuutospyynto } from "../../stores/muutospyynto";
+import common from "../../i18n/definitions/common";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -414,12 +415,19 @@ const UusiAsiaDialog = React.memo(
         </FormDialog>
         <ConfirmDialog
           isConfirmDialogVisible={isConfirmDialogVisible}
-          title={"Poistutaanko?"}
-          content={HAKEMUS_VIESTI.VARMISTUS.FI}
-          yesMessage={HAKEMUS_VIESTI.KYLLA.FI}
-          noMessage={HAKEMUS_VIESTI.EI.FI}
-          handleOk={closeWizard}
+          messages={{
+            content: intl.formatMessage(common.confirmExitEsittelijaMuutoshakemusWizard),
+            ok: intl.formatMessage(common.save),
+            noSave: intl.formatMessage(common.noSave),
+            cancel: intl.formatMessage(common.cancel),
+            title: intl.formatMessage(common.confirmExitEsittelijaMuutoshakemusWizardTitle)
+          }}
+          handleOk={() => {
+            onAction("save");
+            closeWizard();
+          }}
           handleCancel={handleCancel}
+          handleExitAndAbandonChanges={closeWizard}
         />
       </div>
     );
