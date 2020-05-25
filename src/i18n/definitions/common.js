@@ -381,5 +381,9 @@ export default defineMessages({
   VSTLupaSectionTitleOther: {
     id: "common.VSTLupaSectionTitleOther",
     defaultMessage: "Muut koulutuksen järjestämiseen liittyvät ehdot"
+  },
+  VSTOppilaitosTitle: {
+    id: "common.VSTOppilaitosTitle",
+    defaultMessage: "Oppilaitos"
   }
 });

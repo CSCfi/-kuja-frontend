@@ -81,6 +81,7 @@ const VapaaSivistystyo = () => {
 
   useEffect(() => {
     if (luvatRaw.data) {
+      console.log(luvatRaw.data)
       let filteredLuvat = luvatRaw.data;
       if (vstYllapitajaFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {

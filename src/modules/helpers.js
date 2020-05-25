@@ -21,6 +21,21 @@ export const resolveLocalizedOrganizerName = (lupa, primaryLocale) => {
 };
 
 /**
+ * Resolve name of the VST oppilaitos from an oppilaitosmääräys in lupa.
+ * @param lupa
+ * @param locale
+ * @return {string|*}
+ */
+export const resolveVSTOppilaitosNameFromLupa = (lupa, locale) => {
+  const maarays = lupa.maaraykset.find(item => item.koodisto = "oppilaitos");
+  if(maarays) {
+    const fakelupa = { jarjestaja: { nimi: R.path(["organisaatio", "nimi"])(maarays)}};
+    return resolveLocalizedOrganizerName(fakelupa, locale);
+  }
+  else return "";
+}
+
+/**
  * Given a koodisto koodi metadata array, return the localized message contained in given primaryLocale, or
  * alternative locale when locales are assumed to be either 'fi' or 'sv'.
  * @param messageObjects
