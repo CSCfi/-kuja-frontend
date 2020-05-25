@@ -422,9 +422,12 @@ const UusiAsiaDialog = React.memo(
             cancel: intl.formatMessage(common.cancel),
             title: intl.formatMessage(common.confirmExitEsittelijaMuutoshakemusWizardTitle)
           }}
-          handleOk={closeWizard}
+          handleOk={() => {
+            onAction("save");
+            closeWizard();
+          }}
           handleCancel={handleCancel}
-          handleExitAndAbandonChanges={() => {}}
+          handleExitAndAbandonChanges={closeWizard}
         />
       </div>
     );
