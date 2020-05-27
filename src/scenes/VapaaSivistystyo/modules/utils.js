@@ -1,10 +1,11 @@
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
-import {resolveLocalizedOrganizerName} from "../../../modules/helpers";
+import {resolveLocalizedOrganizerName, resolveVSTOppilaitosNameFromLupa} from "../../../modules/helpers";
 
 const colWidths = {
-  0: "w-4/6",
-  1: "w-2/6"
+  0: "w-5/12",
+  1: "w-4/12",
+  2: "w-3/12"
 };
 
 export const generateVSTTableStructure = (tableData = [], intl, vstMap, history) => {
@@ -26,6 +27,7 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
                 },
                 [
                   { text: intl.formatMessage(common.yllapitaja) },
+                  { text: intl.formatMessage(common.VSTOppilaitosTitle) },
                   { text: intl.formatMessage(common.oppilaitostyyppi) }
                 ]
               )
@@ -63,7 +65,11 @@ export const generateVSTTableStructure = (tableData = [], intl, vstMap, history)
                     text: col.text
                   };
                 },
-                [{ text: jarjestajanNimi }, { text: vstMap[lupa.oppilaitostyyppi] }]
+                [
+                  { text: jarjestajanNimi },
+                  { text: resolveVSTOppilaitosNameFromLupa(lupa, intl.locale)},
+                  { text: vstMap[lupa.oppilaitostyyppi] }
+                  ]
               )
             };
           }, tableData)
