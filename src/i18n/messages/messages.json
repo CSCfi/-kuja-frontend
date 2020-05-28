@@ -15,13 +15,13 @@
     "filepath": "src/i18n/definitions/auth.js"
   },
   {
-    "id": "common.statistics",
-    "defaultMessage": "Tilastot",
+    "id": "common.noSelection",
+    "defaultMessage": "Ei valintaa",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
-    "id": "common.current",
-    "defaultMessage": "Nykyinen",
+    "id": "common.statistics",
+    "defaultMessage": "Tilastot",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
@@ -170,6 +170,16 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.asiat",
+    "defaultMessage": "Asia",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.asiatOpen",
+    "defaultMessage": "Avoimet asiat",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "common.document",
     "defaultMessage": "Asiakirja",
     "filepath": "src/i18n/definitions/common.js"
@@ -240,6 +250,96 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.frontpage",
+    "defaultMessage": "Etusivu",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.since",
+    "defaultMessage": "{date} lukien",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.jarjestaja",
+    "defaultMessage": "Koulutuksen järjestäjä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.yllapitaja",
+    "defaultMessage": "Oppilaitoksen ylläpitäjä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.homeCounty",
+    "defaultMessage": "Kotipaikan maakunta",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.oppilaitostyyppi",
+    "defaultMessage": "Oppilaitostyyppi",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.filterByOppilaitostyyppi",
+    "defaultMessage": "Rajaa oppilaitostyypin mukaan",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.displayingPortion",
+    "defaultMessage": "Näytetään {selectedCount}/{allCount}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.errorFetchingRow",
+    "defaultMessage": "Virhe haettaessa valitun rivin tietoja.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.errorOpeningPDF",
+    "defaultMessage": "PDF:n avaaminen ei onnistunut.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.errorLoadingLupaHistory",
+    "defaultMessage": "Lupahistoriaa ladattaessa tapahtui virhe.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.errorLoadingLupa",
+    "defaultMessage": "Järjestämislupatietojen näyttäminen epäonnistui.",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.vstActiveLuvatCount",
+    "defaultMessage": "Voimassa olevat ylläpitämisluvat ({count} kpl)",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.searchByJarjestaja",
+    "defaultMessage": "Hae järjestäjän nimellä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.searchByYllapitaja",
+    "defaultMessage": "Hae ylläpitäjän tai oppilaitoksen nimellä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.vstTitleName",
+    "defaultMessage": "Vapaa sivistystyö",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.vstYllapitajatHeading",
+    "defaultMessage": "Vapaan sivistystyön oppilaitosten ylläpitäjät",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.current",
+    "defaultMessage": "Nykyinen",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "common.toBeAdded",
     "defaultMessage": "Lisättävä",
     "filepath": "src/i18n/definitions/common.js"
@@ -247,6 +347,171 @@
   {
     "id": "common.toBeRemoved",
     "defaultMessage": "Poistettava",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaLatest",
+    "defaultMessage": "Viimeisin päätös",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPaatokset",
+    "defaultMessage": "Päätökset",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoria",
+    "defaultMessage": "Historiatiedot",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.diaarinumero",
+    "defaultMessage": "Diaarinumero",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaDiaarinumeroHeading",
+    "defaultMessage": "Diaarinumero",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaPaatosDateHeading",
+    "defaultMessage": "Päätöspvm",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaStartDateHeading",
+    "defaultMessage": "Voimaantulopvm",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaEndDateHeading",
+    "defaultMessage": "Päättämispvm",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaKumottuDateHeading",
+    "defaultMessage": "Kumottu",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaPaatosDateMobile",
+    "defaultMessage": "Päätös tehty: {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaValidDateRangeMobile",
+    "defaultMessage": "Voimassa: {date1} - {date2}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaHistoriaKumottuDateMobile",
+    "defaultMessage": "Kumottu: {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleAmmatillinen",
+    "defaultMessage": "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleEsiJaPerusopeutus",
+    "defaultMessage": "Ajantasainen esi- ja perusopetuksen järjestämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleLukio",
+    "defaultMessage": "Ajantasainen lukiokoulutuksen järjestämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTKansalaisopisto",
+    "defaultMessage": "Ajantasainen kansalaisopiston ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTMuut",
+    "defaultMessage": "Ajantasainen Snellman-korkeakoulun ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTOpintokeskus",
+    "defaultMessage": "Ajantasainen opintokeskuksen ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTKansanopisto",
+    "defaultMessage": "Ajantasainen kansanopiston ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTKesäyliopisto",
+    "defaultMessage": "Ajantasainen kesäyliopiston ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaPageTitleVSTLiikunnanKoulutuskeskus",
+    "defaultMessage": "Ajantasainen liikunnan koulutuskeskuksen ylläpitämislupa {date}",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.lupaTitle",
+    "defaultMessage": "Järjestämislupa",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.yllapitamisLupaTitle",
+    "defaultMessage": "Ylläpitämislupa",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleOrganizer",
+    "defaultMessage": "Ylläpitäjän nimi ja kotipaikka",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleMunicipality",
+    "defaultMessage": "Sopimuskunnat",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleSchoolNameAndLocation",
+    "defaultMessage": "Oppilaitoksen nimi ja sijainti",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleOperationalArea",
+    "defaultMessage": "Oppilaitoksen toiminta-alue",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleTeachingLanguage",
+    "defaultMessage": "Opetuskieli",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleSchoolPurpose",
+    "defaultMessage": "Oppilaitoksen tarkoitus",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleSchoolMission",
+    "defaultMessage": "Oppilaitoksen koulutustehtävä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleSchoolMissionSpecial",
+    "defaultMessage": "Erityinen koulutustehtävä",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTLupaSectionTitleOther",
+    "defaultMessage": "Muut koulutuksen järjestämiseen liittyvät ehdot",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
+    "id": "common.VSTOppilaitosTitle",
+    "defaultMessage": "Oppilaitos",
     "filepath": "src/i18n/definitions/common.js"
   },
   {
