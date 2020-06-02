@@ -79,14 +79,12 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     const maarays = R.find(R.propEq("koodisto", "koulutussektori"))(
       props.maaraykset
     );
-    if (maarays) {
-      setKoodiarvot(prevState => {
-        return {
-          ...prevState,
-          vahimmaisopiskelijavuodet: maarays.koodiarvo
-        };
-      });
-    }
+    setKoodiarvot(prevState => {
+      return {
+        ...prevState,
+        vahimmaisopiskelijavuodet: maarays ? maarays.koodiarvo : "3"  // 3 = Ammatillinen koulutus
+      };
+    });
   }, [props.maaraykset]);
 
   // This effect is run depending on changes in section 5
