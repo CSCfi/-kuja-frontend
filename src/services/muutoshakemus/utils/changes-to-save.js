@@ -453,7 +453,8 @@ export function getChangesToSave(
       const anchorParts = R.split(".", changeObj.anchor);
       const koodiarvo = changeObj.properties.metadata.koodiarvo;
       let koodisto = { koodistoUri: "koulutussektori" };
-      if (!R.equals("vahimmaisopiskelijavuodet", R.nth(1, anchorParts))) {
+      const isVahimmaismaara = R.equals("vahimmaisopiskelijavuodet", R.nth(1, anchorParts));
+      if (!isVahimmaismaara) {
         koodisto = (R.find(R.propEq("koodiArvo", koodiarvo), muut) || {})
           .koodisto;
       }
@@ -506,7 +507,9 @@ export function getChangesToSave(
         koodiarvo,
         koodisto: koodisto.koodistoUri,
         kohde,
-        maaraystyyppi: R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit),
+        maaraystyyppi: isVahimmaismaara
+            ? R.find(R.propEq("tunniste", "OIKEUS"), maaraystyypit)
+            : R.find(R.propEq("tunniste", "RAJOITE"), maaraystyypit),
         meta,
         tila: "MUUTOS",
         type: "change"
