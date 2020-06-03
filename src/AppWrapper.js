@@ -8,6 +8,7 @@ import { useUser } from "./stores/user";
 import App from "./App";
 
 import "axios-progress-bar/dist/nprogress.css";
+import { useKaannokset } from "./stores/localizations";
 
 defaults.devtools = true;
 
@@ -29,6 +30,10 @@ if (!Intl.RelativeTimeFormat) {
  * authenticated user the basic structures of the app is shown.
  */
 const AppWrapper = () => {
+  const [kaannokset, kaannoksetActions] = useKaannokset();
+  // See the file: .env.development.local
+  const isBackendTheSourceOfLocalizations = !process.env.USE_LOCAL_TRANSLATIONS;
+
   const [user, actions] = useUser();
 
   const { state } = useContext(AppContext);
@@ -41,9 +46,29 @@ const AppWrapper = () => {
     };
   }, [actions]);
 
+  useEffect(() => {
+    if (isBackendTheSourceOfLocalizations) {
+      const abortController = kaannoksetActions.load(state.locale);
+      return function cancel() {
+        if (abortController) {
+          abortController.abort();
+        }
+      };
+    }
+  }, [isBackendTheSourceOfLocalizations, kaannoksetActions, state.locale]);
+
   const messages = useMemo(() => {
-    return translations[state.locale];
-  }, [state]);
+    if (!!kaannokset.data) {
+      //Using backend data as source
+      return kaannokset.data;
+    } else if (!isBackendTheSourceOfLocalizations) {
+      //Using local files as source
+      return translations[state.locale];
+    } else {
+      //Falling back to default localization messages
+      return {};
+    }
+  }, [kaannokset, state.locale]);
 
   return (
     <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
