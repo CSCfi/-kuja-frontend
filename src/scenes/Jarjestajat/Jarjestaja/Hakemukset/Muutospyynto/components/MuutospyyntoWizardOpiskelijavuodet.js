@@ -7,14 +7,13 @@ import Lomake from "../../../../../../components/02-organisms/Lomake";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useIntl } from "react-intl";
 
-const getArvoFromKohdeArray = (tyyppi, kohde) => {
+const getKohde = (tyyppi, kohteet) =>
+    R.find(obj => obj.tyyppi === tyyppi)(kohteet || []) || {};
+
+const getArvoFromKohdeArray = (tyyppi, kohteet) => {
   return parseInt(
-    (
-      R.find(obj => {
-        return obj.tyyppi === tyyppi;
-      }, kohde || []) || {}
-    ).arvo || "0",
-    10
+    getKohde(tyyppi, kohteet).arvo || "0",
+      10
   );
 };
 
@@ -82,10 +81,13 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
     setKoodiarvot(prevState => {
       return {
         ...prevState,
-        vahimmaisopiskelijavuodet: maarays ? maarays.koodiarvo : "3"  // 3 = Ammatillinen koulutus
+        vahimmaisopiskelijavuodet: {
+          koodiarvo: maarays ? maarays.koodiarvo : "3", // 3 = Ammatillinen koulutus
+          maaraysUuid: getKohde("Ammatillinen koulutus", opiskelijavuodet).maaraysUuid
+        },
       };
     });
-  }, [props.maaraykset]);
+  }, [props.maaraykset, opiskelijavuodet]);
 
   // This effect is run depending on changes in section 5
   useEffect(() => {
@@ -221,12 +223,18 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(props => {
       setKoodiarvot(prevState => {
         return {
           ...prevState,
-          sisaoppilaitos: sisaoppilaitosKoodiarvo,
-          vaativatuki: vaativatKoodiarvo
+          sisaoppilaitos: {
+            koodiarvo: sisaoppilaitosKoodiarvo,
+            maaraysUuid: getKohde("Sisäoppilaitosmuotoinen koulutus", rajoitukset).maaraysUuid
+          },
+          vaativatuki: {
+            koodiarvo: vaativatKoodiarvo,
+            maaraysUuid: getKohde("Vaativan erityisen tuen tehtävä", rajoitukset).maaraysUuid
+          }
         };
       });
     }
-  }, [changeObjects.muut, props.muut, props.lomakkeet.muut]);
+  }, [changeObjects.muut, props.muut, props.lomakkeet.muut, rajoitukset]);
 
   // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
   useEffect(() => {

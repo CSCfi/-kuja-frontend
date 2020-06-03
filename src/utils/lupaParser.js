@@ -373,7 +373,7 @@ const parseSectionData = (
     let rajoitukset = [];
 
     _.forEach(maaraykset, maarays => {
-      const { koodi, arvo, koodisto, kohde, maaraystyyppi } = maarays;
+      const { koodi, arvo, koodisto, kohde, maaraystyyppi, uuid } = maarays;
       const { metadata } = koodi;
       const tyyppi = parseLocalizedField(metadata);
 
@@ -381,6 +381,7 @@ const parseSectionData = (
         rajoitukset.push({
           arvo: arvo,
           tyyppi: tyyppi,
+          maaraysUuid: uuid,
           kohde,
           maaraystyyppi,
           koodisto
@@ -389,6 +390,7 @@ const parseSectionData = (
         opiskelijavuodet.push({
           arvo: arvo,
           tyyppi: tyyppi,
+          maaraysUuid: uuid,
           kohde,
           maaraystyyppi,
           koodisto
