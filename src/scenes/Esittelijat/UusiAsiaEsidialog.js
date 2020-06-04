@@ -11,7 +11,7 @@ import {
   Button
 } from "@material-ui/core";
 import { useOrganisations } from "../../stores/organisations";
-import * as R from "ramda";
+import { sortBy, prop, map, last, values } from "ramda";
 
 const UusiAsiaEsidialog = ({ isVisible, onClose, onSelect }) => {
   const intl = useIntl();
@@ -42,14 +42,14 @@ const UusiAsiaEsidialog = ({ isVisible, onClose, onSelect }) => {
           <Autocomplete
             isMulti={false}
             name="koulutuksen-jarjestaja"
-            options={R.sortBy(
-              R.prop("label"),
-              R.map(organisation => {
+            options={sortBy(
+              prop("label"),
+              map(organisation => {
                 return organisation
                   ? {
                       label:
                         organisation.nimi[intl.locale] ||
-                        R.last(R.values(organisation.nimi)),
+                        last(values(organisation.nimi)),
                       value: organisation.ytunnus
                     }
                   : null;

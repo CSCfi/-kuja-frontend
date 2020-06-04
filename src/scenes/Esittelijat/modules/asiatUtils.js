@@ -52,7 +52,7 @@ const getJarjestajaNimiFromHakemus = (hakemus, locale) => {
 };
 
 // Generates common row data for all Asiat-tables
-export const generateAsiaTableRows = (row, i, {formatMessage, locale}) => {
+export const generateAsiaTableRows = (row, {formatMessage, locale}) => {
   const paivityspvm = row.paivityspvm
     ? moment(row.paivityspvm).format("D.M.YYYY")
     : "";
@@ -127,7 +127,7 @@ export const generateAvoimetAsiatTableStructure = (hakemusList, intl, history, o
                   history.push("/asiat/" + row.id);
                 }
               },
-              cells: generateAsiaTableRows(row, i, intl).concat([
+              cells: generateAsiaTableRows(row, intl).concat([
                 {
                   menu: {
                     id: `simple-menu-${i}`,
@@ -177,7 +177,7 @@ export const generatePaatetytAsiatTableStructure = (hakemusList, intl) => {
                   console.log("Avaa asian asiakirjat", row);
                 }
               },
-              cells: generateAsiaTableRows(row, i, intl).concat({
+              cells: generateAsiaTableRows(row, intl).concat({
                 menu: {
                   id: `simple-menu-${i}`,
                   actions: [
