@@ -2,6 +2,7 @@ import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 import moment from "moment";
 import ProcedureHandler from "../../../components/02-organisms/procedureHandler";
+import { resolveLocalizedOrganizationName } from "../../../modules/helpers";
 
 const asiatTableColumnSetup = [
   { titleKey: common["asiaTable.headers.asianumero"], widthClass: "w-2/12" },
@@ -46,11 +47,6 @@ const getMaakuntaNimiFromHakemus = (hakemus, locale) => {
   return maakuntaObject ? maakuntaObject.nimi : "";
 };
 
-const getJarjestajaNimiFromHakemus = (hakemus, locale) => {
-  const nimi = R.path(["jarjestaja", "nimi"], hakemus);
-  return R.prop(locale, nimi) || R.last(R.values(nimi));
-};
-
 // Generates common row data for all Asiat-tables
 export const generateAsiaTableRows = (row, {formatMessage, locale}) => {
   const paivityspvm = row.paivityspvm
@@ -67,7 +63,7 @@ export const generateAsiaTableRows = (row, {formatMessage, locale}) => {
     [
       { text: row.asianumero },
       { text: formatMessage(common["asiaTypes.lupaChange"]) }, // Only one type known in system at this juncture
-      { text: getJarjestajaNimiFromHakemus(row, locale) },
+      { text: resolveLocalizedOrganizationName(row.jarjestaja, locale) },
       { text: getMaakuntaNimiFromHakemus(row, locale) },
       {
         text: formatMessage(common[`asiaStates.esittelija.${row.tila}`]) || ""

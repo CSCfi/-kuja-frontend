@@ -11,7 +11,8 @@ import {
   Button
 } from "@material-ui/core";
 import { useOrganisations } from "../../stores/organisations";
-import { sortBy, prop, map, last, values } from "ramda";
+import { sortBy, prop, map } from "ramda";
+import { resolveLocalizedOrganizationName } from "../../modules/helpers";
 
 const UusiAsiaEsidialog = ({ isVisible, onClose, onSelect }) => {
   const intl = useIntl();
@@ -47,9 +48,7 @@ const UusiAsiaEsidialog = ({ isVisible, onClose, onSelect }) => {
               map(organisation => {
                 return organisation
                   ? {
-                      label:
-                        organisation.nimi[intl.locale] ||
-                        last(values(organisation.nimi)),
+                      label: resolveLocalizedOrganizationName(organisation, intl.locale),
                       value: organisation.ytunnus
                     }
                   : null;
