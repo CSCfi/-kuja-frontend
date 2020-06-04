@@ -45,7 +45,7 @@ const Tutkinnot = React.memo(props => {
             messages={changesMessages}
             onChangesRemove={props.onChangesRemove}
             onUpdate={props.onChangesUpdate}
-            sectionId={sectionId}
+            sectionId={anchorInitial}
             showCategoryTitles={true}
             title={title}>
             <Lomake
