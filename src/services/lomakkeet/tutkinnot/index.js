@@ -13,8 +13,8 @@ function getModificationForm(
   areaCode,
   locale
 ) {
-  if (!categories[index]) {
-    categories[index] = R.values(
+  function getFormStructure() {
+    return R.values(
       R.addIndex(R.map)((koulutustyyppi, i) => {
         return {
           anchor: koulutustyyppi.koodiArvo,
@@ -22,10 +22,9 @@ function getModificationForm(
             areaCode,
             title
           },
-          title:
-            _.find(koulutustyyppi.metadata, m => {
-              return m.kieli === locale;
-            }).nimi || "[Koulutustyypin otsikko tähän]",
+          title: _.find(koulutustyyppi.metadata, m => {
+            return m.kieli === locale;
+          }).nimi,
           categories: R.addIndex(R.map)((koulutus, ii) => {
             const maaraysKoulutukselle = article
               ? R.find(
@@ -34,7 +33,9 @@ function getModificationForm(
                 ) || {}
               : {};
 
-            const isInLupaBool = !R.isEmpty(maaraysKoulutukselle);
+            const isTutkintoInLupaBool = !R.isEmpty(maaraysKoulutukselle);
+
+            let isTutkintoIndeterminate = false;
 
             const osaamisalat = (koulutus.osaamisalat || []).map(osaamisala => {
               const maaraysOsaamisalalle = article
@@ -43,35 +44,40 @@ function getModificationForm(
                     findObjectWithKey(article.koulutusalat, "rajoitteet")
                   ) || {}
                 : {};
-              const isInLupaBool = !R.isEmpty(maaraysOsaamisalalle);
-              const isAddedBool = false;
-              const isRemovedBool = false;
+              const osaamisalamaaraysFound = !R.isEmpty(maaraysOsaamisalalle);
+              const isOsaamisalaInLupaBool =
+                isTutkintoInLupaBool && !osaamisalamaaraysFound;
+              if (!isOsaamisalaInLupaBool) {
+                isTutkintoIndeterminate = true;
+              }
               return {
                 anchor: osaamisala.koodiArvo,
                 components: [
                   {
-                    anchor: "A",
-                    fullAnchor: `${koulutustyyppi.koodiArvo}.lukuun-ottamatta.${osaamisala.koodiArvo}.A`,
+                    anchor: "osaamisala",
                     name: "CheckboxWithLabel",
                     properties: {
                       forChangeObject: {
                         maaraysUuid: maaraysOsaamisalalle.maaraysId,
                         koodisto: osaamisala.koodisto,
                         metadata: osaamisala.metadata,
-                        isInLupa: isInLupaBool
+                        isInLupa: isOsaamisalaInLupaBool,
+                        isTutkintoInLupa: isTutkintoInLupaBool
                       },
                       name: "CheckboxWithLabel",
                       code: osaamisala.koodiArvo,
-                      title:
-                        _.find(osaamisala.metadata, m => {
-                          return m.kieli === "FI";
-                        }).nimi || "[Osaamisalan otsikko tähän]",
+                      title: _.find(osaamisala.metadata, m => {
+                        return m.kieli === locale;
+                      }).nimi,
                       labelStyles: {
                         addition: isAdded,
                         removal: isRemoved,
-                        custom: Object.assign({}, isInLupaBool ? isInLupa : {})
+                        custom: Object.assign(
+                          {},
+                          isOsaamisalaInLupaBool ? isInLupa : {}
+                        )
                       },
-                      isChecked: (isInLupaBool && !isRemovedBool) || isAddedBool
+                      isChecked: isOsaamisalaInLupaBool
                     }
                   }
                 ]
@@ -82,15 +88,14 @@ function getModificationForm(
               anchor: koulutus.koodiArvo,
               components: [
                 {
-                  anchor: "A",
-                  fullAnchor: `${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}.A`,
+                  anchor: "tutkinto",
                   name: "CheckboxWithLabel",
                   properties: {
                     forChangeObject: {
                       maaraysUuid: maaraysKoulutukselle.maaraysId,
                       koodisto: koulutus.koodisto,
                       metadata: koulutus.metadata,
-                      isInLupa: isInLupaBool
+                      isInLupa: isTutkintoInLupaBool
                     },
                     name: "CheckboxWithLabel",
                     code: koulutus.koodiArvo,
@@ -101,9 +106,13 @@ function getModificationForm(
                     labelStyles: {
                       addition: isAdded,
                       removal: isRemoved,
-                      custom: Object.assign({}, isInLupaBool ? isInLupa : {})
+                      custom: Object.assign(
+                        {},
+                        isTutkintoInLupaBool ? isInLupa : {}
+                      )
                     },
-                    isChecked: isInLupaBool
+                    isChecked: isTutkintoInLupaBool,
+                    isIndeterminate: isTutkintoIndeterminate
                   }
                 }
               ],
@@ -114,7 +123,17 @@ function getModificationForm(
       }, koulutustyypit)
     );
   }
-  return categories[index];
+
+  if (index) {
+    if (categories[index]) {
+      return categories[index];
+    } else {
+      categories[index] = getFormStructure();
+      return categories[index];
+    }
+  } else {
+    return getFormStructure();
+  }
 }
 
 export default function getTutkinnotLomake(action, data, isReadOnly, locale) {

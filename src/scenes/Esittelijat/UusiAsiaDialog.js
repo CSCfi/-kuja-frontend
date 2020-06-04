@@ -262,7 +262,8 @@ const UusiAsiaDialog = React.memo(
     const onAction = useCallback(
       async action => {
         const formData = createMuutospyyntoOutput(
-          createObjectToSave(
+          await createObjectToSave(
+            R.toUpper(intl.locale),
             lupa,
             cos,
             backendMuutokset,
@@ -271,7 +272,8 @@ const UusiAsiaDialog = React.memo(
             maaraystyypit,
             muut,
             lupaKohteet,
-            "ESITTELIJA"
+            "ESITTELIJA",
+            parsedTutkinnot
           )
         );
 
@@ -309,6 +311,7 @@ const UusiAsiaDialog = React.memo(
         onNewDocSave,
         onPreview,
         onSave,
+        parsedTutkinnot,
         uuid
       ]
     );
