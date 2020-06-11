@@ -17,6 +17,7 @@ const MuutospyyntoWizardKoulutukset = props => {
 
       <ATVKoulutukset
         koulutukset={props.koulutukset}
+        maaraykset={props.maaraykset}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
       />
