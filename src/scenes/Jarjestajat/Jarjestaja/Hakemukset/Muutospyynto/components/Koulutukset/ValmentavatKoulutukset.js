@@ -22,7 +22,7 @@ const ValmentavatKoulutukset = React.memo(
         maaraykset,
         "koulutus"
       );
-    }, [intl.locale, koulutukset]);
+    }, [intl.locale, koulutukset, maaraykset]);
 
     const changesMessages = {
       undo: intl.formatMessage(common.undo),
