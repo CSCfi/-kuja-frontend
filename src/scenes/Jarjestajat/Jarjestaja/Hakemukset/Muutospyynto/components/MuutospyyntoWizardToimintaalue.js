@@ -351,7 +351,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
           onChanges: whenChanges,
           toggleEditView,
           options,
-          changeObjectsByProvince: categoryFilterChanges
+          changeObjectsByProvince: Object.assign({}, categoryFilterChanges)
         }}
         onChangesUpdate={handleChanges}
         path={["toimintaalue"]}
