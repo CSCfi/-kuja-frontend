@@ -21,7 +21,7 @@ const ATVKoulutukset = ({ koulutukset, maaraykset, onChangesRemove, onChangesUpd
       maaraykset,
       "ammatilliseentehtavaanvalmistavakoulutus"
     );
-  }, [intl.locale, koulutukset]);
+  }, [intl.locale, koulutukset, maaraykset]);
 
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
