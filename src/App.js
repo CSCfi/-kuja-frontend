@@ -212,12 +212,14 @@ const App = ({ user }) => {
                     path="/esi-ja-perusopetus"
                     component={EsiJaPerusopetus}
                   />
+
                 </Switch>
               </div>
             </div>
           </main>
           <footer>
             <Footer
+              oivaURL={oivaURL}
             // props={props}
             />
             <ToastContainer />
