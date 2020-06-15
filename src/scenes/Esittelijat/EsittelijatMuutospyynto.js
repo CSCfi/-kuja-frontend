@@ -100,15 +100,15 @@ const EsittelijatMuutospyynto = React.memo(
             <MuutospyyntoWizardKielet
               lupa={props.lupa}
               lupaKohteet={props.lupaKohteet}
-              kielet={props.kielet}
               koulutukset={props.koulutukset}
-              tutkintolomakkeet={props.lomakkeet.tutkinnot}
               onUpdate={props.onUpdate}
               onChangesRemove={onChangesRemove}
               onChangesUpdate={updateChanges}
+              opetuskielet={props.kielet.opetuskielet}
               sectionId={"tutkinnot"}
             />
           </Section>
+
           <Section
             code={props.lupaKohteet[3].headingNumber}
             title={props.lupaKohteet[3].heading}>
@@ -165,13 +165,10 @@ const EsittelijatMuutospyynto = React.memo(
   (currentProps, nextProps) => {
     return (
       R.equals(currentProps.kielet, nextProps.kielet) &&
-      JSON.stringify(currentProps.lomakkeet) ===
-        JSON.stringify(nextProps.lomakkeet) &&
-      JSON.stringify(currentProps.lupa) === JSON.stringify(nextProps.lupa) &&
-      JSON.stringify(currentProps.lupaKohteet) ===
-        JSON.stringify(nextProps.lupaKohteet) &&
-      JSON.stringify(currentProps.maaraystyypit) ===
-        JSON.stringify(nextProps.maaraystyypit)
+      R.equals(currentProps.lomakkeet, nextProps.lomakkeet) &&
+      R.equals(currentProps.lupa, nextProps.lupa) &&
+      R.equals(currentProps.lupaKohteet, nextProps.lupaKohteet) &&
+      R.equals(currentProps.maaraystyypit, nextProps.maaraystyypit)
     );
   }
 );

@@ -75,8 +75,6 @@ const FormDialog = withStyles(() => ({
 });
 
 const defaultProps = {
-  backendMuutokset: [],
-  elykeskukset: [],
   kohteet: [],
   koulutustyypit: [],
   kunnat: [],
@@ -86,14 +84,11 @@ const defaultProps = {
   maakuntakunnat: [],
   maaraystyypit: [],
   muut: [],
-  muutosperusteluList: [],
-  organisation: {},
-  vankilat: []
+  organisation: {}
 };
 
 const UusiAsiaDialog = React.memo(
   ({
-    backendMuutokset = defaultProps.backendMuutokset,
     kohteet = defaultProps.kohteet,
     koulutustyypit = defaultProps.koulutustyypit,
     kunnat = defaultProps.kunnat,
@@ -266,7 +261,6 @@ const UusiAsiaDialog = React.memo(
             R.toUpper(intl.locale),
             lupa,
             cos,
-            backendMuutokset,
             uuid,
             kohteet,
             maaraystyypit,
@@ -301,9 +295,9 @@ const UusiAsiaDialog = React.memo(
       },
       [
         anchors,
-        backendMuutokset,
         cos,
         kohteet,
+        intl.locale,
         lupa,
         lupaKohteet,
         maaraystyypit,
@@ -345,7 +339,10 @@ const UusiAsiaDialog = React.memo(
           <DialogContentWithStyles>
             <div className="bg-vaalenharmaa px-16 w-full m-auto mb-20 border-b border-xs border-harmaa">
               <div className="py-4">
-                <h1>{organisation.nimi[intl.locale] || R.last(R.values(organisation.nimi))}</h1>
+                <h1>
+                  {organisation.nimi[intl.locale] ||
+                    R.last(R.values(organisation.nimi))}
+                </h1>
                 <p>
                   {organisation.kayntiosoite.osoite},{" "}
                   {organisation.postiosoite.osoite}{" "}
@@ -442,8 +439,6 @@ const UusiAsiaDialog = React.memo(
 );
 
 UusiAsiaDialog.propTypes = {
-  backendMuutokset: PropTypes.array,
-  elykeskukset: PropTypes.array,
   history: PropTypes.object,
   koulutustyypit: PropTypes.array,
   kunnat: PropTypes.array,
@@ -453,10 +448,8 @@ UusiAsiaDialog.propTypes = {
   maakuntakunnat: PropTypes.array,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
-  muutosperusteluList: PropTypes.array,
   onNewDocSave: PropTypes.func,
-  organisation: PropTypes.object,
-  vankilat: PropTypes.array
+  organisation: PropTypes.object
 };
 
 export default UusiAsiaDialog;
