@@ -385,5 +385,21 @@ export default defineMessages({
   VSTOppilaitosTitle: {
     id: "common.VSTOppilaitosTitle",
     defaultMessage: "Oppilaitos"
+  },
+  tietosuojailmoitus: {
+    id: "common.tietosuojailmoitus",
+    defaultMessage: "Tietosuojailmoitus"
+  },
+  yhteydenotto: {
+    id: "common.yhteydenotto",
+    defaultMessage: "Yhteydenotto"
+  },
+  saavutettavuusseloste: {
+    id: "common.saavutettavuusseloste",
+    defaultMessage: "Saavutettavuusseloste"
+  },
+  valtioneuvosto: {
+    id: "common.valtioneuvosto",
+    defaultMessage: "Valtioneuvosto"
   }
 });
