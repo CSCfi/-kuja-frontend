@@ -32,19 +32,18 @@ const AppWrapper = () => {
   const [kaannokset, kaannoksetActions] = useKaannokset();
   // See the file: .env.development.local
   const isBackendTheSourceOfLocalizations = !process.env.USE_LOCAL_TRANSLATIONS;
-
   const { state } = useContext(AppContext);
-  
+
   useEffect(() => {
     if (isBackendTheSourceOfLocalizations) {
-      const abortController = kaannoksetActions.load(state.locale);
+      const abortController = kaannoksetActions.load();
       return function cancel() {
         if (abortController) {
           abortController.abort();
         }
       };
     }
-  }, [isBackendTheSourceOfLocalizations, kaannoksetActions, state.locale]);
+  }, [isBackendTheSourceOfLocalizations, kaannoksetActions]);
 
   const messages = useMemo(() => {
     if (!!kaannokset.data) {
@@ -52,18 +51,24 @@ const AppWrapper = () => {
       return kaannokset.data;
     } else if (!isBackendTheSourceOfLocalizations) {
       //Using local files as source
-      return translations[state.locale];
+      return translations;
     } else {
       //Falling back to default localization messages
       return {};
     }
-  }, [kaannokset, state.locale]);
+  }, [kaannokset.fetchedAt, isBackendTheSourceOfLocalizations]);
 
-  return (
-    <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
-      <App />
-    </IntlProvider>
-  );
+  if(!kaannokset.fetchedAt && !kaannokset.isErroneous && isBackendTheSourceOfLocalizations) {
+    return <React.Fragment />
+  }
+
+  else {
+    return (
+      <IntlProvider locale={state.locale} key={state.locale} messages={messages[state.locale]}>
+        <App/>
+      </IntlProvider>
+    );
+  }
 };
 
 export default AppWrapper;
