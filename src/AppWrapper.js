@@ -4,7 +4,6 @@ import translations from "./i18n/locales";
 import { AppContext } from "./context/appContext";
 import { defaults } from "react-sweet-state";
 import { loadProgressBar } from "axios-progress-bar";
-import { useUser } from "./stores/user";
 import App from "./App";
 
 import "axios-progress-bar/dist/nprogress.css";
@@ -34,18 +33,8 @@ const AppWrapper = () => {
   // See the file: .env.development.local
   const isBackendTheSourceOfLocalizations = !process.env.USE_LOCAL_TRANSLATIONS;
 
-  const [user, actions] = useUser();
-
   const { state } = useContext(AppContext);
-
-  useEffect(() => {
-    // Let's fetch the current user from backend
-    const abortController = actions.load();
-    return function cancel() {
-      abortController.abort();
-    };
-  }, [actions]);
-
+  
   useEffect(() => {
     if (isBackendTheSourceOfLocalizations) {
       const abortController = kaannoksetActions.load(state.locale);
@@ -72,7 +61,7 @@ const AppWrapper = () => {
 
   return (
     <IntlProvider locale={state.locale} key={state.locale} messages={messages}>
-      {user.fetchedAt && <App user={user.data} />}
+      <App />
     </IntlProvider>
   );
 };

@@ -38,7 +38,7 @@ const logo = { text: "Oiva", path: "/" };
  *
  * @param {props} - Properties object.
  */
-const App = ({ user }) => {
+const App = () => {
   const intl = useIntl();
 
   const [isSideMenuVisible, setSideMenuVisibility] = useState(false);
@@ -122,8 +122,7 @@ const App = ({ user }) => {
       intl,
       onLocaleChange,
       onMenuClick,
-      shortDescription,
-      user
+      shortDescription
     ]
   );
 
