@@ -21,6 +21,7 @@ import moment from "moment";
 import { resolveLocalizedOrganizerName } from "../../../modules/helpers";
 import { Tabs, Tab } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
+import education from "../../../i18n/definitions/education";
 
 const Separator = styled.div`
   &:after {
@@ -159,7 +160,7 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
       <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
         <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
         <BreadcrumbsItem to="/vapaa-sivistystyo">
-          {intl.formatMessage(common.vstTitleName)}
+          {intl.formatMessage(education.vstEducation)}
         </BreadcrumbsItem>
         <BreadcrumbsItem to={breadcrumb}>{jarjestaja.nimi}</BreadcrumbsItem>
 

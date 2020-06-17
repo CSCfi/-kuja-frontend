@@ -18,6 +18,7 @@ import Loading from "../../../modules/Loading";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
 import {useLocation, useRouteMatch, useHistory} from "react-router-dom";
 import queryString from 'query-string';
+import education from "../../../i18n/definitions/education";
 
 const VapaaSivistystyo = () => {
   const history = useHistory();
@@ -161,7 +162,7 @@ const VapaaSivistystyo = () => {
         {intl.formatMessage(common.frontpage)}
       </BreadcrumbsItem>
       <BreadcrumbsItem to="/vapaa-sivistystyo">
-        {intl.formatMessage(common.vstTitleName)}
+        {intl.formatMessage(education.vstEducation)}
       </BreadcrumbsItem>
       <div className="mx-2 lg:mx-auto w-full sm:w-3/4 mb-16">
         <h1>{intl.formatMessage(common.vstYllapitajatHeading)}</h1>

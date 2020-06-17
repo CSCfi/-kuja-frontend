@@ -63,7 +63,7 @@ const App = () => {
       url: oivaURL + "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
-    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
+    { path: "/vapaa-sivistystyo", text: intl.formatMessage(educationMessages.vstEducation) },
     { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
 
