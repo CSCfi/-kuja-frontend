@@ -1,6 +1,10 @@
 import {defineMessages} from "react-intl";
 
 export default defineMessages({
+  noSelection: {
+    id: "common.noSelection",
+    defaultMessage: "Ei valintaa"
+  },
   statistics: {
     id: "common.statistics",
     defaultMessage: "Tilastot"
@@ -197,6 +201,10 @@ export default defineMessages({
     id: "common.jarjestaja",
     defaultMessage: "Koulutuksen järjestäjä"
   },
+  yllapitaja: {
+    id: "common.yllapitaja",
+    defaultMessage: "Oppilaitoksen ylläpitäjä"
+  },
   homeCounty: {
     id: "common.homeCounty",
     defaultMessage: "Kotipaikan maakunta"
@@ -229,48 +237,11 @@ export default defineMessages({
     id: "common.errorLoadingLupa",
     defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
   },
-  activeLuvatCount: {id: "common.activeLuvatCount", defaultMessage: "Voimassa olevat järjestämisluvat ({count} kpl)"},
+  vstActiveLuvatCount: {id: "common.vstActiveLuvatCount", defaultMessage: "Voimassa olevat ylläpitämisluvat ({count} kpl)"},
   searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
-  vst: {
-    titleName: {id: "vst.titleName", defaultMessage: "Vapaa sivistystyö"},
-    jarjestajatHeading: {id: "vst.jarjestajatHeading", defaultMessage: "Vapaan sivistystyön koulutuksen järjestäjät"}
-  },
-  asiaTable: {
-    headers: {
-      asianumero: {id: "asiaTable.headers.asianumero", defaultMessage: "Asianumero"},
-      tila: {id: "asiaTable.headers.tila", defaultMessage: "Tila"},
-      asia: {id: "asiaTable.headers.asia", defaultMessage: "Asia"},
-      asiakas: {id: "asiaTable.headers.asiakas", defaultMessage: "Asiakkaan nimi"},
-      maakunta: {id: "asiaTable.headers.maakunta", defaultMessage: "Maakunta"},
-      saapunut: {id: "asiaTable.headers.saapunut", defaultMessage: "Saapunut"},
-      hakupvm: {id: "asiaTable.headers.hakupvm", defaultMessage: "Haettu voimaantulo"},
-      actions: {id: "asiaTable.headers.actions", defaultMessage: "Toiminnot"},
-    },
-    actions: {
-      handle: {id: "asiaTable.actions.handle", defaultMessage: "Ota valmisteluun"}
-    }
-  },
-  asiaStates: {
-    kj: {
-      LUONNOS: {id: "asiaStates.kj.LUONNOS", defaultMessage: "Luonnos"},
-      AVOIN: {id: "asiaStates.kj.AVOIN", defaultMessage: "Lähetetty"},
-      VALMISTELUSSA: {id: "asiaStates.kj.VALMISTELUSSA", defaultMessage: "Lähetetty"},
-      TAYDENNETTAVA: {id: "asiaStates.kj.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
-      PAATETTY: {id: "asiaStates.kj.PAATETTY", defaultMessage: "Päätetty"},
-      PASSIVOITU: {id: "asiaStates.kj.PASSIVOITU", defaultMessage: "Poistettu"}
-    },
-    esittelija: {
-      LUONNOS: {id: "asiaStates.esittelija.LUONNOS", defaultMessage: "Luonnos"},
-      AVOIN: {id: "asiaStates.esittelija.AVOIN", defaultMessage: "Saapunut"},
-      VALMISTELUSSA: {id: "asiaStates.esittelija.VALMISTELUSSA", defaultMessage: "Valmistelussa"},
-      TAYDENNETTAVA: {id: "asiaStates.esittelija.TAYDENNETTAVA", defaultMessage: "Täydennettävä"},
-      PAATETTY: {id: "asiaStates.esittelija.PAATETTY", defaultMessage: "Päätetty"},
-      PASSIVOITU: {id: "asiaStates.esittelija.PASSIVOITU", defaultMessage: "Poistettu"}
-    }
-  },
-  asiaTypes: {
-    lupaChange: {id: "asiaTypes.lupaChange", defaultMessage: "Järjestämisluvan muutos"}
-  },
+  searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän tai oppilaitoksen nimellä"},
+  vstTitleName: {id: "common.vstTitleName", defaultMessage: "Vapaa sivistystyö"},
+  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön oppilaitosten ylläpitäjät"},
   current: {
     id: "common.current",
     defaultMessage: "Nykyinen"
@@ -371,12 +342,16 @@ export default defineMessages({
     id: "common.lupaTitle",
     defaultMessage: "Järjestämislupa"
   },
+  yllapitamisLupaTitle: {
+    id: "common.yllapitamisLupaTitle",
+    defaultMessage: "Ylläpitämislupa"
+  },
   VSTLupaSectionTitleOrganizer: {
     id: "common.VSTLupaSectionTitleOrganizer",
     defaultMessage: "Ylläpitäjän nimi ja kotipaikka"
   },
   VSTLupaSectionTitleMunicipality: {
-    id: "common.VSTLupaSectionTitleOrganizer",
+    id: "common.VSTLupaSectionTitleMunicipality",
     defaultMessage: "Sopimuskunnat"
   },
   VSTLupaSectionTitleSchoolNameAndLocation: {
@@ -406,5 +381,25 @@ export default defineMessages({
   VSTLupaSectionTitleOther: {
     id: "common.VSTLupaSectionTitleOther",
     defaultMessage: "Muut koulutuksen järjestämiseen liittyvät ehdot"
+  },
+  VSTOppilaitosTitle: {
+    id: "common.VSTOppilaitosTitle",
+    defaultMessage: "Oppilaitos"
+  },
+  tietosuojailmoitus: {
+    id: "common.tietosuojailmoitus",
+    defaultMessage: "Tietosuojailmoitus"
+  },
+  yhteydenotto: {
+    id: "common.yhteydenotto",
+    defaultMessage: "Yhteydenotto"
+  },
+  saavutettavuusseloste: {
+    id: "common.saavutettavuusseloste",
+    defaultMessage: "Saavutettavuusseloste"
+  },
+  valtioneuvosto: {
+    id: "common.valtioneuvosto",
+    defaultMessage: "Valtioneuvosto"
   }
 });

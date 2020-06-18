@@ -21,7 +21,7 @@ const LupaSection = props => {
       </div>
     )
   } else {
-    return (<></>)
+    return (<React.Fragment></React.Fragment>)
   }
 };
 

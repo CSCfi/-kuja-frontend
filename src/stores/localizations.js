@@ -2,20 +2,18 @@ import { createStore, createHook } from "react-sweet-state";
 import { execute } from "./utils/loadFromBackend";
 
 const Store = createStore({
-  initialState: {},
+  initialState: [],
   actions: {
-    load: userOid => ({ getState, setState }) => {
+    load: () => ({ getState, setState }) => {
       return execute(
         { getState, setState },
         {
-          key: "organisaatio",
-          urlEnding: userOid
-        },
-        { userOid }
+          key: "kaannokset"
+        }
       );
     }
   },
-  name: "Organisation"
+  name: "Käännökset"
 });
 
-export const useOrganisation = createHook(Store);
+export const useKaannokset = createHook(Store);

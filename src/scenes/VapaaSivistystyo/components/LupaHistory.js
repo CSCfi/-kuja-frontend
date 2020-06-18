@@ -7,11 +7,9 @@ import { MEDIA_QUERIES } from "../../../modules/styles";
 import LupaHistoryItem from "./LupaHistoryItem";
 import Table from "okm-frontend-components/dist/components/02-organisms/Table";
 import moment from "moment";
-import { API_BASE_URL } from "../../../modules/constants";
 import PropTypes from "prop-types";
 import { downloadFileFn } from "../../../utils/common";
 import { useLupahistoria } from "../../../stores/lupahistoria";
-import _ from "lodash";
 import * as R from "ramda";
 import common from "../../../i18n/definitions/common";
 
@@ -87,20 +85,10 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
                   lupahistoria.data
                 );
                 if (lupaHistoryObject) {
-                  const pathToPDF =
-                    moment(lupaHistoryObject.voimassaololoppupvm) >
-                    moment("2018-12-30") // Yeah, hard coded value. Not sure if it's valid anymore.
-                      ? "/pdf/"
-                      : "/pebble/resources/liitteet/lupahistoria/";
-                  if (history) {
-                    downloadFileFn({
-                      filename: lupaHistoryObject.filename,
-                      openInNewWindow: true,
-                      url: `${API_BASE_URL}${pathToPDF}`
-                    })();
-                  } else {
-                    console.error(intl.formatMessage(common.errorOpeningPDF));
-                  }
+                  downloadFileFn({
+                    openInNewWindow: true,
+                    url: `/pebble/resources/liitteet/${lupaHistoryObject.filename}`
+                  })();
                 } else {
                   console.error(intl.formatMessage(common.errorFetchingRow));
                 }
@@ -132,13 +120,13 @@ const LupaHistory = ({ history, jarjestajaOid }) => {
   ];
 
   const renderLupaHistoryList = data => {
-    data = _.orderBy(data, ["paatospvm"], ["desc"]);
-    return _.map(data, (historyData, index) => (
+    const sorter = R.sortWith([R.descend(R.prop('paatospvm'))]);
+    return R.map((historyData, index) => (
       <LupaHistoryItem
         lupaHistoria={historyData}
         key={`${historyData.diaarinumero}-${index}`}
       />
-    ));
+    ),sorter(data));
   };
 
   return (

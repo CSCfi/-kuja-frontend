@@ -1,7 +1,7 @@
 import {
   GENERIC_LUPA_SECTIONS, VST_LUPA_STRUCTURE
 } from "../scenes/VapaaSivistystyo/modules/constants";
-import { parseLocalizedField } from "../modules/helpers";
+import {resolveKoodiLocalization, resolveLocalizedOrganizerName} from "../modules/helpers";
 import common from "../i18n/definitions/common";
 
 /**
@@ -37,7 +37,7 @@ export const parseVSTLupa = (lupa, intl) => {
 
       let sectionData = {};
       if(maaraykset.length > 0)  {
-        sectionData = generateSectionData(maaraykset, intl.locale);
+        sectionData = generateSectionData(maaraykset, intl.locale, lupa.diaarinumero);
       }
       sectionData.heading = intl.formatMessage(metaDataObject.titleMessageKey);
       sectionDataList.push(sectionData)
@@ -48,12 +48,12 @@ export const parseVSTLupa = (lupa, intl) => {
 };
 
 const generateOrganizerSectionData = (lupa, locale) => {
-  const kunta = parseLocalizedField(lupa.jarjestaja.kuntaKoodi.metadata, locale.toUpperCase())
+  const kunta = resolveKoodiLocalization(lupa.jarjestaja.kuntaKoodi.metadata, locale)
   // Exception sourced from kuja-template/lupahistoria/liikunnankoulutuskeskukset/paatos/content_paatos_fi.html:35
   // TODO: localization of this exception case content
   const value = lupa.jarjestaja.oid === '1.2.246.562.10.13451568789' ?
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
-    `${lupa.jarjestaja.nimi[locale]}, ${kunta}`;
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta} sekä Humppilan ja Ypäjän kunnat` :
+    `${resolveLocalizedOrganizerName(lupa, locale)}, ${kunta}`;
 
   const retval = {
     values: [
@@ -96,25 +96,32 @@ const generateIteratedKoodiData = (maaraykset, locale) => {
   const retval = {}
   retval.values = [];
   for (const maarays of maaraykset) {
-    retval.heading = maarays.kohde.meta.otsikko[locale];
-    retval.values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()))
+    retval.values.push(resolveKoodiLocalization(maarays.koodi.metadata, locale))
     retval.values.sort();
   }
 
   return retval;
 };
 
-const generateMetaAttributeBasedData = (maaraykset, attributes, locale) => {
+/**
+ * Get meta-attribute values from maaraykset based on meta-attribute names.
+ *
+ * @param maaraykset
+ * @param attributes
+ * @param locale
+ * @return {{}}
+ */
+const generateMetaAttributeBasedData = (maaraykset, attributes) => {
   const retval = {};
-  const maarays = maaraykset.length > 0 ? maaraykset[0] : null;
-  if(!maarays) {
+  if(maaraykset.length === 0) {
     return retval;
   }
 
-  retval.heading = maarays.kohde.meta.otsikko[locale];
   retval.values = [];
-  for(const attribute of attributes) {
-    if(maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+  for(const maarays of maaraykset) {
+    for (const attribute of attributes) {
+      if (maarays.meta[attribute] && maarays.meta[attribute].length > 0) retval.values.push(maarays.meta[attribute])
+    }
   }
   retval.values.sort();
   return retval;
@@ -128,7 +135,7 @@ const generateKoulutustehtavaData = (maaraykset, locale) => {
     "koulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateErityinenKoulutustehtavaData = (maaraykset, locale) => {
@@ -139,7 +146,7 @@ const generateErityinenKoulutustehtavaData = (maaraykset, locale) => {
     "erityinenkoulutustehtävämääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateOppilaitoksetData = (maaraykset, locale) => {
@@ -150,7 +157,7 @@ const generateOppilaitoksetData = (maaraykset, locale) => {
     "oppilaitosmääräys-2"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const generateMuutData = (maaraykset, locale) => {
@@ -161,7 +168,7 @@ const generateMuutData = (maaraykset, locale) => {
     "urn:oppilaitosmääräys-1"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale)
+  return generateMetaAttributeBasedData(maaraykset, attributes)
 };
 
 const generateTarkoitusData = (maaraykset, locale) => {
@@ -170,7 +177,7 @@ const generateTarkoitusData = (maaraykset, locale) => {
     "oppilaitoksentarkoitus-0"
   ];
 
-  return generateMetaAttributeBasedData(maaraykset, attributes, locale);
+  return generateMetaAttributeBasedData(maaraykset, attributes);
 };
 
 const getSectionDataGeneratorForGeneric = (tunniste) => {
@@ -208,32 +215,27 @@ const generateSopimuskunnatDataForVST = (maaraykset, locale) => {
   return data;
 };
 
-const generateOppilaitoksetDataForVST = (maaraykset, locale) => {
+const generateOppilaitoksetDataForVST = (maaraykset, locale, diaarinumero) => {
   let values = [];
 
   for(const maarays of maaraykset) {
-    const schoolName = maarays.organisaatio.nimi[locale];
-    const municipalities = [schoolName];
-    municipalities.push(parseLocalizedField(maarays.organisaatio.kuntaKoodi.metadata, locale.toUpperCase()));
-    if (!!maarays.organisaatio.muutKuntaKoodit) {
-      for (const other of maarays.organisaatio.muutKuntaKoodit) {
-        municipalities.push(parseLocalizedField(other.metadata, locale.toUpperCase()));
+    if (!!maarays.organisaatio) {
+      const schoolName = maarays.organisaatio.nimi[locale];
+      const municipalities = [];
+      if (!!maarays.organisaatio.muutKuntaKoodit) {
+        for (const other of maarays.organisaatio.muutKuntaKoodit) {
+          municipalities.push(resolveKoodiLocalization(other.metadata, locale));
+        }
       }
+      municipalities.sort();
+      // Prepend school name and its location
+      municipalities.unshift(schoolName, resolveKoodiLocalization(maarays.organisaatio.kuntaKoodi.metadata, locale));
+      values.push(municipalities.join(', '));
+    } else if (diaarinumero === '27/532/2011') {
+      //Special case for a school that doesn't have organisaatio information
+      values.push(`${maarays.meta["oppilaitosmääräys-0"]}, ${locale === 'fi' ? 'Kokkola' : 'Karleby'}`);
     }
-    values.push(municipalities.join(', '));
   }
-
-    /*
-    TODO: implementation of following special case, after CSCKUJA-379 has been fixed. Corresponding määräys does
-          not arrive from backend at the moment
-
-        <!-- !!Special case!! Because Nordiska Konstskolan som filial can not be found from organisaatiopalvelu -->
-        {% if lupa.diaarinumero == "27/532/2011" and maarays.organisaatio is empty %}
-            {{ maarays.meta | fieldvalue("oppilaitosmääräys-0") }}, Kokkola
-        {% endif %}
-
-     */
-
   return {values}
 };
 
@@ -244,7 +246,7 @@ const generateRegionalDataForVST = (maaraykset, locale) => {
   const maarays = maaraykset[0];
 
   let values = [];
-  values.push(parseLocalizedField(maarays.koodi.metadata, locale.toUpperCase()));
+  values.push(resolveKoodiLocalization(maarays.koodi.metadata, locale));
   if(maarays.koodi.koodiArvo === '2') {
     const school = maarays.meta["urn:oppilaitosmääräys-1"];
     const other = maarays.meta["urn:muumääräys-2"]

@@ -1,48 +1,32 @@
 import React, {
   useContext,
-  useEffect,
   useMemo,
   useState,
   useCallback
 } from "react";
 import { Route, Router, Switch } from "react-router-dom";
-import Login from "scenes/Login/Login";
 import PropTypes from "prop-types";
-import Logout from "scenes/Logout/Logout";
 import Footer from "scenes/Footer/Footer";
 import { COLORS } from "./modules/styles";
 import Home from "scenes/Home";
-import CasAuthenticated from "scenes/CasAuthenticated/CasAuthenticated";
 import Tilastot from "./scenes/Tilastot/components/Tilastot";
-import RequireCasAuth from "./scenes/Login/services/RequireCasAuth";
-import DestroyCasAuth from "./scenes/Logout/services/DestroyCasAuth";
 import Lukiokoulutus from "./scenes/Lukiokoulutus/components/Lukiokoulutus";
 import { Breadcrumbs } from "react-breadcrumbs-dynamic";
 import EsiJaPerusopetus from "./scenes/EsiJaPerusopetus/components/EsiJaPerusopetus";
 import VapaaSivistystyo from "./scenes/VapaaSivistystyo/components/VapaaSivistystyo";
 import { NavLink } from "react-dom";
 import { createBrowserHistory } from "history";
-import authMessages from "./i18n/definitions/auth";
 import { useIntl } from "react-intl";
 import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import langMessages from "./i18n/definitions/languages";
 import { ToastContainer } from "react-toastify";
 import ReactResizeDetector from "react-resize-detector";
-import {
-  ROLE_ESITTELIJA,
-  ROLE_KATSELIJA,
-  ROLE_MUOKKAAJA,
-  ROLE_NIMENKIRJOITTAJA,
-  ROLE_YLLAPITAJA
-} from "./modules/constants";
 import Header from "okm-frontend-components/dist/components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
 import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
 import SideNavigation from "okm-frontend-components/dist/components/02-organisms/SideNavigation";
-import { useOrganisation } from "./stores/organisation";
-import * as R from "ramda";
 import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
 
 const history = createBrowserHistory();
@@ -54,10 +38,8 @@ const logo = { text: "Oiva", path: "/" };
  *
  * @param {props} - Properties object.
  */
-const App = ({ user }) => {
+const App = () => {
   const intl = useIntl();
-
-  const [organisation, organisationActions] = useOrganisation();
 
   const [isSideMenuVisible, setSideMenuVisibility] = useState(false);
 
@@ -81,25 +63,9 @@ const App = ({ user }) => {
       url: oivaURL + "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
-    { path: "/vapaa-sivistystyo", text: "Vapaa sivistystyö" },
+    { path: "/vapaa-sivistystyo", text: intl.formatMessage(educationMessages.vstEducation) },
     { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
-
-  if (sessionStorage.getItem("role") === ROLE_ESITTELIJA) {
-    pageLinks.push({
-      path: "/asiat",
-      text: "Asiat"
-    });
-  }
-
-  const authenticationLink = useMemo(() => {
-    return {
-      text: !user
-        ? [intl.formatMessage(authMessages.logIn)]
-        : [intl.formatMessage(authMessages.logOut), user.username],
-      path: !user ? "/cas-auth" : "/cas-logout"
-    };
-  }, [intl, user]);
 
   const onLocaleChange = useCallback(
     (...props) => {
@@ -113,27 +79,10 @@ const App = ({ user }) => {
     [appDispatch]
   );
 
-  const onLoginButtonClick = useCallback(() => history.push("/cas-auth"), []);
-
   const onMenuClick = useCallback(
     () => setSideMenuVisibility(isVisible => !isVisible),
     []
   );
-
-  const organisationLink = useMemo(() => {
-    const orgNimi = R.prop("nimi", organisation.data);
-    return {
-      // Select name by locale or first in nimi object
-      text: R.or(
-          R.prop(intl.locale, orgNimi),
-          R.tail(R.head(R.toPairs(orgNimi)) || [])
-      ),
-      path: `/jarjestajat/${R.prop(
-        "ytunnus",
-        organisation.data
-      )}/jarjestamislupa-asia`
-    };
-  }, [intl, organisation.data]);
 
   const shortDescription = useMemo(() => {
     return {
@@ -142,61 +91,25 @@ const App = ({ user }) => {
     };
   }, [intl]);
 
-  // Let's fetch ORGANISAATIO
-  useEffect(() => {
-    let abortController;
-    if (user && user.oid) {
-      abortController = organisationActions.load(user.oid);
-    }
-    return () => {
-      if (abortController) {
-        abortController.abort();
-      }
-    };
-  }, [organisationActions, user]);
-
   const onHeaderResize = (width, height) => {
     setHeaderHeight(height);
   };
-
-  /**
-   * If user has authenticated save some of his/her information into the
-   * session storage.
-   */
-  useEffect(() => {
-    if (user && user.username !== sessionStorage.getItem("username")) {
-      sessionStorage.setItem("username", user.username);
-      sessionStorage.setItem("oid", user.oid);
-      const role = [
-        ROLE_YLLAPITAJA,
-        ROLE_ESITTELIJA,
-        ROLE_MUOKKAAJA,
-        ROLE_NIMENKIRJOITTAJA,
-        ROLE_KATSELIJA
-      ].find(role => R.indexOf(role, user.roles) > -1);
-      sessionStorage.setItem("role", role || "");
-    }
-  }, [user]);
 
   const getHeader = useCallback(
     template => {
       if (
         (appDispatch,
-        appState.locale && intl && (!user || !organisation.isLoding))
+        appState.locale && intl)
       ) {
         return (
           <Header
             inFinnish={intl.formatMessage(langMessages.inFinnish)}
             inSwedish={intl.formatMessage(langMessages.inSwedish)}
-            isAuthenticated={!!user}
             locale={appState.locale}
-            logIn={intl.formatMessage(authMessages.logIn)}
             logo={logo}
-            authenticationLink={authenticationLink}
             onLocaleChange={onLocaleChange}
-            onLoginButtonClick={onLoginButtonClick}
             onMenuClick={onMenuClick}
-            organisation={organisationLink}
+            organisation={{text: ''}}
             shortDescription={shortDescription}
             template={template}></Header>
         );
@@ -206,15 +119,10 @@ const App = ({ user }) => {
     [
       appDispatch,
       appState.locale,
-      authenticationLink,
       intl,
-      organisation,
       onLocaleChange,
-      onLoginButtonClick,
       onMenuClick,
-      organisationLink,
-      shortDescription,
-      user
+      shortDescription
     ]
   );
 
@@ -269,12 +177,7 @@ const App = ({ user }) => {
               <div className="flex-1 flex flex-col">
                 <Switch>
                   <Route exact path="/" component={Home} />
-                  <Route path="/logout" component={Logout} />
-                  <Route path="/kirjaudu" component={Login} />
                   <Route exact path="/tilastot" component={Tilastot} />
-                  <Route path="/cas-auth" component={RequireCasAuth} />
-                  <Route path="/cas-logout" component={DestroyCasAuth} />
-                  <Route path="/cas-ready" component={CasAuthenticated} />
                   <Route
                     exact
                     path="/lukiokoulutus"
@@ -308,12 +211,14 @@ const App = ({ user }) => {
                     path="/esi-ja-perusopetus"
                     component={EsiJaPerusopetus}
                   />
+
                 </Switch>
               </div>
             </div>
           </main>
           <footer>
             <Footer
+              oivaURL={oivaURL}
             // props={props}
             />
             <ToastContainer />

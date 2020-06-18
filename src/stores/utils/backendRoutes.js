@@ -35,5 +35,6 @@ export const backendRoutes = {
   paatoskierrokset: { path: `paatoskierrokset/open` },
   vankilat: { path: `koodistot/koodit/vankilat` },
   vsttyypit: { path: `koodistot/koodit/vsttyypit` },
-  liitteet: { path: `liitteet/`, abortController: false }
+  liitteet: { path: `liitteet/`, abortController: false },
+  kaannokset: { path: "lokalisaatio" }
 };
