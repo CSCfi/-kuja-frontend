@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import common from "../../../../../../i18n/definitions/common";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { useIntl } from "react-intl";
@@ -24,18 +23,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(
         setMuutMaaraykset(await getMaarayksetByTunniste("muut"));
       })();
     }, []);
-
-    // When sisaoppilaitos or vaativatuki are not visible, exclude them from the collection of changes updates
-    useEffect(() => {
-      let filteredChanges = changeObjects.opiskelijavuodet;
-
-      if (!R.equals(filteredChanges, changeObjects.opiskelijavuodet)) {
-        onChangesUpdate({
-          anchor: sectionId,
-          changes: filteredChanges
-        });
-      }
-    }, [onChangesUpdate, changeObjects.opiskelijavuodet, sectionId]);
 
     const changesMessages = {
       undo: intl.formatMessage(common.undo),
