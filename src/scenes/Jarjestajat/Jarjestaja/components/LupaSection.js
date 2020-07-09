@@ -78,7 +78,7 @@ const MuutSection = styled.div`
 `;
 
 const LupaSection = props => {
-  const { kohde, ytunnus } = props;
+  const { kohde, ytunnus, lupaAlkuPvm } = props;
   const intl = useIntl();
 
   // const { isRemoving } = this.state
@@ -123,7 +123,7 @@ const LupaSection = props => {
             <Section code={headingNumber} title={heading}>
               <Tutkinnot>
                 {_.map(maaraykset, (ala, i) => (
-                  <Koulutusala key={i} {...ala} />
+                  <Koulutusala key={i} {...ala} lupaAlkuPvm={lupaAlkuPvm}/>
                 ))}
               </Tutkinnot>
               <Tietoa>
