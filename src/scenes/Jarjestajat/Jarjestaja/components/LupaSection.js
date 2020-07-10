@@ -126,9 +126,11 @@ const LupaSection = props => {
                   <Koulutusala key={i} {...ala} lupaAlkuPvm={lupaAlkuPvm}/>
                 ))}
               </Tutkinnot>
-              <Tietoa>
-                {intl.formatMessage(common.lupaSectionTitleSupplementary)}
-              </Tietoa>
+              {
+                maaraykset && maaraykset.length > 0
+                  ? <Tietoa>{intl.formatMessage(common.lupaSectionTitleSupplementary)}</Tietoa>
+                  : null
+              }
 
               <Koulutukset>
                 {vt && vt[0] && (
@@ -347,7 +349,7 @@ const LupaSection = props => {
                   </MuutSection>
                 );
               })}
-              
+
               {section(vaativat)}
               {section(kokeilut)}
               {section(vankilat)}
