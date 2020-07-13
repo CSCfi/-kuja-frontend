@@ -15,6 +15,7 @@ import { useIntl } from "react-intl";
 
 const Otsikko = styled.div`
   font-size: 16px;
+  margin-bottom: 20px;
 `;
 
 const H3 = styled.h3`
@@ -116,11 +117,10 @@ const LupaSection = props => {
 
         return (
           <div className="border-b border-b-gray">
-            <Otsikko>
-              {intl.formatMessage(common.lupaSectionTitleAllLupas)}
-            </Otsikko>
-
             <Section code={headingNumber} title={heading}>
+              <Otsikko>
+                {intl.formatMessage(common.lupaSectionTitleAllLupas)}
+              </Otsikko>
               <Tutkinnot>
                 {_.map(maaraykset, (ala, i) => (
                   <Koulutusala key={i} {...ala} lupaAlkuPvm={lupaAlkuPvm}/>
