@@ -36,7 +36,7 @@ import { useOrganisation } from "./stores/organisation";
 import { useGlobalSettings } from "./stores/appStore";
 import { useUser } from "./stores/user";
 import * as R from "ramda";
-import YleinenSisaltosivu from "./scenes/YleinenSisaltosivu";
+import Yhteydenotto from "./scenes/Yhteydenotto";
 import Saavutettavuusseloste from "./scenes/Saavutettavuusseloste";
 import Tietosuojailmoitus from "./scenes/Tietosuojailmoitus";
 
@@ -317,11 +317,15 @@ const App = React.memo(({ isDebugModeOn }) => {
                   />
                   <Route
                     path="/tietosuojailmoitus"
-                    component={Tietosuojailmoitus}
+                    render={() => (
+                      <Tietosuojailmoitus locale={intl.locale} />
+                    )}
                   />
                   <Route
-                    path="/yleinen-sisaltosivu"
-                    component={YleinenSisaltosivu}
+                    path="/yhteydenotto"
+                    render={() => (
+                      <Yhteydenotto locale={intl.locale} />
+                    )}
                   />
                 </Switch>
               </div>
