@@ -15,7 +15,7 @@ const Footer = ({ oivaURL }) => {
         </a>
       </p>
       <p className="lg:mr-10">
-        <a href={`${oivaURL}/yleinen-sisaltosivu`} className="text-green-500">
+        <a href={`${oivaURL}/yhteydenotto`} className="text-green-500">
           {intl.formatMessage(common.yhteydenotto)}
         </a>
       </p>
