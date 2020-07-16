@@ -515,6 +515,10 @@ const parseSectionData = (
             vankilat.push(obj);
             break;
           }
+          case "15": {
+            muut.push(obj);
+            break;
+          }
           default:
             console.warn(`Unknown koodiarvo ${koodiarvo} in section 5. Muut`);
         }
