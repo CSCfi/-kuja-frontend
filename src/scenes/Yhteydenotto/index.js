@@ -21,7 +21,7 @@ const ContentFi = (
       Opetus- ja kulttuuriministeriön yhteystiedot
     </h2>
     <p className="mb-2">
-      <a href="https://minedu.fi/yhteystiedot" target="_blank">Opetus- ja kulttuuriministeriön yhteystiedot</a>
+      <a href="https://minedu.fi/yhteystiedot" target="_blank" rel="noopener noreferrer">Opetus- ja kulttuuriministeriön yhteystiedot</a>
     </p>
     <p className="mb-2">
       Opetus- ja kulttuuriministeriön yhteystiedoista voit hakea ministeriössä työskentelevien henkilöiden yhteystietoja nimellä, virkanimikkellää tai osastojen ja yksiköiden mukaan.
@@ -50,7 +50,7 @@ const ContentSv = (
       Undervisnings- och kulturministeriets kontaktuppgifter
     </h2>
     <p className="mb-2">
-      <a href="https://minedu.fi/sv/kontaktinformation" target="_blank">Undervisnings- och kulturministeriets kontaktuppgifter</a>
+      <a href="https://minedu.fi/sv/kontaktinformation" target="_blank" rel="noopener noreferrer">Undervisnings- och kulturministeriets kontaktuppgifter</a>
     </p>
     <p className="mb-2">
       I undervisnings- och kulturministeriets kontaktuppgifter kan du söka kontaktuppgifter för personer som arbetar vid ministeriet med namn, tjänstebenämning eller enligt avdelningarna och enheterna.
