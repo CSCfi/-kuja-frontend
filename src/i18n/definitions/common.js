@@ -828,5 +828,9 @@ export default defineMessages({
   okmLinkUrl: {
     id: "common.okmLinkUrl",
     defaultMessage: "http://www.minedu.fi"
+  },
+  decisionDetails: {
+    id: "common.decisionDetails",
+    defaultMessage: "Päätöksen tiedot"
   }
 });

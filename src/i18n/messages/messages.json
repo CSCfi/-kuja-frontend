@@ -990,6 +990,11 @@
     "filepath": "src/i18n/definitions/common.js"
   },
   {
+    "id": "common.decisionDetails",
+    "defaultMessage": "Päätöksen tiedot",
+    "filepath": "src/i18n/definitions/common.js"
+  },
+  {
     "id": "education.highSchoolEducation",
     "defaultMessage": "Lukiokoulutus",
     "filepath": "src/i18n/definitions/education.js"
