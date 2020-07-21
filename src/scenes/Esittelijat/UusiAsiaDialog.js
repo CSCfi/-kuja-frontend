@@ -352,7 +352,8 @@ const UusiAsiaDialog = React.memo(
                     onSectionChangesUpdate(payload.anchor, payload.changes)
                   }
                   path={["esittelija", "topThree"]}
-                  rules={getRules()}></Lomake>
+                  rulesFn={getRules}
+                  ></Lomake>
               </div>
               <EsittelijatMuutospyynto
                 kielet={kielet}
