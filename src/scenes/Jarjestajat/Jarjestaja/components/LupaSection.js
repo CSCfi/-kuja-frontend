@@ -12,6 +12,7 @@ import Tutkintokieli from "./Tutkintokieli";
 import Section from "../../../../components/03-templates/Section";
 import common from "../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
+import { parseLocalizedField } from "../../../../modules/helpers";
 
 const Otsikko = styled.div`
   font-size: 16px;
@@ -63,6 +64,11 @@ const VALMATELMA = styled.div`
 const OpiskelijavuosiRajoitukset = styled.div`
   margin-left: 30px;
   margin-bottom: 20px;
+`;
+
+const RajoitusTitle = styled.span`
+  display: inline-block;
+  width: 20em;
 `;
 
 const KohdeKuvaus = styled.div`
@@ -313,6 +319,13 @@ const LupaSection = props => {
                 const { tyyppi, arvo } = obj;
                 return (
                   <OpiskelijavuosiRajoitukset key={i}>
+                    <RajoitusTitle>
+                      {parseLocalizedField(
+                        obj.koodi.metadata,
+                        intl.locale.toUpperCase(),
+                        "nimi"
+                      )}
+                    </RajoitusTitle>
                     {intl.formatMessage(
                       common.lupaSectionOpiskelijavuodetMaximum,
                       { tyyppi, arvo }
