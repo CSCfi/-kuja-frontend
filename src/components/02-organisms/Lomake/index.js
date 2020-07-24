@@ -61,7 +61,7 @@ const Lomake = React.memo(
     onChangesUpdate,
     path: _path,
     prefix = "",
-    rules = [],
+    rules,
     rulesFn,
     showCategoryTitles = true,
     uncheckParentWithoutActiveChildNodes = defaultProps.uncheckParentWithoutActiveChildNodes
@@ -153,6 +153,10 @@ const Lomake = React.memo(
     return isSameOld;
   }
 );
+
+Lomake.defaultProps = {
+  rules: []
+}
 
 Lomake.propTypes = {
   anchor: PropTypes.string,
