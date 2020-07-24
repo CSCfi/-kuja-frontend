@@ -36,7 +36,7 @@ export function getRules() {
               properties: {
                 value: async value => {
                   if (value) {
-                    const isValueInValidFormat = /^VN\/[0-9]{1,6}\/[0-9]{4}$/.test(
+                    const isValueInValidFormat = /^VN\/[0-9]{1,9}\/[0-9]{4}$/.test(
                       value
                     );
                     /**
