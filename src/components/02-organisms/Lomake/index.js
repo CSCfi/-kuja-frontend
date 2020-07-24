@@ -47,7 +47,8 @@ async function markRequiredFields(
 
 const defaultProps = {
   changeObjects: [],
-  uncheckParentWithoutActiveChildNodes: false
+  uncheckParentWithoutActiveChildNodes: false,
+  rules: []
 };
 
 const Lomake = React.memo(
@@ -61,7 +62,7 @@ const Lomake = React.memo(
     onChangesUpdate,
     path: _path,
     prefix = "",
-    rules,
+    rules = defaultProps.rules,
     rulesFn,
     showCategoryTitles = true,
     uncheckParentWithoutActiveChildNodes = defaultProps.uncheckParentWithoutActiveChildNodes
@@ -153,10 +154,6 @@ const Lomake = React.memo(
     return isSameOld;
   }
 );
-
-Lomake.defaultProps = {
-  rules: []
-}
 
 Lomake.propTypes = {
   anchor: PropTypes.string,
