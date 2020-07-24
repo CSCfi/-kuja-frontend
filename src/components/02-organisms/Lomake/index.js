@@ -106,9 +106,9 @@ const Lomake = React.memo(
           metadata
         };
       }
-      defineRules().then(aa => {
-        if (!isEqual(aa, lomakeWithRules)) {
-          setLomakeWithRules(aa);
+      defineRules().then(definedRules => {
+        if (!isEqual(definedRules, lomakeWithRules)) {
+          setLomakeWithRules(definedRules);
         }
       });
     }, [
