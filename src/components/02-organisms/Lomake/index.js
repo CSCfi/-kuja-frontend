@@ -90,8 +90,6 @@ const Lomake = React.memo(
         let _rules = cloneDeep(rules);
         if (rulesFn) {
           _rules = rulesFn(lomake);
-        } else if (rulesFn) {
-          _rules = rulesFn(lomake);
         }
         if (_rules.length) {
           result = await markRequiredFields(

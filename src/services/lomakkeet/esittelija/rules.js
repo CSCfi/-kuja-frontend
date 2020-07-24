@@ -56,7 +56,6 @@ export function getRules() {
                        * Mikäli asianumero ei ole käytössä, on kenttä arvoltaan
                        * validi sen sisällön ollessa oikeassa muodossa.
                        */
-                      console.info(isAsianumeroAlreadyInUse);
                       return !isAsianumeroAlreadyInUse;
                     }
                     return false;

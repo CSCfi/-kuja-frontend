@@ -202,6 +202,7 @@
   "education.preAndBasicEducation": "Esi- ja perusopetus",
   "education.vocationalEducation": "Ammatillinen koulutus",
   "education.vstEducation": "Vapaa sivistystyö",
+  "error.duplicateAsianumero": "Asianumero on jo käytössä toisella muutospyynnöllä",
   "homepage.header": "Oiva - Opetushallinnon ohjaus- ja säätelypalvelu",
   "homepage.infotext": "Palvelusta löytyvät tällä hetkellä kaikki ajantasaiset ammatillisen koulutuksen järjestämisluvat sekä vapaan sivistystyön oppilaitosten ylläpitämisluvat. Myöhemmin Oiva laajennetaan koskemaan myös esi- ja perusopetuksen sekä lukiokoulutuksen järjestämisluvat. Palvelusta löytyy lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia tilastoja ammatillisen koulutuksen osalta.",
   "languages.inFinnish": "Suomeksi",
