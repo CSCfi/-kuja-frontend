@@ -343,16 +343,17 @@ const UusiAsiaDialog = React.memo(
               className="px-16 xl:w-3/4 max-w-7xl m-auto mb-20">
               <div className="w-1/3" style={{ marginLeft: "-2rem" }}>
                 <h2 className="p-8">
-                  {intl.formatMessage(common.decisionDetails)}
+                  {/* {intl.formatMessage(common.decisionDetails)} */}
                 </h2>
                 <Lomake
                   anchor="topthree"
                   changeObjects={cos.topthree}
+                  data={{ uuid }}
                   onChangesUpdate={payload =>
                     onSectionChangesUpdate(payload.anchor, payload.changes)
                   }
                   path={["esittelija", "topThree"]}
-                  rules={getRules()}></Lomake>
+                  rulesFn={getRules}></Lomake>
               </div>
               <EsittelijatMuutospyynto
                 kielet={kielet}
