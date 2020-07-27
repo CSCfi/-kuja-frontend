@@ -19,7 +19,7 @@ const Description = styled.p`
 const Jarjestajat = ({ intl }) => {
   return (
     <ContentContainer>
-      <Helmet>
+      <Helmet htmlAttributes={{ lang: intl.locale }}>
         <title>Oiva | Ammatillinen koulutus</title>
       </Helmet>
       <div height="300px">
