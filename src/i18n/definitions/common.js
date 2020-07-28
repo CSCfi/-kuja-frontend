@@ -840,5 +840,9 @@ export default defineMessages({
   viiva: {
     id: "common.viiva",
     defaultMessage: "Viiva"
+  },
+  breadCrumbs: {
+    id: "common.breadCrumbs",
+    defaultMessage: "Murupolku"
   }
 });

@@ -57,6 +57,7 @@
   "common.attachmentSecretUnselect": "Merkitse liite julkiseksi",
   "common.author": "Laatija",
   "common.backFromAsiakirjat": "Takaisin Järjestämislupa asiat -taulukkoon",
+  "common.breadCrumbs": "Murupolku",
   "common.cancel": "Peruuta",
   "common.change": "Järjestämisluvan muutos",
   "common.changesText": "Muutokset:",

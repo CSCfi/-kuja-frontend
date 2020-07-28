@@ -265,6 +265,7 @@ const App = React.memo(({ isDebugModeOn }) => {
               <div
                 style={{ maxWidth: "90rem" }}
                 className="w-full mx-auto px-3 lg:px-8 py-8">
+                <div tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}></div>
                 <Breadcrumbs
                   separator={<b> / </b>}
                   item={NavLink}
