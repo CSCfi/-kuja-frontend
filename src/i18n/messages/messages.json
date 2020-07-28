@@ -595,6 +595,11 @@
     "filepath": "src/i18n/definitions/languages.js"
   },
   {
+    "id": "languages.selection",
+    "defaultMessage": "Kielivalinta",
+    "filepath": "src/i18n/definitions/languages.js"
+  },
+  {
     "id": "user.ownOrganisation",
     "defaultMessage": "Oma organisaatio",
     "filepath": "src/i18n/definitions/user.js"

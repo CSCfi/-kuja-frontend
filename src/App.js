@@ -111,7 +111,8 @@ const App = () => {
             onMenuClick={onMenuClick}
             organisation={{text: ''}}
             shortDescription={shortDescription}
-            template={template}></Header>
+            template={template}
+            languageSelectionAriaLabel={intl.formatMessage(langMessages.selection)}></Header>
         );
       }
       return null;
