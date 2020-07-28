@@ -207,6 +207,7 @@
   "homepage.infotext": "SV: Palvelusta löytyvät tällä hetkellä kaikki ajantasaiset ammatillisen koulutuksen järjestämisluvat sekä vapaan sivistystyön oppilaitosten ylläpitämisluvat. Myöhemmin Oiva laajennetaan koskemaan myös esi- ja perusopetuksen sekä lukiokoulutuksen järjestämisluvat. Palvelusta löytyy lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia tilastoja ammatillisen koulutuksen osalta.",
   "languages.inFinnish": "SV: Suomeksi",
   "languages.inSwedish": "På svenska",
+  "languages.selection": "SV: Kielivalinta",
   "user.ownOrganisation": "Din egen organisation",
   "wizard.allFieldsRequired": "SV: Täydennä kaikki tämän sivun kentät.",
   "wizard.allPerustelutRequired": "SV: Perustele kaikki muutokset.",
