@@ -261,20 +261,22 @@ const App = React.memo(({ isDebugModeOn }) => {
           </SideNavigation>
 
           <main className="flex flex-1 flex-col justify-between mt-16 sm:mt-48 md:mt-32">
-            <div tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)} className="flex flex-col flex-1 bg-white">
+            <div className="flex flex-col flex-1 bg-white">
               <div
                 style={{ maxWidth: "90rem" }}
                 className="w-full mx-auto px-3 lg:px-8 py-8">
-                <Breadcrumbs
-                  separator={<b> / </b>}
-                  item={NavLink}
-                  finalItem={"b"}
-                  finalProps={{
-                    style: {
-                      color: COLORS.BLACK
-                    }
-                  }}
-                />
+                <nav tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
+                  <Breadcrumbs
+                    separator={<b> / </b>}
+                    item={NavLink}
+                    finalItem={"b"}
+                    finalProps={{
+                      style: {
+                        color: COLORS.BLACK
+                      }
+                    }}
+                  />
+                </nav>
               </div>
               <div className="flex-1 flex flex-col">
                 <Switch>
