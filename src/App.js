@@ -161,18 +161,20 @@ const App = () => {
           <main
             className="flex flex-1 flex-col justify-between"
             style={{ marginTop: headerHeight }}>
-            <div tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)} className="flex flex-col flex-1 bg-white">
+            <div className="flex flex-col flex-1 bg-white">
               <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
-                <Breadcrumbs
-                  separator={<b> / </b>}
-                  item={NavLink}
-                  finalItem={"b"}
-                  finalProps={{
-                    style: {
-                      color: COLORS.BLACK
-                    }
-                  }}
-                />
+                <nav tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
+                  <Breadcrumbs
+                    separator={<b> / </b>}
+                    item={NavLink}
+                    finalItem={"b"}
+                    finalProps={{
+                      style: {
+                        color: COLORS.BLACK
+                      }
+                    }}
+                  />
+                </nav>
               </div>
               <div className="flex-1 flex flex-col">
                 <Switch>
