@@ -161,9 +161,8 @@ const App = () => {
           <main
             className="flex flex-1 flex-col justify-between"
             style={{ marginTop: headerHeight }}>
-            <div className="flex flex-col flex-1 bg-white">
+            <div tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)} className="flex flex-col flex-1 bg-white">
               <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
-                <div tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}></div>
                 <Breadcrumbs
                   separator={<b> / </b>}
                   item={NavLink}
