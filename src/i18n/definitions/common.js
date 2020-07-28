@@ -417,5 +417,9 @@ export default defineMessages({
   okmLinkUrl: {
     id: "common.okmLinkUrl",
     defaultMessage: "http://www.minedu.fi"
+  },
+  breadCrumbs: {
+    id: "common.breadCrumbs",
+    defaultMessage: "Murupolku"
   }
 });
