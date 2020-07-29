@@ -25,7 +25,7 @@ import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
 
 const history = createBrowserHistory();
 
-const logo = { text: "Oiva", path: "/" };
+
 
 /**
  * App component forms the basic structure of the application and its routing.
@@ -40,6 +40,7 @@ const App = () => {
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
   const oivaURL = process.env.REACT_APP_OIVA_URL || "https://localhost:443";
+  const logo = { text: "Oiva", path: oivaURL };
 
   const pageLinks = [
     {
