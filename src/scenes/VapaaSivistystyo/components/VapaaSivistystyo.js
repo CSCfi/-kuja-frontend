@@ -155,7 +155,7 @@ const VapaaSivistystyo = () => {
 
   return (
     <React.Fragment>
-      <Helmet>
+      <Helmet htmlAttributes={{ lang: intl.locale }}>
         <title>Kuja | Vapaa sivistystyö</title>
       </Helmet>
       <BreadcrumbsItem to="/">

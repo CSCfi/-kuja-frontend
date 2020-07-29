@@ -9,19 +9,19 @@ import homepage from "../../i18n/definitions/homepage";
 const Home = () => {
   const { formatMessage } = useIntl();
   return (
-      <ContentContainer>
-          <Helmet>
-              <title>Oiva | Etusivu</title>
-          </Helmet>
-          <Typography component="h2" variant="h4" className="p-4">
-              {formatMessage(homepage.header)}
-          </Typography>
-          <Card className="p-4">
-              <Typography paragraph={true}>
-                  {formatMessage(homepage.infotext)}
-              </Typography>
-          </Card>
-      </ContentContainer>
+    <ContentContainer>
+      <Helmet htmlAttributes={{ lang: intl.locale }}>
+        <title>Oiva | Etusivu</title>
+      </Helmet>
+      <Typography component="h2" variant="h4" className="p-4">
+        {formatMessage(homepage.header)}
+      </Typography>
+      <Card className="p-4">
+        <Typography paragraph={true}>
+          {formatMessage(homepage.infotext)}
+        </Typography>
+      </Card>
+    </ContentContainer>
   );
 };
 

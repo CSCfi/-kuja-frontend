@@ -20,7 +20,7 @@ const Description = styled.p`
 const EsiJaPerusopetus = ({ intl }) => {
   return (
     <ContentContainer>
-      <Helmet>
+      <Helmet htmlAttributes={{ lang: intl.locale }}>
         <title>Oiva | Esi- ja perusopetus</title>
       </Helmet>
       <div height="300px">
