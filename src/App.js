@@ -39,6 +39,8 @@ import * as R from "ramda";
 import Yhteydenotto from "./scenes/Yhteydenotto";
 import Saavutettavuusseloste from "./scenes/Saavutettavuusseloste";
 import Tietosuojailmoitus from "./scenes/Tietosuojailmoitus";
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import "@reach/skip-nav/styles.css";
 
 const history = createBrowserHistory();
 
@@ -230,6 +232,7 @@ const App = React.memo(({ isDebugModeOn }) => {
     <React.Fragment>
       <Router history={history}>
         <div className="flex flex-col min-h-screen">
+          <SkipNavLink>{intl.formatMessage(commonMessages.jumpToContent)}</SkipNavLink>
           <div
             className={`fixed z-50 ${
               appState.isDebugModeOn ? "w-2/3" : "w-full"
@@ -260,7 +263,7 @@ const App = React.memo(({ isDebugModeOn }) => {
             </div>
           </SideNavigation>
 
-          <main className="flex flex-1 flex-col justify-between mt-16 sm:mt-48 md:mt-32">
+          <div className="flex flex-1 flex-col justify-between mt-16 sm:mt-48 md:mt-32">
             <div className="flex flex-col flex-1 bg-white">
               <div
                 style={{ maxWidth: "90rem" }}
@@ -278,7 +281,8 @@ const App = React.memo(({ isDebugModeOn }) => {
                   />
                 </nav>
               </div>
-              <div className="flex-1 flex flex-col">
+              <SkipNavContent />
+              <main className="flex-1 flex flex-col">
                 <Switch>
                   <Route exact path="/" component={Home} />
                   <Route path="/logout" component={Logout} />
@@ -330,9 +334,9 @@ const App = React.memo(({ isDebugModeOn }) => {
                     )}
                   />
                 </Switch>
-              </div>
+              </main>
             </div>
-          </main>
+          </div>
           <footer>
             <Footer
             // props={props}
