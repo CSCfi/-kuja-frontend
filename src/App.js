@@ -234,7 +234,7 @@ const App = React.memo(({ isDebugModeOn }) => {
         <div className="flex flex-col min-h-screen">
           <SkipNavLink>{intl.formatMessage(commonMessages.jumpToContent)}</SkipNavLink>
           <div
-            className={`fixed z-50 ${
+            className={`relative lg:fixed z-50 ${
               appState.isDebugModeOn ? "w-2/3" : "w-full"
             }`}>
             {getHeader()}
@@ -263,7 +263,7 @@ const App = React.memo(({ isDebugModeOn }) => {
             </div>
           </SideNavigation>
 
-          <div className="flex flex-1 flex-col justify-between mt-16 sm:mt-48 md:mt-32">
+          <div className="flex flex-1 flex-col justify-between mt-16 md:mt-0 lg:mt-32">
             <div className="flex flex-col flex-1 bg-white">
               <div
                 style={{ maxWidth: "90rem" }}
