@@ -208,7 +208,6 @@ const MuutospyyntoWizardMuut = props => {
             changes={R.prop(configObj.code, changeObjects.muut)}
             hideAmountOfChanges={true}
             messages={changesMessages}
-            code={configObj.code}
             index={i}
             onUpdate={onChangesUpdate}
             sectionId={fullSectionId}
