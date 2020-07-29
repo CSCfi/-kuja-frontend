@@ -421,5 +421,9 @@ export default defineMessages({
   breadCrumbs: {
     id: "common.breadCrumbs",
     defaultMessage: "Murupolku"
+  },
+  jumpToContent: {
+    id: "common.jumpToContent",
+    defaultMessage: "Hyppää sisältöön"
   }
 });

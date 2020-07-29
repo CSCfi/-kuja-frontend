@@ -22,6 +22,8 @@ import { AppContext } from "./context/appContext";
 import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
 import SideNavigation from "okm-frontend-components/dist/components/02-organisms/SideNavigation";
 import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import "@reach/skip-nav/styles.css";
 
 const history = createBrowserHistory();
 
@@ -119,6 +121,7 @@ const App = () => {
     <React.Fragment>
       <Router history={history}>
         <div className="flex flex-col min-h-screen">
+          <SkipNavLink>{intl.formatMessage(commonMessages.jumpToContent)}</SkipNavLink>
           <div className="relative lg:fixed z-50 w-full">
             {getHeader()}
 
@@ -147,7 +150,7 @@ const App = () => {
             </div>
           </SideNavigation>
 
-          <main className="flex flex-1 flex-col justify-between mt-16 md:mt-0 lg:mt-32">
+          <div className="flex flex-1 flex-col justify-between mt-16 md:mt-0 lg:mt-32">
             <div className="flex flex-col flex-1 bg-white">
               <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
                 <nav tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
@@ -163,7 +166,8 @@ const App = () => {
                   />
                 </nav>
               </div>
-              <div className="flex-1 flex flex-col">
+              <SkipNavContent />
+              <main className="flex-1 flex flex-col">
                 <Switch>
                   <Route exact path="/" component={Home} />
                   <Route exact path="/tilastot" component={Tilastot} />
@@ -197,9 +201,9 @@ const App = () => {
                     component={EsiJaPerusopetus}
                   />
                 </Switch>
-              </div>
+              </main>
             </div>
-          </main>
+          </div>
           <footer>
             <Footer oivaURL={oivaURL} />
             <ToastContainer />
