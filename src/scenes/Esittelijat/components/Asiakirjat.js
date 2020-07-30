@@ -306,13 +306,10 @@ const Asiakirjat = React.memo(() => {
     }
   ];
 
-  if (
-    muutospyynnonLiitteet.isLoading === false &&
-    muutospyynto.isLoading === false &&
-    muutospyynnonLiitteet.fetchedAt &&
-    muutospyynto.fetchedAt &&
-    muutospyynto.data
-  ) {
+  const muutospyyntoLoaded = muutospyynnonLiitteet.isLoading === false && muutospyynto.isLoading === false &&
+    muutospyynnonLiitteet.fetchedAt && muutospyynto.fetchedAt;
+
+  if (muutospyyntoLoaded && muutospyynto.data) {
     return (
       <div
         className="flex flex-col flex-1"
@@ -404,12 +401,7 @@ const Asiakirjat = React.memo(() => {
         </div>
       </div>
     );
-  } else if (
-    muutospyynnonLiitteet.isLoading === false &&
-    muutospyynto.isLoading === false &&
-    muutospyynnonLiitteet.fetchedAt &&
-    muutospyynto.fetchedAt &&
-    !muutospyynto.data) {
+  } else if (muutospyyntoLoaded && !muutospyynto.data) {
     return <div className="flex-1 flex justify-center">{intl.formatMessage(error.muutospyyntoNotFound)}</div>
   } else {
     return <Loading />;
