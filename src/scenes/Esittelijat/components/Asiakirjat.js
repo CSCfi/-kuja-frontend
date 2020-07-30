@@ -24,6 +24,7 @@ import { useHistory, useParams } from "react-router-dom";
 import RemovalDialogOfAsiakirja from "../RemovalDialogOfAsiakirja";
 import { useMuutospyynnot } from "../../../stores/muutospyynnot";
 import PDFAndStateDialog from "../PDFAndStateDialog";
+import error from "../../../i18n/definitions/error";
 
 const WrapTable = styled.div``;
 
@@ -309,7 +310,8 @@ const Asiakirjat = React.memo(() => {
     muutospyynnonLiitteet.isLoading === false &&
     muutospyynto.isLoading === false &&
     muutospyynnonLiitteet.fetchedAt &&
-    muutospyynto.fetchedAt
+    muutospyynto.fetchedAt &&
+    muutospyynto.data
   ) {
     return (
       <div
@@ -402,6 +404,13 @@ const Asiakirjat = React.memo(() => {
         </div>
       </div>
     );
+  } else if (
+    muutospyynnonLiitteet.isLoading === false &&
+    muutospyynto.isLoading === false &&
+    muutospyynnonLiitteet.fetchedAt &&
+    muutospyynto.fetchedAt &&
+    !muutospyynto.data) {
+    return <div className="flex-1 flex justify-center">{intl.formatMessage(error.muutospyyntoNotFound)}</div>
   } else {
     return <Loading />;
   }
