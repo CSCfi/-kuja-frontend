@@ -26,12 +26,9 @@ import {
   setAttachmentUuids,
   combineArrays
 } from "../../../../../../utils/muutospyyntoUtil";
-import Loading from "../../../../../../modules/Loading";
 import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
-import { useKoulutukset } from "../../../../../../stores/koulutukset";
-import { mapObjIndexed, prop, sortBy } from "ramda";
 import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import ProcedureHandler from "../../../../../../components/02-organisms/procedureHandler";
 import { createMuutospyyntoOutput } from "../../../../../../services/muutoshakemus/utils/common";
@@ -64,6 +61,7 @@ const defaultProps = {
   elykeskukset: [],
   kielet: [],
   kohteet: [],
+  koulutukset: {},
   koulutusalat: [],
   koulutustyypit: [],
   kunnat: [],
@@ -90,6 +88,7 @@ const MuutospyyntoWizard = ({
   history,
   kielet = defaultProps.kielet,
   kohteet = defaultProps.kohteet,
+  koulutukset = defaultProps.koulutukset,
   koulutusalat = defaultProps.koulutusalat,
   koulutustyypit = defaultProps.koulutustyypit,
   kunnat = defaultProps.kunnat,
@@ -127,28 +126,7 @@ const MuutospyyntoWizard = ({
    * We are going to create new objects based on these definitions.
    */
   const [cos, coActions] = useChangeObjects(); // cos means change objects
-  const [koulutukset] = useKoulutukset();
   const [, muutospyyntoActions] = useMuutospyynto();
-
-  /**
-   * Basic data for the wizard is created here. The following functions modify
-   * the backend data for the wizard. E.g. the most used languages can be
-   * moved to the top of the languages list.
-   *
-   * Some wizard related data is fine as it is and doesn't need to be modified.
-   * That kind of data is passed to this wizard using properties.
-   */
-  const parsedKoulutukset = useMemo(() => {
-    return {
-      muut: mapObjIndexed((num, key, obj) => {
-        return sortBy(prop("koodiArvo"), obj[key].data);
-      }, koulutukset.muut),
-      poikkeukset: mapObjIndexed((num, key, obj) => {
-        return obj[key].data;
-      }, koulutukset.poikkeukset)
-    };
-  }, [koulutukset]);
-
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
@@ -472,7 +450,7 @@ const MuutospyyntoWizard = ({
         <h3>{intl.formatMessage(wizardMessages.noRights)}</h3>
       </MessageWrapper>
     );
-  } else if (kielet && parsedKoulutukset) {
+  } else {
     return (
       <React.Fragment>
         <FormDialog
@@ -509,7 +487,7 @@ const MuutospyyntoWizard = ({
                   <MuutospyyntoWizardMuutokset
                     kielet={kielet}
                     kohteet={kohteet}
-                    koulutukset={parsedKoulutukset}
+                    koulutukset={koulutukset}
                     koulutusalat={koulutusalat}
                     koulutustyypit={koulutustyypit}
                     kunnat={kunnat}
@@ -539,7 +517,7 @@ const MuutospyyntoWizard = ({
                     elykeskukset={elykeskukset}
                     kielet={kielet}
                     kohteet={kohteet}
-                    koulutukset={parsedKoulutukset}
+                    koulutukset={koulutukset}
                     lupa={lupa}
                     lupaKohteet={lupaKohteet}
                     maakuntakunnat={maakuntakunnat}
@@ -581,7 +559,7 @@ const MuutospyyntoWizard = ({
                     changeObjects={cos}
                     kielet={kielet}
                     kohteet={kohteet}
-                    koulutukset={parsedKoulutukset}
+                    koulutukset={koulutukset}
                     lupa={lupa}
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}
@@ -612,8 +590,6 @@ const MuutospyyntoWizard = ({
         />
       </React.Fragment>
     );
-  } else {
-    return <Loading />;
   }
 };
 
@@ -622,6 +598,7 @@ MuutospyyntoWizard.propTypes = {
   elykeskukset: PropTypes.array,
   history: PropTypes.object,
   kielet: PropTypes.array,
+  koulutukset: PropTypes.object,
   koulutusalat: PropTypes.array,
   koulutustyypit: PropTypes.array,
   kunnat: PropTypes.array,

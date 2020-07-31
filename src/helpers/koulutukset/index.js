@@ -12,9 +12,21 @@ import {
   prop,
   path,
   flatten,
-  dissoc
+  dissoc,
+  omit,
+  mapObjIndexed,
+  head,
+  groupBy
 } from "ramda";
 import { fillForBackend } from "../../services/lomakkeet/backendMappings";
+
+export const initializeKoulutus = koulutus => {
+  return {
+    ...omit(["koodiArvo"], koulutus),
+    koodiarvo: koulutus.koodiArvo,
+    metadata: mapObjIndexed(head, groupBy(prop("kieli"), koulutus.metadata))
+  };
+};
 
 export const getChangesToSave = (changeObjects = {}, kohde, maaraystyypit) =>
   map(changeObj => {

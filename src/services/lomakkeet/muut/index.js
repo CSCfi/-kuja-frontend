@@ -25,11 +25,12 @@ function getModificationForm(
       anchor: configObj.key,
       title: item.title,
       categories: R.addIndex(R.map)((article, index) => {
+        console.info(article);
         const title =
           _.find(article.metadata, m => {
             return m.kieli === locale;
           }).kuvaus || "Muu";
-        const maarays = R.find(R.propEq("koodiarvo", article.koodiArvo))(
+        const maarays = R.find(R.propEq("koodiarvo", article.koodiarvo))(
           osiota5koskevatMaaraykset
         );
         const isInLupaBool = !!maarays;
@@ -40,14 +41,14 @@ function getModificationForm(
           isInLupa: isInLupaBool
         };
         const section4changeObj = R.find(
-          R.pathEq(["properties", "metadata", "koodiarvo"], article.koodiArvo),
+          R.pathEq(["properties", "metadata", "koodiarvo"], article.koodiarvo),
           opiskelijavuodetChangeObjects
         );
         const showAlertBecauseOfSection4 =
           !section4changeObj ||
           !section4changeObj.properties.applyForValue.length;
         let result = {
-          anchor: article.koodiArvo,
+          anchor: article.koodiarvo,
           components: [
             {
               anchor: "A",
@@ -61,7 +62,7 @@ function getModificationForm(
                   code: configObj.code,
                   title: configObj.title,
                   isInLupa: isInLupaBool,
-                  koodiarvo: article.koodiArvo,
+                  koodiarvo: article.koodiarvo,
                   koodisto: article.koodisto,
                   maaraysUuid: maarays ? maarays.uuid : null
                 },
@@ -94,7 +95,7 @@ function getModificationForm(
                   anchor: "A",
                   name: "Alert",
                   properties: {
-                    id: `${article.koodiArvo}-notification`,
+                    id: `${article.koodiarvo}-notification`,
                     ariaLabel: "Notification",
                     message: __("info.osion.4.tayttamisesta"),
                     linkText: __("ilmoita.opiskelijavuosimaara"),
@@ -108,7 +109,7 @@ function getModificationForm(
           ];
         }
 
-        if (article.koodiArvo === "22") {
+        if (article.koodiarvo === "22") {
           result.categories = [
             {
               anchor: "other",
@@ -122,7 +123,7 @@ function getModificationForm(
                       code: configObj.code,
                       title: configObj.title,
                       isInLupa: isInLupaBool,
-                      koodiarvo: article.koodiArvo,
+                      koodiarvo: article.koodiarvo,
                       koodisto: article.koodisto
                     },
                     placeholder: __("other.placeholder")

@@ -79,20 +79,24 @@ const AppWrapper = () => {
             <div className="w-2/3 relative">{<App />}</div>
           </div>
         ) : null
-      ) : (
-        user.fetchedAt && <App />
-      );
+      ) : !!user.fetchedAt ? (
+        <App />
+      ) : null;
     }
     return null;
   }, [state.isDebugModeOn, user.fetchedAt]);
 
-  if(!kaannokset.fetchedAt && !kaannokset.isErroneous && isBackendTheSourceOfLocalizations) {
-    return <React.Fragment />
-  } else if (appStructure && state.locale && messages) {
+  if (
+    !kaannokset.fetchedAt &&
+    !kaannokset.isErroneous &&
+    isBackendTheSourceOfLocalizations
+  ) {
+    return <React.Fragment />;
+  } else if (appStructure && messages && state.locale && user.fetchedAt) {
     return (
       // Key has been set to ensure the providers's refresh when locale changes.
       <IntlProvider
-        key={state.locale}
+        otherKey={state.locale}
         locale={state.locale}
         messages={messages[state.locale]}>
         {appStructure}

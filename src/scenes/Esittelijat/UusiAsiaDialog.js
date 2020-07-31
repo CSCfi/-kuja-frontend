@@ -8,9 +8,6 @@ import React, {
 import { useChangeObjects } from "../../stores/changeObjects";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
-import * as R from "ramda";
-import { mapObjIndexed, prop, sortBy } from "ramda";
-import { useKoulutukset } from "../../stores/koulutukset";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
 import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
 import wizardMessages from "../../i18n/definitions/wizard";
@@ -28,6 +25,7 @@ import Lomake from "../../components/02-organisms/Lomake";
 import { getRules } from "../../services/lomakkeet/esittelija/rules";
 import { useMuutospyynto } from "../../stores/muutospyynto";
 import common from "../../i18n/definitions/common";
+import * as R from "ramda";
 
 const isDebugOn = process.env.REACT_APP_DEBUG === "true";
 
@@ -65,6 +63,10 @@ const FormDialog = withStyles(() => ({
 const defaultProps = {
   kielet: [],
   kohteet: [],
+  koulutukset: {
+    muut: {},
+    poikkeukset: {}
+  },
   koulutusalat: {},
   koulutustyypit: {},
   kunnat: [],
@@ -83,6 +85,7 @@ const UusiAsiaDialog = React.memo(
   ({
     kielet = defaultProps.kielet,
     kohteet = defaultProps.kohteet,
+    koulutukset = defaultProps.koulutukset,
     koulutusalat = defaultProps.koulutusalat,
     koulutustyypit = defaultProps.koulutustyypit,
     kunnat = defaultProps.kunnat,
@@ -101,7 +104,6 @@ const UusiAsiaDialog = React.memo(
     let history = useHistory();
     const params = useParams();
     const [cos, coActions] = useChangeObjects(); // cos means change objects
-    const [koulutukset] = useKoulutukset();
     const [, muutospyyntoActions] = useMuutospyynto();
 
     const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
@@ -121,17 +123,6 @@ const UusiAsiaDialog = React.memo(
     const organisationWebsite = R.head(
       R.values(R.find(R.prop("www"), organisation.yhteystiedot))
     );
-
-    const parsedKoulutukset = useMemo(() => {
-      return {
-        muut: mapObjIndexed((num, key, obj) => {
-          return sortBy(prop("koodiArvo"), obj[key].data);
-        }, koulutukset.muut),
-        poikkeukset: mapObjIndexed((num, key, obj) => {
-          return obj[key].data;
-        }, koulutukset.poikkeukset)
-      };
-    }, [koulutukset]);
 
     /**
      * The function is mainly called by FormSection.
@@ -362,7 +353,7 @@ const UusiAsiaDialog = React.memo(
                 <EsittelijatMuutospyynto
                   kielet={kielet}
                   kohteet={kohteet}
-                  koulutukset={parsedKoulutukset}
+                  koulutukset={koulutukset}
                   koulutusalat={koulutusalat}
                   koulutustyypit={koulutustyypit}
                   kunnat={kunnat}

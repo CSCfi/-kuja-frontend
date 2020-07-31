@@ -85,7 +85,7 @@ function getCategoriesForPerustelut(
     R.compose(R.not, R.isEmpty, R.prop("koulutukset")),
     R.mapObjIndexed(koulutustyyppi => {
       koulutustyyppi.koulutukset = R.filter(koulutus => {
-        const anchorStart = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+        const anchorStart = `${anchorInitial}.${koulutustyyppi.koodiarvo}.${koulutus.koodiarvo}`;
         return !!R.find(R.startsWith(anchorStart))(relevantAnchors);
       }, koulutustyyppi.koulutukset);
       return koulutustyyppi;
@@ -105,12 +105,12 @@ function getCategoriesForPerustelut(
           const isInLupaBool = article
             ? !!_.find(article.koulutusalat, koulutusala => {
                 return !!_.find(koulutusala.koulutukset, {
-                  koodi: koulutus.koodiArvo
+                  koodi: koulutus.koodiarvo
                 });
               })
             : false;
 
-          const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiArvo}`;
+          const anchorBase = `${anchorInitial}.${koulutustyyppi.koodiArvo}.${koulutus.koodiarvo}`;
 
           const changeObjs = R.sortWith(
             [R.ascend(R.compose(R.length, anchor)), R.ascend(anchor)],
@@ -130,7 +130,7 @@ function getCategoriesForPerustelut(
               _.find(R.prop("metadata", obj), m => m.kieli === locale).nimi;
 
             return {
-              anchor: `${koulutus.koodiArvo}|${i}`,
+              anchor: `${koulutus.koodiarvo}|${i}`,
               categories: [
                 {
                   anchor: osaamisala
@@ -153,14 +153,14 @@ function getCategoriesForPerustelut(
                       anchor: "A",
                       name: "StatusTextRow",
                       properties: {
-                        code: osaamisala ? "" : koulutus.koodiArvo,
+                        code: osaamisala ? "" : koulutus.koodiarvo,
                         title: osaamisala
                           ? R.join(" ", [
                               __("osaamisalarajoitus"),
                               osaamisalakoodi,
                               nimi(osaamisala),
                               "(" +
-                                koulutus.koodiArvo +
+                                koulutus.koodiarvo +
                                 " " +
                                 nimi(koulutus) +
                                 ")"

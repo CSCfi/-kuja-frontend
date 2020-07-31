@@ -112,9 +112,10 @@ const Lomake = React.memo(
         }
       });
     }, [
-      lomake,
       anchor,
       changeObjects,
+      intl.formatMessage,
+      lomake,
       lomakeWithRules,
       metadata,
       rules,
