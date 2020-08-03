@@ -207,6 +207,7 @@
   "education.vocationalEducation": "Yrkesutbildning",
   "education.vstEducation": "Vapaa sivistystyö",
   "error.duplicateAsianumero": "SV: Asianumero on jo käytössä toisella muutospyynnöllä",
+  "error.muutospyyntoNotFound": "SV: Muutospyyntöä ei löytynyt",
   "homepage.header": "SV: Oiva - Opetushallinnon ohjaus- ja säätelypalvelu",
   "homepage.infotext": "SV: Palvelusta löytyvät tällä hetkellä kaikki ajantasaiset ammatillisen koulutuksen järjestämisluvat sekä vapaan sivistystyön oppilaitosten ylläpitämisluvat. Myöhemmin Oiva laajennetaan koskemaan myös esi- ja perusopetuksen sekä lukiokoulutuksen järjestämisluvat. Palvelusta löytyy lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia tilastoja ammatillisen koulutuksen osalta.",
   "informUser.asianumeroOnJoKaytossa": "Asianumero on jo käytössä toisella muutospyynnöllä",
