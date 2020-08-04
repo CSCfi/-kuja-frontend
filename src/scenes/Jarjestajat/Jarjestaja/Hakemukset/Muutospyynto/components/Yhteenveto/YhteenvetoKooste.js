@@ -239,6 +239,7 @@ const YhteenvetoKooste = ({
               id="perustelut_opiskelijavuodet"
               render={_props => (
                 <PerustelutOpiskelijavuodet
+                  changeObjects={changeObjects}
                   muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                     muutosperusteluList
                   )}

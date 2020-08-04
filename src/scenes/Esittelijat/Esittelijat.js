@@ -36,7 +36,6 @@ const Esittelijat = () => {
         authenticated={!!user}
         exact
         path={`${path}/:ytunnus/uusi`}
-        // render={() => <UusiAsiaDialogContainer />}
         render={() => (
           <BaseData
             locale={intl.locale}

@@ -29,7 +29,6 @@ import {
 import { findObjectWithKey } from "../../../../../../utils/common";
 import ConfirmDialog from "okm-frontend-components/dist/components/02-organisms/ConfirmDialog";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
-import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import ProcedureHandler from "../../../../../../components/02-organisms/procedureHandler";
 import { createMuutospyyntoOutput } from "../../../../../../services/muutoshakemus/utils/common";
 import { useMuutospyynto } from "../../../../../../stores/muutospyynto";
@@ -57,7 +56,7 @@ const FormDialog = withStyles(() => ({
 });
 
 const defaultProps = {
-  backendMuutokset: [],
+  initialChangeObjects: {},
   elykeskukset: [],
   kielet: [],
   kohteet: [],
@@ -80,10 +79,9 @@ const defaultProps = {
 /**
  * MuutospyyntoWizard is the tool to create a new application. It provides all
  * the needed fields and information for a user for filling out the form.
- * @param {Object} backendChanges - Backend known changes of the current application
  */
 const MuutospyyntoWizard = ({
-  backendMuutokset = defaultProps.backendMuutokset,
+  initialChangeObjects = defaultProps.initialChangeObjects,
   elykeskukset = defaultProps.elykeskukset,
   history,
   kielet = defaultProps.kielet,
@@ -122,28 +120,13 @@ const MuutospyyntoWizard = ({
     4: 0
   });
 
-  /**
-   * We are going to create new objects based on these definitions.
-   */
-  const [cos, coActions] = useChangeObjects(); // cos means change objects
+  const [changeObjects, setChangeObjects] = useState(initialChangeObjects);
   const [, muutospyyntoActions] = useMuutospyynto();
   const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
   const [state] = useState({
     isHelpVisible: false
   });
   const [steps, setSteps] = useState([]);
-
-  /**
-   * The function is mainly called by FormSection.
-   */
-  const onSectionChangesUpdate = useCallback(
-    (id, changeObjects) => {
-      if (id && changeObjects) {
-        coActions.set(id, changeObjects);
-      }
-    },
-    [coActions]
-  );
 
   const handlePrev = useCallback(
     pageNumber => {
@@ -170,6 +153,12 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
+  const onChangeObjectsUpdate = useCallback((id, changeObjects) => {
+    if (id && changeObjects) {
+      setChangeObjects(R.assocPath(R.split("_", id), changeObjects));
+    }
+  }, []);
+
   useEffect(() => {
     // TODO: add isCompleted, isFailed for validation
     setSteps([
@@ -187,24 +176,23 @@ const MuutospyyntoWizard = ({
       }
     ]);
     return function cancel() {
-      // Let's empty some store content on close.
-      const procedureHandler = new ProcedureHandler(intl.formatMessage);
-      procedureHandler.run("muutospyynto.muutokset.poista", [coActions]);
       muutospyyntoActions.reset();
     };
-  }, [coActions, intl, muutospyyntoActions]);
+  }, [intl, muutospyyntoActions]);
 
   const getFiles = useCallback(() => {
     // Gets all attachment data from changeObjects
-    const files = findObjectWithKey(cos, "file");
+    const files = findObjectWithKey(changeObjects, "file");
     const allAttachments = combineArrays([
-      R.path(["yhteenveto", "yleisettiedot"], cos) || [],
-      R.path(["yhteenveto", "hakemuksenLiitteet"], cos) || [],
-      R.path(["taloudelliset", "liitteet"], cos) || [],
-      R.path(["perustelut", "liitteet"], cos) || [],
+      R.path(["yhteenveto", "yleisettiedot"], changeObjects) || [],
+      R.path(["yhteenveto", "hakemuksenLiitteet"], changeObjects) || [],
+      R.path(["taloudelliset", "liitteet"], changeObjects) || [],
+      R.path(["perustelut", "liitteet"], changeObjects) || [],
       R.flatten(
-        R.path(["perustelut", "koulutukset", "kuljettajakoulutukset"], cos) ||
-          []
+        R.path(
+          ["perustelut", "koulutukset", "kuljettajakoulutukset"],
+          changeObjects
+        ) || []
       ) || []
     ]);
     // Returns only attachments
@@ -219,11 +207,9 @@ const MuutospyyntoWizard = ({
       }, allAttachments);
     }
     return R.concat(attachments, files);
-  }, [cos]);
+  }, [changeObjects]);
 
-  const anchors = useMemo(() => {
-    return findObjectWithKey(cos, "anchor");
-  }, [cos]);
+  const anchors = findObjectWithKey(changeObjects, "anchor");
 
   const prevAnchorsRef = useRef(anchors);
 
@@ -323,7 +309,7 @@ const MuutospyyntoWizard = ({
         await createObjectToSave(
           R.toUpper(intl.locale),
           lupa,
-          cos,
+          changeObjects,
           uuid,
           kohteet,
           maaraystyypit,
@@ -366,9 +352,9 @@ const MuutospyyntoWizard = ({
           );
 
           const selectionChanged = (path, key) => {
-            const objs = R.path(path, cos);
+            const objs = R.path(path, changeObjects);
             if (objs) {
-              onSectionChangesUpdate(key, setAttachments(objs));
+              onChangeObjectsUpdate(key, setAttachments(objs));
             }
           };
 
@@ -390,7 +376,7 @@ const MuutospyyntoWizard = ({
     },
     [
       anchors,
-      cos,
+      changeObjects,
       getFiles,
       intl.locale,
       kohteet,
@@ -402,7 +388,7 @@ const MuutospyyntoWizard = ({
       onNewDocSave,
       onPreview,
       onSave,
-      onSectionChangesUpdate,
+      onChangeObjectsUpdate,
       onSend,
       uuid
     ]
@@ -482,7 +468,7 @@ const MuutospyyntoWizard = ({
                   onAction={onAction}
                   onNext={handleNext}
                   lupa={lupa}
-                  changeObjects={cos}
+                  changeObjects={changeObjects}
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardMuutokset
                     kielet={kielet}
@@ -497,7 +483,7 @@ const MuutospyyntoWizard = ({
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}
                     muut={muut}
-                    onChangesUpdate={onSectionChangesUpdate}
+                    onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
                   />
@@ -510,10 +496,10 @@ const MuutospyyntoWizard = ({
                   onPrev={handlePrev}
                   onNext={handleNext}
                   lupa={lupa}
-                  changeObjects={cos}
+                  changeObjects={changeObjects}
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardPerustelut
-                    changeObjects={cos}
+                    changeObjects={changeObjects}
                     elykeskukset={elykeskukset}
                     kielet={kielet}
                     kohteet={kohteet}
@@ -524,7 +510,7 @@ const MuutospyyntoWizard = ({
                     maaraystyypit={maaraystyypit}
                     muut={muut}
                     muutosperusteluList={muutosperusteluList}
-                    onChangesUpdate={onSectionChangesUpdate}
+                    onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
                     vankilat={vankilat}
@@ -539,11 +525,11 @@ const MuutospyyntoWizard = ({
                   onPrev={handlePrev}
                   onNext={handleNext}
                   lupa={lupa}
-                  changeObjects={cos}
+                  changeObjects={changeObjects}
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardTaloudelliset
-                    changeObjects={cos}
-                    onChangesUpdate={onSectionChangesUpdate}
+                    changeObjects={changeObjects}
+                    onChangesUpdate={onChangeObjectsUpdate}
                     isFirstVisit={visitsPerPage[3] === 1}
                   />
                 </WizardPage>
@@ -556,7 +542,7 @@ const MuutospyyntoWizard = ({
                   lupa={lupa}
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardYhteenveto
-                    changeObjects={cos}
+                    changeObjects={changeObjects}
                     kielet={kielet}
                     kohteet={kohteet}
                     koulutukset={koulutukset}
@@ -565,7 +551,7 @@ const MuutospyyntoWizard = ({
                     maaraystyypit={maaraystyypit}
                     muut={muut}
                     muutosperusteluList={muutosperusteluList}
-                    onChangesUpdate={onSectionChangesUpdate}
+                    onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
                     isFirstVisit={visitsPerPage[4] === 1}
@@ -594,9 +580,9 @@ const MuutospyyntoWizard = ({
 };
 
 MuutospyyntoWizard.propTypes = {
-  backendMuutokset: PropTypes.array,
   elykeskukset: PropTypes.array,
   history: PropTypes.object,
+  initialChangeObjects: PropTypes.object,
   kielet: PropTypes.array,
   koulutukset: PropTypes.object,
   koulutusalat: PropTypes.array,

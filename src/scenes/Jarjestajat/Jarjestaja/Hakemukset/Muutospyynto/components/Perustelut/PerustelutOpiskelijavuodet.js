@@ -7,13 +7,12 @@ import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getRules as getVahimmaisRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/vahimmais/rules";
 import { getRules as getSisaoppilaitosRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/sisaoppilaitos/rules";
 import { getRules as getVaativaTukiRules } from "../../../../../../../services/lomakkeet/perustelut/opiskelijavuodet/vaativa/rules";
-import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 import { path } from "ramda";
 import common from "../../../../../../../i18n/definitions/common";
 
 const PerustelutOpiskelijavuodet = props => {
   const intl = useIntl();
-  const [changeObjects] = useChangeObjects();
+  const { changeObjects } = props;
   const sectionId = "perustelut_opiskelijavuodet";
   const { onChangesRemove, onChangesUpdate, isReadOnly } = props;
 
@@ -42,7 +41,7 @@ const PerustelutOpiskelijavuodet = props => {
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
-  }
+  };
 
   return (
     <React.Fragment>

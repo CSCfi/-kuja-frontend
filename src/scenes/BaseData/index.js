@@ -2,7 +2,16 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { API_BASE_URL } from "modules/constants";
 import Loading from "modules/Loading";
-import { isEmpty, sortBy, prop, map, toUpper, includes, assoc } from "ramda";
+import {
+  isEmpty,
+  sortBy,
+  prop,
+  map,
+  toUpper,
+  includes,
+  assoc,
+  path
+} from "ramda";
 import { initializeTutkinnot } from "helpers/tutkinnot";
 import localforage from "localforage";
 import { backendRoutes } from "stores/utils/backendRoutes";
@@ -24,7 +33,7 @@ const acceptJSON = {
  * ei ole noudettu tai jos edellisestä noutokerrasta on kulunut muuttujan
  * minimumTimeBetweenFetchingInSeconds ilmaisema aika.
  */
-const minimumTimeBetweenFetchingInSeconds = 3600; // 1 tunti
+const minimumTimeBetweenFetchingInMinutes = 60;
 
 const fetchJSON = async path => {
   const response = await fetch(`${API_BASE_URL}/${path}`, acceptJSON);
@@ -41,8 +50,8 @@ const getRaw = async (key, path, keys) => {
   if (includes(key, keys) || isEmpty(keys)) {
     const stored = await localforage.getItem(path);
     return stored &&
-      (new Date() - stored.fetchedAt) / 1000 <
-        minimumTimeBetweenFetchingInSeconds
+      (new Date() - stored.fetchedAt) / 1000 / 60 <
+        minimumTimeBetweenFetchingInMinutes
       ? stored.data
       : await fetchJSON(path);
   }
@@ -238,9 +247,12 @@ const fetchBaseData = async (keys, locale, ytunnus) => {
     maakuntakunnat: raw.maakuntakunnat
       ? await localforage.setItem(
           "maakuntakunnat",
-          map(maakunta => {
-            return initializeMaakunta(maakunta, localeUpper);
-          }, raw.maakuntakunnat).filter(Boolean)
+          sortBy(
+            path(["metadata", localeUpper, "nimi"]),
+            map(maakunta => {
+              return initializeMaakunta(maakunta, localeUpper);
+            }, raw.maakuntakunnat).filter(Boolean)
+          )
         )
       : undefined,
     maaraystyypit: raw.maaraystyypit
@@ -296,7 +308,6 @@ const BaseData = ({ keys = defaultProps.keys, locale, render }) => {
    */
   useEffect(() => {
     fetchBaseData(keys, locale, ytunnus).then(result => {
-      console.info(result);
       setBaseData(result);
     });
   }, [keys, locale, ytunnus]);

@@ -5,7 +5,6 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import common from "../../../../../../i18n/definitions/common";
 import wizard from "../../../../../../i18n/definitions/wizard";
 import Lomake from "../../../../../../components/02-organisms/Lomake";
-import { useChangeObjects } from "../../../../../../stores/changeObjects";
 import { isAdded, isRemoved, isInLupa } from "../../../../../../css/label";
 import kuntaProvinceMapping from "./kuntaProvinceMapping";
 import * as R from "ramda";
@@ -38,7 +37,7 @@ const mapping = {
 };
 
 const MuutospyyntoWizardToimintaalue = React.memo(props => {
-  const [changeObjects] = useChangeObjects();
+  const { changeObjects } = props;
   const intl = useIntl();
   const { onChangesUpdate } = props;
 

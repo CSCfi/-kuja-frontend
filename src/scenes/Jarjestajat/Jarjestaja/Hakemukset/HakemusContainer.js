@@ -10,7 +10,8 @@ import {
   path,
   prop,
   propEq,
-  split
+  split,
+  equals
 } from "ramda";
 import { useHistory, useParams } from "react-router-dom";
 import { isEmpty, toUpper } from "ramda";
@@ -18,7 +19,6 @@ import localforage from "localforage";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
 import { getMuutosperusteluList } from "../../../../utils/muutosperusteluUtil";
 import Loading from "modules/Loading";
-import { useChangeObjects } from "stores/changeObjects";
 import { useMuutospyynto } from "stores/muutospyynto";
 import { getAnchorPart, findObjectWithKey } from "utils/common";
 import { parseLupa } from "utils/lupaParser";
@@ -48,17 +48,62 @@ const HakemusContainer = React.memo(
     muut,
     oivaperustelut,
     opetuskielet,
-    organisaatio,
     tutkinnot,
     vankilat
   }) => {
     const intl = useIntl();
-
-    const [, coActions] = useChangeObjects();
     const [muutospyynto, muutospyyntoActions] = useMuutospyynto();
 
     let { uuid, ytunnus } = useParams();
     let history = useHistory();
+
+    const [changeObjects, setChangeObjects] = useState({
+      tutkinnot: {},
+      kielet: {
+        opetuskielet: [],
+        tutkintokielet: {}
+      },
+      koulutukset: {
+        atvKoulutukset: [],
+        kuljettajakoulutukset: [],
+        valmentavatKoulutukset: []
+      },
+      perustelut: {
+        kielet: {
+          opetuskielet: [],
+          tutkintokielet: []
+        },
+        koulutukset: {
+          atvKoulutukset: [],
+          kuljettajakoulutukset: [],
+          tyovoimakoulutukset: [],
+          valmentavatKoulutukset: []
+        },
+        opiskelijavuodet: {
+          sisaoppilaitos: [],
+          vaativatuki: [],
+          vahimmaisopiskelijavuodet: []
+        },
+        liitteet: [],
+        toimintaalue: [],
+        tutkinnot: {}
+      },
+      taloudelliset: {
+        yleisettiedot: [],
+        investoinnit: [],
+        tilinpaatostiedot: [],
+        liitteet: []
+      },
+      muut: {},
+      opiskelijavuodet: [],
+      toimintaalue: [],
+      yhteenveto: {
+        yleisettiedot: [],
+        hakemuksenLiitteet: []
+      },
+      // Top three fields of muutospyyntö form of esittelijä role
+      topthree: []
+    });
 
     // Let's fetch data for the form
     useEffect(() => {
@@ -171,13 +216,21 @@ const HakemusContainer = React.memo(
         /**
          * At this point the backend data is handled and change objects have been formed.
          */
-        coActions.initialize(changesBySection);
+        const nextChangeObjects = Object.assign(
+          {},
+          changeObjects,
+          changesBySection
+        );
+
+        if (!equals(changeObjects, nextChangeObjects)) {
+          setChangeObjects(Object.assign({}, changeObjects, changesBySection));
+        }
 
         setAsHandled(true);
       }
     }, [
-      coActions,
       backendMuutokset,
+      changeObjects,
       filesFromMuutokset,
       muutospyynto.data,
       muutospyynto.fetchedAt,
@@ -207,9 +260,9 @@ const HakemusContainer = React.memo(
     ) {
       return (
         <MuutospyyntoWizard
-          backendMuutokset={backendMuutokset}
           elykeskukset={elykeskukset}
           history={history}
+          initialChangeObjects={changeObjects}
           kielet={kielet}
           kohteet={kohteet}
           koulutukset={koulutukset}

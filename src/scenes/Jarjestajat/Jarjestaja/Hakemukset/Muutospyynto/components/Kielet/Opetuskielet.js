@@ -7,10 +7,8 @@ import PropTypes from "prop-types";
 import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
-import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
 const Opetuskielet = React.memo(props => {
-  const [changeObjects] = useChangeObjects();
   const intl = useIntl();
   const sectionId = "kielet_opetuskielet";
   const { onChangesRemove, onChangesUpdate } = props;
@@ -26,14 +24,14 @@ const Opetuskielet = React.memo(props => {
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
-  }
+  };
 
   return (
     <React.Fragment>
       <ExpandableRowRoot
         anchor={sectionId}
         key={`expandable-row-root`}
-        changes={changeObjects.kielet.opetuskielet}
+        changes={props.changeObjects.kielet.opetuskielet}
         hideAmountOfChanges={true}
         messages={changesMessages}
         onChangesRemove={onChangesRemove}
@@ -45,13 +43,12 @@ const Opetuskielet = React.memo(props => {
           <Lomake
             action="modification"
             anchor={sectionId}
-            changeObjects={changeObjects.kielet.opetuskielet}
+            changeObjects={props.changeObjects.kielet.opetuskielet}
             data={{
               opetuskieletData
             }}
             onChangesUpdate={onChangesUpdate}
             path={["kielet", "opetuskielet"]}
-            rules={[]}
             showCategoryTitles={true}></Lomake>
         )}
       </ExpandableRowRoot>

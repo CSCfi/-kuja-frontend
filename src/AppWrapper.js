@@ -8,6 +8,7 @@ import App from "./App";
 import "axios-progress-bar/dist/nprogress.css";
 import { useKaannokset } from "./stores/localizations";
 import { useGlobalSettings } from "./stores/appStore";
+import { CircularProgress } from "@material-ui/core";
 
 defaults.devtools = true;
 
@@ -91,7 +92,7 @@ const AppWrapper = () => {
     !kaannokset.isErroneous &&
     isBackendTheSourceOfLocalizations
   ) {
-    return <React.Fragment />;
+    return <CircularProgress size={80} />;
   } else if (appStructure && messages && state.locale && user.fetchedAt) {
     return (
       // Key has been set to ensure the providers's refresh when locale changes.

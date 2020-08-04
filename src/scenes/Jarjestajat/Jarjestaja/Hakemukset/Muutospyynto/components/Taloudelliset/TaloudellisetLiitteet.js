@@ -1,11 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { useChangeObjects } from "../../../../../../../stores/changeObjects";
 
 const TaloudellisetLiitteet = React.memo(props => {
-  const [changeObjects] = useChangeObjects();
+  const { changeObjects } = props;
 
   return (
     <ExpandableRowRoot
@@ -26,7 +25,6 @@ const TaloudellisetLiitteet = React.memo(props => {
         isReadOnly={props.isReadOnly}
         onChangesUpdate={props.onChangesUpdate}
         path={["taloudelliset"]}
-        rules={[]}
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>
   );

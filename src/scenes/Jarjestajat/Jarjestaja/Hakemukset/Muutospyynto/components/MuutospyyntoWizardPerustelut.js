@@ -289,6 +289,7 @@ const MuutospyyntoWizardPerustelut = ({
               render={_props => (
                 <React.Fragment>
                   <PerustelutOpiskelijavuodet
+                    changeObjects={changeObjects}
                     muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
                       muutosperusteluList
                     )}

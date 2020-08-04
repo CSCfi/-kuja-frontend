@@ -10,11 +10,11 @@ import {
   path,
   prop,
   propEq,
-  split
+  split,
+  equals
 } from "ramda";
 import Loading from "../../modules/Loading";
 import { useMuutospyynto } from "../../stores/muutospyynto";
-import { useChangeObjects } from "../../stores/changeObjects";
 import { getAnchorPart, findObjectWithKey } from "../../utils/common";
 import { setAttachmentUuids } from "../../utils/muutospyyntoUtil";
 import UusiAsiaDialog from "./UusiAsiaDialog";
@@ -24,8 +24,7 @@ import { isEmpty } from "ramda";
 import localforage from "localforage";
 
 /**
- * HakemusContainer gathers all the required data for the MuutospyyntoWizard by
- * executing several backend searches.
+ * Container component of UusiaAsiaDialog.
  *
  * @param {Object} props - Props object.
  * @param {Object} props.intl - Object of react-intl library.
@@ -49,11 +48,58 @@ const UusiAsiaDialogContainer = React.memo(
   }) => {
     const intl = useIntl();
 
-    const [, coActions] = useChangeObjects();
     const [muutospyynto, muutospyyntoActions] = useMuutospyynto();
 
     let { uuid, ytunnus } = useParams();
     let history = useHistory();
+
+    const [changeObjects, setChangeObjects] = useState({
+      tutkinnot: {},
+      kielet: {
+        opetuskielet: [],
+        tutkintokielet: {}
+      },
+      koulutukset: {
+        atvKoulutukset: [],
+        kuljettajakoulutukset: [],
+        valmentavatKoulutukset: []
+      },
+      perustelut: {
+        kielet: {
+          opetuskielet: [],
+          tutkintokielet: []
+        },
+        koulutukset: {
+          atvKoulutukset: [],
+          kuljettajakoulutukset: [],
+          tyovoimakoulutukset: [],
+          valmentavatKoulutukset: []
+        },
+        opiskelijavuodet: {
+          sisaoppilaitos: [],
+          vaativatuki: [],
+          vahimmaisopiskelijavuodet: []
+        },
+        liitteet: [],
+        toimintaalue: [],
+        tutkinnot: {}
+      },
+      taloudelliset: {
+        yleisettiedot: [],
+        investoinnit: [],
+        tilinpaatostiedot: [],
+        liitteet: []
+      },
+      muut: {},
+      opiskelijavuodet: [],
+      toimintaalue: [],
+      yhteenveto: {
+        yleisettiedot: [],
+        hakemuksenLiitteet: []
+      },
+      // Top three fields of muutospyyntö form of esittelijä role
+      topthree: []
+    });
 
     // Let's fetch data for the form
     useEffect(() => {
@@ -166,13 +212,21 @@ const UusiAsiaDialogContainer = React.memo(
         /**
          * At this point the backend data is handled and change objects have been formed.
          */
-        coActions.initialize(changesBySection);
+        const nextChangeObjects = Object.assign(
+          {},
+          changeObjects,
+          changesBySection
+        );
+
+        if (!equals(changeObjects, nextChangeObjects)) {
+          setChangeObjects(Object.assign({}, changeObjects, changesBySection));
+        }
 
         setAsHandled(true);
       }
     }, [
-      coActions,
       backendMuutokset,
+      changeObjects,
       filesFromMuutokset,
       muutospyynto.data,
       muutospyynto.fetchedAt,
@@ -197,6 +251,7 @@ const UusiAsiaDialogContainer = React.memo(
       return (
         <UusiAsiaDialog
           history={history}
+          initialChangeObjects={changeObjects}
           kielet={kielet}
           kohteet={kohteet}
           koulutukset={koulutukset}

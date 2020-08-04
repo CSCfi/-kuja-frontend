@@ -6,7 +6,7 @@ import _ from "lodash";
 import { sortArticlesByHuomioitavaKoodi } from "../utils";
 import { scrollToOpiskelijavuodet } from "./utils";
 
-function getModificationForm(
+async function getModificationForm(
   configObj,
   opiskelijavuodetChangeObjects,
   osiota5koskevatMaaraykset,
@@ -25,7 +25,6 @@ function getModificationForm(
       anchor: configObj.key,
       title: item.title,
       categories: R.addIndex(R.map)((article, index) => {
-        console.info(article);
         const title =
           _.find(article.metadata, m => {
             return m.kieli === locale;
@@ -99,9 +98,7 @@ function getModificationForm(
                     ariaLabel: "Notification",
                     message: __("info.osion.4.tayttamisesta"),
                     linkText: __("ilmoita.opiskelijavuosimaara"),
-                    handleLinkClick: () => {
-                      scrollToOpiskelijavuodet();
-                    }
+                    handleLinkClick: scrollToOpiskelijavuodet
                   }
                 }
               ]
@@ -139,10 +136,10 @@ function getModificationForm(
   }, configObj.categoryData);
 }
 
-export default function getMuutLomake(action, data, isReadOnly, locale) {
+export default async function getMuutLomake(action, data, isReadOnly, locale) {
   switch (action) {
     case "modification":
-      return getModificationForm(
+      return await getModificationForm(
         data.configObj,
         data.opiskelijavuodetChangeObjects,
         data.osiota5koskevatMaaraykset,

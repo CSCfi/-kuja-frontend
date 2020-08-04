@@ -1,11 +1,4 @@
-import React, {
-  useMemo,
-  useState,
-  useCallback,
-  useRef,
-  useEffect
-} from "react";
-import { useChangeObjects } from "../../stores/changeObjects";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import DialogTitle from "okm-frontend-components/dist/components/02-organisms/DialogTitle";
@@ -22,7 +15,6 @@ import { createMuutospyyntoOutput } from "../../services/muutoshakemus/utils/com
 import { findObjectWithKey } from "../../utils/common";
 import ProcedureHandler from "../../components/02-organisms/procedureHandler";
 import Lomake from "../../components/02-organisms/Lomake";
-import { getRules } from "../../services/lomakkeet/esittelija/rules";
 import { useMuutospyynto } from "../../stores/muutospyynto";
 import common from "../../i18n/definitions/common";
 import * as R from "ramda";
@@ -61,6 +53,7 @@ const FormDialog = withStyles(() => ({
 });
 
 const defaultProps = {
+  initialChangeObjects: {},
   kielet: [],
   kohteet: [],
   koulutukset: {
@@ -83,6 +76,7 @@ const defaultProps = {
 
 const UusiAsiaDialog = React.memo(
   ({
+    initialChangeObjects = defaultProps.initialChangeObjects,
     kielet = defaultProps.kielet,
     kohteet = defaultProps.kohteet,
     koulutukset = defaultProps.koulutukset,
@@ -103,9 +97,9 @@ const UusiAsiaDialog = React.memo(
     const intl = useIntl();
     let history = useHistory();
     const params = useParams();
-    const [cos, coActions] = useChangeObjects(); // cos means change objects
     const [, muutospyyntoActions] = useMuutospyynto();
 
+    const [changeObjects, setChangeObjects] = useState(initialChangeObjects);
     const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
     const [isSavingEnabled, setIsSavingEnabled] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(true);
@@ -124,18 +118,6 @@ const UusiAsiaDialog = React.memo(
       R.values(R.find(R.prop("www"), organisation.yhteystiedot))
     );
 
-    /**
-     * The function is mainly called by FormSection.
-     */
-    const onSectionChangesUpdate = useCallback(
-      (id, changeObjects) => {
-        if (id && changeObjects) {
-          coActions.set(id, changeObjects);
-        }
-      },
-      [coActions]
-    );
-
     const openCancelModal = () => {
       setIsConfirmDialogVisible(true);
     };
@@ -144,22 +126,24 @@ const UusiAsiaDialog = React.memo(
       setIsConfirmDialogVisible(false);
     }
 
+    const onChangeObjectsUpdate = useCallback((id, changeObjects) => {
+      if (id && changeObjects) {
+        setChangeObjects(R.assocPath(R.split("_", id), changeObjects));
+      }
+    }, []);
+
     /**
      * User is redirected to the following path when the form is closed.
      */
-    const closeWizard = useCallback(() => {
+    const closeWizard = useCallback(async () => {
       setIsDialogOpen(false);
       setIsConfirmDialogVisible(false);
       // Let's empty some store content on close.
-      const procedureHandler = new ProcedureHandler(intl.formatMessage);
-      procedureHandler.run("muutospyynto.muutokset.poista", [coActions]);
       muutospyyntoActions.reset();
       return history.push(`/asiat?force=true`);
-    }, [coActions, history, intl.formatMessage, muutospyyntoActions]);
+    }, [history, muutospyyntoActions]);
 
-    const anchors = useMemo(() => {
-      return findObjectWithKey(cos, "anchor");
-    }, [cos]);
+    const anchors = findObjectWithKey(changeObjects, "anchor");
 
     const prevAnchorsRef = useRef(anchors);
 
@@ -222,7 +206,7 @@ const UusiAsiaDialog = React.memo(
           await createObjectToSave(
             R.toUpper(intl.locale),
             lupa,
-            cos,
+            changeObjects,
             uuid,
             kohteet,
             maaraystyypit,
@@ -256,7 +240,7 @@ const UusiAsiaDialog = React.memo(
       },
       [
         anchors,
-        cos,
+        changeObjects,
         kohteet,
         intl.locale,
         lupa,
@@ -342,15 +326,15 @@ const UusiAsiaDialog = React.memo(
                   </h2>
                   <Lomake
                     anchor="topthree"
-                    changeObjects={cos.topthree}
-                    data={{ uuid }}
+                    changeObjects={changeObjects.topthree}
+                    data={{ formatMessage: intl.formatMessage, uuid }}
                     onChangesUpdate={payload =>
-                      onSectionChangesUpdate(payload.anchor, payload.changes)
+                      onChangeObjectsUpdate(payload.anchor, payload.changes)
                     }
-                    path={["esittelija", "topThree"]}
-                    rulesFn={getRules}></Lomake>
+                    path={["esittelija", "topThree"]}></Lomake>
                 </div>
                 <EsittelijatMuutospyynto
+                  changeObjects={changeObjects}
                   kielet={kielet}
                   kohteet={kohteet}
                   koulutukset={koulutukset}
@@ -363,7 +347,7 @@ const UusiAsiaDialog = React.memo(
                   lupaKohteet={lupaKohteet}
                   maaraystyypit={maaraystyypit}
                   muut={muut}
-                  onChangesUpdate={onSectionChangesUpdate}
+                  onChangesUpdate={onChangeObjectsUpdate}
                   opetuskielet={opetuskielet}
                   tutkinnot={tutkinnot}
                 />
@@ -406,6 +390,7 @@ const UusiAsiaDialog = React.memo(
   },
   (cp, np) => {
     return (
+      R.equals(cp.initialChangeObjects, np.initialChangeObjects) &&
       R.equals(cp.koulutusalat, np.koulutusalat) &&
       R.equals(cp.koulutustyypit, np.koulutustyypit) &&
       R.equals(cp.lupa, np.lupa) &&
@@ -417,6 +402,7 @@ const UusiAsiaDialog = React.memo(
 
 UusiAsiaDialog.propTypes = {
   history: PropTypes.object,
+  initialChangeObjects: PropTypes.object,
   kielet: PropTypes.array,
   koulutusalat: PropTypes.array,
   koulutustyypit: PropTypes.array,
@@ -427,6 +413,7 @@ UusiAsiaDialog.propTypes = {
   maakuntakunnat: PropTypes.array,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
+  onChangeObjectsUpdate: PropTypes.func,
   onNewDocSave: PropTypes.func,
   opetuskielet: PropTypes.array,
   organisation: PropTypes.object,
