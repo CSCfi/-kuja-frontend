@@ -16,7 +16,8 @@ import {
   omit,
   mapObjIndexed,
   head,
-  groupBy
+  groupBy,
+  toUpper
 } from "ramda";
 import { fillForBackend } from "../../services/lomakkeet/backendMappings";
 
@@ -28,17 +29,20 @@ export const initializeKoulutus = koulutus => {
   };
 };
 
-export const getChangesToSave = (changeObjects = {}, kohde, maaraystyypit) =>
+export const getChangesToSave = (
+  changeObjects = {},
+  kohde,
+  maaraystyypit,
+  localeUpper
+) =>
   map(changeObj => {
     const anchorInit = compose(join("."), init, split("."))(changeObj.anchor);
     const code = getAnchorPart(changeObj.anchor, 1);
     const metadata = path(["properties", "metadata"], changeObj);
-    const finnishInfo = find(propEq("kieli", "FI"), metadata.metadata);
     const perustelut = filter(
       compose(includes(anchorInit), prop("anchor")),
       changeObjects.perustelut
     );
-
     const perustelutForBackend = fillForBackend(perustelut, changeObj.anchor);
 
     const perusteluteksti = perustelutForBackend
@@ -73,7 +77,7 @@ export const getChangesToSave = (changeObjects = {}, kohde, maaraystyypit) =>
       maaraystyyppi: find(propEq("tunniste", "OIKEUS"), maaraystyypit),
       maaraysUuid: metadata.maaraysUuid,
       meta,
-      nimi: finnishInfo.nimi,
+      nimi: metadata.metadata[localeUpper].nimi,
       tila: changeObj.properties.isChecked ? "LISAYS" : "POISTO"
     };
   }, changeObjects.muutokset).filter(Boolean);
