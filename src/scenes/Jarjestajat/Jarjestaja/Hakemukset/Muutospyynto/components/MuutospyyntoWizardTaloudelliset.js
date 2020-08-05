@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import FormSection from "../../../../../../components/03-templates/FormSection";
 import { useIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit";
@@ -7,8 +6,8 @@ import TaloudellisetTilinpaatostiedot from "./Taloudelliset/TaloudellisetTilinpa
 import TaloudellisetLiitteet from "./Taloudelliset/TaloudellisetLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
 import PropTypes from "prop-types";
-import * as R from "ramda";
 import Section from "components/03-templates/Section";
+import * as R from "ramda";
 
 const MuutospyyntoWizardTaloudelliset = ({
   changeObjects = {},

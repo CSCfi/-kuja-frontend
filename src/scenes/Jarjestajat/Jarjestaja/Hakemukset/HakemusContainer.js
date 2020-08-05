@@ -17,7 +17,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { isEmpty, toUpper } from "ramda";
 import localforage from "localforage";
 import MuutospyyntoWizard from "./Muutospyynto/components/MuutospyyntoWizard";
-import { getMuutosperusteluList } from "../../../../utils/muutosperusteluUtil";
 import Loading from "modules/Loading";
 import { useMuutospyynto } from "stores/muutospyynto";
 import { getAnchorPart, findObjectWithKey } from "utils/common";
@@ -54,7 +53,7 @@ const HakemusContainer = React.memo(
     const intl = useIntl();
     const [muutospyynto, muutospyyntoActions] = useMuutospyynto();
 
-    let { uuid, ytunnus } = useParams();
+    let { uuid } = useParams();
     let history = useHistory();
 
     const [changeObjects, setChangeObjects] = useState({
@@ -115,7 +114,7 @@ const HakemusContainer = React.memo(
 
     const lupaKohteet = useMemo(() => {
       const result = lupa
-        ? parseLupa({ ...lupa }, intl.formatMessage, intl.locale.toUpperCase())
+        ? parseLupa({ ...lupa }, intl.formatMessage, toUpper(intl.locale))
         : {};
       return result;
     }, [lupa, intl]);

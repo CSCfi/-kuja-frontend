@@ -16,8 +16,7 @@ import {
   omit,
   mapObjIndexed,
   head,
-  groupBy,
-  toUpper
+  groupBy
 } from "ramda";
 import { fillForBackend } from "../../services/lomakkeet/backendMappings";
 

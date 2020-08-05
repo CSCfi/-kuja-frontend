@@ -5,7 +5,6 @@ import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import * as R from "ramda";
 
 const Opetuskielet = React.memo(props => {
   const intl = useIntl();

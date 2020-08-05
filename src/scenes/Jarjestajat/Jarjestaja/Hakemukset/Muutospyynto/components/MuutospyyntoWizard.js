@@ -152,12 +152,21 @@ const MuutospyyntoWizard = ({
     [history]
   );
 
-  const onChangeObjectsUpdate = useCallback((id, changeObjects) => {
-    console.info(id, changeObjects);
-    if (id && changeObjects) {
-      setChangeObjects(R.assocPath(R.split("_", id), changeObjects));
-    }
-  }, []);
+  const onChangeObjectsUpdate = useCallback(
+    ({ anchor, changes: changeObjects }) => {
+      if (anchor && changeObjects) {
+        setChangeObjects(R.assocPath(R.split("_", anchor), changeObjects));
+      }
+    },
+    []
+  );
+
+  const onChangesRemove = useCallback(
+    anchor => {
+      return onChangeObjectsUpdate({ anchor, changes: [] });
+    },
+    [onChangeObjectsUpdate]
+  );
 
   useEffect(() => {
     // TODO: add isCompleted, isFailed for validation
@@ -484,6 +493,7 @@ const MuutospyyntoWizard = ({
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}
                     muut={muut}
+                    onChangesRemove={onChangesRemove}
                     onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
@@ -513,6 +523,7 @@ const MuutospyyntoWizard = ({
                     maaraystyypit={maaraystyypit}
                     muut={muut}
                     oivaperustelut={oivaperustelut}
+                    onChangesRemove={onChangesRemove}
                     onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
@@ -532,6 +543,7 @@ const MuutospyyntoWizard = ({
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardTaloudelliset
                     changeObjects={changeObjects}
+                    onChangesRemove={onChangesRemove}
                     onChangesUpdate={onChangeObjectsUpdate}
                     isFirstVisit={visitsPerPage[3] === 1}
                   />
@@ -554,6 +566,7 @@ const MuutospyyntoWizard = ({
                     maaraystyypit={maaraystyypit}
                     muut={muut}
                     oivaperustelut={oivaperustelut}
+                    onChangesRemove={onChangesRemove}
                     onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}

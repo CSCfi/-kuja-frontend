@@ -7,6 +7,7 @@ import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
 import * as R from "ramda";
+import Section from "components/03-templates/Section";
 
 const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
@@ -19,6 +20,7 @@ const MuutospyyntoWizardYhteenveto = ({
   muut,
   muutoshakemus,
   muutosperusteluList,
+  onChangesRemove,
   onChangesUpdate,
   opetuskielet,
   tutkinnot
@@ -91,36 +93,32 @@ const MuutospyyntoWizardYhteenveto = ({
 
       <div className="mb-12">{jarjestajaLayout}</div>
 
-      <FormSection
-        id="yhteenveto_yleisettiedot"
-        className="my-0"
-        render={_props => (
-          <React.Fragment>
-            <YhteenvetoYleisetTiedot
-              changeObjects={{
-                yhteenveto: changeObjects.yhteenveto.yleisettiedot
-              }}
-              {..._props}
-            />
-            <YhteenvetoKooste
-              changeObjects={changeObjects}
-              kielet={kielet}
-              kohteet={kohteet}
-              koulutukset={koulutukset}
-              lupa={lupa}
-              lupaKohteet={lupaKohteet}
-              maaraystyypit={maaraystyypit}
-              muutosperusteluList={muutosperusteluList}
-              muut={muut}
-              muutoshakemus={muutoshakemus}
-              onChangesUpdate={onChangesUpdate}
-              opetuskielet={opetuskielet}
-              tutkinnot={tutkinnot}></YhteenvetoKooste>
-          </React.Fragment>
-        )}
-        runOnChanges={onChangesUpdate}
-      />
-      <FormSection
+      <Section title={"Hakemuksen yleiset tiedot"} className="my-0">
+        <YhteenvetoYleisetTiedot
+          changeObjects={{
+            yhteenveto: changeObjects.yhteenveto.yleisettiedot
+          }}
+          onChangesRemove={onChangesRemove}
+          onChangesUpdate={onChangesUpdate}
+        />
+        <YhteenvetoKooste
+          changeObjects={changeObjects}
+          kielet={kielet}
+          kohteet={kohteet}
+          koulutukset={koulutukset}
+          lupa={lupa}
+          lupaKohteet={lupaKohteet}
+          maaraystyypit={maaraystyypit}
+          muutosperusteluList={muutosperusteluList}
+          muut={muut}
+          muutoshakemus={muutoshakemus}
+          onChangesRemove={onChangesRemove}
+          onChangesUpdate={onChangesUpdate}
+          opetuskielet={opetuskielet}
+          tutkinnot={tutkinnot}></YhteenvetoKooste>
+      </Section>
+
+      {/* <FormSection
         id="yhteenveto_hakemuksenLiitteet"
         className="my-0"
         render={_props => (
@@ -134,7 +132,7 @@ const MuutospyyntoWizardYhteenveto = ({
           </React.Fragment>
         )}
         runOnChanges={onChangesUpdate}
-      />
+      /> */}
     </React.Fragment>
   );
 };
@@ -150,6 +148,7 @@ MuutospyyntoWizardYhteenveto.propTypes = {
   lupaKohteet: PropTypes.object,
   muutoshakemus: PropTypes.object,
   muutosperusteluList: PropTypes.array,
+  onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   opetuskielet: PropTypes.array,
   tutkinnot: PropTypes.array

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Tutkinnot from "./Tutkinnot";
 import MuutospyyntoWizardKoulutukset from "./MuutospyyntoWizardKoulutukset";
 import MuutospyyntoWizardKielet from "./MuutospyyntoWizardKielet";
@@ -18,7 +18,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
     const [kohteet, setKohteet] = useState({});
     const [maaraystyypit, setMaaraystyypit] = useState(null);
 
-    const { onChangesUpdate } = props;
+    const { onChangesRemove, onChangesUpdate } = props;
 
     useEffect(() => {
       setKohteet(
@@ -53,20 +53,6 @@ const MuutospyyntoWizardMuutokset = React.memo(
       props.lupa.maaraykset || []
     );
 
-    const onChangesRemove = useCallback(
-      sectionId => {
-        return onChangesUpdate(sectionId, []);
-      },
-      [onChangesUpdate]
-    );
-
-    const updateChanges = useCallback(
-      payload => {
-        onChangesUpdate(payload.anchor, payload.changes);
-      },
-      [onChangesUpdate]
-    );
-
     return (
       <React.Fragment>
         <h2 className="my-6">
@@ -84,7 +70,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
               koulutusalat={props.koulutusalat}
               koulutustyypit={props.koulutustyypit}
               onChangesRemove={onChangesRemove}
-              onChangesUpdate={updateChanges}
+              onChangesUpdate={onChangesUpdate}
               tutkinnot={props.tutkinnot}
             />
             <h4 className="pt-8 pb-4">
@@ -96,7 +82,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
               koulutukset={props.koulutukset}
               maaraykset={props.lupa.maaraykset}
               onChangesRemove={onChangesRemove}
-              onChangesUpdate={updateChanges}
+              onChangesUpdate={onChangesUpdate}
             />
           </Section>
 
@@ -113,7 +99,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
               koulutukset={props.koulutukset}
               onUpdate={props.onUpdate}
               onChangesRemove={onChangesRemove}
-              onChangesUpdate={updateChanges}
+              onChangesUpdate={onChangesUpdate}
               opetuskielet={props.opetuskielet}
               sectionId={"tutkinnot"}
               tutkinnot={props.tutkinnot}
@@ -130,7 +116,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
               maakuntakunnat={props.maakuntakunnat}
               maakunnat={props.maakunnat}
               onChangesRemove={onChangesRemove}
-              onChangesUpdate={updateChanges}
+              onChangesUpdate={onChangesUpdate}
               sectionId={"toimintaalue"}
               valtakunnallinenMaarays={valtakunnallinenMaarays}
             />
@@ -147,7 +133,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
                 muut={props.muut}
                 opiskelijavuodet={props.opiskelijavuodet}
                 onChangesRemove={onChangesRemove}
-                onChangesUpdate={updateChanges}
+                onChangesUpdate={onChangesUpdate}
                 sectionId={"opiskelijavuodet"}
               />
             </Section>
@@ -163,7 +149,7 @@ const MuutospyyntoWizardMuutokset = React.memo(
                 muut={props.muut}
                 koulutukset={props.koulutukset}
                 onChangesRemove={onChangesRemove}
-                onChangesUpdate={updateChanges}
+                onChangesUpdate={onChangesUpdate}
               />
             </Section>
           )}
@@ -196,6 +182,7 @@ MuutospyyntoWizardMuutokset.propTypes = {
   lupaKohteet: PropTypes.object,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
+  onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   opetuskielet: PropTypes.array,
   tutkinnot: PropTypes.array

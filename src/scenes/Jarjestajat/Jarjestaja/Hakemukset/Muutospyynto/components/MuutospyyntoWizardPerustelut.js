@@ -38,6 +38,7 @@ const MuutospyyntoWizardPerustelut = ({
   lupa,
   lupaKohteet,
   oivaperustelut = defaultProps.oivaperustelut,
+  onChangesRemove,
   onChangesUpdate,
   opetuskielet,
   tutkinnot,
@@ -101,14 +102,6 @@ const MuutospyyntoWizardPerustelut = ({
   const isMuutChanges = useMemo(() => {
     return R.not(R.isEmpty(changeObjects.muut || {}));
   }, [changeObjects.muut]);
-
-  const onChangesRemove = useCallback(
-    sectionId => {
-      console.info(sectionId);
-      return onChangesUpdate(sectionId, []);
-    },
-    [onChangesUpdate]
-  );
 
   const updateChanges = useCallback(
     payload => {
@@ -294,28 +287,21 @@ const MuutospyyntoWizardPerustelut = ({
           ) : null}
 
           {/* MUUT */}
-          {/* {isMuutChanges ? (
-            <FormSection
-              code={5}
-              id="perustelut_muut"
-              render={_props => (
-                <React.Fragment>
-                  <PerustelutMuut
-                    changeObjects={{
-                      muut: changeObjects.muut,
-                      perustelut: changeObjects.perustelut.muut
-                    }}
-                    maaraykset={lupa.maaraykset}
-                    muut={muut}
-                    vankilat={vankilat}
-                    {..._props}
-                  />
-                </React.Fragment>
-              )}
-              runOnChanges={onChangesUpdate}
-              title={kohdetiedot[4].title}
-            />
-          ) : null} */}
+          {isMuutChanges ? (
+            <Section code={5} title={kohdetiedot[4].title}>
+              <PerustelutMuut
+                changeObjects={{
+                  muut: changeObjects.muut,
+                  perustelut: changeObjects.perustelut.muut
+                }}
+                maaraykset={lupa.maaraykset}
+                muut={muut}
+                onChangesRemove={onChangesRemove}
+                onChangesUpdate={updateChanges}
+                vankilat={vankilat}
+              />
+            </Section>
+          ) : null}
           {/* Common attachments, the same also in Yhteenveto */}
           {/* {isAnyChanges && (
             <FormSection
@@ -356,6 +342,7 @@ MuutospyyntoWizardPerustelut.propTypes = {
   lupa: PropTypes.object,
   lupaKohteet: PropTypes.object,
   oivaperustelut: PropTypes.array,
+  onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   opetuskielet: PropTypes.array,
   tutkinnot: PropTypes.array,

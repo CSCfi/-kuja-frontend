@@ -48,7 +48,7 @@ const MuutospyyntoWizardMuut = props => {
          * has been defined before this (MuutospyyntoWizardMuut) component.
          */
         article.showAlertBecauseOfSection5 =
-          isInLupa ||
+          (isInLupa && R.includes(article.koodiarvo, koodiarvot)) ||
           !!R.find(changeObj => {
             const koodiarvo = R.nth(-2, R.split(".", changeObj.anchor));
             return (
@@ -219,7 +219,8 @@ const MuutospyyntoWizardMuut = props => {
               changeObjects={R.prop(configObj.code, props.changeObjects.muut)}
               data={{
                 configObj,
-                opiskelijavuodetChangeObjects: props.changeObjects.opiskelijavuodet,
+                opiskelijavuodetChangeObjects:
+                  props.changeObjects.opiskelijavuodet,
                 osiota5koskevatMaaraykset
               }}
               onChangesUpdate={onChangesUpdate}

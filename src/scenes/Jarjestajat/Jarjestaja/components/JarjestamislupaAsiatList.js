@@ -18,7 +18,6 @@ import { ROLE_KATSELIJA } from "../../../../modules/constants";
 import { FIELDS } from "../../../../locales/uusiHakemusFormConstants";
 import { useMuutospyynnot } from "../../../../stores/muutospyynnot";
 import * as R from "ramda";
-import { useLupa } from "../../../../stores/lupa";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -83,8 +82,7 @@ const JarjestamislupaAsiatList = ({
     };
   }, [
     isForceReloadRequested,
-    lupa.data,
-    lupa.fetchedAt,
+    lupa,
     muutospyynnotActions,
     match
   ]);

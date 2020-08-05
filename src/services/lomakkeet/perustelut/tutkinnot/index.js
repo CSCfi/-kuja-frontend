@@ -2,7 +2,6 @@ import { isAdded, isInLupa, isRemoved } from "../../../../css/label";
 import { getMuutostarveCheckboxes } from "../common";
 import "../../i18n-config";
 import { __ } from "i18n-for-browser";
-import _ from "lodash";
 import {
   map,
   toUpper,
@@ -85,7 +84,6 @@ function getCategoriesForPerustelut(
   tutkinnotByKoulutustyyppi,
   locale
 ) {
-  console.info(tutkinnotChangeObjects, changeObjects);
   const localeUpper = toUpper(locale);
   const currentDate = new Date();
   const structure = map(koulutustyyppi => {
