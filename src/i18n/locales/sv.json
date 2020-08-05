@@ -279,9 +279,12 @@
   "wizard.sectionTitle_1": "Kvalifikationer och träning",
   "wizard.send": "svenska: Lähetä hakemus",
   "wizard.singularMunicipalitiesOrTheWholeCountry": "SV: Yksittäiset maakunnat ja kunnat tai koko maa",
+  "wizard.taloudellisetInvestoinnit": "Taloudelliset investoinnit",
+  "wizard.taloudellisetTilinpaatostiedot": "Taloudelliset tilinpäätöstiedot",
   "wizard.teachingLanguages": "Undervisningsspråk",
   "wizard.tutkintokielet": "SV: Tutkintokielet",
   "wizard.vocationalTraining": "Yrkesutbildning",
   "wizard.wholeCountryWithoutAhvenanmaa": "Koko Suomi - pois lukien Ahvenanmaan maakunta",
-  "wizard.workforceTraining": "Arbetsträning"
+  "wizard.workforceTraining": "Arbetsträning",
+  "wizard.yleisetTiedot": "Yleiset tiedot"
 }

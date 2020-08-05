@@ -29,7 +29,7 @@ const simplify = children => {
 
 const Section = React.memo(
   props => {
-    const fullTitle = `${props.code}${props.code ? ". " : ""}${props.title}`;
+    const fullTitle = `${props.code ? `${props.code}. ` : ""}${props.title}`;
     return (
       <div>
         <h2 className="py-8">{fullTitle}</h2>

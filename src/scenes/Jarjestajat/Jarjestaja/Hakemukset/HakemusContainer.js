@@ -238,20 +238,19 @@ const HakemusContainer = React.memo(
       updatedC
     ]);
 
-    const muutosperusteluList = useMemo(() => {
-      return oivaperustelut
-        ? getMuutosperusteluList(oivaperustelut, toUpper(intl.locale))
-        : [];
-    }, [oivaperustelut, intl.locale]);
-
     const onNewDocSave = useCallback(
       muutospyynto => {
+        const page = parseInt(match.params.page, 10);
+        const url = `/jarjestajat/${match.params.ytunnus}`;
+        const uuid = muutospyynto.uuid;
+        let newurl = url + "/hakemukset-ja-paatokset/" + uuid + "/" + page;
+
         /**
          * User is redirected to the url of the saved document.
          */
-        history.push(`/asiat/${ytunnus}/${muutospyynto.uuid}`);
+        history.push(newurl);
       },
-      [history, ytunnus]
+      [history, match.params.page, match.params.ytunnus]
     );
 
     if (
@@ -276,7 +275,7 @@ const HakemusContainer = React.memo(
           maaraystyypit={maaraystyypit}
           match={match}
           muut={muut}
-          muutosperusteluList={muutosperusteluList}
+          oivaperustelut={oivaperustelut}
           muutospyynto={muutospyynto.data}
           vankilat={vankilat}
           onNewDocSave={onNewDocSave}

@@ -39,12 +39,13 @@ export default async function getTopThree(
   locale,
   changeObjects
 ) {
+  const defaultAsianumero = "VN/";
   const changeObjAsianumero = find(
     propEq("anchor", "topthree.asianumero.A"),
     changeObjects
   );
   const asianumero =
-    path(["properties", "value"], changeObjAsianumero) || "VN/";
+    path(["properties", "value"], changeObjAsianumero) || defaultAsianumero;
 
   return [
     {
@@ -64,7 +65,7 @@ export default async function getTopThree(
             ),
             label: __("asianumero"),
             type: "text",
-            value: "VN/",
+            value: defaultAsianumero,
             forChangeObject: {
               uuid: data.uuid
             }

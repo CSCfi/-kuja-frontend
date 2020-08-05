@@ -11,21 +11,13 @@ import { getRules } from "../../../../../../../services/lomakkeet/perustelut/ope
 
 const PerustelutOpetuskielet = React.memo(props => {
   const intl = useIntl();
-  const sectionId = `${props.sectionId}_opetuskielet`;
+  const sectionId = "perustelut_opetuskielet";
   const { onChangesRemove, onChangesUpdate } = props;
-
-  const opetuskieletList = useMemo(() => {
-    return getDataForOpetuskieletList(
-      props.opetuskielet,
-      props.kohde,
-      R.toUpper(intl.locale)
-    );
-  }, [props.kohde, props.opetuskielet, intl.locale]);
 
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
-  }
+  };
 
   return (
     <ExpandableRowRoot
@@ -39,23 +31,21 @@ const PerustelutOpetuskielet = React.memo(props => {
       title={intl.formatMessage(wizardMessages.teachingLanguages)}
       isExpanded={true}
       hideAmountOfChanges={true}>
-      {opetuskieletList && opetuskieletList.items && (
-        <Lomake
-          anchor={sectionId}
-          action="reasoning"
-          changeObjects={props.changeObjects.perustelut}
-          data={{
-            changeObjectsPage1: props.changeObjects.opetuskielet,
-            kohde: props.kohde,
-            maaraystyyppi: props.maaraystyyppi,
-            opetuskielet: opetuskieletList
-          }}
-          metadata={{ kohde: props.kohde, maaraystyyppi: props.maaraystyyppi }}
-          isReadOnly={props.isReadOnly}
-          onChangesUpdate={onChangesUpdate}
-          path={["perustelut", "kielet", "opetuskielet"]}
-          rulesFn={getRules}></Lomake>
-      )}
+      <Lomake
+        anchor={sectionId}
+        action="reasoning"
+        changeObjects={props.changeObjects.perustelut}
+        data={{
+          changeObjectsPage1: props.changeObjects.opetuskielet,
+          kohde: props.kohde,
+          maaraystyyppi: props.maaraystyyppi,
+          opetuskielet: props.opetuskielet
+        }}
+        metadata={{ kohde: props.kohde, maaraystyyppi: props.maaraystyyppi }}
+        isReadOnly={props.isReadOnly}
+        onChangesUpdate={onChangesUpdate}
+        path={["perustelut", "kielet", "opetuskielet"]}
+        rulesFn={getRules}></Lomake>
     </ExpandableRowRoot>
   );
 });
@@ -67,13 +57,12 @@ PerustelutOpetuskielet.defaultProps = {
 
 PerustelutOpetuskielet.propTypes = {
   changeObjects: PropTypes.object,
-  opetuskielet: PropTypes.array,
-  onChangesRemove: PropTypes.func,
-  onChangesUpdate: PropTypes.func,
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   maaraystyyppi: PropTypes.object,
-  lupa: PropTypes.object
+  onChangesRemove: PropTypes.func,
+  onChangesUpdate: PropTypes.func,
+  opetuskielet: PropTypes.array,
 };
 
 export default PerustelutOpetuskielet;

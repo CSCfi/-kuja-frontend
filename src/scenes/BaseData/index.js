@@ -10,7 +10,11 @@ import {
   toUpper,
   includes,
   assoc,
-  path
+  path,
+  mapObjIndexed,
+  groupBy,
+  omit,
+  head
 } from "ramda";
 import { initializeTutkinnot } from "helpers/tutkinnot";
 import localforage from "localforage";
@@ -23,6 +27,7 @@ import { initializeKoulutusala } from "helpers/koulutusalat";
 import { initializeKoulutustyyppi } from "helpers/koulutustyypit";
 import { initializeMuu } from "helpers/muut";
 import { initializeKoulutus } from "helpers/koulutukset";
+import { initializeOpetuskielet } from "helpers/opetuskielet";
 
 const acceptJSON = {
   headers: { Accept: "application/json" }
@@ -266,13 +271,37 @@ const fetchBaseData = async (keys, locale, ytunnus) => {
           }, raw.muut)
         )
       : undefined,
-    oivaperustelut: raw.oivaperustelut,
+    oivaperustelut: raw.oivaperustelut
+      ? sortBy(
+          prop("koodiarvo"),
+          map(perustelu => {
+            return omit(["koodiArvo"], {
+              ...perustelu,
+              koodiarvo: perustelu.koodiArvo,
+              metadata: mapObjIndexed(
+                head,
+                groupBy(prop("kieli"), perustelu.metadata)
+              )
+            });
+          }, raw.oivaperustelut)
+        )
+      : undefined,
     omovet: raw.omovet
       ? await localforage.setItem("omovet", raw.omovet)
       : undefined,
-    opetuskielet: raw.opetuskielet
-      ? await localforage.setItem("opetuskielet", raw.opetuskielet)
-      : undefined,
+    opetuskielet:
+      raw.lupa && raw.opetuskielet
+        ? await localforage.setItem(
+            "opetuskielet",
+            sortBy(
+              prop("koodiarvo"),
+              initializeOpetuskielet(
+                raw.opetuskielet,
+                prop("maaraykset", raw.lupa) || []
+              )
+            )
+          )
+        : undefined,
     organisaatio: raw.organisaatio
       ? await localforage.setItem("organisaatio", raw.organisaatio)
       : undefined,

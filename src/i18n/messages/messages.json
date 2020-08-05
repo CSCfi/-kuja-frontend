@@ -1423,5 +1423,25 @@
     "id": "wizard.quickFilter",
     "defaultMessage": "Pikavalinnat",
     "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.yleisetTiedot",
+    "defaultMessage": "Yleiset tiedot",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.taloudellisetInvestoinnit",
+    "defaultMessage": "Taloudelliset investoinnit",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.taloudellisetTilinpaatostiedot",
+    "defaultMessage": "Taloudelliset tilinpäätöstiedot",
+    "filepath": "src/i18n/definitions/wizard.js"
+  },
+  {
+    "id": "wizard.liitteet",
+    "defaultMessage": "Liitteet",
+    "filepath": "src/i18n/definitions/wizard.js"
   }
 ]

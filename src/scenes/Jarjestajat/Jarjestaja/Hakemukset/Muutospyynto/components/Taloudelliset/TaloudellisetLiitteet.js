@@ -11,7 +11,7 @@ const TaloudellisetLiitteet = React.memo(props => {
       title={"Liitteet"}
       anchor={props.sectionId}
       key={`taloudelliset-liitteet`}
-      changes={changeObjects.taloudelliset.liitteet}
+      changes={changeObjects}
       disableReverting={props.isReadOnly}
       hideAmountOfChanges={true}
       showCategoryTitles={true}
@@ -21,7 +21,7 @@ const TaloudellisetLiitteet = React.memo(props => {
       <Lomake
         action="liitteet"
         anchor={props.sectionId}
-        changeObjects={changeObjects.taloudelliset.liitteet}
+        changeObjects={changeObjects}
         isReadOnly={props.isReadOnly}
         onChangesUpdate={props.onChangesUpdate}
         path={["taloudelliset"]}

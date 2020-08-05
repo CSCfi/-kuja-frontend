@@ -7,25 +7,19 @@ import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 
 const TaloudellisetYleisettiedot = React.memo(
-  ({
-    changeObjects,
-    isReadOnly,
-    onChangesRemove,
-    onChangesUpdate,
-    sectionId
-  }) => {
+  ({ changeObjects, isReadOnly, onChangesRemove, onChangesUpdate }) => {
+    const sectionId = "taloudelliset_yleisettiedot";
     const intl = useIntl();
     const changesMessages = {
       undo: intl.formatMessage(common.undo),
       changesTest: intl.formatMessage(common.changesText)
-    }
+    };
 
     return (
       <ExpandableRowRoot
         title={"Yleiset tiedot"}
         anchor={"taloudelliset_yleisettiedot"}
         key={`taloudelliset-yleisetiedot`}
-        categories={[]}
         changes={changeObjects}
         disableReverting={isReadOnly}
         hideAmountOfChanges={true}

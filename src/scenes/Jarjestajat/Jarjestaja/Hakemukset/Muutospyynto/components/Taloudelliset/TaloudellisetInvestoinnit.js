@@ -11,10 +11,10 @@ const TaloudellisetInvestoinnit = React.memo(
     changeObjects,
     isReadOnly,
     onChangesRemove,
-    onChangesUpdate,
-    sectionId
+    onChangesUpdate
   }) => {
     const intl = useIntl();
+    const sectionId = "taloudelliset_investoinnit";
     const changesMessages = {
       undo: intl.formatMessage(common.undo),
       changesTest: intl.formatMessage(common.changesText)

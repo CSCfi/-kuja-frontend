@@ -56,8 +56,8 @@ const FormDialog = withStyles(() => ({
 });
 
 const defaultProps = {
-  initialChangeObjects: {},
   elykeskukset: [],
+  initialChangeObjects: {},
   kielet: [],
   kohteet: [],
   koulutukset: {},
@@ -70,7 +70,6 @@ const defaultProps = {
   maakuntakunnat: [],
   maaraystyypit: [],
   muut: [],
-  muutosperusteluList: [],
   opetuskielet: [],
   tutkinnot: [],
   vankilat: []
@@ -97,7 +96,7 @@ const MuutospyyntoWizard = ({
   maaraystyypit = defaultProps.maaraystyypit,
   match,
   muut = defaultProps.muut,
-  muutosperusteluList = defaultProps.muutosperusteluList,
+  oivaperustelut,
   onNewDocSave,
   opetuskielet = defaultProps.opetuskielet,
   tutkinnot = defaultProps.tutkinnot,
@@ -154,6 +153,7 @@ const MuutospyyntoWizard = ({
   );
 
   const onChangeObjectsUpdate = useCallback((id, changeObjects) => {
+    console.info(id, changeObjects);
     if (id && changeObjects) {
       setChangeObjects(R.assocPath(R.split("_", id), changeObjects));
     }
@@ -471,6 +471,7 @@ const MuutospyyntoWizard = ({
                   changeObjects={changeObjects}
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardMuutokset
+                    changeObjects={changeObjects}
                     kielet={kielet}
                     kohteet={kohteet}
                     koulutukset={koulutukset}
@@ -504,12 +505,14 @@ const MuutospyyntoWizard = ({
                     kielet={kielet}
                     kohteet={kohteet}
                     koulutukset={koulutukset}
+                    koulutusalat={koulutusalat}
+                    koulutustyypit={koulutustyypit}
                     lupa={lupa}
                     lupaKohteet={lupaKohteet}
                     maakuntakunnat={maakuntakunnat}
                     maaraystyypit={maaraystyypit}
                     muut={muut}
-                    muutosperusteluList={muutosperusteluList}
+                    oivaperustelut={oivaperustelut}
                     onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
@@ -550,7 +553,7 @@ const MuutospyyntoWizard = ({
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}
                     muut={muut}
-                    muutosperusteluList={muutosperusteluList}
+                    oivaperustelut={oivaperustelut}
                     onChangesUpdate={onChangeObjectsUpdate}
                     opetuskielet={opetuskielet}
                     tutkinnot={tutkinnot}
@@ -595,7 +598,7 @@ MuutospyyntoWizard.propTypes = {
   maaraystyypit: PropTypes.array,
   match: PropTypes.object,
   muut: PropTypes.array,
-  muutosperusteluList: PropTypes.array,
+  oivaperustelut: PropTypes.array,
   onNewDocSave: PropTypes.func,
   opetuskielet: PropTypes.array,
   tutkinnot: PropTypes.array,

@@ -101,8 +101,8 @@ const lomakkeet = {
   perustelut: {
     kielet: {
       opetuskielet: {
-        reasoning: (data, isReadOnly) =>
-          getOpetuskieletPerustelulomake("reasoning", data, isReadOnly)
+        reasoning: (data, isReadOnly, locale) =>
+          getOpetuskieletPerustelulomake("reasoning", data, isReadOnly, locale)
       },
       tutkintokielet: {
         reasoning: (data, isReadOnly, locale) =>
@@ -216,6 +216,7 @@ const lomakkeet = {
           data,
           isReadOnly,
           locale,
+          changeObjects,
           prefix
         )
     },
