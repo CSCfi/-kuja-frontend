@@ -261,55 +261,37 @@ const MuutospyyntoWizardPerustelut = ({
           )}
 
           {/* TOIMINTA-ALUE */}
-          {/* {isToimintaalueChanges ? (
-            <FormSection
-              code={3}
-              id="perustelut_toimintaalue"
-              render={_props => (
-                <React.Fragment>
-                  <PerustelutToimintaalue
-                    kohde={R.find(R.propEq("tunniste", "toimintaalue"))(
-                      kohteet
-                    )}
-                    lupakohde={lupaKohteet[3]}
-                    maakuntakunnatList={maakuntakunnatList}
-                    maaraystyyppi={maaraystyypitState.VELVOITE}
-                    changeObjects={{
-                      toimintaalue: R.path(["toimintaalue"], changeObjects),
-                      perustelut: R.path(
-                        ["perustelut", "toimintaalue"],
-                        changeObjects
-                      )
-                    }}
-                    {..._props}
-                  />
-                </React.Fragment>
-              )}
-              runOnChanges={onChangesUpdate}
-              title={kohdetiedot[2].title}
-            />
-          ) : null} */}
+          {isToimintaalueChanges ? (
+            <Section code={3} title={kohdetiedot[2].title}>
+              <PerustelutToimintaalue
+                kohde={R.find(R.propEq("tunniste", "toimintaalue"))(kohteet)}
+                lupakohde={lupaKohteet[3]}
+                maakuntakunnatList={maakuntakunnatList}
+                maaraystyyppi={maaraystyypitState.VELVOITE}
+                changeObjects={{
+                  toimintaalue: R.path(["toimintaalue"], changeObjects),
+                  perustelut: R.path(
+                    ["perustelut", "toimintaalue"],
+                    changeObjects
+                  )
+                }}
+                onChangesRemove={onChangesRemove}
+                onChangesUpdate={updateChanges}
+              />
+            </Section>
+          ) : null}
 
           {/* OPISKELIJAVUODET */}
-          {/* {isOpiskelijavuodetChanges ? (
-            <FormSection
-              code={4}
-              id="perustelut_opiskelijavuodet"
-              render={_props => (
-                <React.Fragment>
-                  <PerustelutOpiskelijavuodet
-                    changeObjects={changeObjects}
-                    muutosperustelut={R.sortBy(R.prop("koodiArvo"))(
-                      muutosperusteluList
-                    )}
-                    {..._props}
-                  />
-                </React.Fragment>
-              )}
-              runOnChanges={onChangesUpdate}
-              title={kohdetiedot[3].title}
-            />
-          ) : null} */}
+          {isOpiskelijavuodetChanges ? (
+            <Section code={4} title={kohdetiedot[3].title}>
+              <PerustelutOpiskelijavuodet
+                changeObjects={changeObjects}
+                oivaperustelut={oivaperustelut}
+                onChangesRemove={onChangesRemove}
+                onChangesUpdate={updateChanges}
+              />
+            </Section>
+          ) : null}
 
           {/* MUUT */}
           {/* {isMuutChanges ? (

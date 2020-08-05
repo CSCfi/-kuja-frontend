@@ -58,6 +58,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
+          sectionId={sectionId}
           title={"Vähimmäisopiskelijavuosimäärä"}>
           <Lomake
             anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
@@ -67,7 +68,7 @@ const PerustelutOpiskelijavuodet = props => {
               changeObjects
             )}
             data={{
-              checkboxItems: props.muutosperustelut,
+              oivaperustelut: props.oivaperustelut,
               changeObject:
                 valueChanges.vahimmaisopiskelijavuosimaara.properties,
               differenceTitles
@@ -91,6 +92,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
+          sectionId={sectionId}
           title={"Sisäoppilaitosmuotoinen opetus"}>
           <Lomake
             action="reasoning"
@@ -122,6 +124,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
+          sectionId={sectionId}
           title={"Vaativa koulutus"}>
           <Lomake
             action="reasoning"
@@ -146,13 +149,13 @@ const PerustelutOpiskelijavuodet = props => {
 
 PerustelutOpiskelijavuodet.defaultProps = {
   changeObjects: {},
-  muutosperustelut: [],
+  oivaperustelut: [],
   isReadOnly: false
 };
 
 PerustelutOpiskelijavuodet.propTypes = {
   changeObjects: PropTypes.object,
-  muutosperustelut: PropTypes.array,
+  oivaperustelut: PropTypes.array,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   isReadOnly: PropTypes.bool
