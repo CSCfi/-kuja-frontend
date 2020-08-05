@@ -76,7 +76,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
-  }
+  };
 
   return (
     <React.Fragment>
@@ -92,6 +92,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
           isExpanded={true}
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
+          sectionId={sectionId}
           title={intl.formatMessage(wizardMessages.workforceTraining)}>
           {lomakkeet}
         </ExpandableRowRoot>

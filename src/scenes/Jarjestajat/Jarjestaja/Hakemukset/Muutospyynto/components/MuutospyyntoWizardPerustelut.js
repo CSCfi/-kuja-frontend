@@ -104,6 +104,7 @@ const MuutospyyntoWizardPerustelut = ({
 
   const onChangesRemove = useCallback(
     sectionId => {
+      console.info(sectionId);
       return onChangesUpdate(sectionId, []);
     },
     [onChangesUpdate]
@@ -175,24 +176,25 @@ const MuutospyyntoWizardPerustelut = ({
                   onChangesUpdate={updateChanges}
                 />
               )}
-              {/* {isKoulutuksetChanges && (
-                    <PerustelutKoulutukset
-                      changeObjects={{
-                        koulutukset: changeObjects.koulutukset,
-                        perustelut: {
-                          koulutukset: changeObjects.perustelut.koulutukset
-                        }
-                      }}
-                      elykeskukset={elykeskukset}
-                      kohde={R.find(
-                        R.propEq("tunniste", "tutkinnotjakoulutukset")
-                      )(kohteet)}
-                      koulutukset={koulutukset}
-                      maaraystyyppi={maaraystyypitState.OIKEUS}
-                      maaraykset={lupa.maaraykset}
-                      {..._props}
-                    />
-                  )} */}
+              {isKoulutuksetChanges && (
+                <PerustelutKoulutukset
+                  changeObjects={{
+                    koulutukset: changeObjects.koulutukset,
+                    perustelut: {
+                      koulutukset: changeObjects.perustelut.koulutukset
+                    }
+                  }}
+                  elykeskukset={elykeskukset}
+                  kohde={R.find(R.propEq("tunniste", "tutkinnotjakoulutukset"))(
+                    kohteet
+                  )}
+                  koulutukset={koulutukset}
+                  maaraystyyppi={maaraystyypitState.OIKEUS}
+                  maaraykset={lupa.maaraykset}
+                  onChangesRemove={onChangesRemove}
+                  onChangesUpdate={updateChanges}
+                />
+              )}
               {/* Attachments for Tutkinnot ja koulutukset */}
               {/* <FormSection
                     id="perustelut_liitteet"

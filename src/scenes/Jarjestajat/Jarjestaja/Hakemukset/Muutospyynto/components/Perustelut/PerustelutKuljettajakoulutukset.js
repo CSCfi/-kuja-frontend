@@ -96,13 +96,12 @@ const PerustelutKuljettajakoulutukset = props => {
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
-  }
+  };
 
   return (
     <ExpandableRowRoot
       anchor={sectionId}
       key={`expandable-row-root`}
-      categories={[]}
       changes={R.path(["perustelut"], props.changeObjects)}
       disableReverting={props.isReadOnly}
       hideAmountOfChanges={false}
@@ -110,6 +109,7 @@ const PerustelutKuljettajakoulutukset = props => {
       messages={changesMessages}
       onChangesRemove={onChangesRemove}
       onUpdate={onChangesUpdate}
+      sectionId={sectionId}
       title={intl.formatMessage(wizardMessages.driverTraining)}>
       {lomakkeet}
     </ExpandableRowRoot>
