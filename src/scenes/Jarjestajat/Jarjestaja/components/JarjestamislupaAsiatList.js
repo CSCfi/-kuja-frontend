@@ -54,13 +54,12 @@ const JarjestamislupaAsiatList = ({
   history,
   isForceReloadRequested,
   match,
-  newApplicationRouteItem
+  newApplicationRouteItem,
+  lupa
 }) => {
   const intl = useIntl();
 
-  const [lupa] = useLupa();
   const [muutospyynnot, muutospyynnotActions] = useMuutospyynnot();
-
   const { url } = match;
   const classes = useStyles();
   const [muutospyynto, setMuutospyynto] = useState(null);
@@ -68,8 +67,8 @@ const JarjestamislupaAsiatList = ({
   // Let's fetch MUUTOSPYYNNÖT
   useEffect(() => {
     let abortController;
-    if (lupa.fetchedAt) {
-      const ytunnus = R.path(["jarjestaja", "ytunnus"], lupa.data);
+    if (lupa && !R.isEmpty(lupa)) {
+      const ytunnus = R.path(["jarjestaja", "ytunnus"], lupa);
       if (ytunnus) {
         abortController = muutospyynnotActions.load(
           ytunnus,

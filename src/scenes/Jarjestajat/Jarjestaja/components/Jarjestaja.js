@@ -158,6 +158,7 @@ const Jarjestaja = React.memo(
                       props.location.search
                     )}
                     newApplicationRouteItem={newApplicationRouteItem}
+                    lupa={lupa}
                   />
                 )}
               />
