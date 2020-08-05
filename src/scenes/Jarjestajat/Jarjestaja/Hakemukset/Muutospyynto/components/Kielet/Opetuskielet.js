@@ -1,10 +1,9 @@
-import React, { useMemo } from "react";
+import React from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import * as R from "ramda";
 
@@ -12,14 +11,6 @@ const Opetuskielet = React.memo(props => {
   const intl = useIntl();
   const sectionId = "kielet_opetuskielet";
   const { onChangesRemove, onChangesUpdate } = props;
-
-  const opetuskieletData = useMemo(() => {
-    return getDataForOpetuskieletList(
-      R.sortBy(R.prop("koodiArvo"), R.values(props.opetuskielet)),
-      props.lupakohde,
-      R.toUpper(intl.locale)
-    );
-  }, [intl.locale, props.lupakohde, props.opetuskielet]);
 
   const changesMessages = {
     undo: intl.formatMessage(common.undo),
@@ -39,25 +30,22 @@ const Opetuskielet = React.memo(props => {
         sectionId={sectionId}
         title={intl.formatMessage(wizardMessages.teachingLanguages)}
         isExpanded={true}>
-        {opetuskieletData && (
-          <Lomake
-            action="modification"
-            anchor={sectionId}
-            changeObjects={props.changeObjects.kielet.opetuskielet}
-            data={{
-              opetuskieletData
-            }}
-            onChangesUpdate={onChangesUpdate}
-            path={["kielet", "opetuskielet"]}
-            showCategoryTitles={true}></Lomake>
-        )}
+        <Lomake
+          action="modification"
+          anchor={sectionId}
+          changeObjects={props.changeObjects.kielet.opetuskielet}
+          data={{
+            opetuskielet: props.opetuskielet
+          }}
+          onChangesUpdate={onChangesUpdate}
+          path={["kielet", "opetuskielet"]}
+          showCategoryTitles={true}></Lomake>
       </ExpandableRowRoot>
     </React.Fragment>
   );
 });
 
 Opetuskielet.propTypes = {
-  lupakohde: PropTypes.object,
   onChangesUpdate: PropTypes.func,
   onChangesRemove: PropTypes.func,
   opetuskielet: PropTypes.array

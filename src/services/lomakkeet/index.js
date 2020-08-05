@@ -76,8 +76,8 @@ const lomakkeet = {
   },
   kielet: {
     opetuskielet: {
-      modification: (data, isReadOnly) =>
-        getOpetuskieletLomake("modification", data, isReadOnly)
+      modification: (data, isReadOnly, locale) =>
+        getOpetuskieletLomake("modification", data, isReadOnly, locale)
     },
     tutkintokielet: {
       modification: (data, isReadOnly, locale) =>

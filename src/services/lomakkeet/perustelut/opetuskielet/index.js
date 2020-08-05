@@ -20,7 +20,7 @@ function getReasoningForm(
       structure = {
         anchor: opetuskieli.koodiarvo,
         meta: {
-          isInLupa: !opetuskieli.maarays,
+          isInLupa: !!opetuskieli.maarays,
           kuvaus: opetuskieli.metadata[localeUpper].nimi,
           kohde: kohde,
           maaraystyyppi,

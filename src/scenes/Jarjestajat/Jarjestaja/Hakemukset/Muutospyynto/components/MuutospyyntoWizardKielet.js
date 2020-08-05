@@ -66,8 +66,6 @@ const MuutospyyntoWizardKielet = props => {
       <Opetuskielet
         changeObjects={props.changeObjects}
         opetuskielet={props.opetuskielet}
-        lupakohde={props.lupaKohteet[2]}
-        maaraystyyppi={props.maaraystyyppi}
         onChangesRemove={props.onChangesRemove}
         onChangesUpdate={props.onChangesUpdate}
       />

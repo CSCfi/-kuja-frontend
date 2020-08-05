@@ -1,17 +1,15 @@
-import React, { useMemo } from "react";
+import React from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import wizardMessages from "../../../../../../../i18n/definitions/wizard";
 import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
-import { getDataForOpetuskieletList } from "../../../../../../../utils/opetuskieletUtil";
-import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
 import { getRules } from "../../../../../../../services/lomakkeet/perustelut/opetuskielet/rules";
 
 const PerustelutOpetuskielet = React.memo(props => {
   const intl = useIntl();
-  const sectionId = "perustelut_opetuskielet";
+  const sectionId = "perustelut_kielet_opetuskielet";
   const { onChangesRemove, onChangesUpdate } = props;
 
   const changesMessages = {
@@ -62,7 +60,7 @@ PerustelutOpetuskielet.propTypes = {
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
-  opetuskielet: PropTypes.array,
+  opetuskielet: PropTypes.array
 };
 
 export default PerustelutOpetuskielet;
