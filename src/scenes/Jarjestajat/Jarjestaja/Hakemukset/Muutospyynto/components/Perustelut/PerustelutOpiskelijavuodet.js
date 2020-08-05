@@ -58,7 +58,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
-          sectionId={sectionId}
+          sectionId={`${sectionId}_vahimmaisopiskelijavuodet`}
           title={"Vähimmäisopiskelijavuosimäärä"}>
           <Lomake
             anchor={`${sectionId}_vahimmaisopiskelijavuodet`}
@@ -92,7 +92,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
-          sectionId={sectionId}
+          sectionId={`${sectionId}_sisaoppilaitos`}
           title={"Sisäoppilaitosmuotoinen opetus"}>
           <Lomake
             action="reasoning"
@@ -124,7 +124,7 @@ const PerustelutOpiskelijavuodet = props => {
           messages={changesMessages}
           onChangesRemove={onChangesRemove}
           onUpdate={onChangesUpdate}
-          sectionId={sectionId}
+          sectionId={`${sectionId}_vaativatuki`}
           title={"Vaativa koulutus"}>
           <Lomake
             action="reasoning"
