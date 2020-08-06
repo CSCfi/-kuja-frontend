@@ -220,12 +220,12 @@ const MuutospyyntoWizard = ({
 
   const anchors = findObjectWithKey(changeObjects, "anchor");
 
-  const prevAnchorsRef = useRef(anchors);
+  const prevCosRef = useRef(changeObjects);
 
   useEffect(() => {
     // If user has made changes on the form the save action must be available.
-    setIsSavingEnabled(!R.equals(prevAnchorsRef.current, anchors));
-  }, [anchors]);
+    setIsSavingEnabled(!R.equals(prevCosRef.current, changeObjects));
+  }, [changeObjects]);
 
   /**
    * Opens the preview.
@@ -344,7 +344,7 @@ const MuutospyyntoWizard = ({
        * save button. It will be enabled after new changes.
        */
       setIsSavingEnabled(false);
-      prevAnchorsRef.current = anchors;
+      prevCosRef.current = changeObjects;
 
       /**
        * Next thing is to check out if this was the first save. If so we need
