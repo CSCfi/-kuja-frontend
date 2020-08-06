@@ -11,9 +11,12 @@ import Section from "components/03-templates/Section";
 
 const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
+  elykeskukset,
   kielet,
   kohteet,
   koulutukset,
+  koulutusalat,
+  koulutustyypit,
   lupa,
   lupaKohteet,
   maaraystyypit,
@@ -103,9 +106,12 @@ const MuutospyyntoWizardYhteenveto = ({
         />
         <YhteenvetoKooste
           changeObjects={changeObjects}
+          elykeskukset={elykeskukset}
           kielet={kielet}
           kohteet={kohteet}
           koulutukset={koulutukset}
+          koulutusalat={koulutusalat}
+          koulutustyypit={koulutustyypit}
           lupa={lupa}
           lupaKohteet={lupaKohteet}
           maaraystyypit={maaraystyypit}
@@ -139,9 +145,11 @@ const MuutospyyntoWizardYhteenveto = ({
 
 MuutospyyntoWizardYhteenveto.propTypes = {
   changeObjects: PropTypes.object,
+  elykeskukset: PropTypes.array,
   kielet: PropTypes.array,
   kohteet: PropTypes.array,
   koulutukset: PropTypes.object,
+  koulutusalat: PropTypes.array,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
   lupa: PropTypes.object,

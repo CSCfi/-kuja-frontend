@@ -53,6 +53,7 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "vahimmaisopiskelijavuodet"],
             changeObjects
           )}
+          disableReverting={isReadOnly}
           hideAmountOfChanges={true}
           isExpanded={true}
           messages={changesMessages}
@@ -87,6 +88,7 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "sisaoppilaitos"],
             changeObjects
           )}
+          disableReverting={isReadOnly}
           hideAmountOfChanges={true}
           isExpanded={true}
           messages={changesMessages}
@@ -119,6 +121,7 @@ const PerustelutOpiskelijavuodet = props => {
             ["perustelut", "opiskelijavuodet", "vaativatuki"],
             changeObjects
           )}
+          disableReverting={isReadOnly}
           hideAmountOfChanges={true}
           isExpanded={true}
           messages={changesMessages}

@@ -154,6 +154,7 @@ const MuutospyyntoWizard = ({
 
   const onChangeObjectsUpdate = useCallback(
     ({ anchor, changes: changeObjects }) => {
+      console.info(anchor, changeObjects);
       if (anchor && changeObjects) {
         setChangeObjects(R.assocPath(R.split("_", anchor), changeObjects));
       }
@@ -558,9 +559,12 @@ const MuutospyyntoWizard = ({
                   isSavingEnabled={isSavingEnabled}>
                   <MuutospyyntoWizardYhteenveto
                     changeObjects={changeObjects}
+                    elykeskukset={elykeskukset}
                     kielet={kielet}
                     kohteet={kohteet}
                     koulutukset={koulutukset}
+                    koulutusalat={koulutusalat}
+                    koulutustyypit={koulutustyypit}
                     lupa={lupa}
                     lupaKohteet={lupaKohteet}
                     maaraystyypit={maaraystyypit}

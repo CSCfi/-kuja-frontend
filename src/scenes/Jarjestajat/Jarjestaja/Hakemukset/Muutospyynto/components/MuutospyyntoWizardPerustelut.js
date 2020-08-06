@@ -103,13 +103,6 @@ const MuutospyyntoWizardPerustelut = ({
     return R.not(R.isEmpty(changeObjects.muut || {}));
   }, [changeObjects.muut]);
 
-  const updateChanges = useCallback(
-    payload => {
-      onChangesUpdate(payload.anchor, payload.changes);
-    },
-    [onChangesUpdate]
-  );
-
   const isAnyChanges = useMemo(() => {
     return (
       isTutkinnotChanges ||
@@ -166,7 +159,7 @@ const MuutospyyntoWizardPerustelut = ({
                   oivaperustelut={oivaperustelut}
                   tutkinnot={tutkinnot}
                   onChangesRemove={onChangesRemove}
-                  onChangesUpdate={updateChanges}
+                  onChangesUpdate={onChangesUpdate}
                 />
               )}
               {isKoulutuksetChanges && (
@@ -185,25 +178,19 @@ const MuutospyyntoWizardPerustelut = ({
                   maaraystyyppi={maaraystyypitState.OIKEUS}
                   maaraykset={lupa.maaraykset}
                   onChangesRemove={onChangesRemove}
-                  onChangesUpdate={updateChanges}
+                  onChangesUpdate={onChangesUpdate}
                 />
               )}
               {/* Attachments for Tutkinnot ja koulutukset */}
-              {/* <FormSection
-                    id="perustelut_liitteet"
-                    className="my-0"
-                    render={_props => (
-                      <React.Fragment>
-                        <PerustelutLiitteet
-                          changeObjects={{
-                            perustelut: changeObjects.perustelut.liitteet
-                          }}
-                          {..._props}
-                        />
-                      </React.Fragment>
-                    )}
-                    runOnChanges={onChangesUpdate}
-                  /> */}
+              <Section className="my-0">
+                <PerustelutLiitteet
+                  changeObjects={{
+                    perustelut: changeObjects.perustelut.liitteet
+                  }}
+                  onChangesRemove={onChangesRemove}
+                  onChangesUpdate={onChangesUpdate}
+                />
+              </Section>
             </Section>
           )}
           {(isTutkintokieletChanges || isOpetuskieletChanges) && (
@@ -226,7 +213,7 @@ const MuutospyyntoWizardPerustelut = ({
                   maaraystyyppi={maaraystyypitState.OIKEUS}
                   opetuskielet={opetuskielet}
                   onChangesRemove={onChangesRemove}
-                  onChangesUpdate={updateChanges}
+                  onChangesUpdate={onChangesUpdate}
                 />
               ) : null}
               {/* {isTutkintokieletChanges ? (
@@ -269,7 +256,7 @@ const MuutospyyntoWizardPerustelut = ({
                   )
                 }}
                 onChangesRemove={onChangesRemove}
-                onChangesUpdate={updateChanges}
+                onChangesUpdate={onChangesUpdate}
               />
             </Section>
           ) : null}
@@ -281,7 +268,7 @@ const MuutospyyntoWizardPerustelut = ({
                 changeObjects={changeObjects}
                 oivaperustelut={oivaperustelut}
                 onChangesRemove={onChangesRemove}
-                onChangesUpdate={updateChanges}
+                onChangesUpdate={onChangesUpdate}
               />
             </Section>
           ) : null}
@@ -297,30 +284,24 @@ const MuutospyyntoWizardPerustelut = ({
                 maaraykset={lupa.maaraykset}
                 muut={muut}
                 onChangesRemove={onChangesRemove}
-                onChangesUpdate={updateChanges}
+                onChangesUpdate={onChangesUpdate}
                 vankilat={vankilat}
               />
             </Section>
           ) : null}
           {/* Common attachments, the same also in Yhteenveto */}
-          {/* {isAnyChanges && (
-            <FormSection
-              id="yhteenveto_hakemuksenLiitteet"
-              className="my-0"
-              render={_props => (
-                <React.Fragment>
-                  <YhteenvetoLiitteet
-                    changeObjects={{
-                      hakemuksenLiitteet:
-                        changeObjects.yhteenveto.hakemuksenLiitteet
-                    }}
-                    {..._props}
-                  />
-                </React.Fragment>
-              )}
-              runOnChanges={onChangesUpdate}
-            />
-          )} */}
+          {isAnyChanges && (
+            <Section className="my-0">
+              <YhteenvetoLiitteet
+                changeObjects={{
+                  hakemuksenLiitteet:
+                    changeObjects.yhteenveto.hakemuksenLiitteet
+                }}
+                onChangesRemove={onChangesRemove}
+                onChangesUpdate={onChangesUpdate}
+              />
+            </Section>
+          )}
         </React.Fragment>
       ) : null}
     </React.Fragment>

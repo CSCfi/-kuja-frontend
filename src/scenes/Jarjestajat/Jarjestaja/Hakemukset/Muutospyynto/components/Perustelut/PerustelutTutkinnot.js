@@ -61,7 +61,9 @@ const PerustelutTutkinnot = React.memo(
                   changes={
                     changeObjects.perustelut.tutkinnot[koulutusala.koodiarvo]
                   }
+                  disableReverting={isReadOnly}
                   hideAmountOfChanges={true}
+                  isExpanded={isReadOnly}
                   messages={changesMessages}
                   onChangesRemove={onChangesRemove}
                   onUpdate={onChangesUpdate}
@@ -83,6 +85,7 @@ const PerustelutTutkinnot = React.memo(
                       title,
                       tutkinnotByKoulutustyyppi
                     }}
+                    isReadOnly={isReadOnly}
                     onChangesUpdate={onChangesUpdate}
                     path={["perustelut", "tutkinnot"]}
                     showCategoryTitles={true}></Lomake>

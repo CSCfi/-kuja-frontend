@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 import TaloudellisetYleisettiedot from "./Taloudelliset/TaloudellisetYleisettiedot";
 import TaloudellisetInvestoinnit from "./Taloudelliset/TaloudellisetInvestoinnit";
@@ -10,10 +10,12 @@ import Section from "components/03-templates/Section";
 import * as R from "ramda";
 
 const MuutospyyntoWizardTaloudelliset = ({
-  changeObjects = {},
+  changeObjects,
+  onChangesRemove,
   onChangesUpdate
 }) => {
   const intl = useIntl();
+
   const checkIfIsAdditions = changeObjects => {
     const findIsChecked = obj => {
       if (obj instanceof Array) {
@@ -34,20 +36,6 @@ const MuutospyyntoWizardTaloudelliset = ({
     return findIsChecked(changeObjects);
   };
 
-  const onChangesRemove = useCallback(
-    sectionId => {
-      return onChangesUpdate(sectionId, []);
-    },
-    [onChangesUpdate]
-  );
-
-  const updateChanges = useCallback(
-    payload => {
-      onChangesUpdate(payload.anchor, payload.changes);
-    },
-    [onChangesUpdate]
-  );
-
   return (
     <React.Fragment>
       <h2 className="my-6">{intl.formatMessage(wizard.pageTitle_3)}</h2>
@@ -64,29 +52,30 @@ const MuutospyyntoWizardTaloudelliset = ({
           <Section title={intl.formatMessage(wizard.yleisetTiedot)}>
             <TaloudellisetYleisettiedot
               changeObjects={changeObjects.taloudelliset.yleisettiedot}
-              onChangesUpdate={updateChanges}
               onChangesRemove={onChangesRemove}
+              onChangesUpdate={onChangesUpdate}
             />
           </Section>
           <Section title={intl.formatMessage(wizard.taloudellisetInvestoinnit)}>
             <TaloudellisetInvestoinnit
               changeObjects={changeObjects.taloudelliset.investoinnit}
-              onChangesUpdate={updateChanges}
               onChangesRemove={onChangesRemove}
+              onChangesUpdate={onChangesUpdate}
             />
           </Section>
-          <Section title={intl.formatMessage(wizard.taloudellisetTilinpaatostiedot)}>
+          <Section
+            title={intl.formatMessage(wizard.taloudellisetTilinpaatostiedot)}>
             <TaloudellisetTilinpaatostiedot
               changeObjects={changeObjects.taloudelliset.tilinpaatostiedot}
-              onChangesUpdate={updateChanges}
               onChangesRemove={onChangesRemove}
+              onChangesUpdate={onChangesUpdate}
             />
           </Section>
           <Section title={intl.formatMessage(wizard.liitteet)}>
             <TaloudellisetLiitteet
               changeObjects={changeObjects.taloudelliset.liitteet}
-              onChangesUpdate={updateChanges}
               onChangesRemove={onChangesRemove}
+              onChangesUpdate={onChangesUpdate}
             />
           </Section>
         </React.Fragment>
@@ -98,6 +87,7 @@ const MuutospyyntoWizardTaloudelliset = ({
 MuutospyyntoWizardTaloudelliset.propTypes = {
   changeObjects: PropTypes.object,
   muutoshakemus: PropTypes.object,
+  onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func,
   isReadOnly: PropTypes.bool
 };
