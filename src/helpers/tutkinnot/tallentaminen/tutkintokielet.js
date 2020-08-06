@@ -44,7 +44,7 @@ export function createBEOofTutkintakielet(
     removals = tutkinto.tutkintokielet
       ? map(tutkintokielimaarays => {
           const koodiarvoUpper = toUpper(tutkintokielimaarays.koodiarvo);
-          const hasLanguageBeenRemoved = !!!find(
+          const hasLanguageBeenRemoved = !listOfActiveLanguages || !!!find(
             propEq("value", koodiarvoUpper),
             listOfActiveLanguages
           );
