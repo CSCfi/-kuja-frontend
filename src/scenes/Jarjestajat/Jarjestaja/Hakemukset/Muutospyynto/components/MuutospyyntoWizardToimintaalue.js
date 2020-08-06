@@ -78,35 +78,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
   );
 
   /**
-   * There are three radio buttons in Toiminta-alue section: 1) Maakunnat and kunnat
-   * 2) Koko Suomi - pois lukien Ahvenanmaan maakunta 3) Ei määriteltyä toiminta-aluetta.
-   * When one of them is selected the change objects under other ones have to be deleted.
-   * This function deletes them.
-   */
-  useEffect(() => {
-    if (fiCode !== "FI0") {
-      // Let's check if updating is necessary.
-      const radioButtonChangeObjects = R.filter(
-        R.compose(R.includes("radio"), R.prop("anchor")),
-        changeObjects.toimintaalue || []
-      );
-      if (!R.equals(radioButtonChangeObjects, changeObjects.toimintaalue)) {
-        // Fist we are going to update the change objects of Toiminta-alue section
-        // on form page one.
-        // onChangesUpdate({
-        //   anchor: props.sectionId,
-        //   changes: radioButtonChangeObjects
-        // });
-        // Then it's time to get rid of the change objects of form page two (reasoning).
-        onChangesUpdate({
-          anchor: `perustelut_${props.sectionId}`,
-          changes: []
-        });
-      }
-    }
-  }, [fiCode, onChangesUpdate, changeObjects.toimintaalue, props.sectionId]);
-
-  /**
    * Changes are handled here. Changes objects will be formed and callback
    * function will be called with them.
    */
@@ -334,7 +305,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
   };
-
+  console.log(changeObjects);
   return (
     <ExpandableRowRoot
       anchor={props.sectionId}

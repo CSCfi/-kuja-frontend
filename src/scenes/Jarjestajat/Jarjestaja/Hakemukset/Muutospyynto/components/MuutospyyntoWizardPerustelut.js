@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PerustelutKoulutukset from "./Perustelut/PerustelutKoulutukset";
 import PerustelutMuut from "./Perustelut/PerustelutMuut";
 import PerustelutOpetuskielet from "./Perustelut/PerustelutOpetuskielet";
@@ -32,7 +32,7 @@ const MuutospyyntoWizardPerustelut = ({
   koulutukset,
   koulutusalat,
   koulutustyypit,
-  maakuntakunnatList,
+  maakuntakunnat,
   maaraystyypit,
   muut,
   lupa,
@@ -246,7 +246,7 @@ const MuutospyyntoWizardPerustelut = ({
               <PerustelutToimintaalue
                 kohde={R.find(R.propEq("tunniste", "toimintaalue"))(kohteet)}
                 lupakohde={lupaKohteet[3]}
-                maakuntakunnatList={maakuntakunnatList}
+                maakuntakunnat={maakuntakunnat}
                 maaraystyyppi={maaraystyypitState.VELVOITE}
                 changeObjects={{
                   toimintaalue: R.path(["toimintaalue"], changeObjects),
@@ -317,7 +317,7 @@ MuutospyyntoWizardPerustelut.propTypes = {
   koulutusalat: PropTypes.array,
   koulutustyypit: PropTypes.array,
   koulutukset: PropTypes.object,
-  maakuntakunnatList: PropTypes.array,
+  maakuntakunnat: PropTypes.array,
   maaraystyypit: PropTypes.array,
   muut: PropTypes.array,
   lupa: PropTypes.object,

@@ -105,6 +105,7 @@ const YhteenvetoKooste = ({
                   }
                 }}
                 elykeskukset={elykeskukset}
+                isReadOnly={true}
                 kohde={R.find(R.propEq("tunniste", "tutkinnotjakoulutukset"))(
                   kohteet
                 )}

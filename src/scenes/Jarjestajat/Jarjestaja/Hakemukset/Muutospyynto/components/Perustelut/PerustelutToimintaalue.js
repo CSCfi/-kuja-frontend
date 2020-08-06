@@ -12,7 +12,7 @@ const defaultProps = {
   isReadOnly: false,
   kohde: {},
   lupakohde: {},
-  maakuntakunnatList: [],
+  maakuntakunnat: [],
   maaraystyyppi: {},
   stateObjects: {}
 };
@@ -23,18 +23,18 @@ const PerustelutToimintaalue = React.memo(
     isReadOnly = defaultProps.isReadOnly,
     kohde = defaultProps.kohde,
     lupakohde = {},
-    maakuntakunnatList = defaultProps.maakuntakunnatList,
+    maakuntakunnat = defaultProps.maakuntakunnat,
     maaraystyyppi = defaultProps.maaraystyyppi,
     onChangesRemove,
-    onChangesUpdate,
-    sectionId
+    onChangesUpdate
   }) => {
     const intl = useIntl();
+    const sectionId = "perustelut_toimintaalue";
     const changesMessages = {
       undo: intl.formatMessage(common.undo),
       changesTest: intl.formatMessage(common.changesText)
-    }
-    
+    };
+
     return (
       <React.Fragment>
         {lupakohde && lupakohde.kunnat && lupakohde.maakunnat && kohde && (
@@ -57,7 +57,7 @@ const PerustelutToimintaalue = React.memo(
               data={{
                 changeObjectsPage1: changeObjects.toimintaalue,
                 lupakohde,
-                maakuntakunnatList
+                maakuntakunnat
               }}
               metadata={{ kohde, maaraystyyppi }}
               onChangesUpdate={onChangesUpdate}
@@ -77,7 +77,7 @@ PerustelutToimintaalue.propTypes = {
   isReadOnly: PropTypes.bool,
   kohde: PropTypes.object,
   lupakohde: PropTypes.object,
-  maakuntakunnatList: PropTypes.array,
+  maakuntakunnat: PropTypes.array,
   maaraystyyppi: PropTypes.object,
   onChangesRemove: PropTypes.func,
   onChangesUpdate: PropTypes.func
