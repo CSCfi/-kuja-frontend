@@ -148,7 +148,7 @@ const HakemusContainer = React.memo(
               return Object.assign({}, file, fileFromBackend);
             }, changeObj.properties.attachments || [])
           : null;
-        return assocPath(["properties", "attachments"], files, changeObj);
+        return files ? assocPath(["properties", "attachments"], files, changeObj) : changeObj;
       }, findObjectWithKey({ ...muutospyynto.data }, "changeObjects"));
     }, [filesFromMuutokset, muutospyynto.data]);
 

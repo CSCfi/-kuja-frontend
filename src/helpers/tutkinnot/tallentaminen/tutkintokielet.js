@@ -32,7 +32,7 @@ export function createBEOofTutkintakielet(
    **/
   if (changeObj) {
     const { value: listOfActiveLanguages } = changeObj.properties;
-    const perustelut = [];
+    const perustelut = changeObjects.tutkintokielet.perustelut;
 
     /**
      * TUTKINTAKIELIEN POISTAMINEN

@@ -216,7 +216,7 @@ const MuutospyyntoWizardPerustelut = ({
                   onChangesUpdate={onChangesUpdate}
                 />
               ) : null}
-              {/* {isTutkintokieletChanges ? (
+               {isTutkintokieletChanges ? (
                     <PerustelutTutkintokielet
                       changeObjects={{
                         tutkintokielet: changeObjects.kielet.tutkintokielet,
@@ -234,9 +234,11 @@ const MuutospyyntoWizardPerustelut = ({
                       maaraystyyppi={maaraystyypitState.OIKEUS}
                       maaraykset={lupa.maaraykset}
                       opetuskielet={kielet.opetuskielet}
-                      {..._props}
+                      koulutusalat={koulutusalat}
+                      onChangesRemove={onChangesRemove}
+                      onChangesUpdate={onChangesUpdate}
                     />
-                  ) : null} */}
+                  ) : null}
             </Section>
           )}
 
