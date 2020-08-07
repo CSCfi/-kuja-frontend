@@ -226,6 +226,7 @@
   "informUser.virheDokumentinLataamisessa": "Virhe dokumentin lataamisessa",
   "languages.inFinnish": "Suomeksi",
   "languages.inSwedish": "På svenska",
+  "languages.selection": "Kielivalinta",
   "user.ownOrganisation": "Oma organisaatio",
   "wizard.allFieldsRequired": "Täydennä kaikki tämän sivun kentät.",
   "wizard.allPerustelutRequired": "Perustele kaikki muutokset.",

@@ -209,7 +209,8 @@ const App = React.memo(({ isDebugModeOn }) => {
             onMenuClick={onMenuClick}
             organisation={organisationLink}
             shortDescription={shortDescription}
-            template={template}></Header>
+            template={template}
+            languageSelectionAriaLabel={intl.formatMessage(langMessages.selection)}></Header>
         );
       }
       return null;
