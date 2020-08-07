@@ -7,7 +7,6 @@ import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import * as R from "ramda";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/koulutukset/tyovoimakoulutukset/rules";
 
 const PerustelutTyovoimakoulutukset = React.memo(props => {
   const intl = useIntl();
@@ -39,8 +38,7 @@ const PerustelutTyovoimakoulutukset = React.memo(props => {
                 key={code}
                 isReadOnly={props.isReadOnly}
                 onChangesUpdate={onChangesUpdate}
-                path={["perustelut", "koulutukset", "tyovoimakoulutukset"]}
-                rules={rules}></Lomake>
+                path={["perustelut", "koulutukset", "tyovoimakoulutukset"]}></Lomake>
             ) : (
               <Lomake
                 action="removal"

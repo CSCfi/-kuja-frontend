@@ -54,7 +54,6 @@ const ATVKoulutukset = ({
           }}
           onChangesUpdate={onChangesUpdate}
           path={["koulutukset", "atvKoulutukset"]}
-          rules={[]}
           showCategoryTitles={true}></Lomake>
       )}
     </ExpandableRowRoot>

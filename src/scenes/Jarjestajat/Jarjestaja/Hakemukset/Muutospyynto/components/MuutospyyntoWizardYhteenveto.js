@@ -1,13 +1,12 @@
 import React, { useMemo } from "react";
-import FormSection from "../../../../../../components/03-templates/FormSection";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import YhteenvetoYleisetTiedot from "./Yhteenveto/YhteenvetoYleisetTiedot";
 import YhteenvetoKooste from "./Yhteenveto/YhteenvetoKooste";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 import wizard from "../../../../../../i18n/definitions/wizard";
-import * as R from "ramda";
 import Section from "components/03-templates/Section";
+import * as R from "ramda";
 
 const MuutospyyntoWizardYhteenveto = ({
   changeObjects,
@@ -124,21 +123,15 @@ const MuutospyyntoWizardYhteenveto = ({
           tutkinnot={tutkinnot}></YhteenvetoKooste>
       </Section>
 
-      {/* <FormSection
-        id="yhteenveto_hakemuksenLiitteet"
-        className="my-0"
-        render={_props => (
-          <React.Fragment>
-            <YhteenvetoLiitteet
-              changeObjects={{
-                hakemuksenLiitteet: changeObjects.yhteenveto.hakemuksenLiitteet
-              }}
-              {..._props}
-            />
-          </React.Fragment>
-        )}
-        runOnChanges={onChangesUpdate}
-      /> */}
+      <Section className="my-0">
+        <YhteenvetoLiitteet
+          changeObjects={{
+            hakemuksenLiitteet: changeObjects.yhteenveto.hakemuksenLiitteet
+          }}
+          onChangesRemove={onChangesRemove}
+          onChangesUpdate={onChangesUpdate}
+        />
+      </Section>
     </React.Fragment>
   );
 };

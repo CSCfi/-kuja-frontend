@@ -50,6 +50,6 @@ export const getMuutostarveCheckboxes = (
     }
     return checkboxCategory;
   }, oivaperustelut);
-  console.log(structure);
+
   return structure;
 };

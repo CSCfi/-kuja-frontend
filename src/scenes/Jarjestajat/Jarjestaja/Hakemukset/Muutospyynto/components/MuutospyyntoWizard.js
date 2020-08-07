@@ -154,7 +154,6 @@ const MuutospyyntoWizard = ({
 
   const onChangeObjectsUpdate = useCallback(
     ({ anchor, changes: changeObjects }) => {
-      console.info(anchor, changeObjects);
       if (anchor && changeObjects) {
         setChangeObjects(R.assocPath(R.split("_", anchor), changeObjects));
       }
@@ -218,8 +217,6 @@ const MuutospyyntoWizard = ({
     }
     return R.concat(attachments, files);
   }, [changeObjects]);
-
-  const anchors = findObjectWithKey(changeObjects, "anchor");
 
   const prevCosRef = useRef(changeObjects);
 
@@ -385,7 +382,6 @@ const MuutospyyntoWizard = ({
       }
     },
     [
-      anchors,
       changeObjects,
       getFiles,
       intl.locale,

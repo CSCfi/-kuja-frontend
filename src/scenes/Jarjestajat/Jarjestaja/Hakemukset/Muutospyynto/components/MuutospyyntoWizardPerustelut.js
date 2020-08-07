@@ -7,7 +7,6 @@ import PerustelutTutkinnot from "./Perustelut/PerustelutTutkinnot";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import PerustelutToimintaalue from "./Perustelut/PerustelutToimintaalue";
-import FormSection from "../../../../../../components/03-templates/FormSection";
 import PerustelutOpiskelijavuodet from "./Perustelut/PerustelutOpiskelijavuodet";
 import YhteenvetoLiitteet from "./Yhteenveto/YhteenvetoLiitteet";
 import PerustelutLiitteet from "./Perustelut/PerustelutLiitteet";

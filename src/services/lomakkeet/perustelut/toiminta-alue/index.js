@@ -161,6 +161,7 @@ function getReasoningForm(
           name: "TextBox",
           properties: {
             isReadOnly,
+            isRequired: true,
             title: "Perustelut",
             value: ""
           }

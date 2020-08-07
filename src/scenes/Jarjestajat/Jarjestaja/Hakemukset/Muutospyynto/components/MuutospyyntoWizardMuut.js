@@ -225,7 +225,6 @@ const MuutospyyntoWizardMuut = props => {
               }}
               onChangesUpdate={onChangesUpdate}
               path={["muut"]}
-              rules={[]}
               showCategoryTitles={true}
             />
           </ExpandableRowRoot>

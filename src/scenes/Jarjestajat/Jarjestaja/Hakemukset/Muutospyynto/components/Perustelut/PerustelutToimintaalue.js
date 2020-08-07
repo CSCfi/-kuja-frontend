@@ -4,7 +4,6 @@ import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organi
 import common from "../../../../../../../i18n/definitions/common";
 import "./perustelut-toiminta-alue.module.css";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { rules } from "../../../../../../../services/lomakkeet/perustelut/toiminta-alue/rules";
 import { useIntl } from "react-intl";
 
 const defaultProps = {
@@ -62,7 +61,6 @@ const PerustelutToimintaalue = React.memo(
               metadata={{ kohde, maaraystyyppi }}
               onChangesUpdate={onChangesUpdate}
               path={["perustelut", "toimintaalue"]}
-              rules={rules}
               showCategoryTitles={true}></Lomake>
           </ExpandableRowRoot>
         )}

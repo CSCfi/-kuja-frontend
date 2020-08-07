@@ -136,7 +136,7 @@ export async function createObjectToSave(
         return !!sourceObject
           ? R.map(changeObject => {
               return {
-                anchor: `perustelut_${changeObject.anchor}`,
+                anchor: `perustelut_toimintaalue`,
                 properties: sourceObject.properties
               };
             }, R.path(["toimintaalue"], changeObjects) || [])

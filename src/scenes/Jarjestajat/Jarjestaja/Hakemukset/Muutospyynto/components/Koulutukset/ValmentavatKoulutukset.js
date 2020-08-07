@@ -55,7 +55,6 @@ const ValmentavatKoulutukset = React.memo(
             }}
             onChangesUpdate={onChangesUpdate}
             path={["koulutukset", "valmentavatKoulutukset"]}
-            rules={[]}
             showCategoryTitles={true}></Lomake>
         )}
       </ExpandableRowRoot>

@@ -114,7 +114,6 @@ const MuutospyyntoWizardOpiskelijavuodet = React.memo(
           }}
           onChangesUpdate={onChangesUpdate}
           path={["opiskelijavuodet"]}
-          rules={[]}
           showCategoryTitles={true}></Lomake>
       </ExpandableRowRoot>
     ) : null;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback, useState } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { useIntl } from "react-intl";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
@@ -305,7 +305,7 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
     undo: intl.formatMessage(common.undo),
     changesTest: intl.formatMessage(common.changesText)
   };
-  console.log(changeObjects);
+
   return (
     <ExpandableRowRoot
       anchor={props.sectionId}
@@ -357,7 +357,6 @@ const MuutospyyntoWizardToimintaalue = React.memo(props => {
         }}
         onChangesUpdate={handleChanges}
         path={["toimintaalue"]}
-        rules={[]}
         showCategoryTitles={true}
       />
     </ExpandableRowRoot>

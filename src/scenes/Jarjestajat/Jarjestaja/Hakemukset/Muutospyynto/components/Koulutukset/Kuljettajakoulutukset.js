@@ -54,7 +54,6 @@ const Kuljettajakoulutukset = ({
         }}
         onChangesUpdate={onChangesUpdate}
         path={["koulutukset", "kuljettajakoulutukset"]}
-        rules={[]}
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>
   );

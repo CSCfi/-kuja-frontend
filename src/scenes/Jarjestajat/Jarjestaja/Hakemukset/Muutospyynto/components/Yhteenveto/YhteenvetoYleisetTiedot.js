@@ -2,7 +2,6 @@ import React from "react";
 import ExpandableRowRoot from "okm-frontend-components/dist/components/02-organisms/ExpandableRowRoot";
 import PropTypes from "prop-types";
 import Lomake from "../../../../../../../components/02-organisms/Lomake";
-import { rules } from "../../../../../../../services/lomakkeet/yhteenveto/yleisetTiedot/rules";
 import common from "../../../../../../../i18n/definitions/common";
 import { useIntl } from "react-intl";
 
@@ -33,7 +32,6 @@ const YhteenvetoYleisettiedot = React.memo(props => {
         changeObjects={props.changeObjects.yhteenveto}
         onChangesUpdate={props.onChangesUpdate}
         path={["yhteenveto", "yleisetTiedot"]}
-        rules={rules}
         showCategoryTitles={true}></Lomake>
     </ExpandableRowRoot>
   );
