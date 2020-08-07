@@ -65,7 +65,8 @@ const Lomake = React.memo(
     rules = defaultProps.rules,
     rulesFn,
     showCategoryTitles = true,
-    uncheckParentWithoutActiveChildNodes = defaultProps.uncheckParentWithoutActiveChildNodes
+    uncheckParentWithoutActiveChildNodes = defaultProps.uncheckParentWithoutActiveChildNodes,
+    hasInvalidFieldsFn
   }) => {
     const intl = useIntl();
     const [meta, metadataActions] = useMetadata();
@@ -121,6 +122,14 @@ const Lomake = React.memo(
       rulesFn
     ]);
 
+    useEffect(() => {
+        if (hasInvalidFieldsFn) {
+          hasInvalidFieldsFn(lomakeWithRules.invalidFields > 0);
+        }
+      },
+      [lomakeWithRules.invalidFields, changeObjects]
+    );
+
     if (
       lomakeWithRules.categories &&
       lomakeWithRules.invalidFields !== undefined &&
@@ -168,7 +177,8 @@ Lomake.propTypes = {
   rules: PropTypes.array,
   // This is useful for dynamic forms.
   rulesFn: PropTypes.func,
-  uncheckParentWithoutActiveChildNodes: PropTypes.bool
+  uncheckParentWithoutActiveChildNodes: PropTypes.bool,
+  hasInvalidFieldsFn: PropTypes.func
 };
 
 export default Lomake;

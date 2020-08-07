@@ -46,6 +46,11 @@ const Tutkintokielet = React.memo(props => {
         };
       }, props.unselectedAnchors);
 
+      tutkintokielichangesWithoutRemovedOnes = R.filter(
+        R.compose(R.not, R.isEmpty),
+        tutkintokielichangesWithoutRemovedOnes
+      );
+
       if (
         !R.equals(
           tutkintokielichangesWithoutRemovedOnes,

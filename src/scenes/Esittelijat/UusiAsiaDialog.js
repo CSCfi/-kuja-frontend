@@ -105,6 +105,7 @@ const UusiAsiaDialog = React.memo(
     const [, muutospyyntoActions] = useMuutospyynto();
 
     const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
+    const [hasInvalidFields, setHasInvalidFields] = useState(false);
     const [isSavingEnabled, setIsSavingEnabled] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(true);
 
@@ -171,11 +172,11 @@ const UusiAsiaDialog = React.memo(
     }, [cos]);
 
     const prevAnchorsRef = useRef(anchors);
+    const prevCosRef = useRef(cos);
 
     useEffect(() => {
-      // If user has made changes on the form the save action must be available.
-      setIsSavingEnabled(!R.equals(prevAnchorsRef.current, anchors));
-    }, [anchors]);
+      setIsSavingEnabled(!R.equals(prevCosRef.current, cos) && !hasInvalidFields);
+    }, [anchors, hasInvalidFields, cos]);
 
     /**
      * Opens the preview.
@@ -255,6 +256,7 @@ const UusiAsiaDialog = React.memo(
          */
         setIsSavingEnabled(false);
         prevAnchorsRef.current = anchors;
+        prevCosRef.current = cos;
 
         if (!uuid && !fromDialog) {
           if (muutospyynto && muutospyynto.uuid) {
@@ -357,7 +359,10 @@ const UusiAsiaDialog = React.memo(
                       onSectionChangesUpdate(payload.anchor, payload.changes)
                     }
                     path={["esittelija", "topThree"]}
-                    rulesFn={getRules}></Lomake>
+                    rulesFn={getRules}
+                    hasInvalidFieldsFn={invalidFields => {
+                      setHasInvalidFields(invalidFields)
+                    }}></Lomake>
                 </div>
                 <EsittelijatMuutospyynto
                   kielet={kielet}
