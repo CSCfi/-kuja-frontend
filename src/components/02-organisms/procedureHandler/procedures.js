@@ -24,6 +24,7 @@ import { onnistui as muutospyynnonLataaminenOnnistui } from "./procedures/muutos
 import { onnistuiNew as muutospyynnonLataaminenOnnistuiNew } from "./procedures/muutospyynto/lataaminen/onnistuiNew";
 import { luvanLatauspolku } from "./procedures/muutospyynto/esikatselu/luvanLatauspolku";
 import { tarkistaDuplikaattiAsianumero } from "./procedures/muutospyynto/muutokset/tarkistaDuplikaattiAsianumero";
+import { asianumeroOK } from "./procedures/muutospyynto/muutokset/asianumeroOK";
 import { asianumeroOnJoKaytossa } from "./procedures/muutospyynto/muutokset/asianumeroOnJoKaytossa";
 
 export const procedures = {
@@ -67,7 +68,8 @@ export const procedures = {
     },
     muutokset: {
       tarkistaDuplikaattiAsianumero: tarkistaDuplikaattiAsianumero,
-      asianumeroOnJoKaytossa: asianumeroOnJoKaytossa
+      asianumeroOK,
+      asianumeroOnJoKaytossa
     },
     tallennus: {
       epaonnistui: tallennusEpaonnistui,

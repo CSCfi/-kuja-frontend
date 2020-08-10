@@ -23,6 +23,8 @@ export const tarkistaDuplikaattiAsianumero = {
     next: output => {
         if (output.result) {
             return ["muutospyynto.muutokset.asianumeroOnJoKaytossa"];
+        } else {
+            return ["muutospyynto.muutokset.asianumeroOK"];
         }
     }
 };

@@ -6,6 +6,7 @@ import UusiAsiaDialogContainer from "./UusiAsiaDialogContainer";
 import { useUser } from "../../stores/user";
 import BaseData from "scenes/BaseData";
 import { useIntl } from "react-intl";
+import AsiaDialogContainer from "./AsiaDialogContainer";
 
 const Esittelijat = () => {
   const intl = useIntl();
@@ -47,12 +48,14 @@ const Esittelijat = () => {
         authenticated={!!user}
         exact
         path={`${path}/:ytunnus/:uuid`}
-        render={() => (
-          <BaseData
-            locale={intl.locale}
-            render={_props => <UusiAsiaDialogContainer {..._props} />}
-          />
-        )}
+        render={() => {
+          return (
+            <BaseData
+              locale={intl.locale}
+              render={_props => <AsiaDialogContainer {..._props} />}
+            />
+          );
+        }}
       />
     </Switch>
   );

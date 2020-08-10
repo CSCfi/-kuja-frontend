@@ -95,16 +95,21 @@ const UusiAsiaDialog = React.memo(
     tutkinnot = defaultProps.tutkinnot
   }) => {
     const intl = useIntl();
-    let history = useHistory();
     const params = useParams();
-    const [, muutospyyntoActions] = useMuutospyynto();
+    let history = useHistory();
 
-    const [changeObjects, setChangeObjects] = useState(initialChangeObjects);
+    let { uuid } = params;
+
+    const [changeObjects, setChangeObjects] = useState(null);
     const [isConfirmDialogVisible, setIsConfirmDialogVisible] = useState(false);
     const [isSavingEnabled, setIsSavingEnabled] = useState(false);
     const [isDialogOpen, setIsDialogOpen] = useState(true);
 
-    let { uuid } = params;
+    const [, muutospyyntoActions] = useMuutospyynto();
+
+    useEffect(() => {
+      setChangeObjects(initialChangeObjects);
+    }, [initialChangeObjects]);
 
     const organisationPhoneNumber = R.head(
       R.values(R.find(R.prop("numero"), organisation.yhteystiedot))
@@ -136,6 +141,7 @@ const UusiAsiaDialog = React.memo(
      * User is redirected to the following path when the form is closed.
      */
     const closeWizard = useCallback(async () => {
+      setChangeObjects(null);
       setIsDialogOpen(false);
       setIsConfirmDialogVisible(false);
       // Let's empty some store content on close.
@@ -234,7 +240,8 @@ const UusiAsiaDialog = React.memo(
         if (!uuid && !fromDialog) {
           if (muutospyynto && muutospyynto.uuid) {
             // It was the first save...
-            onNewDocSave(muutospyynto);
+            setChangeObjects(null);
+            onNewDocSave(muutospyynto.uuid);
           }
         }
       },
@@ -255,137 +262,139 @@ const UusiAsiaDialog = React.memo(
     );
 
     return (
-      <div className="max-w-7xl">
-        <FormDialog
-          open={isDialogOpen}
-          onClose={openCancelModal}
-          maxWidth={"lg"}
-          fullScreen={true}
-          aria-labelledby="simple-dialog-title">
-          <div>
-            <div className={"w-full m-auto"}>
-              <DialogTitleWithStyles id="customized-dialog-title">
-                <div className="flex">
-                  <div className="flex-1">
-                    {intl.formatMessage(
-                      wizardMessages.esittelijatMuutospyyntoDialogTitle
-                    )}
+      changeObjects !== null && (
+        <div className="max-w-7xl">
+          <FormDialog
+            open={isDialogOpen}
+            onClose={openCancelModal}
+            maxWidth={"lg"}
+            fullScreen={true}
+            aria-labelledby="simple-dialog-title">
+            <div>
+              <div className={"w-full m-auto"}>
+                <DialogTitleWithStyles id="customized-dialog-title">
+                  <div className="flex">
+                    <div className="flex-1">
+                      {intl.formatMessage(
+                        wizardMessages.esittelijatMuutospyyntoDialogTitle
+                      )}
+                    </div>
+                    <div>
+                      <SimpleButton
+                        text={`${intl.formatMessage(wizardMessages.getOut)} X`}
+                        onClick={openCancelModal}
+                        variant={"text"}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <SimpleButton
-                      text={`${intl.formatMessage(wizardMessages.getOut)} X`}
-                      onClick={openCancelModal}
-                      variant={"text"}
-                    />
+                </DialogTitleWithStyles>
+              </div>
+              <DialogContentWithStyles>
+                <div className="bg-vaalenharmaa px-16 w-full m-auto mb-20 border-b border-xs border-harmaa">
+                  <div className="py-4">
+                    <h1>
+                      {organisation.nimi[intl.locale] ||
+                        R.last(R.values(organisation.nimi))}
+                    </h1>
+                    <p>
+                      {organisation.kayntiosoite.osoite},{" "}
+                      {organisation.postiosoite.osoite}{" "}
+                      {organisation.kayntiosoite.postitoimipaikka}
+                    </p>
+                    <p>
+                      {organisationPhoneNumber && (
+                        <React.Fragment>
+                          <a href={`tel:${organisationPhoneNumber}`}>
+                            {organisationPhoneNumber}
+                          </a>{" "}
+                          |{" "}
+                        </React.Fragment>
+                      )}
+                      {organisationPhoneNumber && (
+                        <React.Fragment>
+                          <a href={`mailto:${organisationEmail}`}>
+                            {organisationEmail}
+                          </a>{" "}
+                          |{" "}
+                        </React.Fragment>
+                      )}
+                      {organisation.ytunnus} |{" "}
+                      {organisationWebsite && (
+                        <a href={organisationWebsite}>{organisationWebsite}</a>
+                      )}
+                    </p>
                   </div>
                 </div>
-              </DialogTitleWithStyles>
+                <div
+                  id="wizard-content"
+                  className="px-16 xl:w-3/4 max-w-7xl m-auto mb-20">
+                  <div className="w-1/3" style={{ marginLeft: "-2rem" }}>
+                    <h2 className="p-8">
+                      {intl.formatMessage(common.decisionDetails)}
+                    </h2>
+                    <Lomake
+                      anchor="topthree"
+                      changeObjects={changeObjects.topthree}
+                      data={{ formatMessage: intl.formatMessage, uuid }}
+                      onChangesUpdate={payload =>
+                        onChangeObjectsUpdate(payload.anchor, payload.changes)
+                      }
+                      path={["esittelija", "topThree"]}></Lomake>
+                  </div>
+                  <EsittelijatMuutospyynto
+                    changeObjects={changeObjects}
+                    kielet={kielet}
+                    kohteet={kohteet}
+                    koulutukset={koulutukset}
+                    koulutusalat={koulutusalat}
+                    koulutustyypit={koulutustyypit}
+                    kunnat={kunnat}
+                    maakuntakunnat={maakuntakunnat}
+                    maakunnat={maakunnat}
+                    lupa={lupa}
+                    lupaKohteet={lupaKohteet}
+                    maaraystyypit={maaraystyypit}
+                    muut={muut}
+                    onChangesUpdate={onChangeObjectsUpdate}
+                    opetuskielet={opetuskielet}
+                    tutkinnot={tutkinnot}
+                  />
+                  <EsittelijatWizardActions
+                    isSavingEnabled={isSavingEnabled}
+                    onClose={openCancelModal}
+                    onPreview={() => {
+                      return onAction("preview");
+                    }}
+                    onSave={() => {
+                      return onAction("save");
+                    }}
+                  />
+                </div>
+              </DialogContentWithStyles>
             </div>
-            <DialogContentWithStyles>
-              <div className="bg-vaalenharmaa px-16 w-full m-auto mb-20 border-b border-xs border-harmaa">
-                <div className="py-4">
-                  <h1>
-                    {organisation.nimi[intl.locale] ||
-                      R.last(R.values(organisation.nimi))}
-                  </h1>
-                  <p>
-                    {organisation.kayntiosoite.osoite},{" "}
-                    {organisation.postiosoite.osoite}{" "}
-                    {organisation.kayntiosoite.postitoimipaikka}
-                  </p>
-                  <p>
-                    {organisationPhoneNumber && (
-                      <React.Fragment>
-                        <a href={`tel:${organisationPhoneNumber}`}>
-                          {organisationPhoneNumber}
-                        </a>{" "}
-                        |{" "}
-                      </React.Fragment>
-                    )}
-                    {organisationPhoneNumber && (
-                      <React.Fragment>
-                        <a href={`mailto:${organisationEmail}`}>
-                          {organisationEmail}
-                        </a>{" "}
-                        |{" "}
-                      </React.Fragment>
-                    )}
-                    {organisation.ytunnus} |{" "}
-                    {organisationWebsite && (
-                      <a href={organisationWebsite}>{organisationWebsite}</a>
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div
-                id="wizard-content"
-                className="px-16 xl:w-3/4 max-w-7xl m-auto mb-20">
-                <div className="w-1/3" style={{ marginLeft: "-2rem" }}>
-                  <h2 className="p-8">
-                    {intl.formatMessage(common.decisionDetails)}
-                  </h2>
-                  <Lomake
-                    anchor="topthree"
-                    changeObjects={changeObjects.topthree}
-                    data={{ formatMessage: intl.formatMessage, uuid }}
-                    onChangesUpdate={payload =>
-                      onChangeObjectsUpdate(payload.anchor, payload.changes)
-                    }
-                    path={["esittelija", "topThree"]}></Lomake>
-                </div>
-                <EsittelijatMuutospyynto
-                  changeObjects={changeObjects}
-                  kielet={kielet}
-                  kohteet={kohteet}
-                  koulutukset={koulutukset}
-                  koulutusalat={koulutusalat}
-                  koulutustyypit={koulutustyypit}
-                  kunnat={kunnat}
-                  maakuntakunnat={maakuntakunnat}
-                  maakunnat={maakunnat}
-                  lupa={lupa}
-                  lupaKohteet={lupaKohteet}
-                  maaraystyypit={maaraystyypit}
-                  muut={muut}
-                  onChangesUpdate={onChangeObjectsUpdate}
-                  opetuskielet={opetuskielet}
-                  tutkinnot={tutkinnot}
-                />
-                <EsittelijatWizardActions
-                  isSavingEnabled={isSavingEnabled}
-                  onClose={openCancelModal}
-                  onPreview={() => {
-                    return onAction("preview");
-                  }}
-                  onSave={() => {
-                    return onAction("save");
-                  }}
-                />
-              </div>
-            </DialogContentWithStyles>
-          </div>
-        </FormDialog>
-        <ConfirmDialog
-          isConfirmDialogVisible={isConfirmDialogVisible}
-          messages={{
-            content: intl.formatMessage(
-              common.confirmExitEsittelijaMuutoshakemusWizard
-            ),
-            ok: intl.formatMessage(common.save),
-            noSave: intl.formatMessage(common.noSave),
-            cancel: intl.formatMessage(common.cancel),
-            title: intl.formatMessage(
-              common.confirmExitEsittelijaMuutoshakemusWizardTitle
-            )
-          }}
-          handleOk={async () => {
-            await onAction("save", true);
-            closeWizard();
-          }}
-          handleCancel={handleCancel}
-          handleExitAndAbandonChanges={closeWizard}
-        />
-      </div>
+          </FormDialog>
+          <ConfirmDialog
+            isConfirmDialogVisible={isConfirmDialogVisible}
+            messages={{
+              content: intl.formatMessage(
+                common.confirmExitEsittelijaMuutoshakemusWizard
+              ),
+              ok: intl.formatMessage(common.save),
+              noSave: intl.formatMessage(common.noSave),
+              cancel: intl.formatMessage(common.cancel),
+              title: intl.formatMessage(
+                common.confirmExitEsittelijaMuutoshakemusWizardTitle
+              )
+            }}
+            handleOk={async () => {
+              await onAction("save", true);
+              closeWizard();
+            }}
+            handleCancel={handleCancel}
+            handleExitAndAbandonChanges={closeWizard}
+          />
+        </div>
+      )
     );
   },
   (cp, np) => {
