@@ -121,6 +121,7 @@ function getCategoriesForPerustelut(
           }, osaamisalaChangeObjsForTutkinto);
 
           const categories = concat(tutkintoCategory, osaamisalaCategories);
+
           return new Date(tutkinto.voimassaAlkuPvm) < currentDate
             ? {
                 anchor: tutkinto.koodiarvo,
