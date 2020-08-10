@@ -39,21 +39,23 @@ import * as R from "ramda";
 import Yhteydenotto from "./scenes/Yhteydenotto";
 import Saavutettavuusseloste from "./scenes/Saavutettavuusseloste";
 import Tietosuojailmoitus from "./scenes/Tietosuojailmoitus";
-import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 import "@reach/skip-nav/styles.css";
+import BaseData from "scenes/BaseData";
 
 const history = createBrowserHistory();
 
 const logo = { text: "Oiva", path: "/" };
+
+const keys = ["lupa"];
 
 /**
  * App component forms the basic structure of the application and its routing.
  *
  * @param {props} - Properties object.
  */
-const App = React.memo(({ isDebugModeOn }) => {
+const App = ({ isDebugModeOn }) => {
   const intl = useIntl();
-
   const [userState] = useUser();
 
   const { data: user } = userState;
@@ -233,7 +235,9 @@ const App = React.memo(({ isDebugModeOn }) => {
     <React.Fragment>
       <Router history={history}>
         <div className="flex flex-col min-h-screen">
-          <SkipNavLink>{intl.formatMessage(commonMessages.jumpToContent)}</SkipNavLink>
+          <SkipNavLink>
+            {intl.formatMessage(commonMessages.jumpToContent)}
+          </SkipNavLink>
           <div
             className={`relative lg:fixed z-50 ${
               appState.isDebugModeOn ? "w-2/3" : "w-full"
@@ -269,7 +273,9 @@ const App = React.memo(({ isDebugModeOn }) => {
               <div
                 style={{ maxWidth: "90rem" }}
                 className="w-full mx-auto px-3 lg:px-8 py-8">
-                <nav tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
+                <nav
+                  tabIndex="0"
+                  aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
                   <Breadcrumbs
                     separator={<b> / </b>}
                     item={NavLink}
@@ -310,13 +316,24 @@ const App = React.memo(({ isDebugModeOn }) => {
                   />
                   <Route
                     path="/jarjestajat/:ytunnus"
-                    render={props => (
-                      <JarjestajaSwitch
-                        path={props.match.path}
-                        ytunnus={props.match.params.ytunnus}
-                        user={user}
-                      />
-                    )}
+                    render={props => {
+                      return (
+                        <BaseData
+                          keys={keys}
+                          locale={intl.locale}
+                          render={_props => {
+                            return (
+                              <JarjestajaSwitch
+                                lupa={_props.lupa}
+                                path={props.match.path}
+                                ytunnus={_props.ytunnus}
+                                user={user}
+                              />
+                            );
+                          }}
+                        />
+                      );
+                    }}
                   />
                   <Route
                     path="/saavutettavuusseloste"
@@ -324,15 +341,11 @@ const App = React.memo(({ isDebugModeOn }) => {
                   />
                   <Route
                     path="/tietosuojailmoitus"
-                    render={() => (
-                      <Tietosuojailmoitus locale={intl.locale} />
-                    )}
+                    render={() => <Tietosuojailmoitus locale={intl.locale} />}
                   />
                   <Route
                     path="/yhteydenotto"
-                    render={() => (
-                      <Yhteydenotto locale={intl.locale} />
-                    )}
+                    render={() => <Yhteydenotto locale={intl.locale} />}
                   />
                 </Switch>
               </main>
@@ -348,7 +361,7 @@ const App = React.memo(({ isDebugModeOn }) => {
       </Router>
     </React.Fragment>
   );
-});
+};
 
 App.propTypes = {
   isDebugModeOn: PropTypes.bool
