@@ -165,11 +165,11 @@ export const generatePaatetytAsiatTableStructure = (hakemusList, intl) => {
                     intl.formatMessage
                   );
                   const output = await procedureHandler.run(
-                    "muutospyynto.esikatselu.latauspolku",
+                    "muutospyynto.esittelijanEsikatselu.latauspolku",
                     [row.id]
                   );
                   const filePath =
-                    output.muutospyynto.esikatselu.latauspolku.output;
+                    output.muutospyynto.esittelijanEsikatselu.latauspolku.output;
                   procedureHandler.run(
                     "muutospyynto.lataaminen.downloadAndShow",
                     [filePath, true]
