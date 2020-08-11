@@ -4,6 +4,7 @@ import CategorizedListRoot from "okm-frontend-components/dist/components/02-orga
 import { getLomake } from "../../../services/lomakkeet";
 import { isEqual } from "lodash";
 import { useIntl } from "react-intl";
+import { find } from 'ramda';
 
 const defaultProps = {
   changeObjects: [],
@@ -60,11 +61,12 @@ const Lomake = React.memo(
     ]);
 
     useEffect(() => {
-        if (hasInvalidFieldsFn) {
-          hasInvalidFieldsFn(lomakeWithRules.invalidFields > 0);
+        if (hasInvalidFieldsFn && lomake) {
+          const asianumeroAnchor = find(l => l.anchor === 'asianumero', lomake);
+          hasInvalidFieldsFn(asianumeroAnchor ? !asianumeroAnchor.components[0].properties.isValid : false);
         }
       },
-      [lomakeWithRules.invalidFields, changeObjects]
+      [lomake]
     );
 
     const showValidationErrors = true;

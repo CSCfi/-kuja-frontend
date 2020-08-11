@@ -196,6 +196,9 @@ const AsiaDialogContainer = ({
     }
 
     changesBySection.topthree = path(["meta", "topthree"], muutospyynto) || [];
+    // Set uuid for asianumero
+    find(topthree => getAnchorPart(topthree.anchor, 1) === 'asianumero', changesBySection.topthree)
+      .properties.metadata = {uuid: muutospyynto.uuid};
 
     if (
       changesBySection.categoryFilter &&

@@ -152,12 +152,11 @@ const UusiAsiaDialog = React.memo(
 
     const anchors = findObjectWithKey(changeObjects, "anchor");
 
-    const prevAnchorsRef = useRef(anchors);
-    const prevCosRef = useRef(cos);
+    const prevCosRef = useRef(initialChangeObjects);
 
     useEffect(() => {
-      setIsSavingEnabled(!R.equals(prevCosRef.current, cos) && !hasInvalidFields);
-    }, [anchors, hasInvalidFields, cos]);
+      setIsSavingEnabled(!R.equals(prevCosRef.current, changeObjects) && !hasInvalidFields);
+    }, [hasInvalidFields, changeObjects]);
 
     /**
      * Opens the preview.
@@ -236,8 +235,7 @@ const UusiAsiaDialog = React.memo(
          * save button. It will be enabled after new changes.
          */
         setIsSavingEnabled(false);
-        prevAnchorsRef.current = anchors;
-        prevCosRef.current = cos;
+        prevCosRef.current = changeObjects;
 
         if (!uuid && !fromDialog) {
           if (muutospyynto && muutospyynto.uuid) {
