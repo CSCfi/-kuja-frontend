@@ -1,9 +1,4 @@
-import React, {
-  useContext,
-  useMemo,
-  useState,
-  useCallback
-} from "react";
+import React, { useContext, useMemo, useState, useCallback } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
 import Footer from "scenes/Footer/Footer";
@@ -21,17 +16,18 @@ import commonMessages from "./i18n/definitions/common";
 import educationMessages from "./i18n/definitions/education";
 import langMessages from "./i18n/definitions/languages";
 import { ToastContainer } from "react-toastify";
-import ReactResizeDetector from "react-resize-detector";
 import Header from "okm-frontend-components/dist/components/02-organisms/Header";
 import { setLocale } from "./services/app/actions";
 import { AppContext } from "./context/appContext";
 import Navigation from "okm-frontend-components/dist/components/02-organisms/Navigation";
 import SideNavigation from "okm-frontend-components/dist/components/02-organisms/SideNavigation";
 import Jarjestaja from "./scenes/VapaaSivistystyo/components/Jarjestaja";
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav"
+import "@reach/skip-nav/styles.css";
 
 const history = createBrowserHistory();
 
-const logo = { text: "Oiva", path: "/" };
+
 
 /**
  * App component forms the basic structure of the application and its routing.
@@ -45,9 +41,8 @@ const App = () => {
 
   const { state: appState, dispatch: appDispatch } = useContext(AppContext);
 
-  const [headerHeight, setHeaderHeight] = useState(0);
-
-  const oivaURL = process.env.REACT_APP_OIVA_URL || 'https://localhost:443';
+  const oivaURL = process.env.REACT_APP_OIVA_URL || "https://localhost:443";
+  const logo = { text: "Oiva", path: oivaURL };
 
   const pageLinks = [
     {
@@ -63,7 +58,10 @@ const App = () => {
       url: oivaURL + "/jarjestajat",
       text: intl.formatMessage(educationMessages.vocationalEducation)
     },
-    { path: "/vapaa-sivistystyo", text: intl.formatMessage(educationMessages.vstEducation) },
+    {
+      path: "/vapaa-sivistystyo",
+      text: intl.formatMessage(educationMessages.vstEducation)
+    },
     { path: "/tilastot", text: intl.formatMessage(commonMessages.statistics) }
   ];
 
@@ -91,16 +89,9 @@ const App = () => {
     };
   }, [intl]);
 
-  const onHeaderResize = (width, height) => {
-    setHeaderHeight(height);
-  };
-
   const getHeader = useCallback(
     template => {
-      if (
-        (appDispatch,
-        appState.locale && intl)
-      ) {
+      if ((appDispatch, appState.locale && intl)) {
         return (
           <Header
             inFinnish={intl.formatMessage(langMessages.inFinnish)}
@@ -109,7 +100,7 @@ const App = () => {
             logo={logo}
             onLocaleChange={onLocaleChange}
             onMenuClick={onMenuClick}
-            organisation={{text: ''}}
+            organisation={{ text: "" }}
             shortDescription={shortDescription}
             template={template}></Header>
         );
@@ -130,8 +121,8 @@ const App = () => {
     <React.Fragment>
       <Router history={history}>
         <div className="flex flex-col min-h-screen">
-          <div className="fixed z-50 w-full">
-            <ReactResizeDetector handleHeight onResize={onHeaderResize} />
+          <SkipNavLink>{intl.formatMessage(commonMessages.jumpToContent)}</SkipNavLink>
+          <div className="relative lg:fixed z-50 w-full">
             {getHeader()}
 
             <div className="hidden md:block">
@@ -154,27 +145,29 @@ const App = () => {
                   backgroundColor: "white",
                   color: "black",
                   hoverColor: "white"
-                }}/>
+                }}
+              />
             </div>
           </SideNavigation>
 
-          <main
-            className="flex flex-1 flex-col justify-between"
-            style={{ marginTop: headerHeight }}>
+          <div className="flex flex-1 flex-col justify-between mt-16 md:mt-0 lg:mt-32">
             <div className="flex flex-col flex-1 bg-white">
               <div className="pb-16 pt-8 mx-auto w-11/12 lg:w-3/4">
-                <Breadcrumbs
-                  separator={<b> / </b>}
-                  item={NavLink}
-                  finalItem={"b"}
-                  finalProps={{
-                    style: {
-                      color: COLORS.BLACK
-                    }
-                  }}
-                />
+                <nav tabIndex="0" aria-label={intl.formatMessage(commonMessages.breadCrumbs)}>
+                  <Breadcrumbs
+                    separator={<b> / </b>}
+                    item={NavLink}
+                    finalItem={"b"}
+                    finalProps={{
+                      style: {
+                        color: COLORS.BLACK
+                      }
+                    }}
+                  />
+                </nav>
               </div>
-              <div className="flex-1 flex flex-col">
+              <SkipNavContent />
+              <main className="flex-1 flex flex-col">
                 <Switch>
                   <Route exact path="/" component={Home} />
                   <Route exact path="/tilastot" component={Tilastot} />
@@ -187,23 +180,19 @@ const App = () => {
                     exact
                     path="/vapaa-sivistystyo"
                     render={props => {
-                      return(
-                        <VapaaSivistystyo
-                          history={history}
-                        />
-                      )
+                      return <VapaaSivistystyo history={history} />;
                     }}
                   />
                   <Route
-                    path = "/lupa/:uuid"
+                    path="/lupa/:uuid"
                     render={props => {
-                      return(
+                      return (
                         <Jarjestaja
                           history={history}
                           uuid={props.match.params.uuid}
                           match={props.match}
                         />
-                      )
+                      );
                     }}
                   />
                   <Route
@@ -211,21 +200,16 @@ const App = () => {
                     path="/esi-ja-perusopetus"
                     component={EsiJaPerusopetus}
                   />
-
                 </Switch>
-              </div>
+              </main>
             </div>
-          </main>
+          </div>
           <footer>
-            <Footer
-              oivaURL={oivaURL}
-            // props={props}
-            />
+            <Footer oivaURL={oivaURL} />
             <ToastContainer />
           </footer>
         </div>
       </Router>
-      }
     </React.Fragment>
   );
 };

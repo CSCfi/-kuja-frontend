@@ -30,6 +30,7 @@
   "common.attachmentSecretUnselect": "Merkitse liite julkiseksi",
   "common.author": "Laatija",
   "common.backFromAsiakirjat": "Takaisin Järjestämislupa asiat -taulukkoon",
+  "common.breadCrumbs": "Murupolku",
   "common.cancel": "Peruuta",
   "common.change": "Järjestämisluvan muutos",
   "common.clear": "Tyhjennä",
@@ -55,6 +56,7 @@
   "common.hakemusAsiakirjat": "Hakemuksen asiakirjat",
   "common.homeCounty": "Kotipaikan maakunta",
   "common.jarjestaja": "Koulutuksen järjestäjä",
+  "common.jumpToContent": "Hyppää sisältöön",
   "common.loading": "Ladataan",
   "common.loginError": "Kirjautumisessa tapahtui virhe",
   "common.lupaHistoria": "Historiatiedot",
@@ -161,5 +163,11 @@
   "wizard.tooltipTaloudellisetYleisetTiedotKentta2": "Arvioikaa, vaikuttaako haetut tehtävät nykyisten taloudellisten resurssienne uudelleen kohdentamiseen. Jos vaikuttavat, esittäkää millä tavalla.",
   "wizard.tooltipTaloudellisetYleisetTiedotKentta3": "Mikäli haette työvoimakoulutuksen tai laajennettua oppisopimuskoulutuksen järjestämistehtävää, arvioikaa, miten kykenette vastaamaan ko. koulutustarpeen muutoksiin nopeasti ja uudelleen kohdentamaan resurssejanne tarpeen mukaisesti.",
   "wizard.vocationalTraining": "Ammatilliseen tehtävään valmistavat koulutukset",
-  "wizard.workforceTraining": "Työvoimakoulutukset"
+  "wizard.workforceTraining": "Työvoimakoulutukset",
+  "common.phoneNumber": "Puh. 029 533 0004",
+  "common.okmAddress": "PL 29, 00023 Valtioneuvosto",
+  "homepage.header": "Oiva - Opetushallinnon ohjaus- ja säätelypalvelu",
+  "homepage.infotext": "Palvelusta löytyvät tällä hetkellä kaikki ajantasaiset ammatillisen koulutuksen järjestämisluvat sekä vapaan sivistystyön oppilaitosten ylläpitämisluvat. Myöhemmin Oiva laajennetaan koskemaan myös esi- ja perusopetuksen sekä lukiokoulutuksen järjestämisluvat. Palvelusta löytyy lisäksi väestö-, koulutus- ja lupatietoja ja erilaisia tilastoja ammatillisen koulutuksen osalta.",
+  "common.okmLinkText": "www.minedu.fi",
+  "common.okmLinkUrl": "http://www.minedu.fi"
 }
