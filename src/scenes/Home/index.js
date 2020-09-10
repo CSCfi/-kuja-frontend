@@ -13,7 +13,7 @@ const Home = () => {
       <Helmet htmlAttributes={{ lang: intl.locale }}>
         <title>Oiva | Etusivu</title>
       </Helmet>
-      <Typography component="h2" variant="h4" className="p-4">
+      <Typography component="h1" variant="h4" className="p-4">
         {intl.formatMessage(homepage.header)}
       </Typography>
       <Card className="p-4">
