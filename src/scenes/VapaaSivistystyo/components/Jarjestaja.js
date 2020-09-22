@@ -2,11 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import {
-  Route,
-  useHistory,
-  useLocation
-} from "react-router-dom";
+import { Route, useHistory, useLocation } from "react-router-dom";
 import { BreadcrumbsItem } from "react-breadcrumbs-dynamic";
 import JarjestajaBasicInfo from "./JarjestajaBasicInfo";
 import { COLORS } from "../../../modules/styles";
@@ -157,6 +153,10 @@ const Jarjestaja = React.memo(({ uuid, match }) => {
 
   return (
     <React.Fragment>
+      <Helmet htmlAttributes={{ lang: intl.locale }}>
+        <title>{jarjestaja.nimi}, Vapaa sivistystyö - Oiva</title>
+      </Helmet>
+
       <div className="mx-auto px-4 sm:px-0 w-11/12 lg:w-3/4">
         <BreadcrumbsItem to="/">Etusivu</BreadcrumbsItem>
         <BreadcrumbsItem to="/vapaa-sivistystyo">

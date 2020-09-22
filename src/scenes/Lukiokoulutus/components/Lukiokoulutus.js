@@ -21,7 +21,7 @@ const Lukiokoulutus = ({ intl }) => {
   return (
     <ContentContainer>
       <Helmet htmlAttributes={{ lang: intl.locale }}>
-        <title>Oiva | Lukiokoulutus</title>
+        <title>Lukiokoulutus - Oiva</title>
       </Helmet>
       <div height="300px">
         <Description>
