@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from "react";
+import { Helmet } from "react-helmet";
 import { useIntl } from "react-intl";
 import PropTypes from "prop-types";
 import styled from "styled-components";
