@@ -1,4 +1,4 @@
-import {defineMessages} from "react-intl";
+import { defineMessages } from "react-intl";
 
 export default defineMessages({
   noSelection: {
@@ -55,7 +55,8 @@ export default defineMessages({
   },
   attachmentInfo: {
     id: "common.attachmentInfo",
-    defaultMessage: "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
+    defaultMessage:
+      "Liitteen koko saa olla korkeintaan 25 MB ja tyypiltään pdf, word, excel, jpeg tai gif. Muista merkitä salassa pidettävät liitteet."
   },
   attachmentNone: {
     id: "common.attachmentNone",
@@ -63,7 +64,8 @@ export default defineMessages({
   },
   attachmentError: {
     id: "common.attachmentError",
-    defaultMessage: "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
+    defaultMessage:
+      "Valitsemaasi liitettä ei voi lisätä hakemukseen, tarkista sen koko ja tyyppi"
   },
   attachmentAdd: {
     id: "common.attachmentAdd",
@@ -237,11 +239,26 @@ export default defineMessages({
     id: "common.errorLoadingLupa",
     defaultMessage: "Järjestämislupatietojen näyttäminen epäonnistui."
   },
-  vstActiveLuvatCount: {id: "common.vstActiveLuvatCount", defaultMessage: "Voimassa olevat ylläpitämisluvat ({count} kpl)"},
-  searchByJarjestaja: {id: "common.searchByJarjestaja", defaultMessage: "Hae järjestäjän nimellä"},
-  searchByYllapitaja: {id: "common.searchByYllapitaja", defaultMessage: "Hae ylläpitäjän tai oppilaitoksen nimellä"},
-  vstTitleName: {id: "common.vstTitleName", defaultMessage: "Vapaa sivistystyö"},
-  vstYllapitajatHeading: {id: "common.vstYllapitajatHeading", defaultMessage: "Vapaan sivistystyön oppilaitosten ylläpitäjät"},
+  vstActiveLuvatCount: {
+    id: "common.vstActiveLuvatCount",
+    defaultMessage: "Voimassa olevat ylläpitämisluvat ({count} kpl)"
+  },
+  searchByJarjestaja: {
+    id: "common.searchByJarjestaja",
+    defaultMessage: "Hae järjestäjän nimellä"
+  },
+  searchByYllapitaja: {
+    id: "common.searchByYllapitaja",
+    defaultMessage: "Hae ylläpitäjän tai oppilaitoksen nimellä"
+  },
+  vstTitleName: {
+    id: "common.vstTitleName",
+    defaultMessage: "Vapaa sivistystyö"
+  },
+  vstYllapitajatHeading: {
+    id: "common.vstYllapitajatHeading",
+    defaultMessage: "Vapaan sivistystyön oppilaitosten ylläpitäjät"
+  },
   current: {
     id: "common.current",
     defaultMessage: "Nykyinen"
@@ -304,7 +321,8 @@ export default defineMessages({
   },
   lupaPageTitleAmmatillinen: {
     id: "common.lupaPageTitleAmmatillinen",
-    defaultMessage: "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}"
+    defaultMessage:
+      "Ajantasainen ammatillisten tutkintojen ja koulutuksen järjestämislupa {date}"
   },
   lupaPageTitleEsiJaPerusopeutus: {
     id: "common.lupaPageTitleEsiJaPerusopeutus",
@@ -336,7 +354,8 @@ export default defineMessages({
   },
   lupaPageTitleVSTLiikunnanKoulutuskeskus: {
     id: "common.lupaPageTitleVSTLiikunnanKoulutuskeskus",
-    defaultMessage: "Ajantasainen liikunnan koulutuskeskuksen ylläpitämislupa {date}"
+    defaultMessage:
+      "Ajantasainen liikunnan koulutuskeskuksen ylläpitämislupa {date}"
   },
   lupaTitle: {
     id: "common.lupaTitle",

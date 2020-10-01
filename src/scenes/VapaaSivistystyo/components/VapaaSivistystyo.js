@@ -16,8 +16,8 @@ import {
 } from "../../../modules/helpers";
 import Loading from "../../../modules/Loading";
 import Input from "okm-frontend-components/dist/components/00-atoms/Input";
-import {useLocation, useRouteMatch, useHistory} from "react-router-dom";
-import queryString from 'query-string';
+import { useLocation, useRouteMatch, useHistory } from "react-router-dom";
+import queryString from "query-string";
 import education from "../../../i18n/definitions/education";
 
 const VapaaSivistystyo = () => {
@@ -37,24 +37,24 @@ const VapaaSivistystyo = () => {
     6: "6"
   });
   const [vstTypeOptions, setvstTypeOptions] = useState([]);
-  const [vstYllapitajaFilter, setVstYllapitajaFilter] = useState('');
-  const [vstOppilaitostyyppiFilter, setVstOppilaitostyyppiFilter] = useState('');
+  const [vstYllapitajaFilter, setVstYllapitajaFilter] = useState("");
+  const [vstOppilaitostyyppiFilter, setVstOppilaitostyyppiFilter] = useState(
+    ""
+  );
   const [allDataLength, setAllDataLength] = useState(0);
   const [filteredDataLength, setFilteredDataLength] = useState(0);
 
   useEffect(() => {
     const searchParams = queryString.parse(location.search);
-    if(!!searchParams.yllapitaja) {
-      setVstYllapitajaFilter(searchParams.yllapitaja)
+    if (!!searchParams.yllapitaja) {
+      setVstYllapitajaFilter(searchParams.yllapitaja);
+    } else {
+      setVstYllapitajaFilter("");
     }
-    else {
-      setVstYllapitajaFilter('');
-    }
-    if(!!searchParams.oppilaitostyyppi) {
-      setVstOppilaitostyyppiFilter(searchParams.oppilaitostyyppi)
-    }
-    else{
-      setVstOppilaitostyyppiFilter('');
+    if (!!searchParams.oppilaitostyyppi) {
+      setVstOppilaitostyyppiFilter(searchParams.oppilaitostyyppi);
+    } else {
+      setVstOppilaitostyyppiFilter("");
     }
   }, [location.search]);
 
@@ -90,10 +90,17 @@ const VapaaSivistystyo = () => {
       if (vstYllapitajaFilter.length > 0) {
         filteredLuvat = filteredLuvat.filter(lupa => {
           const nimi = resolveLocalizedOrganizerName(lupa, intl.locale);
-          const oppilaitosnimi = resolveVSTOppilaitosNameFromLupa(lupa, intl.locale) || "";
+          const oppilaitosnimi =
+            resolveVSTOppilaitosNameFromLupa(lupa, intl.locale) || "";
           if (nimi) {
-            return nimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase()) ||
-              oppilaitosnimi.toLocaleLowerCase().includes(vstYllapitajaFilter.toLocaleLowerCase());
+            return (
+              nimi
+                .toLocaleLowerCase()
+                .includes(vstYllapitajaFilter.toLocaleLowerCase()) ||
+              oppilaitosnimi
+                .toLocaleLowerCase()
+                .includes(vstYllapitajaFilter.toLocaleLowerCase())
+            );
           } else {
             return false;
           }
@@ -125,25 +132,30 @@ const VapaaSivistystyo = () => {
     }
   }, [vstRaw, intl.locale]);
 
-  const tableStructure = generateVSTTableStructure(luvat, intl, vstMap, history);
+  const tableStructure = generateVSTTableStructure(
+    luvat,
+    intl,
+    vstMap,
+    history
+  );
 
-  const onOppilaitostyyppiSelectionChange = (_, {selectedOption}) => {
+  const onOppilaitostyyppiSelectionChange = (_, { selectedOption }) => {
     const params = {};
-    if(vstYllapitajaFilter !== '') {
+    if (vstYllapitajaFilter !== "") {
       params.yllapitaja = vstYllapitajaFilter;
     }
-    if (selectedOption.value !== '') {
+    if (selectedOption.value !== "") {
       params.oppilaitostyyppi = selectedOption.value;
     }
     history.push(`${match.url}?${queryString.stringify(params)}`);
   };
 
-  const onYllapitajaFilterChange = (_, {value}) => {
+  const onYllapitajaFilterChange = (_, { value }) => {
     const params = {};
-    if(value.length > 0) {
+    if (value.length > 0) {
       params.yllapitaja = value;
     }
-    if(vstOppilaitostyyppiFilter !== '') {
+    if (vstOppilaitostyyppiFilter !== "") {
       params.oppilaitostyyppi = vstOppilaitostyyppiFilter;
     }
     history.push(`${match.url}?${queryString.stringify(params)}`);
@@ -156,7 +168,7 @@ const VapaaSivistystyo = () => {
   return (
     <React.Fragment>
       <Helmet htmlAttributes={{ lang: intl.locale }}>
-        <title>Kuja | Vapaa sivistystyö</title>
+        <title>Vapaa sivistystyö - Oiva</title>
       </Helmet>
       <BreadcrumbsItem to="/">
         {intl.formatMessage(common.frontpage)}
@@ -166,46 +178,47 @@ const VapaaSivistystyo = () => {
       </BreadcrumbsItem>
       <div className="mx-2 lg:mx-auto w-full sm:w-3/4 mb-16">
         <h1>{intl.formatMessage(common.vstYllapitajatHeading)}</h1>
-        {luvatRaw.isLoading === false && luvatRaw.fetchedAt
-          ? <div>
-              <div className="my-4">
-                {intl.formatMessage(common.vstActiveLuvatCount, {
-                  count: allDataLength
+        {luvatRaw.isLoading === false && luvatRaw.fetchedAt ? (
+          <div>
+            <div className="my-4">
+              {intl.formatMessage(common.vstActiveLuvatCount, {
+                count: allDataLength
+              })}
+            </div>
+            <div className="flex flex-col lg:flex-row mb-6">
+              <div className="lg:mr-4 w-2/6">
+                <Input
+                  onChanges={onYllapitajaFilterChange}
+                  value={vstYllapitajaFilter}
+                  label={intl.formatMessage(common.searchByYllapitaja)}
+                />
+              </div>
+              <div className="mt-2 lg:mt-0 lg:mr-2 w-2/6">
+                <Dropdown
+                  onChanges={onOppilaitostyyppiSelectionChange}
+                  isClearable={true}
+                  options={vstTypeOptions}
+                  value={vstOppilaitostyyppiFilter}
+                  fullWidth={true}
+                  label={vstTypeSelectionPlaceholder}
+                  isTall={false}
+                  className="w-full lg:w-20"
+                  emptyMessage={intl.formatMessage(common.noSelection)}
+                />
+              </div>
+              <div className="mt-2 lg:ml-4 lg:my-auto">
+                {intl.formatMessage(common.displayingPortion, {
+                  selectedCount: filteredDataLength,
+                  allCount: allDataLength
                 })}
               </div>
-              <div className="flex flex-col lg:flex-row mb-6">
-                <div className="lg:mr-4 w-2/6">
-                  <Input
-                    onChanges={onYllapitajaFilterChange}
-                    value={vstYllapitajaFilter}
-                    label={intl.formatMessage(common.searchByYllapitaja)}
-                  />
-                </div>
-                <div className="mt-2 lg:mt-0 lg:mr-2 w-2/6">
-                  <Dropdown
-                    onChanges={onOppilaitostyyppiSelectionChange}
-                    isClearable={true}
-                    options={vstTypeOptions}
-                    value={vstOppilaitostyyppiFilter}
-                    fullWidth={true}
-                    label={vstTypeSelectionPlaceholder}
-                    isTall={false}
-                    className="w-full lg:w-20"
-                    emptyMessage={intl.formatMessage(common.noSelection)}
-                  />
-                </div>
-                <div className="mt-2 lg:ml-4 lg:my-auto">
-                  {intl.formatMessage(common.displayingPortion, {
-                    selectedCount: filteredDataLength,
-                    allCount: allDataLength
-                  })}
-                </div>
-              </div>
-
-              <Table structure={tableStructure} />
             </div>
-          : <Loading />
-        }
+
+            <Table structure={tableStructure} />
+          </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     </React.Fragment>
   );

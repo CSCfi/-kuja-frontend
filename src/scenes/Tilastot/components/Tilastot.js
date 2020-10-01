@@ -15,7 +15,7 @@ const Tilastot = () => {
       <Helmet
         htmlAttributes={{ lang: intl.locale }}
         height="50px"
-        title={"Oiva | Tilastot"}></Helmet>
+        title={"Tilastot - Oiva"}></Helmet>
       <h1>Tilastot</h1>
       <p>Linkkejä tilastodataan (beta-versio):</p>
       <Linkki>
